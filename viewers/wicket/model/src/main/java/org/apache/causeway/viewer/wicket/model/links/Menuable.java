@@ -34,7 +34,8 @@ public interface Menuable extends Serializable {
     public enum Kind {
         SECTION_SEPARATOR("list-separator"),
         SECTION_LABEL("list-section-label"),
-        LINK("viewItem");
+        LINK("viewItem"),
+        SUBMENU(null);
         @Getter private final String cssClassForLiElement;
         public boolean isSectionSeparator() { return this==SECTION_SEPARATOR;}
         public boolean isSectionLabel() { return this==SECTION_LABEL;}

@@ -154,8 +154,8 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                 return;
             }
 
-            val repeatedViewEntry = (RepeatedViewEntry) menuable;
-            final ComponentFactory componentFactory = repeatedViewEntry.getComponentFactory();
+            val linkEntry = (LinkEntry) menuable;
+            final ComponentFactory componentFactory = linkEntry.getComponentFactory();
 
             // add direct download link instead of a panel
             if(componentFactory.getComponentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT) {
@@ -167,7 +167,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                 item.addOrReplace(downloadLink);
 
                 // add title and icon to the link
-                RepeatedViewEntry.addLinkWithIconAndTitle(item, downloadLink);
+                addLinkWithIconAndTitle(item, downloadLink);
                 return;
             }
 
@@ -183,7 +183,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
                 /* [CAUSEWAY-3415] do a full page reload when required,
                  * to properly trigger all client side java-script, that decorates HTML (datatable.net, vega, ...) */
-                if(repeatedViewEntry.isPageReloadRequiredOnTableViewActivation()) {
+                if(linkEntry.isPageReloadRequiredOnTableViewActivation()) {
                     linksSelectorPanel.reloadPage();
                 } else {
                     target.add(linksSelectorPanel, views);
@@ -191,15 +191,13 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
             });
 
             // add title and icon to the link
-            RepeatedViewEntry.addLinkWithIconAndTitle(item, link);
+            addLinkWithIconAndTitle(item, link);
             val checkmarkForSelectedPresentation = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
 
-            val isSelectedPresentation = repeatedViewEntry.isSelectedIn(this);
+            val isSelectedPresentation = linkEntry.isSelectedIn(this);
             checkmarkForSelectedPresentation.setVisible(isSelectedPresentation);
-
-            // if selected, disable the link
             if (isSelectedPresentation) {
-                repeatedViewEntry.markAsSelected(viewButtonIcon, link);
+                linkEntry.markAsSelected(viewButtonIcon, link);
             }
 
         });
@@ -237,13 +235,13 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         return sortedWithSeparators;
     }
 
-    private List<RepeatedViewEntry> sorted(
+    private List<LinkEntry> sorted(
             final Can<ComponentFactory> componentFactories,
             final Predicate<? super ComponentFactory> filter) {
-        final List<RepeatedViewEntry> sorted = componentFactories.stream()
+        final List<LinkEntry> sorted = componentFactories.stream()
             .filter(filter)
             .sorted(_Util.orderByOrderOfAppearanceInUiDropdown())
-            .map((final ComponentFactory factory)->RepeatedViewEntry.linkEntry(factory))
+            .map((final ComponentFactory factory)->LinkEntry.linkEntry(factory))
             .collect(Collectors.toList());
         return sorted;
     }
@@ -254,16 +252,25 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                 new CausewaySelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target));
     }
 
+    // -- UTILITY
 
+    static void addLinkWithIconAndTitle(
+            final @NonNull ListItem<? extends Menuable> item,
+            final @NonNull MarkupContainer link) {
+        WktLinks.listItemAsDropdownLink((ListItem<LinkEntry>)item, link,
+                ID_VIEW_ITEM_TITLE, LinkEntry::nameFor,
+                ID_VIEW_ITEM_ICON, null,
+                LinkEntry::cssClassFor);
+    }
 
     @lombok.Value
-    static class RepeatedViewEntry implements Menuable {
+    static class LinkEntry implements Menuable {
         private static final long serialVersionUID = 1L;
 
         // -- FACTORIES
 
-        public static RepeatedViewEntry linkEntry(final @NonNull ComponentFactory componentFactory) {
-            return new RepeatedViewEntry(componentFactory);
+        public static LinkEntry linkEntry(final @NonNull ComponentFactory componentFactory) {
+            return new LinkEntry(componentFactory);
         }
 
         // -- CONSTRUCTION
@@ -279,32 +286,23 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
             return _Util.isPageReloadRequiredOnTableViewActivation(componentFactory);
         }
 
-        // -- UPDATE STATE
-
+        /**
+         * Disables the link the selected presentation's link,
+         * also sets the icon left of the drop-down caret.
+         */
         void markAsSelected(final Label viewButtonIcon, final AjaxLinkNoPropagate link) {
             final IModel<String> cssClass = _Util.cssClassFor(componentFactory, viewButtonIcon);
             Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
             link.setEnabled(false);
         }
 
-        // -- UTILITY
-
-        static void addLinkWithIconAndTitle(
-                final @NonNull ListItem<? extends Menuable> item,
-                final @NonNull MarkupContainer link) {
-            WktLinks.listItemAsDropdownLink((ListItem<RepeatedViewEntry>)item, link,
-                    ID_VIEW_ITEM_TITLE, RepeatedViewEntry::nameFor,
-                    ID_VIEW_ITEM_ICON, null,
-                    RepeatedViewEntry::cssClassFor);
-        }
-
         // -- HELPER
 
-        private static IModel<String> nameFor(final RepeatedViewEntry either) {
-            return _Util.nameFor(either.getComponentFactory());
+        private static IModel<String> nameFor(final LinkEntry linkEntry) {
+            return _Util.nameFor(linkEntry.getComponentFactory());
         }
-        private static IModel<String> cssClassFor(final RepeatedViewEntry either, final Label viewIcon) {
-            return _Util.cssClassFor(either.getComponentFactory(), viewIcon);
+        private static IModel<String> cssClassFor(final LinkEntry linkEntry, final Label viewIcon) {
+            return _Util.cssClassFor(linkEntry.getComponentFactory(), viewIcon);
         }
 
         @Override

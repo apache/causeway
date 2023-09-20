@@ -44,8 +44,8 @@ public abstract class MenuActionPanel extends PanelBase {
         return Wkt.listView("subMenuItems", subMenuItems, listItem->{
             val subMenuItem = listItem.getModelObject();
 
-            switch(subMenuItem.getItemType()) {
-            case SPACER:
+            switch(subMenuItem.menuableKind()) {
+            case SECTION_SEPARATOR:
                 addSpacer(subMenuItem, listItem);
                 return;
             case SECTION_LABEL:

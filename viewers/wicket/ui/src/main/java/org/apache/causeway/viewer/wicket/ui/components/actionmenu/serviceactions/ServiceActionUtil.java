@@ -105,7 +105,7 @@ public final class ServiceActionUtil {
 
         @Override
         public void addTopLevel(final MenuItemDto menuDto) {
-            currentTopLevelMenu = CssMenuItem.newMenuItem(menuDto.getName());
+            currentTopLevelMenu = CssMenuItem.newMenuItemWithSubmenu(menuDto.getName());
             onNewMenuItem.accept(currentTopLevelMenu);
         }
 
@@ -119,7 +119,7 @@ public final class ServiceActionUtil {
         public void addSubMenu(final MenuItemDto menuDto) {
             val managedAction = menuDto.getManagedAction();
 
-            val menuItem = CssMenuItem.newMenuItem(menuDto.getName());
+            val menuItem = CssMenuItem.newMenuItemWithLink(menuDto.getName());
             currentTopLevelMenu.addSubMenuItem(menuItem);
 
             menuItem.setLinkAndLabel(newActionLink(managedAction));
@@ -131,15 +131,11 @@ public final class ServiceActionUtil {
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
 
-        private LinkAndLabel newActionLink(
-                final ManagedAction managedAction) {
-
+        private LinkAndLabel newActionLink(final ManagedAction managedAction) {
             val serviceModel = UiObjectWkt.ofAdapter(commonContext, managedAction.getOwner());
-
             return LinkAndLabelFactory.forMenu(serviceModel)
                     .apply(managedAction.getAction());
         }
-
     }
 
     public static void buildMenu(

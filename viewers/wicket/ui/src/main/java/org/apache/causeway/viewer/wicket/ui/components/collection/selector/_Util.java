@@ -25,47 +25,36 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _Util {
 
     IModel<String> nameFor(final ComponentFactory componentFactory) {
-        IModel<String> name = null;
-        if (componentFactory instanceof CollectionContentsAsFactory) {
-            val collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
-            name = collectionContentsAsFactory.getTitleLabel();
-        }
-        if (name == null) {
-            name = Model.of(componentFactory.getName());
-        }
-        return name;
+        return _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
+            .map(CollectionContentsAsFactory::getTitleLabel)
+            .orElseGet(()->Model.of(componentFactory.getName()));
     }
 
     IModel<String> cssClassFor(final ComponentFactory componentFactory, final Label viewIcon) {
-        IModel<String> cssClass = null;
-        if (componentFactory instanceof CollectionContentsAsFactory) {
-            val collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
-            cssClass = collectionContentsAsFactory.getCssClass();
-            viewIcon.setDefaultModelObject("");
-            viewIcon.setEscapeModelStrings(true);
-        }
-        if (cssClass == null) {
-            String name = componentFactory.getName();
-            cssClass = Model.of(_Strings.asLowerDashed.apply(name));
-            // Small hack: if there is no specific CSS class then we assume that background-image is used
-            // the span.ViewItemLink should have some content to show it
-            // FIX: find a way to do this with CSS (width and height don't seems to help)
-            viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
-            viewIcon.setEscapeModelStrings(false);
-        }
-        return cssClass;
+        return _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
+            .map(CollectionContentsAsFactory::getCssClass)
+            .map(cssClass->{
+                viewIcon.setDefaultModelObject("");
+                viewIcon.setEscapeModelStrings(true);
+                return cssClass;
+            })
+            .orElseGet(()->{
+                viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
+                viewIcon.setEscapeModelStrings(false);
+                return Model.of(_Strings.asLowerDashed.apply(componentFactory.getName()));
+            });
     }
 
     int orderOfAppearanceInUiDropdownFor(final ComponentFactory componentFactory) {
