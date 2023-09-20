@@ -9,6 +9,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 @UtilityClass
 public class BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil {
+
     public static void validateBigDecimalValueFacet(final ObjectAssociation association) {
 
         association.lookupFacet(MaxTotalDigitsFacet.class)

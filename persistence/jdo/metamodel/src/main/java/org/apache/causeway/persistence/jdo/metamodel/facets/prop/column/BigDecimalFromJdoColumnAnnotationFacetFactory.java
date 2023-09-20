@@ -69,18 +69,19 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addValidatorSkipManagedBeans(spec->{
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
 
             // only consider persistent entities
-            final JdoPersistenceCapableFacet pcFacet = spec.getFacet(JdoPersistenceCapableFacet.class);
+            final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
                 return;
             }
 
-            spec.streamProperties(MixedIn.EXCLUDED)
-            // skip checks if annotated with JDO @NotPersistent
-            .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
-            .forEach(BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil::validateBigDecimalValueFacet);
+            objectSpec
+                    .streamProperties(MixedIn.EXCLUDED)
+                    // skip checks if annotated with JDO @NotPersistent
+                    .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
+                    .forEach(BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil::validateBigDecimalValueFacet);
 
         });
     }

@@ -73,11 +73,8 @@ implements MetaModelRefiner {
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidatorSkipManagedBeans(objectSpec->{
 
-            final Stream<ObjectAssociation> associations = objectSpec
-                    .streamAssociations(MixedIn.EXCLUDED)
-                    .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-            associations
+            objectSpec
+                    .streamProperties(MixedIn.EXCLUDED)
                     .forEach(MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil::validateMandatoryFacet);
 
         });

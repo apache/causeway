@@ -136,14 +136,11 @@ implements MetaModelRefiner {
                 return;
             }
 
-            final Stream<ObjectAssociation> associations = objectSpec
-                    .streamAssociations(MixedIn.EXCLUDED)
-                    .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-            associations
-            // skip checks if annotated with JDO @NotPersistent
-            .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
-            .forEach(MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil::validateMandatoryFacet);
+            objectSpec
+                    .streamProperties(MixedIn.EXCLUDED)
+                    // skip checks if annotated with JDO @NotPersistent
+                    .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
+                    .forEach(MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil::validateMandatoryFacet);
 
         });
     }

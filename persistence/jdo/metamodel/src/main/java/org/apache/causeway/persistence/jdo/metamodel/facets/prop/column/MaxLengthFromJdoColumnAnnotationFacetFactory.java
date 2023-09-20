@@ -29,11 +29,10 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MaxLengthFromXxxColumnAnnotationMetaModelRefinerUtil;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
@@ -75,35 +74,17 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidatorSkipManagedBeans(objectSpec->{
+
             final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
                 return;
             }
 
-            final Stream<ObjectAssociation> associations = objectSpec
-                    .streamAssociations(MixedIn.EXCLUDED)
-                    .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-            associations.forEach(association->{
-                // skip checks if annotated with JDO @NotPersistent
-                if(association.containsNonFallbackFacet(JdoNotPersistentFacet.class)) {
-                    return;
-                }
-
-                association.lookupFacet(MaxLengthFacet.class)
-                .map(MaxLengthFacet::getSharedFacetRankingElseFail)
-                .ifPresent(facetRanking->facetRanking
-                        .visitTopRankPairsSemanticDiffering(MaxLengthFacet.class, (a, b)->{
-
-                            ValidationFailure.raiseFormatted(
-                                    association,
-                                    "%s: inconsistent MaxLength semantics specified in %s and %s.",
-                                    association.getFeatureIdentifier().toString(),
-                                    a.getClass().getSimpleName(),
-                                    b.getClass().getSimpleName());
-                        }));
-
-            });
+            objectSpec
+                    .streamProperties(MixedIn.EXCLUDED)
+                    // skip checks if annotated with JDO @NotPersistent
+                    .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
+                    .forEach(MaxLengthFromXxxColumnAnnotationMetaModelRefinerUtil::validateMaxLengthFacet);
         });
     }
 

@@ -66,9 +66,10 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addValidatorSkipManagedBeans(spec->{
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
 
-            spec.streamProperties(MixedIn.EXCLUDED)
+            objectSpec
+                    .streamProperties(MixedIn.EXCLUDED)
                     .forEach(BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil::validateBigDecimalValueFacet);
 
         });
