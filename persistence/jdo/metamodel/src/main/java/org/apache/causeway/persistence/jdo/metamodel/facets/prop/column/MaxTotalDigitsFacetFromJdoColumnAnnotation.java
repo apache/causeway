@@ -30,14 +30,14 @@ public class MaxTotalDigitsFacetFromJdoColumnAnnotation
 extends MaxTotalDigitsFacetAbstract {
 
     public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<Column> jdoColumnIfAny,
+            final Optional<Column> columnIfAny,
             final FacetHolder holder) {
 
-        return jdoColumnIfAny
-                .filter(jdoColumn->jdoColumn.length()>=0)
-                .map(jdoColumn->
+        return columnIfAny
+                .filter(column->column.length()>=0)
+                .map(column->
                 new MaxTotalDigitsFacetFromJdoColumnAnnotation(
-                        jdoColumn.length(), holder));
+                        column.length(), holder));
     }
 
     private MaxTotalDigitsFacetFromJdoColumnAnnotation(

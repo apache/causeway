@@ -30,13 +30,14 @@ public class MaxLengthFacetFromJdoColumnAnnotation
 extends MaxLengthFacetAbstract {
 
     public static Optional<MaxLengthFacet> create(
-            final Optional<Column> jdoColumnIfAny,
+            final Optional<Column> columnIfAny,
             final FacetHolder holder) {
 
-        return jdoColumnIfAny
-        .map(jdoColumn->
-            new MaxLengthFacetFromJdoColumnAnnotation(
-                    jdoColumn.length(), holder));
+        return columnIfAny
+                .filter(column -> column.length() > 0)
+                .map(column->
+                    new MaxLengthFacetFromJdoColumnAnnotation(
+                            column.length(), holder));
     }
 
     private MaxLengthFacetFromJdoColumnAnnotation(

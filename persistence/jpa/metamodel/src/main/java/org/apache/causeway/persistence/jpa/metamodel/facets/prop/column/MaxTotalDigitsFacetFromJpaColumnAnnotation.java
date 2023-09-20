@@ -30,14 +30,14 @@ public class MaxTotalDigitsFacetFromJpaColumnAnnotation
 extends MaxTotalDigitsFacetAbstract {
 
     public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<Column> jpaColumnIfAny,
+            final Optional<Column> columnIfAny,
             final FacetHolder holder) {
 
-        return jpaColumnIfAny
-        .filter(jpaColumn->jpaColumn.length()>=0)
-        .map(jdoColumn->
-            new MaxTotalDigitsFacetFromJpaColumnAnnotation(
-                    jdoColumn.length(), holder));
+        return columnIfAny
+                .filter(column->column.length()>=0)
+                .map(column->
+                    new MaxTotalDigitsFacetFromJpaColumnAnnotation(
+                            column.length(), holder));
     }
 
     private MaxTotalDigitsFacetFromJpaColumnAnnotation(

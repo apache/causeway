@@ -30,13 +30,14 @@ public class MaxLengthFacetFromJpaColumnAnnotation
 extends MaxLengthFacetAbstract {
 
     public static Optional<MaxLengthFacet> create(
-            final Optional<Column> jpaColumnIfAny,
+            final Optional<Column> columnIfAny,
             final FacetHolder holder) {
 
-        return jpaColumnIfAny
-        .map(jdoColumn->
-            new MaxLengthFacetFromJpaColumnAnnotation(
-                    jdoColumn.length(), holder));
+        return columnIfAny
+                .filter(column -> column.length() > 0)
+                .map(column->
+                    new MaxLengthFacetFromJpaColumnAnnotation(
+                            column.length(), holder));
     }
 
     private MaxLengthFacetFromJpaColumnAnnotation(
