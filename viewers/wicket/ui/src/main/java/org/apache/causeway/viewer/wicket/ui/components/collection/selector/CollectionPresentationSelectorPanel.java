@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collection.selector;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -37,6 +36,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
@@ -47,9 +47,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -132,12 +130,12 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
         Wkt.listViewAdd(container, ID_VIEW_ITEM, sorted(componentFactories), item->{
-            val repeatedViewEntry = item.getModelObject();
-            val repeatedViewEntryKind = repeatedViewEntry.repeatedViewEntryKind;
+            val menuable = item.getModelObject();
+            val menuableKind = menuable.menuableKind();
 
-            Wkt.cssAppend(item, repeatedViewEntryKind.getCssClassForLiElement());
+            Wkt.cssAppend(item, menuableKind.getCssClassForLiElement());
 
-            switch(repeatedViewEntryKind) {
+            switch(menuableKind) {
             case SECTION_SEPARATOR:
                 WktComponents.permanentlyHide(item, ID_SECTION_LABEL);
                 WktComponents.permanentlyHide(item, ID_VIEW_LINK);
@@ -146,9 +144,9 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
             case SECTION_LABEL:
                 WktComponents.permanentlyHide(item, ID_SECTION_SEPARATOR);
                 WktComponents.permanentlyHide(item, ID_VIEW_LINK);
-                Wkt.labelAdd(item, ID_SECTION_LABEL, repeatedViewEntry.getSectionLabel());
+                Wkt.labelAdd(item, ID_SECTION_LABEL, ((Menuable.SectionLabel)menuable).getSectionLabel());
                 return;
-            case LINK_ENTRY:
+            case LINK:
                 WktComponents.permanentlyHide(item, ID_SECTION_SEPARATOR);
                 WktComponents.permanentlyHide(item, ID_SECTION_LABEL);
                 break; // fall through
@@ -156,6 +154,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                 return;
             }
 
+            val repeatedViewEntry = (RepeatedViewEntry) menuable;
             final ComponentFactory componentFactory = repeatedViewEntry.getComponentFactory();
 
             // add direct download link instead of a panel
@@ -214,24 +213,24 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
      * @param filter
      * @see CollectionContentsAsFactory#orderOfAppearanceInUiDropdown()
      */
-    private List<RepeatedViewEntry> sorted(final Can<ComponentFactory> componentFactories) {
+    private List<Menuable> sorted(final Can<ComponentFactory> componentFactories) {
         val presentations = sorted(componentFactories, _Util.filterTablePresentations());
         val exports = sorted(componentFactories, _Util.filterTableExports());
-        val sortedWithSeparators = new ArrayList<RepeatedViewEntry>(
+        val sortedWithSeparators = new ArrayList<Menuable>(
                 presentations.size() + exports.size() + 2); // heap optimization, not strictly required
 
         boolean needsSpacer = false;
 
         if(!presentations.isEmpty()) {
-            sortedWithSeparators.add(RepeatedViewEntry.sectionLabel(translate("Presentations")));
+            sortedWithSeparators.add(Menuable.sectionLabel(translate("Presentations")));
             sortedWithSeparators.addAll(presentations);
             needsSpacer = true;
         }
         if(!exports.isEmpty()) {
             if(needsSpacer) {
-                sortedWithSeparators.add(RepeatedViewEntry.sectionSeparator());
+                sortedWithSeparators.add(Menuable.sectionSeparator());
             }
-            sortedWithSeparators.add(RepeatedViewEntry.sectionLabel(translate("Exports")));
+            sortedWithSeparators.add(Menuable.sectionLabel(translate("Exports")));
             sortedWithSeparators.addAll(exports);
         }
 
@@ -255,48 +254,29 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                 new CausewaySelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target));
     }
 
-    @RequiredArgsConstructor
-    enum RepeatedViewEntryKind {
-        SECTION_SEPARATOR("list-separator"),
-        SECTION_LABEL("list-section-label"),
-        LINK_ENTRY("viewItem");
-        @Getter private final String cssClassForLiElement;
-        boolean isSectionSeparator() { return this==SECTION_SEPARATOR;}
-        boolean isSectionLabel() { return this==SECTION_LABEL;}
-        boolean isLinkEntry() { return this==LINK_ENTRY;}
-    }
+
 
     @lombok.Value
-    static class RepeatedViewEntry implements Serializable {
+    static class RepeatedViewEntry implements Menuable {
         private static final long serialVersionUID = 1L;
 
         // -- FACTORIES
 
-        public static RepeatedViewEntry sectionSeparator() {
-            return new RepeatedViewEntry(RepeatedViewEntryKind.SECTION_SEPARATOR, null, null);
-        }
-        public static RepeatedViewEntry sectionLabel(final @NonNull String sectionLabel) {
-            return new RepeatedViewEntry(RepeatedViewEntryKind.SECTION_LABEL, null, sectionLabel);
-        }
         public static RepeatedViewEntry linkEntry(final @NonNull ComponentFactory componentFactory) {
-            return new RepeatedViewEntry(RepeatedViewEntryKind.LINK_ENTRY, componentFactory, null);
+            return new RepeatedViewEntry(componentFactory);
         }
 
         // -- CONSTRUCTION
 
-        final @NonNull RepeatedViewEntryKind repeatedViewEntryKind;
         final ComponentFactory componentFactory;
-        final String sectionLabel;
 
         // -- PREDICATES
 
         boolean isSelectedIn(final CollectionPresentationSelectorPanel panel) {
-           return repeatedViewEntryKind.isLinkEntry()
-                   && componentFactory == panel.selectedComponentFactory;
+           return componentFactory == panel.selectedComponentFactory;
         }
         boolean isPageReloadRequiredOnTableViewActivation() {
-            return repeatedViewEntryKind.isLinkEntry()
-                    && _Util.isPageReloadRequiredOnTableViewActivation(componentFactory);
+            return _Util.isPageReloadRequiredOnTableViewActivation(componentFactory);
         }
 
         // -- UPDATE STATE
@@ -310,9 +290,9 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         // -- UTILITY
 
         static void addLinkWithIconAndTitle(
-                final @NonNull ListItem<RepeatedViewEntry> item,
+                final @NonNull ListItem<? extends Menuable> item,
                 final @NonNull MarkupContainer link) {
-            WktLinks.listItemAsDropdownLink(item, link,
+            WktLinks.listItemAsDropdownLink((ListItem<RepeatedViewEntry>)item, link,
                     ID_VIEW_ITEM_TITLE, RepeatedViewEntry::nameFor,
                     ID_VIEW_ITEM_ICON, null,
                     RepeatedViewEntry::cssClassFor);
@@ -326,6 +306,9 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         private static IModel<String> cssClassFor(final RepeatedViewEntry either, final Label viewIcon) {
             return _Util.cssClassFor(either.getComponentFactory(), viewIcon);
         }
+
+        @Override
+        public Kind menuableKind() { return Kind.LINK; }
     }
 
 }

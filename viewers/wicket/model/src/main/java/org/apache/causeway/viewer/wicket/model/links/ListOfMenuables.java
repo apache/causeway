@@ -18,37 +18,41 @@
  */
 package org.apache.causeway.viewer.wicket.model.links;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
 
 import org.apache.causeway.commons.collections.Can;
 
 import lombok.NonNull;
-import lombok.val;
 
-public class ListOfLinksModel
-extends ChainingModel<List<LinkAndLabel>> {
+public class ListOfMenuables
+extends ChainingModel<Can<? extends Menuable>> {
 
     private static final long serialVersionUID = 1L;
 
-    public ListOfLinksModel(final @NonNull Can<LinkAndLabel> links) {
-        super(links);
+    public ListOfMenuables(final @NonNull Can<? extends Menuable> menuables) {
+        super(menuables);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<LinkAndLabel> getObject() {
-        return ((Can<LinkAndLabel>)super.getTarget()).toList();
+    public final Can<? extends Menuable> getObject() {
+        return ((Can<? extends Menuable>)super.getTarget());
+    }
+
+    public final Can<? extends Menuable> menuables() {
+        return getObject();
+    }
+
+    public final Stream<LinkAndLabel> streamLinks() {
+        return menuables().stream()
+                .filter(LinkAndLabel.class::isInstance)
+                .map(LinkAndLabel.class::cast);
     }
 
     public boolean hasAnyVisibleLink() {
-        for (val linkAndLabel : getObject()) {
-            if(linkAndLabel.getUiComponent().isVisible()) {
-                return true;
-            }
-        }
-        return false;
+        return streamLinks().anyMatch(linkAndLabel->linkAndLabel.getUiComponent().isVisible());
     }
 
 }

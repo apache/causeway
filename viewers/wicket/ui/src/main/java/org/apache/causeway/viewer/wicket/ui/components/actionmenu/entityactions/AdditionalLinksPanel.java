@@ -19,12 +19,14 @@
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.links.ListOfLinksModel;
+import org.apache.causeway.viewer.wicket.model.links.ListOfMenuables;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -33,7 +35,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 import lombok.val;
 
 public class AdditionalLinksPanel
-extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
+extends PanelAbstract<Can<? extends Menuable>, ListOfMenuables> {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,17 +72,26 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
         return Wkt.add(markupContainer, style.newPanel(id, links));
     }
 
+    protected final ListOfMenuables listOfMenuables() {
+        return getModel();
+    }
+
+    protected final List<LinkAndLabel> listOfLinkAndLabels() {
+        return listOfMenuables().streamLinks().collect(Collectors.toList());
+    }
+
+
     protected AdditionalLinksPanel(
             final String id,
             final Can<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
 
-        super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
+        super(id, new ListOfMenuables(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
         setOutputMarkupId(true);
 
         val container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
                     ()->AdditionalLinksPanel.this.getModel().hasAnyVisibleLink()));
 
-        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, getModel(), item->{
+        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
             val linkAndLabel = item.getModelObject();
             item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel));
         });
