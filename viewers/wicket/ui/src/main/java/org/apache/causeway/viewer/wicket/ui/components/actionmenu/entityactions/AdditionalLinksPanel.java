@@ -47,12 +47,14 @@ extends MenuablePanelAbstract {
         INLINE_LIST {
             @Override
             AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
+                links.forEach(linkAndLabel->linkAndLabel.setAutoAlignableWithBlankIcon(false));
                 return new AdditionalLinksAsListInlinePanel(id, links);
             }
         },
         DROPDOWN {
             @Override
             AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
+                links.forEach(linkAndLabel->linkAndLabel.setAutoAlignableWithBlankIcon(true));
                 return new AdditionalLinksAsDropDownPanel(id, links);
             }
         };
