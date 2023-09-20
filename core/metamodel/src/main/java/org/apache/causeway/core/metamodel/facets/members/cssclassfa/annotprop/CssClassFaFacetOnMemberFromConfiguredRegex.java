@@ -113,16 +113,15 @@ extends CssClassFaImperativeFacetAbstract {
 
     // -- HELPER
 
-    private String faIconForNameElseFallbackToBlank(final String name) {
-
+    private Optional<String> faIconForName(final String name) {
         for (Map.Entry<Pattern, String> entry : faIconByPattern.entrySet()) {
             final Pattern pattern = entry.getKey();
             final String faIcon = entry.getValue();
             if (pattern.matcher(name).matches()) {
-                return faIcon;
+                return _Strings.nonEmpty(faIcon);
             }
         }
-        return "fa-blank"; // to produce aligned menu items.
+        return Optional.empty();
     }
 
     private Optional<CssClassFaFactory> cssClassFaFactoryForConfiguredRegexIfPossible(
@@ -155,7 +154,7 @@ extends CssClassFaImperativeFacetAbstract {
             final String memberFriendlyName) {
 
         return _Strings.nonEmpty(memberFriendlyName)
-        .map(this::faIconForNameElseFallbackToBlank)
+        .flatMap(this::faIconForName)
         .map(_faIcon->{
             final String faIcon;
             final CssClassFaPosition position;
