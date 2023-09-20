@@ -18,19 +18,32 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
+import java.util.Optional;
+
+import javax.jdo.annotations.Column;
+
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
-/**
- * Inferred from absence of an <tt>@Column</tt> method.
- */
-public class MandatoryFacetFromAbsenceOfColumnAnnotation
-extends MandatoryFacetAbstract {
+public class MaxFractionalDigitsFacetFromJdoColumnAnnotation
+extends MaxFractionalDigitsFacetAbstract {
 
-    public MandatoryFacetFromAbsenceOfColumnAnnotation(
-            final Semantics semantics, final FacetHolder holder, final Precedence precedence) {
-        super(semantics, holder, precedence);
+    public static Optional<MaxFractionalDigitsFacet> create(
+            final Optional<Column> jdoColumnIfAny,
+            final FacetHolder holder) {
+
+        return jdoColumnIfAny
+                .filter(jdoColumn->jdoColumn.scale()>=0)
+                .map(jdoColumn->{
+                    return new MaxFractionalDigitsFacetFromJdoColumnAnnotation(
+                            jdoColumn.scale(), holder);
+                });
     }
 
+    private MaxFractionalDigitsFacetFromJdoColumnAnnotation(
+            final int scale, final FacetHolder holder) {
+        super(scale, holder);
+    }
 
 }

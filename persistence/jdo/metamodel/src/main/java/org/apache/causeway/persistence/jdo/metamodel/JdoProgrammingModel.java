@@ -36,8 +36,8 @@ import org.apache.causeway.persistence.jdo.metamodel.facets.object.datastoreiden
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.BigDecimalFromColumnAnnotationFacetFactory;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MandatoryFromColumnAnnotationFacetFactory;
+import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.BigDecimalFromJdoColumnAnnotationFacetFactory;
+import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MandatoryFromJdoColumnAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MaxLengthFromJdoColumnAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
@@ -82,12 +82,12 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
         pm.addFactory(step2, new JdoQueryAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
-        pm.addFactory(step2, new BigDecimalFromColumnAnnotationFacetFactory(mmc), Marker.JDO);
+        pm.addFactory(step2, new BigDecimalFromJdoColumnAnnotationFacetFactory(mmc), Marker.JDO);
         pm.addFactory(step2, new MaxLengthFromJdoColumnAnnotationFacetFactory(mmc), Marker.JDO);
         // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
         // and also PropertyAnnotationFactory
-        pm.addFactory(step2, new MandatoryFromColumnAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
+        pm.addFactory(step2, new MandatoryFromJdoColumnAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
 
         // -- validators

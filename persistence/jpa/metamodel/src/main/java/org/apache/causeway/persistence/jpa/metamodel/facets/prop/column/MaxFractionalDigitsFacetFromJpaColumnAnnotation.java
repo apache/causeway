@@ -30,20 +30,17 @@ public class MaxFractionalDigitsFacetFromJpaColumnAnnotation
 extends MaxFractionalDigitsFacetAbstract {
 
      public static Optional<MaxFractionalDigitsFacet> create(
-             final Optional<Column> jpaColumnIfAny,
+             final Optional<Column> columnIfAny,
              final FacetHolder holder) {
 
-         return jpaColumnIfAny
-         .filter(jpaColumn->jpaColumn.scale()>=0)
-         .map(jdoColumn->{
-             return new MaxFractionalDigitsFacetFromJpaColumnAnnotation(
-                     jdoColumn.scale(), holder);
-         });
+         return columnIfAny
+                 .filter(column->column.scale()>=0)
+                 .map(column-> new MaxFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), holder));
     }
 
     private MaxFractionalDigitsFacetFromJpaColumnAnnotation(
-            final int maxFractionalDigits, final FacetHolder holder) {
-        super(maxFractionalDigits, holder);
+            final int scale, final FacetHolder holder) {
+        super(scale, holder);
     }
 
 }

@@ -18,30 +18,18 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
-import java.util.Optional;
-
-import javax.jdo.annotations.Column;
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
-public class MaxTotalDigitsFacetFromJdoColumnAnnotation
-extends MaxTotalDigitsFacetAbstract {
+/**
+ * Inferred from presence of an <tt>@Column</tt> annotation.
+ */
+public class MandatoryFacetFromJdoColumnAnnotation
+extends MandatoryFacetAbstract {
 
-    public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<Column> columnIfAny,
-            final FacetHolder holder) {
-
-        return columnIfAny
-                .filter(column->column.length()>=0)
-                .map(column->
-                new MaxTotalDigitsFacetFromJdoColumnAnnotation(column.length(), holder));
-    }
-
-    private MaxTotalDigitsFacetFromJdoColumnAnnotation(
-            final int length, final FacetHolder holder) {
-        super(length, holder);
+    public MandatoryFacetFromJdoColumnAnnotation(
+            final Semantics semantics, final FacetHolder holder) {
+        super(semantics, holder);
     }
 
 }

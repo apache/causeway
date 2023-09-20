@@ -32,4 +32,5 @@ module org.apache.causeway.persistence.jpa.metamodel {
     requires org.apache.causeway.core.runtime;
     requires org.apache.causeway.persistence.jpa.applib;
     requires spring.context;
+    requires org.apache.causeway.persistence.commons;
 }

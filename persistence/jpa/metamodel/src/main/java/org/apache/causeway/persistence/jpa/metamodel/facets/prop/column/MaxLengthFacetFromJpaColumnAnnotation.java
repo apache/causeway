@@ -16,32 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
+package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 
 import java.util.Optional;
 
-import javax.jdo.annotations.Column;
+import javax.persistence.Column;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
-public class MaxTotalDigitsFacetFromJdoColumnAnnotation
-extends MaxTotalDigitsFacetAbstract {
+public class MaxLengthFacetFromJpaColumnAnnotation
+extends MaxLengthFacetAbstract {
 
-    public static Optional<MaxTotalDigitsFacet> create(
+    public static Optional<MaxLengthFacet> create(
             final Optional<Column> columnIfAny,
             final FacetHolder holder) {
 
         return columnIfAny
-                .filter(column->column.length()>=0)
+                .filter(column -> column.length() > 0)
                 .map(column->
-                new MaxTotalDigitsFacetFromJdoColumnAnnotation(column.length(), holder));
+                    new MaxLengthFacetFromJpaColumnAnnotation(
+                            column.length(), holder));
     }
 
-    private MaxTotalDigitsFacetFromJdoColumnAnnotation(
-            final int length, final FacetHolder holder) {
-        super(length, holder);
+    private MaxLengthFacetFromJpaColumnAnnotation(
+            final int maxLength, final FacetHolder holder) {
+        super(maxLength, holder);
     }
+
 
 }
