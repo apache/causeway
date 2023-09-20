@@ -63,5 +63,4 @@ public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTest
         Assertions.assertThat(all.size()).isEqualTo(8);
     }
 
-
 }

@@ -19,13 +19,14 @@
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.links.ListOfLinksModel;
-import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
@@ -33,7 +34,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 import lombok.val;
 
 public class AdditionalLinksPanel
-extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
+extends MenuablePanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,18 +73,37 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
     protected AdditionalLinksPanel(
             final String id,
-            final Can<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
-
-        super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
+            final Can<LinkAndLabel> menuables,
+            final Style style) {
+        super(id, menuables);
         setOutputMarkupId(true);
 
         val container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
-                    ()->AdditionalLinksPanel.this.getModel().hasAnyVisibleLink()));
+                    this::hasAnyVisibleLink));
 
-        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, getModel(), item->{
+        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
             val linkAndLabel = item.getModelObject();
-            item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel));
+            item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style==Style.DROPDOWN));
         });
+
+        //refactoring hint: in CssSubMenuItemsPanel we use a RepeatingView instead
+//        Wkt.repeatingViewAdd(container, ID_ADDITIONAL_LINK_ITEM, streamLinkAndLabels(),
+//                (inner, menuable)->{
+//                    WktLinks.asAdditionalLink(inner, ID_ADDITIONAL_LINK_TITLE, menuable);
+//                });
+
+    }
+
+    protected final Stream<LinkAndLabel> streamLinkAndLabels() {
+        return menuablesModel().streamMenuables(LinkAndLabel.class);
+    }
+
+    protected final List<LinkAndLabel> listOfLinkAndLabels() {
+        return streamLinkAndLabels().collect(Collectors.toList());
+    }
+
+    public final boolean hasAnyVisibleLink() {
+        return streamLinkAndLabels().anyMatch(linkAndLabel->linkAndLabel.getUiComponent().isVisible());
     }
 
 }

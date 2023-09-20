@@ -74,4 +74,11 @@ public interface CssClassFaFactory {
                 faIcon, position, null) {};
     }
 
+    /**
+     * Helps with left aligning menu entries, when no fa-icon is present.
+     */
+    public static CssClassFaFactory blankFaIcon(final CssClassFaPosition position) {
+        return ofIconAndPosition("blank", position);
+    }
+
 }

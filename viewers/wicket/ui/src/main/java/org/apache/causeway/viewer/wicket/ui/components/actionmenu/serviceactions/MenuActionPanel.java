@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
-import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -40,12 +40,12 @@ public abstract class MenuActionPanel extends PanelBase {
         super(id);
     }
 
-    protected ListView<CssMenuItem> subMenuItemsView(final List<CssMenuItem> subMenuItems) {
-        return Wkt.listView("subMenuItems", subMenuItems, listItem->{
+    protected ListView<CssMenuItem> subMenuItemsView(final Can<CssMenuItem> subMenuItems) {
+        return Wkt.listView("subMenuItems", subMenuItems.toList(), listItem->{
             val subMenuItem = listItem.getModelObject();
 
-            switch(subMenuItem.getItemType()) {
-            case SPACER:
+            switch(subMenuItem.menuableKind()) {
+            case SECTION_SEPARATOR:
                 addSpacer(subMenuItem, listItem);
                 return;
             case SECTION_LABEL:
@@ -63,12 +63,11 @@ public abstract class MenuActionPanel extends PanelBase {
         });
     }
 
-    protected List<CssMenuItem> flatten(final List<CssMenuItem> menuItems) {
-        val subMenuItems = _Lists.<CssMenuItem>newArrayList();
-        for (val menuItem : menuItems) {
-            subMenuItems.addAll(menuItem.getSubMenuItems());
-        }
-        return subMenuItems;
+    protected Can<CssMenuItem> flatten(final List<CssMenuItem> menuItems) {
+        return menuItems.stream()
+                .map(CssMenuItem::getSubMenuItems)
+                .flatMap(Can::stream)
+                .collect(Can.toCan());
     }
 
     // -- HELPER
