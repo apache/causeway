@@ -22,38 +22,35 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.util.ListModel;
+
+import org.apache.causeway.viewer.wicket.model.links.MenuablesModel;
+import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 /**
  * Panel containing a list of {@link CssMenuItem}s acting as submenus of a
  * parent {@link CssMenuItem}.
  */
 class CssSubMenuItemsPanel
-extends CssMenuItemPanelAbstract<List<CssMenuItem>, CssSubMenuItemsPanel.MyModel> {
+extends MenuablePanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    static class MyModel extends ListModel<CssMenuItem> {
-
-        private static final long serialVersionUID = 1L;
-
-        public MyModel(final List<CssMenuItem> cssMenuItems) {
-            super(cssMenuItems);
-        }
-    }
-
     public CssSubMenuItemsPanel(final String id, final List<CssMenuItem> subMenuItems) {
-        super(id, new MyModel(subMenuItems));
+        super(id, new MenuablesModel(subMenuItems));
         setRenderBodyOnly(true);
 
-        final RepeatingView menuItemRv = new RepeatingView(getId());
-        add(menuItemRv);
-        for (final CssMenuItem cssMenuItem : getModel().getObject()) {
-            final WebMarkupContainer menuItemMarkup = new WebMarkupContainer(menuItemRv.newChildId());
-            menuItemRv.add(menuItemMarkup);
+        val repeatingView = Wkt.add(this, new RepeatingView(getId()));
 
-            addSubMenuItems(menuItemMarkup, cssMenuItem);
-        }
+        menuablesModel().streamMenuables(CssMenuItem.class)
+        .forEach(cssMenuItem->{
+            val menuItemMarkup = new WebMarkupContainer(repeatingView.newChildId());
+            repeatingView.add(menuItemMarkup);
+            cssMenuItem.addTo(menuItemMarkup);
+        });
+
     }
 
 }

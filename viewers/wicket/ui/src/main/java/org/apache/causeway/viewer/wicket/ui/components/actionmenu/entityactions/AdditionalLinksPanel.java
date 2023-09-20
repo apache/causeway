@@ -25,9 +25,8 @@ import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.links.ListOfMenuables;
-import org.apache.causeway.viewer.wicket.model.links.Menuable;
-import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.viewer.wicket.model.links.MenuablesModel;
+import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
@@ -35,7 +34,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 import lombok.val;
 
 public class AdditionalLinksPanel
-extends PanelAbstract<Can<? extends Menuable>, ListOfMenuables> {
+extends MenuablePanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,20 +71,15 @@ extends PanelAbstract<Can<? extends Menuable>, ListOfMenuables> {
         return Wkt.add(markupContainer, style.newPanel(id, links));
     }
 
-    protected final ListOfMenuables listOfMenuables() {
-        return getModel();
-    }
-
     protected final List<LinkAndLabel> listOfLinkAndLabels() {
-        return listOfMenuables().streamLinks().collect(Collectors.toList());
+        return menuablesModel().streamMenuables(LinkAndLabel.class).collect(Collectors.toList());
     }
-
 
     protected AdditionalLinksPanel(
             final String id,
             final Can<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
 
-        super(id, new ListOfMenuables(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
+        super(id, new MenuablesModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
         setOutputMarkupId(true);
 
         val container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,

@@ -16,43 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.links;
-
-import java.util.stream.Stream;
-
-import org.apache.wicket.model.ChainingModel;
+package org.apache.causeway.viewer.wicket.ui.components.menuable;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
+import org.apache.causeway.viewer.wicket.model.links.MenuablesModel;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-import lombok.NonNull;
-
-public class ListOfMenuables
-extends ChainingModel<Can<? extends Menuable>> {
+/**
+ * Common panel for drop-downs and sub-menus.
+ */
+public abstract class MenuablePanelAbstract
+extends PanelAbstract<Can<? extends Menuable>, MenuablesModel> {
 
     private static final long serialVersionUID = 1L;
 
-    public ListOfMenuables(final @NonNull Can<? extends Menuable> menuables) {
-        super(menuables);
+    //TODO[CAUSEWAY-3582] give me a can instead of a model, can make the model from it
+    protected MenuablePanelAbstract(final String id, final MenuablesModel model) {
+        super(id, model);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public final Can<? extends Menuable> getObject() {
-        return ((Can<? extends Menuable>)super.getTarget());
-    }
-
-    public final Can<? extends Menuable> menuables() {
-        return getObject();
-    }
-
-    public final Stream<LinkAndLabel> streamLinks() {
-        return menuables().stream()
-                .filter(LinkAndLabel.class::isInstance)
-                .map(LinkAndLabel.class::cast);
-    }
-
-    public boolean hasAnyVisibleLink() {
-        return streamLinks().anyMatch(linkAndLabel->linkAndLabel.getUiComponent().isVisible());
+    public final MenuablesModel menuablesModel() {
+        return getModel();
     }
 
 }

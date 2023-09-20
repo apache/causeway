@@ -51,6 +51,9 @@ class _Util {
                 return cssClass;
             })
             .orElseGet(()->{
+                // Small hack: if there is no specific CSS class then we assume that background-image is used
+                // the span.ViewItemLink should have some content to show it
+                // FIX: find a way to do this with CSS (width and height don't seems to help)
                 viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
                 viewIcon.setEscapeModelStrings(false);
                 return Model.of(_Strings.asLowerDashed.apply(componentFactory.getName()));
