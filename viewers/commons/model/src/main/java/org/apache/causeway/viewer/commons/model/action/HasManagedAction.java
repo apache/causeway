@@ -92,12 +92,13 @@ public interface HasManagedAction {
 
     // -- UI SPECIFICS
 
-    default Optional<FontAwesomeDecorationModel> getFontAwesomeUiModel() {
+    default Optional<FontAwesomeDecorationModel> getFontAwesomeUiModel(final boolean forceAlignmentOnIconAbsence) {
         val managedAction = getManagedAction();
-        return FontAwesomeDecorationModel.of(
-                ObjectAction.Util.cssClassFaFactoryFor(
+        return ObjectAction.Util.cssClassFaFactoryFor(
                     managedAction.getAction(),
-                    managedAction.getOwner()));
+                    managedAction.getOwner())
+                .flatMap(cssClassFaFactory->
+                    FontAwesomeDecorationModel.create(cssClassFaFactory, forceAlignmentOnIconAbsence));
     }
 
     default Optional<String> getAdditionalCssClass() {

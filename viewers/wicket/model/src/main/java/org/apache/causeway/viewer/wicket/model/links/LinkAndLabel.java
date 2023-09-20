@@ -36,7 +36,6 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LinkAndLabel
@@ -83,13 +82,6 @@ implements
         return Optional.ofNullable(named).orElse("") +
                 " ~ " + getAction().getFeatureIdentifier().getFullIdentityString();
     }
-
-    /**
-     * Allowed in drop-dows, but not in horizontal action panels,
-     * where this {@link LinkAndLabel} correspond to a UI button.
-     */
-    @Getter @Setter
-    private boolean autoAlignableWithBlankIcon;
 
     // -- RULE CHECKING SHORTCUTS
 

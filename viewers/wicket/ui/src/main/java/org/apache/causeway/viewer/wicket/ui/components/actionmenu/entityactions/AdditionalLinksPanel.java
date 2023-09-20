@@ -47,14 +47,12 @@ extends MenuablePanelAbstract {
         INLINE_LIST {
             @Override
             AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
-                links.forEach(linkAndLabel->linkAndLabel.setAutoAlignableWithBlankIcon(false));
                 return new AdditionalLinksAsListInlinePanel(id, links);
             }
         },
         DROPDOWN {
             @Override
             AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
-                links.forEach(linkAndLabel->linkAndLabel.setAutoAlignableWithBlankIcon(true));
                 return new AdditionalLinksAsDropDownPanel(id, links);
             }
         };
@@ -73,6 +71,29 @@ extends MenuablePanelAbstract {
         return Wkt.add(markupContainer, style.newPanel(id, links));
     }
 
+    protected AdditionalLinksPanel(
+            final String id,
+            final Can<LinkAndLabel> menuables,
+            final Style style) {
+        super(id, menuables);
+        setOutputMarkupId(true);
+
+        val container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
+                    this::hasAnyVisibleLink));
+
+        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
+            val linkAndLabel = item.getModelObject();
+            item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style==Style.DROPDOWN));
+        });
+
+        //refactoring hint: in CssSubMenuItemsPanel we use a RepeatingView instead
+//        Wkt.repeatingViewAdd(container, ID_ADDITIONAL_LINK_ITEM, streamLinkAndLabels(),
+//                (inner, menuable)->{
+//                    WktLinks.asAdditionalLink(inner, ID_ADDITIONAL_LINK_TITLE, menuable);
+//                });
+
+    }
+
     protected final Stream<LinkAndLabel> streamLinkAndLabels() {
         return menuablesModel().streamMenuables(LinkAndLabel.class);
     }
@@ -83,29 +104,6 @@ extends MenuablePanelAbstract {
 
     public final boolean hasAnyVisibleLink() {
         return streamLinkAndLabels().anyMatch(linkAndLabel->linkAndLabel.getUiComponent().isVisible());
-    }
-
-    protected AdditionalLinksPanel(
-            final String id,
-            final Can<LinkAndLabel> menuables) {
-
-        super(id, menuables);
-        setOutputMarkupId(true);
-
-        val container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
-                    this::hasAnyVisibleLink));
-
-        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
-            val linkAndLabel = item.getModelObject();
-            item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel));
-        });
-
-        //refactoring hint: in CssSubMenuItemsPanel we use a RepeatingView instead
-//        Wkt.repeatingViewAdd(container, ID_ADDITIONAL_LINK_ITEM, streamLinkAndLabels(),
-//                (inner, menuable)->{
-//                    WktLinks.asAdditionalLink(inner, ID_ADDITIONAL_LINK_TITLE, menuable);
-//                });
-
     }
 
 }

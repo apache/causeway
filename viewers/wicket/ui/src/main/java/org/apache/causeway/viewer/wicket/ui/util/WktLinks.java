@@ -57,12 +57,12 @@ public final class WktLinks {
 
     /**
      * For rendering {@link LinkAndLabel} within additional-link panels or drop-downs.
-     * @param tooltipReceiver
      */
     public AbstractLink asAdditionalLink(
             final Component tooltipReceiver,
             final String titleId,
-            final LinkAndLabel linkAndLabel) {
+            final LinkAndLabel linkAndLabel,
+            final boolean isForceAlignmentWithBlankIcon) {
 
         val link = linkAndLabel.getUiComponent();
         val action = linkAndLabel.getManagedAction().getAction();
@@ -110,15 +110,8 @@ public final class WktLinks {
         val viewTitleLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
 
-        val isAutoAlignable = linkAndLabel.isAutoAlignableWithBlankIcon();
-
         final Optional<FontAwesomeDecorationModel> fontAwesome =
-                linkAndLabel.getFontAwesomeUiModel()
-                .filter(faDecorationModel->isAutoAlignable
-                        && !faDecorationModel.getCssClassesSpaceSeparated().isBlank())
-                .or(()->isAutoAlignable
-                        ? FontAwesomeDecorationModel.blankFaIcon() // autoAlignment
-                        : Optional.empty());
+                linkAndLabel.getFontAwesomeUiModel(isForceAlignmentWithBlankIcon);
 
         WktDecorators.getIcon().decorate(viewTitleLabel, fontAwesome);
         WktDecorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);

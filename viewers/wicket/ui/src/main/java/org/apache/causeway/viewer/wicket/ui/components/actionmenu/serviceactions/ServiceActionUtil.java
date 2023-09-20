@@ -59,7 +59,7 @@ public final class ServiceActionUtil {
                 actionUiModel,
                 commonContext.getTranslationService());
 
-        val fontAwesome = actionUiModel.getFontAwesomeUiModel();
+        val fontAwesome = actionUiModel.getFontAwesomeUiModel(true);
         WktDecorators.getIcon().decorate(menuItemLabel, fontAwesome);
         WktDecorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
 

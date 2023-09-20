@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
@@ -49,30 +51,46 @@ public interface IconDecorator<T, R> {
 
     // -- DECORATION MODEL
 
-    @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public class FontAwesomeDecorationModel implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        @NonNull private final String cssClassesSpaceSeparated;
-        @NonNull private final CssClassFaPosition position;
+        /**
+         * Enforced in drop-dows, but not in horizontal action panels,
+         * where e.g. LinkAndLabel correspond to a UI button.
+         */
+        private final boolean forceAlignmentOnIconAbsence;
+        private final @NonNull String cssClassesSpaceSeparated;
 
-        public static Optional<FontAwesomeDecorationModel> of(final Optional<CssClassFaFactory> cssClassFaFactoryIfAny) {
-            return cssClassFaFactoryIfAny
+        @Getter
+        private final @NonNull CssClassFaPosition position;
+
+        /**
+         * @param forceAlignmentOnIconAbsence enforced in drop-dows,
+         *      but not in horizontal action panels,
+         *      where e.g. LinkAndLabel correspond to a UI button.
+         */
+        public static Optional<FontAwesomeDecorationModel> create(
+                final @Nullable CssClassFaFactory cssClassFaFactoryIfAny,
+                final boolean forceAlignmentOnIconAbsence) {
+            return Optional.ofNullable(cssClassFaFactoryIfAny)
                 .map(cssClassFaFactory->new FontAwesomeDecorationModel(
+                        forceAlignmentOnIconAbsence,
                         cssClassFaFactory.streamCssClasses().collect(Collectors.joining(" ")),
                         Optional.ofNullable(cssClassFaFactory.getPosition()).orElse(CssClassFaPosition.LEFT)));
 
         }
 
-        public static Optional<FontAwesomeDecorationModel> blankFaIcon() {
-            return of(Optional.of(CssClassFaFactory.blankFaIcon(CssClassFaPosition.LEFT)));
-        }
-
-
         public Stream<String> streamCssClasses() {
             return _Strings.splitThenStream(getCssClassesSpaceSeparated(), " ");
+        }
+
+        public String getCssClassesSpaceSeparated(){
+            return forceAlignmentOnIconAbsence
+                    && _Strings.isEmpty(cssClassesSpaceSeparated)
+                    ? "fa fa-blank"
+                    : cssClassesSpaceSeparated;
         }
 
     }
