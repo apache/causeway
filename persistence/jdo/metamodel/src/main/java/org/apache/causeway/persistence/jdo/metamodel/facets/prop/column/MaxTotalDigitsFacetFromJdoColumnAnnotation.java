@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigi
 public class MaxTotalDigitsFacetFromJdoColumnAnnotation
 extends MaxTotalDigitsFacetAbstract {
 
-    public static Optional<MaxTotalDigitsFacet> createJdo(
+    public static Optional<MaxTotalDigitsFacet> create(
             final Optional<Column> jdoColumnIfAny,
             final FacetHolder holder) {
 
@@ -38,17 +38,6 @@ extends MaxTotalDigitsFacetAbstract {
                 .map(jdoColumn->
                 new MaxTotalDigitsFacetFromJdoColumnAnnotation(
                         jdoColumn.length(), holder));
-    }
-
-    public static Optional<MaxTotalDigitsFacet> createJpa(
-            final Optional<javax.persistence.Column> jpaColumnIfAny,
-            final FacetHolder holder) {
-
-        return jpaColumnIfAny
-                .filter(jpaColumn->jpaColumn.length()>=0)
-                .map(jpaColumn->
-                new MaxTotalDigitsFacetFromJdoColumnAnnotation(
-                        jpaColumn.length(), holder));
     }
 
     private MaxTotalDigitsFacetFromJdoColumnAnnotation(

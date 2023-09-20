@@ -59,7 +59,7 @@ implements MetaModelRefiner {
 
         addFacetIfPresent(
                 MaxTotalDigitsFacetFromJdoColumnAnnotation
-                .createJdo(jdoColumnIfAny, holder));
+                .create(jdoColumnIfAny, holder));
 
         addFacetIfPresent(
                 MaxFractionalDigitsFacetFromJdoColumnAnnotation

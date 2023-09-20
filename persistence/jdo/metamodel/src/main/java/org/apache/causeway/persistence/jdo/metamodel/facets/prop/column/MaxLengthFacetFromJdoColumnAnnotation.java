@@ -39,16 +39,6 @@ extends MaxLengthFacetAbstract {
                     jdoColumn.length(), holder));
     }
 
-    public static Optional<MaxLengthFacet> createJpa(
-            final Optional<javax.persistence.Column> jpaColumnIfAny,
-            final FacetHolder holder) {
-
-        return jpaColumnIfAny
-        .map(jdoColumn->
-            new MaxLengthFacetFromJdoColumnAnnotation(
-                    jdoColumn.length(), holder));
-    }
-
     private MaxLengthFacetFromJdoColumnAnnotation(
             final int maxLength, final FacetHolder holder) {
         super(maxLength, holder);
