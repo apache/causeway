@@ -282,6 +282,7 @@ extends ScalarPanelAbstract {
                 .orElse("framework bug: should provide a reason");
 
         WktTooltips.addTooltip(disableReasonButton, translate(disabledReason) + translate(reasonSuffix));
+        Wkt.noTabbing(disableReasonButton);
 
         if(scalarModel().isParameter()) {
             // allow the client-side popover cleaner to kick in
