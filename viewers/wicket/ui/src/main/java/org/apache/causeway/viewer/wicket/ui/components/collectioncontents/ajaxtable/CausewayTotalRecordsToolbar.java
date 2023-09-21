@@ -77,8 +77,8 @@ implements HasCommonContext {
             String.valueOf(table.getColumns().size()).intern())));
 
         Wkt.labelAdd(container, "navigatorLabel", messageModel);
-        Wkt.labelAdd(container, "prototypingLabel", new PrototypingMessageProvider(getMetaModelContext())
-                .getTookTimingMessageModel());
+        Wkt.labelAdd(container, "prototypingLabel",
+                TimeTakenModel.createForPrototypingElseBlank(getMetaModelContext()));
     }
 
     /**

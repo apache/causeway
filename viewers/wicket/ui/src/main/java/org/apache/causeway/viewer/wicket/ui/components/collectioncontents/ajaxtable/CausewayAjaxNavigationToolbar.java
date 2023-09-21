@@ -83,9 +83,8 @@ implements HasCommonContext {
             target.add(table);
         });
 
-        Wkt.labelAdd(container, "prototypingLabel", new PrototypingMessageProvider(getMetaModelContext())
-                .getTookTimingMessageModel());
-
+        Wkt.labelAdd(container, "prototypingLabel",
+                TimeTakenModel.createForPrototypingElseBlank(getMetaModelContext()));
     }
 
     private MarkupContainer navigatorContainer() {
