@@ -2594,6 +2594,20 @@ public class CausewayConfiguration {
 //                            .toEpochSecond());
 //                }
 
+                /**
+                 * Whether the date picker should automatically be shown when the field gains focus.
+                 *
+                 * <p>
+                 *     The default is to show the picker when the user clicks into the field.
+                 * </p>
+                 *
+                 * <p>
+                 *     Corresponds to the <code>allowInputToggle</code> config property of the underlying library,
+                 *     (TempusDominus).
+                 * </p>
+                 */
+                private boolean popupOnFocus = false;
+
             }
 
             private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();

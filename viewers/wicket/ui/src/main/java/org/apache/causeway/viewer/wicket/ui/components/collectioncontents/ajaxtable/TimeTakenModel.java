@@ -22,11 +22,11 @@ import java.util.Locale;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.commons.internal.base._Timing.StopWatch;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+
+import lombok.val;
 
 /**
  * Produces render/response timing info when in prototyping mode.
@@ -41,22 +41,24 @@ implements IModel<String> {
 
     static IModel<String> createForPrototypingElseBlank(final MetaModelContext mmc) {
         return mmc.getSystemEnvironment().isPrototyping()
-            ? new TimeTakenModel(mmc)
+            ? new TimeTakenModel()
             : Model.of("");
     }
 
-    private final StopWatch stopWatch;
-
-    protected TimeTakenModel(final MetaModelContext mmc) {
-        this.stopWatch = mmc.getInteractionService().currentInteraction()
-            .map(CausewayInteraction.class::cast)
-            .map(interaction->_Timing.atSystemNanos(interaction.getStartedAtSystemNanos()))
-            .orElseGet(_Timing::now);
+    protected TimeTakenModel() {
     }
 
     @Override
     public String getObject() {
-        return String.format(Locale.US, "... took %.2f seconds", stopWatch.getSeconds());
+
+        val requestCycle = RequestCycle.get();
+        if(requestCycle==null) return ""; // guard against no RequestCycle available on current Thread
+
+        final long t0Millis = requestCycle.getStartTime();
+        final long t1Millis = System.currentTimeMillis();
+        final double secondsSinceRequestStart = 0.001 * (t1Millis - t0Millis);
+
+        return String.format(Locale.US, "... took %.2f seconds", secondsSinceRequestStart);
     }
 
 }

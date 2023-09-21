@@ -21,6 +21,8 @@ package org.apache.causeway.extensions.fullcalendar.applib;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.causeway.applib.annotation.Programmatic;
+
 /**
  * @since 2.0 {@index}
  */
@@ -38,11 +40,13 @@ public interface Calendarable {
      * calendar names, respectively <i>Fixed break</i>, <i>Fixed break exercise</i> and
      * <i>Fixed break exercise reminder</i>.
      */
+    @Programmatic
     Set<String> getCalendarNames();
 
     /**
      * The events associated with this object, keyed by their corresponding {@link #getCalendarNames() calendar name}.
      */
+    @Programmatic
 	Map<String, CalendarEventable> getCalendarEvents();
 
 }
