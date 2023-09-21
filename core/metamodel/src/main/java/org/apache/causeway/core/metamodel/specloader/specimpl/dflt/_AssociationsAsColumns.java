@@ -23,10 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -35,22 +32,21 @@ import org.apache.causeway.applib.services.tablecol.TableColumnVisibilityService
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
+import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 
 @RequiredArgsConstructor
 class _AssociationsAsColumns implements HasMetaModelContext {
@@ -71,8 +67,8 @@ class _AssociationsAsColumns implements HasMetaModelContext {
         val assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
         elementType.streamAssociations(MixedIn.INCLUDED)
-        .filter(associationIsVisibleAccordingToHiddenFacet(memberIdentifier))
-        .filter(associationDoesReferenceParent(parentSpecIfAny).negate())
+        .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(memberIdentifier))
+        .filter(ObjectAssociation.Predicates.referencesParent(parentSpecIfAny).negate())
         .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
         .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
@@ -170,42 +166,12 @@ class _AssociationsAsColumns implements HasMetaModelContext {
 
     }
 
-    /**
-     * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
-     * <p>
-     * However, if its a 1-to-Many, whereHidden={@link Where.ALL_TABLES} is used as default
-     * when no {@link HiddenFacet} is found.
-     * @apiNote an alternative would be to prime the meta-model with fallback facets,
-     *      however the current approach is more heap friendly
-     */
-    static Predicate<ObjectAssociation> associationIsVisibleAccordingToHiddenFacet(
-            final Identifier memberIdentifier) {
-        val whereContext = whereContextFor(memberIdentifier);
-        return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
-                .map(WhereValueFacet.class::cast)
-                .map(WhereValueFacet::where)
-                // in case its a 1-to-Many, whereHidden=ALL_TABLES is the default when not specified otherwise
-                .or(()->assoc.getSpecialization().right().map(__->Where.ALL_TABLES))
-                .stream()
-                .noneMatch(whereHidden -> whereHidden.includes(whereContext));
-    }
-
-    static Predicate<ObjectAssociation> associationDoesReferenceParent(
-            final @Nullable ObjectSpecification parentSpec) {
-        if(parentSpec == null) {
-            return _Predicates.alwaysFalse();
-        }
-        return (final ObjectAssociation assoc) -> {
-                if(assoc.isCollection()) return false; // never true for collections
-                return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
-                        && parentSpec.isOfType(assoc.getElementType());
-        };
-    }
-
     static Where whereContextFor(final Identifier memberIdentifier) {
         return memberIdentifier.getType().isAction()
-                ? Where.STANDALONE_TABLES
-                : Where.PARENTED_TABLES;
+                ? STANDALONE_TABLES
+                : PARENTED_TABLES;
     }
+
+
 
 }
