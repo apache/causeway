@@ -18,60 +18,63 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
+import lombok.val;
+
+import java.math.BigDecimal;
+
 import jakarta.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MaxLengthFromXxxColumnAnnotationMetaModelRefinerUtil;
-import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
+import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
-
-public class MaxLengthFromJdoColumnAnnotationFacetFactory
+public class BigDecimalFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject private JdoFacetContext jdoFacetContext;
-
-    public MaxLengthFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    @Inject
+    public BigDecimalFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        // only applies to JDO entities; ignore any view models
-        final Class<?> cls = processMethodContext.getCls();
-        if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
+        if(BigDecimal.class != processMethodContext.getMethod().getReturnType()) {
             return;
         }
 
-        if(String.class != processMethodContext.getMethod().getReturnType()) {
-            return;
-        }
-
-        val facetHolder = processMethodContext.getFacetHolder();
+        final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
-        FacetUtil.addFacetIfPresent(
-                MaxLengthFacetFromJdoColumnAnnotation
-                .create(jdoColumnIfAny, facetHolder));
+        addFacetIfPresent(
+                MaxTotalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));
+
+        addFacetIfPresent(
+                MaxFractionalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));
+
+        if (getConfiguration().getCore().getMetaModel().getProgrammingModel().isUseScaleForMinFractionalFacet()) {
+            addFacetIfPresent(
+                    MinFractionalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));
+        }
+
     }
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidatorSkipManagedBeans(objectSpec->{
 
+            // only consider persistent entities
             final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
                 return;
@@ -81,7 +84,8 @@ implements MetaModelRefiner {
                     .streamProperties(MixedIn.EXCLUDED)
                     // skip checks if annotated with JDO @NotPersistent
                     .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
-                    .forEach(MaxLengthFromXxxColumnAnnotationMetaModelRefinerUtil::validateMaxLengthFacet);
+                    .forEach(BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil::validateBigDecimalValueFacet);
+
         });
     }
 

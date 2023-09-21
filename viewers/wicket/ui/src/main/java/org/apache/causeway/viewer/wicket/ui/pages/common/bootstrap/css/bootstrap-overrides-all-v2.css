@@ -300,7 +300,7 @@ footer > .navbar {
     padding:0 0;
 }
 
-/* bootstrap seems to set to 'pointer' 
+/* bootstrap seems to set to 'pointer'
 .collectionContentsAsAjaxTablePanel label:hover {
     cursor: default;
 }
@@ -719,11 +719,11 @@ div.label-none label.col-form-label {
     display: none;
 }
 
-div.label-left .scalarValueWrapper { 
+div.label-left .scalarValueWrapper {
     width: var(--form-field-width);
     float: left;
 }
-div.label-right .scalarValueWrapper { 
+div.label-right .scalarValueWrapper {
 	width: var(--form-field-width);
     float: left;
 }
@@ -1306,15 +1306,15 @@ div.dataTables_wrapper ul.pagination {
 
 .toast.alert-info {
   --bs-toast-bg: rgba(var(--bs-info-rgb), 0.85);
-  --bs-toast-color: var(--bs-dark);  
+  --bs-toast-color: var(--bs-dark);
 }
 .toast.alert-warning {
   --bs-toast-bg: rgba(var(--bs-warning-rgb), 0.85);
-  --bs-toast-color: var(--bs-dark);  
+  --bs-toast-color: var(--bs-dark);
 }
 .toast.alert-danger {
   --bs-toast-bg: rgba(var(--bs-danger-rgb), 0.85);
-  --bs-toast-color: var(--bs-light);  
+  --bs-toast-color: var(--bs-light);
 }
 
 /* TOOLTIPS */
@@ -1334,6 +1334,10 @@ strong.wkt-component-with-tooltip  {
 }
 
 .ui-helper-hidden-accessible { display:none; }
+
+span.entityIconAndTitlePanel > a {
+    text-decoration: none;
+}
 
 /* --- */
 

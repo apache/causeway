@@ -34,7 +34,7 @@ import lombok.val;
 
 /**
  * Contributes a property exposing the logical object type of the domain
- * object, typically as specified by {@link javax.inject.Named}.
+ * object, typically as specified by {@link jakarta.inject.Named}.
  *
  * <p>
  *     The logical type name is also accessible from the

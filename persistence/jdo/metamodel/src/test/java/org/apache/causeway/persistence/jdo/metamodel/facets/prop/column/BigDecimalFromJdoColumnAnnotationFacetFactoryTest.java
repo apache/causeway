@@ -38,14 +38,14 @@ import lombok.val;
 class BigDecimalFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private BigDecimalFromColumnAnnotationFacetFactory facetFactory;
+    private BigDecimalFromJdoColumnAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         val mmc = MetaModelContext_forTesting.buildDefault();
-        facetFactory = new BigDecimalFromColumnAnnotationFacetFactory(mmc);
+        facetFactory = new BigDecimalFromJdoColumnAnnotationFacetFactory(mmc);
     }
 
     @Override
@@ -115,7 +115,7 @@ extends AbstractFacetFactoryTest {
         if(maxFractionalDigits>=0) {
             final MaxFractionalDigitsFacet facet = facetedMethod.getFacet(MaxFractionalDigitsFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof MaxFractionalDigitsFacetFromJdoColumn);
+            assertTrue(facet instanceof MaxFractionalDigitsFacetFromJdoColumnAnnotation);
             assertThat(facet.getMaxFractionalDigits(), is(maxFractionalDigits));
         } else {
             assertNull(facetedMethod.getFacet(MaxFractionalDigitsFacet.class));

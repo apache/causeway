@@ -43,11 +43,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import jakarta.activation.DataSource;
 import jakarta.inject.Named;
+import jakarta.persistence.Column;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -1444,6 +1446,25 @@ public class CausewayConfiguration {
                  * have been indicated as deprecated will simply be ignored/excluded from the metamodel.
                  */
                 private boolean ignoreDeprecated = false;
+
+
+                /**
+                 * If set, then {@link Digits#fraction()}, the JDO <code>@Column#scale</code> and the JPA {@link Column#scale()}
+                 * should be used for the <code>MinFractionalFacet</code> as well as the <code>MaxFractionalFacet</code>.
+                 *
+                 * <p>
+                 *     What this means in practice is that a numeric values will be rendered to the same number of fractional digits,
+                 *     irrespective of whether they are whole numbers.  For example, with a scale of 2, then
+                 *     &quot;123.45&quot; and also &quot;123.00&quot;.
+                 * </p>
+                 *
+                 * <p>
+                 *     If set to <code>false</code>, then these values would be rendered as &quot;123.45&quot;,
+                 *     but for the whole integer instead just &quot;123&quot; (that is, the shortest textual
+                 *     representation).
+                 * </p>
+                 */
+                private boolean useScaleForMinFractionalFacet = true;
             }
 
             private final Introspector introspector = new Introspector();
@@ -1611,7 +1632,6 @@ public class CausewayConfiguration {
                      */
                     private boolean variablesClause = true;
                 }
-
             }
         }
 

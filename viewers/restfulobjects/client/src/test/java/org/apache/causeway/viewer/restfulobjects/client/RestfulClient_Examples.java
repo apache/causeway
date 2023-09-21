@@ -75,7 +75,7 @@ class RestfulClient_Examples {
 
     }
 
-    // javax.ws.rs.client.ClientBuilder
+    // jakarta.ws.rs.client.ClientBuilder
     void refiner() {
 
         RestfulClient restfulClient = RestfulClient.ofConfig(

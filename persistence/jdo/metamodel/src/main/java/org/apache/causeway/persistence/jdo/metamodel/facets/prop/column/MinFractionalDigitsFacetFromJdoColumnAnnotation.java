@@ -18,18 +18,29 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
+import java.util.Optional;
+
+import javax.jdo.annotations.Column;
+
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 
-/**
- * Inferred from presence of an <tt>@Column</tt> annotation.
- */
-public class MandatoryFacetFromColumnAnnotation
-extends MandatoryFacetAbstract {
+public class MinFractionalDigitsFacetFromJdoColumnAnnotation
+extends MinFractionalDigitsFacetAbstract {
 
-    public MandatoryFacetFromColumnAnnotation(
-            final Semantics semantics, final FacetHolder holder) {
-        super(semantics, holder);
+    public static Optional<MinFractionalDigitsFacet> create(
+            final Optional<Column> columnIfAny,
+            final FacetHolder holder) {
+
+        return columnIfAny
+                .filter(column->column.scale()>=0)
+                .map(column-> new MinFractionalDigitsFacetFromJdoColumnAnnotation(column.scale(), holder));
+    }
+
+    private MinFractionalDigitsFacetFromJdoColumnAnnotation(
+            final int scale, final FacetHolder holder) {
+        super(scale, holder);
     }
 
 }

@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
+package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 
-import jakarta.inject.Inject;
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.IdentityType;
+import jakarta.persistence.Column;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -30,19 +28,14 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MaxLengthFromXxxColumnAnnotationMetaModelRefinerUtil;
-import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
-import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
 import lombok.val;
 
-public class MaxLengthFromJdoColumnAnnotationFacetFactory
+public class MaxLengthFromJpaColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject private JdoFacetContext jdoFacetContext;
-
-    public MaxLengthFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    public MaxLengthFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
@@ -51,9 +44,6 @@ implements MetaModelRefiner {
 
         // only applies to JDO entities; ignore any view models
         final Class<?> cls = processMethodContext.getCls();
-        if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
-            return;
-        }
 
         if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
@@ -64,7 +54,7 @@ implements MetaModelRefiner {
         val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         FacetUtil.addFacetIfPresent(
-                MaxLengthFacetFromJdoColumnAnnotation
+                MaxLengthFacetFromJpaColumnAnnotation
                 .create(jdoColumnIfAny, facetHolder));
     }
 
@@ -72,15 +62,8 @@ implements MetaModelRefiner {
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidatorSkipManagedBeans(objectSpec->{
 
-            final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
-            if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
-                return;
-            }
-
             objectSpec
                     .streamProperties(MixedIn.EXCLUDED)
-                    // skip checks if annotated with JDO @NotPersistent
-                    .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
                     .forEach(MaxLengthFromXxxColumnAnnotationMetaModelRefinerUtil::validateMaxLengthFacet);
         });
     }

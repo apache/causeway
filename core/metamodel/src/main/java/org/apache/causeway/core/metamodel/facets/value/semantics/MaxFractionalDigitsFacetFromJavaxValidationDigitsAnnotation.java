@@ -34,15 +34,12 @@ extends MaxFractionalDigitsFacetAbstract {
              final FacetHolder holder) {
 
          return digitsIfAny
-         .map(digits->{
-             return new MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(
-                     digits.fraction(), holder);
-         });
+         .map(digits-> new MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(digits.fraction(), holder));
     }
 
     private MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(
-            final int maxFractionalDigits, final FacetHolder holder) {
-        super(maxFractionalDigits, holder);
+            final int fraction, final FacetHolder holder) {
+        super(fraction, holder);
     }
 
 }

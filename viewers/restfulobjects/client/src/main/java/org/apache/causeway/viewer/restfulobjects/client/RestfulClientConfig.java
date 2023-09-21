@@ -101,7 +101,7 @@ public class RestfulClientConfig {
      * Value {@code 0} represents infinity. Negative values are not allowed.
      * <p>
      * The default value is infinity (0).
-     * @see javax.ws.rs.client.ClientBuilder#connectTimeout(long, TimeUnit)
+     * @see jakarta.ws.rs.client.ClientBuilder#connectTimeout(long, TimeUnit)
      */
     @XmlElement(name="connectTimeoutInMillis")
     @Builder.Default
@@ -116,7 +116,7 @@ public class RestfulClientConfig {
      * Value {@code 0} represents infinity. Negative values are not allowed.
      * <p>
      * The default value is infinity (0).
-     * @see javax.ws.rs.client.ClientBuilder#readTimeout(long, TimeUnit)
+     * @see jakarta.ws.rs.client.ClientBuilder#readTimeout(long, TimeUnit)
      */
     @XmlElement(name="readTimeoutInMillis")
     @Builder.Default

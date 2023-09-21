@@ -90,7 +90,7 @@ public class ActionParameterListBuilder {
 
     /**
      * For transport of {@link ValueDecomposition} over REST.
-     * @see RestfulClient#digestValue(javax.ws.rs.core.Response, org.apache.causeway.applib.value.semantics.ValueSemanticsProvider)
+     * @see RestfulClient#digestValue(jakarta.ws.rs.core.Response, org.apache.causeway.applib.value.semantics.ValueSemanticsProvider)
      */
     public ActionParameterListBuilder addActionParameter(final String parameterName, final ValueDecomposition decomposition) {
         return addActionParameter(parameterName, decomposition.stringify());

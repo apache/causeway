@@ -24,10 +24,10 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 /**
  * Inferred from absence of an <tt>@Column</tt> method.
  */
-public class MandatoryFacetFromAbsenceOfColumnAnnotation
+public class MandatoryFacetFromAbsenceOfJdoColumnAnnotation
 extends MandatoryFacetAbstract {
 
-    public MandatoryFacetFromAbsenceOfColumnAnnotation(
+    public MandatoryFacetFromAbsenceOfJdoColumnAnnotation(
             final Semantics semantics, final FacetHolder holder, final Precedence precedence) {
         super(semantics, holder, precedence);
     }

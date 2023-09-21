@@ -29,14 +29,11 @@ public class MaxTotalDigitsFacetFromValueSemanticsAnnotation
 extends MaxTotalDigitsFacetAbstract {
 
     public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<ValueSemantics> digitsIfAny,
+            final Optional<ValueSemantics> valueSemanticsIfAny,
             final FacetHolder holder) {
 
-        return digitsIfAny
-        .map(digits->{
-            return new MaxTotalDigitsFacetFromValueSemanticsAnnotation(
-                    digits.maxTotalDigits(), holder);
-        });
+        return valueSemanticsIfAny
+                .map(digits-> new MaxTotalDigitsFacetFromValueSemanticsAnnotation(digits.maxTotalDigits(), holder));
    }
 
    private MaxTotalDigitsFacetFromValueSemanticsAnnotation(

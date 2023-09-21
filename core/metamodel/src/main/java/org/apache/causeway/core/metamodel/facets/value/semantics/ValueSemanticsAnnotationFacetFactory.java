@@ -27,6 +27,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.TypedHolderAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import jakarta.inject.Inject;
@@ -118,9 +119,15 @@ extends FacetFactoryAbstract {
                         ));
 
         addFacetIfPresent(
-                MinFractionalDigitsFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
-
+                MinFractionalDigitsFacetAbstract.minimum(
+                        MinFractionalDigitsFacetFromValueSemanticsAnnotation
+                                .create(valueSemanticsIfAny, facetHolder),
+                        // support for @jakarta.validation.constraints.Digits (if supported)
+                        getConfiguration().getCore().getMetaModel().getProgrammingModel().isUseScaleForMinFractionalFacet()
+                                ? MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
+                                            .create(digitsIfAny, facetHolder)
+                                : Optional.empty()
+                ));
     }
 
     private void processTemporalFormat(

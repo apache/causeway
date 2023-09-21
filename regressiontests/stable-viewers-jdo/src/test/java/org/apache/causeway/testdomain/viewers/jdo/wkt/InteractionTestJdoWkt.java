@@ -32,12 +32,14 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester;
@@ -109,10 +111,11 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
         run(()->{
             wktTester.startEntityPage(pageParameters);
 
+            //XXX activate for test troubleshooting
+            // wktTester.dumpComponentTree(comp->true);
+
             wktTester.assertHeaderBrandText("Smoke Tests");
             wktTester.assertPageTitle("JdoInventoryJaxbVm; Bookstore; 3 products");
-
-            //wktTester.dumpComponentTree(comp->true);
 
             wktTester.assertFavoriteBookIs(BookDto.sample());
 
@@ -187,6 +190,8 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     }
 
+    private ManagedObject bookAdapter;
+
     @Test
     void loadBookPage_Dune_then_change_Isbn() {
         val pageParameters = call(()->{
@@ -196,10 +201,16 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
             .findFirst()
             .orElseThrow();
 
+            System.err.printf("--- adapt %n");
+            bookAdapter = super.objectManager.adapt(jdoBook);
+
             return wktTester.createPageParameters(jdoBook);
         });
 
         //System.err.printf("pageParameters %s%n", pageParameters);
+
+        assertEquals(ManagedObject.Specialization.ENTITY, bookAdapter.getSpecialization());
+        assertTrue(bookAdapter.isBookmarkMemoized(), "bookAdapter should be bookmarked");
 
         // open Dune page
         run(()->{
@@ -225,12 +236,27 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
             val form = wktTester.newFormTester(bookIsbn.editInlinePromptForm());
             form.setValue(bookIsbn.scalarField(), "ISBN-XXXX");
             form.submit();
+
+            val jpaBook = (JdoBook)bookAdapter.getPojo();
+            assertEquals("ISBN-A", jpaBook.getIsbn());
         });
 
         // simulate click on form OK button -> expected to trigger the framework's property change execution
         run(()->{
             wktTester.assertComponent(bookIsbn.editInlinePromptFormOk(), IndicatingAjaxButton.class);
+
+            wktTester.dumpComponentTree(comp->true);
+            System.out.println(
+                wktTester.getLastResponseAsString()
+            );
+
             wktTester.executeAjaxEvent(bookIsbn.editInlinePromptFormOk(), "click");
+
+            System.err.printf("bookAdapter state %s%n", bookAdapter.getEntityState());
+
+            System.err.printf("--- verify %n");
+            val jpaBook = (JdoBook)bookAdapter.getPojo();
+            assertEquals("ISBN-XXXX", jpaBook.getIsbn());
         });
 
         // ... should yield a new Title containing 'Dune [ISBN-XXXX]'

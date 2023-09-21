@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -66,6 +67,23 @@ implements MinFractionalDigitsFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("minFractionalDigits", String.valueOf(minFractionalDigits));
+    }
+
+    /**
+     * If equal, first argument wins over second.
+     */
+    public static Optional<MinFractionalDigitsFacet> minimum(
+            final Optional<MinFractionalDigitsFacet> a,
+            final Optional<MinFractionalDigitsFacet> b) {
+        if(b.isEmpty()) {
+            return a;
+        }
+        if(a.isEmpty()) {
+            return b;
+        }
+        return a.get().getMinFractionalDigits() <= b.get().getMinFractionalDigits()
+                ? a
+                : b;
     }
 
 }

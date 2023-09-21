@@ -18,11 +18,13 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import jakarta.inject.Inject;
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -34,22 +36,23 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil;
 import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.MandatoryFacetFromJdoPrimaryKeyAnnotation;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
+import lombok.val;
 
-public class MandatoryFromColumnAnnotationFacetFactory
+
+public class MandatoryFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     private final JdoFacetContext jdoFacetContext;
 
     @Inject
-    public MandatoryFromColumnAnnotationFacetFactory(
+    public MandatoryFromJdoColumnAnnotationFacetFactory(
             final MetaModelContext mmc,
             final JdoFacetContext jdoFacetContext) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
@@ -82,22 +85,45 @@ implements MetaModelRefiner {
             }
         }
 
-        _ColumnUtil.inferSemantics(processMethodContext,
-                semanticsWhileColumnPresent->{
-                    FacetUtil.addFacet(
-                            new MandatoryFacetFromColumnAnnotation(semanticsWhileColumnPresent, holder));
-                },
-                semanticsWhileColumnAbsent->{
-                    FacetUtil.addFacet(
-                            new MandatoryFacetFromAbsenceOfColumnAnnotation(
-                                    semanticsWhileColumnAbsent,
-                                    holder,
-                                    semanticsWhileColumnAbsent.isRequired()
-                                        ? Precedence.DEFAULT
-                                        : Precedence.INFERRED));
-                });
+        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(javax.jdo.annotations.Column.class);
+        MandatoryFacet.Semantics semantics = inferSemantics(processMethodContext, jdoColumnIfAny);
+        if(jdoColumnIfAny.isPresent()) {
+            FacetUtil.addFacet(
+                    new MandatoryFacetFromJdoColumnAnnotation(semantics, holder));
+        } else {
+            FacetUtil.addFacet(
+                    new MandatoryFacetFromAbsenceOfJdoColumnAnnotation(
+                            semantics,
+                            holder,
+                            semantics.isRequired()
+                                    ? Precedence.DEFAULT
+                                    : Precedence.INFERRED));
+        }
 
     }
+
+    static MandatoryFacet.Semantics inferSemantics(
+            final ProcessMethodContext processMethodContext,
+            final Optional<Column> columnIfAny) {
+
+        final String allowsNull = columnIfAny.isPresent()
+                ? columnIfAny.get().allowsNull()
+                : null;
+
+        if(_Strings.isNotEmpty(allowsNull)) {
+            // if miss-spelled, then DN assumes is not-nullable
+            return MandatoryFacet.Semantics.required(!"true".equalsIgnoreCase(allowsNull.trim()));
+        }
+
+        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
+        // per JDO spec
+        return returnType != null
+                && returnType.isPrimitive()
+                ? MandatoryFacet.Semantics.REQUIRED
+                : MandatoryFacet.Semantics.OPTIONAL;
+
+    }
+
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
@@ -108,33 +134,13 @@ implements MetaModelRefiner {
                 return;
             }
 
-            final Stream<ObjectAssociation> associations = objectSpec
-                    .streamAssociations(MixedIn.EXCLUDED)
-                    .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-            associations
-            // skip checks if annotated with JDO @NotPersistent
-            .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
-            .forEach(association->validateMandatoryFacet(association));
+            objectSpec
+                    .streamProperties(MixedIn.EXCLUDED)
+                    // skip checks if annotated with JDO @NotPersistent
+                    .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
+                    .forEach(MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil::validateMandatoryFacet);
 
         });
-    }
-
-    private static void validateMandatoryFacet(final ObjectAssociation association) {
-
-        association.lookupFacet(MandatoryFacet.class)
-        .map(MandatoryFacet::getSharedFacetRankingElseFail)
-        .ifPresent(facetRanking->facetRanking
-                .visitTopRankPairsSemanticDiffering(MandatoryFacet.class, (a, b)->{
-
-                    ValidationFailure.raiseFormatted(
-                            association,
-                            "%s: inconsistent Mandatory/Optional semantics specified in %s and %s.",
-                            association.getFeatureIdentifier().toString(),
-                            a.getClass().getSimpleName(),
-                            b.getClass().getSimpleName());
-                }));
-
     }
 
 }
