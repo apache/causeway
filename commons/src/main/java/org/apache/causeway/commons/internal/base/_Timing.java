@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.internal.base;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.function.Supplier;
 
@@ -51,7 +52,7 @@ public final class _Timing {
      * @param startedAtSystemNanos
      * @return a new {@code startedAtSystemNanos} instance of {@link StopWatch}
      */
-    public static StopWatch atSystemNanos(long startedAtSystemNanos) {
+    public static StopWatch atSystemNanos(final long startedAtSystemNanos) {
         return new StopWatch(startedAtSystemNanos);
     }
 
@@ -60,13 +61,14 @@ public final class _Timing {
      * JVM's high-resolution time source.
      * @implNote using {@link System#nanoTime()} as this is best suited to measure elapsed time
      */
-    public static final class StopWatch {
+    public static final class StopWatch implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         private long t0 = 0;
         private long t1 = 0;
         private boolean stopped;
 
-        private StopWatch(long startedAtSystemNanos) {
+        private StopWatch(final long startedAtSystemNanos) {
             t0 = startedAtSystemNanos;
         }
 
@@ -121,18 +123,18 @@ public final class _Timing {
 
     }
 
-    public static StopWatch run(Runnable runnable) {
+    public static StopWatch run(final Runnable runnable) {
         final StopWatch watch = now();
         runnable.run();
         return watch.stop();
     }
 
-    public static void runVerbose(Logger log, String label, Runnable runnable) {
+    public static void runVerbose(final Logger log, final String label, final Runnable runnable) {
         final StopWatch watch = run(runnable);
         log.info(String.format(Locale.US, "Running '%s' took %d ms", label, watch.getMillis()));
     }
 
-    public static <T> T callVerbose(Logger log, String label, Supplier<T> callable) {
+    public static <T> T callVerbose(final Logger log, final String label, final Supplier<T> callable) {
         final StopWatch watch = now();
         T result = callable.get();
         watch.stop();
