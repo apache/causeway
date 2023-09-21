@@ -35,6 +35,71 @@
       }]
     },
     {
+      "name": "causeway.value-types.temporal.editing.date-pattern",
+      "type": "java.lang.String",
+      "defaultValue": "yyyy-MM-dd"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.time-pattern-nano-second",
+      "type": "java.lang.String",
+      "defaultValue": "HH[:mm[:ss][.SSSSSSSSS]]"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.time-pattern-micro-second",
+      "type": "java.lang.String",
+      "defaultValue": "HH[:mm[:ss][.SSSSSS]]"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.time-pattern-milli-second",
+      "type": "java.lang.String",
+      "defaultValue": "HH[:mm[:ss][.SSS]]"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.time-pattern-second",
+      "type": "java.lang.String",
+      "defaultValue": "HH[:mm[:ss]]"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.time-pattern-minute",
+      "type": "java.lang.String",
+      "defaultValue": "HH[:mm]"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.time-pattern-hour",
+      "type": "java.lang.String",
+      "defaultValue": "HH"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.zone-id-pattern-for-output",
+      "type": "java.lang.String",
+      "defaultValue": "VV"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.zone-id-pattern-for-input",
+      "type": "java.lang.String",
+      "defaultValue": "VV"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.offset-pattern-for-output",
+      "type": "java.lang.String",
+      "defaultValue": "XXX"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.offset-pattern-for-input",
+      "type": "java.lang.String",
+      "defaultValue": "[XXX][X]"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.date-time-joining-pattern",
+      "type": "java.lang.String",
+      "defaultValue": "%1$s %2$s"
+    },
+    {
+      "name": "causeway.value-types.temporal.editing.zone-joining-pattern",
+      "type": "java.lang.String",
+      "defaultValue": "%1$s %2$s"
+    },
+    {
       "name": "causeway.viewer.wicket.themes.provider",
       "providers": [{
         "name": "class-reference",
