@@ -123,8 +123,7 @@ public final class _Timing {
 
         @Override
         public String toString() {
-            //return String.format(Locale.US, "%d ms", getMillis());
-            return String.format(Locale.US, "t0=%d, t1=%d, stopped->%b", t0, t1, stopped);
+            return String.format(Locale.US, "%d ms", getMillis());
         }
 
     }
