@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
-import lombok.val;
-
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
@@ -39,12 +36,13 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil;
 import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.MandatoryFacetFromJdoPrimaryKeyAnnotation;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
+
+import lombok.val;
 
 
 public class MandatoryFromJdoColumnAnnotationFacetFactory
