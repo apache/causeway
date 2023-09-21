@@ -119,7 +119,7 @@ $(function() {
                     	|| x === 'div') {
                         el.focus();
                     } else {
-                        el.select2('open').select2('close');
+                        el.select2('open');
                     }
                 } else {
                     // fallback
@@ -274,6 +274,18 @@ $(function() {
 		});
 	});
 
+    // https://stackoverflow.com/a/67691578
+    $(document).on('select2:open', (e) => {
+        const selectId = e.target.id
+
+        $(".select2-search__field[aria-controls='select2-" + selectId + "-results']").each(function (
+                key,
+                value,
+        ){
+            value.focus();
+        })
+    })
+
 });
 
 
@@ -290,3 +302,4 @@ $(function() {
         }
     })
 });
+

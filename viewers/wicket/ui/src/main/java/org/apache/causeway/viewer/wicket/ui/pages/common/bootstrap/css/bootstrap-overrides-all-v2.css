@@ -37,6 +37,10 @@ body {
     margin-bottom: 0px;
 }
 
+body > nav > div > a > img {
+    height: 32px;
+}
+
 .navbar-nav.primary ul.dropdown-menu,
 .navbar-nav.secondary ul.dropdown-menu,
 .navbar-nav.tertiary ul.dropdown-menu {
@@ -63,6 +67,13 @@ td .badge span,
 .form-control-sm .badge span {
   padding: 0;
 }
+
+
+/* fullcalendar pointer */
+td.fc-day a.fc-daygrid-event {
+    cursor: pointer;
+}
+
 
 /* fixes badge text color, when background is light - seems broken upstream https://bootswatch.com/default/ */
 .badge.bg-light {
@@ -1337,6 +1348,26 @@ strong.wkt-component-with-tooltip  {
 
 span.entityIconAndTitlePanel > a {
     text-decoration: none;
+}
+
+
+/* alignment of certain data types within collections */
+.collectionContentsAsAjaxTablePanel table.contents .scalarPanelTextFieldNumeric {
+    text-align: right;
+    text-align: -moz-right;
+    text-align: -webkit-right;
+}
+.collectionContentsAsAjaxTablePanel table.contents .scalarPanelTextFieldWithTemporalPicker {
+    text-align: center;
+    text-align: -moz-center;
+    text-align: -webkit-center;
+}
+
+
+/* failed attempt to get the select2 focus border the same as regular fields */
+span.select2:focus > span.selection > span.select2-container {
+    border-color: var(--link-color-hover);
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
 }
 
 /* --- */

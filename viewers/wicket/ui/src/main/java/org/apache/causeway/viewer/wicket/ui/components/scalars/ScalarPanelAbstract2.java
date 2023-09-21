@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
@@ -41,11 +42,12 @@ import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  *  Adds inline prompt logic.
@@ -282,6 +284,7 @@ extends ScalarPanelAbstract {
                 .orElse("framework bug: should provide a reason");
 
         WktTooltips.addTooltip(disableReasonButton, translate(disabledReason) + translate(reasonSuffix));
+        Wkt.noTabbing(disableReasonButton);
 
         if(scalarModel().isParameter()) {
             // allow the client-side popover cleaner to kick in
@@ -325,7 +328,9 @@ extends ScalarPanelAbstract {
 
         target.add(getScalarFrameContainer());
 
-        Wkt.focusOnMarkerAttribute(getFormFrame(), target);
+        Wkt.focusOnMarkerAttribute(getFormFrame(), target); // not sure this works...
+        Wkt.javaScriptAdd(target, Wkt.EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());  // .. javascript equivalent.
+
     }
 
     private void onClearFieldButtonClick(final AjaxRequestTarget target) {

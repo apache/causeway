@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker;
 
-import static de.agilecoders.wicket.jquery.JQuery.$;
-
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -35,6 +33,9 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 
+import lombok.NonNull;
+import lombok.val;
+
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
@@ -42,8 +43,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6I
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerJsReference;
 import de.agilecoders.wicket.jquery.Config;
-import lombok.NonNull;
-import lombok.val;
+
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
  * A text input field that is used as a date or date/time picker.
@@ -175,11 +176,12 @@ extends TextFieldWithConverter<T> {
                 .useCloseIcon(FontAwesome6IconType.check_s)
                 );
 
+        val causewayDatePickerConfig = commonContext.getConfiguration().getViewer().getWicket().getDatePicker();
+
         //XXX future extensions might allow to set bounds on a per member basis (via ValueSemantics annotation)
-        //config.withMinDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().minDateAsJavaUtilDate());
-        //config.withMaxDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().maxDateAsJavaUtilDate());
-        config.minDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMinDate());
-        config.maxDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate());
+        config.minDate(causewayDatePickerConfig.getMinDate());
+        config.maxDate(causewayDatePickerConfig.getMaxDate());
+        config.allowInputToggle(causewayDatePickerConfig.isPopupOnFocus());
         return config;
     }
 

@@ -246,6 +246,8 @@ extends IndicatingAjaxLink<ManagedObject> {
 
         inlinePromptContext.onPrompt();
 
+        Wkt.javaScriptAdd(target, Wkt.EventTopic.FOCUS_FIRST_PARAMETER, scalarTypeContainer.getMarkupId());
+
         target.add(scalarTypeContainer);
     }
 

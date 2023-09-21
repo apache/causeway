@@ -57,6 +57,9 @@ public class DateTimeConfig extends AbstractConfig {
      */
     private static final IKey<Boolean> IgnoreReadonly = newKey("ignoreReadonly", false);
 
+    // whether to immediately show the date picker on focus
+    private static final IKey<Boolean> AllowInputToggle = newKey("allowInputToggle", false);
+
     /**
      *
      */
@@ -206,6 +209,11 @@ public class DateTimeConfig extends AbstractConfig {
     public DateTimeConfig keepOpen(final boolean keepOpen) {
         put(KeepOpen, keepOpen);
         return this;
+    }
+
+    public DateTimeConfig allowInputToggle(final boolean allowInputToggle) {
+    	put(AllowInputToggle, allowInputToggle);
+    	return this;
     }
 
     public DateTimeConfig ignoreReadonly(final boolean ignoreReadonly) {
