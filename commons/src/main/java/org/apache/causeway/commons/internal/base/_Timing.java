@@ -24,6 +24,8 @@ import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Logger;
 
+import lombok.Getter;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -66,7 +68,7 @@ public final class _Timing {
 
         private long t0 = 0;
         private long t1 = 0;
-        private boolean stopped;
+        @Getter private boolean stopped;
 
         private StopWatch(final long startedAtSystemNanos) {
             t0 = startedAtSystemNanos;
@@ -76,12 +78,15 @@ public final class _Timing {
             start();
         }
 
+        /** On repeated calls simply restarts the clock. */
         public StopWatch start() {
             t0 = System.nanoTime();
             stopped = false;
             return this;
         }
 
+        /** Snapshots a split time.
+         * Repeated calls will update the measurement value leaving the starting point unchanged. */
         public StopWatch stop() {
             t1 = System.nanoTime();
             stopped  = true;
@@ -118,7 +123,8 @@ public final class _Timing {
 
         @Override
         public String toString() {
-            return String.format(Locale.US, "%d ms", getMillis());
+            //return String.format(Locale.US, "%d ms", getMillis());
+            return String.format(Locale.US, "t0=%d, t1=%d, stopped->%b", t0, t1, stopped);
         }
 
     }
