@@ -71,8 +71,8 @@ import lombok.extern.log4j.Log4j2;
 public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderService {
 
     /**
-     * Reads propertyIds of the collection from a file named <i>ClassName#collectionId.columnOrder.txt</i>. relative
-     * to the class itself.
+     * Reads association Ids of the collection from a file named <i>ClassName#collectionId.columnOrder.txt</i> relative
+     * to the class itself; if there is no such file then falls back to <i>CollectionType.columnOrder.txt</i>.
      *
      * <p>
      * Additional files can be provided by overriding {@link #addResourceNames(Class, String, List)}.
@@ -82,19 +82,14 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     public List<String> orderParented(
             final Object domainObject,
             final String collectionId,
-            final Class<?> collectionType,
-            final List<String> propertyIds) {
+            final Class<?> elementType,
+            final List<String> associationIds) {
 
         val domainClass = domainObject.getClass();
         val resourceNames = buildResourceNames(domainClass, collectionId);
+        addResourceNames(elementType, resourceNames);   // fallback to reading the element type's own .txt file.
         val contentsIfAny = tryLoad(domainClass, resourceNames);
-        if(!contentsIfAny.isPresent()) {
-            return null;
-        }
-        val s = contentsIfAny.get();
-        return TextUtils.readLines(s)
-                .filter(propertyIds::contains)
-                .toList();
+        return contentsMatching(contentsIfAny, associationIds);
     }
 
     private List<String> buildResourceNames(final Class<?> domainClass, final String collectionId) {
@@ -149,17 +144,11 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
      */
     @Override
     public List<String> orderStandalone(
-            final Class<?> domainClass,
-            final List<String> propertyIds) {
-        val resourceNames = buildResourceNames(domainClass);
-        val contentsIfAny = tryLoad(domainClass, resourceNames);
-        if(!contentsIfAny.isPresent()) {
-            return null;
-        }
-        val s = contentsIfAny.get();
-        return TextUtils.readLines(s)
-                .filter(propertyIds::contains)
-                .toList();
+            final Class<?> domainType,
+            final List<String> associationIds) {
+        val resourceNames = buildResourceNames(domainType);
+        val contentsIfAny = tryLoad(domainType, resourceNames);
+        return contentsMatching(contentsIfAny, associationIds);
     }
 
     private List<String> buildResourceNames(final Class<?> domainClass) {
@@ -182,6 +171,15 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             final Class<?> domainClass,
             final List<String> addTo) {
         addTo.add(String.format("%s.columnOrder.txt", domainClass.getSimpleName()));
+    }
+
+    private static List<String> contentsMatching(
+            final Optional<String> contentsIfAny,
+            final List<String> associationIds) {
+        return contentsIfAny
+                .map(content -> TextUtils.readLines(content)
+                        .filter(associationIds::contains)
+                        .toList()).orElse(null);
     }
 
 }
