@@ -62,6 +62,8 @@ import org.springframework.validation.annotation.Validated;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
@@ -1582,6 +1584,18 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 private boolean explicitLogicalTypeNames = false;
+
+                /**
+                 * Allows logical type name in {@link Named} also be included in the list of {@link DomainObject#aliased()}
+                 * or {@link DomainService#aliased()}.
+                 *
+                 * <p>
+                 *     It is <i>highly advisable</i> to leave this disabled. This option is meant as a practical way to
+                 *     enable to transition from old names to new logical type names. Especially when you have a large
+                 *     number of files that have to migrated and you want to do the migration in incremental steps.
+                 * </p>
+                 */
+                private boolean allowLogicalTypeNameAsAlias = false;
 
                 private final JaxbViewModel jaxbViewModel = new JaxbViewModel();
                 @Data
