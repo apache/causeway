@@ -198,9 +198,31 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                         // this semantic doesn't apply to collections; https://github.com/apache/causeway/pull/1887#discussion_r1333919544
                         return false;
                     }
-                    return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
-                            && assoc.getElementType().isOfType(parentSpec);
+                ObjectSpecification childSpec = assoc.getElementType();
+                return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
+                            && equivalent(parentSpec, childSpec);
             };
+        }
+
+        /**
+         * We allow either to be assignable to the other.
+         *
+         * <p>
+         * Because both of these are valid scenarios:
+         * <ul>
+         *     <li>
+         *         a child refers to an interface of its parent
+         *         (eg Order -> OrderItem, but OrderItem's property refers to an interface of Order)
+         *     </li>
+         *     <li>
+         *         the parent and child are both concrete classes of a relationship defined by supertypes
+         *         (eg Invoice -> InvoiceItem, with OutgoingInvoice -> OutgoingInvoiceItem).
+         *     </li>
+         * </ul>
+         * </p>
+         */
+        private static boolean equivalent(ObjectSpecification parentSpec, ObjectSpecification childSpec) {
+            return parentSpec.isOfType(childSpec) || childSpec.isOfType(parentSpec);
         }
     }
 
