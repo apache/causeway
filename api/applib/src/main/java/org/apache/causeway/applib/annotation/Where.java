@@ -20,6 +20,7 @@ package org.apache.causeway.applib.annotation;
 
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.util.Enums;
 
 /**
@@ -92,6 +93,10 @@ public enum Where {
     /**
      * The (property) member should be hidden when displayed as a column of a table
      * within parent object's collection, and when it references that parent.
+     *
+     * <p>
+     * This has no meaning for collections; if set on a collection then it will just be ignored.
+     * </p>
      */
     REFERENCES_PARENT,
 

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
@@ -30,14 +31,21 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.util.Facets;
+import org.springframework.lang.Nullable;
 
 import lombok.val;
+
+import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
+import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -134,29 +142,66 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         private Predicates(){}
 
-        public static final Predicate<ObjectAssociation> PROPERTIES =
-                assoc -> assoc.isOneToOneAssociation();
+        public static final Predicate<ObjectAssociation> PROPERTIES = ObjectMember::isOneToOneAssociation;
 
         public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
                 assoc ->  assoc.isOneToOneAssociation()
                             && !assoc.getElementType().isValue();
 
-        public static final Predicate<ObjectAssociation> COLLECTIONS =
-                assoc -> assoc.isOneToManyAssociation();
+        public static final Predicate<ObjectAssociation> COLLECTIONS = ObjectMember::isOneToManyAssociation;
 
-        public static final Predicate<ObjectAssociation> staticallyVisible(final Where where) {
+        public static Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return assoc -> {
-
                 val b = assoc.streamFacets()
-                        .filter(facet ->
-                                facet instanceof WhereValueFacet &&
-                                facet instanceof HiddenFacet)
+                        .filter(facet -> facet instanceof HiddenFacet)
                         .map(facet -> (WhereValueFacet) facet)
                         .anyMatch(wawF -> wawF.where().includes(where));
                 return !b;
             };
         }
 
+        static Where whereContextFor(final Identifier memberIdentifier) {
+            return memberIdentifier.getType().isAction()
+                    ? STANDALONE_TABLES
+                    : PARENTED_TABLES;
+        }
+
+        /**
+         * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
+         *
+         * <p>
+         * However, if it's a 1-to-Many, whereHidden={@link Where#ALL_TABLES} is used as default
+         * when no {@link HiddenFacet} is found.
+         *
+         * @apiNote an alternative would be to prime the meta-model with fallback facets,
+         *      however the current approach is more heap friendly
+         */
+        public static Predicate<ObjectAssociation> visibleAccordingToHiddenFacet(
+                final Identifier memberIdentifier) {
+            val whereContext = whereContextFor(memberIdentifier);
+            return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
+                    .map(WhereValueFacet.class::cast)
+                    .map(WhereValueFacet::where)
+                    // in case it's a 1-to-Many, whereHidden=ALL_TABLES is the default when not specified otherwise
+                    .or(()->assoc.getSpecialization().right().map(__->Where.ALL_TABLES))
+                    .stream()
+                    .noneMatch(whereHidden -> whereHidden.includes(whereContext));
+        }
+
+        public static Predicate<ObjectAssociation> referencesParent(
+                final @Nullable ObjectSpecification parentSpec) {
+            if(parentSpec == null) {
+                return _Predicates.alwaysFalse();
+            }
+            return (final ObjectAssociation assoc) -> {
+                    if(assoc.isCollection()) {
+                        // this semantic doesn't apply to collections; https://github.com/apache/causeway/pull/1887#discussion_r1333919544
+                        return false;
+                    }
+                    return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
+                            && assoc.getElementType().isOfType(parentSpec);
+            };
+        }
     }
 
     // -- UTIL
@@ -174,7 +219,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 addAssociationIntoGroup(associationsByGroup, association);
             }
             for (Map.Entry<String, List<ObjectAssociation>> objectAssociations : associationsByGroup.entrySet()) {
-                Collections.sort(objectAssociations.getValue(), new MemberOrderComparator(true));
+                objectAssociations.getValue().sort(new MemberOrderComparator(true));
             }
             return associationsByGroup;
         }
@@ -195,14 +240,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         }
 
         private static List<ObjectAssociation> getFrom(final Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
-            List<ObjectAssociation> list = associationsByGroup.get(groupName);
-            if(list == null) {
-                list = _Lists.newArrayList();
-                associationsByGroup.put(groupName, list);
-            }
-            return list;
+            return associationsByGroup.computeIfAbsent(groupName, k -> _Lists.newArrayList());
         }
     }
+
 
 
 }
