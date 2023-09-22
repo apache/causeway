@@ -224,6 +224,8 @@ else
   CMD="mvn"
 fi
 
+CURRENT_BRANCH=$(git branch --show-current)
+
 if [ "$WHATIF" = "true" ]; then
 
   echo git fetch
