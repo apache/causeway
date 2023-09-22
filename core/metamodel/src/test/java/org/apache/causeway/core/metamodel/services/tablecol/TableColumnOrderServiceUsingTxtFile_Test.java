@@ -67,6 +67,32 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         }
 
         /**
+         * should read from Customer#_.Order4.columnOrder.txt
+         */
+        @Test
+        void fallback_to_wildcard_type() {
+            // when
+            val ordered = service.orderParented(new Customer(), "otherOrders", Order4.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderDate", "orderStatus");
+        }
+
+        /**
+         * should read from Customer#_.Order5.columnOrder.fallback.txt
+         */
+        @Test
+        void fallback_to_wildcard_fallback_type() {
+            // when
+            val ordered = service.orderParented(new Customer(), "otherOrders", Order5.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderDate", "orderStatus");
+        }
+
+        /**
          * should read from Order.columnOrder.txt
          */
         @Test
@@ -131,6 +157,10 @@ class Order {
 class Order2 {
 }
 class Order3 {
+}
+class Order4 {
+}
+class Order5 {
 }
 class Customer {
 }
