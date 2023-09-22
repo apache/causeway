@@ -917,7 +917,11 @@ public class CausewayConfiguration {
                             "search.*:fa-search",
 
                             "add.*:fa-regular fa-square-plus",
+                            "plus.*:fa-regular fa-square-plus",
                             "remove.*:fa-regular fa-square-minus",
+                            "minus.*:fa-regular fa-square-minus",
+
+                            "sign.*:fa-solid fa-signature",
 
                             "clear.*:fa-solid fa-broom",
 
@@ -930,8 +934,11 @@ public class CausewayConfiguration {
                             "maintain.*:fa-regular fa-pen-to-square",
                             "update.*:fa-regular fa-pen-to-square",
 
+                            "cut.*:fa-solid fa-scissors",
                             "move.*:fa-solid fa-angles-right",
                             "copy.*:fa-regular fa-copy",
+                            "duplicate.*:fa-solid fa-clone",
+                            "clone.*:fa-solid fa-clone",
                             "categorise.*:fa-regular fa-folder-open",
 
                             "download.*:fa-solid fa-download",
@@ -939,6 +946,10 @@ public class CausewayConfiguration {
 
                             "execute.*:fa-solid fa-bolt",
                             "run.*:fa-solid fa-bolt",
+                            "trigger.*:fa-solid fa-bolt",
+
+                            "link.*:fa-solid fa-link",
+                            "unlink.*:fa-solid fa-link-slash",
 
                             "start.*:fa-solid fa-play",
                             "play.*:fa-solid fa-play",
@@ -971,6 +982,9 @@ public class CausewayConfiguration {
 
                             "install.*:fa-solid fa-wrench",
 
+                            "setup.*:fa-solid fa-gear",
+                            "configure.*:fa-solid fa-gear",
+
                             "refresh.*:fa-sync",
                             "renew.*:fa-rotate-right",
                             "reset.*:fa-rotate-left",
@@ -980,7 +994,10 @@ public class CausewayConfiguration {
                             "switch.*:fa-exchange",
                             "random.*:fa-shuffle",
 
-                            "view.*:fa-regular fa-eye"
+                            "view.*:fa-regular fa-eye",
+
+                            "wizard.*:fa-solid fa-wand-magic-sparkles"
+
                     };
 
                     @Getter(lazy = true)
