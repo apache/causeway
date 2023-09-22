@@ -588,7 +588,9 @@ implements
                     specsByLogicalTypeName.forEach((logicalTypeName, collidingSpecs)->{
                         if(isObjectTypeCollision(collidingSpecs)) {
                             val csv = asCsv(collidingSpecs);
-                            collidingSpecs.forEach(spec->{
+                            collidingSpecs.stream()
+                                    .filter(this::logicalTypeNameIsNotIncludedInAliased)
+                                    .forEach(spec->{
                                 ValidationFailure.raiseFormatted(spec,
                                         ProgrammingModelConstants.Violation.NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
                                             .builder()
@@ -601,6 +603,15 @@ implements
 
                     // clean-up
                     specsByLogicalTypeName.clear();
+                }
+
+                private boolean logicalTypeNameIsNotIncludedInAliased(ObjectSpecification objectSpecification) {
+                    if (getConfiguration().getCore().getMetaModel().getValidator().isAllowLogicalTypeNameAsAlias()) {
+                        return objectSpecification.getAliases()
+                                .map(LogicalType::getLogicalTypeName).stream()
+                                .noneMatch(name -> objectSpecification.getLogicalTypeName().equals(name));
+                    }
+                    return true;
                 }
 
                 private boolean isObjectTypeCollision(final List<ObjectSpecification> specs) {
