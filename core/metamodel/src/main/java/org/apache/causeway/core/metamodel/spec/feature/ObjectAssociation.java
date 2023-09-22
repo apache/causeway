@@ -219,7 +219,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 addAssociationIntoGroup(associationsByGroup, association);
             }
             for (Map.Entry<String, List<ObjectAssociation>> objectAssociations : associationsByGroup.entrySet()) {
-                Collections.sort(objectAssociations.getValue(), new MemberOrderComparator(true));
+                objectAssociations.getValue().sort(new MemberOrderComparator(true));
             }
             return associationsByGroup;
         }
@@ -240,12 +240,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         }
 
         private static List<ObjectAssociation> getFrom(final Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
-            List<ObjectAssociation> list = associationsByGroup.get(groupName);
-            if(list == null) {
-                list = _Lists.newArrayList();
-                associationsByGroup.put(groupName, list);
-            }
-            return list;
+            return associationsByGroup.computeIfAbsent(groupName, k -> _Lists.newArrayList());
         }
     }
 
