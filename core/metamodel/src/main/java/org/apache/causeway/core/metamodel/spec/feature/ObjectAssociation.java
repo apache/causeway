@@ -199,7 +199,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                         return false;
                     }
                     return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
-                            && parentSpec.isOfType(assoc.getElementType());
+                            && assoc.getElementType().isOfType(parentSpec);
             };
         }
     }
