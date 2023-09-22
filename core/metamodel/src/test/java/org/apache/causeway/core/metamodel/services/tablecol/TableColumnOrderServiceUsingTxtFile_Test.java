@@ -57,7 +57,20 @@ class TableColumnOrderServiceUsingTxtFile_Test {
          * should read from Order.columnOrder.txt
          */
         @Test
-        void fallback_file() {
+        void fallback_to_fallback_file() {
+            // when
+            val ordered = service.orderParented(new Customer(), "moreOrders", Order.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderDate", "orderStatus");
+        }
+
+        /**
+         * should read from Order.columnOrder.txt
+         */
+        @Test
+        void fallback_to_element_type() {
             // when
             val ordered = service.orderParented(new Customer(), "previousOrders", Order.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));   // "orderDate" is not in the file being read
@@ -92,6 +105,16 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         }
 
         @Test
+        void fallback_file() {
+            // when
+            val ordered = service.orderStandalone(Order3.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderStatus");
+        }
+
+        @Test
         void missing_file() {
             // when
             val ordered = service.orderStandalone(Order2.class,
@@ -106,6 +129,8 @@ class TableColumnOrderServiceUsingTxtFile_Test {
 class Order {
 }
 class Order2 {
+}
+class Order3 {
 }
 class Customer {
 }

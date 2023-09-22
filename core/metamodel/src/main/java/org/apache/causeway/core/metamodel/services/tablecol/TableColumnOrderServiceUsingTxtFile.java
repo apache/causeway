@@ -114,6 +114,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             final String collectionId,
             final List<String> addTo) {
         addTo.add(String.format("%s#%s.columnOrder.txt", domainClass.getSimpleName(), collectionId));
+        addTo.add(String.format("%s#%s.columnOrder.fallback.txt", domainClass.getSimpleName(), collectionId));
     }
 
     private static Optional<String> tryLoad(final Class<?> domainClass, final List<String> resourceNames) {
@@ -171,6 +172,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             final Class<?> domainClass,
             final List<String> addTo) {
         addTo.add(String.format("%s.columnOrder.txt", domainClass.getSimpleName()));
+        addTo.add(String.format("%s.columnOrder.fallback.txt", domainClass.getSimpleName()));
     }
 
     private static List<String> contentsMatching(
