@@ -37,18 +37,20 @@ usage() {
  echo ""                                                                                               >&2
  echo "$BASENAME_0 options:"                                                                           >&2
  echo ""                                                                                               >&2
+ echo "  -C run 'git clean -dfx first"                                                                 >&2
+ echo "  -H run 'git reset --hard origin/<branchname>' first"                                          >&2
  echo "  -p run 'git pull --ff-only' first"                                                            >&2
  echo "  -c include 'clean' goal"                                                                      >&2
+ echo "  -O do NOT add '-o' (offline) flag, ie bring down any new dependencies"                        >&2
  echo "  -t skip tests"                                                                                >&2
- echo "  -n serve timeline (prereq: npm i -g serve)"                                                   >&2
  echo "  -l single threaded, do NOT add '-T1C' flag"                                                   >&2
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
  echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
- echo "  -O do NOT add '-o' (offline) flag, ie bring down any new dependencies"                        >&2
  echo "  -a append '-Dmodule-all'.  Cannot combine with '-I' or '-K'"                                  >&2
  echo "  -K append '-Dmodule-all-except-kroviz'.  Cannot combine with '-a' or '-I'"                    >&2
  echo "  -I append '-Dmodule-all-except-incubator'.  Cannot combine with '-a' or '-K'"                 >&2
  echo "  -d use mvnd rather than mvn (requires: mvndaemon)"                                            >&2
+ echo "  -n serve up timeline afterwards (prereq: npm i -g serve)"                                     >&2
  echo "  -F do NOT search for Failures and Errors at the end"                                          >&2
  echo "  -S do NOT print summary or last 50 lines at the end"                                          >&2
  echo "  -w whatif - don't run the command but do print it out.  Implies -v (verbose)"                 >&2
@@ -61,16 +63,19 @@ usage() {
  echo "sh build.sh -tOd           # no tests, no offline, use mvnd, released only"                     >&2
  echo "sh build.sh -ptOdI         # pull, no tests, no offline, use mvnd, no incubator"                >&2
  echo "sh build.sh -pctOvI        # pull, clean, no tests, no offline, verbose, no incubator"          >&2
+ echo "sh build.sh -CHOdI         # fetch, clean and reset, no offline, use mvnd, no incubator"         >&2
  echo ""                                                                                               >&2
 }
 
+GIT_CLEAN_HARD=false
+GIT_RESET_HARD=false
 GIT_PULL=false
 CLEAN=false
 SKIP_TESTS=false
-TIMELINE=false
 SKIP_OFFLINE=false
 PACKAGE_ONLY=false
 VERIFY_ONLY=false
+TIMELINE=false
 WHATIF=false
 SINGLE_THREADED=false
 ALL=false
@@ -84,26 +89,28 @@ VERBOSE=false
 
 MVN_LOG=/tmp/$BASENAME_0.$$.log
 
-while getopts 'prcntlkyaIKOdFSwveh' opt
+while getopts 'CHprcntlkyaIKOdFSwveh' opt
 do
   case $opt in
-    p) export GIT_PULL=true ;;
-    c) export CLEAN=true ;;
-    t) export SKIP_TESTS=true ;;
-    n) export TIMELINE=true ;;
-    O) export SKIP_OFFLINE=true ;;
-    l) export SINGLE_THREADED=true ;;
-    k) export PACKAGE_ONLY=true ;;
-    y) export VERIFY_ONLY=true ;;
-    a) export ALL=true ;;
-    I) export ALL_EXCEPT_INCUBATOR=true ;;
-    K) export ALL_EXCEPT_KROVIZ=true ;;
-    d) export USE_MVND=true ;;
-    F) export SKIP_SEARCH_FOR_FAILURES=true ;;
-    S) export SKIP_SUMMARY=true ;;
-    w) export WHATIF=true ;;
-    v) export VERBOSE=true ;;
-    e) export EDIT=true ;;
+    C) GIT_CLEAN_HARD=true ;;
+    H) GIT_RESET_HARD=true ;;
+    p) GIT_PULL=true ;;
+    c) CLEAN=true ;;
+    O) SKIP_OFFLINE=true ;;
+    l) SINGLE_THREADED=true ;;
+    t) SKIP_TESTS=true ;;
+    k) PACKAGE_ONLY=true ;;
+    y) VERIFY_ONLY=true ;;
+    a) ALL=true ;;
+    I) ALL_EXCEPT_INCUBATOR=true ;;
+    K) ALL_EXCEPT_KROVIZ=true ;;
+    n) TIMELINE=true ;;
+    d) USE_MVND=true ;;
+    F) SKIP_SEARCH_FOR_FAILURES=true ;;
+    S) SKIP_SUMMARY=true ;;
+    w) WHATIF=true ;;
+    v) VERBOSE=true ;;
+    e) EDIT=true ;;
     h) usage
        exit 1
        ;;
@@ -119,6 +126,8 @@ shift $((OPTIND-1))
 echo ""
 
 if [ "$VERBOSE" = "true" ]; then
+  echo "-C (git clean -dfx)                     : $GIT_CLEAN_HARD"
+  echo "-H (git reset --hard)                   : $GIT_RESET_HARD"
   echo "-p (git pull --ff-only)                 : $GIT_PULL"
   echo "-c mvn clean                            : $CLEAN"
   echo "-t skip all tests (mvn -DskipTests)     : $SKIP_TESTS"
@@ -129,8 +138,8 @@ if [ "$VERBOSE" = "true" ]; then
   echo "-a include ALL modules                  : $ALL"
   echo "-I include all modules except incubator : $ALL_EXCEPT_INCUBATOR"
   echo "-K include all modules except kroviz    : $ALL_EXCEPT_KROVIZ"
-  echo "-n serve up timeline                    : $TIMELINE"
   echo "-d use mvnd rather than mvn             : $USE_MVND"
+  echo "-n serve up timeline                    : $TIMELINE"
   echo "-F skip search for failures             : $SKIP_SEARCH_FOR_FAILURES"
   echo "-S skip summary                         : $SKIP_SUMMARY"
   echo "-w what-if                              : $WHATIF"
@@ -217,6 +226,16 @@ fi
 
 if [ "$WHATIF" = "true" ]; then
 
+  echo git fetch
+
+  if [ "$GIT_CLEAN_HARD" = "true" ]; then
+    echo git clean -dfx
+  fi
+
+  if [ "$GIT_RESET_HARD" = "true" ]; then
+    echo git reset --hard origin/$CURRENT_BRANCH
+  fi
+
   if [ "$GIT_PULL" = "true" ]; then
     echo git pull --ff-only
   fi
@@ -241,9 +260,30 @@ if [ "$WHATIF" = "true" ]; then
     echo "serve -d target/timeline"
   fi
 
-
   echo ""
 else
+
+  git fetch
+  if [ $? -ne 0 ]; then
+    echo "git fetch failed; aborting" >&2
+    exit 1
+  fi
+
+  if [ "$GIT_CLEAN_HARD" = "true" ]; then
+    git clean -dfx
+    if [ $? -ne 0 ]; then
+      echo "git clean -dfx failed; aborting" >&2
+      exit 1
+    fi
+  fi
+
+  if [ "$GIT_RESET_HARD" = "true" ]; then
+    git reset --hard origin/$CURRENT_BRANCH
+    if [ $? -ne 0 ]; then
+      echo "git reset --hard origin/$CURRENT_BRANCH failed; aborting" >&2
+      exit 1
+    fi
+  fi
 
   if [ "$GIT_PULL" = "true" ]; then
     git pull --ff-only
