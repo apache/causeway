@@ -62,41 +62,33 @@ import java.util.List;
 public interface TableColumnOrderService {
 
     /**
-     * For the parent collection owned by the specified parent and collection
-     * Id, return the set of property ids in the same or other order.
+     * For the parent collection owned by the specified parent and collection Id, return a list of association ids
+     * to be rendered as columns, in a particular order; those not included will be hidden.
      *
-     * <p>
-     *     Return <code>null</code> if has no opinion/provides no reordering
-     *     for this parent and collection.
-     * </p>
+     * @param parent - the parent object (eg an <i>Order</i>).
+     * @param collectionId - the logical member name that identifies the collection within its domain object type (eg <i>items</i>).
+     * @param elementType - the class of the elements of the collection (eg <i>OrderItem</i>s in a collection of <i>Order#items</i>).
+     * @param associationIds - the associations (properties or collections) of the element type that should be rendered in the parent object's collection
      *
-     * @param parent
-     * @param collectionId - the logical member name that identifies the collection
-     *      within its domain object type
-     * @param collectionType
-     * @param propertyIds
+     * @return <code>null</code> if has no opinion/provides no reordering for this parent and collection.
      */
     List<String> orderParented(
             final Object parent,
             final String collectionId,
-            final Class<?> collectionType,
-            final List<String> propertyIds);
+            final Class<?> elementType,
+            final List<String> associationIds);
 
     /**
-     * For the standalone collection of the specified type, return the set of
-     * property ids in the same or other order.
+     * For the standalone collection of the specified type,  return a list of association ids to be rendered as columns,
+     * in a particular order; those not included will be hidden.
      *
-     * <p>
-     *     Return <code>null</code> if has no opinion/provides no reordering
-     *     for this type.
-     * </p>
+     * @param domainType - the class of the domain object being rendered in the standalone collection
+     * @param associationIds - the associations (properties or collections) of the domain type that should be rendered in the parent object's collection
      *
-     * @param collectionType
-     * @param propertyIds - the logical member names that identify the properties
-     *      within their domain object type
+     * @return <code>null</code> if has no opinion/provides no reordering for this type.
      */
     List<String> orderStandalone(
-            final Class<?> collectionType,
-            final List<String> propertyIds);
+            final Class<?> domainType,
+            final List<String> associationIds);
 
 }
