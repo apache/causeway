@@ -142,23 +142,18 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         private Predicates(){}
 
-        public static final Predicate<ObjectAssociation> PROPERTIES =
-                assoc -> assoc.isOneToOneAssociation();
+        public static final Predicate<ObjectAssociation> PROPERTIES = ObjectMember::isOneToOneAssociation;
 
         public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
                 assoc ->  assoc.isOneToOneAssociation()
                             && !assoc.getElementType().isValue();
 
-        public static final Predicate<ObjectAssociation> COLLECTIONS =
-                assoc -> assoc.isOneToManyAssociation();
+        public static final Predicate<ObjectAssociation> COLLECTIONS = ObjectMember::isOneToManyAssociation;
 
-        public static final Predicate<ObjectAssociation> staticallyVisible(final Where where) {
+        public static Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return assoc -> {
-
                 val b = assoc.streamFacets()
-                        .filter(facet ->
-                                facet instanceof WhereValueFacet &&
-                                facet instanceof HiddenFacet)
+                        .filter(facet -> facet instanceof HiddenFacet)
                         .map(facet -> (WhereValueFacet) facet)
                         .anyMatch(wawF -> wawF.where().includes(where));
                 return !b;
@@ -173,9 +168,11 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         /**
          * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
+         *
          * <p>
-         * However, if its a 1-to-Many, whereHidden={@link Where.ALL_TABLES} is used as default
+         * However, if it's a 1-to-Many, whereHidden={@link Where#ALL_TABLES} is used as default
          * when no {@link HiddenFacet} is found.
+         *
          * @apiNote an alternative would be to prime the meta-model with fallback facets,
          *      however the current approach is more heap friendly
          */
@@ -185,7 +182,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
                     .map(WhereValueFacet.class::cast)
                     .map(WhereValueFacet::where)
-                    // in case its a 1-to-Many, whereHidden=ALL_TABLES is the default when not specified otherwise
+                    // in case it's a 1-to-Many, whereHidden=ALL_TABLES is the default when not specified otherwise
                     .or(()->assoc.getSpecialization().right().map(__->Where.ALL_TABLES))
                     .stream()
                     .noneMatch(whereHidden -> whereHidden.includes(whereContext));
@@ -197,7 +194,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 return _Predicates.alwaysFalse();
             }
             return (final ObjectAssociation assoc) -> {
-                    if(assoc.isCollection()) return false; // never true for collections
+                    if(assoc.isCollection()) {
+                        // this semantic doesn't apply to collections; https://github.com/apache/causeway/pull/1887#discussion_r1333919544
+                        return false;
+                    }
                     return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
                             && parentSpec.isOfType(assoc.getElementType());
             };
