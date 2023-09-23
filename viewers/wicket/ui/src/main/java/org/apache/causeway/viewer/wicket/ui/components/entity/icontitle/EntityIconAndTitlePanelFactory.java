@@ -72,7 +72,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
         if (model instanceof ObjectAdapterModel) {
             spec = ((ObjectAdapterModel) model).getTypeOfSpecification();
         } else if (model instanceof ScalarModel) {
-            spec = ((ScalarModel) model).getScalarTypeSpec();
+            spec = ((ScalarModel) model).getElementType();
         } else {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }

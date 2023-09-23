@@ -35,7 +35,6 @@ public interface CalendarEventable {
      * If there is possibly more than one date associated with the entity, then use
      * {@link Calendarable} instead.
      */
-    @Programmatic
     String getCalendarName();
 
     @Programmatic

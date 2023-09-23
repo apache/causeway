@@ -120,11 +120,11 @@ extends ScalarPanelFormFieldAbstract<T> {
     // -- HELPER
 
     private void guardAgainstIncompatibleScalarType() {
-        _Assert.assertTrue(scalarModel().getScalarTypeSpec().isAssignableFrom(type), ()->
+        _Assert.assertTrue(scalarModel().getElementType().isAssignableFrom(type), ()->
             String.format("[%s:%s] cannot possibly unwrap model of type %s into target type %s",
                     this.getClass().getSimpleName(),
                     scalarModel().getIdentifier(),
-                    scalarModel().getScalarTypeSpec().getCorrespondingClass(),
+                    scalarModel().getElementType().getCorrespondingClass(),
                     type));
     }
 

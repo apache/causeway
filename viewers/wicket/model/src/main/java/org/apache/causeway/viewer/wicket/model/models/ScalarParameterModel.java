@@ -69,7 +69,7 @@ implements HasUiParameter {
 
     @Override
     protected Can<ObjectAction> calcAssociatedActions() {
-        return getScalarTypeSpec().streamActions(ActionScope.ANY, MixedIn.INCLUDED)
+        return getElementType().streamActions(ActionScope.ANY, MixedIn.INCLUDED)
                 .collect(Can.toCan());
     }
 

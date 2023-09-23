@@ -173,7 +173,7 @@ class _Util {
             .map(v->scalarModel
                     .getObjectManager().demementify((ObjectMemento)v))
             .collect(Can.toCan());
-            return Optional.of(ManagedObject.packed(scalarModel.getScalarTypeSpec(), unpackedValues));
+            return Optional.of(ManagedObject.packed(scalarModel.getElementType(), unpackedValues));
         }
 
         if(valueObject instanceof ObjectMemento) {
@@ -190,7 +190,7 @@ class _Util {
     }
 
     private Optional<ObjectAction> lookupCompositeValueMixinForFeature(final ScalarModel scalarModel) {
-        val spec = scalarModel.getScalarTypeSpec();
+        val spec = scalarModel.getElementType();
         if(!spec.isValue()) {
             return Optional.empty();
         }

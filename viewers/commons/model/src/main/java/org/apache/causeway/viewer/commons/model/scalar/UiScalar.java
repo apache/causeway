@@ -91,7 +91,7 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
         return !getMetaModel().isOptional();
     }
 
-    default ObjectSpecification getScalarTypeSpec() {
+    default ObjectSpecification getElementType() {
         return getMetaModel().getElementType();
     }
 
@@ -100,7 +100,7 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
     boolean hasChoices();
     boolean hasAutoComplete();
     default boolean hasObjectAutoComplete() {
-        return Facets.autoCompleteIsPresent(getScalarTypeSpec());
+        return Facets.autoCompleteIsPresent(getElementType());
     }
 
     Can<ManagedObject> getChoices();

@@ -83,7 +83,7 @@ class _WktImageUtil {
           return Optional.empty();
       }
 
-      val typeSpec = model.getScalarTypeSpec();
+      val typeSpec = model.getElementType();
 
       return Facets.valueStreamSemantics(typeSpec, ImageValueSemantics.class)
       .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))

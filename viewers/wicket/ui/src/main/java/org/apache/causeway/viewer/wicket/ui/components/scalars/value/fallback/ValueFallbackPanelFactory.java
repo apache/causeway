@@ -45,7 +45,7 @@ extends ComponentFactoryScalarAbstract {
 
     @Override
     protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
-        if(!scalarModel.getScalarTypeSpec().isValue()) {
+        if(!scalarModel.getElementType().isValue()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 

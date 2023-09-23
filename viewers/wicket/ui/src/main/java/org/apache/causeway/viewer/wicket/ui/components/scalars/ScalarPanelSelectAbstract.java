@@ -74,7 +74,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
             settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
             break;
         case OBJECT_AUTO_COMPLETE:
-            Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
+            Facets.autoCompleteMinLength(scalarModel.getElementType())
             .ifPresent(settings::setMinimumInputLength);
             break;
         case NO_CHOICES:
