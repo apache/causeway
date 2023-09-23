@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.spec.feature;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
@@ -40,12 +41,11 @@ import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderCom
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.springframework.lang.Nullable;
-
-import lombok.val;
 
 import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
 import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
+
+import lombok.val;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -221,7 +221,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * </ul>
          * </p>
          */
-        private static boolean equivalent(ObjectSpecification parentSpec, ObjectSpecification childSpec) {
+        private static boolean equivalent(final ObjectSpecification parentSpec, final ObjectSpecification childSpec) {
             return parentSpec.isOfType(childSpec) || childSpec.isOfType(parentSpec);
         }
     }

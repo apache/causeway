@@ -66,7 +66,7 @@ implements ObjectAdapterModel {
 
     @Override
     public ObjectSpecification getTypeOfSpecification() {
-        return scalarModel().getScalarTypeSpec();
+        return scalarModel().getElementType();
     }
 
     @Override

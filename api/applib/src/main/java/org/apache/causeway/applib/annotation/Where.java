@@ -20,7 +20,6 @@ package org.apache.causeway.applib.annotation;
 
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.util.Enums;
 
 /**
@@ -59,7 +58,7 @@ public enum Where {
     EVERYWHERE {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return true;
         }
 
@@ -75,7 +74,7 @@ public enum Where {
     ANYWHERE {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return true;
         }
 
@@ -142,7 +141,7 @@ public enum Where {
     ALL_TABLES {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return context == this || context == PARENTED_TABLES || context == STANDALONE_TABLES;
         }
 
@@ -158,7 +157,7 @@ public enum Where {
     ALL_EXCEPT_STANDALONE_TABLES {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return context != STANDALONE_TABLES;
         }
 
@@ -175,7 +174,7 @@ public enum Where {
     NOWHERE {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return false;
         }
 
@@ -188,7 +187,7 @@ public enum Where {
     NOT_SPECIFIED {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return false;
         }
 
@@ -220,7 +219,7 @@ public enum Where {
      * <p>
      * For example, {@link #ALL_TABLES} includes {@link #STANDALONE_TABLES}; {@link #ANYWHERE} includes all others.
      */
-    public boolean includes(Where context) {
+    public boolean includes(final Where context) {
         return context == this
                 || (this.isAlways()
                     && context.isAlways());

@@ -158,14 +158,14 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
     }
 
     public final boolean isScalarTypeAnyOf(final Can<Class<?>> requiredClasses) {
-        final String fullName = getScalarTypeSpec().getFullIdentifier();
+        final String fullName = getElementType().getFullIdentifier();
         return requiredClasses.stream()
                 .map(Class::getName)
                 .anyMatch(fullName::equals);
     }
 
     public final boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
-        final Class<?> scalarType = getScalarTypeSpec().getCorrespondingClass();
+        final Class<?> scalarType = getElementType().getCorrespondingClass();
         return _NullSafe.streamNullable(requiredClass)
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
@@ -274,11 +274,11 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
     }
 
     public final OptionalInt maxLength() {
-        return Facets.maxLength(getScalarTypeSpec());
+        return Facets.maxLength(getElementType());
     }
 
     public final OptionalInt typicalLength() {
-        return Facets.typicalLength(getScalarTypeSpec(), maxLength());
+        return Facets.typicalLength(getElementType(), maxLength());
     }
 
     // -- TO STRING

@@ -68,7 +68,7 @@ extends ChoiceProviderAbstractForScalarModel {
 
     private Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(final String term) {
         val autoCompleteAdapters = Facets
-                .autoCompleteExecute(scalarModel().getScalarTypeSpec(), term);
+                .autoCompleteExecute(scalarModel().getElementType(), term);
         return autoCompleteAdapters
                 .map(ManagedObject::getMementoElseFail);
     }

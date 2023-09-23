@@ -41,7 +41,7 @@ extends ChainingModel<Boolean> {
     protected BooleanModel(final ScalarModel scalarModel) {
         super(scalarModel);
 
-        val spec = scalarModel().getScalarTypeSpec();
+        val spec = scalarModel().getElementType();
         this.isPrimitive = spec.getFullIdentifier().equals("boolean");
     }
 
@@ -60,7 +60,7 @@ extends ChainingModel<Boolean> {
     @Override
     public void setObject(final Boolean value) {
         val adaptedValue = ManagedObject.value(
-                scalarModel().getScalarTypeSpec(),
+                scalarModel().getElementType(),
                 (value==null
                     && isPrimitive)
                 ? Boolean.FALSE

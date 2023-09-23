@@ -112,13 +112,13 @@ public interface UiParameter extends UiScalar {
     }
 
     @Override
-    default ObjectSpecification getScalarTypeSpec() {
+    default ObjectSpecification getElementType() {
         return getMetaModel().getElementType();
     }
 
     @Override
     default boolean hasObjectAutoComplete() {
-        return Facets.autoCompleteIsPresent(getScalarTypeSpec());
+        return Facets.autoCompleteIsPresent(getElementType());
     }
 
     default int getParameterIndex() {

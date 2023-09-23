@@ -214,8 +214,8 @@ class Select2OnSelect extends AbstractAjaxBehavior {
 
     private @NonNull ObjectSpecification elementSpec() {
         val updateReceiver = scalarModel.getSpecialization().fold(
-                param->param.getScalarTypeSpec(),
-                prop->prop.getScalarTypeSpec());
+                param->param.getElementType(),
+                prop->prop.getElementType());
         return updateReceiver;
     }
 
