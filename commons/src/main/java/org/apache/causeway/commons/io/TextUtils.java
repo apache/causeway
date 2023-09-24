@@ -434,7 +434,7 @@ public class TextUtils {
          */
         public StringCutter keepBeforeLast(final @NonNull String str) {
             _Assert.assertNotEmpty(str, this::matcherNotEmptyMsg);
-            final int index = value.indexOf(str);
+            final int index = value.lastIndexOf(str);
             if(index>-1) {
                 return StringCutter.of(value.substring(0, index));
             }
@@ -450,7 +450,7 @@ public class TextUtils {
          */
         public StringCutter keepAfterLast(final @NonNull String str) {
             _Assert.assertNotEmpty(str, this::matcherNotEmptyMsg);
-            final int index = value.indexOf(str);
+            final int index = value.lastIndexOf(str);
             if(index>-1) {
                 return StringCutter.of(value.substring(index + str.length()));
             }
