@@ -916,6 +916,14 @@ public class CausewayConfiguration {
                             "lookup.*:fa-search",
                             "search.*:fa-search",
 
+                            "recent.*:fa-solid fa-clock-rotate-left",
+
+                            "lock.*:fa-solid fa-lock",
+                            "unlock.*:fa-solid fa-unlock",
+
+                            "permit.*:fa-solid fa-unlock",
+                            "review.*:fa-solid fa-eye",
+
                             "add.*:fa-regular fa-square-plus",
                             "plus.*:fa-regular fa-square-plus",
                             "remove.*:fa-regular fa-square-minus",
