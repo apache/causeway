@@ -157,7 +157,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         if(numberOfLines<2) return; // ignore
         final int defaultHeight = row.getSheet().getDefaultRowHeight();
         int height = numberOfLines * defaultHeight;
-        height = Math.min(height, Short.MAX_VALUE); // upper bound to 32767 lines
+        height = Math.min(height, Short.MAX_VALUE); // upper bound to 32767 'twips' or 1/20th of a point
         row.setHeight((short) height);
     }
 
