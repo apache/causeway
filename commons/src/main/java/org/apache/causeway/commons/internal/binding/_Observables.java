@@ -19,8 +19,8 @@
 package org.apache.causeway.commons.internal.binding;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
+import org.apache.causeway.commons.functional.ThrowingSupplier;
 import org.apache.causeway.commons.internal.base._Lazy;
 
 /**
@@ -39,7 +39,7 @@ public class _Observables {
 
         private final _Lazy<T> lazyValue;
 
-        public LazyObservable(final Supplier<T> factory) {
+        public LazyObservable(final ThrowingSupplier<T> factory) {
             this.lazyValue = _Lazy.threadSafe(factory);
         }
 
@@ -60,7 +60,7 @@ public class _Observables {
 
     }
 
-    public static <T> LazyObservable<T> lazy(final Supplier<T> factory) {
+    public static <T> LazyObservable<T> lazy(final ThrowingSupplier<T> factory) {
         return new LazyObservable<T>(factory);
     }
 
