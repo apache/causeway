@@ -23,6 +23,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
