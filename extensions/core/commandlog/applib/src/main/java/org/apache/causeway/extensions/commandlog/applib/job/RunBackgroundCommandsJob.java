@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.job;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,18 +29,20 @@ import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 
+import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -58,50 +62,68 @@ public class RunBackgroundCommandsJob implements Job {
 
     @Inject InteractionService interactionService;
     @Inject TransactionService transactionService;
+    @Inject ClockService clockService;
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
-        val user = UserMemento.ofNameAndRoleNames("scheduler_user", "admin_role");
-        val interactionContext = InteractionContext.builder().user(user).build();
-        interactionService.run(interactionContext, new ExecuteNotYetStartedCommands());
-    }
 
-    private class ExecuteNotYetStartedCommands implements ThrowingRunnable {
+        UserMemento user = UserMemento.ofNameAndRoleNames("scheduler_user", "admin_role");
+        InteractionContext interactionContext = InteractionContext.builder().user(user).build();
 
-        @Override
-        public void run() {
-
-            // we obtain the list of Commands first; we use their CommandDto as it is serializable across transactions
-            val commandDtosIfAny =
-                    transactionService.callTransactional(
-                            Propagation.REQUIRES_NEW,
-                            () -> commandLogEntryRepository.findBackgroundAndNotYetStarted()
-                                    .stream()
-                                    .map(CommandLogEntry::getCommandDto)
-                                    .collect(Collectors.toList())
+        // we obtain the list of Commands first; we use their CommandDto as it is serializable across transactions
+        final Optional<List<CommandDto>> commandDtosIfAny =
+                interactionService.callAndCatch(interactionContext, () ->
+                    transactionService.callTransactional(Propagation.REQUIRES_NEW, () ->
+                        commandLogEntryRepository.findBackgroundAndNotYetStarted()
+                                .stream()
+                                .map(CommandLogEntry::getCommandDto)
+                                .collect(Collectors.toList())
+                        )
+                        .ifFailureFail()
+                        .valueAsNonNullElseFail()
                     )
                     .ifFailureFail()    // we give up if unable to find these
-                    .getValue();        // the success case wrapped in an optional
+                    .getValue();
 
-            // for each command, we execute within its own transaction.  Failure of one should not impact the next.
-            commandDtosIfAny.ifPresent(
-                commandDtos -> {
-                for (val commandDto : commandDtos) {
+        // for each command, we execute within its own transaction.  Failure of one should not impact the next.
+        commandDtosIfAny.ifPresent(commandDtos -> {
+            for (val commandDto : commandDtos) {
+                interactionService.runAndCatch(interactionContext, () -> {
                     transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                        // it's necessary to look up the CommandLogEntry again because we are within a new transaction.
+                        // look up the CommandLogEntry again because we are within a new transaction.
                         val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
                         // finally, we execute
                         commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                                commandExecutorService.executeCommand(
-                                        CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto));
-                    }).ifFailure(throwable -> log.error("Failed to execute command: " +
-                            CommandDtoUtils.dtoMapper().toString(commandDto), throwable));
-                }
-            });
-        }
+                        {
+                            commandExecutorService.executeCommand(
+                                    CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto);
+                            commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
+                        });
+                    })
+                    .ifFailureFail();
+                })
+                .ifFailure(throwable -> {
+                    log.error("Failed to execute command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
+                    // update this command as having failed.
+                    interactionService.runAndCatch(interactionContext, () -> {
+                        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                            // look up the CommandLogEntry again because we are within a new transaction.
+                            val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+
+                            // capture the error
+                            commandLogEntryIfAny.ifPresent(commandLogEntry ->
+                            {
+                                commandLogEntry.setException(throwable);
+                                commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
+                            });
+                        });
+                    });
+                });
+            }
+        });
     }
 
 }
