@@ -21,7 +21,7 @@ package org.apache.causeway.commons.internal.base;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.apache.causeway.commons.functional.ThrowingSupplier;
+import org.springframework.util.function.ThrowingSupplier;
 
 /**
  * <h1>- internal use only -</h1>
