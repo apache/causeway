@@ -20,12 +20,14 @@ package org.apache.causeway.core.webapp.confmenu;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
@@ -57,6 +59,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
 import org.apache.causeway.core.webapp.modules.WebModule;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -83,20 +86,15 @@ implements
 
     private LocalDateTime startupTime = LocalDateTime.MIN; // so it is not uninitialized
 
-    @Override
-    public Set<ConfigurationProperty> getEnvironmentProperties() {
-        return new TreeSet<>(env.get().values());
-    }
-
-    @Override
-    public Set<ConfigurationProperty> getVisibleConfigurationProperties() {
-        return new TreeSet<>(configForUi.get().values());
-    }
-
     @PostConstruct
     public void postConstruct() {
         startupTime = LocalDateTime.now();
         log.info("\n\n" + toStringFormatted());
+    }
+
+    @Override
+    public Set<ConfigurationProperty> getConfigurationProperties(final @NonNull Scope scope) {
+        return new TreeSet<>(scopedConf.get().get(scope.ordinal()).values());
     }
 
     // -- DUMP AS STRING
@@ -112,7 +110,7 @@ implements
                 configuration.getViewer().getCommon().getApplication().getVersion(),
                 systemEnvironment.getDeploymentType().name());
 
-        final Map<String, ConfigurationProperty> map = configForStartup.get();
+        final Map<String, ConfigurationProperty> map = scopedConf.get().get(Scope.PRIMARY.ordinal());
 
         final int fillCount = 46-head.length();
         final int fillLeft = fillCount/2;
@@ -134,7 +132,31 @@ implements
 
     // -- HELPER
 
-    private _Lazy<Map<String, ConfigurationProperty>> env = _Lazy.of(this::loadEnvironment);
+    private _Lazy<List<Map<String, ConfigurationProperty>>> scopedConf = _Lazy.of(()->loadConfiguration());
+
+    private List<Map<String, ConfigurationProperty>> loadConfiguration() {
+        val configCategories =
+                new ArrayList<Map<String, ConfigurationProperty>>();
+
+        val env = loadEnvironment();
+        val primary = loadPrimary();
+        val secondary = loadSecondary(Stream.concat(env.keySet().stream(), env.keySet().stream())
+                .distinct()
+                .collect(Collectors.toSet()));
+
+        for(Scope scope : Scope.values()) {
+            if(scope==Scope.ENV) {
+                configCategories.add(env);
+            }
+            if(scope==Scope.PRIMARY) {
+                configCategories.add(primary);
+            }
+            if(scope==Scope.SECONDARY) {
+                configCategories.add(secondary);
+            }
+        }
+        return configCategories;
+    }
 
     private Map<String, ConfigurationProperty> loadEnvironment() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
@@ -167,39 +189,14 @@ implements
         return map;
     }
 
-    enum Scope {
-        STARTUP_LOGGING,
-        UI
-    }
-
-    private _Lazy<Map<String, ConfigurationProperty>> configForStartup = _Lazy.of(()->loadConfiguration(Scope.STARTUP_LOGGING));
-    private _Lazy<Map<String, ConfigurationProperty>> configForUi = _Lazy.of(()->loadConfiguration(Scope.UI));
-
-    private Map<String, ConfigurationProperty> loadConfiguration(final Scope scope) {
+    private Map<String, ConfigurationProperty> loadPrimary() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
 
-            if(scope == Scope.STARTUP_LOGGING) {
-                configProps.getCauseway().forEach((k, v)->add("causeway." + k, v, map));
-                configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
-                configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
-                configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));
-            } else {
-
-                ConfigurableEnvironment springEnv = configuration.getEnvironment();
-                MutablePropertySources propertySources = springEnv.getPropertySources();
-                StreamSupport
-                .stream(propertySources.spliterator(), false)
-                .filter((ps) -> ps instanceof EnumerablePropertySource)
-                .map((ps) -> ((EnumerablePropertySource<?>)ps).getPropertyNames())
-                .flatMap(_NullSafe::stream)
-                //.filter(springEnv->springEnv.)
-                .forEach((propName) -> {
-                    String propertyValue = springEnv.getProperty(propName);
-                    add(propName, propertyValue, map);
-                });
-            }
-
+            configProps.getCauseway().forEach((k, v)->add("causeway." + k, v, map));
+            configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
+            configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
+            configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));
 
             val dsInfos = datasourceInfoService.getDataSourceInfos();
 
@@ -209,6 +206,32 @@ implements
                         map);
             }));
 
+        } else {
+            // if properties are not visible, show at least the policy
+            add("Configuration Property Visibility Policy",
+                    getConfigurationPropertyVisibilityPolicy().name(), map);
+        }
+        return map;
+    }
+
+    private Map<String, ConfigurationProperty> loadSecondary(final Set<String> toBeExcluded) {
+        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
+        if(isShowConfigurationProperties()) {
+
+            ConfigurableEnvironment springEnv = configuration.getEnvironment();
+            MutablePropertySources propertySources = springEnv.getPropertySources();
+            StreamSupport
+            .stream(propertySources.spliterator(), false)
+            .filter(EnumerablePropertySource.class::isInstance)
+            .map(EnumerablePropertySource.class::cast)
+            .filter(ps->!"systemEnvironment".equalsIgnoreCase(ps.getName())) // exclude system env
+            .map(EnumerablePropertySource::getPropertyNames)
+            .flatMap(_NullSafe::stream)
+            .filter(propName->!toBeExcluded.contains(propName))
+            .forEach(propName -> {
+                String propertyValue = springEnv.getProperty(propName);
+                add(propName, propertyValue, map);
+            });
 
         } else {
             // if properties are not visible, show at least the policy

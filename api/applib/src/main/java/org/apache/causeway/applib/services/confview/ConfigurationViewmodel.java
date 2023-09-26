@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.services.confview.ConfigurationViewService.Scope;
 
 /**
  * As returned by {@link ConfigurationMenu.configuration#act() ConfigurationMenu}.
@@ -53,14 +54,21 @@ public class ConfigurationViewmodel {
     @Collection
     public Set<ConfigurationProperty> getEnvironment(){
         return configurationService!=null
-                ? configurationService.getEnvironmentProperties()
+                ? configurationService.getConfigurationProperties(Scope.ENV)
                 : Collections.emptySet();
     }
 
     @Collection
-    public Set<ConfigurationProperty> getConfiguration(){
+    public Set<ConfigurationProperty> getPrimary(){
         return configurationService!=null
-                ? configurationService.getVisibleConfigurationProperties()
+                ? configurationService.getConfigurationProperties(Scope.PRIMARY)
+                : Collections.emptySet();
+    }
+
+    @Collection
+    public Set<ConfigurationProperty> getSecondary(){
+        return configurationService!=null
+                ? configurationService.getConfigurationProperties(Scope.SECONDARY)
                 : Collections.emptySet();
     }
 
