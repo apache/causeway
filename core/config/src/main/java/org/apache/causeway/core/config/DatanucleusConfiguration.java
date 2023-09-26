@@ -315,10 +315,10 @@ public class DatanucleusConfiguration {
 }
 
 /*
-As of 6.0.0-M5, these are all the config properties supported.
+As of 6.0.5, these are all the config properties supported (taken from <code>org.datanucleus.PropertyNames</code>).
 I'm pasting them here so that we might choose to surface some via application.properties, ie, define in this class.
 
-Note: As it's not easy (impossible?) to define camelCase in Spring Boot, but because DN does case-insensitive checks, we can just make em lowercase.
+Note: As it's not easy (impossible?) to define camelCase in Spring Boot, but because DN does case-insensitive checks, we can just make 'em lowercase.
 
 datanucleus.allowattachoftransient
 datanucleus.allowcallbacks

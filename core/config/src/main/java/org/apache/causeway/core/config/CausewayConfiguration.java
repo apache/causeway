@@ -916,6 +916,9 @@ public class CausewayConfiguration {
                             "lookup.*:fa-search",
                             "search.*:fa-search",
 
+                            "open.*:fa-solid fa-arrow-up-right-from-square",
+                            "close.*:fa-solid fa-regular fa-rectangle-xmark",
+
                             "recent.*:fa-solid fa-clock-rotate-left",
 
                             "lock.*:fa-solid fa-lock",
