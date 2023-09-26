@@ -27,6 +27,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.viewer.web.TextMode;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
@@ -116,7 +117,7 @@ public class WktTooltips {
             final @Nullable String body) {
         return addTooltip(target, _Strings.isEmpty(body)
                 ? null
-                : TooltipDecorationModel.ofBody(uiPlacementDirection, body));
+                : TooltipDecorationModel.ofBody(uiPlacementDirection, preprocess(body)));
     }
 
     public <T extends Component> T addTooltip(
@@ -124,7 +125,7 @@ public class WktTooltips {
             final @Nullable T target,
             final @Nullable String title,
             final @Nullable String body) {
-        return addTooltip(target, TooltipDecorationModel.ofTitleAndBody(uiPlacementDirection, title, body));
+        return addTooltip(target, TooltipDecorationModel.ofTitleAndBody(uiPlacementDirection, title, preprocess(body)));
     }
 
     // -- HELPER
@@ -201,11 +202,26 @@ public class WktTooltips {
     }
 
     /**
-     * Lookup in global context.
+     * Lookup in config, else returns default.
      */
-    private TextMode getTooltipTextMode() {
+    private static TextMode getTooltipTextMode() {
         val textMode = Optional.ofNullable(WktContext.getMetaModelContext())
-                .map(mmc->mmc.getConfiguration().getViewer().getWicket().getTooltipTextMode())
+                .map(MetaModelContext::getConfiguration)
+                .map(cfg->cfg.getViewer().getWicket().getTooltipTextMode())
                 .orElseGet(TextMode::defaults);
-        return textMode;    }
+        return textMode;
+    }
+
+    private static String preprocess(@Nullable final String string) {
+        return _Strings.nonEmpty(string)
+            .map(s->getTooltipTextMode().isHtml()
+                    ? replaceNewlineWithHtmlBR(s)
+                    : s)
+            .orElse(string);
+    }
+    private static String replaceNewlineWithHtmlBR(final @NonNull String s) {
+        return s.replace("\r", "")
+                .replace("\n", "<br/>");
+    }
+
 }

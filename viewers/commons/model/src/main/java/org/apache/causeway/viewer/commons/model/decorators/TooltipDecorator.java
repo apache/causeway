@@ -48,14 +48,14 @@ public interface TooltipDecorator<T> {
         public static TooltipDecorationModel ofBody(
                 final @NonNull UiPlacementDirection uiPlacementDirection,
                 final @Nullable String body) {
-            return of(uiPlacementDirection, Optional.empty(), _Strings.nullToEmpty(body));
+            return of(uiPlacementDirection, Optional.empty(), _Strings.nonEmpty(body).orElse(""));
         }
 
         public static TooltipDecorationModel ofTitleAndBody(
                 final @NonNull UiPlacementDirection uiPlacementDirection,
                 final @Nullable String title,
                 final @Nullable String body) {
-            return of(uiPlacementDirection, Optional.ofNullable(_Strings.emptyToNull(title)), _Strings.nullToEmpty(body));
+            return of(uiPlacementDirection, _Strings.nonEmpty(title), _Strings.nonEmpty(body).orElse(""));
         }
 
         public static TooltipDecorationModel empty() {
