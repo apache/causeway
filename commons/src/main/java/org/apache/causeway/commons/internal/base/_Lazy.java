@@ -21,6 +21,8 @@ package org.apache.causeway.commons.internal.base;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.apache.causeway.commons.functional.ThrowingSupplier;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -53,7 +55,8 @@ public interface _Lazy<T> extends Supplier<T> {
      * Evaluates this lazy value and memoizes it, when called the first time
      * after initialization or clear().
      * <p>
-     * Postcondition when memoization throws an exception: isMemoized()->true and get()->null
+     * Postcondition when memoization throws an exception: isMemoized()->true and get()->null.
+     * In other words: the _Lazy needs to be cleared before it can be re-memoized.
      */
     @Override
     public T get();
@@ -77,21 +80,21 @@ public interface _Lazy<T> extends Supplier<T> {
      * Concurrent calls to this lazy's get() method might result in concurrent calls to the
      * specified {@code supplier}.
      * @param supplier
-     * @return an (non-thread-safe) instance of _Lacy that initializes with the specified {@code supplier}
+     * @return an (non-thread-safe) instance of _Lazy that initializes with the specified {@code supplier}
      */
-    public static <T> _Lazy<T> of(Supplier<? extends T> supplier) {
+    public static <T> _Lazy<T> of(final ThrowingSupplier<? extends T> supplier) {
         return new _Lazy_Simple<T>(supplier);
     }
 
     /**
-     * Thread-safe variant to {@link _Lazy#of(Supplier)}.
+     * Thread-safe variant to {@link _Lazy#of(ThrowingSupplier)}.
      * <p>
      * Concurrent calls to this lazy's get() method will never result in concurrent calls to the
      * specified {@code supplier}.
      * @param supplier
-     * @return an (thread-safe) instance of _Lacy that initializes with the specified {@code supplier}
+     * @return an (thread-safe) instance of _Lazy that initializes with the specified {@code supplier}
      */
-    public static <T> _Lazy<T> threadSafe(Supplier<? extends T> supplier) {
+    public static <T> _Lazy<T> threadSafe(final ThrowingSupplier<? extends T> supplier) {
         return new _Lazy_ThreadSafe<T>(supplier);
     }
 

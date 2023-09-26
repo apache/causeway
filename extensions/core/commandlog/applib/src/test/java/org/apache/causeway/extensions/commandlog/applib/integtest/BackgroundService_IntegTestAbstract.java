@@ -22,7 +22,6 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,12 +30,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.quartz.JobExecutionContext;
-import org.springframework.transaction.annotation.Propagation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.springframework.transaction.annotation.Propagation;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;

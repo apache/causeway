@@ -19,8 +19,8 @@
 package org.apache.causeway.commons.internal.base;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
+import org.apache.causeway.commons.functional.ThrowingSupplier;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
@@ -31,12 +31,12 @@ import lombok.NonNull;
  */
 final class _Lazy_Simple<T> implements _Lazy<T> {
 
-    private final Supplier<? extends T> supplier;
+    private final ThrowingSupplier<? extends T> supplier;
     private T value;
     private boolean memoized;
     private boolean getting;
 
-    _Lazy_Simple(final @NonNull Supplier<? extends T> supplier) {
+    _Lazy_Simple(final @NonNull ThrowingSupplier<? extends T> supplier) {
         this.supplier = supplier;
     }
 
@@ -60,9 +60,12 @@ final class _Lazy_Simple<T> implements _Lazy<T> {
         }
         guardAgainstRecursiveCall();
         getting = true; // prevent the supplier from doing a nested call
-        value = supplier.get();
-        getting = false;
-        memoized = true;
+        try {
+            value = supplier.get();
+        } finally {
+            getting = false;
+            memoized = true; // post condition as per contract
+        }
         return value;
     }
 

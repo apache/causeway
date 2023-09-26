@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Reduction;
@@ -47,6 +47,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTab
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 class ExcelFileModel extends LoadableDetachableModel<File> {
@@ -69,14 +71,10 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         this.model = model;
     }
 
+    @RequiredArgsConstructor
     static class RowFactory {
         private final Sheet sheet;
         private int rowNum;
-
-        RowFactory(final Sheet sheet) {
-            this.sheet = sheet;
-        }
-
         public Row newRow() {
             return sheet.createRow((short) rowNum++);
         }
@@ -86,15 +84,9 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         return model.getDataTableModel();
     }
 
-    @Override
+    @Override @SneakyThrows
     protected File load() {
-
-        try {
-            return createFile();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return createFile();
     }
 
     private File createFile() throws IOException, FileNotFoundException {
@@ -103,48 +95,66 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                     .orElse("Collection"); // fallback sheet name
 
             val tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
+            Row row;
 
             try(val fos = new FileOutputStream(tempFile)) {
                 val sheet = wb.createSheet(sheetName);
 
+                val cellStyleProvider = new CellStyleProvider(wb);
+
                 final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
-                Row row = rowFactory.newRow();
+
 
                 val dataColumns = table().getDataColumns().getValue();
 
-                // header row
+                // primary header row
+                row = rowFactory.newRow();
                 int i=0;
                 for(val column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
                     cell.setCellValue(column.getColumnFriendlyName().getValue());
+                    cell.setCellStyle(cellStyleProvider.primaryHeaderStyle());
                 }
 
-                final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
+                // secondary header row
+                row = rowFactory.newRow();
+                i=0;
+                var maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
+                for(val column : dataColumns) {
+                    final Cell cell = row.createCell((short) i++);
+                    final String columnDescription = column.getColumnDescription().getValue().orElse("");
+                    cell.setCellValue(columnDescription);
+                    maxLinesInRow.accept((int)
+                            _Strings.splitThenStream(columnDescription, "\n").count());
+                    cell.setCellStyle(cellStyleProvider.secondaryHeaderStyle());
+                }
+                autoSizeRow(row, maxLinesInRow.getResult().orElse(1),
+                        wb.getFontAt(cellStyleProvider.secondaryHeaderStyle().getFontIndex()));
 
                 val dataRows = table().getDataRowsFiltered().getValue();
-                val maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
 
                 // detail rows
                 for (val dataRow : dataRows) {
                     row = rowFactory.newRow();
                     i=0;
+                    maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
                     for(val column : dataColumns) {
                         final Cell cell = row.createCell((short) i++);
                         val cellElements = dataRow.getCellElementsForColumn(column)
                                 .filter(managedObject->managedObject.getPojo()!=null);
-                        maxLinesInRow.accept(cellElements.size());
-                        setCellValue(cellElements,
+                        final int linesWritten = setCellValue(cellElements,
                                 cell,
-                                dateCellStyle);
+                                cellStyleProvider);
+                        maxLinesInRow.accept(linesWritten);
                     }
-                    autoSizeRow(row, maxLinesInRow.getResult().orElse(1));
+                    autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
                 }
 
                 // column auto-size
                 autoSizeColumns(sheet, dataColumns.size());
 
                 // freeze panes
-                sheet.createFreezePane(0, 1);
+                sheet.createFreezePane(0, 2);
 
                 wb.write(fos);
 
@@ -153,9 +163,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
     }
 
-    protected void autoSizeRow(final Row row, final int numberOfLines) {
+    protected void autoSizeRow(final Row row, final int numberOfLines, final @Nullable Font fontHint) {
         if(numberOfLines<2) return; // ignore
-        final int defaultHeight = row.getSheet().getDefaultRowHeight();
+        final int defaultHeight = fontHint!=null
+                ? fontHint.getFontHeight()
+                : row.getSheet().getDefaultRowHeight();
         int height = numberOfLines * defaultHeight;
         height = Math.min(height, Short.MAX_VALUE); // upper bound to 32767 'twips' or 1/20th of a point
         row.setHeight((short) height);
@@ -166,22 +178,17 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             .forEach(sheet::autoSizeColumn);
     }
 
-    protected CellStyle createDateFormatCellStyle(final Workbook wb) {
-        CreationHelper createHelper = wb.getCreationHelper();
-        short dateFormat = createHelper.createDataFormat().getFormat("yyyy-mm-dd");
-        CellStyle dateCellStyle = wb.createCellStyle();
-        dateCellStyle.setDataFormat(dateFormat);
-        return dateCellStyle;
-    }
-
-    private void setCellValue(
+    /**
+     * @return lines actually written to the cell (1 or more)
+     */
+    private int setCellValue(
             final Can<ManagedObject> cellElements, // pre-filtered, so contains only non-null pojos
             final Cell cell,
-            final CellStyle dateCellStyle) {
+            final CellStyleProvider cellStyleProvider) {
 
         if(cellElements.isEmpty()) {
             cell.setBlank();
-            return;
+            return 1;
         }
 
         if(cellElements.isCardinalityMultiple()) {
@@ -195,9 +202,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             if(overflow>0) {
                 joinedElementsLiteral += POI_LINE_DELIMITER + String.format("(has %d more)", overflow);
             }
-
             cell.setCellValue(joinedElementsLiteral);
-            return;
+            cell.setCellStyle(cellStyleProvider.multilineStyle());
+            return overflow>0
+                    ? MAX_CELL_ELEMENTS + 1
+                    : cellElements.size();
         }
 
         val singleton = cellElements.getFirstElseFail();
@@ -207,94 +216,94 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         // null
         if(valueAsObj == null) {
             cell.setBlank();
-            return;
+            return 1;
         }
 
         // boolean
         if(valueAsObj instanceof Boolean) {
             boolean value = (Boolean) valueAsObj;
             cell.setCellValue(value);
-            return;
+            return 1;
         }
 
         // date
         if(valueAsObj instanceof Date) {
             Date value = (Date) valueAsObj;
-            setCellValueForDate(cell, value, dateCellStyle);
-            return;
+            setCellValueForDate(cell, value, cellStyleProvider);
+            return 1;
         }
         if(valueAsObj instanceof LocalDate) {
             LocalDate value = (LocalDate) valueAsObj;
             Date date = _TimeConversion.toDate(value);
-            setCellValueForDate(cell, date, dateCellStyle);
-            return;
+            setCellValueForDate(cell, date, cellStyleProvider);
+            return 1;
         }
         if(valueAsObj instanceof LocalDateTime) {
             LocalDateTime value = (LocalDateTime) valueAsObj;
             Date date = _TimeConversion.toDate(value);
-            setCellValueForDate(cell, date, dateCellStyle);
-            return;
+            setCellValueForDate(cell, date, cellStyleProvider);
+            return 1;
         }
         if(valueAsObj instanceof OffsetDateTime) {
             OffsetDateTime value = (OffsetDateTime) valueAsObj;
             Date date = _TimeConversion.toDate(value);
-            setCellValueForDate(cell, date, dateCellStyle);
-            return;
+            setCellValueForDate(cell, date, cellStyleProvider);
+            return 1;
         }
 
         // number
         if(valueAsObj instanceof Double) {
             Double value = (Double) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Float) {
             Float value = (Float) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof BigDecimal) {
             BigDecimal value = (BigDecimal) valueAsObj;
             setCellValueForDouble(cell, value.doubleValue());
-            return;
+            return 1;
         }
         if(valueAsObj instanceof BigInteger) {
             BigInteger value = (BigInteger) valueAsObj;
             setCellValueForDouble(cell, value.doubleValue());
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Long) {
             Long value = (Long) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Integer) {
             Integer value = (Integer) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Short) {
             Short value = (Short) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Byte) {
             Byte value = (Byte) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
 
         final String objectAsStr = singleton.getTitle();
         cell.setCellValue(objectAsStr);
-        return;
+        return 1;
     }
 
-    private static void setCellValueForDouble(final Cell cell, final double value2) {
-        cell.setCellValue(value2);
+    private static void setCellValueForDouble(final Cell cell, final double value) {
+        cell.setCellValue(value);
     }
 
-    private static void setCellValueForDate(final Cell cell, final Date date, final CellStyle dateCellStyle) {
+    private static void setCellValueForDate(final Cell cell, final Date date, final CellStyleProvider cellStyleProvider) {
         cell.setCellValue(date);
-        cell.setCellStyle(dateCellStyle);
+        cell.setCellStyle(cellStyleProvider.dateStyle());
     }
 }
