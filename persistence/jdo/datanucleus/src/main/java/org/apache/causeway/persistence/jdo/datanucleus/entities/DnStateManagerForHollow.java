@@ -224,49 +224,56 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
     @Override public void checkInheritance(final FieldValues fv) { }
     @Override public void markFieldsAsLoaded(final int[] fieldNumbers) { }
 
-    private final static String INVALID_FIELD_ACCESS_MSG =
-            "JDO entity %s is in HOLLOW state, its fields are no longer valid.";
-
     @Override public boolean getBooleanField(final Persistable pc, final int field, final boolean currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
     }
 
     @Override public char getCharField(final Persistable pc, final int field, final char currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
     }
 
     @Override public byte getByteField(final Persistable pc, final int field, final byte currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
     }
 
     @Override public short getShortField(final Persistable pc, final int field, final short currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
     }
 
     @Override public int getIntField(final Persistable pc, final int field, final int currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
     }
 
     @Override public long getLongField(final Persistable pc, final int field, final long currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
     }
 
     @Override public float getFloatField(final Persistable pc, final int field, final float currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
     }
 
     @Override public double getDoubleField(final Persistable pc, final int field, final double currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
     }
 
     @Override public String getStringField(final Persistable pc, final int field, final String currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
         //return null; // mimics behavior as if there was no StateManager
     }
 
     @Override public Object getObjectField(final Persistable pc, final int field, final Object currentValue) {
-        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        throw unrecoverable(pc);
         //return null; // mimics behavior as if there was no StateManager
+    }
+
+    /**
+     * The exception message will indicate only the Oid of the entity; we don't attempt pass the entity itself because
+     * this would trigger <code>toString()</code> on it, likely to cause a stack overflow.
+     */
+    private static RuntimeException unrecoverable(Persistable pc) {
+        return _Exceptions.unrecoverable(
+                "JDO entity %s is in HOLLOW state, its fields are no longer valid.",
+                DnOidStoreAndRecoverHelper.forEntity(pc).recoverOid().orElse(pc.getClass().getSimpleName() + " (with no OID)"));
     }
 
 }
