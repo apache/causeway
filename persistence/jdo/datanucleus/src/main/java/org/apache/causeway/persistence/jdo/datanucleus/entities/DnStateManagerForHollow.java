@@ -34,6 +34,7 @@ import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.StoreManager;
 import org.datanucleus.store.fieldmanager.FieldManager;
 import org.datanucleus.transaction.Transaction;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -268,7 +269,7 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
     }
 
     private final static String INVALID_FIELD_ACCESS_MSG =
-            "JDO entity %s(oid=%s) is in HOLLOW state, its fields are no longer valid.";
+            "JDO entity %s (oid=%s) is in HOLLOW state, its fields are no longer valid.";
 
     /**
      * There is no point in trying to generate a message from a hollow {@link Persistable}'s,

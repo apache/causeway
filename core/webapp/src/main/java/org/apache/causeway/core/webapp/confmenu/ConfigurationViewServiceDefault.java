@@ -20,12 +20,14 @@ package org.apache.causeway.core.webapp.confmenu;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -33,7 +35,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.MutablePropertySources;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -46,7 +51,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
@@ -74,11 +78,6 @@ implements
     private final CausewayConfiguration configuration;
     private final DataSourceIntrospectionService datasourceInfoService;
     private final List<WebModule> webModules;
-
-//    @org.springframework.beans.factory.annotation.Value("${spring.profiles.active}")
-//    private String activeProfiles;
-
-    private final CausewayModuleCoreConfig.ConfigProps configProps;
 
     private LocalDateTime startupTime = LocalDateTime.MIN; // so it is not uninitialized
 
@@ -173,10 +172,17 @@ implements
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
 
-            configProps.getCauseway().forEach((k, v)->add("causeway." + k, v, map));
-            configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
-            configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
-            configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));
+            ConfigurableEnvironment springEnv = configuration.getEnvironment();
+            MutablePropertySources propertySources = springEnv.getPropertySources();
+            StreamSupport
+                    .stream(propertySources.spliterator(), false)
+                    .filter((ps) -> ps instanceof EnumerablePropertySource)
+                    .map((ps) -> ((EnumerablePropertySource<?>)ps).getPropertyNames())
+                    .flatMap(Arrays::stream)
+                    .forEach((propName) -> {
+                        String propertyValue = springEnv.getProperty(propName);
+                        add(propName, propertyValue, map);
+                    });
 
             val index = _Refs.intRef(0);
             val dsInfos = datasourceInfoService.getDataSourceInfos();
