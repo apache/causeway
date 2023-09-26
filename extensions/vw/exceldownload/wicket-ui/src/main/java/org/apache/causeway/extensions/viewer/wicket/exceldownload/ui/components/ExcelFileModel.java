@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -40,6 +41,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Reduction;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
@@ -96,8 +99,9 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
 
     private File createFile() throws IOException, FileNotFoundException {
         try(final Workbook wb = new XSSFWorkbook()) {
-            String sheetName = table().getTitle().getValue();
-            if(sheetName==null||sheetName.length()==0) sheetName = "Collection";
+            final String sheetName = _Strings.nonEmpty(table().getTitle().getValue())
+                    .orElse("Collection"); // fallback sheet name
+
             val tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
 
             try(val fos = new FileOutputStream(tempFile)) {
@@ -118,6 +122,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                 final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
 
                 val dataRows = table().getDataRowsFiltered().getValue();
+                val maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
 
                 // detail rows
                 for (val dataRow : dataRows) {
@@ -125,12 +130,18 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                     i=0;
                     for(val column : dataColumns) {
                         final Cell cell = row.createCell((short) i++);
-                        setCellValue(dataRow.getCellElementsForColumn(column)
-                                .filter(managedObject->managedObject.getPojo()!=null),
+                        val cellElements = dataRow.getCellElementsForColumn(column)
+                                .filter(managedObject->managedObject.getPojo()!=null);
+                        maxLinesInRow.accept(cellElements.size());
+                        setCellValue(cellElements,
                                 cell,
                                 dateCellStyle);
                     }
+                    autoSizeRow(row, maxLinesInRow.getResult().orElse(1));
                 }
+
+                // column auto-size
+                autoSizeColumns(sheet, dataColumns.size());
 
                 // freeze panes
                 sheet.createFreezePane(0, 1);
@@ -142,10 +153,17 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
     }
 
-    protected void autoSize(final Sheet sh, final int numProps) {
-        for(int prop=0; prop<numProps; prop++) {
-            sh.autoSizeColumn(prop);
-        }
+    protected void autoSizeRow(final Row row, final int numberOfLines) {
+        if(numberOfLines<2) return; // ignore
+        final int defaultHeight = row.getSheet().getDefaultRowHeight();
+        int height = numberOfLines * defaultHeight;
+        height = Math.min(height, Short.MAX_VALUE); // upper bound to 32767 'twips' or 1/20th of a point
+        row.setHeight((short) height);
+    }
+
+    protected void autoSizeColumns(final Sheet sheet, final int columnCount) {
+        IntStream.range(0, columnCount)
+            .forEach(sheet::autoSizeColumn);
     }
 
     protected CellStyle createDateFormatCellStyle(final Workbook wb) {
