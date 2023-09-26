@@ -161,8 +161,7 @@ public final class _Exceptions {
     }
 
     public static RuntimeException unrecoverable(final String format, final Object ...args) {
-        String format1 = String.format("unrecoverable error: '%s'", safelyFormat(format, args));
-        return new RuntimeException(format1);
+        return new RuntimeException(String.format("unrecoverable error: '%s'", safelyFormat(format, args)));
     }
 
     public static RuntimeException unrecoverable(final Throwable cause, final String format, final Object ...args) {
