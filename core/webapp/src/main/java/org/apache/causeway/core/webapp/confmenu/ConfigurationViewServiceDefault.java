@@ -140,7 +140,8 @@ implements
 
         val env = loadEnvironment();
         val primary = loadPrimary();
-        val secondary = loadSecondary(Stream.concat(env.keySet().stream(), env.keySet().stream())
+        // we dont't want any duplicates to appear in secondary
+        val secondary = loadSecondary(Stream.concat(env.keySet().stream(), primary.keySet().stream())
                 .distinct()
                 .collect(Collectors.toSet()));
 
