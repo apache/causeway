@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +45,7 @@ import org.apache.causeway.core.config.beans.aoppatch.TransactionInterceptorFact
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
+import org.apache.causeway.persistence.jdo.datanucleus.changetracking.PreAndPostValueEvaluatorServiceJdo;
 import org.apache.causeway.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.causeway.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
@@ -111,6 +113,7 @@ import lombok.extern.log4j.Log4j2;
     // @Service's
     JdoSupportServiceDefault.class,
     JdoObjectNotFoundRecognizer.class,
+    PreAndPostValueEvaluatorServiceJdo.class,
 
 })
 @EnableConfigurationProperties(DatanucleusSettings.class)
