@@ -32,8 +32,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -47,6 +45,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTab
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 class ExcelFileModel extends LoadableDetachableModel<File> {
@@ -69,14 +69,10 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         this.model = model;
     }
 
+    @RequiredArgsConstructor
     static class RowFactory {
         private final Sheet sheet;
         private int rowNum;
-
-        RowFactory(final Sheet sheet) {
-            this.sheet = sheet;
-        }
-
         public Row newRow() {
             return sheet.createRow((short) rowNum++);
         }
@@ -86,15 +82,9 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         return model.getDataTableModel();
     }
 
-    @Override
+    @Override @SneakyThrows
     protected File load() {
-
-        try {
-            return createFile();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return createFile();
     }
 
     private File createFile() throws IOException, FileNotFoundException {
@@ -107,6 +97,8 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             try(val fos = new FileOutputStream(tempFile)) {
                 val sheet = wb.createSheet(sheetName);
 
+                val cellStyleProvider = new CellStyleProvider(wb);
+
                 final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
                 Row row = rowFactory.newRow();
 
@@ -117,9 +109,8 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                 for(val column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
                     cell.setCellValue(column.getColumnFriendlyName().getValue());
+                    cell.setCellStyle(cellStyleProvider.headerStyle());
                 }
-
-                final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
 
                 val dataRows = table().getDataRowsFiltered().getValue();
                 val maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
@@ -132,10 +123,10 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                         final Cell cell = row.createCell((short) i++);
                         val cellElements = dataRow.getCellElementsForColumn(column)
                                 .filter(managedObject->managedObject.getPojo()!=null);
-                        maxLinesInRow.accept(cellElements.size());
-                        setCellValue(cellElements,
+                        final int linesWritten = setCellValue(cellElements,
                                 cell,
-                                dateCellStyle);
+                                cellStyleProvider);
+                        maxLinesInRow.accept(linesWritten);
                     }
                     autoSizeRow(row, maxLinesInRow.getResult().orElse(1));
                 }
@@ -166,22 +157,17 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             .forEach(sheet::autoSizeColumn);
     }
 
-    protected CellStyle createDateFormatCellStyle(final Workbook wb) {
-        CreationHelper createHelper = wb.getCreationHelper();
-        short dateFormat = createHelper.createDataFormat().getFormat("yyyy-mm-dd");
-        CellStyle dateCellStyle = wb.createCellStyle();
-        dateCellStyle.setDataFormat(dateFormat);
-        return dateCellStyle;
-    }
-
-    private void setCellValue(
+    /**
+     * @return lines actually written to the cell (1 or more)
+     */
+    private int setCellValue(
             final Can<ManagedObject> cellElements, // pre-filtered, so contains only non-null pojos
             final Cell cell,
-            final CellStyle dateCellStyle) {
+            final CellStyleProvider cellStyleProvider) {
 
         if(cellElements.isEmpty()) {
             cell.setBlank();
-            return;
+            return 1;
         }
 
         if(cellElements.isCardinalityMultiple()) {
@@ -197,7 +183,10 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             }
 
             cell.setCellValue(joinedElementsLiteral);
-            return;
+            cell.setCellStyle(cellStyleProvider.multilineStyle());
+            return overflow>0
+                    ? MAX_CELL_ELEMENTS + 1
+                    : cellElements.size();
         }
 
         val singleton = cellElements.getFirstElseFail();
@@ -207,94 +196,94 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         // null
         if(valueAsObj == null) {
             cell.setBlank();
-            return;
+            return 1;
         }
 
         // boolean
         if(valueAsObj instanceof Boolean) {
             boolean value = (Boolean) valueAsObj;
             cell.setCellValue(value);
-            return;
+            return 1;
         }
 
         // date
         if(valueAsObj instanceof Date) {
             Date value = (Date) valueAsObj;
-            setCellValueForDate(cell, value, dateCellStyle);
-            return;
+            setCellValueForDate(cell, value, cellStyleProvider);
+            return 1;
         }
         if(valueAsObj instanceof LocalDate) {
             LocalDate value = (LocalDate) valueAsObj;
             Date date = _TimeConversion.toDate(value);
-            setCellValueForDate(cell, date, dateCellStyle);
-            return;
+            setCellValueForDate(cell, date, cellStyleProvider);
+            return 1;
         }
         if(valueAsObj instanceof LocalDateTime) {
             LocalDateTime value = (LocalDateTime) valueAsObj;
             Date date = _TimeConversion.toDate(value);
-            setCellValueForDate(cell, date, dateCellStyle);
-            return;
+            setCellValueForDate(cell, date, cellStyleProvider);
+            return 1;
         }
         if(valueAsObj instanceof OffsetDateTime) {
             OffsetDateTime value = (OffsetDateTime) valueAsObj;
             Date date = _TimeConversion.toDate(value);
-            setCellValueForDate(cell, date, dateCellStyle);
-            return;
+            setCellValueForDate(cell, date, cellStyleProvider);
+            return 1;
         }
 
         // number
         if(valueAsObj instanceof Double) {
             Double value = (Double) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Float) {
             Float value = (Float) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof BigDecimal) {
             BigDecimal value = (BigDecimal) valueAsObj;
             setCellValueForDouble(cell, value.doubleValue());
-            return;
+            return 1;
         }
         if(valueAsObj instanceof BigInteger) {
             BigInteger value = (BigInteger) valueAsObj;
             setCellValueForDouble(cell, value.doubleValue());
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Long) {
             Long value = (Long) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Integer) {
             Integer value = (Integer) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Short) {
             Short value = (Short) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
         if(valueAsObj instanceof Byte) {
             Byte value = (Byte) valueAsObj;
             setCellValueForDouble(cell, value);
-            return;
+            return 1;
         }
 
         final String objectAsStr = singleton.getTitle();
         cell.setCellValue(objectAsStr);
-        return;
+        return 1;
     }
 
     private static void setCellValueForDouble(final Cell cell, final double value2) {
         cell.setCellValue(value2);
     }
 
-    private static void setCellValueForDate(final Cell cell, final Date date, final CellStyle dateCellStyle) {
+    private static void setCellValueForDate(final Cell cell, final Date date, final CellStyleProvider cellStyleProvider) {
         cell.setCellValue(date);
-        cell.setCellStyle(dateCellStyle);
+        cell.setCellStyle(cellStyleProvider.dateStyle());
     }
 }
