@@ -61,6 +61,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
+import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.causeway.core.transaction.changetracking.EntityChangeTracker;
@@ -108,6 +109,7 @@ implements
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
     private final EntityChangesPublisher entityChangesPublisher;
     private final Provider<InteractionProvider> interactionProviderProvider;
+    private final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService;
 
     /**
      * Contains a record for every objectId/propertyId that was changed.
@@ -162,13 +164,16 @@ implements
                         rec.withPostValueSetToCurrent();
                     }
                 })
-                .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
+                .filter(managedProperty-> shouldPublish(managedProperty.getPreAndPostValue()))
                 .collect(_Sets.toUnmodifiable());
 
         enlistedPropertyChangeRecordsById.clear();
 
         return records;
+    }
 
+    private boolean shouldPublish(PreAndPostValue preAndPostValue) {
+        return preAndPostValueEvaluatorService.differ(preAndPostValue);
     }
 
     private boolean isEntityExcludedForChangePublishing(final ManagedObject entity) {
