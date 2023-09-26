@@ -225,9 +225,6 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
     @Override public void checkInheritance(final FieldValues fv) { }
     @Override public void markFieldsAsLoaded(final int[] fieldNumbers) { }
 
-    private final static String INVALID_FIELD_ACCESS_MSG =
-            "JDO entity %s is in HOLLOW state, its fields are no longer valid.";
-
     @Override public boolean getBooleanField(final Persistable pc, final int field, final boolean currentValue) {
         throw invalidFieldAccess(pc);
     }
@@ -270,10 +267,13 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
         //return null; // mimics behavior as if there was no StateManager
     }
 
-    static RuntimeException invalidFieldAccess(final @Nullable Persistable pc) {
+    private final static String INVALID_FIELD_ACCESS_MSG =
+            "JDO entity %s(oid=%s) is in HOLLOW state, its fields are no longer valid.";
+
+    private RuntimeException invalidFieldAccess(final @Nullable Persistable pc) {
         return pc==null
-            ? _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, "Persistable") // just in case
-            : _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc.getClass().getName()); // free of side effects
+            ? _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, "Persistable", "oidStringified") // just in case
+            : _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc.getClass().getName(), oidStringified); // free of side effects
     }
 
 }
