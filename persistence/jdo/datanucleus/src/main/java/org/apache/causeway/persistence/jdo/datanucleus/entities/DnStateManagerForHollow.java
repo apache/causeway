@@ -277,7 +277,7 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
      */
     private RuntimeException invalidFieldAccess(final @Nullable Persistable pc) {
         return pc==null
-            ? _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, "Persistable", "oidStringified") // just in case
+            ? _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, "Persistable", oidStringified) // just in case
             : _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc.getClass().getName(), oidStringified); // free of side effects
     }
 
