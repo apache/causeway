@@ -77,14 +77,14 @@ public final class _Exceptions {
     public static final IllegalArgumentException illegalArgument(
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalArgumentException(String.format(format, args));
+        return new IllegalArgumentException(safelyFormat(format, args));
     }
 
     public static final IllegalArgumentException illegalArgument(
             final @NonNull Throwable cause,
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalArgumentException(String.format(format, args), cause);
+        return new IllegalArgumentException(safelyFormat(format, args), cause);
     }
 
     // -- ILLEGAL STATE
@@ -92,14 +92,14 @@ public final class _Exceptions {
     public static IllegalStateException illegalState(
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalStateException(String.format(format, args));
+        return new IllegalStateException(safelyFormat(format, args));
     }
 
     public static IllegalStateException illegalState(
             final @NonNull Throwable cause,
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalStateException(String.format(format, args), cause);
+        return new IllegalStateException(safelyFormat(format, args), cause);
     }
 
     // -- ILLEGAL ACCESS
@@ -107,7 +107,7 @@ public final class _Exceptions {
     public static IllegalAccessException illegalAccess(
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalAccessException(String.format(format, args));
+        return new IllegalAccessException(safelyFormat(format, args));
     }
 
     // -- NO SUCH ELEMENT
@@ -123,7 +123,7 @@ public final class _Exceptions {
     public static final NoSuchElementException noSuchElement(
             final @NonNull String format,
             final @Nullable Object ...args) {
-        return noSuchElement(String.format(format, args));
+        return noSuchElement(safelyFormat(format, args));
     }
 
     // -- NO SUCH METHOD
@@ -161,13 +161,13 @@ public final class _Exceptions {
     }
 
     public static RuntimeException unrecoverable(final String format, final Object ...args) {
-        return new RuntimeException(String.format("unrecoverable error: '%s'",
-                String.format(format, args)));
+        String format1 = String.format("unrecoverable error: '%s'", safelyFormat(format, args));
+        return new RuntimeException(format1);
     }
 
     public static RuntimeException unrecoverable(final Throwable cause, final String format, final Object ...args) {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...",
-                String.format(format, args)), cause);
+                safelyFormat(format, args)), cause);
     }
 
     // -- UNSUPPORTED
@@ -181,8 +181,20 @@ public final class _Exceptions {
     }
 
     public static UnsupportedOperationException unsupportedOperation(final String format, final Object ...args) {
-        return new UnsupportedOperationException(String.format(format, args));
+        return new UnsupportedOperationException(safelyFormat(format, args));
     }
+
+
+    private static String safelyFormat(String format, Object... args) {
+        try {
+            return String.format(format, args);
+        } catch (Throwable ex) {
+            // we lose the args
+            return format;
+        }
+    }
+
+
 
     // -- ASSERT
 
