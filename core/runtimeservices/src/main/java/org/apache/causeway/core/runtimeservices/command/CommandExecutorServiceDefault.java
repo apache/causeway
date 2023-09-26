@@ -122,9 +122,15 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         val interaction = interactionLayerTracker.currentInteractionElseFail();
         val command = interaction.getCommand();
 
-        // replace the command with that of the DTO to be executed.
-        command.updater().setInteractionId(UUID.fromString(dto.getInteractionId()));
+        // replace the command with that of the DTO to be executed
         command.updater().setCommandDto(dto);
+
+        // ... and also its interactionId.
+        //
+        // nb: this should be sufficient; there are no other copies of interactionId to be updated.
+        // In particular, both InteractionServiceDefault#getInteractionId() and Interaction#getInteractionId() just
+        // delegate to the Command held within the Interaction;
+        command.updater().setInteractionId(UUID.fromString(dto.getInteractionId()));
 
 
         // notify subscribers that the command is now ready for execution
