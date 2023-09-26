@@ -49,7 +49,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterRepository;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter_bumpUsingMixin;
-import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.SneakyThrows;
