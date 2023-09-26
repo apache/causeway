@@ -34,7 +34,6 @@ import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.StoreManager;
 import org.datanucleus.store.fieldmanager.FieldManager;
 import org.datanucleus.transaction.Transaction;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -268,18 +267,18 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
         //return null; // mimics behavior as if there was no StateManager
     }
 
-    private final static String INVALID_FIELD_ACCESS_MSG =
-            "JDO entity %s (oid=%s) is in HOLLOW state, its fields are no longer valid.";
-
     /**
      * There is no point in trying to generate a message from a hollow {@link Persistable}'s,
      * toString() method, as its fields are all set to null.
      * Instead we provide type and OID information.
      */
     private RuntimeException invalidFieldAccess(final @Nullable Persistable pc) {
-        return pc==null
-            ? _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, "Persistable", oidStringified) // just in case
-            : _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc.getClass().getName(), oidStringified); // free of side effects
+        return  _Exceptions.unrecoverable
+                ("JDO entity %s (oid=%s) is in HOLLOW state, its fields are no longer valid.",
+                pc!=null
+                    ? pc.getClass().getName()
+                    : "Persistable",
+                oidStringified);
     }
 
 }
