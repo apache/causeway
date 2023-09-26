@@ -623,6 +623,10 @@ public final class CommonDtoUtils {
 
     // -- PARAM DTO FACTORIES
 
+    /**
+     * @param paramName name by which the parameter is identified
+     * (not its friendly name for rendering)
+     */
     public static ParamDto paramDto(final @NonNull String paramName) {
         val paramDto = new ParamDto();
         if(paramName.isBlank()) {
