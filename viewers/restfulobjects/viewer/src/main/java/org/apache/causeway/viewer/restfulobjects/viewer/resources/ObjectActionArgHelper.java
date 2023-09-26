@@ -90,7 +90,7 @@ public class ObjectActionArgHelper {
         .map(Map.Entry::getKey)
         .filter(argName->!argName.startsWith("x-ro"))
         .forEach(argName->{
-            if (action.getParameterById(argName) == null) {
+            if (action.getParameterByName(argName) == null) {
                 String reason = String.format("Argument '%s' found but no such parameter", argName);
                 arguments.mapPutString("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException
