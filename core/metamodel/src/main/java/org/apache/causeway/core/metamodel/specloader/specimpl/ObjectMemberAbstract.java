@@ -312,7 +312,7 @@ implements
             // trampling over the command's DTO
         } else {
             val dto = commandDtoFactory.apply(command.getInteractionId());
-            command.updater().setCommandDto(dto);
+            command.updater().setCommandDtoAndIdentifier(dto);
         }
 
     }

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.runtimeservices.command;
 
 import java.util.Optional;
-import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -122,9 +121,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         val interaction = interactionLayerTracker.currentInteractionElseFail();
         val command = interaction.getCommand();
 
-        // replace the command with that of the DTO to be executed.
-        command.updater().setInteractionId(UUID.fromString(dto.getInteractionId()));
-        command.updater().setCommandDto(dto);
+        // replace the command with that of the DTO to be executed, and also the command's identifier
+        //
+        // nb: this should be sufficient; there are no other copies of interactionId to be updated.
+        // In particular, both InteractionServiceDefault#getInteractionId() and Interaction#getInteractionId() just
+        // delegate to the Command held within the Interaction;
+        command.updater().setCommandDtoAndIdentifier(dto);
 
 
         // notify subscribers that the command is now ready for execution

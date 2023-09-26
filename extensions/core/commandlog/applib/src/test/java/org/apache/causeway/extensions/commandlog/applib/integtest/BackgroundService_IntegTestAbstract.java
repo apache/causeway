@@ -190,10 +190,6 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
 
         // when (simulate quartz running in the background)
-//        Thread thread = new Thread(() -> runBackgroundCommandsJob.execute(mockQuartzJobExecutionContext));
-//        thread.start();
-//        thread.join();
-
         runBackgroundCommandsJob.execute(mockQuartzJobExecutionContext);
         interactionService.nextInteraction();
 
