@@ -32,11 +32,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Reduction;
@@ -93,6 +95,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                     .orElse("Collection"); // fallback sheet name
 
             val tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
+            Row row;
 
             try(val fos = new FileOutputStream(tempFile)) {
                 val sheet = wb.createSheet(sheetName);
@@ -100,25 +103,41 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                 val cellStyleProvider = new CellStyleProvider(wb);
 
                 final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
-                Row row = rowFactory.newRow();
+
 
                 val dataColumns = table().getDataColumns().getValue();
 
-                // header row
+                // primary header row
+                row = rowFactory.newRow();
                 int i=0;
                 for(val column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
                     cell.setCellValue(column.getColumnFriendlyName().getValue());
-                    cell.setCellStyle(cellStyleProvider.headerStyle());
+                    cell.setCellStyle(cellStyleProvider.primaryHeaderStyle());
                 }
 
+                // secondary header row
+                row = rowFactory.newRow();
+                i=0;
+                var maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
+                for(val column : dataColumns) {
+                    final Cell cell = row.createCell((short) i++);
+                    final String columnDescription = column.getColumnDescription().getValue().orElse("");
+                    cell.setCellValue(columnDescription);
+                    maxLinesInRow.accept((int)
+                            _Strings.splitThenStream(columnDescription, "\n").count());
+                    cell.setCellStyle(cellStyleProvider.secondaryHeaderStyle());
+                }
+                autoSizeRow(row, maxLinesInRow.getResult().orElse(1),
+                        wb.getFontAt(cellStyleProvider.secondaryHeaderStyle().getFontIndex()));
+
                 val dataRows = table().getDataRowsFiltered().getValue();
-                val maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
 
                 // detail rows
                 for (val dataRow : dataRows) {
                     row = rowFactory.newRow();
                     i=0;
+                    maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
                     for(val column : dataColumns) {
                         final Cell cell = row.createCell((short) i++);
                         val cellElements = dataRow.getCellElementsForColumn(column)
@@ -128,14 +147,14 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                                 cellStyleProvider);
                         maxLinesInRow.accept(linesWritten);
                     }
-                    autoSizeRow(row, maxLinesInRow.getResult().orElse(1));
+                    autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
                 }
 
                 // column auto-size
                 autoSizeColumns(sheet, dataColumns.size());
 
                 // freeze panes
-                sheet.createFreezePane(0, 1);
+                sheet.createFreezePane(0, 2);
 
                 wb.write(fos);
 
@@ -144,9 +163,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
     }
 
-    protected void autoSizeRow(final Row row, final int numberOfLines) {
+    protected void autoSizeRow(final Row row, final int numberOfLines, final @Nullable Font fontHint) {
         if(numberOfLines<2) return; // ignore
-        final int defaultHeight = row.getSheet().getDefaultRowHeight();
+        final int defaultHeight = fontHint!=null
+                ? fontHint.getFontHeight()
+                : row.getSheet().getDefaultRowHeight();
         int height = numberOfLines * defaultHeight;
         height = Math.min(height, Short.MAX_VALUE); // upper bound to 32767 'twips' or 1/20th of a point
         row.setHeight((short) height);
@@ -181,7 +202,6 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             if(overflow>0) {
                 joinedElementsLiteral += POI_LINE_DELIMITER + String.format("(has %d more)", overflow);
             }
-
             cell.setCellValue(joinedElementsLiteral);
             cell.setCellStyle(cellStyleProvider.multilineStyle());
             return overflow>0
@@ -278,8 +298,8 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         return 1;
     }
 
-    private static void setCellValueForDouble(final Cell cell, final double value2) {
-        cell.setCellValue(value2);
+    private static void setCellValueForDouble(final Cell cell, final double value) {
+        cell.setCellValue(value);
     }
 
     private static void setCellValueForDate(final Cell cell, final Date date, final CellStyleProvider cellStyleProvider) {
