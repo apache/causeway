@@ -20,7 +20,6 @@ package org.apache.causeway.core.webapp.confmenu;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,12 +44,14 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.confview.ConfigurationProperty;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
@@ -78,6 +79,7 @@ implements
     private final CausewayConfiguration configuration;
     private final DataSourceIntrospectionService datasourceInfoService;
     private final List<WebModule> webModules;
+    private final CausewayModuleCoreConfig.ConfigProps configProps;
 
     private LocalDateTime startupTime = LocalDateTime.MIN; // so it is not uninitialized
 
@@ -88,7 +90,7 @@ implements
 
     @Override
     public Set<ConfigurationProperty> getVisibleConfigurationProperties() {
-        return new TreeSet<>(config.get().values());
+        return new TreeSet<>(configForUi.get().values());
     }
 
     @PostConstruct
@@ -96,7 +98,6 @@ implements
         startupTime = LocalDateTime.now();
         log.info("\n\n" + toStringFormatted());
     }
-
 
     // -- DUMP AS STRING
 
@@ -111,7 +112,7 @@ implements
                 configuration.getViewer().getCommon().getApplication().getVersion(),
                 systemEnvironment.getDeploymentType().name());
 
-        final Map<String, ConfigurationProperty> map = config.get();
+        final Map<String, ConfigurationProperty> map = configForStartup.get();
 
         final int fillCount = 46-head.length();
         final int fillLeft = fillCount/2;
@@ -166,33 +167,47 @@ implements
         return map;
     }
 
-    private _Lazy<Map<String, ConfigurationProperty>> config = _Lazy.of(this::loadConfiguration);
+    enum Scope {
+        STARTUP_LOGGING,
+        UI
+    }
 
-    private Map<String, ConfigurationProperty> loadConfiguration() {
+    private _Lazy<Map<String, ConfigurationProperty>> configForStartup = _Lazy.of(()->loadConfiguration(Scope.STARTUP_LOGGING));
+    private _Lazy<Map<String, ConfigurationProperty>> configForUi = _Lazy.of(()->loadConfiguration(Scope.UI));
+
+    private Map<String, ConfigurationProperty> loadConfiguration(final Scope scope) {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
 
-            ConfigurableEnvironment springEnv = configuration.getEnvironment();
-            MutablePropertySources propertySources = springEnv.getPropertySources();
-            StreamSupport
-                    .stream(propertySources.spliterator(), false)
-                    .filter((ps) -> ps instanceof EnumerablePropertySource)
-                    .map((ps) -> ((EnumerablePropertySource<?>)ps).getPropertyNames())
-                    .flatMap(Arrays::stream)
-                    .forEach((propName) -> {
-                        String propertyValue = springEnv.getProperty(propName);
-                        add(propName, propertyValue, map);
-                    });
+            if(scope == Scope.STARTUP_LOGGING) {
+                configProps.getCauseway().forEach((k, v)->add("causeway." + k, v, map));
+                configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
+                configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
+                configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));
+            } else {
 
-            val index = _Refs.intRef(0);
+                ConfigurableEnvironment springEnv = configuration.getEnvironment();
+                MutablePropertySources propertySources = springEnv.getPropertySources();
+                StreamSupport
+                .stream(propertySources.spliterator(), false)
+                .filter((ps) -> ps instanceof EnumerablePropertySource)
+                .map((ps) -> ((EnumerablePropertySource<?>)ps).getPropertyNames())
+                .flatMap(_NullSafe::stream)
+                //.filter(springEnv->springEnv.)
+                .forEach((propName) -> {
+                    String propertyValue = springEnv.getProperty(propName);
+                    add(propName, propertyValue, map);
+                });
+            }
+
+
             val dsInfos = datasourceInfoService.getDataSourceInfos();
 
-            dsInfos.forEach(dataSourceInfo->{
-                index.incAndGet();
-                add(String.format("Data Source (%d/%d)", index.getValue(), dsInfos.size()),
+            dsInfos.forEach(IndexedConsumer.offset(1, (index,  dataSourceInfo)->{
+                add(String.format("Data Source (%d/%d)", index, dsInfos.size()),
                         dataSourceInfo.getJdbcUrl(),
                         map);
-            });
+            }));
 
 
         } else {
@@ -231,7 +246,5 @@ implements
                 // fallback to configuration default policy
                 .orElseGet(()->new CausewayConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
     }
-
-
 
 }
