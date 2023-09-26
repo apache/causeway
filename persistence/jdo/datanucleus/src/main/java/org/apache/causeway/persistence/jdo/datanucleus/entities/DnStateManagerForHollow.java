@@ -270,6 +270,11 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
     private final static String INVALID_FIELD_ACCESS_MSG =
             "JDO entity %s(oid=%s) is in HOLLOW state, its fields are no longer valid.";
 
+    /**
+     * There is no point in trying to generate a message from a hollow {@link Persistable}'s,
+     * toString() method, as its fields are all set to null.
+     * Instead we provide type and OID information.
+     */
     private RuntimeException invalidFieldAccess(final @Nullable Persistable pc) {
         return pc==null
             ? _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, "Persistable", "oidStringified") // just in case
