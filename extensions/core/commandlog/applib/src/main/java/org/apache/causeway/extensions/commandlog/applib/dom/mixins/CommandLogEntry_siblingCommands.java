@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.mixins;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Contributes a <code>siblingCommands</code> collection to the {@link CommandLogEntry}), in other words those
@@ -52,11 +54,11 @@ public class CommandLogEntry_siblingCommands {
     private final CommandLogEntry commandLogEntry;
 
     @MemberSupport public List<? extends CommandLogEntry> coll() {
-        final CommandLogEntry parentJdo = commandLogEntry.getParent();
-        if(parentJdo == null) {
+        val parentLogEntry = commandLogEntry.getParent();
+        if(parentLogEntry == null) {
             return Collections.emptyList();
         }
-        final List<? extends CommandLogEntry> siblingCommands = commandLogEntryRepository.findByParent(parentJdo);
+        val siblingCommands = new ArrayList<>(commandLogEntryRepository.findByParent(parentLogEntry));
         siblingCommands.remove(commandLogEntry);
         return siblingCommands;
     }
