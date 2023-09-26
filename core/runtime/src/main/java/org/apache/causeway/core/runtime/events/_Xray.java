@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtime.events;
 
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
+import org.apache.causeway.applib.services.confview.ConfigurationViewService.Scope;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
@@ -38,13 +39,13 @@ final class _Xray {
 
             val env = model.addDataNode(
                     root, new XrayDataModel.KeyValue("causeway-env", "Environment", Stickiness.CANNOT_DELETE_NODE));
-            configurationService.getEnvironmentProperties().forEach(item->{
+            configurationService.getConfigurationProperties(Scope.ENV).forEach(item->{
                 env.getData().put(item.getKey(), item.getValue());
             });
 
             val config = model.addDataNode(
                     root, new XrayDataModel.KeyValue("causeway-conf", "Config", Stickiness.CANNOT_DELETE_NODE));
-            configurationService.getVisibleConfigurationProperties().forEach(item->{
+            configurationService.getConfigurationProperties(Scope.PRIMARY).forEach(item->{
                 config.getData().put(item.getKey(), item.getValue());
             });
 

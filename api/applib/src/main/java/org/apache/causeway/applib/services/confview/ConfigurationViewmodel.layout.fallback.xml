@@ -27,11 +27,16 @@
 						<bs:col span="12" size="MD" />
 					</bs:row>
 				</bs:tab>
-				<bs:tab name="Configuration">
+				<bs:tab name="Primary">
 					<bs:row>
 						<bs:col span="12" size="MD" />
 					</bs:row>
 				</bs:tab>
+                <bs:tab name="Secondary">
+                    <bs:row>
+                        <bs:col span="12" size="MD" />
+                    </bs:row>
+                </bs:tab>
 			</bs:tabGroup>
 		</bs:col>
 	</bs:row>
