@@ -30,7 +30,7 @@ import lombok.experimental.UtilityClass;
 public class ValueMaskingUtil {
 
     private static final List<String> PROTECTED_KEYS =
-            List.of("password", "apiKey", "authToken", "secretKey");
+            List.of("password", "apiKey", "authToken", "secret");
 
     public static Map<String, String> maskIfProtected(
             final Map<String, String> inMap,
