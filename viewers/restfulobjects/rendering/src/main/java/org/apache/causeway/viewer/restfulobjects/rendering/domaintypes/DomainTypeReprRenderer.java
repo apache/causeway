@@ -161,10 +161,10 @@ extends ReprRendererAbstract<ObjectSpecification> {
         return link;
     }
 
-    public static JsonRepresentation argumentsTo(final IResourceContext resourceContext, final String paramName, final ObjectSpecification objectSpec) {
+    public static JsonRepresentation argumentsTo(final IResourceContext resourceContext, final String paramId, final ObjectSpecification objectSpec) {
         final JsonRepresentation arguments = JsonRepresentation.newMap();
         final JsonRepresentation link = JsonRepresentation.newMap();
-        arguments.mapPutJsonRepresentation(paramName, link);
+        arguments.mapPutJsonRepresentation(paramId, link);
         if (objectSpec != null) {
             link.mapPutString("href", resourceContext.restfulUrlFor("domain-types/" + objectSpec.getLogicalTypeName()));
         } else {
