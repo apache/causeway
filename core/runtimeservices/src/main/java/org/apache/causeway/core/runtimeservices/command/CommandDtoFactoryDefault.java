@@ -31,8 +31,8 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -120,7 +120,9 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             val argAdapter = argAdapters.getElseFail(paramNum);
 
-            final ParamDto paramDto = CommonDtoUtils.paramDto(actionParameter.getId());
+            final ParamDto paramDto = new ParamDto();
+            paramDto.setName(actionParameter.getStaticFriendlyName()
+                    .orElseThrow(_Exceptions::unexpectedCodeReach));
 
             actionParameter.getFeatureIdentifier();
 
