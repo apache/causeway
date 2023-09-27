@@ -55,9 +55,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.apache.causeway.schema.cmd.v2.ActionDto;
-import org.apache.causeway.schema.cmd.v2.ParamDto;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -93,6 +90,8 @@ import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesIni
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.viewer.web.DialogMode;
 import org.apache.causeway.core.config.viewer.web.TextMode;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
 
 import lombok.Data;
 import lombok.Getter;

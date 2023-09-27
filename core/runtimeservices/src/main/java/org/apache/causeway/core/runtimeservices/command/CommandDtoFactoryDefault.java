@@ -24,9 +24,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.util.schema.CommonDtoUtils;
-import org.apache.causeway.core.config.CausewayConfiguration;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +31,9 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -48,7 +47,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
-import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.OidsDto;
