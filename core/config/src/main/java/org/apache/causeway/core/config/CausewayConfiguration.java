@@ -90,6 +90,8 @@ import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesIni
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.viewer.web.DialogMode;
 import org.apache.causeway.core.config.viewer.web.TextMode;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
 
 import lombok.Data;
 import lombok.Getter;
@@ -254,6 +256,38 @@ public class CausewayConfiguration {
              * If {@link #isExtractRoles()}  roles are to be extracted}, this allows the resultant role to be optionally prefixed.
              */
             private String rolePrefix = null;
+        }
+    }
+
+    private final Schema schema = new Schema();
+    @Data
+    public static class Schema {
+
+        private final Command command = new Command();
+        @Data
+        public static class Command {
+
+            public enum ParamIdentifierStrategy {
+                BY_ID,
+                /**
+                 * For backward compatibility with v1 behaviour
+                 */
+                BY_CANONICAL_FRIENDLY_NAME;
+            }
+
+            /**
+             * Whether the {@link ParamDto#getName()} field - which uniquely identifies a parameter within the
+             * {@link org.apache.causeway.schema.cmd.v2.ActionDto action}'s
+             * {@link ActionDto#getParameters() list of parameters} - is populated with the parameter's formal Id
+             * (eg &quot;firstName&quot;) or instead using the parameter's friendly name (eg &quot;First Name&quot;).
+             *
+             * <p>
+             *     The default is to use the {@link ParamIdentifierStrategy#BY_ID formal Id}, but the name is provided
+             *     as an alternative for compatibility with v1.  Note that the name is potentially translated, so this
+             *     could also cause issues within integration scenarios.
+             * </p>
+             */
+            private ParamIdentifierStrategy paramIdentifierStrategy = ParamIdentifierStrategy.BY_ID;
         }
     }
 
