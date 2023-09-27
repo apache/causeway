@@ -225,11 +225,19 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Returns the parameter with provided id.
+     *
+     * @param paramId parameter Id as per {@link ObjectActionParameter#getId()}
+     *
+     * @see ObjectActionParameter#getId()
      */
     ObjectActionParameter getParameterById(String paramId);
 
     /**
-     * Returns the parameter with provided name.
+     * Returns the parameter with provided (friendly) name.
+     *
+     * @param paramName parameter name as per {@link ObjectActionParameter#getCanonicalFriendlyName()}
+     *
+     * @see ObjectActionParameter#get(ManagedObject, InteractionInitiatedBy)
      */
     ObjectActionParameter getParameterByName(String paramName);
 
