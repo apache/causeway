@@ -57,7 +57,7 @@ class ObjectActionParameterAbstractTest_getId_and_getName {
     public void shouldProperlyDetectParamIdAndName() {
         val param0 = action.getParameters().getElseFail(0);
         assertThat(param0.getId(), is("someParameterName"));
-        assertThat(param0.getStaticFriendlyName().get(), is("Some Parameter Name"));
+        assertThat(param0.getCanonicalFriendlyName(), is("Some Parameter Name"));
     }
 
 }

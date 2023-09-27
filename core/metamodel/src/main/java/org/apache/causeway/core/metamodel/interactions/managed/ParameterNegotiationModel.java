@@ -261,7 +261,7 @@ public class ParameterNegotiationModel {
             final int paramIndex, final @NonNull Function<ManagedObject, Object> pojoUpdater) {
         updateParamValue(paramIndex, current->adaptParamValuePojo(paramIndex, pojoUpdater.apply(current)));
     }
-    
+
     @NonNull public ManagedObject adaptParamValuePojo(final int paramIndex,
             final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramIndex);
@@ -385,8 +385,8 @@ public class ParameterNegotiationModel {
 
         @Override
         public String getFriendlyName() {
-            return getMetaModel().getStaticFriendlyName()
-                    .orElseThrow(_Exceptions::unexpectedCodeReach);
+            ObjectActionParameter objectActionParameter = getMetaModel();
+            return objectActionParameter.getCanonicalFriendlyName();
         }
 
         @Override

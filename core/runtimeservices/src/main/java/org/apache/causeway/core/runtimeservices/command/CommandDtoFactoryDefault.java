@@ -121,8 +121,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             val argAdapter = argAdapters.getElseFail(paramNum);
 
             final ParamDto paramDto = new ParamDto();
-            paramDto.setName(actionParameter.getStaticFriendlyName()
-                    .orElseThrow(_Exceptions::unexpectedCodeReach));
+            paramDto.setName(actionParameter.getCanonicalFriendlyName());
 
             actionParameter.getFeatureIdentifier();
 

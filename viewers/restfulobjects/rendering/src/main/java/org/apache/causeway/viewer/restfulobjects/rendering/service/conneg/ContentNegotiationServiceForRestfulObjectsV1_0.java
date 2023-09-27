@@ -282,8 +282,7 @@ implements ContentNegotiationService {
                     buf.append(",");
                 }
                 buf
-                .append(param.getStaticFriendlyName()
-                        .orElseThrow(_Exceptions::unexpectedCodeReach))
+                .append(param.getCanonicalFriendlyName())
                 .append("=")
                 .append(abbreviated(titleOf(argAdapter), 8));
             }

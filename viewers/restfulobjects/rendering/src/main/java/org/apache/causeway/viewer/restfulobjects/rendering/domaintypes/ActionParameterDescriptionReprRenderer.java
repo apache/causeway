@@ -43,9 +43,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
         final String domainType = objectSpecification.getLogicalTypeName();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
-        final String paramName = objectActionParameter
-                .getStaticFriendlyName()
-                .orElseThrow(_Exceptions::unexpectedCodeReach);;
+        final String paramName = objectActionParameter.getCanonicalFriendlyName();
         final String url = String.format("domain-types/%s/actions/%s/params/%s", domainType, actionId, paramName);
         return LinkBuilder.newBuilder(resourceContext, rel.andParam("id", deriveId(objectActionParameter)), RepresentationType.ACTION_PARAMETER_DESCRIPTION, url);
     }
@@ -72,9 +70,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
     }
 
     private static String deriveId(final ObjectActionParameter objectActionParameter) {
-        val named = objectActionParameter
-                .getStaticFriendlyName()
-                .orElseThrow(_Exceptions::unexpectedCodeReach);
+        val named = objectActionParameter.getCanonicalFriendlyName();
         return objectActionParameter.getAction().getId() + "-" + named;
     }
 
@@ -96,13 +92,12 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
 
     @Override
     protected void addPropertiesSpecificToFeature() {
-        representation.mapPutString("name", getObjectFeature()
-                .getStaticFriendlyName()
-                .orElseThrow(_Exceptions::unexpectedCodeReach));
-        representation.mapPutInt("number", getObjectFeature().getParameterIndex());
-        representation.mapPutBoolean("optional", getObjectFeature().isOptional());
+        ObjectActionParameter objectActionParameter = getObjectFeature();
+        representation.mapPutString("name", objectActionParameter.getCanonicalFriendlyName());
+        representation.mapPutInt("number", objectActionParameter.getParameterIndex());
+        representation.mapPutBoolean("optional", objectActionParameter.isOptional());
 
-        Facets.maxLength(getObjectFeature())
+        Facets.maxLength(objectActionParameter)
             .ifPresent(maxLength->representation.mapPutInt("maxLength", maxLength));
     }
 
