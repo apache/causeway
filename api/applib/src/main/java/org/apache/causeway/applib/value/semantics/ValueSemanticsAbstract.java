@@ -265,7 +265,7 @@ ValueSemanticsProvider<T> {
         }
     }
 
-    protected static enum FormatUsageFor {
+    public static enum FormatUsageFor {
         PARSING,
         RENDERING;
         public boolean isParsing() { return this==PARSING; }

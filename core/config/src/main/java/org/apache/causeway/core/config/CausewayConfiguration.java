@@ -1513,24 +1513,6 @@ public class CausewayConfiguration {
                  */
                 private boolean ignoreDeprecated = false;
 
-
-                /**
-                 * If set, then {@link Digits#fraction()}, the JDO <code>@Column#scale</code> and the JPA {@link Column#scale()}
-                 * should be used for the <code>MinFractionalFacet</code> as well as the <code>MaxFractionalFacet</code>.
-                 *
-                 * <p>
-                 *     What this means in practice is that a numeric values will be rendered to the same number of fractional digits,
-                 *     irrespective of whether they are whole numbers.  For example, with a scale of 2, then
-                 *     &quot;123.45&quot; and also &quot;123.00&quot;.
-                 * </p>
-                 *
-                 * <p>
-                 *     If set to <code>false</code>, then these values would be rendered as &quot;123.45&quot;,
-                 *     but for the whole integer instead just &quot;123&quot; (that is, the shortest textual
-                 *     representation).
-                 * </p>
-                 */
-                private boolean useScaleForMinFractionalFacet = true;
             }
 
             private final Introspector introspector = new Introspector();
@@ -2861,6 +2843,48 @@ public class CausewayConfiguration {
         @Data
         public static class Temporal {
             private final TemporalEditingPattern editing = new TemporalEditingPattern();
+        }
+
+        private final BigDecimal bigDecimal = new BigDecimal();
+        @Data
+        public static class BigDecimal {
+
+            /**
+             * Indicates how to derive the min fractional facet (the minimum number of digits after the decimal point).
+             *
+             * <p>
+             * If this flag is set, then the {@link Digits#fraction()} annotation or ORM equivalent (the JDO
+             * <code>@Column#scale</code> or the JPA {@link Column#scale()}) should be used for the
+             * <code>MinFractionalFacet</code> as well as the <code>MaxFractionalFacet</code>.
+             * </p>
+             *
+             * <p>
+             * What this means in practice is that a numeric values will be rendered to the same number of fractional
+             * digits, irrespective of whether they are whole numbers or fractional.  For example, with a scale of 2,
+             * then &quot;123.4532&quot; will be rendered as &quot;123.45&quot;, while &quot;123&quot; will be rendered
+             * as &quot;123.00&quot;.
+             * </p>
+             *
+             * <p>
+             * If this flag is NOT set, or if it is set but there is no annotation, then the {@link #minScale} config
+             * property is used as a fallback.
+             * </p>
+             *
+             * <p>
+             * If there is no fallback, then it means that a big decimal such as &quot;123.00&quot; will be presented as
+             * just &quot;123&quot; (that is, the shortest possible textual representation).
+             * </p>
+             */
+            private boolean useScaleForMinFractionalFacet = true;
+
+            /**
+             * The minimum scale to use for all {@link java.math.BigDecimal}s.
+             *
+             * <p>
+             * Is only used if the minimum scale has not been specified explicitly by some other means, typically
+             * either {@link Digits#fraction()} or an ORM semantic such as the (JPA) {@link Column#scale()}.
+             */
+            private Integer minScale = null;
         }
 
         private final Kroki kroki = new Kroki();
