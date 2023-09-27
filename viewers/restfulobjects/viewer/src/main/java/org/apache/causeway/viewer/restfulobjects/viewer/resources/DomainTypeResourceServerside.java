@@ -263,34 +263,34 @@ implements DomainTypeResource {
 
     @Override
     @GET
-    @Path("/{domainType}/actions/{actionId}/params/{paramName}")
+    @Path("/{domainType}/actions/{actionId}/params/{paramId}")
     @Produces({
         MediaType.APPLICATION_JSON,
         RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     public Response typeActionParam(
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId,
-            @PathParam("paramName") final String paramName) {
+            @PathParam("paramId") final String paramId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.ACTION_PARAMETER_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
-            throw _EndpointLogging.error(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramName,
+            throw _EndpointLogging.error(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramId,
                     RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         }
 
         val parentAction = parentSpec.getAction(actionId)
-                .orElseThrow(()->_EndpointLogging.error(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramName,
+                .orElseThrow(()->_EndpointLogging.error(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramId,
                         RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)));
 
-        final ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);
+        final ObjectActionParameter actionParam = parentAction.getParameterById(paramId);
 
         final ActionParameterDescriptionReprRenderer renderer = new ActionParameterDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndActionParam(parentSpec, actionParam)).includesSelf();
 
-        return _EndpointLogging.response(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramName,
+        return _EndpointLogging.response(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramId,
                 Responses.ofOk(renderer, Caching.ONE_DAY).build());
     }
 
@@ -384,7 +384,7 @@ implements DomainTypeResource {
     private static String domainTypeFor(
             final String domainTypeStr,
             final String argsAsUrlEncodedQueryString,
-            final String argsParamName,
+            final String argsParamId,
             final @NonNull UnaryOperator<RestfulObjectsApplicationException> onRoException) {
 
         // simple style; simple return
@@ -394,21 +394,21 @@ implements DomainTypeResource {
 
         // formal style; must parse from args that has a link with an href to the domain type
         val requestParams = RequestParams.ofQueryString(UrlEncodingUtils.urlDecode(argsAsUrlEncodedQueryString));
-        final String href = linkFromFormalArgs(requestParams, argsParamName, onRoException);
+        final String href = linkFromFormalArgs(requestParams, argsParamId, onRoException);
         return UrlParserUtils.domainTypeFrom(href);
     }
 
     private static String linkFromFormalArgs(
             final RequestParams requestParams,
-            final String paramName,
+            final String paramId,
             final @NonNull UnaryOperator<RestfulObjectsApplicationException> onRoException) {
         final JsonRepresentation arguments = requestParams.asMap();
-        if (!arguments.isLink(paramName)) {
+        if (!arguments.isLink(paramId)) {
             throw onRoException.apply(RestfulObjectsApplicationException
-                    .createWithMessage(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramName));
+                    .createWithMessage(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramId));
         }
 
-        return arguments.getLink(paramName).getHref();
+        return arguments.getLink(paramId).getHref();
     }
 
 }

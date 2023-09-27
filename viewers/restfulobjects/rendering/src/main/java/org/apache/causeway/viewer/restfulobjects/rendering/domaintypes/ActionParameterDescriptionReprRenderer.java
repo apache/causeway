@@ -42,8 +42,8 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
         final String domainType = objectSpecification.getLogicalTypeName();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
-        final String paramName = objectActionParameter.getCanonicalFriendlyName();
-        final String url = String.format("domain-types/%s/actions/%s/params/%s", domainType, actionId, paramName);
+        final String paramId = objectActionParameter.getId();
+        final String url = String.format("domain-types/%s/actions/%s/params/%s", domainType, actionId, paramId);
         return LinkBuilder.newBuilder(resourceContext, rel.andParam("id", deriveId(objectActionParameter)), RepresentationType.ACTION_PARAMETER_DESCRIPTION, url);
     }
 
