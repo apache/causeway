@@ -24,6 +24,9 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.util.schema.CommonDtoUtils;
+import org.apache.causeway.core.config.CausewayConfiguration;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +70,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     @Inject private SchemaValueMarshaller valueMarshaller;
     @Inject private ClockService clockService;
     @Inject private UserService userService;
+    @Inject private CausewayConfiguration causewayConfiguration;
 
     @Override
     public CommandDto asCommandDto(
@@ -119,8 +123,11 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             val argAdapter = argAdapters.getElseFail(paramNum);
 
-            final ParamDto paramDto = new ParamDto();
-            paramDto.setName(actionParameter.getCanonicalFriendlyName());
+            val paramDto = CommonDtoUtils.paramDto(
+                                            isParamIdentifierStrategySetToUseId()
+                                                ? actionParameter.getId()
+                                                : actionParameter.getCanonicalFriendlyName()
+                                             );
 
             actionParameter.getFeatureIdentifier();
 
@@ -169,6 +176,10 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         targetOids.getOid().add(bookmark.toOidDto());
 
         return dto;
+    }
+
+    private boolean isParamIdentifierStrategySetToUseId() {
+        return causewayConfiguration.getSchema().getCommand().getParamIdentifierStrategy() == CausewayConfiguration.Schema.Command.ParamIdentifierStrategy.BY_ID;
     }
 
 
