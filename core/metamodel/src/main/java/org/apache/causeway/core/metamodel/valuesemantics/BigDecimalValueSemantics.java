@@ -139,7 +139,7 @@ implements
         if(context==null) {
             return;
         }
-        context.getFeatureIdentifier();
+
         val feature = specificationLoader.loadFeature(context.getFeatureIdentifier())
                 .orElse(null);
         if(feature==null) {
