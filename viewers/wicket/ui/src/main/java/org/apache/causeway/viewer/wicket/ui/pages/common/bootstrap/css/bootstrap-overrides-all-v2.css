@@ -135,6 +135,7 @@ td.fc-day a.fc-daygrid-event {
 a, .btn-link {
 	color: var(--link-color);
 }
+
 a:focus, a:hover,
 .btn-link:focus, .btn-link:hover {
     color: var(--link-color-hover);
@@ -1363,12 +1364,6 @@ span.entityIconAndTitlePanel > a {
     text-align: -webkit-center;
 }
 
-
-/* failed attempt to get the select2 focus border the same as regular fields */
-span.select2:focus > span.selection > span.select2-container {
-    border-color: var(--link-color-hover);
-    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
-}
 
 /* --- */
 
