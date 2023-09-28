@@ -17,7 +17,7 @@
  *  under the License.
  *
  */
-package org.apache.causeway.persistence.jpa.integration.changetracking;
+package org.apache.causeway.persistence.commons.integration.changetracking;
 
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 

@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnOidStoreAndRecoverHelper;
-import org.apache.causeway.persistence.jpa.integration.changetracking.PreAndPostValueEvaluatorService;
+import org.apache.causeway.persistence.commons.integration.changetracking.PreAndPostValueEvaluatorService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
