@@ -43,7 +43,7 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.links.Link;
-import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
@@ -689,8 +689,8 @@ implements DomainObjectResource {
             final @PathParam("actionId") String actionId,
             final @QueryParam("x-causeway-querystring") String xCausewayUrlEncodedQueryString) {
 
-        final String urlUnencodedQueryString = _UrlDecoderUtil
-                .urlDecodeNullSafe(xCausewayUrlEncodedQueryString != null
+        final String urlUnencodedQueryString = UrlUtils.urlDecodeUtf8(
+                xCausewayUrlEncodedQueryString != null
                     ? xCausewayUrlEncodedQueryString
                     : httpServletRequest.getQueryString());
         val resourceContext = createResourceContext(

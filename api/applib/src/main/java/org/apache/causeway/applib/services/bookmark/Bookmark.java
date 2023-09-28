@@ -31,8 +31,8 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.schema.common.v2.OidDto;
 
 import lombok.AccessLevel;
@@ -151,7 +151,7 @@ public final class Bookmark implements Oid {
 
     public static Bookmark parseElseFail(final @Nullable String input) {
         return parse(input)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot parse Bookmark %s", input));
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot parse Bookmark '%s'", input));
     }
 
     /**
@@ -160,7 +160,7 @@ public final class Bookmark implements Oid {
     public static Optional<Bookmark> parseUrlEncoded(@Nullable final String urlEncodedStr) {
         return _Strings.isEmpty(urlEncodedStr)
                 ? Optional.empty()
-                : parse(_UrlDecoderUtil.urlDecode(urlEncodedStr));
+                : parse(UrlUtils.urlDecodeUtf8(urlEncodedStr));
     }
 
     // -- TO DTO
