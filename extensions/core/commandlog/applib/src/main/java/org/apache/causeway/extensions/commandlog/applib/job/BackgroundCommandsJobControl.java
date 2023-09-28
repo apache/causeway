@@ -18,37 +18,12 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.job;
 
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.command.CommandExecutorService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
 
-import org.quartz.DisallowConcurrentExecution;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.PersistJobDataAfterExecution;
-
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Is checked by {@link RunBackgroundCommandsJob} each time it is executed.
