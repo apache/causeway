@@ -54,16 +54,14 @@ extends ExecutionPublishingFacetAbstract {
         }
     }
 
-    public static Optional<ExecutionPublishingFacet> create(
+    public static ExecutionPublishingFacet create(
             final Optional<Property> propertyIfAny,
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
         val publishingPolicy = PropertyConfigOptions.propertyExecutionPublishingPolicy(configuration);
 
-        return _Optionals.orNullable(
-
-            propertyIfAny
+        return propertyIfAny
             .map(Property::executionPublishing)
             .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
             .map(publishing -> {
@@ -72,7 +70,7 @@ extends ExecutionPublishingFacetAbstract {
                     case AS_CONFIGURED:
                         switch (publishingPolicy) {
                             case NONE:
-                                return new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.None(holder);
+                                return (ExecutionPublishingFacet)new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.None(holder);
                             case ALL:
                                 return new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.All(holder);
                             default:
@@ -85,10 +83,7 @@ extends ExecutionPublishingFacetAbstract {
                     default:
                         throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
                 }
-            })
-            ,
-            // if not specified
-            () -> {
+            }).orElseGet(() -> {
                 switch (publishingPolicy) {
                     case NONE:
                         return new ExecutionPublishingFacetForPropertyFromConfiguration.None(holder);

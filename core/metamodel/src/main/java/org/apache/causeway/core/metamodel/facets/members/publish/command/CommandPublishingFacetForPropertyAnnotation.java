@@ -55,7 +55,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
         }
     }
 
-    public static Optional<CommandPublishingFacet> create(
+    public static CommandPublishingFacet create(
             final Optional<Property> propertyIfAny,
             final CausewayConfiguration configuration,
             final FacetHolder holder,
@@ -63,9 +63,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
 
         val publishingPolicy = PropertyConfigOptions.propertyCommandPublishingPolicy(configuration);
 
-        return _Optionals.orNullable(
-
-            propertyIfAny
+        return propertyIfAny
             .filter(property -> property.commandPublishing() != Publishing.NOT_SPECIFIED)
             .map(property -> {
                 Publishing publishing = property.commandPublishing();
@@ -80,7 +78,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                     case AS_CONFIGURED:
                         switch (publishingPolicy) {
                             case NONE:
-                                return new CommandPublishingFacetForPropertyAnnotationAsConfigured.None(holder, servicesInjector);
+                                return (CommandPublishingFacet)new CommandPublishingFacetForPropertyAnnotationAsConfigured.None(holder, servicesInjector);
                             case ALL:
                                 return new CommandPublishingFacetForPropertyAnnotationAsConfigured.All(holder, servicesInjector);
                             default:
@@ -93,10 +91,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                     default:
                         throw new IllegalStateException(String.format("commandPublishing '%s' not recognised", publishing));
                 }
-            })
-            ,
-            // if not specified
-            () -> {
+            }).orElseGet(() -> {
                 switch (publishingPolicy) {
                     case NONE:
                         return new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);

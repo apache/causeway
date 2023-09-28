@@ -54,20 +54,32 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
         }
     }
 
-    public static Optional<ExecutionPublishingFacet> create(
+    public static ExecutionPublishingFacet create(
             final Optional<Action> actionsIfAny,
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
         val publishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
 
-        return _Optionals.orNullable(
-
+        return
         actionsIfAny
         .map(Action::executionPublishing)
-        .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
         .<ExecutionPublishingFacet>map(publishing -> {
             switch (publishing) {
+                case NOT_SPECIFIED:
+                    switch (publishingPolicy) {
+                        case NONE:
+                            return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
+                        case IGNORE_QUERY_ONLY:
+                        case IGNORE_SAFE:
+                            return hasSafeSemantics(holder)
+                                    ? new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafe(holder)
+                                    : new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder);
+                        case ALL:
+                            return new ExecutionPublishingFacetForActionFromConfiguration.All(holder);
+                        default:
+                            throw new IllegalStateException(String.format("configured executionPublishing policy '%s' not recognised", publishingPolicy));
+                    }
                 case AS_CONFIGURED:
                     switch (publishingPolicy) {
                         case NONE:
@@ -90,23 +102,8 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
                     throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
             }
         })
-        ,
-        () -> {
-            // if not specified
-            switch (publishingPolicy) {
-                case NONE:
-                    return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
-                case IGNORE_QUERY_ONLY:
-                case IGNORE_SAFE:
-                    return hasSafeSemantics(holder)
-                            ? new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafe(holder)
-                            : new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder);
-                case ALL:
-                    return new ExecutionPublishingFacetForActionFromConfiguration.All(holder);
-                default:
-                    throw new IllegalStateException(String.format("configured executionPublishing policy '%s' not recognised", publishingPolicy));
-            }
-        });
+        // this fallback facet can be replaced if the facetHolder actually represents a property
+        .orElse(new ExecutionPublishingFacetForActionFallback(holder));
     }
 
     private static boolean hasSafeSemantics(final FacetHolder holder) {

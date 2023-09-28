@@ -18,25 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.publish.execution;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetAbstract;
 
-public abstract class ExecutionPublishingFacetAbstract
-extends FacetAbstract
-implements ExecutionPublishingFacet {
+public class ExecutionPublishingFacetForActionFallback extends ExecutionPublishingFacetAbstract {
 
-    private static Class<? extends Facet> type() {
-        return ExecutionPublishingFacet.class;
+    ExecutionPublishingFacetForActionFallback(
+            final FacetHolder holder) {
+        super(holder, Precedence.FALLBACK);
     }
 
-    public ExecutionPublishingFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
-
-    public ExecutionPublishingFacetAbstract(
-            final FacetHolder facetHolder,
-            final Precedence precedence) {
-        super(type(), facetHolder, precedence);
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

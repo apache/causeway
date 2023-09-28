@@ -178,7 +178,7 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Action(commandPublishing=...)
-        addFacetIfPresent(CommandPublishingFacetForActionAnnotation
+        addFacet(CommandPublishingFacetForActionAnnotation
                 .create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod));
     }
 
@@ -200,9 +200,9 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Action(executionPublishing=...)
-        addFacetIfPresent(
+        addFacet(
                 ExecutionPublishingFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), facetedMethod));        // check for @Action(executionPublishing=...)
+                .create(actionIfAny, getConfiguration(), facetedMethod));
 
 
     }

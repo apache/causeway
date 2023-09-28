@@ -56,7 +56,7 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
         }
     }
 
-    public static Optional<CommandPublishingFacet> create(
+    public static CommandPublishingFacet create(
             final Optional<Action> actionsIfAny,
             final CausewayConfiguration configuration,
             final ServiceInjector servicesInjector,
@@ -64,13 +64,26 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
 
         val publishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
 
-        return _Optionals.orNullable(
-
-        actionsIfAny
-        .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
+        return actionsIfAny
         .<CommandPublishingFacet>map(action -> {
 
             Publishing publishing = action.commandPublishing();
+            if (publishing == Publishing.NOT_SPECIFIED) {
+                switch (publishingPolicy) {
+                    case NONE:
+                        return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
+                    case IGNORE_QUERY_ONLY:
+                    case IGNORE_SAFE:
+                        return hasSafeSemantics(holder)
+                                ? new CommandPublishingFacetForActionFromConfiguration.IgnoreSafe(holder, servicesInjector)
+                                : new CommandPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder, servicesInjector);
+                    case ALL:
+                        return new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
+                    default:
+                        throw new IllegalStateException(String.format("configured commandPublishing policy '%s' not recognised", publishingPolicy));
+                }
+            }
+
             final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
             final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
@@ -101,23 +114,8 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                     throw new IllegalStateException(String.format("commandPublishing '%s' not recognised", publishing));
             }
         })
-        ,
-        () -> {
-            // if not specified
-            switch (publishingPolicy) {
-                case NONE:
-                    return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
-                case IGNORE_QUERY_ONLY:
-                case IGNORE_SAFE:
-                    return hasSafeSemantics(holder)
-                            ? new CommandPublishingFacetForActionFromConfiguration.IgnoreSafe(holder, servicesInjector)
-                            : new CommandPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder, servicesInjector);
-                case ALL:
-                    return new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
-                default:
-                    throw new IllegalStateException(String.format("configured commandPublishing policy '%s' not recognised", publishingPolicy));
-            }
-        });
+        // this fallback facet can be replaced if the facetHolder actually represents a property
+        .orElse(new CommandPublishingFacetForActionFallback(holder, servicesInjector));
     }
 
     private static boolean hasSafeSemantics(final FacetHolder holder) {
