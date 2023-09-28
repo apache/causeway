@@ -21,9 +21,10 @@ package org.apache.causeway.core.metamodel.facets.members.publish.command;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public abstract class CommandPublishingFacetForPropertyAnnotationAsConfigured extends CommandPublishingFacetForPropertyAnnotation {
+public abstract class CommandPublishingFacetForActionFromConfiguration extends CommandPublishingFacetAbstract {
 
-    static class All extends CommandPublishingFacetForPropertyAnnotationAsConfigured {
+    static class All extends CommandPublishingFacetForActionFromConfiguration {
+
         All(FacetHolder holder, ServiceInjector servicesInjector) {
             super(holder, servicesInjector);
         }
@@ -34,7 +35,8 @@ public abstract class CommandPublishingFacetForPropertyAnnotationAsConfigured ex
         }
     }
 
-    static class None extends CommandPublishingFacetForPropertyAnnotationAsConfigured {
+    static class None extends CommandPublishingFacetForActionFromConfiguration {
+
         None(FacetHolder holder, ServiceInjector servicesInjector) {
             super(holder, servicesInjector);
         }
@@ -45,8 +47,34 @@ public abstract class CommandPublishingFacetForPropertyAnnotationAsConfigured ex
         }
     }
 
-    CommandPublishingFacetForPropertyAnnotationAsConfigured(
-            final FacetHolder holder, final ServiceInjector servicesInjector) {
+    static class IgnoreSafe extends CommandPublishingFacetForActionFromConfiguration {
+
+        IgnoreSafe(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
+
+    static class IgnoreSafeYetNot extends CommandPublishingFacetForActionFromConfiguration {
+
+        IgnoreSafeYetNot(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
+    CommandPublishingFacetForActionFromConfiguration(
+            final FacetHolder holder,
+            final ServiceInjector servicesInjector) {
         super(null, holder, servicesInjector);
     }
+
 }

@@ -18,14 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.publish.execution;
 
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetAbstract;
 
-public class ExecutionPublishingActionFacetFromConfiguration
-extends ExecutionPublishingFacetAbstract {
+public class ExecutionPublishingFacetForActionFallback extends ExecutionPublishingFacetAbstract {
 
-    public ExecutionPublishingActionFacetFromConfiguration(
+    ExecutionPublishingFacetForActionFallback(
             final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
     }
 
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }

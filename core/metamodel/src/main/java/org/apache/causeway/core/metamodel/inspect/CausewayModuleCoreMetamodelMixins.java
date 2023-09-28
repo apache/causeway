@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.inspect.model.TypeNode;
 @Configuration
 @Import({
         Object_inspectMetamodel.class,
-        Object_downloadColumnOrderTxtFile.class,
+        Object_downloadColumnOrderTxtFilesAsZip.class,
 
         ActionNode.class,
         CollectionNode.class,
@@ -44,6 +44,6 @@ import org.apache.causeway.core.metamodel.inspect.model.TypeNode;
         PropertyNode.class,
         TypeNode.class,
 })
-public class CausewayModuleCoreMetamodelInspection {
+public class CausewayModuleCoreMetamodelMixins {
 
 }

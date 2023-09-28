@@ -16,14 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.publish.command;
+package org.apache.causeway.core.metamodel.facets.members.publish.execution;
 
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
@@ -35,11 +33,12 @@ import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.val;
 
-public abstract class CommandPublishingFacetForPropertyAnnotation extends CommandPublishingFacetAbstract {
+public abstract class ExecutionPublishingFacetForPropertyAnnotation
+extends ExecutionPublishingFacetAbstract {
 
-    static class Enabled extends CommandPublishingFacetForPropertyAnnotation {
-        Enabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
-            super(processor, holder, servicesInjector);
+    static class Enabled extends ExecutionPublishingFacetForPropertyAnnotation {
+        Enabled(FacetHolder holder) {
+            super(holder);
         }
 
         @Override
@@ -48,9 +47,9 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
         }
     }
 
-    static class Disabled extends CommandPublishingFacetForPropertyAnnotation {
-        Disabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
-            super(processor, holder, servicesInjector);
+    static class Disabled extends ExecutionPublishingFacetForPropertyAnnotation {
+        Disabled(FacetHolder holder) {
+            super(holder);
         }
 
         @Override
@@ -59,67 +58,62 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
         }
     }
 
-    public static CommandPublishingFacet create(
+    public static ExecutionPublishingFacet create(
             final Optional<Property> propertyIfAny,
             final CausewayConfiguration configuration,
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
+            final FacetHolder holder) {
 
-        val publishingPolicy = PropertyConfigOptions.propertyCommandPublishingPolicy(configuration);
+        val publishingPolicy = PropertyConfigOptions.propertyExecutionPublishingPolicy(configuration);
 
         return propertyIfAny
-            .filter(property -> property.commandPublishing() != Publishing.NOT_SPECIFIED)
-            .map(property -> {
-                Publishing publishing = property.commandPublishing();
-
-                val processorClass = property.commandDtoProcessor();
-                val processor = newProcessorElseNull(processorClass);
-
-                if(processor != null) {
-                    publishing = Publishing.ENABLED;
-                }
+            .map(Property::executionPublishing)
+            .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+            .map(publishing -> {
 
                 switch (publishing) {
                     case AS_CONFIGURED:
                         switch (publishingPolicy) {
                             case NONE:
-                                return (CommandPublishingFacet)new CommandPublishingFacetForPropertyAnnotationAsConfigured.None(holder, servicesInjector);
+                                return (ExecutionPublishingFacet)new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.None(holder);
                             case ALL:
-                                return new CommandPublishingFacetForPropertyAnnotationAsConfigured.All(holder, servicesInjector);
+                                return new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.All(holder);
                             default:
-                                throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
+                                throw new IllegalStateException(String.format("configured property.executionPublishing policy '%s' not recognised", publishingPolicy));
                         }
                     case DISABLED:
-                        return new CommandPublishingFacetForPropertyAnnotation.Disabled(processor, holder, servicesInjector);
+                        return new ExecutionPublishingFacetForPropertyAnnotation.Disabled(holder);
                     case ENABLED:
-                        return new CommandPublishingFacetForPropertyAnnotation.Enabled(processor, holder, servicesInjector);
+                        return new ExecutionPublishingFacetForPropertyAnnotation.Enabled(holder);
                     default:
-                        throw new IllegalStateException(String.format("commandPublishing '%s' not recognised", publishing));
+                        throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
                 }
             })
             .orElseGet(() -> {
                 // there is no publishing facet from either @Action or @Property, so use the appropriate configuration to install a default
                 if (representsProperty(holder)) {
+                    // we are dealing with a property
                     switch (publishingPolicy) {
                         case NONE:
-                            return new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);
+                            return new ExecutionPublishingFacetForPropertyFromConfiguration.None(holder);
                         case ALL:
-                            return new CommandPublishingFacetForPropertyFromConfiguration.All(holder, servicesInjector);
+                            return new ExecutionPublishingFacetForPropertyFromConfiguration.All(holder);
                         default:
-                            throw new IllegalStateException(String.format("configured property publishingPolicy '%s' not recognised", publishingPolicy));
+                            throw new IllegalStateException(String.format("configured property.executionPublishing policy '%s' not recognised", publishingPolicy));
                     }
                 } else {
+                    // we are dealing with an action
                     val actionPublishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
                     switch (actionPublishingPolicy) {
                         case NONE:
-                            return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
+                            return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
                         case ALL:
-                            return new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
+                            return new ExecutionPublishingFacetForActionFromConfiguration.All(holder);
                         default:
-                            throw new IllegalStateException(String.format("configured action publishingPolicy '%s' not recognised", publishingPolicy));
+                            throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
                     }
                 }
-            });
+            }
+        );
     }
 
     private static boolean representsProperty(FacetHolder holder) {
@@ -132,12 +126,8 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                 holder.getFacet(ContributingFacet.class).contributed() == MixinFacet.Contributing.AS_PROPERTY;
     }
 
-    CommandPublishingFacetForPropertyAnnotation(
-            final CommandDtoProcessor processor,
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
-        super(processor, holder, servicesInjector);
+    public ExecutionPublishingFacetForPropertyAnnotation(final FacetHolder holder) {
+        super(holder);
     }
-
 
 }

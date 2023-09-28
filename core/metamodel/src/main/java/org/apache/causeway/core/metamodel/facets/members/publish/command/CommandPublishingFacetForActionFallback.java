@@ -16,14 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.publish.execution;
+package org.apache.causeway.core.metamodel.facets.members.publish.command;
 
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured
-extends ExecutionPublishingPropertyFacetForPropertyAnnotation {
+public class CommandPublishingFacetForActionFallback extends CommandPublishingFacetAbstract {
 
-    public ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(final FacetHolder holder) {
-        super(holder);
+    CommandPublishingFacetForActionFallback(
+            final FacetHolder holder,
+            final ServiceInjector servicesInjector) {
+        super(null, holder, servicesInjector, Precedence.FALLBACK);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

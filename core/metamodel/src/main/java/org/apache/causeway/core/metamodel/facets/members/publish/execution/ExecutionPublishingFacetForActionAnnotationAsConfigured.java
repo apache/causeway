@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.publish.command;
+package org.apache.causeway.core.metamodel.facets.members.publish.execution;
 
-import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public abstract class CommandPublishingFacetForActionAnnotationAsConfigured extends CommandPublishingFacetForActionAnnotation {
+public abstract class ExecutionPublishingFacetForActionAnnotationAsConfigured
+extends ExecutionPublishingFacetForActionAnnotation {
 
-    static class All extends CommandPublishingFacetForActionAnnotationAsConfigured {
-        All(FacetHolder holder, ServiceInjector servicesInjector) {
-            super(holder, servicesInjector);
+    static class All extends ExecutionPublishingFacetForActionAnnotationAsConfigured {
+        All(FacetHolder holder) {
+            super(holder);
         }
 
         @Override
@@ -34,9 +34,9 @@ public abstract class CommandPublishingFacetForActionAnnotationAsConfigured exte
         }
     }
 
-    static class None extends CommandPublishingFacetForActionAnnotationAsConfigured {
-        None(FacetHolder holder, ServiceInjector servicesInjector) {
-            super(holder, servicesInjector);
+    static class None extends ExecutionPublishingFacetForActionAnnotationAsConfigured {
+        None(FacetHolder holder) {
+            super(holder);
         }
 
         @Override
@@ -45,9 +45,9 @@ public abstract class CommandPublishingFacetForActionAnnotationAsConfigured exte
         }
     }
 
-    static class IgnoreSafe extends CommandPublishingFacetForActionAnnotationAsConfigured {
-        IgnoreSafe(FacetHolder holder, ServiceInjector servicesInjector) {
-            super(holder, servicesInjector);
+    static class IgnoreSafe extends ExecutionPublishingFacetForActionAnnotationAsConfigured {
+        IgnoreSafe(FacetHolder holder) {
+            super(holder);
         }
 
         @Override
@@ -56,9 +56,9 @@ public abstract class CommandPublishingFacetForActionAnnotationAsConfigured exte
         }
     }
 
-    static class IgnoreSafeYetNot extends CommandPublishingFacetForActionAnnotationAsConfigured {
-        IgnoreSafeYetNot(FacetHolder holder, ServiceInjector servicesInjector) {
-            super(holder, servicesInjector);
+    static class IgnoreSafeYetNot extends ExecutionPublishingFacetForActionAnnotationAsConfigured {
+        IgnoreSafeYetNot(FacetHolder holder) {
+            super(holder);
         }
 
         @Override
@@ -67,10 +67,9 @@ public abstract class CommandPublishingFacetForActionAnnotationAsConfigured exte
         }
     }
 
-    CommandPublishingFacetForActionAnnotationAsConfigured(
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
-        super(null, holder, servicesInjector);
+
+    public ExecutionPublishingFacetForActionAnnotationAsConfigured(final FacetHolder holder) {
+        super(holder);
     }
 
 }

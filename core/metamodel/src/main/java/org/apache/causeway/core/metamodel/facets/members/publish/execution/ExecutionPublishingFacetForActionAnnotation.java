@@ -30,8 +30,29 @@ import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanti
 
 import lombok.val;
 
-public class ExecutionPublishingActionFacetForActionAnnotation
-extends ExecutionPublishingFacetAbstract {
+public abstract class ExecutionPublishingFacetForActionAnnotation extends ExecutionPublishingFacetAbstract {
+
+    static class Enabled extends ExecutionPublishingFacetForActionAnnotation {
+        Enabled(FacetHolder holder) {
+            super(holder);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
+    static class Disabled extends ExecutionPublishingFacetForActionAnnotation {
+        Disabled(FacetHolder holder) {
+            super(holder);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
 
     public static Optional<ExecutionPublishingFacet> create(
             final Optional<Action> actionsIfAny,
@@ -40,54 +61,34 @@ extends ExecutionPublishingFacetAbstract {
 
         val publishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
 
-        return _Optionals.orNullable(
-
+        return
         actionsIfAny
+                .filter(action -> action.executionPublishing() != Publishing.NOT_SPECIFIED)
         .map(Action::executionPublishing)
-        .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
         .<ExecutionPublishingFacet>map(publishing -> {
             switch (publishing) {
-            case AS_CONFIGURED:
-
-                switch (publishingPolicy) {
-                case NONE:
-                    return null;
-                case IGNORE_QUERY_ONLY:
-                case IGNORE_SAFE:
-                    if (hasSafeSemantics(holder)) {
-                        return null;
-                    }
-                    // else fall through
+                case AS_CONFIGURED:
+                    switch (publishingPolicy) {
+                        case NONE:
+                            return new ExecutionPublishingFacetForActionAnnotationAsConfigured.None(holder);
+                        case IGNORE_QUERY_ONLY:
+                        case IGNORE_SAFE:
+                            return hasSafeSemantics(holder)
+                                    ? new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder)
+                                    : new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder);
+                        case ALL:
+                            return new ExecutionPublishingFacetForActionAnnotationAsConfigured.All(holder);
+                        default:
+                            throw new IllegalStateException(String.format("configured executionPublishing policy '%s' not recognised", publishingPolicy));
+                        }
+                case DISABLED:
+                    return new ExecutionPublishingFacetForActionAnnotation.Disabled(holder);
+                case ENABLED:
+                    return new ExecutionPublishingFacetForActionAnnotation.Enabled(holder);
                 default:
-                    return new ExecutionPublishingActionFacetForActionAnnotationAsConfigured(holder);
-                }
-            case DISABLED:
-                return null;
-            case ENABLED:
-                return new ExecutionPublishingActionFacetForActionAnnotation(holder);
-            default:
+                    throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
             }
-            throw new IllegalStateException("publishing '" + publishing + "' not recognised");
-        })
-
-        ,
-
-        () -> {
-            switch (publishingPolicy) {
-            case NONE:
-                return null;
-            case IGNORE_QUERY_ONLY:
-            case IGNORE_SAFE:
-                if (hasSafeSemantics(holder)) {
-                    return null;
-                }
-                // else fall through
-            default:
-                return new ExecutionPublishingActionFacetFromConfiguration(holder);
-            }
-        }
-
-        );
+        });
     }
 
     private static boolean hasSafeSemantics(final FacetHolder holder) {
@@ -95,12 +96,10 @@ extends ExecutionPublishingFacetAbstract {
         if(actionSemanticsFacet == null) {
             throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
         }
-
         return actionSemanticsFacet.value().isSafeInNature();
     }
 
-    ExecutionPublishingActionFacetForActionAnnotation(
-            final FacetHolder holder) {
+    ExecutionPublishingFacetForActionAnnotation(final FacetHolder holder) {
         super(holder);
     }
 
