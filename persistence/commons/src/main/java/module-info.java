@@ -20,6 +20,7 @@ module org.apache.causeway.persistence.commons {
     exports org.apache.causeway.persistence.jpa.integration.changetracking;
     exports org.apache.causeway.persistence.commons;
     exports org.apache.causeway.persistence.commons.metamodel.facets.prop.column;
+    exports org.apache.causeway.persistence.commons.integration.changetracking;
 
     requires java.annotation;
     requires java.desktop;
