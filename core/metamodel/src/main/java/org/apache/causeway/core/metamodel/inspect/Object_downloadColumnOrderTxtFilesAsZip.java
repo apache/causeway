@@ -18,13 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.inspect;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
-import org.springframework.lang.Nullable;
+import org.apache.causeway.applib.value.Blob;
+
+import org.apache.causeway.commons.io.ZipUtils;
+
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -45,37 +47,49 @@ import lombok.val;
 
 @Action(
         commandPublishing = Publishing.DISABLED,
-        domainEvent = Object_downloadColumnOrderTxtFile.ActionDomainEvent.class,
+        domainEvent = Object_downloadColumnOrderTxtFilesAsZip.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
         restrictTo = RestrictTo.PROTOTYPING,
         semantics = SemanticsOf.IDEMPOTENT  // to avoid caching
 )
 @ActionLayout(
-        describedAs = "Downloads a .columnOrder.txt file for either this object or one of its collections",
+        cssClassFa = "fa-download",
+        named = "Download .columnOrder.txt files (ZIP)",
+        describedAs = "Downloads all the .columnOrder.txt files for this object and its collections, as a zip file",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        sequence = "700.2.2"
+        sequence = "700.2.3"
 )
 @RequiredArgsConstructor
-public class Object_downloadColumnOrderTxtFile {
+public class Object_downloadColumnOrderTxtFilesAsZip {
 
     private final Object domainObject; // mixee
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_downloadColumnOrderTxtFile> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_downloadColumnOrderTxtFilesAsZip> {}
 
     @Inject SpecificationLoader specificationLoader;
 
-    @MemberSupport public Clob act(
-            @Nullable String collectionId
-    ) {
+    @MemberSupport public Blob act(final String fileName) {
 
-        return collectionId == null
-                ? standaloneCollectionTxtFile()
-                : parentedCollectionTxtFile(collectionId);
+        val zipBuilder = ZipUtils.zipEntryBuilder();
+
+        addStandaloneEntry(zipBuilder);
+        addCollectionEntries(zipBuilder);
+
+        final byte[] zipBytes = zipBuilder.toBytes();
+        return Blob.of(fileName, NamedWithMimeType.CommonMimeType.ZIP, zipBytes);
     }
 
-    private Clob standaloneCollectionTxtFile() {
+    public String default0Act() {
+        val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
+        return String.format("%s.columnOrder.zip", parentSpec.getShortIdentifier());
+    }
+
+
+    // HELPERS
+
+    private void addStandaloneEntry(ZipUtils.EntryBuilder zipBuilder) {
         val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         val buf = new StringBuilder();
 
@@ -83,19 +97,21 @@ public class Object_downloadColumnOrderTxtFile {
                 .map(ObjectFeature::getId)
                 .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        String fileName = String.format("%s.columnOrder.txt", parentSpec.getShortIdentifier());
-        String fileContents = buf.toString();
-        return newClob(fileName, fileContents);
+        val fileName = String.format("%s.columnOrder.txt", parentSpec.getShortIdentifier());
+        val fileContents = buf.toString();
+
+        zipBuilder.addAsUtf8(fileName, fileContents);
     }
 
-    private Clob parentedCollectionTxtFile(String collectionId) {
+    private void addCollectionEntries(ZipUtils.EntryBuilder zipBuilder) {
         val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
+        parentSpec.streamCollections(MixedIn.INCLUDED)
+                .forEach(collection -> addCollection(collection, parentSpec, zipBuilder));
+    }
+
+    private void addCollection(OneToManyAssociation collection, ObjectSpecification parentSpec, ZipUtils.EntryBuilder zipBuilder) {
         val buf = new StringBuilder();
 
-        val collection = parentSpec.streamCollections(MixedIn.INCLUDED)
-                            .filter(x -> Objects.equals(x.getId(), collectionId))
-                            .findFirst()
-                            .orElseThrow(); // shouldn't happen because of disableAct guard.
         val collectionIdentifier = collection.getFeatureIdentifier();
         val elementType = collection.getElementType();
 
@@ -105,20 +121,12 @@ public class Object_downloadColumnOrderTxtFile {
                 .map(ObjectFeature::getId)
                 .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        String fileName = String.format("%s#%s.columnOrder.txt", parentSpec.getShortIdentifier(), collectionId);
-        String fileContents = buf.toString();
-        return newClob(fileName, fileContents);
+        val fileName = String.format("%s#%s.columnOrder.txt", parentSpec.getShortIdentifier(), collection.getId());
+        val fileContents = buf.toString();
+
+        zipBuilder.addAsUtf8(fileName, fileContents);
     }
 
-    @MemberSupport public List<String> choices0Act() {
-        val objectSpec = specificationLoader.loadSpecification(domainObject.getClass());
-        return objectSpec.streamCollections(MixedIn.INCLUDED)
-                .map(ObjectFeature::getId)
-                .collect(Collectors.toList());
-    }
 
-    private static Clob newClob(String fileName, String fileContents) {
-        return Clob.of(fileName, NamedWithMimeType.CommonMimeType.TXT, fileContents);
-    }
 
 }
