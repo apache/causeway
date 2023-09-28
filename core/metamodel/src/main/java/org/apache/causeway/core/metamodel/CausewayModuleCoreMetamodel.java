@@ -35,7 +35,7 @@ import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.metamodel.context.MetaModelContexts;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
-import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelInspection;
+import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelMixins;
 import org.apache.causeway.core.metamodel.inspect.model.ActionNode;
 import org.apache.causeway.core.metamodel.inspect.model.CollectionNode;
 import org.apache.causeway.core.metamodel.inspect.model.FacetAttrNode;
@@ -121,7 +121,7 @@ import lombok.NonNull;
 
         // @Configuration's
         MetaModelContexts.class,
-        CausewayModuleCoreMetamodelInspection.class,
+        CausewayModuleCoreMetamodelMixins.class,
 
         // @Component's
         ProgrammingModelInitFilterDefault.class,

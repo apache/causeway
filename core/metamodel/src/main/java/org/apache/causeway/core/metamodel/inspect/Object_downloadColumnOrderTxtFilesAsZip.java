@@ -81,7 +81,7 @@ public class Object_downloadColumnOrderTxtFilesAsZip {
         return Blob.of(fileName, NamedWithMimeType.CommonMimeType.ZIP, zipBytes);
     }
 
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         return String.format("%s.columnOrder.zip", parentSpec.getShortIdentifier());
     }
