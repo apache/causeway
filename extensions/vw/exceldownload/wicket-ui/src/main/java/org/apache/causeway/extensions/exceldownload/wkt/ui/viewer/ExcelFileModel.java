@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.components;
+package org.apache.causeway.extensions.exceldownload.wkt.ui.viewer;
 
 import java.io.File;
 import java.io.FileNotFoundException;

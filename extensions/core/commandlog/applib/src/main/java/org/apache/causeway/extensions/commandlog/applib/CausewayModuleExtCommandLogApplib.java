@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
+import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -54,6 +56,8 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         // @Service's
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
+
+        BackgroundCommandsJobControl.class,
 
         BackgroundService.class,
         BackgroundService.PersistCommandExecutorService.class,

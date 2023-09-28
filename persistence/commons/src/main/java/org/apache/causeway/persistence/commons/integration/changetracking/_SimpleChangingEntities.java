@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jpa.integration.changetracking;
+package org.apache.causeway.persistence.commons.integration.changetracking;
 
 import java.sql.Timestamp;
 import java.util.UUID;

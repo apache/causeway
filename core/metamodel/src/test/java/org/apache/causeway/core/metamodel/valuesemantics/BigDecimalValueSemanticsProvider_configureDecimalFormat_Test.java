@@ -18,22 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Optional;
-
-import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +29,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 @ExtendWith(MockitoExtension.class)
 class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {

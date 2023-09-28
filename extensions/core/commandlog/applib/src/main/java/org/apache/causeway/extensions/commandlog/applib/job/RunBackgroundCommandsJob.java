@@ -25,13 +25,10 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
-
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -46,7 +43,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
-import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -54,6 +50,13 @@ import lombok.extern.log4j.Log4j2;
  * An implementation of a Quartz {@link Job} that queries for {@link CommandLogEntry}s that have been persisted by
  * the {@link org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService} but not yet started; and then
  * executes them.
+ *
+ * <p>
+ *     Note that although this is a component, a new instance is created for each run.  It is for this reason that
+ *     the control is managed through the injected {@link BackgroundCommandsJobControl}
+ * </p>
+ *
+ * @see BackgroundCommandsJobControl
  *
  * @since 2.0 {@index}
  */
@@ -68,29 +71,14 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject ClockService clockService;
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
+    @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
 
-    public enum State {
-        RUNNING,
-        PAUSED
-    }
-
-    @Getter
-    private State state = State.RUNNING;
-
-    @Programmatic
-    public void pause() {
-        state = State.PAUSED;
-    }
-    @Programmatic
-    public void resume() {
-        state = State.RUNNING;
-    }
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
 
-        if (state == State.PAUSED) {
-            log.debug("state is " + state);
+        if (backgroundCommandsJobControl.isPaused()) {
+            log.debug("currently paused");
             return;
         }
 

@@ -15,35 +15,16 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.components;
+package org.apache.causeway.persistence.commons.integration.changetracking;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 
-final class _TimeConversion {
-
-    public static Date toDate(LocalDate value) {
-        return toDate(value.atStartOfDay());
-    }
-
-    public static Date toDate(LocalDateTime value) {
-        return new Date(toEpochMilli(value));
-    }
-
-    public static Date toDate(OffsetDateTime value) {
-        return toDate(value.toLocalDateTime());
-    }
-
-    // -- HELPER
-
-    private static final ZoneId zId = ZoneId.systemDefault();
-
-    private static long toEpochMilli(LocalDateTime localDateTime){
-        return localDateTime.atZone(zId).toInstant().toEpochMilli();
-    }
-
+/**
+ * Defines an SPI to determine whether the pre- and post values in the {@link PreAndPostValue} are actually
+ * different (and so should be published).
+ */
+public interface PreAndPostValueEvaluatorService {
+    boolean differ(PreAndPostValue preAndPostValue);
 }
