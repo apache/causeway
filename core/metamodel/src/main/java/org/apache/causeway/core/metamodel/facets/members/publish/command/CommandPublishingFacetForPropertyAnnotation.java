@@ -31,7 +31,29 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 import lombok.val;
 
-public class CommandPublishingFacetForPropertyAnnotation extends CommandPublishingFacetAbstract {
+public abstract class CommandPublishingFacetForPropertyAnnotation extends CommandPublishingFacetAbstract {
+
+    static class Enabled extends CommandPublishingFacetForPropertyAnnotation {
+        Enabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
+            super(processor, holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
+    static class Disabled extends CommandPublishingFacetForPropertyAnnotation {
+        Disabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
+            super(processor, holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
 
     public static Optional<CommandPublishingFacet> create(
             final Optional<Property> propertyIfAny,
@@ -46,50 +68,51 @@ public class CommandPublishingFacetForPropertyAnnotation extends CommandPublishi
             propertyIfAny
             .filter(property -> property.commandPublishing() != Publishing.NOT_SPECIFIED)
             .map(property -> {
-                Publishing commandReification = property.commandPublishing();
+                Publishing publishing = property.commandPublishing();
 
-                final Class<? extends CommandDtoProcessor> processorClass =
-                        property.commandDtoProcessor();
+                final Class<? extends CommandDtoProcessor> processorClass = property.commandDtoProcessor();
                 final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
                 if(processor != null) {
-                    commandReification = Publishing.ENABLED;
+                    publishing = Publishing.ENABLED;
                 }
-                switch (commandReification) {
-                case AS_CONFIGURED:
-                    switch (publishingPolicy) {
-                    case NONE:
-                        return null;
+                switch (publishing) {
+                    case AS_CONFIGURED:
+                        switch (publishingPolicy) {
+                            case NONE:
+                                return new CommandPublishingFacetForPropertyAnnotationAsConfigured.None(holder, servicesInjector);
+                            case ALL:
+                                return new CommandPublishingFacetForPropertyAnnotationAsConfigured.All(holder, servicesInjector);
+                            default:
+                                throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
+                        }
+                    case DISABLED:
+                        return new CommandPublishingFacetForPropertyAnnotation.Disabled(processor, holder, servicesInjector);
+                    case ENABLED:
+                        return new CommandPublishingFacetForPropertyAnnotation.Enabled(processor, holder, servicesInjector);
                     default:
-                        return (CommandPublishingFacet)new CommandPublishingFacetForPropertyAnnotationAsConfigured(holder, servicesInjector);
-                    }
-                case DISABLED:
-                    return null;
-                case ENABLED:
-                    return new CommandPublishingFacetForPropertyAnnotation(holder, processor, servicesInjector);
-                default:
+                        throw new IllegalStateException(String.format("commandPublishing '%s' not recognised", publishing));
                 }
-                throw new IllegalStateException("command '" + commandReification + "' not recognised");
             })
-
             ,
-
+            // if not specified
             () -> {
                 switch (publishingPolicy) {
-                case NONE:
-                    return null;
-                default:
-                    return CommandPublishingFacetFromConfiguration.create(holder, servicesInjector);
+                    case NONE:
+                        return new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);
+                    case ALL:
+                        return new CommandPublishingFacetForPropertyFromConfiguration.All(holder, servicesInjector);
+                    default:
+                        throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
                 }
             }
-
         );
     }
 
 
     CommandPublishingFacetForPropertyAnnotation(
-            final FacetHolder holder,
             final CommandDtoProcessor processor,
+            final FacetHolder holder,
             final ServiceInjector servicesInjector) {
         super(processor, holder, servicesInjector);
     }

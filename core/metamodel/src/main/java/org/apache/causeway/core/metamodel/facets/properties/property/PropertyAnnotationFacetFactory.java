@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
@@ -218,7 +218,7 @@ extends FacetFactoryAbstract {
 
         // check for @Property(executionPublishing=...)
         addFacetIfPresent(
-                ExecutionPublishingPropertyFacetForPropertyAnnotation
+                ExecutionPublishingFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder));
     }
 

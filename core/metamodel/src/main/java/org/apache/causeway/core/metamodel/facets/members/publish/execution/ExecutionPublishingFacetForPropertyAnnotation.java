@@ -29,8 +29,30 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 import lombok.val;
 
-public class ExecutionPublishingPropertyFacetForPropertyAnnotation
+public abstract class ExecutionPublishingFacetForPropertyAnnotation
 extends ExecutionPublishingFacetAbstract {
+
+    static class Enabled extends ExecutionPublishingFacetForPropertyAnnotation {
+        Enabled(FacetHolder holder) {
+            super(holder);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
+    static class Disabled extends ExecutionPublishingFacetForPropertyAnnotation {
+        Disabled(FacetHolder holder) {
+            super(holder);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
 
     public static Optional<ExecutionPublishingFacet> create(
             final Optional<Property> propertyIfAny,
@@ -47,40 +69,39 @@ extends ExecutionPublishingFacetAbstract {
             .map(publishing -> {
 
                 switch (publishing) {
-                case AS_CONFIGURED:
-                    switch (publishingPolicy) {
-                    case NONE:
-                        return null;
+                    case AS_CONFIGURED:
+                        switch (publishingPolicy) {
+                            case NONE:
+                                return new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.None(holder);
+                            case ALL:
+                                return new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.All(holder);
+                            default:
+                                throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
+                        }
+                    case DISABLED:
+                        return new ExecutionPublishingFacetForPropertyAnnotation.Disabled(holder);
+                    case ENABLED:
+                        return new ExecutionPublishingFacetForPropertyAnnotation.Enabled(holder);
                     default:
-                        return (ExecutionPublishingFacet)
-                                new ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(holder);
-                    }
-                case DISABLED:
-                    return null;
-                case ENABLED:
-                    return new ExecutionPublishingPropertyFacetForPropertyAnnotation(holder);
-                default:
+                        throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
                 }
-                return null;
-
             })
-
             ,
-
+            // if not specified
             () -> {
                 switch (publishingPolicy) {
-                case NONE:
-                    return null;
-                default:
-                    return new ExecutionPublishingPropertyFacetFromConfiguration(holder);
+                    case NONE:
+                        return new ExecutionPublishingFacetForPropertyFromConfiguration.None(holder);
+                    case ALL:
+                        return new ExecutionPublishingFacetForPropertyFromConfiguration.All(holder);
+                    default:
+                        throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
                 }
             }
-
         );
-
     }
 
-    public ExecutionPublishingPropertyFacetForPropertyAnnotation(final FacetHolder holder) {
+    public ExecutionPublishingFacetForPropertyAnnotation(final FacetHolder holder) {
         super(holder);
     }
 

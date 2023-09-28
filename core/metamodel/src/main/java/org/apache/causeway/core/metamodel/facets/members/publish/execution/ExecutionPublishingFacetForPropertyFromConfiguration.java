@@ -18,12 +18,39 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.publish.execution;
 
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration;
 
-public class ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured
-extends ExecutionPublishingPropertyFacetForPropertyAnnotation {
+public abstract class ExecutionPublishingFacetForPropertyFromConfiguration
+extends ExecutionPublishingFacetAbstract {
 
-    public ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(final FacetHolder holder) {
+    static class All extends ExecutionPublishingFacetForPropertyFromConfiguration {
+
+        All(FacetHolder holder) {
+            super(holder);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
+    static class None extends ExecutionPublishingFacetForPropertyFromConfiguration {
+
+        None(FacetHolder holder) {
+            super(holder);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
+
+    public ExecutionPublishingFacetForPropertyFromConfiguration(final FacetHolder holder) {
         super(holder);
     }
+
 }

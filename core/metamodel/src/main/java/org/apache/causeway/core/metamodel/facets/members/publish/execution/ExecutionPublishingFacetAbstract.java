@@ -26,7 +26,7 @@ public abstract class ExecutionPublishingFacetAbstract
 extends FacetAbstract
 implements ExecutionPublishingFacet {
 
-    private static final Class<? extends Facet> type() {
+    private static Class<? extends Facet> type() {
         return ExecutionPublishingFacet.class;
     }
 

@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFac
 import org.apache.causeway.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
@@ -201,7 +201,7 @@ extends FacetFactoryAbstract {
 
         // check for @Action(executionPublishing=...)
         addFacetIfPresent(
-                ExecutionPublishingActionFacetForActionAnnotation
+                ExecutionPublishingFacetForActionAnnotation
                 .create(actionIfAny, getConfiguration(), facetedMethod));        // check for @Action(executionPublishing=...)
 
 

@@ -31,7 +31,7 @@ public abstract class CommandPublishingFacetAbstract
 extends FacetAbstract
 implements CommandPublishingFacet {
 
-    private static final Class<? extends Facet> type() {
+    private static Class<? extends Facet> type() {
         return CommandPublishingFacet.class;
     }
 
@@ -87,4 +87,6 @@ implements CommandPublishingFacet {
         super.visitAttributes(visitor);
         visitor.accept("dtoProcessor", processor);
     }
+
+
 }

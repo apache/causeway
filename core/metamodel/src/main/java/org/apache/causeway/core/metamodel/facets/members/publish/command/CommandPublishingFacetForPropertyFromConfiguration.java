@@ -21,15 +21,33 @@ package org.apache.causeway.core.metamodel.facets.members.publish.command;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class CommandPublishingFacetFromConfiguration extends CommandPublishingFacetAbstract {
+public abstract class CommandPublishingFacetForPropertyFromConfiguration extends CommandPublishingFacetAbstract {
 
-    public static CommandPublishingFacet create(
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
-        return new CommandPublishingFacetFromConfiguration(holder, servicesInjector);
+    static class All extends CommandPublishingFacetForPropertyFromConfiguration {
+
+        All(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
     }
 
-    private CommandPublishingFacetFromConfiguration(
+    static class None extends CommandPublishingFacetForPropertyFromConfiguration {
+
+        None(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
+
+    CommandPublishingFacetForPropertyFromConfiguration(
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
         super(null, holder, servicesInjector);

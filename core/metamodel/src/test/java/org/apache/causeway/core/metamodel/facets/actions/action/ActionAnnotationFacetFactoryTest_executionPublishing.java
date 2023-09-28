@@ -32,8 +32,8 @@ import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetFromConfiguration;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 
 import lombok.val;
@@ -82,7 +82,7 @@ extends ActionAnnotationFacetFactoryTest {
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingActionFacetFromConfiguration);
+            assertTrue(facet instanceof ExecutionPublishingFacetForActionFromConfiguration);
         });
     }
 
@@ -123,7 +123,7 @@ extends ActionAnnotationFacetFactoryTest {
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingActionFacetFromConfiguration);
+            assertTrue(facet instanceof ExecutionPublishingFacetForActionFromConfiguration);
         });
     }
 
@@ -163,7 +163,7 @@ extends ActionAnnotationFacetFactoryTest {
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
-            final ExecutionPublishingActionFacetForActionAnnotation facetImpl = (ExecutionPublishingActionFacetForActionAnnotation) facet;
+            final ExecutionPublishingFacetForActionAnnotation facetImpl = (ExecutionPublishingFacetForActionAnnotation) facet;
             _Blackhole.consume(facetImpl);
             assertNoMethodsRemoved();
         });
@@ -218,7 +218,7 @@ extends ActionAnnotationFacetFactoryTest {
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
+            assertTrue(facet instanceof ExecutionPublishingFacetForActionAnnotation);
             assertNoMethodsRemoved();
         });
     }
@@ -239,7 +239,7 @@ extends ActionAnnotationFacetFactoryTest {
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
+            assertTrue(facet instanceof ExecutionPublishingFacetForActionAnnotation);
         });
     }
 

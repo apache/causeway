@@ -32,7 +32,29 @@ import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanti
 
 import lombok.val;
 
-public class CommandPublishingFacetForActionAnnotation extends CommandPublishingFacetAbstract {
+public abstract class CommandPublishingFacetForActionAnnotation extends CommandPublishingFacetAbstract {
+
+    static class Enabled extends CommandPublishingFacetForActionAnnotation {
+        Enabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
+            super(processor, holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
+    static class Disabled extends CommandPublishingFacetForActionAnnotation {
+        Disabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
+            super(processor, holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
 
     public static Optional<CommandPublishingFacet> create(
             final Optional<Action> actionsIfAny,
@@ -48,57 +70,54 @@ public class CommandPublishingFacetForActionAnnotation extends CommandPublishing
         .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
         .<CommandPublishingFacet>map(action -> {
 
-            Publishing commandPublishing = action.commandPublishing();
+            Publishing publishing = action.commandPublishing();
             final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
             final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
             if(processor != null) {
-                commandPublishing = Publishing.ENABLED;
+                publishing = Publishing.ENABLED;
             }
 
-            switch (commandPublishing) {
-            case AS_CONFIGURED:
-                switch (publishingPolicy) {
+            switch (publishing) {
+                case AS_CONFIGURED:
+                    switch (publishingPolicy) {
+                        case NONE:
+                            return new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
+                        case IGNORE_QUERY_ONLY:
+                        case IGNORE_SAFE:
+                            return hasSafeSemantics(holder)
+                                    ? new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder, servicesInjector)
+                                    : new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder, servicesInjector);
+                        case ALL:
+                            return new CommandPublishingFacetForActionAnnotationAsConfigured.All(holder, servicesInjector);
+                        default:
+                            throw new IllegalStateException(String.format("configured commandPublishing policy '%s' not recognised", publishingPolicy));
+                    }
+                case DISABLED:
+                    return new CommandPublishingFacetForActionAnnotation.Disabled(processor, holder, servicesInjector);
+                case ENABLED:
+                    return new CommandPublishingFacetForActionAnnotation.Enabled(processor, holder, servicesInjector);
+                default:
+                    throw new IllegalStateException(String.format("commandPublishing '%s' not recognised", publishing));
+            }
+        })
+        ,
+        () -> {
+            // if not specified
+            switch (publishingPolicy) {
                 case NONE:
-                    return null;
+                    return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
                 case IGNORE_QUERY_ONLY:
                 case IGNORE_SAFE:
-                    if (hasSafeSemantics(holder)) {
-                        return null;
-                    }
-                    // else fall through
+                    return hasSafeSemantics(holder)
+                            ? new CommandPublishingFacetForActionFromConfiguration.IgnoreSafe(holder, servicesInjector)
+                            : new CommandPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder, servicesInjector);
+                case ALL:
+                    return new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
                 default:
-                    return new CommandPublishingFacetForActionAnnotationAsConfigured(
-                            holder, servicesInjector);
-                }
-            case DISABLED:
-                return null;
-            case ENABLED:
-                return new CommandPublishingFacetForActionAnnotation(
-                        processor, holder, servicesInjector);
-            default:
+                    throw new IllegalStateException(String.format("configured commandPublishing policy '%s' not recognised", publishingPolicy));
             }
-            throw new IllegalStateException("command '" + commandPublishing + "' not recognised");
-        })
-
-        ,
-
-        () -> {
-            switch (publishingPolicy) {
-            case NONE:
-                return null;
-            case IGNORE_QUERY_ONLY:
-            case IGNORE_SAFE:
-                if (hasSafeSemantics(holder)) {
-                    return null;
-                }
-                // else fall through
-            default:
-                return CommandPublishingFacetFromConfiguration.create(holder, servicesInjector);
-            }
-        }
-
-        );
+        });
     }
 
     private static boolean hasSafeSemantics(final FacetHolder holder) {
@@ -106,10 +125,7 @@ public class CommandPublishingFacetForActionAnnotation extends CommandPublishing
         if(actionSemanticsFacet == null) {
             throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
         }
-        if(actionSemanticsFacet.value().isSafeInNature()) {
-            return true;
-        }
-        return false;
+        return actionSemanticsFacet.value().isSafeInNature();
     }
 
     CommandPublishingFacetForActionAnnotation(
@@ -118,6 +134,5 @@ public class CommandPublishingFacetForActionAnnotation extends CommandPublishing
             final ServiceInjector servicesInjector) {
         super(processor, holder, servicesInjector);
     }
-
 
 }
