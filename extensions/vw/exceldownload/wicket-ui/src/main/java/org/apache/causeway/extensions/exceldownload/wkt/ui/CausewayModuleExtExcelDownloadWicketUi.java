@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.viewer.wicket.exceldownload.ui;
+package org.apache.causeway.extensions.exceldownload.wkt.ui;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory;
+import org.apache.causeway.extensions.exceldownload.wkt.ui.viewer.CollectionContentsAsExcelFactory;
 
 /**
  * @since 2.0 {@index}
