@@ -19,6 +19,8 @@
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.lang.reflect.Constructor;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -39,9 +41,12 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * Corresponds to {@link ViewModel} interface.
@@ -135,10 +140,45 @@ extends ViewModelFacetAbstract {
     @Override
     public String serialize(final ManagedObject viewModel) {
         final ViewModel viewModelPojo = (ViewModel) viewModel.getPojo();
-        return UrlUtils.urlEncodeUtf8(viewModelPojo.viewModelMemento());
+        return SpecialMemento.encode(viewModelPojo.viewModelMemento());
     }
 
     // -- HELPER
+
+    /**
+     * In support of (stateless) {@link ViewModel}s that don't use a memento,
+     * or if an empty memento String is actually considered a valid use-case.
+     * (e.g. a Viewmodel that simply holds a String value for a search say)
+     * @apiNote introduced so we can create valid bookmarks,
+     *      that must have a non-empty identifier part
+     * @implNote the pipe character '|' is regarded unsafe,
+     *      hence gets processed by {@link URLEncoder} and {@link URLDecoder},
+     *      which makes it safe for us to use with special meaning
+     */
+    @Getter @Accessors(fluent=true)
+    @RequiredArgsConstructor
+    enum SpecialMemento {
+        EMPTY("||"),
+        NULL("|");
+        static String encode(final @Nullable String memento) {
+            return memento==null
+                    ? NULL.representationInUrl()
+                    : memento.isEmpty()
+                            ? EMPTY.representationInUrl()
+                            : UrlUtils.urlEncodeUtf8(memento);
+        }
+        static String decode(final @Nullable String memento) {
+            return NULL.matches(memento)
+                    ? null
+                    : EMPTY.matches(memento)
+                            ? ""
+                            : UrlUtils.urlDecodeUtf8(memento);
+        }
+        final String representationInUrl;
+        boolean matches(final String other) {
+            return representationInUrl.equals(other);
+        }
+    }
 
     @SneakyThrows
     private Object deserialize(
@@ -148,7 +188,7 @@ extends ViewModelFacetAbstract {
         _Assert.assertNotNull(constructorAnyArgs, ()->"framework bug: required non-null, "
                 + "this can only happen, if we try to deserialize an abstract type");
 
-        val memento = UrlUtils.urlDecodeUtf8(mementoEncoded);
+        val memento = SpecialMemento.decode(mementoEncoded);
         val resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
         val viewmodelPojo = constructorAnyArgs.constructor().newInstance(resolvedArgs);
         return viewmodelPojo;
