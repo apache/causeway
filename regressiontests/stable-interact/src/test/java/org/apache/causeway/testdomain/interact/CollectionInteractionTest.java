@@ -101,7 +101,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
                 .tableTester();
 
-        tableTester.assertColumnNames(List.of("Name", "Date"));
+        tableTester.assertColumnNames(List.of("Date", "Name"));
 
     }
 

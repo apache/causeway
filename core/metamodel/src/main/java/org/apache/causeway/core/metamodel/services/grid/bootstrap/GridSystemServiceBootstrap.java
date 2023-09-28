@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -311,9 +313,16 @@ extends GridSystemServiceAbstract<BSGrid> {
                 val fieldSet = gridModel.getFieldSetForUnreferencedPropertiesRef();
                 if(fieldSet != null) {
                     unboundPropertyIds.removeAll(unboundMetadataContributingIds);
+
+                    // add unbound properties alphabetically to fieldset
+                    List<String> sortedUnboundPropertyIds =
+                            unboundPropertyIds.stream()
+                                .sorted()
+                                .collect(Collectors.toList());
+
                     addPropertiesTo(
                             fieldSet,
-                            unboundPropertyIds,
+                            sortedUnboundPropertyIds,
                             layoutDataFactory::createPropertyLayoutData,
                             propertyLayoutDataById::put);
                 }
@@ -331,13 +340,12 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
 
         if(!missingCollectionIds.isEmpty()) {
-            final List<OneToManyAssociation> sortedCollections =
-                    _Lists.map(missingCollectionIds, oneToManyAssociationById::get);
 
-            sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence(false));
-
+            // add missing collections alphabetically to either tab group or column
             final List<String> sortedMissingCollectionIds =
-                    _Lists.map(sortedCollections, ObjectAssociation::getId);
+                    missingCollectionIds.stream()
+                            .sorted()
+                            .collect(Collectors.toList());
 
             final BSTabGroup bsTabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
             if(bsTabGroup != null) {
