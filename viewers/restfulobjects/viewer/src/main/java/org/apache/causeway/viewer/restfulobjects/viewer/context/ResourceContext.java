@@ -156,10 +156,10 @@ implements IResourceContext {
         if(simpleQueryArgs(params)) {
             // try to process regular params and build up JSON repr
             final JsonRepresentation map = JsonRepresentation.newMap();
-            for(String paramName: params.keySet()) {
-                String paramValue = params.get(paramName)[0];
+            for(String paramId: params.keySet()) {
+                String paramValue = params.get(paramId)[0];
                 // this is rather hacky :-(
-                final String key = paramName.startsWith("x-ro") ? paramName : paramName + ".value";
+                final String key = paramId.startsWith("x-ro") ? paramId : paramId + ".value";
 
                 // test whether we can parse as an int
                 val parseResult = _Ints.parseInt(paramValue, 10);
@@ -168,7 +168,6 @@ implements IResourceContext {
                 } else {
                     map.mapPutString(key, stripQuotes(paramValue));
                 }
-
             }
             return map;
         } else {
@@ -190,8 +189,8 @@ implements IResourceContext {
         if(params==null || params.isEmpty()) {
             return false;
         }
-        for(String paramName: params.keySet()) {
-            if("x-causeway-querystring".equals(paramName) || paramName.startsWith("{")) {
+        for(String paramId: params.keySet()) {
+            if("x-causeway-querystring".equals(paramId) || paramId.startsWith("{")) {
                 return false;
             }
         }

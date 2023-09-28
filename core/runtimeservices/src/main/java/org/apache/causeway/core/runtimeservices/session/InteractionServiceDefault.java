@@ -209,8 +209,8 @@ implements
         }
 
         if(log.isDebugEnabled()) {
-            log.debug("new interaction layer created (conversation-id={}, total-layers-on-stack={}, {})",
-                    interactionId.get(),
+            log.debug("new interaction layer created (interactionId={}, total-layers-on-stack={}, {})",
+                    currentInteraction().map(Interaction::getInteractionId).orElse(null),
                     interactionLayerStack.get().size(),
                     _Probe.currentThreadId());
         }
@@ -234,8 +234,8 @@ implements
 
     @Override
     public void closeInteractionLayers() {
-        log.debug("about to close the interaction stack (conversation-id={}, total-layers-on-stack={}, {})",
-                interactionId.get(),
+        log.debug("about to close the interaction stack (interactionId={}, total-layers-on-stack={}, {})",
+                currentInteraction().map(Interaction::getInteractionId).orElse(null),
                 interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
@@ -312,13 +312,11 @@ implements
         run(InteractionContextFactory.anonymous(), runnable);
     }
 
-    // -- CONVERSATION ID
-
-    private final ThreadLocal<UUID> interactionId = ThreadLocal.withInitial(()->null);
+    // -- INTERACTION ID
 
     @Override
     public Optional<UUID> getInteractionId() {
-        return Optional.ofNullable(interactionId.get());
+        return currentInteraction().map(Interaction::getInteractionId);
     }
 
     // -- HELPER
@@ -365,7 +363,6 @@ implements
     }
 
     private void postInteractionOpened(final CausewayInteraction interaction) {
-        interactionId.set(interaction.getInteractionId());
         transactionBoundaryAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
         txBoundaryHandler.onOpen(interaction);
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
@@ -408,9 +405,9 @@ implements
 
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
 
-        log.debug("about to close authenication stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
+        log.debug("about to close interaction stack down to size {} (interactionId={}, total-layers-on-stack={}, {})",
                 downToStackSize,
-                interactionId.get(),
+                currentInteraction().map(Interaction::getInteractionId).orElse(null),
                 interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
@@ -426,7 +423,6 @@ implements
         if(downToStackSize == 0) {
             // cleanup thread-local
             interactionLayerStack.remove();
-            interactionId.remove();
         }
     }
 

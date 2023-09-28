@@ -61,9 +61,10 @@ public enum EntityState {
      * be tracked nor flushed back to the database.
      * <p>
      * JDO distinguishes between DETACHED and HOLLOW,
-     * by virtue of {@code datanucleus.detachAllOnCommit=false}.
+     * by virtue of {@code javax.jdo.option.detachAllOnCommit=false}.
      * <p>
-     * To recover <i>OIDs</i> from <i>hollow</i> entities, we introduced the DnStateManagerForHollow.
+     * (Unfortunately, we have not found a way to recover _OIDs_ from _hollow_ entities, as used for serialization post commit.
+     * We have instead implemented a workaround using the <code>DnStateManagerForHollow</code> class).
      *
      * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#lifecycle"
      */

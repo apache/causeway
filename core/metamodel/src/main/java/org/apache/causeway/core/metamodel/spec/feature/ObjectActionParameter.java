@@ -69,23 +69,42 @@ extends ObjectFeature, CurrentHolder {
     }
 
     /**
-     * Returns the name of this parameter.
+     * Returns the friendly name of this parameter (possibly translated).
      *
      * <p>
-     * Because Java's reflection API does not allow us to access the code name
-     * of the parameter, we have to do figure out the name of the parameter
-     * ourselves:
+     * This is derived as follows:
      * <ul>
      * <li>If there is a {@link MemberNamedFacet} associated with this parameter then
-     * we infer a name from this, eg "First Name" becomes "firstName".
-     * <li>Otherwise we use the type, eg "string".
-     * <li>If there is more than one parameter of the same type, then we use a
-     * numeric suffix (eg "string1", "string2"). Wrappers and primitives are
-     * considered to be the same type.
+     * we infer a name from this, eg "First Name".
+     * <li>Otherwise we infer the type from the parameter, eg "firstName" becomes "First Name"
      * </ul>
+     *
+     * <p>
+     *     Note also that although this method's signature returns an {@link Optional} (because it is inherited from
+     *     {@link ObjectFeature}), it will in fact always return a non-empty value, in fact being
+     *     {@link #getCanonicalFriendlyName()}.
+     * </p>
+     *
+     * @see #getCanonicalFriendlyName()
      */
     @Override
     Optional<String> getStaticFriendlyName();
+
+    /**
+     * Returns the friendly name of this parameter (possibly translated).
+     *
+     * <p>
+     * This is derived as follows:
+     * <ul>
+     * <li>If there is a {@link MemberNamedFacet} associated with this parameter then
+     * we infer a name from this, eg "First Name".
+     * <li>Otherwise we infer the type from the parameter, eg "firstName" becomes "First Name"
+     * </ul>
+     *
+     * @see #getStaticFriendlyName()
+     */
+    @Override
+    String getCanonicalFriendlyName();
 
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(

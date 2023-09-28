@@ -624,15 +624,14 @@ public final class CommonDtoUtils {
     // -- PARAM DTO FACTORIES
 
     /**
-     * @param paramName name by which the parameter is identified
-     * (not its friendly name for rendering)
+     * @param paramIdOrName - should (consistently) be either id or name, as per global configuration.
      */
-    public static ParamDto paramDto(final @NonNull String paramName) {
+    public static ParamDto paramDto(final @NonNull String paramIdOrName) {
         val paramDto = new ParamDto();
-        if(paramName.isBlank()) {
-            throw _Exceptions.illegalArgument("paramName must not be blank '%s'", paramName);
+        if(paramIdOrName.isBlank()) {
+            throw _Exceptions.illegalArgument("paramIdOrName must not be blank '%s'", paramIdOrName);
         }
-        paramDto.setName(paramName);
+        paramDto.setName(paramIdOrName);
         return paramDto;
     }
 

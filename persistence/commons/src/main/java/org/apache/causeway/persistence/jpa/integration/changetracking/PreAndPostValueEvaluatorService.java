@@ -15,26 +15,16 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.causeway.persistence.commons;
+package org.apache.causeway.persistence.jpa.integration.changetracking;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 
-import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
-import org.apache.causeway.persistence.jpa.integration.changetracking.EntityChangeTrackerDefault;
-import org.apache.causeway.persistence.jpa.integration.changetracking.PreAndPostValueEvaluatorServiceDefault;
-
-@Configuration
-@Import({
-        // modules
-        CausewayModuleCoreRuntime.class,
-
-        // @Service's
-        EntityChangeTrackerDefault.class,
-        EntityChangeTrackerDefault.TransactionSubscriber.class,
-        PreAndPostValueEvaluatorServiceDefault.class,
-})
-public class CausewayModulePersistenceCommons {
-
+/**
+ * Defines an SPI to determine whether the pre- and post values in the {@link PreAndPostValue} are actually
+ * different (and so should be published).
+ */
+public interface PreAndPostValueEvaluatorService {
+    boolean differ(PreAndPostValue preAndPostValue);
 }

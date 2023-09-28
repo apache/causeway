@@ -20,6 +20,9 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Digits;
+
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -30,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigi
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Digits;
 import lombok.val;
 
 public class ValueSemanticsAnnotationFacetFactory
@@ -123,7 +124,7 @@ extends FacetFactoryAbstract {
                         MinFractionalDigitsFacetFromValueSemanticsAnnotation
                                 .create(valueSemanticsIfAny, facetHolder),
                         // support for @jakarta.validation.constraints.Digits (if supported)
-                        getConfiguration().getCore().getMetaModel().getProgrammingModel().isUseScaleForMinFractionalFacet()
+                        getConfiguration().getValueTypes().getBigDecimal().isUseScaleForMinFractionalFacet()
                                 ? MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
                                             .create(digitsIfAny, facetHolder)
                                 : Optional.empty()

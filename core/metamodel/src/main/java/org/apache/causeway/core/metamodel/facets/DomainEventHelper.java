@@ -137,8 +137,7 @@ public class DomainEventHelper {
                     val parameters = objectAction.getParameters();
 
                     val parameterNames = parameters.stream()
-                            .map(ObjectActionParameter::getStaticFriendlyName)
-                            .map(optional->optional.orElseThrow(_Exceptions::unexpectedCodeReach))
+                            .map(ObjectActionParameter::getCanonicalFriendlyName)
                             .collect(_Lists.toUnmodifiable());
 
                     final List<Class<?>> parameterTypes = parameters.stream()

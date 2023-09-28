@@ -107,9 +107,10 @@ Object with this state is an entity that is attached to a persistence session, i
 
 Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.JDO specifics:
 
-JDO distinguishes between DETACHED and HOLLOW, where we are using HOLLOW here, by virtue of _datanucleus.detachAllOnCommit=false_ .
+JDO distinguishes between DETACHED and HOLLOW, where we are using HOLLOW here, by virtue of _javax.jdo.option.DetachAllOnCommit=false_ .
 
-(Unfortunately, we have not found a way to recover _OIDs_ from _hollow_ entities, as used for serialization post commit. So a workaround is in place with DnStateManagerForHollow.)
+(Unfortunately, we have not found a way to recover _OIDs_ from _hollow_ entities, as used for serialization post commit.
+We have instead implemented a workaround using the `DnStateManagerForHollow` class).
 
 [#PERSISTABLE_REMOVED]
 === PERSISTABLE_REMOVED

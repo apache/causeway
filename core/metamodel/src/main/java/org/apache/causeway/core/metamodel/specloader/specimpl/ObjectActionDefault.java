@@ -255,9 +255,17 @@ implements ObjectAction {
     }
 
     @Override
+    public ObjectActionParameter getParameterById(final String paramId) {
+        return getParameters().stream()
+                .filter(param->Objects.equals(paramId, param.getId()))
+                .findAny()
+                .orElse(null);
+    }
+
+    @Override
     public ObjectActionParameter getParameterByName(final String paramName) {
         return getParameters().stream()
-                .filter(param->Objects.equals(paramName, param.getId()))
+                .filter(param->Objects.equals(paramName, param.getCanonicalFriendlyName()))
                 .findAny()
                 .orElse(null);
     }

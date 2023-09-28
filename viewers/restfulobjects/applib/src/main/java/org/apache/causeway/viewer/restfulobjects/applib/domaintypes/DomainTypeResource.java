@@ -71,9 +71,9 @@ public interface DomainTypeResource {
     public abstract Response typeAction(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId);
 
     @GET
-    @Path("/{domainType}/actions/{actionId}/params/{paramNum}")
+    @Path("/{domainType}/actions/{actionId}/params/{paramId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
-    public abstract Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramNum") final String paramName);
+    public abstract Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramId") final String paramId);
 
 
 

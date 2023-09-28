@@ -20,11 +20,15 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import org.springframework.stereotype.Component;
 
@@ -59,6 +63,8 @@ implements
 
     @Setter @Inject
     private SpecificationLoader specificationLoader;
+    @Setter @Inject
+    private CausewayConfiguration causewayConfiguration;
 
     @Override
     public Class<BigDecimal> getCorrespondingClass() {
@@ -139,7 +145,7 @@ implements
         if(context==null) {
             return;
         }
-        context.getFeatureIdentifier();
+
         val feature = specificationLoader.loadFeature(context.getFeatureIdentifier())
                 .orElse(null);
         if(feature==null) {
@@ -154,9 +160,16 @@ implements
         // because we want to firstly parse any number value into a BigDecimal,
         // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
         if(usedFor.isRendering()) {
-            // evaluate any facets that provide the MinimumFractionDigits
-            Facets.minFractionalDigits(feature)
-                .ifPresent(format::setMinimumFractionDigits);
+
+            // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
+            OptionalInt optionalInt = Facets.minFractionalDigits(feature);
+            if (optionalInt.isPresent()) {
+                format.setMinimumFractionDigits(optionalInt.getAsInt());
+            } else {
+                // otherwise, apply a minScale if configured.
+                Optional.ofNullable(causewayConfiguration.getValueTypes().getBigDecimal().getMinScale())
+                        .ifPresent(format::setMinimumFractionDigits);
+            }
         }
     }
 

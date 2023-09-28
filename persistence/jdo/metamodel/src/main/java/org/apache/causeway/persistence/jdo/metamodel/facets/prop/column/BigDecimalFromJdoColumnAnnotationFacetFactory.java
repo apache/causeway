@@ -63,7 +63,7 @@ implements MetaModelRefiner {
         addFacetIfPresent(
                 MaxFractionalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));
 
-        if (getConfiguration().getCore().getMetaModel().getProgrammingModel().isUseScaleForMinFractionalFacet()) {
+        if (getConfiguration().getValueTypes().getBigDecimal().isUseScaleForMinFractionalFacet()) {
             addFacetIfPresent(
                     MinFractionalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));
         }
