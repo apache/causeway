@@ -28,7 +28,10 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.TypedHolder;
+import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.val;
 
@@ -96,7 +99,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
             })
             .orElseGet(() -> {
                 // there is no publishing facet from either @Action or @Property, so use the appropriate configuration to install a default
-                if (holder.containsNonFallbackFacet(PropertyOrCollectionAccessorFacet.class)) {
+                if (representsProperty(holder)) {
                     switch (publishingPolicy) {
                         case NONE:
                             return new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);
@@ -119,6 +122,15 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
             });
     }
 
+    private static boolean representsProperty(FacetHolder holder) {
+        // a property
+        if (holder instanceof TypedHolder && ((TypedHolder)holder).getFeatureType() == FeatureType.PROPERTY) {
+            return true;
+        }
+        // or a mixin
+        return  holder.containsFacet(ContributingFacet.class) &&
+                holder.getFacet(ContributingFacet.class).contributed() == MixinFacet.Contributing.AS_PROPERTY;
+    }
 
     CommandPublishingFacetForPropertyAnnotation(
             final CommandDtoProcessor processor,

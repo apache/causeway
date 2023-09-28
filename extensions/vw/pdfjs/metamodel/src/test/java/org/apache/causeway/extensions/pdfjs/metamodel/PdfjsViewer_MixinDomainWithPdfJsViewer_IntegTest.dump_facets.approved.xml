@@ -296,12 +296,12 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="sequence" value="700.2.2"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="CommandPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="ExecutionPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
@@ -457,12 +457,12 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="sequence" value="700.1"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="CommandPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="ExecutionPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
@@ -721,12 +721,12 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="sequence" value="700.2"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="CommandPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="ExecutionPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
@@ -888,12 +888,12 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="sequence" value="700.2.1"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="CommandPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="ExecutionPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
@@ -1002,12 +1002,12 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="sequence" value="750.1"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="CommandPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="ExecutionPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
@@ -1116,12 +1116,12 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="sequence" value="800.1"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="CommandPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
-            <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="ExecutionPublishingFacetForActionAnnotation.Disabled"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
