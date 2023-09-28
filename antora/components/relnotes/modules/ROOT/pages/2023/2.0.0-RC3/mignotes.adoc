@@ -76,3 +76,11 @@ moved to
 </dependency>
 ----
 
+== Extensions
+
+=== CausewayModuleExtExcelDownloadWicketUi
+
+Was relocated from 
+`org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.CausewayModuleExtExcelDownloadWicketUi` to
+`org.apache.causeway.extensions.exceldownload.wkt.ui.CausewayModuleExtExcelDownloadWicketUi`
+
