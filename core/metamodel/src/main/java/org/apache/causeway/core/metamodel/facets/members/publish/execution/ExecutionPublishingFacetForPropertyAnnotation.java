@@ -22,10 +22,11 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 
 import lombok.val;
 
@@ -74,7 +75,7 @@ extends ExecutionPublishingFacetAbstract {
                             case ALL:
                                 return new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.All(holder);
                             default:
-                                throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
+                                throw new IllegalStateException(String.format("configured property.executionPublishing policy '%s' not recognised", publishingPolicy));
                         }
                     case DISABLED:
                         return new ExecutionPublishingFacetForPropertyAnnotation.Disabled(holder);
@@ -83,14 +84,30 @@ extends ExecutionPublishingFacetAbstract {
                     default:
                         throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
                 }
-            }).orElseGet(() -> {
-                switch (publishingPolicy) {
-                    case NONE:
-                        return new ExecutionPublishingFacetForPropertyFromConfiguration.None(holder);
-                    case ALL:
-                        return new ExecutionPublishingFacetForPropertyFromConfiguration.All(holder);
-                    default:
-                        throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
+            })
+            .orElseGet(() -> {
+                // there is no publishing facet from either @Action or @Property, so use the appropriate configuration to install a default
+                if (holder.containsNonFallbackFacet(PropertyOrCollectionAccessorFacet.class)) {
+                    // we are dealing with a property
+                    switch (publishingPolicy) {
+                        case NONE:
+                            return new ExecutionPublishingFacetForPropertyFromConfiguration.None(holder);
+                        case ALL:
+                            return new ExecutionPublishingFacetForPropertyFromConfiguration.All(holder);
+                        default:
+                            throw new IllegalStateException(String.format("configured property.executionPublishing policy '%s' not recognised", publishingPolicy));
+                    }
+                } else {
+                    // we are dealing with an action
+                    val actionPublishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
+                    switch (actionPublishingPolicy) {
+                        case NONE:
+                            return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
+                        case ALL:
+                            return new ExecutionPublishingFacetForActionFromConfiguration.All(holder);
+                        default:
+                            throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
+                    }
                 }
             }
         );

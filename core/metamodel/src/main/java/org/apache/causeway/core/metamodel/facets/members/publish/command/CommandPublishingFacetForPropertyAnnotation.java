@@ -24,10 +24,11 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 
 import lombok.val;
 
@@ -68,12 +69,13 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
             .map(property -> {
                 Publishing publishing = property.commandPublishing();
 
-                final Class<? extends CommandDtoProcessor> processorClass = property.commandDtoProcessor();
-                final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+                val processorClass = property.commandDtoProcessor();
+                val processor = newProcessorElseNull(processorClass);
 
                 if(processor != null) {
                     publishing = Publishing.ENABLED;
                 }
+
                 switch (publishing) {
                     case AS_CONFIGURED:
                         switch (publishingPolicy) {
@@ -91,17 +93,30 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                     default:
                         throw new IllegalStateException(String.format("commandPublishing '%s' not recognised", publishing));
                 }
-            }).orElseGet(() -> {
-                switch (publishingPolicy) {
-                    case NONE:
-                        return new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);
-                    case ALL:
-                        return new CommandPublishingFacetForPropertyFromConfiguration.All(holder, servicesInjector);
-                    default:
-                        throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
+            })
+            .orElseGet(() -> {
+                // there is no publishing facet from either @Action or @Property, so use the appropriate configuration to install a default
+                if (holder.containsNonFallbackFacet(PropertyOrCollectionAccessorFacet.class)) {
+                    switch (publishingPolicy) {
+                        case NONE:
+                            return new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);
+                        case ALL:
+                            return new CommandPublishingFacetForPropertyFromConfiguration.All(holder, servicesInjector);
+                        default:
+                            throw new IllegalStateException(String.format("configured property publishingPolicy '%s' not recognised", publishingPolicy));
+                    }
+                } else {
+                    val actionPublishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
+                    switch (actionPublishingPolicy) {
+                        case NONE:
+                            return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
+                        case ALL:
+                            return new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
+                        default:
+                            throw new IllegalStateException(String.format("configured action publishingPolicy '%s' not recognised", publishingPolicy));
+                    }
                 }
-            }
-        );
+            });
     }
 
 

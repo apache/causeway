@@ -18,10 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFallback;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -71,7 +75,7 @@ extends ActionAnnotationFacetFactoryTest {
     }
 
     @Test
-    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
+    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenNotAdded() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
@@ -81,20 +85,23 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingFacetForActionFromConfiguration);
+            // we rely upon CommandAnnotationFacetFactory to add the facet only if there is no @Property specified also
+            assertNull(facet);
         });
     }
 
     @Test
-    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
+    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenNotAdded() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
-            assertThrows(IllegalStateException.class, ()->
-                processExecutionPublishing(facetFactory, processMethodContext));
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            // we rely upon CommandAnnotationFacetFactory to add the facet only if there is no @Property specified also
+            assertNull(facet);
         });
     }
 
@@ -113,7 +120,7 @@ extends ActionAnnotationFacetFactoryTest {
     }
 
     @Test
-    void given_noAnnotation_and_configurationSetToAll_thenFacetAdded() {
+    void given_noAnnotation_and_configurationSetToAll_thenFacetNotAdded() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.ALL);
@@ -122,8 +129,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingFacetForActionFromConfiguration);
+            assertNull(facet);
         });
     }
 
