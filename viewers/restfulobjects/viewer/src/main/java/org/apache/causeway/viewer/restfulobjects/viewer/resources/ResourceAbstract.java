@@ -36,8 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
 import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -160,7 +160,7 @@ implements HasMetaModelContext {
 
     private String getUrlDecodedQueryStringIfAny() {
         final String queryStringIfAny = httpServletRequest.getQueryString();
-        return _UrlDecoderUtil.urlDecodeNullSafe(queryStringIfAny);
+        return UrlUtils.urlDecodeUtf8(queryStringIfAny);
     }
 
     private ResourceContext resourceContext(
