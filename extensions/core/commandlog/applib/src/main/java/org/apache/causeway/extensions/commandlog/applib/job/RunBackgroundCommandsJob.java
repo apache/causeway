@@ -55,6 +55,13 @@ import lombok.extern.log4j.Log4j2;
  * the {@link org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService} but not yet started; and then
  * executes them.
  *
+ * <p>
+ *     Note that although this is a component, a new instance is created for each run.  It is for this reason that
+ *     the control is managed through the injected {@link BackgroundCommandsJobControl}
+ * </p>
+ *
+ * @see BackgroundCommandsJobControl
+ *
  * @since 2.0 {@index}
  */
 @Component
@@ -68,29 +75,14 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject ClockService clockService;
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
+    @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
 
-    public enum State {
-        RUNNING,
-        PAUSED
-    }
-
-    @Getter
-    private State state = State.RUNNING;
-
-    @Programmatic
-    public void pause() {
-        state = State.PAUSED;
-    }
-    @Programmatic
-    public void resume() {
-        state = State.RUNNING;
-    }
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
 
-        if (state == State.PAUSED) {
-            log.debug("state is " + state);
+        if (backgroundCommandsJobControl.isPaused()) {
+            log.debug("currently paused");
             return;
         }
 
