@@ -58,6 +58,7 @@ import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 import io.swagger.v3.oas.models.servers.Server;
@@ -121,6 +122,8 @@ class _OpenApiModelFactory {
 
         // https://stackoverflow.com/questions/45199989/how-do-i-automatically-authorize-all-endpoints-with-swagger-ui
         oa3.getComponents().addSecuritySchemes("basicAuth", new SecurityScheme().type(Type.HTTP).scheme("basic"));
+
+        oa3.addSecurityItem(new SecurityRequirement().addList("basicAuth"));
 
         return oa3;
     }
