@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -56,6 +55,8 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -96,9 +97,22 @@ extends GridSystemServiceAbstract<BSGrid> {
     public static final String TNS = "https://causeway.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
+    /**
+     * SPI to customize layout fallback behavior on a per class basis.
+     */
+    public static interface FallbackLayoutDataSource {
+        /**
+         * Implementing beans may provide custom defaults (for specific types) if required.<br>
+         * Implementing beans may chose to be indifferent by returning an empty {@link Try}.
+         */
+        Try<String> tryLoadAsStringUtf8(Class<?> domainClass);
+    }
+
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support
     private GridMarshallerService<BSGrid> marshaller;
+
+    private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;
 
     @Inject
     public GridSystemServiceBootstrap(
@@ -106,8 +120,10 @@ extends GridSystemServiceAbstract<BSGrid> {
             final TranslationService translationService,
             final JaxbService jaxbService,
             final MessageService messageService,
-            final CausewaySystemEnvironment causewaySystemEnvironment) {
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
         super(specificationLoader, translationService, jaxbService, messageService, causewaySystemEnvironment);
+        this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
     }
 
     @Override
@@ -125,13 +141,11 @@ extends GridSystemServiceAbstract<BSGrid> {
         return SCHEMA_LOCATION;
     }
 
-
     @Override
     public BSGrid defaultGrid(final Class<?> domainClass) {
-
+        final Try<String> content = loadFallbackLayoutAsStringUtf8(domainClass);
         try {
-            final String content = _Resources.loadAsStringUtf8(getClass(), "GridFallbackLayout.xml");
-            return Optional.ofNullable(content)
+            return content.getValue()
                     .map(xml -> marshaller.unmarshal(xml, CommonMimeType.XML).getValue().orElse(null))
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
@@ -141,6 +155,16 @@ extends GridSystemServiceAbstract<BSGrid> {
         } catch (final Exception e) {
             return fallback(domainClass);
         }
+    }
+
+    private Try<String> loadFallbackLayoutAsStringUtf8(final Class<?> domainClass) {
+        return fallbackLayoutDataSources.stream()
+            .map(ds->ds.tryLoadAsStringUtf8(domainClass))
+            .filter(tried->tried.getValue().isPresent())
+            .findFirst()
+            .orElseGet(()->{
+                return Try.call(()->_Resources.loadAsStringUtf8(GridSystemServiceBootstrap.class, "GridFallbackLayout.xml"));
+            });
     }
 
     //

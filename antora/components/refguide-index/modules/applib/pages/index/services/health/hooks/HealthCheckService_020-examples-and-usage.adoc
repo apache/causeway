@@ -4,5 +4,5 @@
 
 == Related Services
 
-The internal domain service `o.a.i.core.webapp.health.HealthIndicatorUsingHealthCheckService` acts as the bridge between Spring and the `HealthCheckService' SPI.
+The internal domain service `o.a.c.core.webapp.health.HealthIndicatorUsingHealthCheckService` acts as the bridge between Spring and the `HealthCheckService' SPI.
 

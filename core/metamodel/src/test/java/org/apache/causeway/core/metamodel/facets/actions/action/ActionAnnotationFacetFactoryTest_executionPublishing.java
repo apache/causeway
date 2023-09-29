@@ -172,7 +172,7 @@ extends ActionAnnotationFacetFactoryTest {
     }
 
     @Test
-    void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
+    void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenPublishing() {
 
         class Customer {
             @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
@@ -182,8 +182,88 @@ extends ActionAnnotationFacetFactoryTest {
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
-            assertThrows(IllegalStateException.class, ()->
-                processExecutionPublishing(facetFactory, processMethodContext));
+            processExecutionPublishing(facetFactory, processMethodContext);
+
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            assertTrue(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+            assertNoMethodsRemoved();
+        });
+    }
+
+    @Test
+    void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNoPublishing() {
+
+        class Customer {
+            @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
+            public void someAction() { }
+        }
+
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+
+            // given
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+            assertNoMethodsRemoved();
+        });
+    }
+
+    @Test
+    void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andIdempotentSemantics_thenNoPublishing() {
+
+        class Customer {
+            @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
+            public void someAction() { }
+        }
+
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+
+            // given
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
+
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            assertTrue(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+            assertNoMethodsRemoved();
+        });
+    }
+
+    @Test
+    void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNonIdempotentSemantics_thenNoPublishing() {
+
+        class Customer {
+            @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
+            public void someAction() { }
+        }
+
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+
+            // given
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
+
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            assertTrue(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+            assertNoMethodsRemoved();
         });
     }
 

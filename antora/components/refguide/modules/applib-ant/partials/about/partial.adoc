@@ -20,7 +20,7 @@ These annotations have only incomplete/partial support, primarily relating to th
 |`@Value`
 |Specify that a class has value-semantics. +
 
-The `@Value` annotation indicates that a class should be treated as a value type rather than as a reference (or entity) type. It does this providing an implementation of a `o.a.i.applib.adapters.ValueSemanticsProvider`. +
+The `@Value` annotation indicates that a class should be treated as a value type rather than as a reference (or entity) type. It does this providing an implementation of a `o.a.c.applib.adapters.ValueSemanticsProvider`. +
 
 For example: +
 

@@ -18,13 +18,19 @@
  */
 package org.apache.causeway.extensions.secman.integration.usermementorefiner;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.security.authentication.manager.UserMementoRefiner;
+import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -45,8 +51,22 @@ public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner
                     .languageLocale(applicationUser.getLanguage())
                     .numberFormatLocale(applicationUser.getNumberFormat())
                     .timeFormatLocale(applicationUser.getTimeFormat())
+                    .roles(convert(applicationUser.getRoles()))
                     .build()
                 )
                 .orElse(userMemento);
+    }
+
+    private static Can<RoleMemento> convert(Set<ApplicationRole> roles) {
+        return Can.ofCollection(roles.stream()
+                .map(UserMementoRefinerFromApplicationUser::convert)
+                .collect(Collectors.toList()));
+    }
+
+    private static RoleMemento convert(ApplicationRole applicationRole) {
+        return RoleMemento.builder()
+                .name(applicationRole.getName())
+                .description(applicationRole.getDescription())
+                .build();
     }
 }

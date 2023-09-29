@@ -5,4 +5,4 @@
 
 == Implementation
 
-The Apache Causeway framework provides a default implementation (`o.a.i.core.runtimeservices.i18n.po.TranslationServicePo`) that uses the GNU `.pot` and `.po` files for translations.
+The Apache Causeway framework provides a default implementation (`o.a.c.core.runtimeservices.i18n.po.TranslationServicePo`) that uses the GNU `.pot` and `.po` files for translations.

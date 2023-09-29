@@ -131,7 +131,7 @@ The following changed:
 | new
 
 |
-`o.a.c.v.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4` from
+`o.a.i.v.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4` from
 [source,xml]
 ----
 <groupId>org.apache.causeway.viewer</groupId>

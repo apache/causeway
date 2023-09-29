@@ -5,4 +5,4 @@
 
 == Implementation
 
-The framework provides a default implementation, `o.a.i.core.runtimeservices.userreg.EmailNotificationServiceDefault`, that constructs the emails to send.
+The framework provides a default implementation, `o.a.c.core.runtimeservices.userreg.EmailNotificationServiceDefault`, that constructs the emails to send.

@@ -5,4 +5,4 @@
 
 == Implementation
 
-The framework provides a default implementation of this service, `o.a.i.core.runtimeservices.xml.XmlServiceDefault`.
+The framework provides a default implementation of this service, `o.a.c.core.runtimeservices.xml.XmlServiceDefault`.

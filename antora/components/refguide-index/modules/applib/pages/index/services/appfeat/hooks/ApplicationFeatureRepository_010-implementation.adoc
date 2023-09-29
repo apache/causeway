@@ -4,7 +4,7 @@
 
 == Implementation
 
-The core framework (xref:core:metamodel:about.adoc[MetaModel] module) provides a default implementation, `o.a.i.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault`.
+The core framework (xref:core:metamodel:about.adoc[MetaModel] module) provides a default implementation, `o.a.c.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault`.
 
 This implementation supports the following configuration properties:
 

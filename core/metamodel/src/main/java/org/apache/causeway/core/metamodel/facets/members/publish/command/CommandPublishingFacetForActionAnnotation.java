@@ -88,24 +88,21 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                                 case ALL:
                                     return new CommandPublishingFacetForActionAnnotationAsConfigured.All(holder, servicesInjector);
                                 default:
-                                    throw new IllegalStateException(String.format("configured commandPublishing policy '%s' not recognised", publishingPolicy));
+                                    throw new IllegalStateException(String.format("configured action.commandPublishing policy '%s' not recognised", publishingPolicy));
                             }
                         case DISABLED:
                             return new CommandPublishingFacetForActionAnnotation.Disabled(processor, holder, servicesInjector);
                         case ENABLED:
                             return new CommandPublishingFacetForActionAnnotation.Enabled(processor, holder, servicesInjector);
                         default:
-                            throw new IllegalStateException(String.format("commandPublishing '%s' not recognised", publishing));
+                            throw new IllegalStateException(String.format("@Action#commandPublishing '%s' not recognised", publishing));
                     }
                 });
     }
 
-    private static boolean hasSafeSemantics(final FacetHolder holder) {
-        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-        if(actionSemanticsFacet == null) {
-            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-        }
-        return actionSemanticsFacet.value().isSafeInNature();
+    static boolean hasSafeSemantics(final FacetHolder holder) {
+        val actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+        return actionSemanticsFacet != null && actionSemanticsFacet.value().isSafeInNature();
     }
 
     CommandPublishingFacetForActionAnnotation(

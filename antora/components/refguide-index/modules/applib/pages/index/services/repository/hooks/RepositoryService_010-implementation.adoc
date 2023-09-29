@@ -5,7 +5,7 @@
 
 == Implementation
 
-The default implementation of this domain service is `o.a.i.core.runtimeservices.repository.RepositoryServiceDefault`.
+The default implementation of this domain service is `o.a.c.core.runtimeservices.repository.RepositoryServiceDefault`.
 
 === Configuration Properties
 

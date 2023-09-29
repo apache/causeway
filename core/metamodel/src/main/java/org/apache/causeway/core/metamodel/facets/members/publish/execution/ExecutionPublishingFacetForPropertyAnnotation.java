@@ -85,7 +85,7 @@ extends ExecutionPublishingFacetAbstract {
                     case ENABLED:
                         return new ExecutionPublishingFacetForPropertyAnnotation.Enabled(holder);
                     default:
-                        throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
+                        throw new IllegalStateException(String.format("@Property#executionPublishing '%s' not recognised", publishing));
                 }
             })
             .orElseGet(() -> {
@@ -106,14 +106,18 @@ extends ExecutionPublishingFacetAbstract {
                     switch (actionPublishingPolicy) {
                         case NONE:
                             return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
+                        case IGNORE_QUERY_ONLY:
+                        case IGNORE_SAFE:
+                            return ExecutionPublishingFacetForActionAnnotation.hasSafeSemantics(holder)
+                                    ? new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafe(holder)
+                                    : new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder);
                         case ALL:
                             return new ExecutionPublishingFacetForActionFromConfiguration.All(holder);
                         default:
-                            throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
+                            throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", actionPublishingPolicy));
                     }
                 }
-            }
-        );
+            });
     }
 
     private static boolean representsProperty(FacetHolder holder) {
