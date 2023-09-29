@@ -123,8 +123,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final CausewaySystemEnvironment causewaySystemEnvironment,
             final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
         super(specificationLoader, translationService, jaxbService, messageService, causewaySystemEnvironment);
-        this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources)
-                .add(null);
+        this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
     }
 
     @Override
