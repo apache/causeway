@@ -20,11 +20,32 @@ package org.apache.causeway.core.metamodel.facets.members.publish.execution;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class ExecutionPublishingPropertyFacetFromConfiguration
-extends ExecutionPublishingFacetAbstract {
+public abstract class ExecutionPublishingFacetForPropertyAnnotationAsConfigured
+extends ExecutionPublishingFacetForPropertyAnnotation {
 
-    public ExecutionPublishingPropertyFacetFromConfiguration(final FacetHolder holder) {
-        super(holder);
+    static class All extends ExecutionPublishingFacetForPropertyAnnotationAsConfigured {
+        All(FacetHolder holder) {
+            super(holder);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
     }
 
+    static class None extends ExecutionPublishingFacetForPropertyAnnotationAsConfigured {
+        None(FacetHolder holder) {
+            super(holder);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
+
+    public ExecutionPublishingFacetForPropertyAnnotationAsConfigured(final FacetHolder holder) {
+        super(holder);
+    }
 }

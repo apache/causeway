@@ -20,10 +20,15 @@ package org.apache.causeway.core.metamodel.facets.members.publish.execution;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured
-extends ExecutionPublishingPropertyFacetForPropertyAnnotation {
+public class ExecutionPublishingFacetForActionFallback extends ExecutionPublishingFacetAbstract {
 
-    public ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(final FacetHolder holder) {
-        super(holder);
+    ExecutionPublishingFacetForActionFallback(
+            final FacetHolder holder) {
+        super(holder, Precedence.FALLBACK);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

@@ -31,7 +31,7 @@ public abstract class CommandPublishingFacetAbstract
 extends FacetAbstract
 implements CommandPublishingFacet {
 
-    private static final Class<? extends Facet> type() {
+    private static Class<? extends Facet> type() {
         return CommandPublishingFacet.class;
     }
 
@@ -42,6 +42,16 @@ implements CommandPublishingFacet {
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
         super(type(), holder);
+        inject(processor, servicesInjector);
+        this.processor = processor;
+    }
+
+    public CommandPublishingFacetAbstract(
+            final CommandDtoProcessor processor,
+            final FacetHolder holder,
+            final ServiceInjector servicesInjector,
+            final Precedence precedence) {
+        super(type(), holder, precedence);
         inject(processor, servicesInjector);
         this.processor = processor;
     }
@@ -87,4 +97,6 @@ implements CommandPublishingFacet {
         super.visitAttributes(visitor);
         visitor.accept("dtoProcessor", processor);
     }
+
+
 }

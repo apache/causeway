@@ -32,8 +32,10 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
@@ -175,6 +177,13 @@ extends FacetFactoryAbstract {
             final Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 
+        // skip if a facet is already installed
+        // (this is because - despite its name - this facet factory runs for both properties and actions;
+        //  if the holder represents an action then an ExecutionPublishingFacet will already have been installed).
+        if (facetHolder.containsNonFallbackFacet(CommandPublishingFacet.class)) {
+            return;
+        }
+
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
@@ -185,7 +194,7 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Property(commandPublishing=...)
-        addFacetIfPresent(
+        addFacet(
                 CommandPublishingFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector()));
     }
@@ -206,6 +215,13 @@ extends FacetFactoryAbstract {
 
         val holder = processMethodContext.getFacetHolder();
 
+        // skip if a facet is already installed
+        // (this is because - despite its name - this facet factory runs for both properties and actions;
+        //  if the holder represents an action then an ExecutionPublishingFacet will already have been installed).
+        if (holder.containsNonFallbackFacet(ExecutionPublishingFacet.class)) {
+            return;
+        }
+
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
@@ -217,8 +233,8 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Property(executionPublishing=...)
-        addFacetIfPresent(
-                ExecutionPublishingPropertyFacetForPropertyAnnotation
+        addFacet(
+                ExecutionPublishingFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder));
     }
 

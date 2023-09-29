@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,9 +33,8 @@ import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetFromConfiguration;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
 
 import lombok.val;
 
@@ -71,7 +71,7 @@ extends ActionAnnotationFacetFactoryTest {
     }
 
     @Test
-    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
+    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenNotAdded() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
@@ -81,20 +81,23 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingActionFacetFromConfiguration);
+            // we rely upon CommandAnnotationFacetFactory to add the facet only if there is no @Property specified also
+            assertNull(facet);
         });
     }
 
     @Test
-    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
+    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenNotAdded() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
-            assertThrows(IllegalStateException.class, ()->
-                processExecutionPublishing(facetFactory, processMethodContext));
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            // we rely upon CommandAnnotationFacetFactory to add the facet only if there is no @Property specified also
+            assertNull(facet);
         });
     }
 
@@ -113,7 +116,7 @@ extends ActionAnnotationFacetFactoryTest {
     }
 
     @Test
-    void given_noAnnotation_and_configurationSetToAll_thenFacetAdded() {
+    void given_noAnnotation_and_configurationSetToAll_thenFacetNotAdded() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.ALL);
@@ -122,8 +125,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingActionFacetFromConfiguration);
+            assertNull(facet);
         });
     }
 
@@ -163,7 +165,7 @@ extends ActionAnnotationFacetFactoryTest {
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
-            final ExecutionPublishingActionFacetForActionAnnotation facetImpl = (ExecutionPublishingActionFacetForActionAnnotation) facet;
+            final ExecutionPublishingFacetForActionAnnotation facetImpl = (ExecutionPublishingFacetForActionAnnotation) facet;
             _Blackhole.consume(facetImpl);
             assertNoMethodsRemoved();
         });
@@ -218,7 +220,7 @@ extends ActionAnnotationFacetFactoryTest {
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
+            assertTrue(facet instanceof ExecutionPublishingFacetForActionAnnotation);
             assertNoMethodsRemoved();
         });
     }
@@ -239,7 +241,7 @@ extends ActionAnnotationFacetFactoryTest {
             // then
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
+            assertTrue(facet instanceof ExecutionPublishingFacetForActionAnnotation);
         });
     }
 

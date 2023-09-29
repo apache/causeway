@@ -42,8 +42,9 @@ import lombok.val;
 public interface ExecutionPublishingFacet extends Facet {
 
     public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
-        val executionPublishingFacet = facetHolder.getFacet(ExecutionPublishingFacet.class);
-        return executionPublishingFacet!=null;
+        val facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
+        return facet != null && facet.isEnabled();
     }
 
+    boolean isEnabled();
 }

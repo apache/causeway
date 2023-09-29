@@ -271,8 +271,7 @@ implements MemberExecutorService {
         }
 
         // publish (if not a contributed association, query-only mixin)
-        val publishedPropertyFacet = propertyModifier.getFacetHolder().getFacet(ExecutionPublishingFacet.class);
-        if (publishedPropertyFacet != null) {
+        if (ExecutionPublishingFacet.isPublishingEnabled(propertyModifier.getFacetHolder())) {
             executionPublisher().publishPropertyEdit(priorExecution);
         }
 
