@@ -163,7 +163,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <ognl.version>3.4.2</ognl.version>
 
         <picocontainer.version>2.15</picocontainer.version>
-        <poi.version>5.2.3</poi.version>
+        <poi.version>5.2.4</poi.version>
 
         <quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
