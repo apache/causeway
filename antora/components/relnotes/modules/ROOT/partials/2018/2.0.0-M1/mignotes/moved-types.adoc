@@ -20,9 +20,9 @@ The following applib types have been moved.
 
 | Events emitted by `WrapperFactory` when interactions occur.
 |`ActionUsabilityEvent`, `PropertyVisibilityEvent`, `CollectionAccessEvent` etc.
-|`o.a.c.applib.` +
+|`o.a.i.applib.` +
 `events`
-|`o.a.c.applib.` +
+|`o.a.i.applib.` +
 `services.wrapper.events`
 
 
@@ -30,16 +30,16 @@ The following applib types have been moved.
 |`Timestampable`
 `HoldsUpdatedAt`
 `HoldsUpdatedBy`
-|`o.a.c.applib.` +
+|`o.a.i.applib.` +
 `services.timestamp`
-|`o.a.c.applib.` +
+|`o.a.i.applib.` +
 `mixins.timestamp`
 
 
 |`Dto`
-|`o.a.c.applib.` +
+|`o.a.i.applib.` +
 `services.dto`
-|`o.a.c.applib.` +
+|`o.a.i.applib.` +
 `mixins.dto`
 
 |Lifecycle events, domain events & UI events
@@ -50,11 +50,11 @@ lifecycle events
 * `XxxUiEvent` +
 UI events
 |o.a.i.applib.services.eventbus
-|* `o.a.c.applib.` +
+|* `o.a.i.applib.` +
 `events.domain`
-* `o.a.c.applib.` +
+* `o.a.i.applib.` +
 `events.lifecycle`
-* `o.a.c.applib.` +
+* `o.a.i.applib.` +
 `events.ui`
 
 |===
