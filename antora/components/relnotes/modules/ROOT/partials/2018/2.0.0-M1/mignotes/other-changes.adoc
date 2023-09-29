@@ -11,8 +11,8 @@
 
 The default implementation of `UrlEncodingService` provided by the framework has changed:
 
-* in 1.16.x the implementation is `o.a.i.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncoding`
-* in 2.0.0-M1 this is changed to `o.a.i.applib.services.urlencoding.UrlEncodingServiceWithCompression`
+* in 1.16.x the implementation is `o.a.c.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncoding`
+* in 2.0.0-M1 this is changed to `o.a.c.applib.services.urlencoding.UrlEncodingServiceWithCompression`
 
 This new implementation increases the state that can be encoded within the URL (approx 8000 characters) by first gzipping the state prior to base64 encoding the characters.
 
@@ -37,9 +37,9 @@ Wicket has been upgraded from Wicket 7.9 to Wicket 8.0.
 [__migration-notes_1.16.0-to-2.0.0-M1_other-changes_removed-dependencies]
 == Removed dependencies
 
-The Apache Isis applib (`o.a.i.core:isis-core-applib`) no longer depends on the google guava library.
+The Apache Isis applib (`o.a.c.core:isis-core-applib`) no longer depends on the google guava library.
 
-Likewise the Apache Isis Unit Test Support module (`o.a.i.core:isis-core-unittestsupport`) no longer depends on guava either.
+Likewise the Apache Isis Unit Test Support module (`o.a.c.core:isis-core-unittestsupport`) no longer depends on guava either.
 
 Do note however that the core framework _does_ still depend on guava (though the intention is to remove this over time).
 
@@ -58,7 +58,7 @@ To help prevent accidental usage:
 * the package is `org.apache.isis.core.commons.internal`
 * all of the types in this module are prefixed "_".
 
-For example, `o.a.i.commons.internal.resources._Resource` provides utilities for loading static resources from the classpath.
+For example, `o.a.c.commons.internal.resources._Resource` provides utilities for loading static resources from the classpath.
 
 [NOTE]
 ====
@@ -90,7 +90,7 @@ The plugin interface types themselves are defined in various of the Maven module
 | Implementations
 
 .3+|`isis-core-commons`
-|`o.a.i.core.plugins. +
+|`o.a.c.core.plugins. +
 classdiscovery. +
 ClassDiscoveryPlugin`
 
@@ -100,23 +100,23 @@ Include only one implementation on classpath.
 
 |`ClassDiscoveryPluginUsingReflections` uses the `org.reflections` open source library (which depends in turn on guava).
 
-|`o.a.i.core.plugins. +
+|`o.a.c.core.plugins. +
 codegen. +
 ProxyFactoryPlugin`
 |Obtain a plugin acting as a factory to proxy types (as used by the `WrapperFactory` domain service).
 
 Include only one implementation on classpath,
 
-|`o.a.i.core.plugins.codegen.
+|`o.a.c.core.plugins.codegen.
 ProxyFactoryPluginUsingByteBuddy` (using ByteBuddy)
 
-`o.a.i.core.plugins.codegen.
+`o.a.c.core.plugins.codegen.
 ProxyFactoryPluginUsingJavassist` (using Javassist).
 
 
 
 
-|`o.a.i.core.plugins. +
+|`o.a.c.core.plugins. +
 eventbus. +
 EventBusPlugin`
 
@@ -124,7 +124,7 @@ EventBusPlugin`
 
 This removes the need to explicitly specify the implementation using the `isis.services.eventbus.implementation` config property; it can be left as simply "auto".
 
-|`o.a.i.core.plugins.eventbus.
+|`o.a.c.core.plugins.eventbus.
 EventBusPluginForAxon` (using Axon Framework)
 
 `org.apache.isis.core.plugins.eventbus.
@@ -150,39 +150,39 @@ ValuePropertyPlugin`
 
 There can be multiple implementations on the classpath.
 
-|`o.a.i.core.metamodel.
+|`o.a.c.core.metamodel.
 services.swagger.plugins.
 IsisTimeValuePropertyPlugin` (in `metamodel-legacy`)
 contributes factories for the applib value types that have been moved to applib-legacy.
 
 
-|`o.a.i.core. +
+|`o.a.c.core. +
 metamodel. +
 IsisJdoMetamodelPlugin`
 |Decouples the metamodel module from a particular implementation of DataNucleus.
 
 Include only one implementation on classpath,
 
-|`o.a.i.plugins.jdo.dn4.IsisJdoSupportPlugin4`
+|`o.a.c.plugins.jdo.dn4.IsisJdoSupportPlugin4`
 
-`o.a.i.plugins.jdo.dn5.IsisJdoSupportPlugin5`
+`o.a.c.plugins.jdo.dn5.IsisJdoSupportPlugin5`
 
 
 |`isis-core-runtime`
-|`o.a.i.core. +
+|`o.a.c.core. +
 metamodel. +
 IsisJdoRuntimePlugin`
 |Decouples the runtime module from a particular implementation of DataNucleus.
 
 Include only one implementation on classpath,
 
-|`o.a.i.plugins.jdo.dn4.IsisJdoSupportPlugin4`
+|`o.a.c.plugins.jdo.dn4.IsisJdoSupportPlugin4`
 
-`o.a.i.plugins.jdo.dn5.IsisJdoSupportPlugin5`
+`o.a.c.plugins.jdo.dn5.IsisJdoSupportPlugin5`
 
 
 |`isis-core-viewer-restfulobjects-applib`
-|`o.a.i.viewer. +
+|`o.a.c.viewer. +
 restfulobjects. +
 applib.client. +
 UriBuilderPlugin`
@@ -190,18 +190,18 @@ UriBuilderPlugin`
 
 Include only one implementation on classpath,
 
-|`o.a.i.plugins. +
+|`o.a.c.plugins. +
 jaxrs.resteasy.IsisResteasy3Plugin`
 
 or
 
-`o.a.i.plugins. +
+`o.a.c.plugins. +
 jaxrs.resteasy.IsisResteasy4Plugin`
 
 
 
 |`isis-core-viewer-restfulobjects-server`
-|`o.a.i.viewer. +
+|`o.a.c.viewer. +
 restfulobjects. +
 server. +
 IsisJaxrsServerPlugin`
@@ -209,12 +209,12 @@ IsisJaxrsServerPlugin`
 
 Include only one implementation on classpath.
 
-|`o.a.i.plugins. +
+|`o.a.c.plugins. +
 jaxrs.resteasy.IsisResteasy3Plugin`
 
 or
 
-`o.a.i.plugins. +
+`o.a.c.plugins. +
 jaxrs.resteasy.IsisResteasy4Plugin`
 
 

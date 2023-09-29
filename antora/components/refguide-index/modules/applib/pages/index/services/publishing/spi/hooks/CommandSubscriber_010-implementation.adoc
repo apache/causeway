@@ -5,6 +5,6 @@
 
 == Implementation
 
-This is an SPI, but the framework provides a simple implementation, `o.a.i.applib.services.publishing.log.CommandLogger`, that just logs events as they are received.
+This is an SPI, but the framework provides a simple implementation, `o.a.c.applib.services.publishing.log.CommandLogger`, that just logs events as they are received.
 
 

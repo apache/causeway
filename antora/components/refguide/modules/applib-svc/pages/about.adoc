@@ -50,7 +50,7 @@ include::applib-svc:partial$_security-spi.adoc[leveloffset=+2]
 
 == Public API vs Internal Services
 
-The vast majority of Apache Causeway' domain services are defined in Apache Causeway' applib (`o.a.i.core:causeway-applib` module) as stable, public classes.
+The vast majority of Apache Causeway' domain services are defined in Apache Causeway' applib (`o.a.c.core:causeway-applib` module) as stable, public classes.
 Importantly, this also minimizes the coupling between your code and Apache Causeway, allowing you to easily mock out these services in your unit tests.
 
 The framework also defines a number of "internal" services.

@@ -5,5 +5,5 @@
 
 == Implementation
 
-Apache Causeway provides a default implementation of the service, `o.a.i.applib.services.jaxb.JaxbServiceDefault`.
+Apache Causeway provides a default implementation of the service, `o.a.c.applib.services.jaxb.JaxbServiceDefault`.
 This automatically caches ``JAXBContext``s for each domain class as requested.
