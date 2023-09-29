@@ -18,24 +18,22 @@
  */
 package org.apache.causeway.extensions.secman.integration.usermementorefiner;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.apache.causeway.applib.services.user.RoleMemento;
-import org.apache.causeway.commons.collections.Can;
-
-import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
-
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.security.authentication.manager.UserMementoRefiner;
+import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 //@Log4j2
