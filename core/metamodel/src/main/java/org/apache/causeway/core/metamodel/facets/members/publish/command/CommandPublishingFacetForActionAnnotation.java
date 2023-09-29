@@ -24,7 +24,6 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -35,7 +34,7 @@ import lombok.val;
 public abstract class CommandPublishingFacetForActionAnnotation extends CommandPublishingFacetAbstract {
 
     static class Enabled extends CommandPublishingFacetForActionAnnotation {
-        Enabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
+        Enabled(final CommandDtoProcessor processor, final FacetHolder holder, final ServiceInjector servicesInjector) {
             super(processor, holder, servicesInjector);
         }
 
@@ -46,7 +45,7 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
     }
 
     static class Disabled extends CommandPublishingFacetForActionAnnotation {
-        Disabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
+        Disabled(final CommandDtoProcessor processor, final FacetHolder holder, final ServiceInjector servicesInjector) {
             super(processor, holder, servicesInjector);
         }
 

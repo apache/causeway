@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -33,7 +32,7 @@ import lombok.val;
 public abstract class ExecutionPublishingFacetForActionAnnotation extends ExecutionPublishingFacetAbstract {
 
     static class Enabled extends ExecutionPublishingFacetForActionAnnotation {
-        Enabled(FacetHolder holder) {
+        Enabled(final FacetHolder holder) {
             super(holder);
         }
 
@@ -44,7 +43,7 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
     }
 
     static class Disabled extends ExecutionPublishingFacetForActionAnnotation {
-        Disabled(FacetHolder holder) {
+        Disabled(final FacetHolder holder) {
             super(holder);
         }
 

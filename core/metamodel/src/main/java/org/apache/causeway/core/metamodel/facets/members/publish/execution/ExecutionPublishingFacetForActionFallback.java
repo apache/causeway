@@ -18,9 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.publish.execution;
 
-import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetAbstract;
 
 public class ExecutionPublishingFacetForActionFallback extends ExecutionPublishingFacetAbstract {
 

@@ -20,14 +20,6 @@ package org.apache.causeway.core.metamodel.inspect;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.value.Blob;
-
-import org.apache.causeway.commons.io.ZipUtils;
-
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -35,11 +27,14 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
-import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.commons.io.ZipUtils;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
@@ -89,7 +84,7 @@ public class Object_downloadColumnOrderTxtFilesAsZip {
 
     // HELPERS
 
-    private void addStandaloneEntry(ZipUtils.EntryBuilder zipBuilder) {
+    private void addStandaloneEntry(final ZipUtils.EntryBuilder zipBuilder) {
         val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         val buf = new StringBuilder();
 
@@ -103,13 +98,13 @@ public class Object_downloadColumnOrderTxtFilesAsZip {
         zipBuilder.addAsUtf8(fileName, fileContents);
     }
 
-    private void addCollectionEntries(ZipUtils.EntryBuilder zipBuilder) {
+    private void addCollectionEntries(final ZipUtils.EntryBuilder zipBuilder) {
         val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         parentSpec.streamCollections(MixedIn.INCLUDED)
                 .forEach(collection -> addCollection(collection, parentSpec, zipBuilder));
     }
 
-    private void addCollection(OneToManyAssociation collection, ObjectSpecification parentSpec, ZipUtils.EntryBuilder zipBuilder) {
+    private void addCollection(final OneToManyAssociation collection, final ObjectSpecification parentSpec, final ZipUtils.EntryBuilder zipBuilder) {
         val buf = new StringBuilder();
 
         val collectionIdentifier = collection.getFeatureIdentifier();

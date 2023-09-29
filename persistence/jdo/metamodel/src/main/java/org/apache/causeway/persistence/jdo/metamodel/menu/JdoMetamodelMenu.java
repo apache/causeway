@@ -36,17 +36,12 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.io.ZipUtils;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.causeway.persistence.jdo.metamodel.CausewayModulePersistenceJdoMetamodel;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
-import java.util.Objects;
 
 @Named(CausewayModulePersistenceJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu")
 @DomainService()
