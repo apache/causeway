@@ -87,28 +87,30 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                             case ALL:
                                 return new CommandPublishingFacetForPropertyAnnotationAsConfigured.All(holder, servicesInjector);
                             default:
-                                throw new IllegalStateException(String.format("configured publishingPolicy '%s' not recognised", publishingPolicy));
+                                throw new IllegalStateException(String.format("configured property.commandpublishing policy '%s' not recognised", publishingPolicy));
                         }
                     case DISABLED:
                         return new CommandPublishingFacetForPropertyAnnotation.Disabled(processor, holder, servicesInjector);
                     case ENABLED:
                         return new CommandPublishingFacetForPropertyAnnotation.Enabled(processor, holder, servicesInjector);
                     default:
-                        throw new IllegalStateException(String.format("commandPublishing '%s' not recognised", publishing));
+                        throw new IllegalStateException(String.format("@Property#commandPublishing '%s' not recognised", publishing));
                 }
             })
             .orElseGet(() -> {
                 // there is no publishing facet from either @Action or @Property, so use the appropriate configuration to install a default
                 if (representsProperty(holder)) {
+                    // we are dealing with a property
                     switch (publishingPolicy) {
                         case NONE:
                             return new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);
                         case ALL:
                             return new CommandPublishingFacetForPropertyFromConfiguration.All(holder, servicesInjector);
                         default:
-                            throw new IllegalStateException(String.format("configured property publishingPolicy '%s' not recognised", publishingPolicy));
+                            throw new IllegalStateException(String.format("configured property.commandPublishing policy '%s' not recognised", publishingPolicy));
                     }
                 } else {
+                    // we are dealing with an action
                     val actionPublishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
                     switch (actionPublishingPolicy) {
                         case NONE:
@@ -121,7 +123,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                         case ALL:
                             return new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
                         default:
-                            throw new IllegalStateException(String.format("configured action publishingPolicy '%s' not recognised", actionPublishingPolicy));
+                            throw new IllegalStateException(String.format("configured action.commandPublishing policy '%s' not recognised", actionPublishingPolicy));
                     }
                 }
             });

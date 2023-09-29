@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.TypedHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
-import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.val;
@@ -87,7 +85,7 @@ extends ExecutionPublishingFacetAbstract {
                     case ENABLED:
                         return new ExecutionPublishingFacetForPropertyAnnotation.Enabled(holder);
                     default:
-                        throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
+                        throw new IllegalStateException(String.format("@Property#executionPublishing '%s' not recognised", publishing));
                 }
             })
             .orElseGet(() -> {
@@ -119,8 +117,7 @@ extends ExecutionPublishingFacetAbstract {
                             throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", actionPublishingPolicy));
                     }
                 }
-            }
-        );
+            });
     }
 
     private static boolean representsProperty(FacetHolder holder) {
