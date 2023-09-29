@@ -29,6 +29,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.TypedHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.val;
@@ -106,10 +108,15 @@ extends ExecutionPublishingFacetAbstract {
                     switch (actionPublishingPolicy) {
                         case NONE:
                             return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
+                        case IGNORE_QUERY_ONLY:
+                        case IGNORE_SAFE:
+                            return ExecutionPublishingFacetForActionAnnotation.hasSafeSemantics(holder)
+                                    ? new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafe(holder)
+                                    : new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder);
                         case ALL:
                             return new ExecutionPublishingFacetForActionFromConfiguration.All(holder);
                         default:
-                            throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
+                            throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", actionPublishingPolicy));
                     }
                 }
             }

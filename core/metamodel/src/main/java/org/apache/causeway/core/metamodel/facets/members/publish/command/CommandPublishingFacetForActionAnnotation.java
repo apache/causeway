@@ -100,12 +100,9 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                 });
     }
 
-    private static boolean hasSafeSemantics(final FacetHolder holder) {
-        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-        if(actionSemanticsFacet == null) {
-            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-        }
-        return actionSemanticsFacet.value().isSafeInNature();
+    static boolean hasSafeSemantics(final FacetHolder holder) {
+        val actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+        return actionSemanticsFacet != null && actionSemanticsFacet.value().isSafeInNature();
     }
 
     CommandPublishingFacetForActionAnnotation(

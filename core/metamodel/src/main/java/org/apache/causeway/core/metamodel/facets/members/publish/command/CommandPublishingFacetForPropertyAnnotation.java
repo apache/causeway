@@ -113,10 +113,15 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                     switch (actionPublishingPolicy) {
                         case NONE:
                             return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
+                        case IGNORE_QUERY_ONLY:
+                        case IGNORE_SAFE:
+                            return CommandPublishingFacetForActionAnnotation.hasSafeSemantics(holder)
+                                    ? new CommandPublishingFacetForActionFromConfiguration.IgnoreSafe(holder, servicesInjector)
+                                    : new CommandPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder, servicesInjector);
                         case ALL:
                             return new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
                         default:
-                            throw new IllegalStateException(String.format("configured action publishingPolicy '%s' not recognised", publishingPolicy));
+                            throw new IllegalStateException(String.format("configured action publishingPolicy '%s' not recognised", actionPublishingPolicy));
                     }
                 }
             });
