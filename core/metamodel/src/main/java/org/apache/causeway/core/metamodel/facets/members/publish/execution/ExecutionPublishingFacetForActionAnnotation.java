@@ -63,39 +63,36 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
         return
         actionsIfAny
                 .filter(action -> action.executionPublishing() != Publishing.NOT_SPECIFIED)
-        .map(Action::executionPublishing)
-        .<ExecutionPublishingFacet>map(publishing -> {
-            switch (publishing) {
-                case AS_CONFIGURED:
-                    switch (publishingPolicy) {
-                        case NONE:
-                            return new ExecutionPublishingFacetForActionAnnotationAsConfigured.None(holder);
-                        case IGNORE_QUERY_ONLY:
-                        case IGNORE_SAFE:
-                            return hasSafeSemantics(holder)
-                                    ? new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder)
-                                    : new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder);
-                        case ALL:
-                            return new ExecutionPublishingFacetForActionAnnotationAsConfigured.All(holder);
+                .map(Action::executionPublishing)
+                .<ExecutionPublishingFacet>map(publishing -> {
+                    switch (publishing) {
+                        case AS_CONFIGURED:
+                            switch (publishingPolicy) {
+                                case NONE:
+                                    return new ExecutionPublishingFacetForActionAnnotationAsConfigured.None(holder);
+                                case IGNORE_QUERY_ONLY:
+                                case IGNORE_SAFE:
+                                    return hasSafeSemantics(holder)
+                                            ? new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder)
+                                            : new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder);
+                                case ALL:
+                                    return new ExecutionPublishingFacetForActionAnnotationAsConfigured.All(holder);
+                                default:
+                                    throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
+                                }
+                        case DISABLED:
+                            return new ExecutionPublishingFacetForActionAnnotation.Disabled(holder);
+                        case ENABLED:
+                            return new ExecutionPublishingFacetForActionAnnotation.Enabled(holder);
                         default:
-                            throw new IllegalStateException(String.format("configured executionPublishing policy '%s' not recognised", publishingPolicy));
-                        }
-                case DISABLED:
-                    return new ExecutionPublishingFacetForActionAnnotation.Disabled(holder);
-                case ENABLED:
-                    return new ExecutionPublishingFacetForActionAnnotation.Enabled(holder);
-                default:
-                    throw new IllegalStateException(String.format("executionPublishing '%s' not recognised", publishing));
-            }
-        });
+                            throw new IllegalStateException(String.format("@Action#executionPublishing '%s' not recognised", publishing));
+                    }
+                });
     }
 
-    private static boolean hasSafeSemantics(final FacetHolder holder) {
-        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-        if(actionSemanticsFacet == null) {
-            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-        }
-        return actionSemanticsFacet.value().isSafeInNature();
+    static boolean hasSafeSemantics(final FacetHolder holder) {
+        val actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+        return actionSemanticsFacet != null && actionSemanticsFacet.value().isSafeInNature();
     }
 
     ExecutionPublishingFacetForActionAnnotation(final FacetHolder holder) {
