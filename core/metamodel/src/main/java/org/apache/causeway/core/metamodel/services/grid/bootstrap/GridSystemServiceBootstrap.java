@@ -64,8 +64,10 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -77,7 +79,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
@@ -112,17 +113,19 @@ extends GridSystemServiceAbstract<BSGrid> {
     @Setter @Accessors(chain = true) // JUnit support
     private GridMarshallerService<BSGrid> marshaller;
 
+    private final CausewayConfiguration config;
     private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;
 
     @Inject
     public GridSystemServiceBootstrap(
-            final SpecificationLoader specificationLoader,
+            final MetaModelContext metaModelContext,
             final TranslationService translationService,
             final JaxbService jaxbService,
             final MessageService messageService,
             final CausewaySystemEnvironment causewaySystemEnvironment,
             final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
-        super(specificationLoader, translationService, jaxbService, messageService, causewaySystemEnvironment);
+        super(metaModelContext.getSpecificationLoader(), translationService, jaxbService, messageService, causewaySystemEnvironment);
+        this.config = metaModelContext.getConfiguration();
         this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
     }
 
@@ -335,11 +338,11 @@ extends GridSystemServiceAbstract<BSGrid> {
                 if(fieldSet != null) {
                     unboundPropertyIds.removeAll(unboundMetadataContributingIds);
 
-                    // add unbound properties alphabetically to fieldset
-                    List<String> sortedUnboundPropertyIds =
-                            unboundPropertyIds.stream()
-                                .sorted()
-                                .collect(Collectors.toList());
+                    // add unbound properties respecting configured sequence policy
+                    val sortedUnboundPropertyIds = _UnreferencedSequenceUtil
+                            .sortProperties(config, unboundPropertyIds.stream()
+                                    .map(oneToOneAssociationById::get)
+                                    .filter(_NullSafe::isPresent));
 
                     addPropertiesTo(
                             fieldSet,
@@ -362,11 +365,11 @@ extends GridSystemServiceAbstract<BSGrid> {
 
         if(!missingCollectionIds.isEmpty()) {
 
-            // add missing collections alphabetically to either tab group or column
-            final List<String> sortedMissingCollectionIds =
-                    missingCollectionIds.stream()
-                            .sorted()
-                            .collect(Collectors.toList());
+            // add missing collections respecting configured sequence policy
+            val sortedMissingCollectionIds = _UnreferencedSequenceUtil
+                    .sortCollections(config, missingCollectionIds.stream()
+                            .map(oneToManyAssociationById::get)
+                            .filter(_NullSafe::isPresent));
 
             final BSTabGroup bsTabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
             if(bsTabGroup != null) {

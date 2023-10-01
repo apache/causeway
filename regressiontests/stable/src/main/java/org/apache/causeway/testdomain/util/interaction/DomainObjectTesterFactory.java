@@ -52,6 +52,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
@@ -89,6 +90,8 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DomainObjectTesterFactory {
 
+    @Getter
+    private final @NonNull MetaModelContext metaModelContext;
     private final @NonNull ServiceInjector serviceInjector;
 
     public <T> ObjectTester<T> objectTester(
