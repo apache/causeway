@@ -8,7 +8,7 @@
 ----
 class PermissionsEvaluationServiceForSecman {
   PermissionsEvaluationServiceForSecman(CausewayConfiguration causewayConfiguration)
-  ApplicationPermissionValueSet.Evaluation evaluate(ApplicationFeatureId targetMemberId, ApplicationPermissionMode mode, Collection<ApplicationPermissionValue> permissionValues)
+  ApplicationPermissionValueSet.Evaluation evaluate(ApplicationFeatureId targetMemberIdInput, ApplicationPermissionMode mode, Collection<ApplicationPermissionValue> permissionValuesInput)
 }
 ----
 

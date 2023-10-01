@@ -9,6 +9,7 @@ Convenience fixture script intended to be easily subclassed in order to set up a
 .AbstractRoleAndPermissionsFixtureScript.java
 ----
 class AbstractRoleAndPermissionsFixtureScript {
+  FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy()
 }
 ----
 

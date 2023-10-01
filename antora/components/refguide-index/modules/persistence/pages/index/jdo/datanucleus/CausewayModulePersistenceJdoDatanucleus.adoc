@@ -7,6 +7,7 @@
 .CausewayModulePersistenceJdoDatanucleus.java
 ----
 class CausewayModulePersistenceJdoDatanucleus {
+  public static final String NAMESPACE;
   DnJdoDialect getDnJdoDialect(DataSource dataSource)     // <.>
   LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(CausewayConfiguration causewayConfiguration, DataSource dataSource, MetaModelContext metaModelContext, ObjectLifecyclePublisher objectLifecyclePublisher, CausewayBeanTypeRegistry beanTypeRegistry, DatanucleusSettings dnSettings)
   TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(MetaModelContext metaModelContext, LocalPersistenceManagerFactoryBean localPmfBean, CausewayBeanTypeRegistry beanTypeRegistry, List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners, DatanucleusSettings dnSettings)

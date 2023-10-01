@@ -115,6 +115,8 @@ For most viewers, this applies to property and collection members, not actions.
 
 The (property) member should be hidden when displayed as a column of a table within parent object's collection, and when it references that parent.
 
+This has no meaning for collections; if set on a collection then it will just be ignored.
+
 [#PARENTED_TABLES]
 === PARENTED_TABLES
 

@@ -7,7 +7,6 @@
 .UrlEncodingUtils.java
 ----
 class UrlEncodingUtils {
-  public static final Function<String, String> FUNCTION;
   String urlDecode(String string)
   List<String> urlDecode(List<String> values)
   String[] urlDecode(String[] values)

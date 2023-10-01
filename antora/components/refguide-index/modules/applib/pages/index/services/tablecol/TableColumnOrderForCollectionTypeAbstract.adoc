@@ -9,8 +9,8 @@ Convenience implementation of xref:refguide:applib:index/services/tablecol/Table
 .TableColumnOrderForCollectionTypeAbstract.java
 ----
 class TableColumnOrderForCollectionTypeAbstract<T> {
-  List<String> orderParented(Object parent, String collectionId, Class<?> collectionType, List<String> propertyIds)     // <.>
-  List<String> orderStandalone(Class<?> collectionType, List<String> propertyIds)     // <.>
+  List<String> orderParented(Object parent, String collectionId, Class<?> elementType, List<String> associationIds)     // <.>
+  List<String> orderStandalone(Class<?> domainType, List<String> associationIds)     // <.>
 }
 ----
 

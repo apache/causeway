@@ -12,7 +12,7 @@ There are some similarities to _org.apache.causeway.core.metamodel.services.comm
 ----
 interface InteractionDtoFactory {
   ActionInvocationDto asActionInvocationDto(ObjectAction objectAction, InteractionHead head, Can<ManagedObject> argumentAdapters)     // <.>
-  PropertyEditDto asPropertyEditDto(OneToOneAssociation property, ManagedObject targetAdapter, ManagedObject newValueAdapterIfAny, InteractionHead interactionHead)     // <.>
+  PropertyEditDto asPropertyEditDto(OneToOneAssociation property, InteractionHead interactionHead, ManagedObject newValueAdapterIfAny)     // <.>
   ActionInvocationDto updateResult(ActionInvocationDto actionInvocationDto, ObjectAction objectAction, ManagedObject resultObject)     // <.>
 }
 ----
@@ -22,7 +22,7 @@ interface InteractionDtoFactory {
 --
 Called by the framework when invoking an action, to create an _ActionInvocationDto_ capturing the details of the action invocation (target, arguments etc).
 --
-<.> xref:#asPropertyEditDto_OneToOneAssociation_ManagedObject_ManagedObject_InteractionHead[asPropertyEditDto(OneToOneAssociation, ManagedObject, ManagedObject, InteractionHead)]
+<.> xref:#asPropertyEditDto_OneToOneAssociation_InteractionHead_ManagedObject[asPropertyEditDto(OneToOneAssociation, InteractionHead, ManagedObject)]
 +
 --
 Called by the framework when editing a property, to create an _PropertyEditDto_ capturing the details of the action invocation (target, arguments etc).
@@ -42,8 +42,8 @@ Called by the framework when invoking an action, to create an _ActionInvocationD
 
 _ActionInvocationDto_ is a subtype of _org.apache.causeway.schema.ixn.v2.MemberExecutionDto_ that is in turn a part of the overall _org.apache.causeway.schema.ixn.v2.InteractionDto_ .
 
-[#asPropertyEditDto_OneToOneAssociation_ManagedObject_ManagedObject_InteractionHead]
-=== asPropertyEditDto(OneToOneAssociation, ManagedObject, ManagedObject, InteractionHead)
+[#asPropertyEditDto_OneToOneAssociation_InteractionHead_ManagedObject]
+=== asPropertyEditDto(OneToOneAssociation, InteractionHead, ManagedObject)
 
 Called by the framework when editing a property, to create an _PropertyEditDto_ capturing the details of the action invocation (target, arguments etc).
 

@@ -11,7 +11,19 @@ This therefore allows individual fixture scripts to indicate that they have thei
 .FixtureScriptWithExecutionStrategy.java
 ----
 interface FixtureScriptWithExecutionStrategy {
-  FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy()
+  FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy()     // <.>
 }
 ----
 
+<.> xref:#getMultipleExecutionStrategy_[getMultipleExecutionStrategy()]
++
+--
+When returning _null_ , does not override the default.
+--
+
+== Members
+
+[#getMultipleExecutionStrategy_]
+=== getMultipleExecutionStrategy()
+
+When returning _null_ , does not override the default.

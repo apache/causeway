@@ -17,48 +17,88 @@ causeway.applib.annotation. +
 action-layout.css-class-fa. +
 patterns
 
-|  [add.*:fa-plus-square, all. +
-*:fa-list, approve. +
-*:fa-thumbs-o-up, assign. +
-*:fa-hand-o-right, calculate. +
-*:fa-calculator, cancel. +
-*:fa-stop, categorise. +
-*:fa-folder-open-o, change. +
-*:fa-edit, clear.*:fa-remove, copy. +
-*:fa-copy, create. +
-*:fa-plus, decline. +
-*:fa-thumbs-o-down, delete. +
-*:fa-trash, discard. +
-*:fa-trash-o, download. +
-*:fa-download, edit. +
-*:fa-edit, execute. +
-*:fa-bolt, export. +
-*:fa-download, first. +
-*:fa-star, find. +
-*:fa-search, install. +
-*:fa-wrench, list. +
-*:fa-list, import. +
-*:fa-upload, lookup. +
-*:fa-search, maintain. +
-*:fa-edit, move.*:fa-exchange, new. +
-*:fa-plus, next. +
-*:fa-step-forward, pause. +
-*:fa-pause, previous. +
-*:fa-step-backward, refresh. +
-*:fa-sync, remove. +
-*:fa-minus-square, renew. +
-*:fa-redo, reset.*:fa-redo, resume. +
-*:fa-play, run.*:fa-bolt, save. +
-*:fa-floppy-o, search. +
-*:fa-search, stop. +
-*:fa-stop, suspend. +
-*:fa-pause, switch. +
-*:fa-exchange, terminate. +
-*:fa-stop, update. +
-*:fa-edit, upload. +
-*:fa-upload, verify. +
-*:fa-check-circle, view. +
-*:fa-search]
+|  [all.*:fa-solid fa-list, list. +
+*:fa-solid fa-list, find. +
+*:fa-search, lookup. +
+*:fa-search, search. +
+*:fa-search, send. +
+*:fa-regular fa-paper-plane, open. +
+*:fa-solid fa-arrow-up-right-from- +
+square, close. +
+*:fa-solid fa-regular fa-rectangle- +
+xmark, recent. +
+*:fa-solid fa-clock-rotate- +
+left, lock. +
+*:fa-solid fa-lock, unlock. +
+*:fa-solid fa-unlock, permit. +
+*:fa-solid fa-unlock, review. +
+*:fa-solid fa-eye, add. +
+*:fa-regular fa-square-plus, plus. +
+*:fa-regular fa-square- +
+plus, remove. +
+*:fa-regular fa-square- +
+minus, minus. +
+*:fa-regular fa-square-minus, sign. +
+*:fa-solid fa-signature, clear. +
+*:fa-solid fa-broom, create. +
+*:fa-regular fa-square-plus, new. +
+*:fa-regular fa-square- +
+plus, delete. +
+*:fa-solid fa-trash, change. +
+*:fa-regular fa-pen-to- +
+square, edit. +
+*:fa-regular fa-pen-to- +
+square, maintain. +
+*:fa-regular fa-pen-to- +
+square, update. +
+*:fa-regular fa-pen-to-square, cut. +
+*:fa-solid fa-scissors, move. +
+*:fa-solid fa-angles-right, copy. +
+*:fa-regular fa-copy, duplicate. +
+*:fa-solid fa-clone, clone. +
+*:fa-solid fa-clone, categorise. +
+*:fa-regular fa-folder- +
+open, download. +
+*:fa-solid fa-download, upload. +
+*:fa-solid fa-upload, execute. +
+*:fa-solid fa-bolt, run. +
+*:fa-solid fa-bolt, trigger. +
+*:fa-solid fa-bolt, link. +
+*:fa-solid fa-link, unlink. +
+*:fa-solid fa-link-slash, start. +
+*:fa-solid fa-play, play. +
+*:fa-solid fa-play, resume. +
+*:fa-solid fa-play, pause. +
+*:fa-solid fa-pause, suspend. +
+*:fa-solid fa-pause, stop. +
+*:fa-solid fa-stop, terminate. +
+*:fa-solid fa-stop, previous. +
+*:fa-backward-step, next. +
+*:fa-forward-step, approve. +
+*:fa-regular fa-thumbs-up, reject. +
+*:fa-regular fa-thumbs- +
+down, verify. +
+*:fa-solid fa-check, decline. +
+*:fa-solid fa-xmark, cancel. +
+*:fa-solid fa-xmark, discard. +
+*:fa-regular fa-trash-can, assign. +
+*:fa-regular fa-hand-point- +
+right, calculate. +
+*:fa-calculator, import. +
+*:fa-solid fa-file-import, export. +
+*:fa-solid fa-file-export, first. +
+*:fa-regular fa-star, install. +
+*:fa-solid fa-wrench, setup. +
+*:fa-solid fa-gear, configure. +
+*:fa-solid fa-gear, refresh. +
+*:fa-sync, renew. +
+*:fa-rotate-right, reset. +
+*:fa-rotate-left, save. +
+*:fa-regular fa-floppy- +
+disk, switch.*:fa-exchange, random. +
+*:fa-shuffle, view. +
+*:fa-regular fa-eye, wizard. +
+*:fa-solid fa-wand-magic-sparkles]
 | Provides a mapping of patterns to font-awesome CSS classes, where the pattern is used to match against the name of the action method in order to determine a CSS class to use, for example on the action's menu icon if rendered by the Wicket viewer.
 
 Providing a default set of patterns encourages a common set of verbs to be used.
@@ -81,9 +121,18 @@ patterns-as-map
 causeway.applib.annotation. +
 action-layout.css-class.patterns
 
-|  [delete.*:btn-danger, discard. +
-*:btn-warning, remove. +
-*:btn-warning]
+|  [add.*:btn-info, remove. +
+*:btn-warning, start. +
+*:btn-info, play.*:btn-info, stop. +
+*:btn-warning, reset. +
+*:btn-warning, new. +
+*:btn-info, create. +
+*:btn-info, delete. +
+*:btn-danger, verify. +
+*:btn-success, decline. +
+*:btn-danger, save. +
+*:btn-success, approve. +
+*:btn-success, reject.*:btn-danger]
 | Provides a mapping of patterns to CSS classes, where the pattern is used to match against the name of the action method in order to determine a CSS class to use, for example on the action's button if rendered by the Wicket viewer.
 
 Providing a default set of patterns encourages a common set of verbs to be used.
@@ -162,6 +211,18 @@ collection-layout.paged
 | Defines the default number of objects that are shown in a "parented" collection of a domain object, result of invoking an action.
 
 This can be overridden on a case-by-case basis using ``CollectionLayout#paged()``.
+
+
+|
+[[causeway.applib.annotation.collection-layout.sequence-policy-if-unreferenced]]
+causeway.applib.annotation. +
+collection-layout. +
+sequence-policy-if-unreferenced
+
+| 
+| How ``CollectionLayout#sequence()`` should be handled when calculating the slot-in order for unreferenced _Collections_. \{@code AS_PER_SEQUENCE} will use Dewey order based on available 'sequence' attributes, whereas \{@code ALPHABETICALLY} will use alphabetical order based on member names.
+
+default: \{@code AS_PER_SEQUENCE}
 
 
 |
@@ -481,6 +542,18 @@ property-layout.label-position
 Can be overridden on a case-by-case basis using ``ParameterLayout#labelPosition()``.
 
 If left as ``LabelPosition#NOT_SPECIFIED`` and not overridden, then the position depends upon the viewer implementation.
+
+
+|
+[[causeway.applib.annotation.property-layout.sequence-policy-if-unreferenced]]
+causeway.applib.annotation. +
+property-layout. +
+sequence-policy-if-unreferenced
+
+| 
+| How ``PropertyLayout#sequence()`` should be handled when calculating the slot-in order for unreferenced _Properties_. \{@code AS_PER_SEQUENCE} will use Dewey order based on available 'sequence' attributes, whereas \{@code ALPHABETICALLY} will use alphabetical order based on member names.
+
+default: \{@code AS_PER_SEQUENCE}
 
 
 |

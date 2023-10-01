@@ -147,6 +147,19 @@ Use time zone 'Z', as the date/time picker UI component is not wired up to suppo
 
 
 |
+[[causeway.viewer.wicket.date-picker.popup-on-focus]]
+causeway.viewer.wicket.date-picker. +
+popup-on-focus
+
+| 
+| Whether the date picker should automatically be shown when the field gains focus.
+
+The default is to show the picker when the user clicks into the field.
+
+Corresponds to the ``allowInputToggle`` config property of the underlying library, (TempusDominus).
+
+
+|
 [[causeway.viewer.wicket.development-utilities.enable]]
 causeway.viewer.wicket. +
 development-utilities.enable
@@ -240,6 +253,18 @@ max-title-length-in-tables
 | The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either ``#getMaxTitleLengthInParentedTables()`` or ``#getMaxTitleLengthInStandaloneTables()``.
 
 If truncated, then the remainder of the title will be replaced with ellipses (...).
+
+
+|
+[[causeway.viewer.wicket.max-title-length-in-tables-not-having-any-property-column]]
+causeway.viewer.wicket. +
+max-title-length-in-tables-not- +
+having-any-property-column
+
+|  80
+| If a table has no property columns, for the title column this value is used, to determine how many characters to render for the table element titles.
+
+Introduced for the case when max-title-length is set to zero for tables in general, that if a table has no property columns an exception to that title suppression can be made.
 
 
 |
@@ -470,6 +495,15 @@ show-chooser
 
 | 
 | Whether the theme chooser widget should be available in the footer.
+
+
+|
+[[causeway.viewer.wicket.tooltip-text-mode]]
+causeway.viewer.wicket. +
+tooltip-text-mode
+
+| 
+| How to interpret tooltip content, e.g. as HTML or TEXT. default = TEXT
 
 
 |

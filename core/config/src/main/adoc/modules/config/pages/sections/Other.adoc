@@ -44,6 +44,17 @@ Corresponds to Spring Boot 'spring.h2.console.settings.web-allow-others'.
 
 
 |
+[[causeway.schema.command.param-identifier-strategy]]
+causeway.schema.command. +
+param-identifier-strategy
+
+| 
+| Whether the ``ParamDto#getName()`` field - which uniquely identifies a parameter within the action's of parameters - is populated with the parameter's formal Id (eg "firstName") or instead using the parameter's friendly name (eg "First Name").
+
+The default is to use the Id, but the name is provided as an alternative for compatibility with v1. Note that the name is potentially translated, so this could also cause issues within integration scenarios.
+
+
+|
 [[causeway.security.actions-with-safe-semantics-require-only-viewing-permission]]
 causeway.security. +
 actions-with-safe-semantics- +

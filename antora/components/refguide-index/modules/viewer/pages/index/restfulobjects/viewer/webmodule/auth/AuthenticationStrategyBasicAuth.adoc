@@ -12,7 +12,19 @@ class AuthenticationStrategyBasicAuth {
   public static final String HEADER_AUTHORIZATION;
   public static final String BASIC_AUTH_PREFIX;
   InteractionContext lookupValid(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
-  void bind(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, InteractionContext auth)
+  void bind(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, InteractionContext auth)     // <.>
 }
 ----
 
+<.> xref:#bind_HttpServletRequest_HttpServletResponse_InteractionContext[bind(HttpServletRequest, HttpServletResponse, InteractionContext)]
++
+--
+This implementation is stateless and so does not support binding the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] (aka authentication) into a store (eg a session); instead each request is authenticated afresh.
+--
+
+== Members
+
+[#bind_HttpServletRequest_HttpServletResponse_InteractionContext]
+=== bind(HttpServletRequest, HttpServletResponse, InteractionContext)
+
+This implementation is stateless and so does not support binding the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] (aka authentication) into a store (eg a session); instead each request is authenticated afresh.

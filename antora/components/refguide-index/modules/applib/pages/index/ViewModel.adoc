@@ -3,7 +3,7 @@
 
 Indicates that an object belongs to the UI/application layer and is intended to be used as a view-model.Naturally this also allows for the idiom of passing in the xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector] as an argument and programmatically resolve any field-style injection points via _ServiceInjector#injectServicesInto(Object)_ , that is, if already required during _construction_ .
 
-Instances of xref:refguide:applib:index/ViewModel.adoc[ViewModel] must include (exactly) one public constructor.
+Instances of xref:refguide:applib:index/ViewModel.adoc[ViewModel] must include (at least) one public constructor.
 
 Contract:
 
@@ -39,3 +39,5 @@ Obtain a memento of the view-model. (Optional)
 Obtain a memento of the view-model. (Optional)
 
 Captures the state of this view-model as _String_ , which can be passed in to this view-model's constructor for later re-construction.
+
+The framework automatically takes care of non-URL-safe strings, by passing them through _java.net.URLEncoder_ / _java.net.URLDecoder_ for encoding and decoding respectively.

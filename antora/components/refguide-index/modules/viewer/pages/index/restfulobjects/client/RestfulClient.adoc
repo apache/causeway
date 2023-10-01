@@ -7,11 +7,11 @@ For example:
 
 ----
 
-RestfulClientConfig clientConfig = RestfulClientConfig.builder();
-.restfulBase("http://localhost:8080/helloworld/restful/")
-.useBasicAuth(true) // default = false
-.restfulAuthUser("sven")
-.restfulAuthPassword("pass")
+val clientConfig = RestfulClientConfig.builder();
+    .restfulBaseUrl("http://localhost:8080/helloworld/restful/")
+        .authenticationMode(AuthenticationMode.BASIC)
+        .restfulAuthUser("sven")
+        .restfulAuthPassword("pass")
 .useRequestDebugLogging(true) // default = false
 .build();
 
@@ -43,8 +43,10 @@ if(digest.isSuccess()) {
 .RestfulClient.java
 ----
 class RestfulClient {
-  RestfulClient ofConfig(RestfulClientConfig clientConfig)
+  RestfulClient ofConfig(RestfulClientConfig clientConfig)     // <.>
+  RestfulClient ofConfig(RestfulClientConfig clientConfig, AuthorizationHeaderFactory authorizationHeaderFactory)     // <.>
   RestfulClient ofConfig(RestfulClientConfig clientConfig, UnaryOperator<ClientBuilder> configRefiner)
+  RestfulClient ofConfig(RestfulClientConfig clientConfig, UnaryOperator<ClientBuilder> configRefiner, AuthorizationHeaderFactory authorizationHeaderFactory)
   RestfulClientConfig getConfig()
   Client getJaxRsClient()
   void close()
@@ -57,6 +59,8 @@ class RestfulClient {
 }
 ----
 
+<.> xref:#ofConfig_RestfulClientConfig[ofConfig(RestfulClientConfig)]
+<.> xref:#ofConfig_RestfulClientConfig_AuthorizationHeaderFactory[ofConfig(RestfulClientConfig, AuthorizationHeaderFactory)]
 <.> xref:#digestValue_Response_ValueSemanticsProvider[digestValue(Response, ValueSemanticsProvider)]
 +
 --
@@ -69,6 +73,12 @@ Returns an _URI_ constructed from this client's base path plus given relative _p
 --
 
 == Members
+
+[#ofConfig_RestfulClientConfig]
+=== ofConfig(RestfulClientConfig)
+
+[#ofConfig_RestfulClientConfig_AuthorizationHeaderFactory]
+=== ofConfig(RestfulClientConfig, AuthorizationHeaderFactory)
 
 [#digestValue_Response_ValueSemanticsProvider]
 === digestValue(Response, ValueSemanticsProvider)
