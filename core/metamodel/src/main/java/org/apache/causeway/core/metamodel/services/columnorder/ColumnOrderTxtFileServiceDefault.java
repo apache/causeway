@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.inspect;
+package org.apache.causeway.core.metamodel.services.columnorder;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.RestrictTo;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.layout.LayoutConstants;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.services.columnorder.ColumnOrderTxtFileService;
 import org.apache.causeway.commons.io.ZipUtils;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -37,54 +37,35 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-@Action(
-        commandPublishing = Publishing.DISABLED,
-        domainEvent = Object_downloadColumnOrderTxtFilesAsZip.ActionDomainEvent.class,
-        executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING,
-        semantics = SemanticsOf.IDEMPOTENT  // to avoid caching
-)
-@ActionLayout(
-        cssClassFa = "fa-download",
-        named = "Download .columnOrder.txt files (ZIP)",
-        describedAs = "Downloads all the .columnOrder.txt files for this object and its collections, as a zip file",
-        fieldSetId = LayoutConstants.FieldSetId.METADATA,
-        position = ActionLayout.Position.PANEL_DROPDOWN,
-        sequence = "700.2.3"
-)
-@RequiredArgsConstructor
-public class Object_downloadColumnOrderTxtFilesAsZip {
+/**
+ * since 2.0 {@index}
+ */
+@Service
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ColumnOrderTxtFileServiceDefault")
+@Priority(PriorityPrecedence.LATE)
+@Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileService {
 
-    private final Object domainObject; // mixee
+    final SpecificationLoader specificationLoader;
 
-    public static class ActionDomainEvent
-    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_downloadColumnOrderTxtFilesAsZip> {}
-
-    @Inject SpecificationLoader specificationLoader;
-
-    @MemberSupport public Blob act(final String fileName) {
-
+    @Programmatic
+    public byte[] toZip(final Object domainObject) {
         val zipBuilder = ZipUtils.zipEntryBuilder();
 
-        addStandaloneEntry(zipBuilder);
-        addCollectionEntries(zipBuilder);
+        addStandaloneEntry(domainObject, zipBuilder);
+        addCollectionEntries(domainObject, zipBuilder);
 
-        final byte[] zipBytes = zipBuilder.toBytes();
-        return Blob.of(fileName, NamedWithMimeType.CommonMimeType.ZIP, zipBytes);
-    }
-
-    @MemberSupport public String default0Act() {
-        val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
-        return String.format("%s.columnOrder.zip", parentSpec.getShortIdentifier());
+        return zipBuilder.toBytes();
     }
 
 
     // HELPERS
 
-    private void addStandaloneEntry(final ZipUtils.EntryBuilder zipBuilder) {
+    private void addStandaloneEntry(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
         val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         val buf = new StringBuilder();
 
@@ -92,13 +73,13 @@ public class Object_downloadColumnOrderTxtFilesAsZip {
                 .map(ObjectFeature::getId)
                 .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        val fileName = String.format("%s.columnOrder.txt", parentSpec.getShortIdentifier());
         val fileContents = buf.toString();
+        val fileName = String.format("%s.columnOrder.txt", parentSpec.getShortIdentifier());
 
         zipBuilder.addAsUtf8(fileName, fileContents);
     }
 
-    private void addCollectionEntries(final ZipUtils.EntryBuilder zipBuilder) {
+    private void addCollectionEntries(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
         val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         parentSpec.streamCollections(MixedIn.INCLUDED)
                 .forEach(collection -> addCollection(collection, parentSpec, zipBuilder));
@@ -121,7 +102,5 @@ public class Object_downloadColumnOrderTxtFilesAsZip {
 
         zipBuilder.addAsUtf8(fileName, fileContents);
     }
-
-
 
 }
