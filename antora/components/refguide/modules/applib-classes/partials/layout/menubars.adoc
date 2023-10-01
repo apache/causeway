@@ -27,24 +27,24 @@ This design greatly assists in the implementation of generic REST clients.
 
 The menu classes reside in the `org.apache.causeway.applib.layout.menubars.bootstrap3` package, consisting of:
 
-* `BS3MenuBars`
+* `BSMenuBars`
 
 +
-The top-level structure that define three fields: a primary `BS3MenuBar`, secondary `BS3MenuBar` and tertiary `BS3MenuBar`.
-The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] places the primary bar to the left, the secondary bar aligned right, and the tertiary bar (expected to consist of just one `BS3Menu`) under the user names.
+The top-level structure that define three fields: a primary `BSMenuBar`, secondary `BSMenuBar` and tertiary `BSMenuBar`.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] places the primary bar to the left, the secondary bar aligned right, and the tertiary bar (expected to consist of just one `BSMenu`) under the user names.
 
-* `BS3MenuBar`
-
-+
-consisting of one or many ``BS3Menu``s.
-
-* `BS3Menu`
+* `BSMenuBar`
 
 +
-consisting of one or many ``BS3MenuSection``s.
+consisting of one or many ``BSMenu``s.
+
+* `BSMenu`
+
++
+consisting of one or many ``BSMenuSection``s.
 The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] renders a separator between each section.
 
-* `BS3MenuSection`
+* `BSMenuSection`
 
 +
 consisting of one or many actions (``ServiceActionLayoutData``s)

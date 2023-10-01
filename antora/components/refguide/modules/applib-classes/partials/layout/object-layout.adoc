@@ -13,7 +13,7 @@ These classes fall into two main categories:
 * common component classes, that capture the layout metadata for an object's properties, collections and actions.
 These are bound (or associated) to the regions of the grid
 
-The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] components capable of rendering that grid system.
+The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap], along with xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] components capable of rendering that grid system.
 In principle it is also possible to extend the layout architecture for other grid systems.
 The component classes, though, are intended to be reusable across all grid systems.
 
@@ -35,7 +35,7 @@ The component classes reside in the `org.apache.causeway.applib.layout.component
 
 * `FieldSet` +
 +
-A fieldset (sometimes also called a property group or member group) of a number of the domain object's properties (along with any associationed actions of those properties).
+A fieldset (sometimes also called a property group or member group) of a number of the domain object's properties (along with any associated actions of those properties).
 
 * layout data classes, which correspond to the similarly named annotations:
 
@@ -54,9 +54,9 @@ The `GridAbstract` convenience superclass provides a partial implementation of t
 The XSD for these classes is available at link:https://causeway.apache.org/applib/layout/component/component.xsd[].
 
 
-== Bootstrap3 Grid
+== Bootstrap Grid
 
-The bootstrap3 grid classes are modelled closely on link:http://getbootstrap.com[Bootstrap 3].
+The bootstrap grid classes are modelled closely on link:http://getbootstrap.com[Bootstrap].
 Bootstrap's link:http://getbootstrap.com/css/#grid[grid system] divides the page width equally into 12 columns, and so each column spans 1 or more of these widths.
 Thus, a column with a span of 12 is the full width, one with a span of 6 is half the width, one with a span of 4 is a third of the width, and so on.
 
@@ -67,42 +67,42 @@ It is also possible to specify multiple size/spans for a given column.
 
 The grid classes provided by Apache Causeway reside in the `org.apache.causeway.applib.layout.grid.bootstrap3` package, and consist of:
 
-* `BS3Grid` +
+* `BSGrid` +
 +
-Consists of a number of ``BS3Row``s.
+Consists of a number of ``BSRow``s.
 +
 This class is the concrete implementation of `Grid` interface, discussed previously.
 As such, it extends the `Grid.Visitor` to iterate over all of the ``Row``s of the grid.
 
-* `BS3Row` +
+* `BSRow` +
 +
-A container of ``BS3Col``s.
+A container of ``BSCol``s.
 This element is rendered as `<div class="row">`.
 
-* `BS3Col` +
+* `BSCol` +
 +
 A container of almost everything else.
 A column most commonly contains properties (grouped into ``FieldSet``s, described above) or collections (specified by ``CollectionLayoutData``, also above).
-However, a `Col` might instead contain a ``BS3TabGroup`` (described below) in order that the object members is arranged into tabs.
+However, a `Col` might instead contain a ``BSTabGroup`` (described below) in order that the object members is arranged into tabs.
 +
 It is also possible for a ``Col`` to contain the object's title/icon (using ``DomainObjectLayoutData``) or indeed arbitrary actions (using ``ActionLayoutData`).
 +
-Finally, a ``BS3Col`` can also contain other ``BS3Row``s, allowing arbitrarily deep hierarchies of containers as required.
+Finally, a ``BSCol`` can also contain other ``BSRow``s, allowing arbitrarily deep hierarchies of containers as required.
 +
 This element is rendered as, for example, `<div class="col-md-4">` (for a size `MD`, span of 4).
 
-* `BS3TabGroup` +
+* `BSTabGroup` +
 +
-A container of ``BS3Tab``s.
+A container of ``BSTab``s.
 
-* `BS3Tab` +
+* `BSTab` +
 +
-A container of ``BS3Row``s, which will in turn contain ``BS3Col``s and thence ultimately the object's members.
+A container of ``BSRow``s, which will in turn contain ``BSCol``s and thence ultimately the object's members.
 
 There are also two close cousins of `Col`, namely `ClearFixVisible` and `ClearFixHidden`.
 These map to Bootstrap's link:http://getbootstrap.com/css/#responsive-utilities[responsive utility class]es, and provide greater control for responsive designs.
 
-As you can probably guess, the `BS3Grid` is the top-level object (that is, it is JAXB `@XmlRootElement`); this is the object that is serialized to/from XML.
+As you can probably guess, the `BSGrid` is the top-level object (that is, it is JAXB `@XmlRootElement`); this is the object that is serialized to/from XML.
 
 All of these classes also allow custom CSS to be specified; these are added to the CSS classes for the corresponding `<div`> in the rendered page.
 The xref:vw:ROOT:customisation.adoc#custom-css[application.css] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
