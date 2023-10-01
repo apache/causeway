@@ -82,6 +82,8 @@ import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.Tempora
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions.SequencePolicy;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
@@ -1149,6 +1151,16 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
+
+                /**
+                 * How {@link org.apache.causeway.applib.annotation.PropertyLayout#sequence()}
+                 * should be handled when calculating the slot-in order for unreferenced <i>Properties</i>.
+                 * {@code AS_PER_SEQUENCE} will use Dewey order based on available 'sequence' attributes,
+                 * whereas {@code ALPHABETICALLY} will use alphabetical order based on member names.
+                 * <p>
+                 * default: {@code AS_PER_SEQUENCE}
+                 */
+                private AssociationLayoutConfigOptions.SequencePolicy sequencePolicyIfUnreferenced = SequencePolicy.AS_PER_SEQUENCE;
             }
 
             private final Collection collection = new Collection();
@@ -1226,6 +1238,17 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 private int paged = 12;
+
+                /**
+                 * How {@link org.apache.causeway.applib.annotation.CollectionLayout#sequence()}
+                 * should be handled when calculating the slot-in order for unreferenced <i>Collections</i>.
+                 * {@code AS_PER_SEQUENCE} will use Dewey order based on available 'sequence' attributes,
+                 * whereas {@code ALPHABETICALLY} will use alphabetical order based on member names.
+                 * <p>
+                 * default: {@code AS_PER_SEQUENCE}
+                 */
+                private AssociationLayoutConfigOptions.SequencePolicy sequencePolicyIfUnreferenced =
+                        SequencePolicy.AS_PER_SEQUENCE;
 
                 /**
                  * Defines whether the table representation of a collection should be decorated using a client-side
@@ -1512,7 +1535,6 @@ public class CausewayConfiguration {
                  * have been indicated as deprecated will simply be ignored/excluded from the metamodel.
                  */
                 private boolean ignoreDeprecated = false;
-
             }
 
             private final Introspector introspector = new Introspector();

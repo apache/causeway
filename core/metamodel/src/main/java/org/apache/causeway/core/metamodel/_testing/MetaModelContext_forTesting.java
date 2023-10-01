@@ -464,7 +464,7 @@ implements MetaModelContext {
             getGridMarshallerService(),
             List.of(
                     new GridSystemServiceBootstrap(
-                            getSpecificationLoader(),
+                            this,
                             getTranslationService(),
                             getJaxbService(),
                             getMessageService(),

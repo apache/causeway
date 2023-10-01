@@ -28,7 +28,7 @@ xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemServic
 
 
 |xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService]
-|Validates and normalizes the grid layout for a domain class (with respect to a particular grid system such as Bootstrap3), also providing a default grid (for those domain classes where there is no grid layout).
+|Validates and normalizes the grid layout for a domain class (with respect to a particular grid system such as Bootstrap), also providing a default grid (for those domain classes where there is no grid layout).
 
 
 
