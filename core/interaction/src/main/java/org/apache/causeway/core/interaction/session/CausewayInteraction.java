@@ -142,7 +142,7 @@ implements InteractionInternal {
             // we rather print all of them, no matter whether recognized or not later on
             // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
             // WrapperFactory utilizing async calls
-            log.error("failed to execute an interaction", _Exceptions.getRootCause(ex));
+            log.error("failed to execute an interaction", _Exceptions.getRootCause(ex).orElse(null));
 
             // just because an exception has thrown, does not mean it is that significant;
             // it could be that it is recognized by an ExceptionRecognizer and is not severe
