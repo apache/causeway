@@ -42,7 +42,6 @@ class _UnreferencedSequenceUtil {
             final CausewayConfiguration config,
             final Stream<OneToOneAssociation> propertyStream) {
         var sequencePolicy = AssociationLayoutConfigOptions.SequencePolicy.forProperty(config);
-System.err.printf("sequencePolicy %s%n", sequencePolicy);
         return sequencePolicy == SequencePolicy.ALPHABETICALLY
                 ? propertyStream
                     .map(ObjectAssociation::getId)
