@@ -1365,5 +1365,13 @@ span.entityIconAndTitlePanel > a {
 }
 
 
+/* vertical alignment of certain data types within object forms */
+div.booleanPanel span.scalarValueInput label.fragment-prompt-checkboxNo {
+    margin-top: -5px;
+}
+div.scalarPanelTextFieldWithTemporalPicker span.scalarValueInput.fragment-fieldFrame-withLink {
+    margin-top: -2px;
+}
+
 /* --- */
 
