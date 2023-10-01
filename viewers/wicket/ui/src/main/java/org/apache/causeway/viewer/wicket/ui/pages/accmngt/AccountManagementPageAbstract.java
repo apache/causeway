@@ -99,12 +99,11 @@ public class AccountManagementPageAbstract extends WebPageBase {
             return false;
         }
         val exceptionModelMainMessage = exceptionModel.getMainMessage();
-        for (String message : suppressedExceptionMessages) {
-            if(message.equals(exceptionModelMainMessage)) {
-                return false;
-            }
+        if (exceptionModelMainMessage == null) {
+            return false;
         }
-        return true;
+        return suppressedExceptionMessages.stream()
+                    .noneMatch(exceptionModelMainMessage::contains);
     }
 
     private final static List<String> suppressedExceptionMessages = Arrays.asList("Requested page is no longer available.");
