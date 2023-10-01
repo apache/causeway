@@ -141,7 +141,7 @@ public @interface CollectionLayout {
      * the layout group that collects all unreferenced <i>Collections</i>,
      * unless overwritten via application scoped config option that enforced alphabetical order:
      * <br>
-     * {@code causeway.core.meta-model.programming-model.ignoreSequenceWhenAssociationIsUnreferenced}
+     * {@code causeway.applib.annotation.collectionLayout.sequencePolicyIfUnreferenced}
      * <p>
      * An alternative is to use the <code>Xxx.layout.xml</code> file,
      * where <code>Xxx</code> is the domain object name.
