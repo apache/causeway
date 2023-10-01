@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel;
 
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.services.columnorder.ColumnOrderTxtFileServiceDefault;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -176,29 +178,30 @@ import lombok.NonNull;
         IdStringifierForSerializable.class,
 
         // @Service's
-        IdStringifierLookupService.class,
-        ObjectManagerDefault.class,
-        ServiceInjectorDefault.class,
-        MetamodelEventService.class,
+        ColumnOrderTxtFileServiceDefault.class,
         ExceptionRecognizerForRecoverableException.class,
         GridLoaderServiceDefault.class,
         GridMarshallerServiceBootstrap.class,
         GridServiceDefault.class,
         GridSystemServiceBootstrap.class,
+        IdStringifierLookupService.class,
         LayoutServiceDefault.class,
+        MetamodelEventService.class,
         MetaModelServiceDefault.class,
+        ObjectManagerDefault.class,
         ProgrammingModelServiceDefault.class,
+        ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
+        SpecificationLoaderDefault.class,
         TableColumnOrderServiceDefault.class,
         TableColumnOrderServiceUsingTxtFile.class,
         TitleServiceDefault.class,
-        SpecificationLoaderDefault.class,
 
         // @Repository's
         ApplicationFeatureRepositoryDefault.class,
 
+        // standalone validators
         LogicalTypeMalformedValidator.class,
-
 })
 public class CausewayModuleCoreMetamodel {
 
