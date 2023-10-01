@@ -1513,6 +1513,20 @@ public class CausewayConfiguration {
                  */
                 private boolean ignoreDeprecated = false;
 
+                /**
+                 * Whether
+                 * {@link org.apache.causeway.applib.annotation.PropertyLayout#sequence()}
+                 * and {@link org.apache.causeway.applib.annotation.CollectionLayout#sequence()}
+                 * should be ignored when calculating the slot-in order for unreferenced <i>Properties</i>
+                 * and <i>Collections</i>.
+                 * If ignored ({@code true}),
+                 * alphabetical order based on member names is enforced
+                 * (over Dewey order based on available sequence strings).
+                 * <p>
+                 * default: {@code false}
+                 */
+                private boolean ignoreSequenceWhenAssociationIsUnreferenced = false;
+
             }
 
             private final Introspector introspector = new Introspector();

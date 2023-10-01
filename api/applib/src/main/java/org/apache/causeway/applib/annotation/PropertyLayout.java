@@ -233,9 +233,13 @@ public @interface PropertyLayout {
      * The order of this member relative to other members in the same (layout) group,
      * given in <i>Dewey-decimal</i> notation.
      * <p>
-     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
-     *     where <code>Xxx</code> is the domain object name.
-     * </p>
+     * Also governs slot-in order for the layout group that collects all unreferenced <i>Properties</i>,
+     * unless overwritten via application scoped config option that enforced alphabetical order:
+     * <br>
+     * {@code causeway.core.meta-model.programming-model.ignoreSequenceWhenAssociationIsUnreferenced}
+     * <p>
+     * An alternative is to use the <code>Xxx.layout.xml</code> file,
+     * where <code>Xxx</code> is the domain object name.
      * @see ActionLayout#sequence()
      * @see CollectionLayout#sequence()
      */
