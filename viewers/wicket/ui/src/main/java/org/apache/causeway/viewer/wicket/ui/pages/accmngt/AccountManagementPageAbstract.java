@@ -46,6 +46,9 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavasc
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import lombok.val;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
@@ -80,7 +83,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
         addPageTitle();
         addApplicationName(signInLink);
 
-        if(exceptionModel != null) {
+        if(shouldDisplayException(exceptionModel)) {
             val pageClassRegistry = super.getServiceRegistry().lookupServiceElseFail(PageClassRegistry.class);
             add(new ExceptionStackTracePanel(pageClassRegistry, ID_EXCEPTION_STACK_TRACE, exceptionModel));
         } else {
@@ -90,6 +93,21 @@ public class AccountManagementPageAbstract extends WebPageBase {
         add(new HeaderResponseContainer("footerJS", "footerJS"));
         BootstrapJavascriptBehavior.addTo(this);
     }
+
+    private static boolean shouldDisplayException(ExceptionModel exceptionModel) {
+        if (exceptionModel == null) {
+            return false;
+        }
+        val exceptionModelMainMessage = exceptionModel.getMainMessage();
+        for (String message : suppressedExceptionMessages) {
+            if(message.equals(exceptionModelMainMessage)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private final static List<String> suppressedExceptionMessages = Arrays.asList("Requested page is no longer available.");
 
 
     private void addPageTitle() {
