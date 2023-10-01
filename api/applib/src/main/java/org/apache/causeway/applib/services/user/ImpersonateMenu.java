@@ -53,7 +53,6 @@ import lombok.val;
  *
  * @see UserService
  * @see ImpersonateMenuAdvisor
- * @see ImpersonatedUserHolder
  *
  * @since 2.0 {@index}
  */
