@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.inspect.model.TypeNode;
 @Configuration
 @Import({
         Object_inspectMetamodel.class,
-        Object_downloadColumnOrderTxtFilesAsZip.class,
 
         ActionNode.class,
         CollectionNode.class,

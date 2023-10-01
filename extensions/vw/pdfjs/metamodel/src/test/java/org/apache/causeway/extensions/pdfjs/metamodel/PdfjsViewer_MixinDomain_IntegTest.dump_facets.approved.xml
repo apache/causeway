@@ -215,7 +215,7 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
-            <mml:attr name="eventType" value="org.apache.causeway.core.metamodel.inspect.Object_downloadColumnOrderTxtFilesAsZip.ActionDomainEvent"/>
+            <mml:attr name="eventType" value="org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.ActionDomainEvent"/>
             <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
             <mml:attr name="facet" value="ActionDomainEventFacet"/>
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
@@ -223,13 +223,13 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
-            <mml:attr name="declaringType" value="org.apache.causeway.core.metamodel.inspect.Object_downloadColumnOrderTxtFilesAsZip"/>
-            <mml:attr name="eventType" value="org.apache.causeway.core.metamodel.inspect.Object_downloadColumnOrderTxtFilesAsZip.ActionDomainEvent"/>
+            <mml:attr name="declaringType" value="org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip"/>
+            <mml:attr name="eventType" value="org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.ActionDomainEvent"/>
             <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
             <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="isPostable" value="true"/>
-            <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.core.metamodel.inspect.Object_downloadColumnOrderTxtFilesAsZip.act(java.lang.String)"/>
+            <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.act(java.lang.String)"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
           </mml:facet>
@@ -260,14 +260,14 @@
             <mml:attr name="value" value="IDEMPOTENT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.core.metamodel.inspect.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Downloads all the .columnOrder.txt files for this object and its collections, as a zip file"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Downloads all the .columnOrder.txt files for this object and its collections, as a zip file"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.NamedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.core.metamodel.inspect.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
             <mml:attr name="facet" value="NamedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Download .columnOrder.txt files (ZIP)"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -324,7 +324,7 @@
           <mml:param id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.core.metamodel.inspect.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
                 <mml:attr name="originalText" value="File Name"/>
                 <mml:attr name="precedence" value="LOW"/>
@@ -355,7 +355,7 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
                 <mml:attr name="facet" value="ActionParameterDefaultsFacetViaMethod"/>
                 <mml:attr name="intent.default0Act" value="DEFAULTS"/>
-                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.core.metamodel.inspect.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
+                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
