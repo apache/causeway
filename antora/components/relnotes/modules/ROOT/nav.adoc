@@ -3,6 +3,7 @@
 
 
 * 2023
+** xref:relnotes:ROOT:2023/2.0.0-RC3/relnotes.adoc[2.0.0-RC3]
 ** xref:relnotes:ROOT:2023/2.0.0-RC2/relnotes.adoc[2.0.0-RC2]
 ** xref:relnotes:ROOT:2023/2.0.0-RC1/relnotes.adoc[2.0.0-RC1]
 * 2022
