@@ -43,6 +43,7 @@ class ApplicationFeatureId {
   int hashCode()
   String toString()
   ApplicationFeatureId withNamespace(String namespace)     // <.>
+  ApplicationFeatureId withLogicalTypeName(String logicalTypeName)     // <.>
 }
 ----
 
@@ -81,6 +82,11 @@ Round-trip with _#asEncodedString()_
 --
 Returns a new instance that is a clone of this, except for the namespace, which is taken from the argument.
 --
+<.> xref:#withLogicalTypeName_String[withLogicalTypeName(String)]
++
+--
+Returns a new instance that is a clone of this feature (expected to be a _ApplicationFeatureSort#MEMBER member_ or _ApplicationFeatureSort#TYPE type_ ), but with the logicalTypeName taken from the argument.
+--
 
 == Members
 
@@ -118,3 +124,12 @@ Round-trip with _#asEncodedString()_
 === withNamespace(String)
 
 Returns a new instance that is a clone of this, except for the namespace, which is taken from the argument.
+
+[#withLogicalTypeName_String]
+=== withLogicalTypeName(String)
+
+Returns a new instance that is a clone of this feature (expected to be a _ApplicationFeatureSort#MEMBER member_ or _ApplicationFeatureSort#TYPE type_ ), but with the logicalTypeName taken from the argument.
+
+If this feature is instead a _ApplicationFeatureSort#NAMESPACE namespace_ then the feature is returned unchanged.
+
+Note: if the feature is a _ApplicationFeatureSort#TYPE type_ , then this method will be the same as if _ApplicationFeatureId#newType(String)_ had been used to create a new instance. The method exists though to provide a standardized way of transforming xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] s where possible, without the caller having to worry as to what _#getSort() sort_ of feature it is dealing with.

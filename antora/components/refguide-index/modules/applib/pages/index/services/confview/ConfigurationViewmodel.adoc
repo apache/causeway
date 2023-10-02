@@ -11,7 +11,8 @@ As returned by _ConfigurationMenu.configuration#act() ConfigurationMenu_ .
 class ConfigurationViewmodel {
   String title()
   Set<ConfigurationProperty> getEnvironment()
-  Set<ConfigurationProperty> getConfiguration()
+  Set<ConfigurationProperty> getPrimary()
+  Set<ConfigurationProperty> getSecondary()
 }
 ----
 

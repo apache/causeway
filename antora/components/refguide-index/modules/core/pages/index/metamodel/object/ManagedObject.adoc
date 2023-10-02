@@ -34,9 +34,11 @@ interface ManagedObject {
   PackedManagedObject packed(ObjectSpecification elementSpec, Can<ManagedObject> nonScalar)     // <.>
   ManagedObject adaptSingular(SpecificationLoader specLoader, Object pojo)     // <.>
   ManagedObject adaptSingular(ObjectSpecification guess, Object pojo)
+  ManagedObject adaptProperty(OneToOneAssociation oneToOneAssociation, Object pojo)
+  ManagedObject adaptParameter(ObjectActionParameter param, Object paramValue)
+  Can<ManagedObject> adaptParameters(Can<ObjectActionParameter> objectActionParameters, List<Object> args)
   ManagedObject bookmarked(ObjectSpecification spec, Object pojo, Bookmark bookmark)     // <.>
   ManagedObject adaptSingularInternal(ObjectSpecification guess, Object pojo, Optional<Bookmark> bookmarkIfAny)     // <.>
-  ManagedObject adaptParameter(ObjectActionParameter param, Object paramValue)
 }
 ----
 

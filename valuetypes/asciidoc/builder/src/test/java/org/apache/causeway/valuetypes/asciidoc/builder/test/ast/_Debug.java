@@ -32,15 +32,15 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.val;
 
 final class _Debug {
-    
+
     static void debug(Document node) {
         debug(node, 0);
     }
-    
+
     static void debug(StructuralNode node, int level) {
-        
+
         val simpleName = node.getClass().getSimpleName();
-        
+
         print(level, "node type: %s", node.getClass());
         print(level, "%s title: %s", simpleName, node.getTitle());
         print(level, "%s style: %s", simpleName, node.getStyle());
@@ -51,11 +51,11 @@ final class _Debug {
             print(level+1, " - %s->%s", k, v);
         });
         printAdditionalFor(node, level);
-        
-        if(node.getBlocks().size()>0) {
+
+        if(!node.getBlocks().isEmpty()) {
             print(level, "%s child blocks: %d ...", simpleName, node.getBlocks().size());
         }
-        
+
         for(val subNode : node.getBlocks()) {
             debug(subNode, level+1);
         }
@@ -79,7 +79,7 @@ final class _Debug {
         }
         if(node instanceof Block) {
             return Optional.ofNullable(((Block)node).getSource());
-        }    
+        }
         throw _Exceptions.unsupportedOperation("node type not supported %s", node.getClass());
     }
 
@@ -102,40 +102,40 @@ final class _Debug {
         }
         if(node instanceof Block) {
             return;
-        }    
+        }
         throw _Exceptions.unsupportedOperation("node type not supported %s", node.getClass());
     }
-    
+
     private static void debug(Table table, int level) {
         val refCol = table.getColumns().get(0);
         val refRow = table.getBody().get(0);
         val refCell = refRow.getCells().get(0);
-        
+
         val refHead = table.getHeader().get(0);
-        
+
         print(level, "tab caption: " + table.getCaption());
-        
+
         print(level, "col attrib: " + refCol.getAttributes());
         print(level, "col context: " + refCol.getContext());
         print(level, "col id: " + refCol.getId());
         print(level, "col reftex: " + refCol.getReftext());
         print(level, "col nodeName: " + refCol.getNodeName());
         print(level, "col role: " + refCol.getRole());
-       
+
         print(level, "cell source: " + refCell.getSource());
-        
+
         print(level, "head source: " + refHead.getCells().get(0).getSource());
     }
-    
+
     private static void debug(org.asciidoctor.ast.List list, int level) {
         print(level, "%d list blocks: ", list.getBlocks().size());
         print(level, "%d list items: ", list.getItems().size());
         print(level, "%d list level: ", list.getLevel());
     }
-    
+
     private static void print(int level, String format, Object... args) {
         val indent = _Strings.of(level*2, ' ');
         System.out.println(String.format("%s%s", indent, String.format(format, args)));
     }
-    
+
 }

@@ -22,8 +22,6 @@ class DomainObjectLayoutData {
   void setDescribedAs(String describedAs)
   String getNamed()
   void setNamed(String named)
-  String getPlural()     // <.>
-  void setPlural(String plural)     // <.>
   Integer getPaged()
   void setPaged(Integer paged)
   Class<? extends TableDecorator> getTableDecorator()
@@ -37,26 +35,6 @@ class DomainObjectLayoutData {
 }
 ----
 
-<.> xref:#getPlural_[getPlural()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- unused, to remove.
-====
---
-<.> xref:#setPlural_String[setPlural(String)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- unused, to remove.
-====
---
 <.> xref:#getMetadataError_[getMetadataError()]
 +
 --
@@ -74,26 +52,6 @@ The link to access this resource from the REST API (Restful Objects viewer).
 --
 
 == Members
-
-[#getPlural_]
-=== getPlural()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- unused, to remove.
-====
-
-[#setPlural_String]
-=== setPlural(String)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- unused, to remove.
-====
 
 [#getMetadataError_]
 === getMetadataError()

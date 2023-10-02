@@ -43,7 +43,7 @@ public class JpaSupportServiceUsingSpring implements JpaSupportService {
             val em = jpaContextSpring.getEntityManagerByManagedType(entityClass);
             return Try.success(em);
         } catch (Exception e) {
-            log.error("failed to get an EntityManager for entity type %s", entityClass, e);
+            log.error(String.format("failed to get an EntityManager for entity type %s", entityClass), e);
             return Try.failure(e);
         }
     }

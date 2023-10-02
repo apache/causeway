@@ -13,7 +13,7 @@ interface DomainTypeResource {
   Response typeProperty(String domainType, String propertyId)
   Response typeCollection(String domainType, String collectionId)
   Response typeAction(String domainType, String actionId)
-  Response typeActionParam(String domainType, String actionId, String paramName)
+  Response typeActionParam(String domainType, String actionId, String paramId)
   Response domainTypeIsSubtypeOf(String domainType, String superType, String argumentsQueryString)
   Response domainTypeIsSupertypeOf(String domainType, String superType, String argumentsQueryString)
 }

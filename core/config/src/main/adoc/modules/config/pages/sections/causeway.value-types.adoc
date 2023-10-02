@@ -12,6 +12,34 @@ include::../section-hooks/causeway.value-types~pre.adoc[]
 |Default
 |Description
 |
+[[causeway.value-types.big-decimal.min-scale]]
+causeway.value-types.big-decimal. +
+min-scale
+
+| 
+| The minimum scale to use for all ``BigDecimal``s.
+
+Is only used if the minimum scale has not been specified explicitly by some other means, typically either ``Digits#fraction()`` or an ORM semantic such as the (JPA) ``Column#scale()``.
+
+
+|
+[[causeway.value-types.big-decimal.use-scale-for-min-fractional-facet]]
+causeway.value-types.big-decimal. +
+use-scale-for-min-fractional-facet
+
+|  true
+| Indicates how to derive the min fractional facet (the minimum number of digits after the decimal point).
+
+If this flag is set, then the ``Digits#fraction()`` annotation or ORM equivalent (the JDO ``@Column#scale`` or the JPA ``Column#scale()``) should be used for the ``MinFractionalFacet`` as well as the ``MaxFractionalFacet``.
+
+What this means in practice is that a numeric values will be rendered to the same number of fractional digits, irrespective of whether they are whole numbers or fractional. For example, with a scale of 2, then "123.4532" will be rendered as "123.45", while "123" will be rendered as "123.00".
+
+If this flag is NOT set, or if it is set but there is no annotation, then the ``#minScale`` config property is used as a fallback.
+
+If there is no fallback, then it means that a big decimal such as "123.00" will be presented as just "123" (that is, the shortest possible textual representation).
+
+
+|
 [[causeway.value-types.kroki.backend-url]]
 causeway.value-types.kroki. +
 backend-url

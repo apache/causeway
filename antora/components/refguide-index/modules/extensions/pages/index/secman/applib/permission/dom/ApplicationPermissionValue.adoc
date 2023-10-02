@@ -17,6 +17,7 @@ class ApplicationPermissionValue {
   ApplicationPermissionMode getMode()
   boolean implies(ApplicationFeatureId featureId, ApplicationPermissionMode mode)
   boolean refutes(ApplicationFeatureId featureId, ApplicationPermissionMode mode)
+  ApplicationPermissionValue withFeatureId(ApplicationFeatureId applicationFeatureId)
   int compareTo(ApplicationPermissionValue o)
   boolean equals(Object o)
   int hashCode()

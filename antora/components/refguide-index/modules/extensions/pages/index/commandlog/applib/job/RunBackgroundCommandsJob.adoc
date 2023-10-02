@@ -3,6 +3,8 @@
 
 An implementation of a Quartz _Job_ that queries for xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s that have been persisted by the _org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService_ but not yet started; and then executes them.
 
+Note that although this is a component, a new instance is created for each run. It is for this reason that the control is managed through the injected _BackgroundCommandsJobControl_
+
 == API
 
 [source,java]

@@ -47,7 +47,6 @@ import lombok.RequiredArgsConstructor;
  *
  * @see UserService
  * @see ImpersonateMenuAdvisor
- * @see ImpersonatedUserHolder
  *
  * @since 2.0 {@index}
  */

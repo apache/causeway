@@ -13,6 +13,7 @@ class AbstractUserAndRolesFixtureScript {
   AbstractUserAndRolesFixtureScript(Supplier<String> usernameSupplier, Supplier<String> passwordSupplier, Supplier<AccountType> accountTypeSupplier, Supplier<Can<String>> roleNamesSupplier)
   AbstractUserAndRolesFixtureScript(String username, String password, String emailAddress, String tenancyPath, AccountType accountType, Can<String> roleNames)
   AbstractUserAndRolesFixtureScript(Supplier<String> usernameSupplier, Supplier<String> passwordSupplier, Supplier<String> emailAddressSupplier, Supplier<String> tenancyPathSupplier, Supplier<AccountType> accountTypeSupplier, Supplier<Can<String>> roleNamesSupplier)
+  FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy()
 }
 ----
 

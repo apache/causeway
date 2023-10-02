@@ -1,0 +1,21 @@
+= FakeScheduler
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Intended to support integration testing which uses the _org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService_ to create background xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s, that the integration test then needs to be executed.
+
+== API
+
+[source,java]
+.FakeScheduler.java
+----
+class FakeScheduler {
+  CommandBulkExecutionResult runBackgroundCommands(long waitForMillis, NoCommandsPolicy noCommandsPolicy)     // <.>
+}
+----
+
+<.> xref:#runBackgroundCommands_long_NoCommandsPolicy[runBackgroundCommands(long, NoCommandsPolicy)]
+
+== Members
+
+[#runBackgroundCommands_long_NoCommandsPolicy]
+=== runBackgroundCommands(long, NoCommandsPolicy)

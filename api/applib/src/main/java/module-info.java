@@ -57,6 +57,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.bookmark;
     exports org.apache.causeway.applib.services.bookmarkui;
     exports org.apache.causeway.applib.services.clock;
+    exports org.apache.causeway.applib.services.columnorder;
     exports org.apache.causeway.applib.services.command;
     exports org.apache.causeway.applib.services.commanddto.conmap;
     exports org.apache.causeway.applib.services.commanddto.processor.spi;

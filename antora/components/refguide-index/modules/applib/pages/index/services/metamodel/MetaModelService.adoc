@@ -17,6 +17,7 @@ interface MetaModelService {
   BeanSort sortOf(Bookmark bookmark, Mode mode)     // <.>
   CommandDtoProcessor commandDtoProcessorFor(String logicalMemberIdentifier)     // <.>
   MetamodelDto exportMetaModel(Config config)     // <.>
+  ObjectGraph exportObjectGraph(BiPredicate<BeanSort, LogicalType> filter)     // <.>
 }
 ----
 
@@ -59,6 +60,11 @@ Obtains the implementation of xref:refguide:applib:index/services/commanddto/pro
 +
 --
 Exports the entire metamodel as a DTO, serializable into XML using JAXB.
+--
+<.> xref:#exportObjectGraph_BiPredicate[exportObjectGraph(BiPredicate)]
++
+--
+Can be used to create object relation diagrams (e.g. Plantuml).
 --
 
 == Members
@@ -110,6 +116,11 @@ This is used by framework-provided implementations of _org.apache.causeway.appli
 Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 
 The xref:refguide:applib:index/services/metamodel/Config.adoc[Config] parameter can be used to restrict/filter the export to some subset of the metamodel; in particular to specific _Config#getNamespacePrefixes() namespace prefixes_ .
+
+[#exportObjectGraph_BiPredicate]
+=== exportObjectGraph(BiPredicate)
+
+Can be used to create object relation diagrams (e.g. Plantuml).
 
 include::hooks/MetaModelService_010-implementation.adoc[]
 

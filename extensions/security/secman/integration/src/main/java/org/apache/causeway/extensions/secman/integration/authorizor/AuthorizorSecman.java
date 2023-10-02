@@ -36,7 +36,10 @@ import org.apache.causeway.applib.annotation.InteractionScope;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.security.authentication.logout.LogoutMenu;
 import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -69,14 +72,28 @@ public class AuthorizorSecman implements Authorizor {
 
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject Provider<PermissionCache> cache;
+    @Inject MetaModelService metaModelService;
 
-    @Override
-    public boolean isVisible(final InteractionContext authentication, final Identifier identifier) {
-        return grants(authentication, identifier, ApplicationPermissionMode.VIEWING);
+    private _Lazy<Identifier> logoutIdentifier = _Lazy.of(this::logoutIdentifier);
+
+    private Identifier logoutIdentifier() {
+        return Identifier.actionIdentifier(metaModelService.lookupLogicalTypeByClass(LogoutMenu.class).orElseThrow(), "logout");
     }
 
     @Override
+    public boolean isVisible(final InteractionContext authentication, final Identifier identifier) {
+        if (this.logoutIdentifier.get().equals(identifier)) {
+            return true;
+        }
+        return grants(authentication, identifier, ApplicationPermissionMode.VIEWING);
+    }
+
+
+    @Override
     public boolean isUsable(final InteractionContext authentication, final Identifier identifier) {
+        if (this.logoutIdentifier.get().equals(identifier)) {
+            return true;
+        }
         return grants(authentication, identifier, ApplicationPermissionMode.CHANGING);
     }
 
