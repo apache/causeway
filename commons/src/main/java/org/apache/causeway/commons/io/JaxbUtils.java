@@ -299,8 +299,8 @@ public class JaxbUtils {
 
     private static String prettyPrint(final JaxbCustomizer[] customizers, final String xml) {
         try {
-            var transformerFactory = TransformerFactory.newInstance();
-            transformerFactory.setAttribute("indent-number", 4);    // default, but can be overwritten by customisers.
+            var transformerFactory = _DocumentFactories.transformerFactory();
+            transformerFactory.setAttribute("indent-number", 4); // default, but can be overwritten by customizers.
             apply(customizers, transformerFactory);
 
             var xmlInput = new StreamSource(new StringReader(xml));
