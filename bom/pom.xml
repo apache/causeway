@@ -97,7 +97,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <commons-email.version>1.5</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
-        <commons-io.version>2.13.0</commons-io.version>
+        <commons-io.version>2.14.0</commons-io.version>
 
         <cucumber.version>7.14.0</cucumber.version>
 
