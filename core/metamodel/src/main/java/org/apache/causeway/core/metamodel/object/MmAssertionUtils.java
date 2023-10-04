@@ -36,6 +36,17 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MmAssertionUtils {
 
+    public void assertExactTypeSpecification(final @Nullable ManagedObject obj) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(obj)
+                || ManagedObjects.isPacked(obj)) {
+            return;
+        }
+        val pojo = ManagedObjects.peekAtPojoOf(obj);
+        val requiredType = pojo.getClass();
+        val actualSpec = obj.getSpecification();
+        _Assert.assertEquals(requiredType, actualSpec.getCorrespondingClass());
+    }
+
     public void assertExactType(
             final @Nullable ObjectSpecification requiredSpec,
             final @Nullable Object pojo) {

@@ -258,6 +258,20 @@ public final class ManagedObjects {
                     : Can.of(any);
     }
 
+    // -- SIDE EFFECT FREE POJO GETTER
+
+    /**
+     * Peeks at the pojo of given {@link ManagedObject}, without triggering refetches of hollow entities.
+     */
+    @Nullable
+    public static Object peekAtPojoOf(final @Nullable ManagedObject obj) {
+        return isNullOrUnspecifiedOrEmpty(obj)
+                ? null
+                : (obj instanceof _Refetchable)
+                    ? ((_Refetchable)obj).peekAtPojo()
+                    : obj.getPojo();
+    }
+
     // -- COMPARE UTILITIES
 
     public static boolean pojoEquals(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
