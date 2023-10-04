@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.param.parameter.mandatory;
 
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
@@ -58,6 +59,11 @@ extends MandatoryFacetAbstract {
         super(semantics, holder);
     }
 
+    protected MandatoryFacetForParameterAnnotation(
+            final Semantics semantics, final FacetHolder holder, final Facet.Precedence precedence) {
+        super(semantics, holder, precedence);
+    }
+
     @Override
     public final String summarize() {
         return MandatoryFacetForParameterAnnotation.class.getSimpleName() + "." + super.summarize();
@@ -73,7 +79,7 @@ extends MandatoryFacetAbstract {
 
     public static class Required extends MandatoryFacetForParameterAnnotation {
         public Required(final FacetHolder holder) {
-            super(Semantics.REQUIRED, holder);
+            super(Semantics.REQUIRED, holder, Precedence.HIGH); // allow UI to be more strict than data/store
         }
     }
 
