@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.properties.property.mandatory;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
@@ -63,8 +64,13 @@ extends MandatoryFacetAbstract {
                 });
     }
 
-    public MandatoryFacetForPropertyAnnotation(final FacetHolder holder, final Semantics semantics) {
+    public MandatoryFacetForPropertyAnnotation(final Semantics semantics, final FacetHolder holder) {
         super(semantics, holder);
+    }
+
+    protected MandatoryFacetForPropertyAnnotation(
+            final Semantics semantics, final FacetHolder holder, final Facet.Precedence precedence) {
+        super(semantics, holder, precedence);
     }
 
     @Override
@@ -76,19 +82,19 @@ extends MandatoryFacetAbstract {
 
     public static class Primitive extends MandatoryFacetForPropertyAnnotation {
         public Primitive(final FacetHolder holder) {
-            super(holder, Semantics.REQUIRED);
+            super(Semantics.REQUIRED, holder);
         }
     }
 
     public static class Required extends MandatoryFacetForPropertyAnnotation {
         public Required(final FacetHolder holder) {
-            super(holder, Semantics.REQUIRED);
+            super(Semantics.REQUIRED, holder, Precedence.HIGH); // allow UI to be more strict than data/store
         }
     }
 
     public static class Optional extends MandatoryFacetForPropertyAnnotation {
         public Optional(final FacetHolder holder) {
-            super(holder, Semantics.OPTIONAL);
+            super(Semantics.OPTIONAL, holder);
         }
     }
 
