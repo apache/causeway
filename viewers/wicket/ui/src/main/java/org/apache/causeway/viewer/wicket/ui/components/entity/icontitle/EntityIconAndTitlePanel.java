@@ -127,7 +127,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             final TitleRecord title = determineTitle(linkedDomainObject);
             Wkt.labelAdd(link, ID_ENTITY_TITLE, title.abbreviatedTitle());
 
-            if(title.isTooltipTitleSuppressed()) {
+            // If the link title is abbreviated or not shown, add the full-title to the tooltip body.
+            if(isTitleSuppressed()
+                    || title.isTitleAbbreviated()) {
+                WktTooltips.addTooltip(link, title.tooltipTitle(), title.tooltipBodyIncludingFullTitle());
+            } else if(title.isTooltipTitleEqualToBody()) {
                 WktTooltips.addTooltip(link, title.tooltipBody());
             } else {
                 WktTooltips.addTooltip(link, title.tooltipTitle(), title.tooltipBody());
@@ -177,10 +181,26 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         final String tooltipTitle;
         final String tooltipBody;
         /**
-         * No need to show a tooltip-title that is equal to the tooltip-body.
+         * Whether tooltip-title and tooltip-body are the same ignoring case.
+         * <p>
+         * UI note: No need to show a tooltip-title that is equal to the tooltip-body.
          */
-        final boolean isTooltipTitleSuppressed() {
-            return Objects.equals(tooltipTitle, tooltipBody);
+        final boolean isTooltipTitleEqualToBody() {
+            return _Strings.nullToEmpty(tooltipTitle)
+                    .equalsIgnoreCase(_Strings.nullToEmpty(tooltipBody));
+        }
+        /**
+         * Whether not {@link #abbreviatedTitle()} equals {@link #fullTitle()}.
+         * <p>
+         * UI note: If the link title is abbreviated or not shown, add the full-title to the tooltip body.
+         */
+        final boolean isTitleAbbreviated() {
+            return !Objects.equals(abbreviatedTitle, fullTitle);
+        }
+        final String tooltipBodyIncludingFullTitle() {
+            return _Strings.nullToEmpty(fullTitle)
+                    + "\n-\n"
+                    + _Strings.nullToEmpty(tooltipBody);
         }
     }
 
