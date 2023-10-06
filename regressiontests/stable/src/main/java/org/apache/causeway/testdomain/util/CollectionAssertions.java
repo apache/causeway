@@ -27,6 +27,7 @@ import org.assertj.core.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -35,19 +36,16 @@ import lombok.val;
 
 public final class CollectionAssertions {
 
-    public static void assertComponentWiseEquals(Object a, Object b) {
-
+    public static void assertComponentWiseEquals(final Object a, final Object b) {
         val array1 = _NullSafe.streamAutodetect(a)
             .collect(_Arrays.toArray(Object.class));
         val array2 = _NullSafe.streamAutodetect(b)
             .collect(_Arrays.toArray(Object.class));
 
         assertArrayEquals(array1, array2);
-
     }
 
-    public static <T> void assertComponentWiseEquals(Object a, Object b, BiFunction<T, T, String> difference) {
-
+    public static <T> void assertComponentWiseEquals(final Object a, final Object b, final BiFunction<T, T, String> difference) {
         @SuppressWarnings("unchecked")
         final List<T> list1 = _NullSafe.streamAutodetect(a)
                 .map(t->(T)t)
@@ -60,7 +58,6 @@ public final class CollectionAssertions {
         assertEquals(list1.size(), list2.size(), "expected element count equals");
 
         for(int i=0; i<list1.size(); ++i) {
-
             final int index = i;
             val u = list1.get(i);
             val v = list2.get(i);
@@ -70,13 +67,10 @@ public final class CollectionAssertions {
             if(delta!=null) {
                 Assertions.fail(String.format("elements at index %d differ: %s", index, delta));
             }
-
         }
-
     }
 
-    public static void assertComponentWiseNumberEquals(Object a, Object b) {
-
+    public static void assertComponentWiseNumberEquals(final Object a, final Object b) {
         val array1 = _NullSafe.streamAutodetect(a)
             .map(Number.class::cast)
             .collect(_Arrays.toArray(Number.class));
@@ -87,13 +81,11 @@ public final class CollectionAssertions {
         assertEquals(array1.length, array2.length);
 
         for(int i=0; i<array1.length; ++i) {
-            assertNumberEqualsPoorManEdition(array1[i], array2[i]);
+            _Assert.assertNumberEqualsUnsafe(array1[i], array2[i], 1E-9);
         }
-
     }
 
-    public static void assertComponentWiseUnwrappedEquals(Object a, Object b) {
-
+    public static void assertComponentWiseUnwrappedEquals(final Object a, final Object b) {
         val array1 = _NullSafe.streamAutodetect(a)
             .map(element->(element instanceof ManagedObject)
                     ? ((ManagedObject)element).getPojo()
@@ -107,16 +99,6 @@ public final class CollectionAssertions {
                 .collect(_Arrays.toArray(Object.class));
 
         assertArrayEquals(array1, array2);
-
     }
-
-    private static void assertNumberEqualsPoorManEdition(Number a, Number b) {
-        if(a==null) {
-            assertEquals((Object)null, (Object)b);
-            return;
-        }
-        assertEquals(a.doubleValue(), b.doubleValue(), 1E-9);
-    }
-
 
 }
