@@ -21,6 +21,10 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.util.Iterator;
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
@@ -50,6 +54,15 @@ extends SortableDataProvider<DataRow, String> {
         this.dataTableModelHolder = dataTableModelHolder instanceof EntityCollectionModelAbstract
                 ? ((EntityCollectionModelAbstract)dataTableModelHolder).delegate()
                 : dataTableModelHolder;
+    }
+
+    public boolean isDecoratedWithDataTablesNet() {
+        TableDecoratorFacet facet = getDataTableModel().getMetaModel().getFacetHolder().getFacet(TableDecoratorFacet.class);
+        if (facet == null) {
+            return false;
+        }
+        Class<? extends TableDecorator> value = facet.value();
+        return TableDecorator.DatatablesNet.class == value;
     }
 
     public DataTableModel getDataTableModel() {

@@ -22,6 +22,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
@@ -38,6 +41,7 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
@@ -46,6 +50,8 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.util.Attributes;
+
+import lombok.val;
 
 
 /**
@@ -117,7 +123,7 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
 
                 WebMarkupContainer header;
 
-                if (column.isSortable())
+                if (!isDecoratedWithDataTablesNet() && column.isSortable())
                 {
                     header = newSortableHeader("header", column.getSortProperty(), stateLocator);
 
@@ -158,6 +164,11 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
         add(headers);
     }
 
+    private boolean isDecoratedWithDataTablesNet() {
+        return getTable() instanceof CausewayAjaxDataTable &&
+             ((CausewayAjaxDataTable) getTable()).isDecoratedWithDataTablesNet();
+    }
+
     /**
      * Factory method for the sort icon
      *
@@ -177,7 +188,7 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
             protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
 
-                if(column.isSortable()) {
+                if(!isDecoratedWithDataTablesNet() && column.isSortable()) {
                     ISortState<S> sortState = stateLocator.getSortState();
                     S sortProperty = column.getSortProperty();
                     SortOrder sortOrder = sortProperty == null ? SortOrder.NONE : sortState.getPropertySortOrder(sortProperty);
