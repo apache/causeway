@@ -31,6 +31,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToo
 import org.apache.wicket.markup.repeater.IItemFactory;
 import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.base._Casts;
@@ -107,11 +108,20 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
 
         navigationToolbar = new CausewayAjaxNavigationToolbar(this, this.toggleboxColumn);
 
-        // implementation note: toolbars do decide for themselves, whether they are visible
-        addBottomToolbar(navigationToolbar);
-        addBottomToolbar(new NoRecordsToolbar(this));
-        addBottomToolbar(new CausewayTotalRecordsToolbar(this));
+        if (!isDecoratedWithDataTablesNet()) {
+            // implementation note: toolbars do decide for themselves, whether they are visible
+            addBottomToolbar(navigationToolbar);
+            addBottomToolbar(new NoRecordsToolbar(this));
+            addBottomToolbar(new CausewayTotalRecordsToolbar(this));
+        }
     }
+
+    public boolean isDecoratedWithDataTablesNet() {
+        IDataProvider<?> dataProvider = getDataProvider();
+        return dataProvider instanceof CollectionContentsSortableDataProvider &&
+                ((CollectionContentsSortableDataProvider) dataProvider).isDecoratedWithDataTablesNet();
+    }
+
 
     @Override
     protected void onConfigure() {

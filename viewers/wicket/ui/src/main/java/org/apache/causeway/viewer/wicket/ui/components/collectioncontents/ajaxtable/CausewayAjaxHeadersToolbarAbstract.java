@@ -47,20 +47,17 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.util.Attributes;
 
-
 /**
  * Adapted from Wicket's own {@link HeadersToolbar}.
  */
-public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractToolbar
-{
+public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractToolbar {
     private static final long serialVersionUID = 1L;
 
     private static final String CLASS_SORT_NONE = "fa fa-fw fa-sort";
     private static final String CLASS_SORT_UP = "fa fa-fw fa-sort-up";
     private static final String CLASS_SORT_DOWN = "fa fa-fw fa-sort-down";
 
-    static abstract class CssAttributeBehavior extends Behavior
-    {
+    static abstract class CssAttributeBehavior extends Behavior {
         private static final long serialVersionUID = 1L;
 
         protected abstract String getCssClass();
@@ -69,11 +66,9 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
          * @see Behavior#onComponentTag(Component, ComponentTag)
          */
         @Override
-        public void onComponentTag(final Component component, final ComponentTag tag)
-        {
+        public void onComponentTag(final Component component, final ComponentTag tag) {
             String className = getCssClass();
-            if (!Strings.isEmpty(className))
-            {
+            if (!Strings.isEmpty(className)) {
                 tag.append("class", className, " ");
             }
         }
@@ -89,42 +84,32 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
      * @param stateLocator
      *            locator for the ISortState implementation used by sortable headers
      */
-    public <T> CausewayAjaxHeadersToolbarAbstract(final DataTable<T, S> table, final ISortStateLocator<S> stateLocator)
-    {
+    public <T> CausewayAjaxHeadersToolbarAbstract(
+            final DataTable<T, S> table, final ISortStateLocator<S> stateLocator) {
         super(table);
 
-        RefreshingView<IColumn<T, S>> headers = new RefreshingView<IColumn<T, S>>("headers")
-        {
+        RefreshingView<IColumn<T, S>> headers = new RefreshingView<IColumn<T, S>>("headers") {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected Iterator<IModel<IColumn<T, S>>> getItemModels()
-            {
+            protected Iterator<IModel<IColumn<T, S>>> getItemModels() {
                 List<IModel<IColumn<T, S>>> columnsModels = new LinkedList<IModel<IColumn<T, S>>>();
-
-                for (IColumn<T, S> column : table.getColumns())
-                {
+                for (IColumn<T, S> column : table.getColumns()) {
                     columnsModels.add(Model.of(column));
                 }
-
                 return columnsModels.iterator();
             }
 
             @Override
-            protected void populateItem(final Item<IColumn<T, S>> item)
-            {
+            protected void populateItem(final Item<IColumn<T, S>> item) {
                 final IColumn<T, S> column = item.getModelObject();
-
                 WebMarkupContainer header;
 
-                if (column.isSortable())
-                {
+                if (!isDecoratedWithDataTablesNet() && column.isSortable()) {
                     header = newSortableHeader("header", column.getSortProperty(), stateLocator);
 
-                    if (column instanceof IStyledColumn)
-                    {
-                        CssAttributeBehavior cssAttributeBehavior = new CssAttributeBehavior()
-                        {
+                    if (column instanceof IStyledColumn) {
+                        CssAttributeBehavior cssAttributeBehavior = new CssAttributeBehavior() {
                             private static final long serialVersionUID = 1L;
 
                             @Override
@@ -136,13 +121,9 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
 
                         header.add(cssAttributeBehavior);
                     }
-
-                }
-                else
-                {
+                } else {
                     header = new WebMarkupContainer("header");
                 }
-
 
                 item.add(header);
                 item.setRenderBodyOnly(true);
@@ -156,6 +137,11 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
             }
         };
         add(headers);
+    }
+
+    private boolean isDecoratedWithDataTablesNet() {
+        return getTable() instanceof CausewayAjaxDataTable
+                && ((CausewayAjaxDataTable) getTable()).isDecoratedWithDataTablesNet();
     }
 
     /**
@@ -173,11 +159,13 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
      */
     protected <T> Component newSortIcon(final String id, final IColumn<T, S> column, final ISortStateLocator<S> stateLocator) {
         return new WebComponent(id) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
 
-                if(column.isSortable()) {
+                if(!isDecoratedWithDataTablesNet() && column.isSortable()) {
                     ISortState<S> sortState = stateLocator.getSortState();
                     S sortProperty = column.getSortProperty();
                     SortOrder sortOrder = sortProperty == null ? SortOrder.NONE : sortState.getPropertySortOrder(sortProperty);
@@ -206,15 +194,11 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
      * @return created header component
      */
     protected WebMarkupContainer newSortableHeader(final String headerId, final S property,
-            final ISortStateLocator<S> locator)
-    {
-        return new OrderByBorder<S>(headerId, property, locator)
-        {
+            final ISortStateLocator<S> locator) {
+        return new OrderByBorder<S>(headerId, property, locator) {
             private static final long serialVersionUID = 1L;
-
             @Override
-            protected void onSortChanged()
-            {
+            protected void onSortChanged() {
                 getTable().setCurrentPage(0);
             }
         };

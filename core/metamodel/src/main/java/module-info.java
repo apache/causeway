@@ -139,6 +139,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy;
 
     exports org.apache.causeway.core.metamodel.valuetypes;
+    exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
 
     requires jakarta.activation;
     requires jakarta.annotation;
