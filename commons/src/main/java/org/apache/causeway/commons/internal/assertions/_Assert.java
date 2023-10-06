@@ -255,30 +255,49 @@ public final class _Assert {
      * BigDecimal equality by value.
      */
     public void assertNumberEquals(final @Nullable BigDecimal a, final @Nullable BigDecimal b) {
+        assertNumberEquals(a, b, ()->"");
+    }
+
+    /**
+     * BigDecimal equality by value.
+     */
+    public void assertNumberEquals(final @Nullable BigDecimal a, final @Nullable BigDecimal b,
+            final Supplier<String> lazyMessage) {
         if(a==null || b==null) {
-            assertEquals(a, b);
+            assertEquals(a, b, lazyMessage);
             return;
         }
         val maxScale = Math.max(a.scale(), b.scale());
         assertEquals(
                 a.setScale(maxScale),
-                b.setScale(maxScale));
+                b.setScale(maxScale),
+                lazyMessage);
     }
 
     /**
      * double equality by value relaxed by delta
      */
     public void assertNumberEquals(final double a, final double b, final double delta) {
+        assertNumberEquals(a, b, delta, ()->"");
+    }
+
+    /**
+     * double equality by value relaxed by delta
+     */
+    public void assertNumberEquals(final double a, final double b, final double delta,
+            final Supplier<String> lazyMessage) {
         if (Double.isNaN(delta) || delta < 0.0) {
             throw _Exceptions.assertionError(
-                    "invalid delta: '%s'", String.valueOf(delta));
+                    "%sinvalid delta: '%s'",
+                    _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
+                    String.valueOf(delta));
         }
         if((Double.doubleToLongBits(a) != Double.doubleToLongBits(b))
                 || Math.abs(a - b) <= delta) {
             throw _Exceptions.assertionError(
-                    "Numbers %s and %s are not equal within delta %s",
-                        String.valueOf(a), String.valueOf(b),
-                        String.valueOf(delta));
+                    "%snumbers %s and %s are not equal within delta %s",
+                    _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
+                    String.valueOf(a), String.valueOf(b), String.valueOf(delta));
         }
     }
 
@@ -286,11 +305,19 @@ public final class _Assert {
      * Generic number equality check, use with caution!
      */
     public void assertNumberEqualsUnsafe(final @Nullable Number a, final @Nullable Number b, final double delta) {
+        assertNumberEqualsUnsafe(a, b, delta, ()->"");
+    }
+
+    /**
+     * Generic number equality check, use with caution!
+     */
+    public void assertNumberEqualsUnsafe(final @Nullable Number a, final @Nullable Number b, final double delta,
+            final Supplier<String> lazyMessage) {
         if(a==null || b==null) {
-            assertEquals(a, b);
+            assertEquals(a, b, lazyMessage);
             return;
         }
-        assertNumberEquals(a.doubleValue(), b.doubleValue(), delta);
+        assertNumberEquals(a.doubleValue(), b.doubleValue(), delta, lazyMessage);
     }
 
     // -- HELPER
