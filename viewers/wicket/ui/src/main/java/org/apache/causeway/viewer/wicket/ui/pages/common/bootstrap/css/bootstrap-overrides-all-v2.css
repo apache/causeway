@@ -1373,5 +1373,18 @@ div.scalarPanelTextFieldWithTemporalPicker span.scalarValueInput.fragment-fieldF
     margin-top: -2px;
 }
 
+
+/* datatables.net styling of header, consistent with Wicket's original */
+div.dataTables_wrapper th strong {
+    color: var(--link-color);
+    font-weight: 700;
+}
+div.dataTables_wrapper table.dataTable>thead>tr>th {
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+}
+
 /* --- */
 
