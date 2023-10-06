@@ -7,107 +7,98 @@
 The `WebModule` interface allows modules to dynamically configure ``Filter``s, ``Servlet``s and ``ServletContextListener``s.
 The `@javax.annotation.Priority` annotation is used to ensure that the request chain is sequenced correctly.
 
-.WebModules (highest priority first, ie lowest value of `@Priority`)
-[cols="6m,^2a,^2a,^3a,^4a,8a", options="header"]
+.WebModules (priority determines filter sequence, earliest first)
+[cols="6m,^4a,^2a,^3m,^3m,8a", options="header"]
 |===
 
-
-
-|Web module|listener?|servlet?|filter?
-|`@Priority`|Notes
-
-|WebModule +
-Keycloak
-|N
-|N
-|Y +
-`/*`
-|FIRST + 100
-|Either this, spring or shiro
+|Web module
+|`@Priority`
+|listener?
+|filter?
+|servlet?
+|Notes
 
 |WebModule +
 Shiro
-|Y
-|N
-|Y +
-`/*`
 |FIRST + 100
-|Either this, spring or keycloak
+|Yes
+|/*
+|
+|Either this or spring
 
 |WebModule +
 SpringSecurity
-|Y
-|N
-|Y +
-`/*`
 |FIRST + 100
-|Either this, shiro or keycloak
+|Yes
+|/*
+|
+|Either this or shiro
 
 |WebModule +
 LogOnExceptionLogger
-|N
-|N
-|Y +
-`/wicket` & `/restful`
 |EARLY - 100
+|
+|
+/wicket +
+/restful
+|
 |Filter is passthru, with no side-effects. +
 Mapping depends on which viewers configured.
 
+Although priority is relatively early, the filter is registered to be last in pipeline.
+
 |WebModule +
 Cors
-|N
-|N
-|Y +
-`/wicket` & `/restful`
 |EARLY
+|
+|
+/wicket +
+/restful
+|
 |Mapping depends on which viewers configured.
+
+|WebModule +
+TemplateResources
+|MIDPOINT - 100
+|
+|*.thtml
+|*.thtml
+|
 
 
 |WebModule +
 JaxrsResteasy4
-|Y
-|Y +
-`/restful`
-|Y (x2) +
-`/restful`
 |MIDPOINT - 80
+|Yes
+|/restful
+|/restful
 |Filters mapped to servlet
 
 |WebModule +
-TemplateResources
-|N
-|Y +
-`*.thtml`
-|Y +
-`*.thtml`
-|MIDPOINT - 100
-|
-
-|WebModule +
 Wicket
-|N
-|N
-|Y +
-`/wicket`
 |MIDPOINT - 80
+|
+|/wicket
+|
 |
 
 |WebModule +
 ServerSentEvents
-|N
-|Y +
-`/sse`
-|N
 |MIDPOINT
-|servlet only, so order doesn't really matter.
+|
+|
+|/sse
+|servlet only, so priority doesn't really matter.
 
 |WebModule +
 H2Console
-|N
-|Y +
-`/db/*`
-|N
 |MIDPOINT
-|servlet only, so order doesn't really matter.
+|
+|
+|/db/*
+|servlet only, so priority doesn't really matter.
 
 |===
+
+
+
