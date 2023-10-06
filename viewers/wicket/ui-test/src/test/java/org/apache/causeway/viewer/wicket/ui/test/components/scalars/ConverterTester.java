@@ -43,6 +43,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -147,7 +148,7 @@ public class ConverterTester<T extends Serializable> {
             val parsedValue = scenario.converter.convertToObject(valueAsText, LOCALE_NOT_USED);
 
             if(value instanceof BigDecimal) {
-                assertNumberEquals(
+                _Assert.assertNumberEquals(
                         (BigDecimal)value, (BigDecimal)parsedValue);
             } else if(value instanceof java.util.Date) {
                 assertTemporalEquals(
@@ -182,13 +183,6 @@ public class ConverterTester<T extends Serializable> {
     }
 
     // -- HELPER
-
-    private static void assertNumberEquals(final BigDecimal a, final BigDecimal b) {
-        val maxScale = Math.max(a.scale(), b.scale());
-        assertEquals(
-                a.setScale(maxScale),
-                b.setScale(maxScale));
-    }
 
     @SuppressWarnings("deprecation")
     private void assertTemporalEquals(final java.util.Date a, final java.util.Date b) {

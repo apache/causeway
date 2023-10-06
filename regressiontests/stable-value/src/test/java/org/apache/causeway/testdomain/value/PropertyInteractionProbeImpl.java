@@ -40,6 +40,7 @@ import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
@@ -57,12 +58,12 @@ import lombok.val;
 
 @RequiredArgsConstructor
 class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
-    
+
     final @NonNull String name;
     final @NonNull Class<T> valueType;
     final @NonNull ValueTypeExample<T> example;
     final @NonNull ValueSemanticsTester<T> tester;
-    
+
     @Inject private SpecificationLoader specLoader;
     @Inject private SchemaValueMarshaller valueMarshaller;
     @Inject private WrapperFactory wrapperFactory;
@@ -152,7 +153,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
                     val parsedValue = parser.parseTextRepresentation(context, in);
 
                     if(value instanceof BigDecimal) {
-                        _Utils.assertNumberEquals((BigDecimal)value, (BigDecimal)parsedValue);
+                        _Assert.assertNumberEquals((BigDecimal)value, (BigDecimal)parsedValue);
                     } else {
                         assertEquals(value, parsedValue);
                     }
@@ -275,5 +276,5 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
                 parsedValue.getValue().orElse(null),
                 failureMessage);
     }
-    
+
 }

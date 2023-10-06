@@ -184,7 +184,7 @@ public final class _Exceptions {
     }
 
 
-    private static String safelyFormat(String format, Object... args) {
+    private static String safelyFormat(final String format, final Object... args) {
         try {
             return String.format(format, args);
         } catch (Throwable ex) {
@@ -193,12 +193,14 @@ public final class _Exceptions {
         }
     }
 
-
-
     // -- ASSERT
 
     public static AssertionError assertionError(final String msg) {
         return new AssertionError(msg);
+    }
+
+    public static AssertionError assertionError(final String format, final Object ...args) {
+        return new AssertionError(safelyFormat(format, args));
     }
 
     // -- MESSAGE

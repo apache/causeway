@@ -109,14 +109,14 @@ Comparable<ApplicationFeature> {
     // -- PACKAGE PRIVATE ACCESS
 
     void addToContents(final ApplicationFeatureId contentId) {
-        _Asserts.ensureNamespace(this.getFeatureId());
-        _Asserts.ensureNamespaceOrType(contentId);
+        _Asserts.assertIsNamespace(this.getFeatureId());
+        _Asserts.assertIsNamespaceOrType(contentId);
         this.contents.add(contentId);
     }
 
     void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberSort memberSort) {
-        _Asserts.ensureType(this.getFeatureId());
-        _Asserts.ensureMember(memberId);
+        _Asserts.assertIsType(this.getFeatureId());
+        _Asserts.assertIsMember(memberId);
 
         getMembersOfSort(memberSort).add(memberId);
     }
