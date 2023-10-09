@@ -204,12 +204,13 @@ Next, add the new release into the appropriate directory.
 The `upd.sh` script can be used to automate this:
 
 [source,bash]
+.upd.sh
 ----
 new_ver=$1
 
 if [ $# -lt 1 ]; then
-        echo "usage: $(basename $0) version" 2>&1
-        exit 1
+  echo "usage: $(basename $0) version" 2>&1
+  exit 1
 fi
 
 # constants
@@ -225,9 +226,9 @@ sha512="$zip.sha512"
 
 for suffix in $zip $asc $md5 $sha1 $sha512
 do
-        echo curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
-        curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
-        svn add $fullname-$new_ver-$suffix
+  echo curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
+  curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
+  svn add $fullname-$new_ver-$suffix
 done
 ----
 
