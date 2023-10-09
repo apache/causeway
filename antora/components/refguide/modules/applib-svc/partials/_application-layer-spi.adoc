@@ -35,10 +35,6 @@ This SPI does though provide additional flexibility for other security technolog
 
 
 
-|xref:refguide:applib:index/services/user/ImpersonatedUserHolder.adoc[ImpersonatedUserHolder]
-|Provides a mechanism to hold the impersonated user
-
-
 |xref:refguide:applib:index/services/session/SessionSubscriber.adoc[SessionSubscriber]
 |SPI service to listen on users logging in and logging off their (long-lived) session.
 

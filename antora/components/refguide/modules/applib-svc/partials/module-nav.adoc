@@ -39,7 +39,6 @@
 ** xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier]
 ** xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu]
 ** xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor]
-** xref:refguide:applib:index/services/user/ImpersonatedUserHolder.adoc[ImpersonatedUserHolder]
 ** xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider]
 ** xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker]
 ** xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService]
