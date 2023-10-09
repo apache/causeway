@@ -158,12 +158,12 @@ content:
     - url: .
       start_path: incubator/adoc # incubator
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8, 2.0.0-M9, 2.0.0-RC1, 2.0.0-RC2, 2.0.0-RC3, latest]
-#    - url: .
-#      start_path: incubator/clients/kroviz/adoc # incubator
-#      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8, 2.0.0-M9, 2.0.0-RC1, 2.0.0-RC2, 2.0.0-RC3, latest]
-#    - url: .
-#      start_path: incubator/extensions/core/commandreplay/adoc # incubator
-#      branches:                               [2.0.0-M8, 2.0.0-M9, 2.0.0-RC1, 2.0.0-RC2, 2.0.0-RC3, latest]
+#   - url: .
+#     start_path: incubator/clients/kroviz/adoc # incubator
+#     branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8, 2.0.0-M9, 2.0.0-RC1, 2.0.0-RC2, 2.0.0-RC3, latest]
+#   - url: .
+#     start_path: incubator/extensions/core/commandreplay/adoc # incubator
+#     branches:                               [2.0.0-M8, 2.0.0-M9, 2.0.0-RC1, 2.0.0-RC2, 2.0.0-RC3, latest]
     - url: .
       start_path: incubator/viewers/graphql/adoc # incubator
       branches:                               [2.0.0-M8, 2.0.0-M9, 2.0.0-RC1, 2.0.0-RC2, 2.0.0-RC3, latest]
