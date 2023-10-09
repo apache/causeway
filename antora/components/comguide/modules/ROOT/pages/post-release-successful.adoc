@@ -382,13 +382,16 @@ git push origin {page-causewayrel}
 
 
 
-Revert the last commit (backing out changes to `antora.yml` files):
+Revert the commit that changed the `antora.yml` files:
 
+* if there were no doc changes, then you can simply use:
++
 [source,bash,subs="attributes+"]
 ----
 git revert HEAD
 ----
 
+* otherwise, locate the shaId of the commit that applied the change and revert appropriately.
 
 [#update-site-yml]
 === Update the site
