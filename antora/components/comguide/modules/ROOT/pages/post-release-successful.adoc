@@ -381,33 +381,42 @@ git push origin {page-causewayrel}
 ----
 
 
+[#generate-the-site]
+=== Generate the site
 
-Revert the commit that changed the `antora.yml` files:
 
-* if there were no doc changes, then you can simply use:
+To build the site (referencing the current release and all previous releases), we need to update the `site.yml`.
+This is done in the release branch (`$CAUSEWAYBRANCH`), _not_ in the documentation branch for the current release ({page-causewayrel}).
+
+* Switch to the release branch:
++
+[source,bash,subs="attributes+"]
+----
+git checkout $CAUSEWAYBRANCH            #<.>
+----
+<.> will be before the documentation branch of the current release
+
+* Update with the documentation branch for the current release ({page-causewayrel})
++
+[source,bash,subs="attributes+"]
+----
+git merge {page-causewayrel} --ff-only  #<.>
+----
+<.> move forward to incorporate any changes made thus far on the documentation branch
+
+
+* Now, revert the commit that changed the `antora.yml` files in the documentation branch
++
+If there were no doc changes, then you can simply use:
 +
 [source,bash,subs="attributes+"]
 ----
 git revert HEAD
 ----
++
+Otherwise, locate the `shaId` of the commit that applied the change and revert appropriately.
 
-* otherwise, locate the shaId of the commit that applied the change and revert appropriately.
 
-[#update-site-yml]
-=== Update the site
-
-To build the site (referencing the current release and all previous releases), we need to update the `site.yml`.
-
-This is done in the release branch (`$CAUSEWAYBRANCH`), _not_ in the documentation branch for the current release ({page-causewayrel}).
-In other words:
-
-[source,bash,subs="attributes+"]
-----
-git checkout $CAUSEWAYBRANCH            #<.>
-git merge {page-causewayrel} --ff-only  #<.>
-----
-<.> will be before the documentation branch of the current release
-<.> move forward to incorporate any changes made thus far on the documentation branch
 
 Now, update `site.yml` using `site.NEXT.yml`:
 
@@ -457,9 +466,7 @@ git commit -m "$CAUSEWAYJIRA: updates site.yml in readiness for website generati
 ----
 
 
-=== Generate the site
-
-We are now in a position to actually generate the Antora website.
+We are ready to actually generate the Antora website.
 
 * generate the website:
 +
@@ -471,7 +478,7 @@ sh preview.sh -AS
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
 
-=== Revert changes
+=== Revert site.yml
 
 Finally, restore the original `site.yml` file:
 
