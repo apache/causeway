@@ -293,39 +293,69 @@ We are now ready to xref:#generate-website[generate the website].
 [#generate-website]
 == Generate website
 
-We use Antora to generate the site, not only the version being release but also any previous versions listed in `site.yml`.
-This is done using the `content.sources.url[].branches` properties.
-We use branches for all cases - note that the branch name appears in the generated UI.
-If there are patches to the documentation, we move the branches.
+We use Antora to generate the site, not only the version being release but also any previous versions listed in `site.yml`; each of these are tags.
+The most recent version is also tagged with the `latest` branch (updated each release); this means that neither the `antora.yml` files nor top-level `index.html` file needs to be updated.
+The `antora/playbooks/site.yml` _does_ need to be updated, but the `site-ALL.yml` file (alongside it) is used as a way to quickly make the necessary edits.
 
-We therefore temporarily modify all of the `antora.yml` files (and update `index.html`) file and create a branch for this change; then we update `site.yml` with a reference to that new branch.
-All of this is changed afterwards.
 
 [#create-doc-branch]
 === Create doc branch
 
-First, we update all versions in `antora.yml`:
+Update `site.yml` using `site.NEXT.yml`:
 
-* Update all `antora.yml` files:
+* move `site.yml` to one side, and replace with `site.NEXT.yml`:
 +
 [source,bash,subs="attributes+"]
 ----
-find . -name antora.yml -exec sed -i 's/latest/{page-causewayrel}/g' {} \;
+mv site.yml      site.ORIG.yml
+mv site.NEXT.yml site.yml
 ----
 
-* Commit all these changes:
+* update the new `site.yml`:
+
+** for each documentation component, add in a reference to a new branch `{page-causewayrel}` (we'll create it in the next step).
+Also make sure that the `latest` tag is also in the list; eg:
++
+[source,yaml,subs="attributes+"]
+.site.yml
+----
+content:
+  sources:
+    - url: .
+      start_path: antora/components/docs # docs
+      branches: [2.0.0-M5, ...  2.0.0-RC3, latest]
+      # ...
+    - url: .
+      start_path: viewers/wicket/adoc # vw
+      branches: [2.0.0-M5, ... 2.0.0-RC3, latest]
+----
+
+* also check that the attributes are correct.
++
+The value of the `page-causewayprev` attribute needs to be (the current) `{page-causewayrel}`, and `page-causewayrel` then set to the next likely release version:
++
+[source,yaml,subs="attributes+"]
+.site.yml
+----
+asciidoc:
+  attributes:
+    page-causewayprev: "..."
+    page-causewayrel: "..."
+----
+
+* commit the changes
 +
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
+git commit -m "$CAUSEWAYJIRA: updates site.yml in readiness for website generation"
 ----
 
-We now create a branch to reference in the `site.yml`, later on.
+Now we ensure that the `{page-causewayrel}` branch and the `latest` tag refer to the current location:
 
-* We create the `{page-causewayrel}` branch.
+* create the `{page-causewayrel}` branch.
 +
-This mirrors the "rel/causeway-{page-causewayrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
+This mirrors the "rel/causeway-{page-causewayrel}" used for the formal (immutable) release tag.
 +
 [source,bash,subs="attributes+"]
 ----
@@ -333,12 +363,16 @@ git branch {page-causewayrel}
 git push origin {page-causewayrel}
 ----
 
-Revert the last commit (backing out changes to `antora.yml` files):
-
+* update the `latest` branch.
+This name is used in the "edit page" link of the site template.
++
 [source,bash,subs="attributes+"]
 ----
-git revert HEAD
+git branch -f latest HEAD
+git push origin latest -f
 ----
+
+
 
 === Update the doc branch
 
@@ -348,7 +382,7 @@ Now we make sure that the docs in the new doc branch are actually up-to-date:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout {page-causewayrel}
+git checkout latest
 ----
 
 * build prereqs
@@ -356,9 +390,9 @@ git checkout {page-causewayrel}
 [source,bash,subs="attributes+"]
 ----
 pushd bom
-mvn clean install -T1C -DskipTests -Dgithub
+mvnd clean install -T1C -DskipTests -Dgithub
 popd
-mvn -D module-tooling -D skip.essential install -DskipTests
+mvnd -D module-tooling -D skip.essential install -DskipTests
 ----
 
 * generate the website:
@@ -382,38 +416,7 @@ git push origin {page-causewayrel}
 git checkout $CAUSEWAYBRANCH
 ----
 
-[#update-index-html-site-yml-generate]
-=== Update `index.html` & `site.yml` & generate
-
-Lastly, we update `index.html` and then `site.yml`
-
-* With the home page of the website, `antora/supplemental-ui/index.html`, update any mention of `latest` -> `{page-causewayrel}`
-+
-This should be in hyperlinks, `<a href="docs/...">`
-+
-NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[previous section]) because the supplemental files are _not_ versioned as a doc component:
-
-* Now update `site.yml`
-+
-This will reference the new branch, and any previous branches.
-Every content source needs to be updated:
-+
-** `branches: [2.0.0-RC2]` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
-+
-[WARNING]
-====
-Actually though not every component is available from `2.0.0-M5`, which means that some manual adjustment is required, otherwise Antora will fail.
-
-Easiest thing to do is to use the `site.yml` git history to compare with its state when previous releases were made.
-====
-
-* commit this change, too (there's no need to push):
-+
-[source,bash,subs="attributes+"]
-----
-git add .
-git commit -m "$CAUSEWAYJIRA: updates references to version in index.html and site.yml"
-----
+=== Generate the site
 
 We are now in a position to actually generate the Antora website.
 
@@ -426,11 +429,25 @@ sh preview.sh -AS
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
-Finally, revert the last commit (backing out changes to `site.yml`):
 
+=== Revert changes
+
+Finally, restore the original `site.yml` file:
+
+* move the edited `site.yml` to `site.NEXT.yml` (in readiness for the _next_ release), and restore:
++
 [source,bash,subs="attributes+"]
 ----
-git revert HEAD
+mv site.yml      site.NEXT.yml
+mv site.ORIG.yml site.yml
+----
+
+* commit
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: reverts site.yml"
 ----
 
 
