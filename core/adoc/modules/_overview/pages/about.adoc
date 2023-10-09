@@ -6380,32 +6380,7 @@ Artifact: causeway-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Components
-****
-o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
-o.a.i.testdomain.jdo.JdoInventoryDao +
-o.a.i.testdomain.jdo.JdoTestFixtures +
-o.a.i.testdomain.jpa.JpaInventoryDao +
-o.a.i.testdomain.jpa.JpaTestFixtures +
-o.a.i.testdomain.jpa.springdata.EmployeeRepository +
-o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
-o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
-o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
-o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
-o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
-o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
-o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
-o.a.i.testdomain.util.kv.KVStoreForTesting +
-o.a.i.testdomain.util.rest.RestEndpointService +
-o.a.i.testdomain.wrapperfactory.CounterRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +
@@ -6948,16 +6923,7 @@ Artifact: causeway-viewer-graphql-viewer
 Type: jar
 Directory: /incubator/viewers/graphql/viewer
 ----
-|.Components
-****
-o.a.i.viewer.graphql.viewer.source.ExecutionStrategyResolvingWithinInteraction +
-o.a.i.viewer.graphql.viewer.source.GraphQlServiceForCauseway +
-o.a.i.viewer.graphql.viewer.source.GraphQlSourceForCauseway +
-o.a.i.viewer.graphql.viewer.source.ObjectTypeFactory +
-o.a.i.viewer.graphql.viewer.source.QueryFieldFactory +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.incubator.viewer:causeway-viewer-graphql-model:jar:<managed> +
@@ -7043,12 +7009,6 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
-.Components
-****
-o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
-o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
-****
-
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7073,16 +7033,6 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
-
-.Components
-****
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
-o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
-o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
-o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
-o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
-****
 
 .Dependencies
 ****
