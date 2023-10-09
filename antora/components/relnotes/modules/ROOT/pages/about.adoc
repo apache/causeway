@@ -27,7 +27,7 @@ This table summarises all releases of Apache Causeway v2.0 to date.
 * xref:relnotes:ROOT:2024/2.0.0-RC4/mignotes.adoc[Migration Notes]
 
 | 2.0.0-RC3
-| 6th Oct 2023
+| 9th Oct 2023
 | Third release candidate for Apache Causeway 2.0.0.
 | 19
 | 40
