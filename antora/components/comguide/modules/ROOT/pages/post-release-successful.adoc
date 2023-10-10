@@ -424,8 +424,10 @@ Now, update `site.yml` using `site.NEXT.yml`:
 +
 [source,bash,subs="attributes+"]
 ----
+pushd antora/playbooks
 mv site.yml      site.ORIG.yml
 mv site.NEXT.yml site.yml
+popd
 ----
 
 * update the new `site.yml`, eg:
@@ -486,8 +488,10 @@ Finally, restore the original `site.yml` file:
 +
 [source,bash,subs="attributes+"]
 ----
+pushd antora/playbooks
 mv site.yml      site.NEXT.yml
 mv site.ORIG.yml site.yml
+popd
 ----
 
 * commit
