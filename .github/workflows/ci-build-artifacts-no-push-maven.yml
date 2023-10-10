@@ -33,7 +33,7 @@ jobs:
     env:
       # to be shared among all steps of this job
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      BASELINE: 2.0.0-RC2
+      BASELINE: 2.0.0-RC3
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
 
