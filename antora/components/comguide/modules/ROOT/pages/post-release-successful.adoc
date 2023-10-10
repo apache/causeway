@@ -532,7 +532,7 @@ git push origin release-{page-causewayrel}-$RC --delete
 In the main repo, in `.github/workflows`, update the `BASELINE` variable:
 
 [source,yml,subs="attributes+"]
-.ci-build-artifacts-no-push-maven.yml
+..github/workflows/ci-build-artifacts-no-push-maven.yml
 ----
 jobs:
   build:
@@ -544,7 +544,7 @@ jobs:
 and
 
 [source,yml,subs="attributes+"]
-.ci-build-site-no-push.yml
+..github/workflows/ci-build-site-no-push.yml
 ----
 jobs:
   build:
