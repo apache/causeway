@@ -525,29 +525,7 @@ git push origin release-{page-causewayrel}-$RC --delete
 ----
 <.> adjust RC number as required
 
-== Bump \{page-causewayrel} in `site.yml`
-
-In `site.yml` file, bump the version of `\{page-causewayrel}` and also `\{page-causewayprev}`, and commit.
-
 == Bump baselines for nightly/weekly builds
-
-=== Nightly build repo
-
-And, in the `apache-causeway-committers/causeway-nightly` repo, similarly update:
-
-[source,yml,subs="attributes+"]
-.apache-causeway-ci-nightly.yml
-----
-jobs:
-  build:
-    name: build, site, build/push reference app
-    runs-on: ubuntu-latest
-    env:
-      # to be shared among all steps of this job
-      BASELINE_MAIN: {page-causewayrel}
-      BASELINE_EDGE: 3.0.0-M1
-----
-
 
 === Main repo (weekly builds)
 
@@ -574,6 +552,26 @@ jobs:
     env:
       BASELINE: {page-causewayrel}
 ----
+
+
+=== Nightly build repo
+
+In the `apache-causeway-committers/causeway-nightly` repo, similarly bump the versions of the `BASELINE_MAIN` variable:
+
+[source,yml,subs="attributes+"]
+.apache-causeway-ci-nightly.yml
+----
+jobs:
+  build:
+    name: build, site, build/push reference app
+    runs-on: ubuntu-latest
+    env:
+      # to be shared among all steps of this job
+      BASELINE_MAIN: {page-causewayrel}
+      BASELINE_EDGE: 3.0.0-M1
+----
+
+NOTE: We leave `BASELINE_EDGE` unchanged for the moment; we will update these release notes when we switch to the v3 release branch.
 
 
 == Update starter projects
