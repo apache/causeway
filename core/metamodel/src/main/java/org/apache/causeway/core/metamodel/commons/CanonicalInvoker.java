@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -48,50 +47,21 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class CanonicalInvoker {
 
-    @lombok.Value @Builder
-    public static class ObjectConstructionRequest {
-        final @NonNull Constructor<?> constructor;
-        final @Nullable Object[] params;
-        final @NonNull @Builder.Default ParameterAdapter parameterAdapter = ParameterAdapter.DEFAULT;
-        public Object[] getAdaptedParameters() {
-            return getParameterAdapter().adaptAll(getConstructor(), getParams());
-        }
-    }
-
-    @lombok.Value @Builder
-    public static class MethodInvocationRequest {
-        final @NonNull Method method;
-        final @NonNull Object targetPojo;
-        final @Nullable Object[] params;
-        final @NonNull @Builder.Default ParameterAdapter parameterAdapter = ParameterAdapter.DEFAULT;
-        public Object[] getAdaptedParameters() {
-            return getParameterAdapter().adaptAll(getMethod(), getParams());
-        }
-    }
-
     // -- CONSTRUCT
 
-    public <T> T construct(final Constructor<T> constructor, final @Nullable Object[] executionParameters) {
-        return _Casts.uncheckedCast(construct(ObjectConstructionRequest.builder()
-                .constructor(constructor)
-                .params(executionParameters)
-                .build()));
-    }
-
-    public Object construct(final ObjectConstructionRequest constructionRequest) {
-        val adaptedExecutionParameters = constructionRequest.getAdaptedParameters();
-
-        // supports effective private constructors as well
-        return _Reflect.invokeConstructor(constructionRequest.getConstructor(), adaptedExecutionParameters)
-        .mapFailure(ex->toVerboseException(constructionRequest.getConstructor(), adaptedExecutionParameters, ex))
-        .getValue().orElseThrow();
+    public <T> T construct(final Constructor<T> constructor, final @Nullable Object... executionParameters) {
+        val adaptedExecutionParameters = ParameterAdapter.DEFAULT.adaptAll(constructor, executionParameters);
+        val t = _Reflect.invokeConstructor(constructor, adaptedExecutionParameters)
+                .mapFailure(ex->toVerboseException(ex, constructor, adaptedExecutionParameters))
+                .valueAsNonNullElseFail();
+        return _Casts.uncheckedCast(t);
     }
 
     // -- INVOKE
 
-    public static Object invoke(final MethodFacade methodFacade, final Object targetPojo, final Object[] executionParameters) {
-        return CanonicalInvoker.invoke(
-                (Method)methodFacade.asExecutable(), targetPojo, methodFacade.getArguments(executionParameters));
+    public Object invoke(final MethodFacade methodFacade, final Object targetPojo, final Object[] executionParameters) {
+        return invoke(
+                methodFacade.asMethodForIntrospection().method(), targetPojo, methodFacade.getArguments(executionParameters));
     }
 
     public void invokeAll(final Iterable<Method> methods, final Object object) {
@@ -100,47 +70,22 @@ public class CanonicalInvoker {
 
     public Object invoke(
             final Method method,
-            final Object targetPojo) {
-        return invoke(MethodInvocationRequest.builder()
-                .method(method)
-                .targetPojo(targetPojo)
-                .build());
-    }
-
-    public Object invoke(
-            final Method method,
             final Object targetPojo,
-            final @Nullable Object[] executionParameters) {
-        return invoke(MethodInvocationRequest.builder()
-                .method(method)
-                .targetPojo(targetPojo)
-                .params(executionParameters)
-                .build());
-    }
-
-    public Object invoke(final MethodInvocationRequest invocationRequest) {
-
-        val adaptedExecutionParameters = invocationRequest.getAdaptedParameters();
-
-        // supports effective private methods as well
-        return _Reflect.invokeMethodOn(
-                invocationRequest.getMethod(),
-                invocationRequest.getTargetPojo(),
-                adaptedExecutionParameters)
-        .mapFailure(ex->toVerboseException(
-                invocationRequest.getMethod(),
-                adaptedExecutionParameters,
-                ex))
-        .ifFailureFail()
-        .getValue().orElse(null);
+            final @Nullable Object ... executionParameters) {
+        val adaptedExecutionParameters = ParameterAdapter.DEFAULT.adaptAll(method, executionParameters);
+        return _Reflect.invokeMethodOn(method, targetPojo, adaptedExecutionParameters)
+            .mapFailure(ex->toVerboseException(ex,
+                    method,
+                    adaptedExecutionParameters))
+            .valueAsNullableElseFail();
     }
 
     // -- HELPER
 
     private Throwable toVerboseException(
+            final Throwable e,
             final Executable executable,
-            final Object[] adaptedExecutionParameters,
-            final Throwable e) {
+            final Object[] adaptedExecutionParameters) {
 
         final Class<?>[] parameterTypes = executable.getParameterTypes();
         final int expectedParamCount = _NullSafe.size(parameterTypes);
