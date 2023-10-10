@@ -5,8 +5,7 @@
 * Learning & Tutorials
 
 include::referenceapp:partial$module-nav.adoc[]
-
-** xref:tutorials:petclinic:about.adoc[Petclinic]
+include::tutorials:petclinic:partial$module-nav.adoc[]
 
 
 
