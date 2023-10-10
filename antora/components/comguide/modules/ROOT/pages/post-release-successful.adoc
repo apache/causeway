@@ -529,8 +529,10 @@ git push origin release-{page-causewayrel}-$RC --delete
 
 === Main repo (weekly builds)
 
-In the main repo, in `.github/workflows`, update the `BASELINE` variable:
+In the main repo, in `.github/workflows`, update the `BASELINE` variable in all scripts:
 
+* for example, in `ci-build-artifacts-no-push-maven.yml`:
++
 [source,yml,subs="attributes+"]
 ..github/workflows/ci-build-artifacts-no-push-maven.yml
 ----
@@ -541,8 +543,8 @@ jobs:
       BASELINE: {page-causewayrel}
 ----
 
-and
-
+* in `ci-build-site-no-push.yml`:
++
 [source,yml,subs="attributes+"]
 ..github/workflows/ci-build-site-no-push.yml
 ----
@@ -553,13 +555,31 @@ jobs:
       BASELINE: {page-causewayrel}
 ----
 
+* commit and push:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
+----
+
 
 === Nightly build repo
 
-In the `apache-causeway-committers/causeway-nightly` repo, similarly bump the versions of the `BASELINE_MAIN` variable:
+In the `apache-causeway-committers/causeway-nightly` repo, similarly bump the versions of the `BASELINE_MAIN` variable.
 
+* first update your local repo:
++
+[source,bash,subs="attributes+"]
+----
+git fetch
+git reset --hard origin/master
+----
+
+* update the `apache-causeway-ci-nightly.yml` file:
++
 [source,yml,subs="attributes+"]
-.apache-causeway-ci-nightly.yml
+..github/workflows/apache-causeway-ci-nightly.yml
 ----
 jobs:
   build:
@@ -570,9 +590,18 @@ jobs:
       BASELINE_MAIN: {page-causewayrel}
       BASELINE_EDGE: 3.0.0-M1
 ----
-
++
 NOTE: We leave `BASELINE_EDGE` unchanged for the moment; we will update these release notes when we switch to the v3 release branch.
 
+* update any other CI scripts that might exist there.
+
+* commit and push:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
+----
 
 == Update starter projects
 
