@@ -13,7 +13,7 @@ If your application inherits from the Apache Causeway starter app (`org.apache.c
 <parent>
     <groupId>org.apache.causeway.app</groupId>
     <artifactId>causeway-app-starter-parent</artifactId>
-    <version>{page-causewayrel}</version>
+    <version>{page-causewayprev}</version>
     <relativePath/>
 </parent>
 ----
@@ -29,7 +29,7 @@ This is usually done in the top-level parent pom of your application:
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core</artifactId>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
             <scope>import</scope>
             <type>pom</type>
         </dependency>

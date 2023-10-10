@@ -24,7 +24,7 @@ Add an entry for the _Execution Republisher_ module's own BOM:
             <artifactId>causeway-extensions-executionrepublisher</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
