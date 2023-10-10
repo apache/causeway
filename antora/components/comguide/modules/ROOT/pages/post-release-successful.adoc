@@ -519,8 +519,9 @@ RC=RC1                                                <.>
 git checkout master
 git pull
 git merge release-{page-causewayrel}-$RC
-git push origin --delete release-{page-causewayrel}-$RC
+git push origin master
 git branch -d release-{page-causewayrel}-$RC
+git push origin release-{page-causewayrel}-$RC --delete
 ----
 <.> adjust RC number as required
 
