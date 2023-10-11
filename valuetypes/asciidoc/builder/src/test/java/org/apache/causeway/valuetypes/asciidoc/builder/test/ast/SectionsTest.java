@@ -30,7 +30,7 @@ import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.do
 
 import lombok.val;
 
-class SimpleExampleTest extends AbstractAsciiDocWriterTest {
+class SectionsTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
