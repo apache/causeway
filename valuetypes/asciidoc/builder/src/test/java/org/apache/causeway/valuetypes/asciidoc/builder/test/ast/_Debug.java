@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
@@ -33,11 +34,11 @@ import lombok.val;
 
 final class _Debug {
 
-    static void debug(Document node) {
+    static void debug(final Document node) {
         debug(node, 0);
     }
 
-    static void debug(StructuralNode node, int level) {
+    static void debug(final StructuralNode node, final int level) {
 
         val simpleName = node.getClass().getSimpleName();
 
@@ -61,7 +62,7 @@ final class _Debug {
         }
     }
 
-    private static Optional<String> sourceFor(StructuralNode node) {
+    private static Optional<String> sourceFor(final StructuralNode node) {
         if(node instanceof Document) {
             //((Document)node);
             return Optional.empty();
@@ -80,10 +81,13 @@ final class _Debug {
         if(node instanceof Block) {
             return Optional.ofNullable(((Block)node).getSource());
         }
-        throw _Exceptions.unsupportedOperation("node type not supported %s", node.getClass());
+        if(node instanceof Section) {
+            return Optional.empty();
+        }
+        throw _Exceptions.unsupportedOperation("node type %s not supported for debugging", node.getClass());
     }
 
-    private static void printAdditionalFor(StructuralNode node, int level) {
+    private static void printAdditionalFor(final StructuralNode node, final int level) {
         if(node instanceof Document) {
             //((Document)node);
             return;
@@ -103,10 +107,20 @@ final class _Debug {
         if(node instanceof Block) {
             return;
         }
-        throw _Exceptions.unsupportedOperation("node type not supported %s", node.getClass());
+        if(node instanceof Section) {
+            debug((Section)node, level);
+            return;
+        }
+        throw _Exceptions.unsupportedOperation("node type %s not supported for debugging", node.getClass());
     }
 
-    private static void debug(Table table, int level) {
+    private static void debug(final Section section, final int level) {
+        print(level, "section index: " + section.getIndex());
+        print(level, "section numeral: " + section.getNumeral());
+        print(level, "section name: " + section.getSectionName());
+    }
+
+    private static void debug(final Table table, final int level) {
         val refCol = table.getColumns().get(0);
         val refRow = table.getBody().get(0);
         val refCell = refRow.getCells().get(0);
@@ -127,13 +141,13 @@ final class _Debug {
         print(level, "head source: " + refHead.getCells().get(0).getSource());
     }
 
-    private static void debug(org.asciidoctor.ast.List list, int level) {
+    private static void debug(final org.asciidoctor.ast.List list, final int level) {
         print(level, "%d list blocks: ", list.getBlocks().size());
         print(level, "%d list items: ", list.getItems().size());
         print(level, "%d list level: ", list.getLevel());
     }
 
-    private static void print(int level, String format, Object... args) {
+    private static void print(final int level, final String format, final Object... args) {
         val indent = _Strings.of(level*2, ' ');
         System.out.println(String.format("%s%s", indent, String.format(format, args)));
     }

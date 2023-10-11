@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
@@ -164,6 +165,13 @@ final class NodeWriter implements StructuralNodeVisitor {
         public boolean isAdmonition() {
             return name().startsWith("ADMONITION_");
         }
+    }
+
+    @Override
+    public boolean sectionHead(final Section section, final int depth) {
+        println("");
+        printChapterTitle(section.getTitle(), depth+1);
+        return true; // continue visit
     }
 
     @Override
