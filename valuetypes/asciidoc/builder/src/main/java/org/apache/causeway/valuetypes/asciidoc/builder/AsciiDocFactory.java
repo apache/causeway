@@ -27,6 +27,7 @@ import org.asciidoctor.ast.Column;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.Row;
+import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 import org.springframework.lang.Nullable;
@@ -43,6 +44,7 @@ import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleDocument;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleList;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleListItem;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleRow;
+import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleSection;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleTable;
 
 import lombok.NonNull;
@@ -139,6 +141,15 @@ public class AsciiDocFactory {
 
     public static Block warning(final StructuralNode parent, final String source) {
         return admonition("Warning", parent, source);
+    }
+
+    public static Section section(final StructuralNode parent, final String title) {
+        val section = new SimpleSection();
+        section.setTitle(title);
+        section.setLevel(parent.getLevel() + 1);
+        parent.getBlocks().add(section);
+        section.setParent(parent);
+        return section;
     }
 
     // -- BLOCK
@@ -470,6 +481,5 @@ public class AsciiDocFactory {
         admonition.setAttribute("name", label.toLowerCase(), true);
         return admonition;
     }
-
 
 }
