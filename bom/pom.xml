@@ -1452,7 +1452,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <dependency>
 				<groupId>org.codehaus.woodstox</groupId>
 				<artifactId>stax2-api</artifactId>
-				<version>4.2.1</version>
+				<version>4.2.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
