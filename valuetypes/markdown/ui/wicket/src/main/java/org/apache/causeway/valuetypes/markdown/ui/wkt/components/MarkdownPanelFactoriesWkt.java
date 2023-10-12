@@ -40,7 +40,6 @@ public class MarkdownPanelFactoriesWkt {
 
     @Component
     public static class Parented extends MarkupPanelFactories.ParentedAbstract<Markdown> {
-        private static final long serialVersionUID = 1L;
 
         public Parented() {
             super(Markdown.class);
@@ -59,7 +58,6 @@ public class MarkdownPanelFactoriesWkt {
 
     @Component
     public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<Markdown> {
-        private static final long serialVersionUID = 1L;
 
         public Standalone() {
             super(Markdown.class);

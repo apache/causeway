@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
  */
 public class ActionInfoPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public ActionInfoPanelFactory() {
         super(UiComponentType.ACTION_INFO, ActionInfoPanel.class);
     }

@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 public class EmptyCollectionPanelFactory extends ComponentFactoryAbstract implements ComponentFactory {
 
-    private static final long serialVersionUID = 1L;
-
     public EmptyCollectionPanelFactory() {
         super(UiComponentType.EMPTY_COLLECTION, EmptyCollectionPanel.class);
     }

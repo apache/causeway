@@ -35,8 +35,6 @@ import lombok.val;
 // TODO mgrigorov: Is this still needed ? It seems it is not used.
 public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     private static final String NAME = "icons";
 
     public CollectionContentsAsIconsPanelFactory() {

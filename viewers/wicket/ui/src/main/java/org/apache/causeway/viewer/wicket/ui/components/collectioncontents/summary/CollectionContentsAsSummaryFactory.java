@@ -47,8 +47,6 @@ public class CollectionContentsAsSummaryFactory
 extends ComponentFactoryAbstract
 implements CollectionContentsAsFactory {
 
-    private static final long serialVersionUID = 1L;
-
     private static final String NAME = "summary";
 
     static final Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {

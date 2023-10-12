@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.exceldownload.wkt.ui.viewer;
+package org.apache.causeway.extensions.tabular.excel.model;
 
 import java.awt.Color;
 

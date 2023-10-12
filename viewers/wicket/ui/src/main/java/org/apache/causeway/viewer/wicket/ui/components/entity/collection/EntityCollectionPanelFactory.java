@@ -39,8 +39,6 @@ import lombok.val;
  */
 public class EntityCollectionPanelFactory extends EntityComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     /**
      * Helper class, used to call this factory.
      */

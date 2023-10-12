@@ -40,7 +40,6 @@ public class AsciiDocPanelFactoriesWkt {
 
     @Component
     public static class Parented extends MarkupPanelFactories.ParentedAbstract<AsciiDoc> {
-        private static final long serialVersionUID = 1L;
 
         public Parented() {
             super(AsciiDoc.class);
@@ -59,7 +58,6 @@ public class AsciiDocPanelFactoriesWkt {
 
     @Component
     public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<AsciiDoc> {
-        private static final long serialVersionUID = 1L;
 
         public Standalone() {
             super(AsciiDoc.class);

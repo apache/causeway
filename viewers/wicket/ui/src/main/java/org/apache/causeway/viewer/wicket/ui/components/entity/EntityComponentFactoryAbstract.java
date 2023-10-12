@@ -34,8 +34,6 @@ import lombok.val;
  */
 public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public EntityComponentFactoryAbstract(
             final UiComponentType uiComponentType,
             final Class<?> componentClass) {

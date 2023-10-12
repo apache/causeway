@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import org.apache.wicket.Component;
 
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 
 /**
@@ -32,15 +33,15 @@ public class ScalarMarkupPanel<T>
 extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
-    private final MarkupComponentFactory<ScalarModel> markupComponentFactory; // serializable!
+    private final ComponentFactoryKey markupComponentFactoryKey; // serializable!
 
     public ScalarMarkupPanel(
             final String id,
             final ScalarModel scalarModel,
             final Class<T> valueType,
-            final MarkupComponentFactory<ScalarModel> markupComponentFactory) {
+            final ComponentFactoryKey markupComponentFactoryKey) {
         super(id, scalarModel, valueType);
-        this.markupComponentFactory = markupComponentFactory;
+        this.markupComponentFactoryKey = markupComponentFactoryKey;
     }
 
     @Override
@@ -55,6 +56,10 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     protected final MarkupComponent createMarkupComponent(final String id) {
+        @SuppressWarnings("unchecked")
+        MarkupComponentFactory<ScalarModel> markupComponentFactory =
+                (MarkupComponentFactory<ScalarModel>) markupComponentFactoryKey.resolve(this::getServiceRegistry);
+
         return markupComponentFactory.newMarkupComponent(id, scalarModel());
     }
 

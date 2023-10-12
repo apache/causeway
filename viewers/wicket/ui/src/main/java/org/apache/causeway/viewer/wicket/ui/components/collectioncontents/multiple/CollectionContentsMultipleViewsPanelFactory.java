@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
  */
 public class CollectionContentsMultipleViewsPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public CollectionContentsMultipleViewsPanelFactory() {
         super(UiComponentType.COLLECTION_CONTENTS, CollectionContentsMultipleViewsPanel.class);
     }

@@ -26,11 +26,10 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
 /**
- * {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory} for {@link org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel}.
+ * {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory} for
+ * {@link org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel}.
  */
 public class EntityIconTitleAndCopyLinkPanelFactory extends EntityComponentFactoryAbstract {
-
-    private static final long serialVersionUID = 1L;
 
     public EntityIconTitleAndCopyLinkPanelFactory() {
         super(UiComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, EntityIconTitleAndCopyLinkPanel.class);

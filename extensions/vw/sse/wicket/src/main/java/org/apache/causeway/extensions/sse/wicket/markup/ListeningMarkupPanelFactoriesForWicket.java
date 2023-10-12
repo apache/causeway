@@ -42,7 +42,6 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
     @Component
     public static class Parented extends MarkupPanelFactories.ParentedAbstract<Markup> {
-        private static final long serialVersionUID = 1L;
 
         public Parented() {
             super(Markup.class);
@@ -72,7 +71,6 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
     @Component
     public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<Markup> {
-        private static final long serialVersionUID = 1L;
 
         public Standalone() {
             super(Markup.class);

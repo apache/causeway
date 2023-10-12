@@ -29,14 +29,13 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 import lombok.val;
 
 @org.springframework.stereotype.Component
 public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
-
-    private static final long serialVersionUID = 1L;
 
     @Inject
     public PdfJsViewerPanelComponentFactory() {

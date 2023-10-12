@@ -36,8 +36,6 @@ import lombok.val;
  */
 public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public ServiceActionsPanelFactory() {
         super(UiComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);
     }

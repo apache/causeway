@@ -45,8 +45,6 @@ class ComponentFactoryAbstractTest_init {
     public void canInstantiateComponentFactoryWithNoComponentClass() {
         class ComponentFactoryWithNoComponentClass extends ComponentFactoryAbstract {
 
-            private static final long serialVersionUID = 1L;
-
             public ComponentFactoryWithNoComponentClass() {
                 super(null);
                 setMetaModelContext(commonContext);
@@ -71,8 +69,6 @@ class ComponentFactoryAbstractTest_init {
     public void canInstantiateComponentFactoryWithComponentClass() {
         class ComponentClass {}
         class ComponentFactoryWithComponentClass extends ComponentFactoryAbstract {
-
-            private static final long serialVersionUID = 1L;
 
             public ComponentFactoryWithComponentClass() {
                 super(null, ComponentClass.class);
@@ -99,8 +95,6 @@ class ComponentFactoryAbstractTest_init {
 
 
         class ComponentFactoryWithIncorrectComponentClass extends ComponentFactoryAbstract {
-
-            private static final long serialVersionUID = 1L;
 
             public ComponentFactoryWithIncorrectComponentClass() {
                 super(null, ComponentFactoryWithIncorrectComponentClass.class);

@@ -30,8 +30,6 @@ import lombok.val;
 public class JavaAwtImagePanelFactory
 extends ComponentFactoryScalarAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public JavaAwtImagePanelFactory() {
         super(JavaAwtImagePanel.class);
     }

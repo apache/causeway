@@ -30,8 +30,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryS
  */
 public class BooleanPanelFactory extends ComponentFactoryScalarTypeConstrainedAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public BooleanPanelFactory() {
         super(BooleanPanel.class, Can.of(boolean.class, Boolean.class));
     }

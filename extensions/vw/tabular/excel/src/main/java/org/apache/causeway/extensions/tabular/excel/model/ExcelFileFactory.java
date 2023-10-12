@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.exceldownload.wkt.ui.viewer;
+package org.apache.causeway.extensions.tabular.excel.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -37,7 +38,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -45,15 +45,14 @@ import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 
-class ExcelFileModel extends LoadableDetachableModel<File> {
-
-    private static final long serialVersionUID = 1L;
+public class ExcelFileFactory implements Supplier<File> {
 
     /**
      * If a cell's cardinality exceeds this threshold, truncate with '... has more' label at the end.
@@ -61,14 +60,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
     private static final int MAX_CELL_ELEMENTS = 5;
     private static final String POI_LINE_DELIMITER = "\n";
 
-    private final EntityCollectionModel model;
+    @Getter @Accessors(fluent=true)
+    private final DataTableModel table;
 
-    public static ExcelFileModel of(final EntityCollectionModel model) {
-        return new ExcelFileModel(model);
-    }
-
-    private ExcelFileModel(final EntityCollectionModel model) {
-        this.model = model;
+    public ExcelFileFactory(final DataTableModel table) {
+        this.table = table;
     }
 
     @RequiredArgsConstructor
@@ -80,21 +76,17 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
     }
 
-    private DataTableModel table() {
-        return model.getDataTableModel();
-    }
-
     @Override @SneakyThrows
-    protected File load() {
-        return createFile();
+    public File get() {
+        return createTempFile();
     }
 
-    private File createFile() throws IOException, FileNotFoundException {
+    private File createTempFile() throws IOException, FileNotFoundException {
         try(final Workbook wb = new XSSFWorkbook()) {
             final String sheetName = _Strings.nonEmpty(table().getTitle().getValue())
                     .orElse("Collection"); // fallback sheet name
 
-            val tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
+            val tempFile = File.createTempFile(ExcelFileFactory.class.getCanonicalName(), sheetName + ".xlsx");
             Row row;
 
             try(val fos = new FileOutputStream(tempFile)) {
@@ -102,7 +94,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
 
                 val cellStyleProvider = new CellStyleProvider(wb);
 
-                final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
+                final ExcelFileFactory.RowFactory rowFactory = new RowFactory(sheet);
 
 
                 val dataColumns = table().getDataColumns().getValue();

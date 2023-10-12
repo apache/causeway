@@ -16,34 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.exceldownload.wkt.ui.viewer;
+package org.apache.causeway.extensions.tabular.excel;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-final class _TimeConversion {
+/**
+ * @since 2.0 {@index}
+ */
+@Configuration
+@Import({
 
-    public static Date toDate(LocalDate value) {
-        return toDate(value.atStartOfDay());
-    }
-
-    public static Date toDate(LocalDateTime value) {
-        return new Date(toEpochMilli(value));
-    }
-
-    public static Date toDate(OffsetDateTime value) {
-        return toDate(value.toLocalDateTime());
-    }
-
-    // -- HELPER
-
-    private static final ZoneId zId = ZoneId.systemDefault();
-
-    private static long toEpochMilli(LocalDateTime localDateTime){
-        return localDateTime.atZone(zId).toInstant().toEpochMilli();
-    }
-
+})
+public class CausewayModuleExtTabularExcel {
 }

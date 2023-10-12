@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public EntityLinkSimplePanelFactory() {
         super(UiComponentType.ENTITY_LINK, EntityLinkSimplePanel.class);
     }

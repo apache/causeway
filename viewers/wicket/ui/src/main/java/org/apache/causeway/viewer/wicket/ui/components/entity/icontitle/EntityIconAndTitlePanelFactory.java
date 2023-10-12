@@ -43,8 +43,6 @@ import lombok.val;
  */
 public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public EntityIconAndTitlePanelFactory(
             final UiComponentType uiComponentType,
             final Class<?> componentClass) {
