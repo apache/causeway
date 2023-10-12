@@ -40,6 +40,11 @@
             <groupId>org.apache.causeway.extensions</groupId>
             <artifactId>causeway-extensions-tabular-applib</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-commons-applib</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>

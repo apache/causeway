@@ -56,11 +56,10 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     protected final MarkupComponent createMarkupComponent(final String id) {
-        @SuppressWarnings("unchecked")
-        MarkupComponentFactory<ScalarModel> markupComponentFactory =
-                (MarkupComponentFactory<ScalarModel>) markupComponentFactoryKey.resolve(this::getServiceRegistry);
-
-        return markupComponentFactory.newMarkupComponent(id, scalarModel());
+        return markupComponentFactory().newMarkupComponent(id, scalarModel());
     }
 
+    protected final MarkupPanelFactories.ParentedAbstract<?> markupComponentFactory() {
+        return (MarkupPanelFactories.ParentedAbstract<?>) markupComponentFactoryKey.resolve(this::getServiceRegistry);
+    }
 }

@@ -99,6 +99,7 @@ public class MarkupPanelFactories {
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
+            // last arg is consumed by constructor, hence trivially serializable
             return new StandaloneMarkupPanel(id, (ValueModel) model, this::newMarkupComponent);
         }
 

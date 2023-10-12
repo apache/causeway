@@ -31,5 +31,5 @@ import org.apache.causeway.extensions.exceldownload.wkt.ui.viewer.CollectionCont
         // @Component's
         CollectionContentsAsExcelFactory.class
 })
-public class CausewayModuleExtExcelDownloadWicketUi {
+class CausewayModuleExtExcelDownloadWicketUi {
 }

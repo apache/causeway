@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTab
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
-import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
@@ -86,9 +85,6 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         if (selectorHelper.getComponentFactories().isCardinalityMultiple()) {
             final CollectionPresentationSelectorPanel selectorDropdownPanel =
                     new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);
-
-            final String selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
-            ComponentFactoryKey selectedComponentFactory = selectorHelper.find(selected); //TODO[CAUSEWAY-3630] unused
 
             outerDiv.setOutputMarkupId(true);
             outerDiv.addOrReplace(selectorDropdownPanel);
