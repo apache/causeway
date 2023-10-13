@@ -263,7 +263,8 @@ implements MultiselectChoices {
     public DataTable export() {
         return new DataTable(getElementType(),
                 getTitle().getValue(),
-                org.apache.causeway.core.metamodel.tabular.simple.DataColumn.orderByColumnId(),
+                getDataColumns().getValue()
+                    .map(DataColumn::getAssociationMetaModel),
                 getDataRowsFiltered().getValue()
                     .stream()
                     .map(dr->dr.getRowElement())

@@ -2400,7 +2400,7 @@ org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/commons/applib/mixins/Object_impersonate.adoc[Object_impersonate], xref:refguide:viewer:index/commons/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles], xref:refguide:viewer:index/commons/applib/services/branding/BrandingUiService.adoc[BrandingUiService], xref:refguide:viewer:index/commons/applib/services/header/HeaderUiService.adoc[HeaderUiService], xref:refguide:viewer:index/commons/applib/services/menu/MenuUiService.adoc[MenuUiService], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModel.adoc[UserProfileUiModel], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiService.adoc[UserProfileUiService], xref:refguide:viewer:index/commons/applib/tabular/export/CollectionContentsExporter.adoc[CollectionContentsExporter]
+xref:refguide:viewer:index/commons/applib/mixins/Object_impersonate.adoc[Object_impersonate], xref:refguide:viewer:index/commons/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles], xref:refguide:viewer:index/commons/applib/services/branding/BrandingUiService.adoc[BrandingUiService], xref:refguide:viewer:index/commons/applib/services/header/HeaderUiService.adoc[HeaderUiService], xref:refguide:viewer:index/commons/applib/services/menu/MenuUiService.adoc[MenuUiService], xref:refguide:viewer:index/commons/applib/services/tabular/CollectionContentsExporter.adoc[CollectionContentsExporter], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModel.adoc[UserProfileUiModel], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiService.adoc[UserProfileUiService]
 ****
 
 |Apache Causeway Viewer - Commons Model
@@ -4924,7 +4924,7 @@ Artifact: causeway-extensions-tabular
 Type: pom
 Directory: /extensions/vw/tabular
 ----
-|Basis for viewers to provide alternative representations of collections for download.
+|Tabular Data Extensions such as download of representations of collections.
 
 |Apache Causeway Ext - Tabular (Applib)
 [source,yaml]

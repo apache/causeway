@@ -14,7 +14,7 @@ interface CollectionContentsExporter {
   String getTitleLabel()     // <.>
   String getCssClass()     // <.>
   int orderOfAppearanceInUiDropdown()     // <.>
-  boolean appliesTo(Class<?> domainObjectType)     // <.>
+  boolean appliesTo(ObjectSpecification objectType)     // <.>
   boolean isPageReloadRequiredOnTableViewActivation()     // <.>
 }
 ----
@@ -26,10 +26,10 @@ interface CollectionContentsExporter {
 --
 An ordinal, that governs the order of appearance in the UI dropdown.
 --
-<.> xref:#appliesTo_Class[appliesTo(Class)]
+<.> xref:#appliesTo_ObjectSpecification[appliesTo(ObjectSpecification)]
 +
 --
-Whether this exporter applies to given _domainObjectType_ . If `false` this exporter is not provided to the end user.
+Whether this exporter applies to given _objectType_ . If `false` , this exporter is not provided to the end user.
 --
 <.> xref:#isPageReloadRequiredOnTableViewActivation_[isPageReloadRequiredOnTableViewActivation()]
 +
@@ -55,10 +55,10 @@ An ordinal, that governs the order of appearance in the UI dropdown.
 
 Lowest comes first.
 
-[#appliesTo_Class]
-=== appliesTo(Class)
+[#appliesTo_ObjectSpecification]
+=== appliesTo(ObjectSpecification)
 
-Whether this exporter applies to given _domainObjectType_ . If `false` this exporter is not provided to the end user.
+Whether this exporter applies to given _objectType_ . If `false` , this exporter is not provided to the end user.
 
 [#isPageReloadRequiredOnTableViewActivation_]
 === isPageReloadRequiredOnTableViewActivation()

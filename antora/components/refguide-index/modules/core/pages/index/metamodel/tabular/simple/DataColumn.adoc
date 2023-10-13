@@ -9,8 +9,7 @@ Represents a single association of a domain object type (typically an entity typ
 .DataColumn.java
 ----
 class DataColumn {
-  DataColumn(DataTable parentTable, OneToOneAssociation metamodel)
-  int compareTo(DataColumn o)
+  DataColumn(DataTable parentTable, ObjectAssociation metamodel)
   Comparator<DataColumn> orderByColumnId()     // <.>
 }
 ----

@@ -9,9 +9,8 @@ Represents a collection of domain objects (typically entity instances).
 .DataTable.java
 ----
 class DataTable {
-  DataTable(ObjectSpecification elementType, Comparator<DataColumn> columnOrder)
-  DataTable(ObjectSpecification elementType, String tableFriendlyName, Comparator<DataColumn> columnOrder, Can<ManagedObject> dataElements)
-  DataTable withDataElements(Can<ManagedObject> dataElements)
+  DataTable(ObjectSpecification elementType, Can<? extends ObjectAssociation> dataColumns)
+  DataTable(ObjectSpecification elementType, String tableFriendlyName, Can<? extends ObjectAssociation> dataColumns, Can<ManagedObject> dataElements)
   void setDataElements(Can<ManagedObject> dataElements)
   String getLogicalName()     // <.>
   int getElementCount()     // <.>

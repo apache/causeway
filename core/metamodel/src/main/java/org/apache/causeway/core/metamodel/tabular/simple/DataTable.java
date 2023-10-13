@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.tabular.simple;
 
-import java.util.Comparator;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -27,7 +26,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -44,45 +43,33 @@ public class DataTable {
     @Getter private final @NonNull String tableFriendlyName;
     @Getter private final @NonNull ObjectSpecification elementType;
     @Getter private final @NonNull Can<DataColumn> dataColumns;
-    @Getter private final @NonNull Comparator<DataColumn> columnOrder;
     @Getter private @NonNull Can<DataRow> dataRows;
 
     public DataTable(
             final @NonNull ObjectSpecification elementType,
-            final @NonNull Comparator<DataColumn> columnOrder) {
-        this(elementType, elementType.getSingularName(), columnOrder, Can.empty());
+            final @NonNull Can<? extends ObjectAssociation> dataColumns) {
+        this(elementType, elementType.getSingularName(), dataColumns, Can.empty());
     }
 
     public DataTable(
             final @NonNull ObjectSpecification elementType,
             final @Nullable String tableFriendlyName,
-            final @NonNull Comparator<DataColumn> columnOrder,
+            final @NonNull Can<? extends ObjectAssociation> dataColumns,
             final @NonNull Can<ManagedObject> dataElements) {
 
         this.tableFriendlyName = _Strings.nonEmpty(tableFriendlyName)
                 .orElse("Collection"); // fallback to a generic name
 
         this.elementType = elementType;
-        this.columnOrder = columnOrder;
 
-        //TODO externalize filtering
-        this.dataColumns = elementType
-                .streamProperties(MixedIn.EXCLUDED)
-                .filter(prop->prop.isIncludedWithSnapshots())
-                .map(property->new DataColumn(this, property))
-                //.sorted() // don't sort, use meta-model's order, to preserve order from schema
-                .collect(Can.toCan());
+        this.dataColumns = dataColumns
+                .map(assoc->new DataColumn(this, assoc));
 
         setDataElements(dataElements);
     }
 
     // -- POPULATE
 
-    public DataTable withDataElements(final Can<ManagedObject> dataElements) {
-        return new DataTable(elementType, tableFriendlyName, columnOrder, dataElements);
-    }
-
-    //XXX perhaps remove this mutability
     public void setDataElements(final Can<ManagedObject> dataElements) {
         this.dataRows = dataElements
                 .map(domainObject->new DataRow(this, domainObject));

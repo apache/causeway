@@ -107,7 +107,6 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
     private void addDropdown() {
         final Can<ComponentFactoryKey> componentFactories = selectorHelper.getComponentFactories();
-                //.map(key->key.resolve(this::getServiceRegistry));
         final String selected = selectorHelper.honourViewHintElseDefault(this);
 
         // selector

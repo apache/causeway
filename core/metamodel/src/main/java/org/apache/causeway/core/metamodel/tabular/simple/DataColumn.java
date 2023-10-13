@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -31,12 +30,9 @@ import lombok.NonNull;
 /**
  * Represents a single association of a domain object type (typically an entity type).
  *
- * @apiNote implements {@link Comparable} such that
- *      column ordering is delegated to the parent's
- *      {@link DataTable#getColumnOrder()}.
  * @since 2.0 {@index}
  */
-public class DataColumn implements Comparable<DataColumn> {
+public class DataColumn {
 
     @Getter private final @NonNull DataTable parentTable;
     @Getter private final @NonNull ObjectAssociation metamodel;
@@ -45,18 +41,13 @@ public class DataColumn implements Comparable<DataColumn> {
     @Getter private final @NonNull Optional<String> columnDescription;
     @Getter private final boolean isMultivalued;
 
-    public DataColumn(final DataTable parentTable, final OneToOneAssociation metamodel) {
+    public DataColumn(final DataTable parentTable, final ObjectAssociation metamodel) {
         this.parentTable = parentTable;
         this.metamodel = metamodel;
         this.columnId = metamodel.getId();
         this.columnFriendlyName = metamodel.getCanonicalFriendlyName();
         this.columnDescription = metamodel.getCanonicalDescription();
         this.isMultivalued = metamodel.isCollection();
-    }
-
-    @Override
-    public final int compareTo(final DataColumn o) {
-        return parentTable.getColumnOrder().compare(this, o);
     }
 
     // -- UTILITY
