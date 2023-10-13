@@ -64,9 +64,4 @@ public interface CollectionContentsExporter {
      */
     default boolean appliesTo(final ObjectSpecification objectType) { return true; }
 
-    /**
-     * Whether activation of this table presentation view should result in a full page reload.
-     */
-    default boolean isPageReloadRequiredOnTableViewActivation() { return false; }
-
 }
