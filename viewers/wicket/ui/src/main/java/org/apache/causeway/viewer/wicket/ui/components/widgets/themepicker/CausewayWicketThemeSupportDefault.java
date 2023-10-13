@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -33,7 +33,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import de.agilecoders.wicket.core.settings.NoopThemeProvider;
@@ -81,7 +80,7 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
     private ThemeProviderComposite createThemeProvider() {
 
         val providerBeans = serviceRegistry.select(ThemeProvider.class);
-        if(providerBeans.isEmpty()) {
+        if (providerBeans.isEmpty()) {
             return ThemeProviderComposite.of(Can.ofSingleton(createFallbackThemeProvider()));
         }
 
@@ -90,14 +89,14 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
 
     private ThemeProvider createFallbackThemeProvider() {
         val themeName = configuration.getViewer().getWicket().getThemes().getInitial();
-        if("default".equalsIgnoreCase("default")) {
+        if ("default".equalsIgnoreCase(themeName)) {
             // in effect uses the bootstrap 'default' theme
             return new NoopThemeProvider();
         }
         BootswatchTheme bootswatchTheme;
         try {
             bootswatchTheme = BootswatchTheme.valueOf(themeName);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             bootswatchTheme = BootswatchTheme.Flatly;
             log.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'",
                     themeName,
@@ -112,25 +111,20 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
      * Filters which themes to show in the drop up by using the provided values
      * in {@link CausewayConfiguration.Viewer.Wicket.Themes#getEnabled()}
      *
-     * @param allThemes All available themes
+     * @param availableThemes All available themes
      * @return A list of all enabled themes
      */
-    private List<String> filterThemes(final List<String> allThemes) {
-        List<String> enabledThemes;
+    private List<String> filterThemes(final List<String> availableThemes) {
 
-        final Set<String> enabledThemesSet =
-        _NullSafe.stream(configuration.getViewer().getWicket().getThemes().getEnabled())
-        .collect(Collectors.toSet());
-
-        if (enabledThemesSet.size() > 0) {
-
-            enabledThemes = allThemes.stream()
-                    .filter(enabledThemesSet::contains)
-                    .collect(Collectors.toList());
-
-        } else {
-            enabledThemes = allThemes;
+        val configuredThemes = configuration.getViewer().getWicket().getThemes().getEnabled();
+        if (configuredThemes == null || configuredThemes.isEmpty()) {
+            return Collections.emptyList();
         }
+
+        val enabledThemes = new ArrayList<String>();
+        availableThemes.stream()
+                .filter(availableTheme -> configuredThemes.stream().anyMatch(configuredTheme -> configuredTheme.equalsIgnoreCase(availableTheme)))
+                .forEach(enabledThemes::add);
 
         return enabledThemes;
     }

@@ -29,8 +29,6 @@ import lombok.val;
 public class ChoicesSelect2PanelFactory
 extends ComponentFactoryScalarAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     private static enum ComponentSort {
         TITLE_BADGE,
         VALUE_CHOICES,

@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFac
  */
 public class EntityHeaderPanelFactory extends EntityComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public EntityHeaderPanelFactory() {
         super(UiComponentType.ENTITY_SUMMARY, EntityHeaderPanel.class);
     }

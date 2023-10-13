@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.util;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -69,12 +70,18 @@ import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.file.Files;
+import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -84,14 +91,16 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
@@ -457,7 +466,7 @@ public class Wkt {
                 onUpdate.accept(target); }
             /**
              * XXX[CAUSEWAY-3005] Any action dialog submission on the same page will
-             * result in a new {@link DataTableModel}, where any previously rendered check-boxes
+             * result in a new {@link DataTableInteractive}, where any previously rendered check-boxes
              * run out of sync with their DataRowToggle model.
              * Hence we intercept such events and reset check-boxes to un-checked.
              */
@@ -572,6 +581,43 @@ public class Wkt {
 
     public ResourceLinkVolatile downloadLinkNoCache(final String id, final IResource resourceModel) {
         return new ResourceLinkVolatile(id, resourceModel);
+    }
+
+    // -- FILE DOWNLOAD
+
+    /**
+     * Schedules a file download within the context of the current {@link RequestCycle}.
+     * @param model - provides a (temporary) file located at the host, which is deleted after consumption
+     */
+    public void fileDownloadClickHandler(final IModel<File> model, final CommonMimeType mime, final String fileName) {
+        final File file = model.getObject();
+        if (file == null) {
+            throw _Exceptions.illegalState("Failed to retrieve a File object from model %s", model.getClass().getName());
+        }
+        RequestCycle.get().scheduleRequestHandlerAfterCurrent(
+                Wkt.fileResourceStreamRequestHandler(file, mime)
+                .setFileName(fileName)
+                .setContentDisposition(ContentDisposition.ATTACHMENT));
+    }
+
+    private ResourceStreamRequestHandler fileResourceStreamRequestHandler(final File file, final CommonMimeType mime) {
+        return new ResourceStreamRequestHandler(Wkt.fileResourceStream(file, mime)){
+            @Override public void respond(final IRequestCycle requestCycle) {
+                super.respond(requestCycle);
+                Files.remove(file);
+            }
+        };
+    }
+
+    private FileResourceStream fileResourceStream(final File file, final CommonMimeType mime) {
+        return new FileResourceStream(
+                new org.apache.wicket.util.file.File(file)) {
+            private static final long serialVersionUID = 1L;
+            @Override public String getContentType() {
+                return mime.getBaseType();
+                        //legacy "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
+            }
+        };
     }
 
     // -- FILE UPLOAD
@@ -1094,7 +1140,5 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
-
-
 
 }

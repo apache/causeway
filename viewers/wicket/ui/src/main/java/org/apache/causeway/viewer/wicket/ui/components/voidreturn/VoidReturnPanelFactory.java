@@ -30,8 +30,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
  */
 public class VoidReturnPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public VoidReturnPanelFactory() {
         super(UiComponentType.VOID_RETURN, VoidReturnPanel.class);
     }

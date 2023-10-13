@@ -5,3 +5,30 @@
 
 This page will be added to as development progresses.
 
+== Extensions
+
+=== Excel Download
+
+[source,xml]
+.pom.xml
+----
+<!-- removed
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>
+</dependency>
+-->
+
+<!-- instead use -->
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-tabular-excel</artifactId>
+</dependency>
+----
+
+Was relocated from 
+`org.apache.causeway.extensions.exceldownload.wkt.ui.CausewayModuleExtExcelDownloadWicketUi` to
+`org.apache.causeway.extensions.tabular.excel.CausewayModuleExtTabularExcel`;
+
+NOTE: A new SPI was added to simplify implementation of custom exporters:
+`org.apache.causeway.viewer.commons.applib.services.tabular.CollectionContentsExporter` 

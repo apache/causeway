@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 
 public interface GenericColumn
 extends IColumn<DataRow, String> {

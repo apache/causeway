@@ -36,8 +36,6 @@ public class CollectionContentsAsAjaxTablePanelFactory
 extends ComponentFactoryAbstract
 implements CollectionContentsAsFactory {
 
-    private static final long serialVersionUID = 1L;
-
     public static final String NAME = "table";
 
     public CollectionContentsAsAjaxTablePanelFactory() {

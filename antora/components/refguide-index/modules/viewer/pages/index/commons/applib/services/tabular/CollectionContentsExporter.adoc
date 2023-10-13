@@ -1,0 +1,66 @@
+= CollectionContentsExporter
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+SPI to provide file export to table views.
+
+== API
+
+[source,java]
+.CollectionContentsExporter.java
+----
+interface CollectionContentsExporter {
+  File createExportFile(DataTable dataTable)
+  CommonMimeType getMimeType()
+  String getTitleLabel()     // <.>
+  String getCssClass()     // <.>
+  int orderOfAppearanceInUiDropdown()     // <.>
+  boolean appliesTo(ObjectSpecification objectType)     // <.>
+  boolean isPageReloadRequiredOnTableViewActivation()     // <.>
+}
+----
+
+<.> xref:#getTitleLabel_[getTitleLabel()]
+<.> xref:#getCssClass_[getCssClass()]
+<.> xref:#orderOfAppearanceInUiDropdown_[orderOfAppearanceInUiDropdown()]
++
+--
+An ordinal, that governs the order of appearance in the UI dropdown.
+--
+<.> xref:#appliesTo_ObjectSpecification[appliesTo(ObjectSpecification)]
++
+--
+Whether this exporter applies to given _objectType_ . If `false` , this exporter is not provided to the end user.
+--
+<.> xref:#isPageReloadRequiredOnTableViewActivation_[isPageReloadRequiredOnTableViewActivation()]
++
+--
+Whether activation of this table presentation view should result in a full page reload.
+--
+
+== Members
+
+[#getTitleLabel_]
+=== getTitleLabel()
+
+[#getCssClass_]
+=== getCssClass()
+
+[#orderOfAppearanceInUiDropdown_]
+=== orderOfAppearanceInUiDropdown()
+
+An ordinal, that governs the order of appearance in the UI dropdown.
+
+* _1000..1999_ reserved for different table presentations
+* _2000..2999_ reserved for different table exports
+
+Lowest comes first.
+
+[#appliesTo_ObjectSpecification]
+=== appliesTo(ObjectSpecification)
+
+Whether this exporter applies to given _objectType_ . If `false` , this exporter is not provided to the end user.
+
+[#isPageReloadRequiredOnTableViewActivation_]
+=== isPageReloadRequiredOnTableViewActivation()
+
+Whether activation of this table presentation view should result in a full page reload.

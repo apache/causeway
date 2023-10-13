@@ -26,9 +26,9 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
@@ -43,7 +43,7 @@ import lombok.NonNull;
  * </pre>
  */
 public abstract class EntityCollectionModelAbstract
-extends ChainingModel<DataTableModel>
+extends ChainingModel<DataTableInteractive>
 implements EntityCollectionModel {
 
     private static final long serialVersionUID = 1L;
@@ -62,12 +62,12 @@ implements EntityCollectionModel {
     }
 
     @Override
-    public final DataTableModel getObject() {
+    public final DataTableInteractive getObject() {
         return delegate().getObject();
     }
 
     @Override
-    public final DataTableModel getDataTableModel() {
+    public final DataTableInteractive getDataTableModel() {
         return getObject();
     }
 

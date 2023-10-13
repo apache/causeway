@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
 public class UnknownModelPanelFactory implements ComponentFactory {
 
-    private static final long serialVersionUID = 1L;
-
     @Override
     public ApplicationAdvice appliesTo(final UiComponentType uiComponentType, final IModel<?> model) {
         return ApplicationAdvice.APPLIES;

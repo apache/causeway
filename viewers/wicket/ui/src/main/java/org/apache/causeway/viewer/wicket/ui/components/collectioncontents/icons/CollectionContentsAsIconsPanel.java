@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.icons
 
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.entity.header.EntityHeaderPanel;
@@ -34,7 +34,7 @@ import lombok.val;
  * collection of entity}s rendered using a simple list of icons.
  */
 public class CollectionContentsAsIconsPanel
-extends PanelAbstract<DataTableModel, EntityCollectionModel> {
+extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
