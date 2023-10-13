@@ -56,7 +56,10 @@ implements CollectionContentsAsFactory {
         if(!(model instanceof EntityCollectionModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        return ApplicationAdvice.APPLIES;
+        var collectionModel = (EntityCollectionModel) model;
+        return collectionContentsExporter.appliesTo(collectionModel.getElementType())
+                ? ApplicationAdvice.APPLIES
+                : ApplicationAdvice.DOES_NOT_APPLY;
     }
 
     @Override

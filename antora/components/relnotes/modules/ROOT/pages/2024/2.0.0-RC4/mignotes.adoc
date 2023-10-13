@@ -30,5 +30,5 @@ Was relocated from
 `org.apache.causeway.extensions.exceldownload.wkt.ui.CausewayModuleExtExcelDownloadWicketUi` to
 `org.apache.causeway.extensions.tabular.excel.CausewayModuleExtTabularExcel`;
 
-NOTE: A new SPI was added to simply implementation of custom exporters:
+NOTE: A new SPI was added to simplify implementation of custom exporters:
 `org.apache.causeway.viewer.commons.applib.services.tabular.CollectionContentsExporter` 
