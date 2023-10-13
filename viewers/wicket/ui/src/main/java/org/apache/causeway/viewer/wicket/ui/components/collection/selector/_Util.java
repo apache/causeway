@@ -22,69 +22,40 @@ import java.util.Comparator;
 import java.util.function.Predicate;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _Util {
 
-    IModel<String> nameFor(final ComponentFactory componentFactory) {
-        return _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
-            .map(CollectionContentsAsFactory::getTitleLabel)
-            .orElseGet(()->Model.of(componentFactory.getName()));
+    void initViewIcon(final ComponentFactoryKey componentFactory, final Label viewIcon) {
+        if(CollectionContentsAsFactory.class.isAssignableFrom(componentFactory.factoryClass())) {
+            viewIcon.setDefaultModelObject("");
+            viewIcon.setEscapeModelStrings(true);
+        } else {
+            // Small hack: if there is no specific CSS class then we assume that background-image is used
+            // the span.ViewItemLink should have some content to show it
+            // FIX: find a way to do this with CSS (width and height don't seems to help)
+            viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
+            viewIcon.setEscapeModelStrings(false);
+        }
     }
 
-    IModel<String> cssClassFor(final ComponentFactory componentFactory, final Label viewIcon) {
-        return _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
-            .map(CollectionContentsAsFactory::getCssClass)
-            .map(cssClass->{
-                viewIcon.setDefaultModelObject("");
-                viewIcon.setEscapeModelStrings(true);
-                return cssClass;
-            })
-            .orElseGet(()->{
-                // Small hack: if there is no specific CSS class then we assume that background-image is used
-                // the span.ViewItemLink should have some content to show it
-                // FIX: find a way to do this with CSS (width and height don't seems to help)
-                viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
-                viewIcon.setEscapeModelStrings(false);
-                return Model.of(_Strings.asLowerDashed.apply(componentFactory.getName()));
-            });
+    Predicate<? super ComponentFactoryKey> filterTablePresentations() {
+        return f->f.componentType() == UiComponentType.COLLECTION_CONTENTS;
+    }
+    Predicate<? super ComponentFactoryKey> filterTableExports() {
+        return f->f.componentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT;
     }
 
-    int orderOfAppearanceInUiDropdownFor(final ComponentFactory componentFactory) {
-        return componentFactory instanceof CollectionContentsAsFactory
-                ? ((CollectionContentsAsFactory) componentFactory).orderOfAppearanceInUiDropdown()
-                : Integer.MAX_VALUE;
-    }
-
-    boolean isPageReloadRequiredOnTableViewActivation(final ComponentFactory componentFactory) {
-        return componentFactory instanceof CollectionContentsAsFactory
-                ? ((CollectionContentsAsFactory) componentFactory).isPageReloadRequiredOnTableViewActivation()
-                : false;
-    }
-
-    Predicate<? super ComponentFactory> filterTablePresentations() {
-        return f->f.getComponentType() == UiComponentType.COLLECTION_CONTENTS;
-    }
-    Predicate<? super ComponentFactory> filterTableExports() {
-        return f->f.getComponentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT;
-    }
-
-    Comparator<? super ComponentFactory> orderByOrderOfAppearanceInUiDropdown() {
+    Comparator<? super ComponentFactoryKey> orderByOrderOfAppearanceInUiDropdown() {
         return (a, b)->Integer.compare(
-                _Util.orderOfAppearanceInUiDropdownFor(a),
-                _Util.orderOfAppearanceInUiDropdownFor(b));
+                a.orderOfAppearanceInUiDropdown(),
+                b.orderOfAppearanceInUiDropdown());
     }
-
-
 
 }

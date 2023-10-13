@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.wicket.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
@@ -37,6 +38,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.viewer.commons.applib.services.tabular.CollectionContentsExporter;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -48,6 +50,7 @@ import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersF
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.export.CollectionContentsAsExportFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
@@ -100,6 +103,7 @@ import lombok.extern.log4j.Log4j2;
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
 
     private @Inject ValueSemanticsResolver valueSemanticsResolver;
+    private @Autowired(required = false) List<CollectionContentsExporter> collectionContentsExporters;
 
     private final List<ComponentFactory> componentFactoriesPluggedIn;
     public ComponentFactoryRegistrarDefault(final List<ComponentFactory> componentFactoriesPluggedIn) {
@@ -188,6 +192,10 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {
         componentFactories.add(new CollectionContentsAsAjaxTablePanelFactory());
+
+        _NullSafe.stream(collectionContentsExporters)
+            .map(CollectionContentsAsExportFactory::new)
+            .forEach(componentFactories::add);
 
         // // work-in-progress
         // componentFactories.add(new CollectionContentsAsIconsPanelFactory());
@@ -294,8 +302,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public static class ScalarPanelFactoryForTextField<T extends Serializable>
     extends ComponentFactoryScalarTypeConstrainedAbstract {
 
-        private static final long serialVersionUID = 1L;
-
         private final Class<T> valueTypeClass;
 
         protected ScalarPanelFactoryForTextField(final Class<T> valueTypeClass) {
@@ -313,8 +319,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public static class ScalarPanelFactoryForNumberField<T extends Serializable>
     extends ComponentFactoryScalarTypeConstrainedAbstract {
 
-        private static final long serialVersionUID = 1L;
-
         private final Class<T> valueTypeClass;
 
         protected ScalarPanelFactoryForNumberField(final Class<T> valueTypeClass) {
@@ -330,8 +334,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     public static class ScalarPanelFactoryForTemporalPicker<T extends Serializable>
     extends ComponentFactoryScalarTypeConstrainedAbstract {
-
-        private static final long serialVersionUID = 1L;
 
         private final Class<T> valueTypeClass;
 
@@ -350,8 +352,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     public static class ScalarPanelFactoryForCompositeValue<T extends Serializable>
     extends ComponentFactoryScalarTypeConstrainedAbstract {
-
-        private static final long serialVersionUID = 1L;
 
         private final Class<T> valueTypeClass;
 

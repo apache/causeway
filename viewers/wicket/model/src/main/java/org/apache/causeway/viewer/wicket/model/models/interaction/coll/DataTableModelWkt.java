@@ -23,10 +23,10 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
@@ -37,7 +37,7 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Bound to a BookmarkedObjectWkt, with the {@link DataTableModel}
+ * Bound to a BookmarkedObjectWkt, with the {@link DataTableInteractive}
  * representing either a <i>Collection</i> or an <i>Action</i>'s result.
  *
  * @implSpec the state of the DataTableModel is held transient,
@@ -47,7 +47,7 @@ import lombok.val;
  * @see HasBookmarkedOwnerAbstract
  */
 public class DataTableModelWkt
-extends HasBookmarkedOwnerAbstract<DataTableModel>
+extends HasBookmarkedOwnerAbstract<DataTableInteractive>
 implements
     HasUiParentObject<UiObject> {
 
@@ -62,7 +62,7 @@ implements
         val managedAction = ManagedAction
                 .of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED);
 
-        val table = DataTableModel.forAction(
+        val table = DataTableInteractive.forAction(
                 managedAction,
                 args,
                 actionResult);
@@ -81,7 +81,7 @@ implements
             final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
             final @NonNull OneToManyAssociation collMetaModel) {
 
-        val table = DataTableModel.forCollection(
+        val table = DataTableInteractive.forCollection(
                 ManagedCollection
                 .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
 
@@ -100,12 +100,12 @@ implements
     private static final long serialVersionUID = 1L;
 
     @Getter private final Identifier featureIdentifier;
-    private final DataTableModel.Memento tableMemento;
+    private final DataTableInteractive.Memento tableMemento;
 
     private DataTableModelWkt(
             final BookmarkedObjectWkt bookmarkedObject,
             final Identifier featureIdentifier,
-            final DataTableModel.Memento tableMemento) {
+            final DataTableInteractive.Memento tableMemento) {
         super(bookmarkedObject);
         this.featureIdentifier = featureIdentifier;
         this.tableMemento = tableMemento;
@@ -119,7 +119,7 @@ implements
     }
 
     @Override
-    protected DataTableModel load() {
+    protected DataTableInteractive load() {
         val dataTableModel = tableMemento.getDataTableModel(getBookmarkedOwner());
         return dataTableModel;
     }

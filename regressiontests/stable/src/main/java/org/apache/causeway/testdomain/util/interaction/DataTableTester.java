@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.binding.Observable;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataColumn;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataColumn;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(staticName = "of")
 public class DataTableTester {
 
-    @Getter final @NonNull DataTableModel dataTable;
+    @Getter final @NonNull DataTableInteractive dataTable;
 
     public void assertUnfilteredDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,

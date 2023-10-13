@@ -26,10 +26,10 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -107,8 +107,8 @@ public final class ManagedCollection extends ManagedMember {
         return streamElements(InteractionInitiatedBy.USER);
     }
 
-    public DataTableModel createDataTableModel() {
-        return DataTableModel.forCollection(this);
+    public DataTableInteractive createDataTableModel() {
+        return DataTableInteractive.forCollection(this);
     }
 
 }

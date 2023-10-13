@@ -39,7 +39,6 @@ public class VegaPanelFactoriesWkt {
 
     @Component
     public static class Parented extends MarkupPanelFactories.ParentedAbstract<Vega> {
-        private static final long serialVersionUID = 1L;
 
         public Parented() {
             super(Vega.class);
@@ -58,7 +57,6 @@ public class VegaPanelFactoriesWkt {
 
     @Component
     public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<Vega> {
-        private static final long serialVersionUID = 1L;
 
         public Standalone() {
             super(Vega.class);

@@ -23,13 +23,15 @@ module org.apache.causeway.viewer.commons.applib {
     exports org.apache.causeway.viewer.commons.applib.services.menu;
     exports org.apache.causeway.viewer.commons.applib;
     exports org.apache.causeway.viewer.commons.applib.mixins;
+    exports org.apache.causeway.viewer.commons.applib.services.tabular;
 
     requires java.inject;
     requires lombok;
-    requires org.apache.causeway.applib;
+    requires transitive org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
+    requires transitive org.apache.causeway.core.metamodel;
     requires spring.context;
     requires spring.core;
+
 }

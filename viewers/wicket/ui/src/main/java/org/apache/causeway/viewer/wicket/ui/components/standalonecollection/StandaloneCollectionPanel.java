@@ -23,14 +23,12 @@ import java.util.Optional;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
@@ -42,7 +40,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import lombok.val;
 
 public class StandaloneCollectionPanel
-extends PanelAbstract<DataTableModel, EntityCollectionModel>
+extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 
     private static final long serialVersionUID = 1L;
@@ -87,13 +85,6 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         if (selectorHelper.getComponentFactories().isCardinalityMultiple()) {
             final CollectionPresentationSelectorPanel selectorDropdownPanel =
                     new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);
-
-            final Model<ComponentFactory> componentFactoryModel = new Model<>();
-
-            final String selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
-            ComponentFactory selectedComponentFactory = selectorHelper.find(selected);
-
-            componentFactoryModel.setObject(selectedComponentFactory);
 
             outerDiv.setOutputMarkupId(true);
             outerDiv.addOrReplace(selectorDropdownPanel);

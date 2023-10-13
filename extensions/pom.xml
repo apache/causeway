@@ -114,10 +114,10 @@
 
 		<module>vro/cors</module>
 
-		<module>vw/exceldownload</module>
 		<module>vw/sse</module>
 		<module>vw/fullcalendar</module>
 		<module>vw/pdfjs</module>
+		<module>vw/tabular</module>
 
 	</modules>
 

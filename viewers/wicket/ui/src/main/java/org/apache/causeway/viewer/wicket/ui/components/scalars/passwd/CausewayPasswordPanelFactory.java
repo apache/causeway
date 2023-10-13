@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryS
  */
 public class CausewayPasswordPanelFactory extends ComponentFactoryScalarTypeConstrainedAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public CausewayPasswordPanelFactory() {
         super(CausewayPasswordPanel.class, org.apache.causeway.applib.value.Password.class);
     }

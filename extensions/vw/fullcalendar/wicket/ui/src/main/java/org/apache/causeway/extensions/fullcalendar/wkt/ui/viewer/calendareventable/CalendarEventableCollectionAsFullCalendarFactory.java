@@ -33,8 +33,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 public class CalendarEventableCollectionAsFullCalendarFactory
 extends CalendaredCollectionFactoryAbstract<CalendarEventable> {
 
-    private static final long serialVersionUID = 1L;
-
     public CalendarEventableCollectionAsFullCalendarFactory() {
         super(CalendarEventable.class);
     }

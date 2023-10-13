@@ -34,8 +34,6 @@ import lombok.val;
  */
 public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public BSGridPanelFactory() {
         super(UiComponentType.ENTITY, BSGridPanel.class);
     }

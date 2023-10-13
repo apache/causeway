@@ -1259,7 +1259,7 @@ org.apache.causeway.core:causeway-core-security:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject], xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/metamodel/MetaModelAnnotator.adoc[MetaModelAnnotator], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/schema/SchemaValueMarshaller.adoc[SchemaValueMarshaller], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile]
+xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject], xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/metamodel/MetaModelAnnotator.adoc[MetaModelAnnotator], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/schema/SchemaValueMarshaller.adoc[SchemaValueMarshaller], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile], xref:refguide:core:index/metamodel/tabular/simple/DataColumn.adoc[DataColumn], xref:refguide:core:index/metamodel/tabular/simple/DataRow.adoc[DataRow], xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable]
 ****
 
 |Apache Causeway Core - Runtime
@@ -2400,7 +2400,7 @@ org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/commons/applib/mixins/Object_impersonate.adoc[Object_impersonate], xref:refguide:viewer:index/commons/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles], xref:refguide:viewer:index/commons/applib/services/branding/BrandingUiService.adoc[BrandingUiService], xref:refguide:viewer:index/commons/applib/services/header/HeaderUiService.adoc[HeaderUiService], xref:refguide:viewer:index/commons/applib/services/menu/MenuUiService.adoc[MenuUiService], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModel.adoc[UserProfileUiModel], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiService.adoc[UserProfileUiService]
+xref:refguide:viewer:index/commons/applib/mixins/Object_impersonate.adoc[Object_impersonate], xref:refguide:viewer:index/commons/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles], xref:refguide:viewer:index/commons/applib/services/branding/BrandingUiService.adoc[BrandingUiService], xref:refguide:viewer:index/commons/applib/services/header/HeaderUiService.adoc[HeaderUiService], xref:refguide:viewer:index/commons/applib/services/menu/MenuUiService.adoc[MenuUiService], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModel.adoc[UserProfileUiModel], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiService.adoc[UserProfileUiService], xref:refguide:viewer:index/commons/applib/tabular/export/CollectionContentsExporter.adoc[CollectionContentsExporter]
 ****
 
 |Apache Causeway Viewer - Commons Model
@@ -2868,6 +2868,7 @@ Directory: /viewers/wicket/ui
 |.Components
 ****
 o.a.i.viewer.wicket.ui.app.logout.LogoutHandlerWkt +
+o.a.i.viewer.wicket.ui.components.collectioncontents.export.CollectionContentsAsExportFactory +
 o.a.i.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupportDefault +
 ****
 
@@ -2898,7 +2899,7 @@ org.wicketstuff:wicketstuff-select2:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/wicket/ui/CausewayModuleViewerWicketUi.adoc[CausewayModuleViewerWicketUi]
+xref:refguide:viewer:index/wicket/ui/CausewayModuleViewerWicketUi.adoc[CausewayModuleViewerWicketUi], xref:refguide:viewer:index/wicket/ui/components/collectioncontents/export/CollectionContentsAsExportFactory.adoc[CollectionContentsAsExportFactory]
 ****
 
 |Apache Causeway Viewer - Wicket (UI Test)
@@ -4005,6 +4006,24 @@ skinparam rectangle<<Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA>>
   BorderColor #2e6295
   shadowing false
 }
+skinparam rectangle<<Extensions.ApacheCausewayExtTabularApplib>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Extensions.ApacheCausewayExtTabularExcel>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Extensions.ApacheCausewayExtTabularparent>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
 skinparam rectangle<<Extensions.ApacheCausewayExtpdfjsApplib>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -4084,7 +4103,10 @@ rectangle "Extensions\n<size:10>[Software System]</size>" <<Extensions>> {
   rectangle "==Apache Causeway Ext - Server Sent Events\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEvents>> as Extensions.ApacheCausewayExtServerSentEvents
   rectangle "==Apache Causeway Ext - Server Sent Events (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEventsmetamodel>> as Extensions.ApacheCausewayExtServerSentEventsmetamodel
   rectangle "==Apache Causeway Ext - Server Sent Events (Wicket)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEventsWicket>> as Extensions.ApacheCausewayExtServerSentEventsWicket
+  rectangle "==Apache Causeway Ext - Tabular (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtTabularparent>> as Extensions.ApacheCausewayExtTabularparent
+  rectangle "==Apache Causeway Ext - Tabular (Applib)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtTabularApplib>> as Extensions.ApacheCausewayExtTabularApplib
   rectangle "==Apache Causeway Ext - Audit Trail Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailApplib>> as Extensions.ApacheCausewayExtAuditTrailApplib
+  rectangle "==Apache Causeway Ext - Tabular (Excel)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtTabularExcel>> as Extensions.ApacheCausewayExtTabularExcel
   rectangle "==Apache Causeway Ext - Audit Trail Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO>> as Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO
   rectangle "==Apache Causeway Ext - Audit Trail Persistence (using JPA)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA>> as Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA
   rectangle "==Apache Causeway Ext - CORS (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtCORSparent>> as Extensions.ApacheCausewayExtCORSparent
@@ -4100,6 +4122,7 @@ Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCa
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLog : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecuritySpringOauth2 : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsparent : "<color:#707070>"
+Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtTabularparent : "<color:#707070>"
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailApplib : "<color:#707070>"
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO : "<color:#707070>"
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA : "<color:#707070>"
@@ -4127,6 +4150,8 @@ Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.Apach
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEvents : "<color:#707070>"
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsmetamodel : "<color:#707070>"
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsWicket : "<color:#707070>"
+Extensions.ApacheCausewayExtTabularparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtTabularApplib : "<color:#707070>"
+Extensions.ApacheCausewayExtTabularparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtTabularExcel : "<color:#707070>"
 @enduml
 ----
 .Projects/Modules (Extensions)
@@ -4890,6 +4915,55 @@ org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
 ****
 xref:refguide:extensions:index/sse/wicket/CausewayModuleExtSseWicket.adoc[CausewayModuleExtSseWicket], xref:refguide:extensions:index/sse/wicket/services/SseServiceDefault.adoc[SseServiceDefault], xref:refguide:extensions:index/sse/wicket/webmodule/WebModuleServerSentEvents.adoc[WebModuleServerSentEvents]
 ****
+
+|Apache Causeway Ext - Tabular (parent)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-tabular
+Type: pom
+Directory: /extensions/vw/tabular
+----
+|Basis for viewers to provide alternative representations of collections for download.
+
+|Apache Causeway Ext - Tabular (Applib)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-tabular-applib
+Type: jar
+Directory: /extensions/vw/tabular/applib
+----
+|.Dependencies
+****
+org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
+****
+
+|Apache Causeway Ext - Tabular (Excel)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-tabular-excel
+Type: jar
+Directory: /extensions/vw/tabular/excel
+----
+|.Components
+****
+o.a.i.extensions.tabular.excel.exporter.CollectionContentsAsExcelExporter +
+****
+
+.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-tabular-applib:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
+org.apache.poi:poi-ooxml:jar:<managed> +
+org.apache.poi:poi-ooxml-lite:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/tabular/excel/CausewayModuleExtTabularExcel.adoc[CausewayModuleExtTabularExcel]
+****
 |===
 
 === Applib: Excel
@@ -4935,18 +5009,6 @@ skinparam rectangle<<ApplibExcel.ApacheCausewayExtExcelparent>> {
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<ApplibExcel.ApacheCausewayExtWicketViewerExcelDownloadparent>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<ApplibExcel.ApacheCausewayExtWicketViewerExcelDownloadui>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
 skinparam rectangle<<ApplibExcel.ApacheCausewaySubExceltestingsupport>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -4965,15 +5027,12 @@ rectangle "Applib: Excel\n<size:10>[Software System]</size>" <<ApplibExcel>> {
   rectangle "==Apache Causeway Ext - Excel (Fixtures)\n<size:10>[Container: packaging: jar]</size>" <<ApplibExcel.ApacheCausewayExtExcelFixtures>> as ApplibExcel.ApacheCausewayExtExcelFixtures
   rectangle "==Apache Causeway Ext - Excel (Integ Tests)\n<size:10>[Container: packaging: jar]</size>" <<ApplibExcel.ApacheCausewayExtExcelIntegTests>> as ApplibExcel.ApacheCausewayExtExcelIntegTests
   rectangle "==Apache Causeway Sub - Excel (testing support)\n<size:10>[Container: packaging: jar]</size>" <<ApplibExcel.ApacheCausewaySubExceltestingsupport>> as ApplibExcel.ApacheCausewaySubExceltestingsupport
-  rectangle "==Apache Causeway Ext - Wicket Viewer - Excel Download (parent)\n<size:10>[Container: packaging: pom]</size>" <<ApplibExcel.ApacheCausewayExtWicketViewerExcelDownloadparent>> as ApplibExcel.ApacheCausewayExtWicketViewerExcelDownloadparent
-  rectangle "==Apache Causeway Ext - Wicket Viewer - Excel Download (ui)\n<size:10>[Container: packaging: jar]</size>" <<ApplibExcel.ApacheCausewayExtWicketViewerExcelDownloadui>> as ApplibExcel.ApacheCausewayExtWicketViewerExcelDownloadui
 }
 
+ApplibExcel.ApacheCausewayExtExcelparent .[#707070,thickness=2].> ApplibExcel.ApacheCausewaySubExceltestingsupport : "<color:#707070>"
+ApplibExcel.ApacheCausewayExtExcelparent .[#707070,thickness=2].> ApplibExcel.ApacheCausewayExtExcelapplib : "<color:#707070>"
 ApplibExcel.ApacheCausewayExtExcelparent .[#707070,thickness=2].> ApplibExcel.ApacheCausewayExtExcelFixtures : "<color:#707070>"
 ApplibExcel.ApacheCausewayExtExcelparent .[#707070,thickness=2].> ApplibExcel.ApacheCausewayExtExcelIntegTests : "<color:#707070>"
-ApplibExcel.ApacheCausewayExtExcelparent .[#707070,thickness=2].> ApplibExcel.ApacheCausewaySubExceltestingsupport : "<color:#707070>"
-ApplibExcel.ApacheCausewayExtWicketViewerExcelDownloadparent .[#707070,thickness=2].> ApplibExcel.ApacheCausewayExtWicketViewerExcelDownloadui : "<color:#707070>"
-ApplibExcel.ApacheCausewayExtExcelparent .[#707070,thickness=2].> ApplibExcel.ApacheCausewayExtExcelapplib : "<color:#707070>"
 @enduml
 ----
 .Projects/Modules (Applib: Excel)
@@ -5075,41 +5134,6 @@ org.projectlombok:lombok:jar:<managed> +
 .Document Index Entries
 ****
 xref:refguide:extensions:index/excel/testing/CausewayModuleExtExcelTesting.adoc[CausewayModuleExtExcelTesting], xref:refguide:extensions:index/excel/testing/ExcelFixture.adoc[ExcelFixture], xref:refguide:extensions:index/excel/testing/ExcelFixture2.adoc[ExcelFixture2], xref:refguide:extensions:index/excel/testing/ExcelFixtureRowHandler.adoc[ExcelFixtureRowHandler], xref:refguide:extensions:index/excel/testing/ExcelFixtureWorkbookHandler.adoc[ExcelFixtureWorkbookHandler], xref:refguide:extensions:index/excel/testing/FixtureAwareRowHandler.adoc[FixtureAwareRowHandler]
-****
-
-|Apache Causeway Ext - Wicket Viewer - Excel Download (parent)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-exceldownload
-Type: pom
-Directory: /extensions/vw/exceldownload
-----
-|A component for Apache Causeway' Wicket viewer, providing an alternative representation of collections to be downloaded as an Excel spreadsheet.
-
-|Apache Causeway Ext - Wicket Viewer - Excel Download (ui)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-exceldownload-wicket-ui
-Type: jar
-Directory: /extensions/vw/exceldownload/wicket-ui
-----
-|.Components
-****
-o.a.i.extensions.exceldownload.wkt.ui.viewer.CollectionContentsAsExcelFactory +
-****
-
-.Dependencies
-****
-org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
-org.apache.poi:poi-ooxml:jar:<managed> +
-org.apache.poi:poi-ooxml-lite:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/exceldownload/wkt/ui/CausewayModuleExtExcelDownloadWicketUi.adoc[CausewayModuleExtExcelDownloadWicketUi], xref:refguide:extensions:index/exceldownload/wkt/ui/viewer/CollectionContentsAsExcelFactory.adoc[CollectionContentsAsExcelFactory]
 ****
 |===
 
@@ -6019,7 +6043,7 @@ eg. code mining, automated documentation.
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.checkerframework:checker-qual:jar:3.38.0 +
+org.checkerframework:checker-qual:jar:3.39.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.5.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
@@ -6380,7 +6404,32 @@ Artifact: causeway-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
+o.a.i.testdomain.jdo.JdoInventoryDao +
+o.a.i.testdomain.jdo.JdoTestFixtures +
+o.a.i.testdomain.jpa.JpaInventoryDao +
+o.a.i.testdomain.jpa.JpaTestFixtures +
+o.a.i.testdomain.jpa.springdata.EmployeeRepository +
+o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
+o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
+o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
+o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
+o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
+o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
+o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
+o.a.i.testdomain.util.kv.KVStoreForTesting +
+o.a.i.testdomain.util.rest.RestEndpointService +
+o.a.i.testdomain.wrapperfactory.CounterRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +
@@ -6923,7 +6972,16 @@ Artifact: causeway-viewer-graphql-viewer
 Type: jar
 Directory: /incubator/viewers/graphql/viewer
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.graphql.viewer.source.ExecutionStrategyResolvingWithinInteraction +
+o.a.i.viewer.graphql.viewer.source.GraphQlServiceForCauseway +
+o.a.i.viewer.graphql.viewer.source.GraphQlSourceForCauseway +
+o.a.i.viewer.graphql.viewer.source.ObjectTypeFactory +
+o.a.i.viewer.graphql.viewer.source.QueryFieldFactory +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.incubator.viewer:causeway-viewer-graphql-model:jar:<managed> +
@@ -7009,6 +7067,12 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
+.Components
+****
+o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
+o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7033,6 +7097,16 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
+
+.Components
+****
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
+o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
+o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
+o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
+****
 
 .Dependencies
 ****

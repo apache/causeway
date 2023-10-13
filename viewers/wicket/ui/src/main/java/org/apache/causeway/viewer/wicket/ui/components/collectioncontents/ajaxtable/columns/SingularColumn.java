@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;

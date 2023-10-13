@@ -33,8 +33,6 @@ extends ComponentFactoryAbstract
 implements
     CollectionContentsAsFactory {
 
-    private static final long serialVersionUID = 1L;
-
     private static final String NAME = "calendar";
 
     private Class<T> type;

@@ -68,7 +68,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -77,6 +76,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
@@ -615,7 +615,7 @@ public class DomainObjectTesterFactory {
 
                 val actionResult = resultOrVeto.getSuccessElseFail();
 
-                val table = DataTableModel
+                val table = DataTableInteractive
                         .forAction(managedAction, pendingArgs.getParamValues(), actionResult);
 
                 return DataTableTester.of(table);

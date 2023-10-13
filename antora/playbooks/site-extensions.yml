@@ -74,7 +74,7 @@ content:
       start_path: extensions/vro/cors/adoc # vro
       branches: HEAD
     - url: .
-      start_path: extensions/vw/exceldownload/adoc # vw
+      start_path: extensions/vw/tabular/adoc # vw
       branches: HEAD
     - url: .
       start_path: extensions/vw/fullcalendar/adoc # vw

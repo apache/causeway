@@ -36,8 +36,6 @@ import lombok.val;
 @org.springframework.stereotype.Component
 public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     @Inject
     public PdfJsViewerPanelComponentFactory() {
         super(UiComponentType.SCALAR_NAME_AND_VALUE, PdfJsViewerPanel.class);
