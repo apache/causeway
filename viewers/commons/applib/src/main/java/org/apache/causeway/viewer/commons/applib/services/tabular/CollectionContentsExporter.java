@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.tabular.export;
+package org.apache.causeway.viewer.commons.applib.services.tabular;
 
 import java.io.File;
 

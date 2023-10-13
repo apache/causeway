@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.viewer.commons.applib.tabular.export.CollectionContentsExporter;
+import org.apache.causeway.viewer.commons.applib.services.tabular.CollectionContentsExporter;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;

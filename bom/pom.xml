@@ -1107,15 +1107,22 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
 			<!-- org.apache.causeway.extensions (wicket viewer) -->
 			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-exceldownload</artifactId>
+			    <groupId>org.apache.causeway.extensions</groupId>
+			    <artifactId>causeway-extensions-tabular</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>
+			    <groupId>org.apache.causeway.extensions</groupId>
+			    <artifactId>causeway-extensions-tabular-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.causeway.extensions</groupId>
+			    <artifactId>causeway-extensions-tabular-excel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>

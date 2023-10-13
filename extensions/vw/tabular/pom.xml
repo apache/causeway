@@ -30,24 +30,9 @@
     <artifactId>causeway-extensions-tabular</artifactId>
     <name>Apache Causeway Ext - Tabular (parent)</name>
     <description>
-        Basis for viewers to provide alternative representations of collections for download.
+        Tabular Data Extensions such as download of representations of collections.
     </description>
     <packaging>pom</packaging>
-
-    <dependencyManagement>
-		<dependencies>
-            <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-tabular-applib</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-tabular-excel</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <modules>
 		<module>applib</module>
