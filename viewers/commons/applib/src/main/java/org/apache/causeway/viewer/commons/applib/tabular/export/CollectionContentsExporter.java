@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.commons.applib.tabular.export;
 import java.io.File;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 /**
@@ -58,12 +59,10 @@ public interface CollectionContentsExporter {
     int orderOfAppearanceInUiDropdown();
 
     /**
-     * Whether this exporter applies to given {@code domainObjectType}.
-     * If <code>false</code> this exporter is not provided to the end user.
+     * Whether this exporter applies to given {@code objectType}.
+     * If <code>false</code>, this exporter is not provided to the end user.
      */
-    default boolean appliesTo(final Class<?> domainObjectType) {
-        return true;
-    }
+    default boolean appliesTo(final ObjectSpecification objectType) { return true; }
 
     /**
      * Whether activation of this table presentation view should result in a full page reload.
