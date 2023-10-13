@@ -25,6 +25,8 @@ import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 /**
  * SPI to provide file export to table views.
+ *
+ * @since 2.0 {@index}}
  */
 public interface CollectionContentsExporter {
 
