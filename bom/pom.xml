@@ -177,7 +177,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <spring-boot.version>3.1.4</spring-boot.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
-        <swagger-core.version>2.2.16</swagger-core.version>
+        <swagger-core.version>2.2.17</swagger-core.version>
 
         <wicket.version>10.0.0-M1</wicket.version>
         <wicket-bootstrap.version>7.0.0</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
