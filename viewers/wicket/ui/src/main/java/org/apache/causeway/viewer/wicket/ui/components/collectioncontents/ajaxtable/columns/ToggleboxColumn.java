@@ -26,8 +26,8 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -46,11 +46,11 @@ extends GenericColumnAbstract {
         public boolean isSetAll() { return this == SET_ALL; }
     }
 
-    private IModel<DataTableModel> dataTableModelHolder;
+    private IModel<DataTableInteractive> dataTableModelHolder;
 
     public ToggleboxColumn(
             final MetaModelContext commonContext,
-            final IModel<DataTableModel> dataTableModelHolder) {
+            final IModel<DataTableInteractive> dataTableModelHolder) {
         super(commonContext, "");
         this.dataTableModelHolder = dataTableModelHolder;
     }

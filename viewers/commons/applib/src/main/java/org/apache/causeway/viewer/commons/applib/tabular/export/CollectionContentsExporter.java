@@ -21,14 +21,14 @@ package org.apache.causeway.viewer.commons.applib.tabular.export;
 import java.io.File;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 /**
  * SPI to provide file export to table views.
  */
 public interface CollectionContentsExporter {
 
-    File createExportFile(DataTableModel dataTableModel);
+    File createExportFile(DataTable dataTable);
 
     CommonMimeType getMimeType();
 

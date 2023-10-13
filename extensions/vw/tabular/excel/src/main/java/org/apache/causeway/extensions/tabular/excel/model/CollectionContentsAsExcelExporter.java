@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.tabular.excel.model;
 import java.io.File;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 import org.apache.causeway.viewer.commons.applib.tabular.export.CollectionContentsExporter;
 
 @org.springframework.stereotype.Component
@@ -29,8 +29,8 @@ public class CollectionContentsAsExcelExporter
 implements CollectionContentsExporter {
 
     @Override
-    public File createExportFile(final DataTableModel dataTableModel) {
-        return new ExcelFileFactory(dataTableModel).get();
+    public File createExportFile(final DataTable dataTable) {
+        return new ExcelFileFactory().apply(dataTable);
     }
 
     @Override

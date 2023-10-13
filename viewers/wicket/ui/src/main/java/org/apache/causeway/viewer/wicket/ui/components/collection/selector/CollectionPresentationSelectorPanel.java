@@ -35,7 +35,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
@@ -58,7 +58,7 @@ import lombok.val;
  * {@link org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel}.
  */
 public class CollectionPresentationSelectorPanel
-extends PanelAbstract<DataTableModel, EntityCollectionModel> {
+extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 

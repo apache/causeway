@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.managed.nonscalar;
+package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ public class DataColumn {
     @Getter private final @NonNull LazyObservable<String> columnFriendlyName;
     @Getter private final @NonNull LazyObservable<Optional<String>> columnDescription;
 
-    public DataColumn(final DataTableModel parentTable, final ObjectAssociation associationMetaModel) {
+    public DataColumn(final DataTableInteractive parentTable, final ObjectAssociation associationMetaModel) {
         this.associationMetaModel = associationMetaModel;
         this.columnId = associationMetaModel.getId();
 

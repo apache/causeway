@@ -24,8 +24,8 @@ import java.util.UUID;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 import lombok.Getter;
@@ -37,7 +37,7 @@ extends ChainingModel<DataRow> {
     private static final long serialVersionUID = 1L;
 
     public static DataRowWkt chain(
-            final IModel<DataTableModel> dataTableModelHolder,
+            final IModel<DataTableInteractive> dataTableModelHolder,
             final DataRow dataRow) {
         return new DataRowWkt(dataTableModelHolder, dataRow);
     }
@@ -48,7 +48,7 @@ extends ChainingModel<DataRow> {
     private transient DataRow dataRow;
 
     private DataRowWkt(
-            final IModel<DataTableModel> dataTableModelHolder,
+            final IModel<DataTableInteractive> dataTableModelHolder,
             final DataRow dataRow) {
         super(dataTableModelHolder);
         this.dataRow = dataRow;
@@ -75,7 +75,7 @@ extends ChainingModel<DataRow> {
 
     // -- HELPER
 
-    private DataTableModel getDataTableModel() {
+    private DataTableInteractive getDataTableModel() {
         return ((DataTableModelWkt) super.getTarget()).getObject();
     }
 

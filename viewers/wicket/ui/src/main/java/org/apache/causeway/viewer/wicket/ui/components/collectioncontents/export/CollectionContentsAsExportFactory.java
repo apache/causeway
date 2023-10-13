@@ -102,7 +102,7 @@ implements CollectionContentsAsFactory {
         @Override
         public File getObject() {
             return ((CollectionContentsAsExportFactory) key.resolve(model::getServiceRegistry))
-            .collectionContentsExporter.createExportFile(model.getDataTableModel());
+            .collectionContentsExporter.createExportFile(model.getDataTableModel().export());
         }
 
     }

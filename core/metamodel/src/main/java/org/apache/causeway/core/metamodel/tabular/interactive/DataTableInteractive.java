@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.managed.nonscalar;
+package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -54,6 +54,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -61,30 +62,30 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-public class DataTableModel
+public class DataTableInteractive
 implements MultiselectChoices {
 
     // -- FACTORIES
 
-    public static DataTableModel empty(final ManagedMember managedMember, final Where where) {
-        return new DataTableModel(managedMember, where, Can::empty);
+    public static DataTableInteractive empty(final ManagedMember managedMember, final Where where) {
+        return new DataTableInteractive(managedMember, where, Can::empty);
     }
 
-    public static DataTableModel forCollection(
+    public static DataTableInteractive forCollection(
             final ManagedCollection managedCollection) {
-        return new DataTableModel(managedCollection, managedCollection.getWhere(), ()->
+        return new DataTableInteractive(managedCollection, managedCollection.getWhere(), ()->
             managedCollection
             .streamElements()
             .collect(Can.toCan()));
     }
 
-    public static DataTableModel forAction(
+    public static DataTableInteractive forAction(
             final ManagedAction managedAction,
             final Can<ManagedObject> args,
             final ManagedObject actionResult) {
 
         if(actionResult==null) {
-            new DataTableModel(managedAction, managedAction.getWhere(), Can::empty);
+            new DataTableInteractive(managedAction, managedAction.getWhere(), Can::empty);
         }
         if(!(actionResult instanceof PackedManagedObject)) {
             throw _Exceptions.unexpectedCodeReach();
@@ -93,7 +94,7 @@ implements MultiselectChoices {
         val elements = ((PackedManagedObject)actionResult).unpack();
         elements.forEach(ManagedObject::getBookmark);
 
-        return new DataTableModel(managedAction, managedAction.getWhere(),
+        return new DataTableInteractive(managedAction, managedAction.getWhere(),
                 ()->elements);
     }
 
@@ -112,7 +113,7 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
     @Getter private final @NonNull LazyObservable<String> title;
 
-    private DataTableModel(
+    private DataTableInteractive(
             // we need access to the owner in support of imperative title and referenced column detection
             final ManagedMember managedMember,
             final Where where,
@@ -257,6 +258,18 @@ implements MultiselectChoices {
         return ActionInteraction.startWithMultiselect(managedMember.getOwner(), actionId, where, this);
     }
 
+    // -- EXPORT
+
+    public DataTable export() {
+        return new DataTable(getElementType(),
+                getTitle().getValue(),
+                org.apache.causeway.core.metamodel.tabular.simple.DataColumn.orderByColumnId(),
+                getDataRowsFiltered().getValue()
+                    .stream()
+                    .map(dr->dr.getRowElement())
+                    .collect(Can.toCan()));
+    }
+
     // -- MEMENTO
 
     public Memento getMemento(final @Nullable ManagedAction.MementoForArgs argsMemento) {
@@ -282,7 +295,7 @@ implements MultiselectChoices {
         private static final long serialVersionUID = 1L;
 
         static Memento create(
-                final @Nullable DataTableModel table,
+                final @Nullable DataTableInteractive table,
                 final @Nullable MementoForArgs argsMemento) {
             val managedMember = table.managedMember;
 
@@ -296,7 +309,7 @@ implements MultiselectChoices {
         private final Where where;
         private final MementoForArgs argsMemento;
 
-        public DataTableModel getDataTableModel(final ManagedObject owner) {
+        public DataTableInteractive getDataTableModel(final ManagedObject owner) {
 
             if(owner.getPojo()==null) {
                 // owner (if entity) might have been deleted
@@ -310,7 +323,7 @@ implements MultiselectChoices {
                 val collInteraction = CollectionInteraction.start(owner, memberId, where);
                 val managedColl = collInteraction.getManagedCollection().orElseThrow();
                 // invocation bypassing domain events (pass-through)
-                return new DataTableModel(managedColl, where, ()->
+                return new DataTableInteractive(managedColl, where, ()->
                     managedColl.streamElements(InteractionInitiatedBy.PASS_THROUGH).collect(Can.toCan()));
             }
             val actionInteraction = ActionInteraction.start(owner, memberId, where);

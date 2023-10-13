@@ -100,7 +100,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
@@ -466,7 +466,7 @@ public class Wkt {
                 onUpdate.accept(target); }
             /**
              * XXX[CAUSEWAY-3005] Any action dialog submission on the same page will
-             * result in a new {@link DataTableModel}, where any previously rendered check-boxes
+             * result in a new {@link DataTableInteractive}, where any previously rendered check-boxes
              * run out of sync with their DataRowToggle model.
              * Hence we intercept such events and reset check-boxes to un-checked.
              */

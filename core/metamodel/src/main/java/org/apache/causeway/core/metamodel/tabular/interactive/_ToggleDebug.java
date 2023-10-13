@@ -16,20 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.exceldownload.wkt.ui;
+package org.apache.causeway.core.metamodel.tabular.interactive;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import org.apache.causeway.extensions.exceldownload.wkt.ui.viewer.CollectionContentsAsExcelFactory;
+class _ToggleDebug {
 
-/**
- * @since 2.0 {@index}
- */
-@Configuration
-@Import({
-        // @Component's
-        CollectionContentsAsExcelFactory.class
-})
-class CausewayModuleExtExcelDownloadWicketUi {
+    public static void onSelectRowToggle(
+            final ManagedObject rowElement,
+            final Boolean old,
+            final Boolean _new,
+            final boolean isToggleAllEvent) {
+
+        System.err.printf("onSelectRowToggle: %s %b->%b (toggle-all: %b)%n",
+                ""+rowElement.getPojo(), old, _new, isToggleAllEvent);
+    }
+
+    public static void onClearToggleAll(
+            final Boolean old,
+            final Boolean isAllOn,
+            final boolean isClearToggleAllEvent) {
+
+        System.err.printf("clear-all: %b->%b (clear-all: %b)%n",
+                old, isAllOn, isClearToggleAllEvent);
+    }
+
 }

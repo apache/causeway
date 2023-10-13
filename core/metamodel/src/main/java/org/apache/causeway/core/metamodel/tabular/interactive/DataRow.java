@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.managed.nonscalar;
+package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -36,10 +36,10 @@ public class DataRow {
     @Getter private final UUID uuid = UUID.randomUUID(); // in support of client side sorting
     private final ManagedObject rowElement;
     @Getter private final BooleanBindable selectToggle;
-    @Getter private final DataTableModel parentTable;
+    @Getter private final DataTableInteractive parentTable;
 
     public DataRow(
-            final @NonNull DataTableModel parentTable,
+            final @NonNull DataTableInteractive parentTable,
             final @NonNull ManagedObject rowElement) {
         this.parentTable = parentTable;
         this.rowElement = rowElement;

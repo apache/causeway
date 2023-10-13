@@ -25,10 +25,10 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.links.LinksProvider;
 
@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 
 public interface EntityCollectionModel
 extends
-    IModel<DataTableModel>,
+    IModel<DataTableInteractive>,
     HasCommonContext,
     LinksProvider {
 
@@ -91,7 +91,7 @@ extends
 
     // -- DATA TABLE
 
-    DataTableModel getDataTableModel();
+    DataTableInteractive getDataTableModel();
 
     // -- METAMODEL SUPPORT
 

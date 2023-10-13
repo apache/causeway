@@ -19,16 +19,14 @@
 package org.apache.causeway.extensions.tabular.excel.model;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -43,29 +41,22 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
-import lombok.experimental.Accessors;
 
-public class ExcelFileFactory implements Supplier<File> {
+@RequiredArgsConstructor
+public class ExcelFileFactory implements Function<DataTable, File> {
 
     /**
      * If a cell's cardinality exceeds this threshold, truncate with '... has more' label at the end.
      */
     private static final int MAX_CELL_ELEMENTS = 5;
     private static final String POI_LINE_DELIMITER = "\n";
-
-    @Getter @Accessors(fluent=true)
-    private final DataTableModel table;
-
-    public ExcelFileFactory(final DataTableModel table) {
-        this.table = table;
-    }
 
     @RequiredArgsConstructor
     static class RowFactory {
@@ -77,14 +68,9 @@ public class ExcelFileFactory implements Supplier<File> {
     }
 
     @Override @SneakyThrows
-    public File get() {
-        return createTempFile();
-    }
-
-    private File createTempFile() throws IOException, FileNotFoundException {
+    public File apply(final DataTable table) {
         try(final Workbook wb = new XSSFWorkbook()) {
-            final String sheetName = _Strings.nonEmpty(table().getTitle().getValue())
-                    .orElse("Collection"); // fallback sheet name
+            final String sheetName = table.getTableFriendlyName();
 
             val tempFile = File.createTempFile(ExcelFileFactory.class.getCanonicalName(), sheetName + ".xlsx");
             Row row;
@@ -96,15 +82,14 @@ public class ExcelFileFactory implements Supplier<File> {
 
                 final ExcelFileFactory.RowFactory rowFactory = new RowFactory(sheet);
 
-
-                val dataColumns = table().getDataColumns().getValue();
+                val dataColumns = table.getDataColumns();
 
                 // primary header row
                 row = rowFactory.newRow();
                 int i=0;
                 for(val column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
-                    cell.setCellValue(column.getColumnFriendlyName().getValue());
+                    cell.setCellValue(column.getColumnFriendlyName());
                     cell.setCellStyle(cellStyleProvider.primaryHeaderStyle());
                 }
 
@@ -114,7 +99,7 @@ public class ExcelFileFactory implements Supplier<File> {
                 var maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
                 for(val column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
-                    final String columnDescription = column.getColumnDescription().getValue().orElse("");
+                    final String columnDescription = column.getColumnDescription().orElse("");
                     cell.setCellValue(columnDescription);
                     maxLinesInRow.accept((int)
                             _Strings.splitThenStream(columnDescription, "\n").count());
@@ -123,7 +108,7 @@ public class ExcelFileFactory implements Supplier<File> {
                 autoSizeRow(row, maxLinesInRow.getResult().orElse(1),
                         wb.getFontAt(cellStyleProvider.secondaryHeaderStyle().getFontIndex()));
 
-                val dataRows = table().getDataRowsFiltered().getValue();
+                val dataRows = table.getDataRows();
 
                 // detail rows
                 for (val dataRow : dataRows) {
@@ -132,7 +117,7 @@ public class ExcelFileFactory implements Supplier<File> {
                     maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
                     for(val column : dataColumns) {
                         final Cell cell = row.createCell((short) i++);
-                        val cellElements = dataRow.getCellElementsForColumn(column)
+                        val cellElements = dataRow.getCellElements(column, InteractionInitiatedBy.PASS_THROUGH)
                                 .filter(managedObject->managedObject.getPojo()!=null);
                         final int linesWritten = setCellValue(cellElements,
                                 cell,
@@ -298,4 +283,5 @@ public class ExcelFileFactory implements Supplier<File> {
         cell.setCellValue(date);
         cell.setCellStyle(cellStyleProvider.dateStyle());
     }
+
 }
