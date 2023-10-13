@@ -239,8 +239,8 @@ public final class Clob implements NamedWithMimeType {
         if(file==null) {
             return; // just ignore
         }
-        try(val os = new FileOutputStream(file)){
-            writeCharsTo(new OutputStreamWriter(os, charset));
+        try(val os = new OutputStreamWriter(new FileOutputStream(file), charset)){
+            writeCharsTo(os);
         }
     }
 
