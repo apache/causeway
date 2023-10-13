@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
  */
 public class PropertyEditFormPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public PropertyEditFormPanelFactory() {
         super(UiComponentType.PROPERTY_EDIT_FORM, PropertyEditFormPanel.class);
     }

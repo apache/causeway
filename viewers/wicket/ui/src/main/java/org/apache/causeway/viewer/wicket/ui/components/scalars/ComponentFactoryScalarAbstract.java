@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 public abstract class ComponentFactoryScalarAbstract
 extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     protected ComponentFactoryScalarAbstract(
             final Class<?> componentClass) {
         super(UiComponentType.SCALAR_NAME_AND_VALUE, componentClass);

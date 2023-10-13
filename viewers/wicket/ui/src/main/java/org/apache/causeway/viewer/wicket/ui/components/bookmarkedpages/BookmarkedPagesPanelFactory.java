@@ -27,8 +27,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 public class BookmarkedPagesPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public BookmarkedPagesPanelFactory() {
         super(UiComponentType.BOOKMARKED_PAGES, BookmarkedPagesPanel.class);
     }

@@ -33,8 +33,6 @@ import lombok.val;
  */
 public class StandaloneCollectionPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public StandaloneCollectionPanelFactory() {
         super(UiComponentType.STANDALONE_COLLECTION, StandaloneCollectionPanel.class);
     }

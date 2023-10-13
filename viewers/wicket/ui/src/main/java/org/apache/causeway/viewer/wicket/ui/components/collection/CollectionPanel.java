@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
@@ -44,7 +44,7 @@ import lombok.val;
  * of) {@link ScalarPanelAbstract}.
  */
 public class CollectionPanel
-extends PanelAbstract<DataTableModel, EntityCollectionModelParented>
+extends PanelAbstract<DataTableInteractive, EntityCollectionModelParented>
 implements
     CollectionPresentationSelectorProvider,
     MultiselectToggleProvider {

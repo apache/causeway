@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryS
  */
 public class CausewayBlobPanelFactory extends ComponentFactoryScalarTypeConstrainedAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public CausewayBlobPanelFactory() {
         super(CausewayBlobPanel.class, org.apache.causeway.applib.value.Blob.class);
     }

@@ -53,9 +53,6 @@ public class MarkupPanelFactories {
 
     public static abstract class ParentedAbstract<T extends Serializable>
     extends ComponentFactoryScalarTypeConstrainedAbstract {
-
-        private static final long serialVersionUID = 1L;
-
         private final Class<T> valueType;
 
         protected ParentedAbstract(final Class<T> valueType) {
@@ -65,7 +62,7 @@ public class MarkupPanelFactories {
 
         @Override
         protected Component createComponent(final String id, final ScalarModel scalarModel) {
-            return new ScalarMarkupPanel<T>(id, scalarModel, valueType, this::newMarkupComponent);
+            return new ScalarMarkupPanel<T>(id, scalarModel, valueType, this.key());
         }
 
         protected abstract MarkupComponent newMarkupComponent(String id, ScalarModel model);
@@ -74,8 +71,8 @@ public class MarkupPanelFactories {
 
     // -- STANDALONE (ABSTRACT)
 
-    public static abstract class StandaloneAbstract<T> extends ComponentFactoryAbstract {
-        private static final long serialVersionUID = 1L;
+    public static abstract class StandaloneAbstract<T>
+    extends ComponentFactoryAbstract {
 
         private final Class<T> valueType;
 
@@ -102,6 +99,7 @@ public class MarkupPanelFactories {
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
+            // last arg is consumed by constructor, hence trivially serializable
             return new StandaloneMarkupPanel(id, (ValueModel) model, this::newMarkupComponent);
         }
 
@@ -111,7 +109,6 @@ public class MarkupPanelFactories {
     // -- CONCRETE COMPONENT FACTORY - PARENTED
 
     static class Parented extends ParentedAbstract<Markup> {
-        private static final long serialVersionUID = 1L;
 
         public Parented() {
             super(Markup.class);
@@ -129,7 +126,6 @@ public class MarkupPanelFactories {
     // -- CONCRETE COMPONENT FACTORY - STANDALONE
 
     static class Standalone extends StandaloneAbstract<Markup> {
-        private static final long serialVersionUID = 1L;
 
         public Standalone() {
             super(Markup.class);

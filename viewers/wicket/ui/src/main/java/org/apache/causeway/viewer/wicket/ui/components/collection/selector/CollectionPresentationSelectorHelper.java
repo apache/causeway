@@ -36,6 +36,7 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
@@ -52,7 +53,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
     private final EntityCollectionModel collectionModel;
 
     @Getter
-    private final Can<ComponentFactory> componentFactories;
+    private final Can<ComponentFactoryKey> componentFactories;
     private final ComponentHintKey componentHintKey;
 
     public CollectionPresentationSelectorHelper(
@@ -72,7 +73,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
                 : ComponentHintKey.noop();
     }
 
-    private Can<ComponentFactory> gatherComponentFactories(
+    private Can<ComponentFactoryKey> gatherComponentFactories(
             final ComponentFactoryRegistry componentFactoryRegistry) {
 
         return componentFactoryRegistry
@@ -82,6 +83,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
                 collectionModel)
         .filter(componentFactory ->
             componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
+        .map(ComponentFactory::key)
         .collect(Can.toCan());
     }
 
@@ -138,8 +140,8 @@ public class CollectionPresentationSelectorHelper implements Serializable {
             final String viewName = Facets.defaultViewName(collectionModel.getMetaModel())
                     .orElseThrow(); // null case guarded by if clause
 
-            for (ComponentFactory componentFactory : componentFactories) {
-                final String componentName = componentFactory.getName();
+            for (ComponentFactoryKey componentFactory : componentFactories) {
+                final String componentName = componentFactory.id();
                 if (componentName.equalsIgnoreCase(viewName)) {
                     return componentName;
                 }
@@ -172,8 +174,8 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         .orElse(false);
     }
 
-    public ComponentFactory find(final String selected) {
-        ComponentFactory componentFactory = doFind(selected);
+    public ComponentFactoryKey find(final String selected) {
+        ComponentFactoryKey componentFactory = doFind(selected);
         if (componentFactory != null) {
             return componentFactory;
         }
@@ -190,9 +192,9 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         return componentFactory;
     }
 
-    private ComponentFactory doFind(final String selected) {
-        for (ComponentFactory componentFactory : componentFactories) {
-            if(selected.equals(componentFactory.getName())) {
+    private ComponentFactoryKey doFind(final String selected) {
+        for (ComponentFactoryKey componentFactory : componentFactories) {
+            if(selected.equals(componentFactory.id())) {
                 return componentFactory;
             }
         }
@@ -201,8 +203,8 @@ public class CollectionPresentationSelectorHelper implements Serializable {
 
     public int lookup(final String view) {
         int i=0;
-        for (ComponentFactory componentFactory : componentFactories) {
-            if(view.equals(componentFactory.getName())) {
+        for (ComponentFactoryKey componentFactory : componentFactories) {
+            if(view.equals(componentFactory.id())) {
                 return i;
             }
             i++;

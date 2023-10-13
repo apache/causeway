@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
  */
 public class FooterPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public FooterPanelFactory() {
         super(UiComponentType.FOOTER, FooterPanel.class);
     }
