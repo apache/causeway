@@ -50,6 +50,7 @@
     </dependencyManagement>
 
     <modules>
+		<module>applib</module>
         <module>excel</module>
     </modules>
 
