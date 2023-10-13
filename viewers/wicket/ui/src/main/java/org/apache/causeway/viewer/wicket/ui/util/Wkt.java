@@ -615,7 +615,6 @@ public class Wkt {
             private static final long serialVersionUID = 1L;
             @Override public String getContentType() {
                 return mime.getBaseType();
-                        //legacy "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
             }
         };
     }

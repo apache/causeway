@@ -24,7 +24,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.file.Files;
 
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.viewer.commons.applib.services.tabular.CollectionContentsExporter;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
@@ -33,6 +35,9 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.components.download.FileDownloadLink;
+
+import lombok.SneakyThrows;
+import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link DownloadLink}.
@@ -70,8 +75,8 @@ implements CollectionContentsAsFactory {
         var fileName = collectionModel.getName().replaceAll(" ", "") + "." + ext;
 
         var link = new FileDownloadLink(id,
-                collectionContentsExporter.getMimeType(),
-                fileName, new FileModel(this, collectionModel));
+                mimeType,
+                fileName, new FileModel(this, collectionModel, fileName));
         return link;
     }
 
@@ -96,16 +101,29 @@ implements CollectionContentsAsFactory {
         private static final long serialVersionUID = 1L;
         private ComponentFactoryKey key;
         private EntityCollectionModel model;
+        private String fileName;
 
-        FileModel(final CollectionContentsAsExportFactory x, final EntityCollectionModel model) {
+        FileModel(final CollectionContentsAsExportFactory x, final EntityCollectionModel model, final String fileName) {
             this.key = x.key();
             this.model = model;
+            this.fileName = fileName;
         }
 
-        @Override
+        @Override @SneakyThrows
         public File getObject() {
+            val tempFile = File.createTempFile(CollectionContentsAsExportFactory.class.getCanonicalName(), fileName);
+            Try.run(()->
+                exporter().createExport(model.getDataTableModel().export(), tempFile))
+            .ifFailure(__->{
+                Files.remove(tempFile); // cleanup after sad case
+            })
+            .ifFailureFail(); // rethrow
+            return tempFile;
+        }
+
+        private CollectionContentsExporter exporter() {
             return ((CollectionContentsAsExportFactory) key.resolve(model::getServiceRegistry))
-            .collectionContentsExporter.createExportFile(model.getDataTableModel().export());
+                    .collectionContentsExporter;
         }
 
     }

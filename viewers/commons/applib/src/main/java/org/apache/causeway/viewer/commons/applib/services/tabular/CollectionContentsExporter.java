@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
  */
 public interface CollectionContentsExporter {
 
-    File createExportFile(DataTable dataTable);
+    void createExport(DataTable dataTable, File tempFile);
 
     CommonMimeType getMimeType();
 
