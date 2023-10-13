@@ -26,7 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -50,7 +50,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @RequiredArgsConstructor
-public class ExcelFileFactory implements Function<DataTable, File> {
+class ExcelExporter implements BiConsumer<DataTable, File> {
 
     /**
      * If a cell's cardinality exceeds this threshold, truncate with '... has more' label at the end.
@@ -68,75 +68,72 @@ public class ExcelFileFactory implements Function<DataTable, File> {
     }
 
     @Override @SneakyThrows
-    public File apply(final DataTable table) {
+    public void accept(final DataTable table, final File tempFile) {
         try(final Workbook wb = new XSSFWorkbook()) {
             final String sheetName = table.getTableFriendlyName();
 
-            val tempFile = File.createTempFile(ExcelFileFactory.class.getCanonicalName(), sheetName + ".xlsx");
             Row row;
 
-            try(val fos = new FileOutputStream(tempFile)) {
-                val sheet = wb.createSheet(sheetName);
+            val sheet = wb.createSheet(sheetName);
 
-                val cellStyleProvider = new CellStyleProvider(wb);
+            val cellStyleProvider = new CellStyleProvider(wb);
 
-                final ExcelFileFactory.RowFactory rowFactory = new RowFactory(sheet);
+            final ExcelExporter.RowFactory rowFactory = new RowFactory(sheet);
 
-                val dataColumns = table.getDataColumns();
+            val dataColumns = table.getDataColumns();
 
-                // primary header row
-                row = rowFactory.newRow();
-                int i=0;
-                for(val column : dataColumns) {
-                    final Cell cell = row.createCell((short) i++);
-                    cell.setCellValue(column.getColumnFriendlyName());
-                    cell.setCellStyle(cellStyleProvider.primaryHeaderStyle());
-                }
+            // primary header row
+            row = rowFactory.newRow();
+            int i=0;
+            for(val column : dataColumns) {
+                final Cell cell = row.createCell((short) i++);
+                cell.setCellValue(column.getColumnFriendlyName());
+                cell.setCellStyle(cellStyleProvider.primaryHeaderStyle());
+            }
 
-                // secondary header row
+            // secondary header row
+            row = rowFactory.newRow();
+            i=0;
+            var maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
+            for(val column : dataColumns) {
+                final Cell cell = row.createCell((short) i++);
+                final String columnDescription = column.getColumnDescription().orElse("");
+                cell.setCellValue(columnDescription);
+                maxLinesInRow.accept((int)
+                        _Strings.splitThenStream(columnDescription, "\n").count());
+                cell.setCellStyle(cellStyleProvider.secondaryHeaderStyle());
+            }
+            autoSizeRow(row, maxLinesInRow.getResult().orElse(1),
+                    wb.getFontAt(cellStyleProvider.secondaryHeaderStyle().getFontIndex()));
+
+            val dataRows = table.getDataRows();
+
+            // detail rows
+            for (val dataRow : dataRows) {
                 row = rowFactory.newRow();
                 i=0;
-                var maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
+                maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
                 for(val column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
-                    final String columnDescription = column.getColumnDescription().orElse("");
-                    cell.setCellValue(columnDescription);
-                    maxLinesInRow.accept((int)
-                            _Strings.splitThenStream(columnDescription, "\n").count());
-                    cell.setCellStyle(cellStyleProvider.secondaryHeaderStyle());
+                    val cellElements = dataRow.getCellElements(column, InteractionInitiatedBy.PASS_THROUGH)
+                            .filter(managedObject->managedObject.getPojo()!=null);
+                    final int linesWritten = setCellValue(cellElements,
+                            cell,
+                            cellStyleProvider);
+                    maxLinesInRow.accept(linesWritten);
                 }
-                autoSizeRow(row, maxLinesInRow.getResult().orElse(1),
-                        wb.getFontAt(cellStyleProvider.secondaryHeaderStyle().getFontIndex()));
-
-                val dataRows = table.getDataRows();
-
-                // detail rows
-                for (val dataRow : dataRows) {
-                    row = rowFactory.newRow();
-                    i=0;
-                    maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
-                    for(val column : dataColumns) {
-                        final Cell cell = row.createCell((short) i++);
-                        val cellElements = dataRow.getCellElements(column, InteractionInitiatedBy.PASS_THROUGH)
-                                .filter(managedObject->managedObject.getPojo()!=null);
-                        final int linesWritten = setCellValue(cellElements,
-                                cell,
-                                cellStyleProvider);
-                        maxLinesInRow.accept(linesWritten);
-                    }
-                    autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
-                }
-
-                // column auto-size
-                autoSizeColumns(sheet, dataColumns.size());
-
-                // freeze panes
-                sheet.createFreezePane(0, 2);
-
-                wb.write(fos);
-
+                autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
             }
-            return tempFile;
+
+            // column auto-size
+            autoSizeColumns(sheet, dataColumns.size());
+
+            // freeze panes
+            sheet.createFreezePane(0, 2);
+
+            try(var fos = new FileOutputStream(tempFile)) {
+                wb.write(fos);
+            }
         }
     }
 
