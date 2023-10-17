@@ -45,6 +45,7 @@ import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleTable;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -353,6 +354,8 @@ final class NodeWriter implements StructuralNodeVisitor {
     @Override
     public boolean tableHead(final Table table, final int depth) {
 
+        printNewLine(); // empty line before table block starts
+
         _Strings.nonEmpty(table.getTitle())
         .ifPresent(this::printBlockTitle);
 
@@ -414,8 +417,19 @@ final class NodeWriter implements StructuralNodeVisitor {
     private static Map<String, String> formatedAttrMap(final Table table) {
         final Map<String, String> formatedAttrMap = new LinkedHashMap<>();
 
-        if(table.hasAttribute("cols")) {
-            formatedAttrMap.put("cols", (String)table.getAttribute("cols"));
+        if(table.hasAttribute(SimpleTable.COLS_ATTR)) {
+            formatedAttrMap.put(SimpleTable.COLS_ATTR, (String)table.getAttribute(SimpleTable.COLS_ATTR));
+        } else {
+            // emit the [cols="1,1,.."] line unconditionally
+            formatedAttrMap.put(SimpleTable.COLS_ATTR, IntStream.range(0, table.getColumns().size())
+                    .mapToObj(i->"1")
+                    .collect(Collectors.joining(",")));
+        }
+        if(table.hasAttribute(SimpleTable.FRAME_ATTR)) {
+            formatedAttrMap.put("frame", (String)table.getAttribute(SimpleTable.FRAME_ATTR));
+        }
+        if(table.hasAttribute(SimpleTable.GRID_ATTR)) {
+            formatedAttrMap.put("grid", (String)table.getAttribute(SimpleTable.GRID_ATTR));
         }
 
         val options = table.getAttributes().entrySet()

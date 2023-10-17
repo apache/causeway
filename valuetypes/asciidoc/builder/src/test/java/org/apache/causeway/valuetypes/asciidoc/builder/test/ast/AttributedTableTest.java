@@ -39,25 +39,27 @@ class AttributedTableTest extends AbstractAsciiDocWriterTest {
     void setUp() throws Exception {
         doc = doc();
         super.adocSourceResourceLocation = "table-attributed.adoc";
-        super.debugEnabled = false;
+        super.debugEnabled = true;
     }
 
     @Test
     void testTable() throws IOException {
-        
+
         val table = table(doc);
         table.setTitle("Some table");
         table.setAttribute("cols", "3m,2a", true);
         table.setAttribute("header-option", "", true);
-        
+        table.setFrame("sides");
+        table.setGrid("rows");
+
         headCell(table, 0, 0, "Col-1");
         headCell(table, 0, 1, "Col-2");
-        
+
         cell(table, 0, 0, "1-1");
         cell(table, 0, 1, "1-2");
-        
+
         assertDocumentIsCorrectlyWritten(doc);
     }
-    
+
 
 }

@@ -1,5 +1,5 @@
 .Some table
-[cols="3m,2a", options="header"]
+[cols="3m,2a", frame="sides", grid="rows", options="header"]
 |===
 |Col-1 |Col-2 
 
