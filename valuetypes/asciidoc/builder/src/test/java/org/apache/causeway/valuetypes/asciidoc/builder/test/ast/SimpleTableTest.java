@@ -44,24 +44,27 @@ class SimpleTableTest extends AbstractAsciiDocWriterTest {
 
     @Test
     void testTable() throws IOException {
-        
+
+        doc.setTitle("SimpleTableTest");
+
+        // assert that we have a blank line before the title block starts
+
         val table = table(doc);
-        table.setTitle("Table");
-        
+
         headCell(table, 0, 0, "Col-1");
         headCell(table, 0, 1, "Col-2");
         headCell(table, 0, 2, "Col-3");
-        
+
         cell(table, 0, 0, "1-1");
         cell(table, 0, 1, "1-2");
         cell(table, 0, 2, "1-3");
-        
+
         cell(table, 1, 0, "2-1");
         cell(table, 1, 1, "2-2");
         cell(table, 1, 2, "2-3");
-        
+
         assertDocumentIsCorrectlyWritten(doc);
     }
-    
+
 
 }

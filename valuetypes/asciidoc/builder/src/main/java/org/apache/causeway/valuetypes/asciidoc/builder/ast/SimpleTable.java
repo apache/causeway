@@ -26,21 +26,33 @@ import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Table;
 
 import lombok.Getter;
-import lombok.Setter;
 
 public class SimpleTable extends SimpleStructuralNode implements Table {
 
-    @Getter @Setter private String frame;
-    @Getter @Setter private String grid;
+    @Getter private String frame = "all";
+    @Getter private String grid  = "all";
     @Getter private final List<Column> columns = new ArrayList<>();
     @Getter private final List<Row> header = new ArrayList<>();
     @Getter private final List<Row> body = new ArrayList<>();
     @Getter private final List<Row> footer = new ArrayList<>();
 
+    public static final String COLS_ATTR = "cols";
+    public static final String FRAME_ATTR = "frame";
+    public static final String GRID_ATTR = "grid";
 
     @Override
     public boolean hasHeaderOption() {
         return false;
+    }
+
+    @Override
+    public void setFrame(final String frame) {
+        setAttribute(FRAME_ATTR, this.frame = frame, true);
+    }
+
+    @Override
+    public void setGrid(final String grid) {
+        setAttribute(GRID_ATTR, this.grid = grid, true);
     }
 
 }
