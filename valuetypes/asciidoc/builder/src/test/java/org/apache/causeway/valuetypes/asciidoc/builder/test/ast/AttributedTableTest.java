@@ -39,7 +39,7 @@ class AttributedTableTest extends AbstractAsciiDocWriterTest {
     void setUp() throws Exception {
         doc = doc();
         super.adocSourceResourceLocation = "table-attributed.adoc";
-        super.debugEnabled = true;
+        super.debugEnabled = false;
     }
 
     @Test

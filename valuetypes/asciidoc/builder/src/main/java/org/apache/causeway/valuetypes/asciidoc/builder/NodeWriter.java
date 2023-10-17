@@ -426,10 +426,10 @@ final class NodeWriter implements StructuralNodeVisitor {
                     .collect(Collectors.joining(",")));
         }
         if(table.hasAttribute(SimpleTable.FRAME_ATTR)) {
-            formatedAttrMap.put("frame", (String)table.getAttribute(SimpleTable.FRAME_ATTR));
+            formatedAttrMap.put(SimpleTable.FRAME_ATTR, (String)table.getAttribute(SimpleTable.FRAME_ATTR));
         }
         if(table.hasAttribute(SimpleTable.GRID_ATTR)) {
-            formatedAttrMap.put("grid", (String)table.getAttribute(SimpleTable.GRID_ATTR));
+            formatedAttrMap.put(SimpleTable.GRID_ATTR, (String)table.getAttribute(SimpleTable.GRID_ATTR));
         }
 
         val options = table.getAttributes().entrySet()

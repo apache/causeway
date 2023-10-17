@@ -39,7 +39,7 @@ class SimpleTableTest extends AbstractAsciiDocWriterTest {
     void setUp() throws Exception {
         doc = doc();
         super.adocSourceResourceLocation = "table-simple.adoc";
-        super.debugEnabled = true;
+        super.debugEnabled = false;
     }
 
     @Test
