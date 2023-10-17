@@ -81,12 +81,30 @@ public class AsciiDocBuilder {
 
     // -- BUILD
 
+    /**
+     * Builds the underlying <i>AsciiDoc<i> document as {@link String}.
+     */
     public String buildAsString() {
         return AsciiDocWriter.toString(doc);
     }
 
+    /**
+     * Builds the underlying <i>AsciiDoc<i> document as {@link AsciiDoc} value.
+     */
     public AsciiDoc buildAsValue() {
         return AsciiDoc.valueOf(buildAsString());
+    }
+
+    /**
+     * Builds a simple {@link AsciiDoc} value,
+     * that has a source block section containing the underlying <i>AsciiDoc<i> document
+     * for introspection and debugging of the emitted source.
+     */
+    public AsciiDoc buildAsDebugValue() {
+        return new AsciiDocBuilder().append(doc->{
+            AsciiDocFactory.sourceBlock(doc, "txt", this.buildAsString());
+        })
+        .buildAsValue();
     }
 
 }
