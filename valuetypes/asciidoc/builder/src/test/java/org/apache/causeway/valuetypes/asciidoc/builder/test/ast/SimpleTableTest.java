@@ -66,5 +66,4 @@ class SimpleTableTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
 
-
 }
