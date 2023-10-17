@@ -179,11 +179,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.17</swagger-core.version>
 
-        <wicket.version>10.0.0-M1</wicket.version>
+        <wicket.version>10.0.0-M2</wicket.version>
         <wicket-bootstrap.version>7.0.0</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
-        <wicket-webjars.version>4.0.0</wicket-webjars.version>
-        <wicket-viewer-jquery.version>3.6.4</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
-        <wicketstuff.version>9.14.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+        <wicket-webjars.version>4.0.0</wicket-webjars.version> <!-- de.agilecoders.wicket.webjars:wicket-webjars -->
+        <wicket-viewer-jquery.version>3.7.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
+        <wicketstuff.version>10.0.0-M1</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 
 		<!-- OTHER -->
 
@@ -1792,6 +1792,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-tester</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 

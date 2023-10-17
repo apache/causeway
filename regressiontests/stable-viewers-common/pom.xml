@@ -52,12 +52,11 @@
 			<artifactId>causeway-viewer-wicket-viewer</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.causeway.regressiontests</groupId>
 			<artifactId>causeway-regressiontests-stable</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		
 	</dependencies>
 </project>
