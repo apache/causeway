@@ -28,7 +28,8 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
 
     @BeforeEach
     void preconditions() {
-        assumeThat(getApiKey()).isNotNull();
+        String apiKey = getApiKey();
+        assumeThat(apiKey).isNotNull();
     }
 
     @BeforeEach

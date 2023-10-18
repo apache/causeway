@@ -69,12 +69,14 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     }
 
     @Override
-    public Optional<LayoutResource> tryLoadLayoutResource(@NonNull Class<?> type, @NonNull String candidateResourceName) {
+    public Optional<LayoutResource> tryLoadLayoutResource(
+            final @NonNull Class<?> type,
+            final @NonNull String candidateResourceName) {
         return search(candidateResourceName)
-              .flatMap(x -> content(x, candidateResourceName));
+              .flatMap(x -> content(candidateResourceName, x));
     }
 
-    private Optional<String> search(String candidateResourceName) {
+    private Optional<String> search(final @NonNull String candidateResourceName) {
 
         // /search/code?q=SimpleObject.layout.xml+in:path+repo:apache/causeway-app-simpleapp
         try {
@@ -94,7 +96,9 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
 
     }
 
-    private Optional<LayoutResource> content(String candidateResourceName, String path) {
+    private Optional<LayoutResource> content(
+            final @NonNull String candidateResourceName,
+            final @NonNull String path) {
 
         // /contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml
         try {
