@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.io.IOException;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,6 +28,10 @@ import java.util.stream.Stream;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
+
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -43,7 +47,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
@@ -64,13 +67,17 @@ import lombok.extern.log4j.Log4j2;
 public class GridLoaderServiceDefault implements GridLoaderService {
 
     private final MessageService messageService;
+
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final boolean supportsReloading;
 
+    @Inject List<LayoutResourceLoader> layoutResourceLoaders;
+
+
     @Inject
     public GridLoaderServiceDefault(
-           final MessageService messageService,
-           final CausewaySystemEnvironment causewaySystemEnvironment) {
+            final MessageService messageService,
+            final CausewaySystemEnvironment causewaySystemEnvironment) {
         this.messageService = messageService;
         this.supportsReloading = causewaySystemEnvironment.isPrototyping();
     }
@@ -79,13 +86,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     static class LayoutKey {
         private final @NonNull Class<?> domainClass;
         private final @Nullable String layoutIfAny; // layout suffix
-    }
-
-    @Value
-    static class LayoutResource {
-        private final @NonNull String resourceName;
-        private final @NonNull CommonMimeType format;
-        private final @NonNull String content;
     }
 
     // for better logging messages (used only in prototyping mode)
@@ -174,10 +174,10 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     // -- HELPER
 
     Optional<LayoutResource> loadLayoutResource(
-            final LayoutKey dcal,
+            final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
-        return _Reflect.streamTypeHierarchy(dcal.getDomainClass(), InterfacePolicy.EXCLUDE)
-        .map(type->loadContent(type, dcal.getLayoutIfAny(), supportedFormats))
+        return _Reflect.streamTypeHierarchy(layoutKey.getDomainClass(), InterfacePolicy.EXCLUDE)
+        .map(type->loadContent(type, layoutKey.getLayoutIfAny(), supportedFormats))
         .filter(Optional::isPresent)
         .findFirst()
         .map(Optional::get);
@@ -230,19 +230,14 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     private Optional<LayoutResource> tryLoadLayoutResource(
             final @NonNull Class<?> type,
             final @NonNull String candidateResourceName) {
-        try {
-            return Optional.ofNullable(
-                    _Resources.loadAsStringUtf8(type, candidateResourceName))
-                    .map(fileContent->new LayoutResource(
-                            candidateResourceName,
-                            CommonMimeType.valueOfFileName(candidateResourceName).orElseThrow(),
-                            fileContent));
-        } catch (IOException ex) {
-            log.error(
-                    "Failed to load layout file {} (relative to {}.class)",
-                    candidateResourceName, type.getName(), ex);
+        for (LayoutResourceLoader layoutResourceLoader : layoutResourceLoaders) {
+            Optional<LayoutResource> layoutResource = layoutResourceLoader.tryLoadLayoutResource(type, candidateResourceName);
+            if (layoutResource.isPresent()) {
+                return layoutResource;
+            }
         }
         return Optional.empty();
     }
+
 
 }

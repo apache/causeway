@@ -87,7 +87,7 @@ You can use `menubars.layout.xml` to arrange as you see fit, for example in the 
 
 == Usage
 
-Once setup, the extension provides a "dynamicLayoutLoading" action for the end-user to click on.
+Once setup, the extension provides an "enableDynamicLayoutLoading" and "disableDynamicLayoutLoading" actions for the end-user to click on.
 This returns a view model that allows the end-user to toggle dynamic loading on and off.
 
 

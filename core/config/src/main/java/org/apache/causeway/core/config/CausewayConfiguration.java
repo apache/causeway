@@ -3442,6 +3442,30 @@ public class CausewayConfiguration {
 
         }
 
+        private final LayoutGithub layoutGithub = new LayoutGithub();
+        @Data
+        public static class LayoutGithub {
+
+            /**
+             * eg <code>apache/causeway-app-simpleapp</code>
+             */
+            private String repository;
+
+            /**
+             * The branch/tag/shaId to fetch from.
+             *
+             * <p>
+             *     If not specified, defaults to the repository's default branch.
+             * </p>
+             */
+            private String branch;
+
+            /**
+             * As per <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>
+             */
+            private String apiKey;
+        }
+
         private final Secman secman = new Secman();
         @Data
         public static class Secman {

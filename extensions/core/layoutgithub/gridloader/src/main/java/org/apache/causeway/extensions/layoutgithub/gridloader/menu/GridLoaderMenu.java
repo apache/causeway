@@ -28,12 +28,20 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.extensions.layoutgithub.gridloader.CausewayModuleExtLayoutGithubGridLoader;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Provides actions to managed the dynamic loading of layouts from a github source code repository.
@@ -52,27 +60,61 @@ public class GridLoaderMenu {
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
+    @Getter
+    private boolean enabled;
+    @Getter
+    private Optional<String> branch = Optional.empty();
 
-    /** Returns a view-model that represents the application's primary help page. */
+
     @Action(
             commandPublishing = Publishing.DISABLED,
-            domainEvent = dynamicLayoutLoading.ActionDomainEvent.class,
+            domainEvent = enableDynamicLayoutLoading.ActionDomainEvent.class,
             executionPublishing = Publishing.DISABLED,
-            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
+            semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(
-            cssClassFa = "fa-regular fa-circle-question",
-            named = "Dynamic Layout Loading",
+            cssClassFa = "fa-solid fa-toggle-on",
             sequence = "100"
     )
-    public class dynamicLayoutLoading {
+    public class enableDynamicLayoutLoading {
 
-        public class ActionDomainEvent extends GridLoaderMenu.ActionDomainEvent<dynamicLayoutLoading> {}
+        public class ActionDomainEvent extends GridLoaderMenu.ActionDomainEvent<enableDynamicLayoutLoading> {}
+
+        @MemberSupport public void act(
+                @Parameter(optionality = Optionality.OPTIONAL)
+                final String branch) {
+            GridLoaderMenu.this.enabled = true;
+            GridLoaderMenu.this.branch = Optional.ofNullable(branch);
+        }
+        public String disableAct() {
+            return GridLoaderMenu.this.enabled ? "Already enabled" : null;
+        }
+        public String default0Act() {
+            return GridLoaderMenu.this.branch.orElse("main");
+        }
+    }
+
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = enableDynamicLayoutLoading.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.IDEMPOTENT
+    )
+    @ActionLayout(
+            cssClassFa = "fa-solid fa-toggle-off",
+            sequence = "100"
+    )
+    public class disableDynamicLayoutLoading {
+
+        public class ActionDomainEvent extends GridLoaderMenu.ActionDomainEvent<enableDynamicLayoutLoading> {}
 
         @MemberSupport public void act() {
-            throw new RuntimeException("Not yet implemented");
+            GridLoaderMenu.this.enabled = false;
         }
-
+        public String disableAct() {
+            return GridLoaderMenu.this.enabled ? null : "Already disabled";
+        }
     }
 
 }
