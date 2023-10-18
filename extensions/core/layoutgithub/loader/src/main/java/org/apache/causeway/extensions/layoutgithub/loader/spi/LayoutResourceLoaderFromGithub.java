@@ -96,19 +96,10 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
 
     private Optional<LayoutResource> content(String candidateResourceName, String path) {
 
-        // /contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml?branch=branchName
+        // /contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml
         try {
 
-            String url = "/contents/" + path;
-            val contentParams = new HashMap<String, String>();
-
-            val branchIfAny = layoutLoaderMenu.getBranch();
-            if (branchIfAny.isPresent()) {
-                url += "?branch={branch}";
-                contentParams.put("branch", branchIfAny.get());
-            }
-
-            val contentResponse = restTemplateForContent.exchange(url, HttpMethod.GET, null, String.class, contentParams);
+            val contentResponse = restTemplateForContent.exchange("/contents/" + path, HttpMethod.GET, null, String.class);
             val content = contentResponse.getBody();
 
             return Optional
