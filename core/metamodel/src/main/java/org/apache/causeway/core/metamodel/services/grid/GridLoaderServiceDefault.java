@@ -67,19 +67,21 @@ import lombok.extern.log4j.Log4j2;
 public class GridLoaderServiceDefault implements GridLoaderService {
 
     private final MessageService messageService;
+    final List<LayoutResourceLoader> layoutResourceLoaders;
 
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final boolean supportsReloading;
 
-    @Inject List<LayoutResourceLoader> layoutResourceLoaders;
 
 
     @Inject
     public GridLoaderServiceDefault(
             final MessageService messageService,
-            final CausewaySystemEnvironment causewaySystemEnvironment) {
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final List<LayoutResourceLoader> layoutResourceLoaders) {
         this.messageService = messageService;
         this.supportsReloading = causewaySystemEnvironment.isPrototyping();
+        this.layoutResourceLoaders = layoutResourceLoaders;
     }
 
     @Value

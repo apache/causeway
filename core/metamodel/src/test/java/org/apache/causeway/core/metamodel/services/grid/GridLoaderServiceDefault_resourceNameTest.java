@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.grid;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 
@@ -42,8 +43,7 @@ class GridLoaderServiceDefault_resourceNameTest {
     @BeforeEach
     void setUp() throws Exception {
         layoutResourceLoader = new LayoutResourceLoaderDefault();
-        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, false);
-        gridLoaderServiceDefault.layoutResourceLoaders = Collections.singletonList(layoutResourceLoader);
+        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, List.of(layoutResourceLoader), false);
     }
 
     @Test
