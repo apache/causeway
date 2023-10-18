@@ -33,14 +33,12 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.extensions.layoutgithub.gridloader.CausewayModuleExtLayoutGithubGridLoader;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.layoutgithub.gridloader.CausewayModuleExtLayoutGithubLoader;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -49,21 +47,19 @@ import java.util.Optional;
  *
  * @since 2.x {@index}
  */
-@Named(CausewayModuleExtLayoutGithubGridLoader.NAMESPACE + ".GridLoaderMenu")
+@Named(CausewayModuleExtLayoutGithubLoader.NAMESPACE + ".LayoutLoaderMenu")
 @DomainService(nature = NatureOfService.VIEW)
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class GridLoaderMenu {
+public class LayoutLoaderMenu {
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
     @Getter
     private boolean enabled;
-    @Getter
-    private Optional<String> branch = Optional.empty();
 
 
     @Action(
@@ -78,19 +74,13 @@ public class GridLoaderMenu {
     )
     public class enableDynamicLayoutLoading {
 
-        public class ActionDomainEvent extends GridLoaderMenu.ActionDomainEvent<enableDynamicLayoutLoading> {}
+        public class ActionDomainEvent extends LayoutLoaderMenu.ActionDomainEvent<enableDynamicLayoutLoading> {}
 
-        @MemberSupport public void act(
-                @Parameter(optionality = Optionality.OPTIONAL)
-                final String branch) {
-            GridLoaderMenu.this.enabled = true;
-            GridLoaderMenu.this.branch = Optional.ofNullable(branch);
+        @MemberSupport public void act() {
+            LayoutLoaderMenu.this.enabled = true;
         }
-        public String disableAct() {
-            return GridLoaderMenu.this.enabled ? "Already enabled" : null;
-        }
-        public String default0Act() {
-            return GridLoaderMenu.this.branch.orElse("main");
+        @MemberSupport public String disableAct() {
+            return LayoutLoaderMenu.this.enabled ? "Already enabled" : null;
         }
     }
 
@@ -107,13 +97,13 @@ public class GridLoaderMenu {
     )
     public class disableDynamicLayoutLoading {
 
-        public class ActionDomainEvent extends GridLoaderMenu.ActionDomainEvent<enableDynamicLayoutLoading> {}
+        public class ActionDomainEvent extends LayoutLoaderMenu.ActionDomainEvent<enableDynamicLayoutLoading> {}
 
         @MemberSupport public void act() {
-            GridLoaderMenu.this.enabled = false;
+            LayoutLoaderMenu.this.enabled = false;
         }
-        public String disableAct() {
-            return GridLoaderMenu.this.enabled ? null : "Already disabled";
+        @MemberSupport public String disableAct() {
+            return LayoutLoaderMenu.this.enabled ? null : "Already disabled";
         }
     }
 

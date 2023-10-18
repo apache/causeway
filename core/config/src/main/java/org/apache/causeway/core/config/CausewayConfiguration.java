@@ -3452,15 +3452,6 @@ public class CausewayConfiguration {
             private String repository;
 
             /**
-             * The branch/tag/shaId to fetch from.
-             *
-             * <p>
-             *     If not specified, defaults to the repository's default branch.
-             * </p>
-             */
-            private String branch;
-
-            /**
              * As per <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>
              */
             private String apiKey;

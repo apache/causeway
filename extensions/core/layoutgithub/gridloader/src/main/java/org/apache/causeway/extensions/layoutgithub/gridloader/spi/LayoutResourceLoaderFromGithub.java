@@ -22,10 +22,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Priority;
@@ -33,44 +30,94 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.services.grid.GridLoaderService;
-import org.apache.causeway.applib.services.grid.GridMarshallerService;
-import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
-import org.apache.causeway.extensions.layoutgithub.gridloader.CausewayModuleExtLayoutGithubGridLoader;
-import org.apache.causeway.extensions.layoutgithub.gridloader.menu.GridLoaderMenu;
+import org.apache.causeway.extensions.layoutgithub.gridloader.CausewayModuleExtLayoutGithubLoader;
+
+import org.apache.causeway.extensions.layoutgithub.gridloader.menu.LayoutLoaderMenu;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-@Named(CausewayModuleExtLayoutGithubGridLoader.NAMESPACE + ".LayoutResourceLoaderFromGithub")
+@Named(CausewayModuleExtLayoutGithubLoader.NAMESPACE + ".LayoutResourceLoaderFromGithub")
 @Priority(PriorityPrecedence.MIDPOINT - 100)
 @Qualifier("Github")
 @Log4j2
 public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
 
-    @Inject @Qualifier("GithubSearch") RestTemplate restTemplateForSearch;
-    @Inject @Qualifier("GithubContent") RestTemplate restTemplateForContent;
+    final RestTemplate restTemplateForSearch;
+    final RestTemplate restTemplateForContent;
+    final CausewayConfiguration causewayConfiguration;
+    final LayoutLoaderMenu layoutLoaderMenu;
+
+    @Inject
+    public LayoutResourceLoaderFromGithub(
+            @Qualifier("GithubSearch") final RestTemplate restTemplateForSearch,
+            @Qualifier("GithubContent") final RestTemplate restTemplateForContent,
+            final CausewayConfiguration causewayConfiguration,
+            final LayoutLoaderMenu layoutLoaderMenu) {
+        this.restTemplateForSearch = restTemplateForSearch;
+        this.restTemplateForContent = restTemplateForContent;
+        this.causewayConfiguration = causewayConfiguration;
+        this.layoutLoaderMenu = layoutLoaderMenu;
+    }
 
     @Override
     public Optional<LayoutResource> tryLoadLayoutResource(@NonNull Class<?> type, @NonNull String candidateResourceName) {
-        Map<String, String> params = new HashMap<>();
-        // ?q=SimpleObject.layout.xml+in:path+repo:apache/causeway-app-simpleapp
-        params.put("q", String.format("%s+in:path+repo:%s", candidateResourceName, causewayConfiguration.getExtensions().getLayoutGithub().getRepository()));
-        ResponseEntity<String> responseEntity = restTemplateForSearch.exchange("", HttpMethod.GET, null, String.class);
-        throw new RuntimeException("not yet implemented");
+        return search(candidateResourceName)
+              .flatMap(x -> content(x, candidateResourceName));
     }
 
-    @Inject CausewayConfiguration causewayConfiguration;
-    @Inject GridLoaderMenu gridLoaderMenu;
+    private Optional<String> search(String candidateResourceName) {
+
+        // /search/code?q=SimpleObject.layout.xml+in:path+repo:apache/causeway-app-simpleapp
+        try {
+            val searchParams = new HashMap<String,String>() {{
+                put("q", String.format("%s+in:path+repo:%s", candidateResourceName, causewayConfiguration.getExtensions().getLayoutGithub().getRepository()));
+            }};
+            val responseEntity = restTemplateForSearch.exchange("/search/code?q={q}", HttpMethod.GET, null, new ParameterizedTypeReference<GitHubResponse>() {}, searchParams);
+
+            GitHubResponse searchResponse = responseEntity.getBody();
+            if (searchResponse.getTotal_count() != 1) {
+                return Optional.empty();
+            }
+            return Optional.of(searchResponse.getItems().get(0).getPath());
+        } catch (Exception ex) {
+            return Optional.empty();
+        }
+
+    }
+
+    private Optional<LayoutResource> content(String candidateResourceName, String path) {
+
+        // /contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml?branch=branchName
+        try {
+
+            String url = "/contents/" + path;
+            val contentParams = new HashMap<String, String>();
+
+            val branchIfAny = layoutLoaderMenu.getBranch();
+            if (branchIfAny.isPresent()) {
+                url += "?branch={branch}";
+                contentParams.put("branch", branchIfAny.get());
+            }
+
+            val contentResponse = restTemplateForContent.exchange(url, HttpMethod.GET, null, String.class, contentParams);
+            val content = contentResponse.getBody();
+
+            return Optional
+                    .ofNullable(content)
+                    .map(body -> new LayoutResource(candidateResourceName, NamedWithMimeType.CommonMimeType.XML, content));
+        } catch (Exception ex) {
+            return Optional.empty();
+        }
+    }
+
 }
+

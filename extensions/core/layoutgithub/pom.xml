@@ -39,7 +39,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>gridloader</module>
+		<module>loader</module>
 	</modules>
 
 </project>
