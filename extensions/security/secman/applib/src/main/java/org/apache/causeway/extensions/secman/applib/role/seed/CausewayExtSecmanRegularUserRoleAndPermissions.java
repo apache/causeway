@@ -103,6 +103,11 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
                 // optionally allow access to documentation menu and pages, based on module presence
                 env.getIocContainer().containsBean("org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp")
                     ? ApplicationFeatureId.newNamespace(CausewayExtDocgenRoleAndPermissions.NAMESPACE)
+                    : null,
+
+                // optionally allow access to layout menu and pages, based on module presence
+                env.getIocContainer().containsBean("org.apache.causeway.extensions.layoutgithub.gridloader.CausewayModuleExtLayoutGithubGridLoader")
+                    ? ApplicationFeatureId.newNamespace(CausewayExtLayoutGithubRoleAndPermissions.NAMESPACE)
                     : null
         );
 

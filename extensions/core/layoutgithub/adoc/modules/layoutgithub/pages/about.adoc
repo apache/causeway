@@ -1,0 +1,98 @@
+= Layout from GitHub
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The _LayoutGitHub_ module allows layouts to be read dynamically from a github source repository, by providing an implementation of xref:refguide:applib:index/services/grid/GridLoaderService.adoc[].
+
+It is intended as a development tool to allow layouts to be updated dynamically in an application running on an app server or in a container.
+
+
+== Setup
+
+=== Dependency Management
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-layoutgithub</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayprev}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-layoutgithub-gridloader</artifactId>
+        <version>{page-causewayprev}</version>
+    </dependency>
+</dependencies>
+----
+
+
+[#appmanifest]
+=== AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleExtLayoutGitHubGridLoader` module.
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtLayoutGitHubGridLoader.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+[#menubar-layout-xml]
+=== menubar.layout.xml
+
+The extension provides its own menu.
+You can use `menubars.layout.xml` to arrange as you see fit, for example in the tertiary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb:tertiary>
+    <mb:menu>
+        <mb:named/>
+        <mb:section>
+            <mb:named>Layouts</mb:named>
+            <mb:serviceAction objectType="causeway.ext.layoutgithub.gridloader.Menu" id="dynamicLayoutLoading"/>
+        </mb:section>
+    </mb:menu>
+    ...
+</mb:tertiary>
+----
+
+
+== Usage
+
+Once setup, the extension provides a "dynamicLayoutLoading" action for the end-user to click on.
+This returns a view model that allows the end-user to toggle dynamic loading on and off.
+
+
+
+== See also
+
+* xref:refguide:applib:index/services/grid/GridLoaderService.adoc[]
+
