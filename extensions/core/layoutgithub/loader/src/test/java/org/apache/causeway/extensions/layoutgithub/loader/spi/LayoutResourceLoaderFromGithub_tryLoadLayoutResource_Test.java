@@ -2,12 +2,12 @@ package org.apache.causeway.extensions.layoutgithub.loader.spi;
 
 import java.nio.charset.StandardCharsets;
 
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.commons.internal.resources._Resources;
 
 import org.apache.causeway.extensions.layoutgithub.loader.menu.LayoutLoaderMenu;
 
-import org.apache.causeway.extensions.layoutgithub.loader.spi.LayoutResourceLoaderFromGithub;
-
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,10 +42,13 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
         val module = new CausewayModuleExtLayoutGithubLoader();
         val restTemplateForSearch = module.restTemplateForGithubSearch(causewayConfiguration);
         val restTemplateForContent = module.restTemplateForGithubContent(causewayConfiguration);
+        val layoutLoaderMenu = new LayoutLoaderMenu(causewayConfiguration);
+        val queryResultsCache = new QueryResultsCache();
 
-        val layoutLoaderMenu = new LayoutLoaderMenu();
+        layoutLoaderMenu.new enableDynamicLayoutLoading().act();
+        Assertions.assertThat(layoutLoaderMenu.isEnabled()).isTrue();
 
-        loader = new LayoutResourceLoaderFromGithub(restTemplateForSearch, restTemplateForContent, causewayConfiguration, layoutLoaderMenu);
+        loader = new LayoutResourceLoaderFromGithub(restTemplateForSearch, restTemplateForContent, causewayConfiguration, layoutLoaderMenu, queryResultsCache);
     }
 
     @Test

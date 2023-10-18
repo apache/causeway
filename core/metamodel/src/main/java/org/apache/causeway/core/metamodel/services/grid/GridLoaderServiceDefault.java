@@ -58,6 +58,9 @@ import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridLoaderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

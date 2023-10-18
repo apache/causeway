@@ -3475,7 +3475,8 @@ public class CausewayConfiguration {
                                 CausewayModuleApplib.NAMESPACE_FEAT,
                                 "causeway.security",
                                 "causeway.ext.h2Console",
-                                "causeway.ext.secman"
+                                "causeway.ext.secman",
+                                "causeway.ext.layoutGithub"
                         ));
                 public static final List<String> ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS =
                         Collections.unmodifiableList(listOf());

@@ -31,10 +31,12 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.layoutgithub.loader.CausewayModuleExtLayoutGithubLoader;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Provides actions to managed the dynamic loading of layouts from a github source code repository.
@@ -52,6 +54,8 @@ import lombok.RequiredArgsConstructor;
 public class LayoutLoaderMenu {
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
+
+    final CausewayConfiguration causewayConfiguration;
 
     @Getter
     private boolean enabled;
@@ -74,9 +78,13 @@ public class LayoutLoaderMenu {
         @MemberSupport public void act() {
             LayoutLoaderMenu.this.enabled = true;
         }
+        @MemberSupport public boolean hideAct() {
+            return !isConfigured();
+        }
         @MemberSupport public String disableAct() {
             return LayoutLoaderMenu.this.enabled ? "Already enabled" : null;
         }
+
     }
 
 
@@ -97,9 +105,18 @@ public class LayoutLoaderMenu {
         @MemberSupport public void act() {
             LayoutLoaderMenu.this.enabled = false;
         }
+        @MemberSupport public boolean hideAct() {
+            return !isConfigured();
+        }
         @MemberSupport public String disableAct() {
             return LayoutLoaderMenu.this.enabled ? null : "Already disabled";
         }
+    }
+
+    boolean isConfigured() {
+        val layoutGithub = causewayConfiguration.getExtensions().getLayoutGithub();
+        return layoutGithub.getRepository() != null &&
+               layoutGithub.getApiKey() != null;
     }
 
 }

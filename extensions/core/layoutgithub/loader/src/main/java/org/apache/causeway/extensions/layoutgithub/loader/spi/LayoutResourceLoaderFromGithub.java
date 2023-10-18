@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
@@ -55,33 +56,48 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     final RestTemplate restTemplateForContent;
     final CausewayConfiguration causewayConfiguration;
     final LayoutLoaderMenu layoutLoaderMenu;
+    final QueryResultsCache queryResultsCache;
 
     @Inject
     public LayoutResourceLoaderFromGithub(
-            @Qualifier("GithubSearch") final RestTemplate restTemplateForSearch,
-            @Qualifier("GithubContent") final RestTemplate restTemplateForContent,
+            final @Qualifier("GithubSearch")  RestTemplate restTemplateForSearch,
+            final @Qualifier("GithubContent") RestTemplate restTemplateForContent,
             final CausewayConfiguration causewayConfiguration,
-            final LayoutLoaderMenu layoutLoaderMenu) {
+            final LayoutLoaderMenu layoutLoaderMenu,
+            final QueryResultsCache queryResultsCache) {
         this.restTemplateForSearch = restTemplateForSearch;
         this.restTemplateForContent = restTemplateForContent;
         this.causewayConfiguration = causewayConfiguration;
         this.layoutLoaderMenu = layoutLoaderMenu;
+        this.queryResultsCache = queryResultsCache;
     }
 
     @Override
     public Optional<LayoutResource> tryLoadLayoutResource(
             final @NonNull Class<?> type,
             final @NonNull String candidateResourceName) {
-        return search(candidateResourceName)
-              .flatMap(x -> content(candidateResourceName, x));
+        if (!layoutLoaderMenu.isEnabled()) {
+            return Optional.empty();
+        }
+        return queryResultsCache.execute(() -> tryLoadLayoutResource(candidateResourceName),
+                getClass(), "tryLoadLayoutResource", candidateResourceName);
     }
 
+    private Optional<LayoutResource> tryLoadLayoutResource(String candidateResourceName) {
+        return search(candidateResourceName)
+                .flatMap(x -> content(candidateResourceName, x));
+    }
+
+    /**
+     * eg:
+     * <code>/search/code?q=SimpleObject.layout.xml+in:path+repo:apache/causeway-app-simpleapp</code>
+     */
     private Optional<String> search(final @NonNull String candidateResourceName) {
 
-        // /search/code?q=SimpleObject.layout.xml+in:path+repo:apache/causeway-app-simpleapp
         try {
             val searchParams = new HashMap<String,String>() {{
-                put("q", String.format("%s+in:path+repo:%s", candidateResourceName, causewayConfiguration.getExtensions().getLayoutGithub().getRepository()));
+                val repo = causewayConfiguration.getExtensions().getLayoutGithub().getRepository();
+                put("q", String.format("%s+in:path+repo:%s", candidateResourceName, repo));
             }};
             val responseEntity = restTemplateForSearch.exchange("/search/code?q={q}", HttpMethod.GET, null, new ParameterizedTypeReference<GitHubResponse>() {}, searchParams);
 
@@ -93,16 +109,17 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
         } catch (Exception ex) {
             return Optional.empty();
         }
-
     }
 
+    /**
+     * eg:
+     * <code>/contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml</code>
+     */
     private Optional<LayoutResource> content(
             final @NonNull String candidateResourceName,
             final @NonNull String path) {
 
-        // /contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml
         try {
-
             val contentResponse = restTemplateForContent.exchange("/contents/" + path, HttpMethod.GET, null, String.class);
             val content = contentResponse.getBody();
 

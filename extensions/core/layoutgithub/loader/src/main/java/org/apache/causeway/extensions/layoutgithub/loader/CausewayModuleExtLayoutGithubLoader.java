@@ -102,12 +102,12 @@ public class CausewayModuleExtLayoutGithubLoader {
     /**
      * Returns a template configured to obtain the content of a file in a repo (from the default branch).
      *
+     * <p>
      * Append for example:
      *
-     * <pre>/contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml?branch=branchName</pre>
+     * <pre>/contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml</pre>
      *
-     * The <i>branchName</i> can be obtained from {@link LayoutLoaderMenu#getBranch()}.
-          * @param causewayConfiguration
+     * @param causewayConfiguration
      * @return
      */
     @Bean(name = "GithubContent")
