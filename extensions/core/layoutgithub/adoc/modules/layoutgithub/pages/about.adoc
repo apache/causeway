@@ -38,7 +38,7 @@ In the webapp module of your application, add the following dependency:
 <dependencies>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-layoutgithub-gridloader</artifactId>
+        <artifactId>causeway-extensions-layoutgithub-loader</artifactId>
         <version>{page-causewayprev}</version>
     </dependency>
 </dependencies>
