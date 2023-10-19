@@ -127,7 +127,7 @@ content:
       start_path: extensions/core/flyway/adoc # userguide
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8, 2.0.0-M9, 2.0.0-RC1, 2.0.0-RC2, 2.0.0-RC3]
     - url: .
-      start_path: extensions/core/layoutgithub/adoc # userguide
+      start_path: extensions/core/layoutloaders/adoc # userguide
       branches: [2.0.0-RC3]
 
     - url: .

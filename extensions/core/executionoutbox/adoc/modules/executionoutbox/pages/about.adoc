@@ -222,7 +222,7 @@ To setup the message processor:
 
 * in `dependencyManagement` section, add an entry for _Execution Outbox_'s own BOM:
 +
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencyManagement>

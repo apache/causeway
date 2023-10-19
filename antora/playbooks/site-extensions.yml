@@ -57,7 +57,7 @@ content:
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
     - url: .
-      start_path: extensions/core/layoutgithub/adoc # userguide
+      start_path: extensions/core/layoutloaders/adoc # userguide
       branches: HEAD
 
     - url: .
