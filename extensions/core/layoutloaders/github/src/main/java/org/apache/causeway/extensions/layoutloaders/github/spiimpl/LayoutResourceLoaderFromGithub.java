@@ -95,7 +95,7 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     private Try<String> search(final @NonNull String candidateResourceName) {
 
         try {
-            val repo = causewayConfiguration.getExtensions().getLayoutLoaders().getRepository();
+            val repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().getRepository();
             val searchParams = new HashMap<String, String>();
             searchParams.put("q", String.format("%s+in:path+repo:%s", candidateResourceName, repo));
 
