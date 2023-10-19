@@ -35,13 +35,11 @@ public class LayoutResourceLoaderDefault implements LayoutResourceLoader {
 
         return DataSource.ofResource(type, candidateResourceName)
             .tryReadAsStringUtf8()
-            .mapSuccess(fileContent->fileContent
-                .map(layoutSource->
-                    new LayoutResource(
-                            candidateResourceName,
-                            NamedWithMimeType.CommonMimeType.valueOfFileName(candidateResourceName).orElseThrow(),
-                            layoutSource))
-                .orElse(null));
+            .mapSuccessWhenPresent(fileContent->
+                new LayoutResource(
+                        candidateResourceName,
+                        NamedWithMimeType.CommonMimeType.valueOfFileName(candidateResourceName).orElseThrow(),
+                        fileContent));
     }
 
 }
