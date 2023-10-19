@@ -34,8 +34,8 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     void setup() {
 
         val causewayConfiguration = new CausewayConfiguration(null);
-        causewayConfiguration.getExtensions().getLayoutLoaders().setApiKey(getApiKey());
-        causewayConfiguration.getExtensions().getLayoutLoaders().setRepository("apache/causeway-app-simpleapp");
+        causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().setApiKey(getApiKey());
+        causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().setRepository("apache/causeway-app-simpleapp");
 
         val module = new CausewayModuleExtLayoutLoadersGithub();
         val restTemplateForSearch = module.restTemplateForGithubSearch(causewayConfiguration);
