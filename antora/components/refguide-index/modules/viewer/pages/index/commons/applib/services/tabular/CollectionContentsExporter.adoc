@@ -9,13 +9,12 @@ SPI to provide file export to table views.
 .CollectionContentsExporter.java
 ----
 interface CollectionContentsExporter {
-  File createExportFile(DataTable dataTable)
+  void createExport(DataTable dataTable, File tempFile)
   CommonMimeType getMimeType()
   String getTitleLabel()     // <.>
   String getCssClass()     // <.>
   int orderOfAppearanceInUiDropdown()     // <.>
   boolean appliesTo(ObjectSpecification objectType)     // <.>
-  boolean isPageReloadRequiredOnTableViewActivation()     // <.>
 }
 ----
 
@@ -30,11 +29,6 @@ An ordinal, that governs the order of appearance in the UI dropdown.
 +
 --
 Whether this exporter applies to given _objectType_ . If `false` , this exporter is not provided to the end user.
---
-<.> xref:#isPageReloadRequiredOnTableViewActivation_[isPageReloadRequiredOnTableViewActivation()]
-+
---
-Whether activation of this table presentation view should result in a full page reload.
 --
 
 == Members
@@ -59,8 +53,3 @@ Lowest comes first.
 === appliesTo(ObjectSpecification)
 
 Whether this exporter applies to given _objectType_ . If `false` , this exporter is not provided to the end user.
-
-[#isPageReloadRequiredOnTableViewActivation_]
-=== isPageReloadRequiredOnTableViewActivation()
-
-Whether activation of this table presentation view should result in a full page reload.
