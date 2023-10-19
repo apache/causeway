@@ -105,7 +105,7 @@
 		<module>core/executionoutbox</module>
 		<module>core/executionrepublisher</module>
 		<module>core/flyway</module>
-		<module>core/layoutgithub</module>
+		<module>core/layoutloaders</module>
 
 		<module>security/audittrail</module>
 

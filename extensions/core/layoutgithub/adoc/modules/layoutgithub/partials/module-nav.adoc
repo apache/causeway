@@ -1,4 +1,0 @@
-
-** xref:userguide:layoutgithub:about.adoc[]
-
-

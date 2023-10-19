@@ -36,7 +36,6 @@ In the webapp module of your application, add the following dependency:
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-docgen-help</artifactId>
-        <version>{page-causewayprev}</version>
     </dependency>
 </dependencies>
 ----

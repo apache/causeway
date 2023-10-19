@@ -1,0 +1,129 @@
+= Layout Loaders
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The _LayoutLoaders_ module allows layouts to be read dynamically from an external repository, such as a source code repository.
+
+It is intended as a development tool to allow layouts to be updated dynamically in an application running on an app server or in a container.
+
+Currently only github is supported.
+
+
+== Dependency Management
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-layoutloaders</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayprev}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+== GitHub
+
+The GitHub implementation allows `.layout.xml` files to be loaded from github code repository.
+The implementation searches for the file across the specified repository, and if found then returns it.
+
+There are a couple of restrictions:
+
+* the file name must be unique across the entire repository; the package structure is _not_ taken into account
+* the file must reside on the default branch of the repository.
+
+One workaround for the second restriction is to set up your own fork of your project repo, and make changes there.
+
+
+[#dependencies]
+=== Dependencies
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-layoutloaders-github</artifactId>
+    </dependency>
+</dependencies>
+----
+
+
+[#appmanifest]
+=== AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleExtLayoutLoadersGitHub` module.
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtLayoutLoadersGitHub.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+[#configuration]
+=== Configuration
+
+Two configuration properties are required:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  extensions:
+    layout-loaders:
+      github:
+        api-key: ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        repository: apache/causeway-app-simpleapp
+----
+
+
+[#menubar-layout-xml]
+=== menubar.layout.xml
+
+The extension provides its own menu.
+You can use `menubars.layout.xml` to arrange as you see fit, for example in the tertiary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb:tertiary>
+    <mb:menu>
+        <mb:named/>
+        <mb:section>
+            <mb:named>Layouts</mb:named>
+            <mb:serviceAction objectType="causeway.ext.layoutLoaders.LayoutLoadersGitHubMenu" id="enableDynamicLayoutLoading"/>
+            <mb:serviceAction objectType="causeway.ext.layoutLoaders.LayoutLoadersGitHubMenu" id="disableDynamicLayoutLoading"/>
+        </mb:section>
+    </mb:menu>
+    ...
+</mb:tertiary>
+----
+
+
+== Usage
+
+Once setup, the extension provides an "enableDynamicLayoutLoading" and "disableDynamicLayoutLoading" actions for the end-user to click on.
+This returns a view model that allows the end-user to toggle dynamic loading on and off.
+
+
+
+// == See also
+//
+// * xref:refguide:applib:index/services/grid/GridLoaderService.adoc[]
+
+
