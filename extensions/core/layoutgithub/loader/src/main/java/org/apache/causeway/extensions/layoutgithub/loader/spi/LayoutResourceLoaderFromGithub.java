@@ -83,11 +83,8 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     }
 
     private Try<LayoutResource> tryLoadLayoutResource(final String candidateResourceName) {
-        var path = search(candidateResourceName);
-        return path.isFailure()
-            // preserve any issues that occurred when searching for the path
-            ? Try.failure(path.getFailure().get())
-            : content(candidateResourceName, path.getValue().orElse(null));
+        return search(candidateResourceName)
+            .flatMapSuccessAsNullable(path->content(candidateResourceName, path));
     }
 
     /**

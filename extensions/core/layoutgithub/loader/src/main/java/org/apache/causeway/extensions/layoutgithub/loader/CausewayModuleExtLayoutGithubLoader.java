@@ -18,21 +18,18 @@
  */
 package org.apache.causeway.extensions.layoutgithub.loader;
 
-import lombok.val;
-
-import org.apache.causeway.core.config.CausewayConfiguration;
-
-import org.apache.causeway.extensions.layoutgithub.loader.menu.LayoutLoaderMenu;
-import org.apache.causeway.extensions.layoutgithub.loader.spi.LayoutResourceLoaderFromGithub;
-
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.client.RestTemplate;
 
 import org.apache.causeway.applib.layout.menubars.Menu;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.layoutgithub.loader.menu.LayoutLoaderMenu;
+import org.apache.causeway.extensions.layoutgithub.loader.spi.LayoutResourceLoaderFromGithub;
 
-import org.springframework.web.client.RestTemplate;
+import lombok.val;
 
 /**
  * Adds the {@link Menu} with its auto-configured menu entries.
@@ -80,7 +77,6 @@ public class CausewayModuleExtLayoutGithubLoader {
      * }
      * </pre>
      * @param causewayConfiguration
-     * @return
      */
     @Bean(name = "GithubSearch")
     public RestTemplate restTemplateForGithubSearch(final CausewayConfiguration causewayConfiguration) {
@@ -108,7 +104,6 @@ public class CausewayModuleExtLayoutGithubLoader {
      * <pre>/contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml</pre>
      *
      * @param causewayConfiguration
-     * @return
      */
     @Bean(name = "GithubContent")
     public RestTemplate restTemplateForGithubContent(final CausewayConfiguration causewayConfiguration) {

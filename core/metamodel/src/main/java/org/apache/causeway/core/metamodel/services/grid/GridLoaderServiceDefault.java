@@ -144,9 +144,10 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             }
         } else {
             // if cached, serve from cache - otherwise fall through
-            final Grid grid = gridCache.get(layoutKey);
+            @SuppressWarnings("unchecked")
+            final T grid = (T)gridCache.get(layoutKey);
             if(grid != null) {
-                return Optional.of((T)grid);
+                return Optional.of(grid);
             }
         }
 

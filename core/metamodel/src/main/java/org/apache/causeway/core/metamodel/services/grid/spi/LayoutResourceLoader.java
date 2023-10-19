@@ -12,7 +12,7 @@ import lombok.NonNull;
 /**
  * A simpler SPI for {@link GridLoaderServiceDefault}.
  *
- * @since 2.0 {@index}}
+ * @since 2.0 {@index}
  */
 public interface LayoutResourceLoader {
 
