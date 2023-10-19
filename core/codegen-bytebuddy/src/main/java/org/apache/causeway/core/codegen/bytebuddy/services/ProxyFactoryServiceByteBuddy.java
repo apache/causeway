@@ -22,9 +22,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
-import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
 import org.springframework.lang.Nullable;
+import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.commons.internal._Constants;
@@ -34,6 +33,7 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryServiceAbstract;
 
+import lombok.val;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ImplementationDefinition;
@@ -51,7 +51,7 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
             final Class<?>[] interfaces,
             final Class<?>[] constructorArgTypes) {
 
-        final Objenesis objenesis = new ObjenesisStd();
+        val objenesis = new ObjenesisStd();
 
         final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler->
         nextProxyDef(base, interfaces)

@@ -111,6 +111,10 @@
                     <groupId>net.bytebuddy</groupId>
                     <artifactId>byte-buddy</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.objenesis</groupId>
+                    <artifactId>objenesis</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 

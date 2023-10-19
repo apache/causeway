@@ -22,7 +22,6 @@ module org.apache.causeway.core.codegen.bytebuddy {
 
     requires net.bytebuddy;
     requires org.apache.causeway.commons;
-    requires org.objenesis;
     requires spring.context;
     requires spring.core;
 }

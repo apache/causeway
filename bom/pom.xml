@@ -159,7 +159,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		<node.version>v18.12.0</node.version>
 		<npm.version>8.19.2</npm.version>
 
-        <objenesis.version>3.3</objenesis.version>
         <ognl.version>3.4.2</ognl.version>
 
         <picocontainer.version>2.15</picocontainer.version>
@@ -2001,12 +2000,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<groupId>org.mindrot</groupId>
 				<artifactId>jbcrypt</artifactId>
 				<version>${jbcrypt.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.objenesis</groupId>
-				<artifactId>objenesis</artifactId>
-				<version>${objenesis.version}</version>
 			</dependency>
 
 			<dependency>

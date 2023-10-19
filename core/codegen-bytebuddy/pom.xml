@@ -68,11 +68,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.causeway.commons</groupId>
 			<artifactId>causeway-commons</artifactId>
 			<scope>compile</scope>
