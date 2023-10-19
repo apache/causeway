@@ -30,7 +30,7 @@
     </parent>
 
     <artifactId>causeway-extensions-layoutloaders</artifactId>
-    <name>Apache Causeway Ext - LayoutLoadersHub</name>
+    <name>Apache Causeway Ext - LayoutLoaders</name>
 
     <description>
         Allows layouts to be dynamically loaded from an external source.
