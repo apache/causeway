@@ -18,14 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
-
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault.LayoutKey;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 
 class GridLoaderServiceDefault_resourceNameTest {
 

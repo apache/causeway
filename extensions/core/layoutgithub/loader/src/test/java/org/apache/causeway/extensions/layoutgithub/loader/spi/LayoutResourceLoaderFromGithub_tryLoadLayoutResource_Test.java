@@ -2,20 +2,18 @@ package org.apache.causeway.extensions.layoutgithub.loader.spi;
 
 import java.nio.charset.StandardCharsets;
 
-import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.causeway.commons.internal.resources._Resources;
-
-import org.apache.causeway.extensions.layoutgithub.loader.menu.LayoutLoaderMenu;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.layoutgithub.loader.CausewayModuleExtLayoutGithubLoader;
+import org.apache.causeway.extensions.layoutgithub.loader.menu.LayoutLoaderMenu;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -54,7 +52,7 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     @Test
     public void happy_case() {
 
-        val layoutResourceIfAny = loader.tryLoadLayoutResource(SimpleObject.class, "SimpleObject.layout.xml");
+        val layoutResourceIfAny = loader.lookupLayoutResource(SimpleObject.class, "SimpleObject.layout.xml");
         assertThat(layoutResourceIfAny).isPresent();
 
     }
@@ -62,7 +60,7 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     @Test
     public void sad_case() {
 
-        val layoutResourceIfAny = loader.tryLoadLayoutResource(SimpleObject.class, "Unknown.layout.xml");
+        val layoutResourceIfAny = loader.lookupLayoutResource(SimpleObject.class, "Unknown.layout.xml");
         assertThat(layoutResourceIfAny).isEmpty();
 
     }

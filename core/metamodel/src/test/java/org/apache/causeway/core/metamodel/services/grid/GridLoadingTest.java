@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
 
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -18,38 +18,38 @@
  */
 package org.apache.causeway.extensions.layoutgithub.loader.spi;
 
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
 import java.util.HashMap;
-import java.util.Optional;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 import org.apache.causeway.extensions.layoutgithub.loader.CausewayModuleExtLayoutGithubLoader;
-
 import org.apache.causeway.extensions.layoutgithub.loader.menu.LayoutLoaderMenu;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import lombok.NonNull;
+import lombok.val;
 
 @Service
 @Named(CausewayModuleExtLayoutGithubLoader.NAMESPACE + ".LayoutResourceLoaderFromGithub")
 @Priority(PriorityPrecedence.MIDPOINT - 100)
 @Qualifier("Github")
-@Log4j2
+//@Log4j2
 public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
 
     final RestTemplate restTemplateForSearch;
@@ -73,41 +73,45 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     }
 
     @Override
-    public Optional<LayoutResource> tryLoadLayoutResource(
+    public Try<LayoutResource> tryLoadLayoutResource(
             final @NonNull Class<?> type,
             final @NonNull String candidateResourceName) {
-        if (!layoutLoaderMenu.isEnabled()) {
-            return Optional.empty();
-        }
-        return queryResultsCache.execute(() -> tryLoadLayoutResource(candidateResourceName),
-                getClass(), "tryLoadLayoutResource", candidateResourceName);
+        return layoutLoaderMenu.isEnabled()
+                ? queryResultsCache.execute(() -> tryLoadLayoutResource(candidateResourceName),
+                        getClass(), "tryLoadLayoutResource", candidateResourceName)
+                : Try.empty();
     }
 
-    private Optional<LayoutResource> tryLoadLayoutResource(String candidateResourceName) {
-        return search(candidateResourceName)
-                .flatMap(x -> content(candidateResourceName, x));
+    private Try<LayoutResource> tryLoadLayoutResource(final String candidateResourceName) {
+        var path = search(candidateResourceName);
+        return path.isFailure()
+            // preserve any issues that occurred when searching for the path
+            ? Try.failure(path.getFailure().get())
+            : content(candidateResourceName, path.getValue().orElse(null));
     }
 
     /**
      * eg:
      * <code>/search/code?q=SimpleObject.layout.xml+in:path+repo:apache/causeway-app-simpleapp</code>
      */
-    private Optional<String> search(final @NonNull String candidateResourceName) {
+    private Try<String> search(final @NonNull String candidateResourceName) {
 
         try {
-            val searchParams = new HashMap<String,String>() {{
-                val repo = causewayConfiguration.getExtensions().getLayoutGithub().getRepository();
-                put("q", String.format("%s+in:path+repo:%s", candidateResourceName, repo));
-            }};
-            val responseEntity = restTemplateForSearch.exchange("/search/code?q={q}", HttpMethod.GET, null, new ParameterizedTypeReference<GitHubResponse>() {}, searchParams);
+            val repo = causewayConfiguration.getExtensions().getLayoutGithub().getRepository();
+            val searchParams = new HashMap<String, String>();
+            searchParams.put("q", String.format("%s+in:path+repo:%s", candidateResourceName, repo));
+
+            val responseEntity = restTemplateForSearch
+                    .exchange("/search/code?q={q}", HttpMethod.GET, null,
+                            new ParameterizedTypeReference<GitHubResponse>() {}, searchParams);
 
             GitHubResponse searchResponse = responseEntity.getBody();
             if (searchResponse.getTotal_count() != 1) {
-                return Optional.empty();
+                return Try.empty();
             }
-            return Optional.of(searchResponse.getItems().get(0).getPath());
+            return Try.success(searchResponse.getItems().get(0).getPath());
         } catch (Exception ex) {
-            return Optional.empty();
+            return Try.failure(ex);
         }
     }
 
@@ -115,19 +119,22 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
      * eg:
      * <code>/contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml</code>
      */
-    private Optional<LayoutResource> content(
+    private Try<LayoutResource> content(
             final @NonNull String candidateResourceName,
-            final @NonNull String path) {
+            final @Nullable String path) {
+
+        if(path==null) return Try.empty();
 
         try {
             val contentResponse = restTemplateForContent.exchange("/contents/" + path, HttpMethod.GET, null, String.class);
             val content = contentResponse.getBody();
 
-            return Optional
-                    .ofNullable(content)
-                    .map(body -> new LayoutResource(candidateResourceName, NamedWithMimeType.CommonMimeType.XML, content));
+            return StringUtils.hasLength(content)
+                    ? Try.call(()->new LayoutResource(candidateResourceName, NamedWithMimeType.CommonMimeType.XML, content))
+                    : Try.empty();
+
         } catch (Exception ex) {
-            return Optional.empty();
+            return Try.failure(ex);
         }
     }
 

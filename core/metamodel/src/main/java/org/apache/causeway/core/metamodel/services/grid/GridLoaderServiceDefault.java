@@ -29,10 +29,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
-
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -43,12 +39,16 @@ import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -74,8 +74,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final boolean supportsReloading;
-
-
 
     @Inject
     public GridLoaderServiceDefault(
@@ -125,6 +123,11 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         val layoutKey = new LayoutKey(domainClass, layoutIfAny);
         val layoutResource = loadLayoutResource(layoutKey, supportedFormats).orElse(null);
         if(layoutResource == null) {
+            log.warn(
+                    "Failed to locate or load layout resource for class {}, "
+                    + "with layout-suffix (if any) {}, "
+                    + "using layout-resource-loaders {}.",
+                    domainClass.getName(), layoutIfAny, Can.ofCollection(layoutResourceLoaders));
             return Optional.empty();
         }
 
@@ -182,10 +185,8 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
         return _Reflect.streamTypeHierarchy(layoutKey.getDomainClass(), InterfacePolicy.EXCLUDE)
-        .map(type->loadContent(type, layoutKey.getLayoutIfAny(), supportedFormats))
-        .filter(Optional::isPresent)
-        .findFirst()
-        .map(Optional::get);
+            .flatMap(type->loadContent(type, layoutKey.getLayoutIfAny(), supportedFormats).stream())
+            .findFirst();
     }
 
     private Optional<LayoutResource> loadContent(
@@ -193,10 +194,8 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final @Nullable String layoutIfAny,
             final EnumSet<CommonMimeType> supportedFormats) {
         return streamResourceNameCandidatesFor(domainClass, layoutIfAny, supportedFormats)
-        .map(candidateResourceName->tryLoadLayoutResource(domainClass, candidateResourceName))
-        .filter(Optional::isPresent)
-        .findFirst()
-        .map(Optional::get);
+            .flatMap(candidateResourceName->lookupLayoutResourceUsingLoaders(domainClass, candidateResourceName).stream())
+            .findFirst();
     }
 
     private Stream<String> streamResourceNameCandidatesFor(
@@ -232,16 +231,13 @@ public class GridLoaderServiceDefault implements GridLoaderService {
                         String.format("%s.layout.fallback.%s", typeSimpleName,fileExtension));
     }
 
-    private Optional<LayoutResource> tryLoadLayoutResource(
+    private Optional<LayoutResource> lookupLayoutResourceUsingLoaders(
             final @NonNull Class<?> type,
             final @NonNull String candidateResourceName) {
-        for (LayoutResourceLoader layoutResourceLoader : layoutResourceLoaders) {
-            Optional<LayoutResource> layoutResource = layoutResourceLoader.tryLoadLayoutResource(type, candidateResourceName);
-            if (layoutResource.isPresent()) {
-                return layoutResource;
-            }
-        }
-        return Optional.empty();
+
+        return _NullSafe.stream(layoutResourceLoaders)
+            .flatMap(loader->loader.lookupLayoutResource(type, candidateResourceName).stream())
+            .findFirst();
     }
 
 
