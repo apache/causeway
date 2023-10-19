@@ -46,7 +46,9 @@ import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.springframework.stereotype.Component;
 
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -159,6 +161,11 @@ implements
         return application;
     }
 
+    @Component
+    static class ServiceInjectorHolder {
+        @Inject ServiceInjector serviceInjector;
+    }
+
     /**
      * Initializes the application; in particular, bootstrapping the Causeway
      * backend, and initializing the {@link ComponentFactoryRegistry} to be used
@@ -171,8 +178,16 @@ implements
         // initialize Spring Dependency Injection for wicket
         val springInjector = new SpringComponentInjector(this);
         getComponentInstantiationListeners().add(springInjector);
-        // resolve injection-points on self
-        springInjector.inject(this);
+
+        // self managed dependency injection
+        {
+            // get the Apache Causeway ServiceInjector
+            val serviceInjectorHolder = new ServiceInjectorHolder();
+            springInjector.inject(serviceInjectorHolder);
+
+            // resolve injection-points on self
+            serviceInjectorHolder.serviceInjector.injectServicesInto(this);
+        }
 
         // gather configuration plugins into a list of named tasks
         val initializationTasks =
