@@ -85,9 +85,10 @@ Two configuration properties are required:
 ----
 causeway:
   extensions:
-    layout-github.api-key=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
-causeway.extensions.layout-github.repository=apache/causeway-app-simpleapp
-
+    layout-loaders:
+      github:
+        api-key: ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        repository: apache/causeway-app-simpleapp
 ----
 
 
