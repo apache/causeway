@@ -3442,19 +3442,26 @@ public class CausewayConfiguration {
 
         }
 
-        private final LayoutGithub layoutGithub = new LayoutGithub();
+        private final LayoutLoaders layoutLoaders = new LayoutLoaders();
         @Data
-        public static class LayoutGithub {
+        public static class LayoutLoaders {
 
-            /**
-             * eg <code>apache/causeway-app-simpleapp</code>
-             */
-            private String repository;
+            private final GitHub gitHub = new GitHub();
+            @Data
+            public static class GitHub {
 
-            /**
-             * As per <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>
-             */
-            private String apiKey;
+                /**
+                 * eg <code>apache/causeway-app-simpleapp</code>
+                 */
+                private String repository;
+
+                /**
+                 * As per <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>,
+                 * must have permissions to the <code>/search</code> and <code>/contents</code> APIs for the specified
+                 * {@link #getRepository() repository}.
+                 */
+                private String apiKey;
+            }
         }
 
         private final Secman secman = new Secman();
@@ -3476,7 +3483,7 @@ public class CausewayConfiguration {
                                 "causeway.security",
                                 "causeway.ext.h2Console",
                                 "causeway.ext.secman",
-                                "causeway.ext.layoutGithub"
+                                "causeway.ext.layoutLoaders"
                         ));
                 public static final List<String> ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS =
                         Collections.unmodifiableList(listOf());

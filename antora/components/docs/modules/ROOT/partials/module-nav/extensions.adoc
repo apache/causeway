@@ -13,6 +13,7 @@
 *** xref:userguide:executionrepublisher:about.adoc[]
 *** xref:userguide:excel:about.adoc[]
 *** xref:userguide:flyway:about.adoc[]
+*** xref:userguide:layoutloaders:about.adoc[]
 
 
 ** Security
