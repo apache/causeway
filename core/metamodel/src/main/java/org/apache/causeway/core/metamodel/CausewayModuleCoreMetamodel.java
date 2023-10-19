@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.core.metamodel.services.columnorder.ColumnOrderTxtFileServiceDefault;
 
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -185,6 +187,7 @@ import lombok.NonNull;
         GridServiceDefault.class,
         GridSystemServiceBootstrap.class,
         IdStringifierLookupService.class,
+        LayoutResourceLoaderDefault.class,
         LayoutServiceDefault.class,
         MetamodelEventService.class,
         MetaModelServiceDefault.class,

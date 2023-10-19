@@ -141,6 +141,7 @@ open module org.apache.causeway.core.metamodel {
 
     exports org.apache.causeway.core.metamodel.valuetypes;
     exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
+    exports org.apache.causeway.core.metamodel.services.grid.spi;
 
     requires jakarta.activation;
     requires jakarta.annotation;

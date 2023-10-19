@@ -23,6 +23,8 @@ import java.util.function.Supplier;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtLayoutGithubRoleAndPermissions;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -123,6 +125,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                 new CausewayExtDocgenRoleAndPermissions(),
                 new CausewayExtExecutionLogRoleAndPermissions(),
                 new CausewayExtExecutionOutboxRoleAndPermissions(),
+                new CausewayExtLayoutGithubRoleAndPermissions(),
                 new CausewayExtSessionLogRoleAndPermissions(),
                 new CausewayExtH2ConsoleRoleAndPermissions(),
                 new CausewayViewerRestfulObjectsSwaggerRoleAndPermissions(),

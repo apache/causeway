@@ -56,6 +56,9 @@ content:
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
+    - url: .
+      start_path: extensions/core/layoutgithub/adoc # userguide
+      branches: HEAD
 
     - url: .
       start_path: extensions/security/audittrail/adoc # security
@@ -73,6 +76,7 @@ content:
     - url: .
       start_path: extensions/vro/cors/adoc # vro
       branches: HEAD
+
     - url: .
       start_path: extensions/vw/tabular/adoc # vw
       branches: HEAD

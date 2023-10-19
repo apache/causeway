@@ -126,6 +126,9 @@ content:
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: [2.0.0-RC3]
+    - url: .
+      start_path: extensions/core/layoutgithub/adoc # userguide
+      branches: [2.0.0-RC3]
 
     - url: .
       start_path: extensions/security/audittrail/adoc # security

@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.io.IOException;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,13 +39,16 @@ import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,6 +58,9 @@ import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridLoaderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
@@ -64,28 +70,25 @@ import lombok.extern.log4j.Log4j2;
 public class GridLoaderServiceDefault implements GridLoaderService {
 
     private final MessageService messageService;
+    final List<LayoutResourceLoader> layoutResourceLoaders;
+
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final boolean supportsReloading;
 
     @Inject
     public GridLoaderServiceDefault(
-           final MessageService messageService,
-           final CausewaySystemEnvironment causewaySystemEnvironment) {
+            final MessageService messageService,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final List<LayoutResourceLoader> layoutResourceLoaders) {
         this.messageService = messageService;
         this.supportsReloading = causewaySystemEnvironment.isPrototyping();
+        this.layoutResourceLoaders = layoutResourceLoaders;
     }
 
     @Value
     static class LayoutKey {
         private final @NonNull Class<?> domainClass;
         private final @Nullable String layoutIfAny; // layout suffix
-    }
-
-    @Value
-    static class LayoutResource {
-        private final @NonNull String resourceName;
-        private final @NonNull CommonMimeType format;
-        private final @NonNull String content;
     }
 
     // for better logging messages (used only in prototyping mode)
@@ -120,6 +123,11 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         val layoutKey = new LayoutKey(domainClass, layoutIfAny);
         val layoutResource = loadLayoutResource(layoutKey, supportedFormats).orElse(null);
         if(layoutResource == null) {
+            log.warn(
+                    "Failed to locate or load layout resource for class {}, "
+                    + "with layout-suffix (if any) {}, "
+                    + "using layout-resource-loaders {}.",
+                    domainClass.getName(), layoutIfAny, Can.ofCollection(layoutResourceLoaders));
             return Optional.empty();
         }
 
@@ -174,13 +182,11 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     // -- HELPER
 
     Optional<LayoutResource> loadLayoutResource(
-            final LayoutKey dcal,
+            final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
-        return _Reflect.streamTypeHierarchy(dcal.getDomainClass(), InterfacePolicy.EXCLUDE)
-        .map(type->loadContent(type, dcal.getLayoutIfAny(), supportedFormats))
-        .filter(Optional::isPresent)
-        .findFirst()
-        .map(Optional::get);
+        return _Reflect.streamTypeHierarchy(layoutKey.getDomainClass(), InterfacePolicy.EXCLUDE)
+            .flatMap(type->loadContent(type, layoutKey.getLayoutIfAny(), supportedFormats).stream())
+            .findFirst();
     }
 
     private Optional<LayoutResource> loadContent(
@@ -188,10 +194,8 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final @Nullable String layoutIfAny,
             final EnumSet<CommonMimeType> supportedFormats) {
         return streamResourceNameCandidatesFor(domainClass, layoutIfAny, supportedFormats)
-        .map(candidateResourceName->tryLoadLayoutResource(domainClass, candidateResourceName))
-        .filter(Optional::isPresent)
-        .findFirst()
-        .map(Optional::get);
+            .flatMap(candidateResourceName->lookupLayoutResourceUsingLoaders(domainClass, candidateResourceName).stream())
+            .findFirst();
     }
 
     private Stream<String> streamResourceNameCandidatesFor(
@@ -227,22 +231,14 @@ public class GridLoaderServiceDefault implements GridLoaderService {
                         String.format("%s.layout.fallback.%s", typeSimpleName,fileExtension));
     }
 
-    private Optional<LayoutResource> tryLoadLayoutResource(
+    private Optional<LayoutResource> lookupLayoutResourceUsingLoaders(
             final @NonNull Class<?> type,
             final @NonNull String candidateResourceName) {
-        try {
-            return Optional.ofNullable(
-                    _Resources.loadAsStringUtf8(type, candidateResourceName))
-                    .map(fileContent->new LayoutResource(
-                            candidateResourceName,
-                            CommonMimeType.valueOfFileName(candidateResourceName).orElseThrow(),
-                            fileContent));
-        } catch (IOException ex) {
-            log.error(
-                    "Failed to load layout file {} (relative to {}.class)",
-                    candidateResourceName, type.getName(), ex);
-        }
-        return Optional.empty();
+
+        return _NullSafe.stream(layoutResourceLoaders)
+            .flatMap(loader->loader.lookupLayoutResource(type, candidateResourceName).stream())
+            .findFirst();
     }
+
 
 }

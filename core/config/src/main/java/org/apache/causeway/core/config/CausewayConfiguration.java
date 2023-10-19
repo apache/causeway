@@ -3442,6 +3442,21 @@ public class CausewayConfiguration {
 
         }
 
+        private final LayoutGithub layoutGithub = new LayoutGithub();
+        @Data
+        public static class LayoutGithub {
+
+            /**
+             * eg <code>apache/causeway-app-simpleapp</code>
+             */
+            private String repository;
+
+            /**
+             * As per <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>
+             */
+            private String apiKey;
+        }
+
         private final Secman secman = new Secman();
         @Data
         public static class Secman {
@@ -3460,7 +3475,8 @@ public class CausewayConfiguration {
                                 CausewayModuleApplib.NAMESPACE_FEAT,
                                 "causeway.security",
                                 "causeway.ext.h2Console",
-                                "causeway.ext.secman"
+                                "causeway.ext.secman",
+                                "causeway.ext.layoutGithub"
                         ));
                 public static final List<String> ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS =
                         Collections.unmodifiableList(listOf());
