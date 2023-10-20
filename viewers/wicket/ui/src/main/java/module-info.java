@@ -154,7 +154,7 @@ module org.apache.causeway.viewer.wicket.ui {
     requires wicket.bootstrap.core;
     requires wicket.bootstrap.extensions;
     requires wicket.bootstrap.themes;
-    requires wicket.webjars;
-    requires wicketstuff.select2;
+    requires de.agilecoders.wicket.webjars;
+    requires org.wicketstuff.select2;
 
 }
