@@ -112,11 +112,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     @Override
     public void addComponentFactories(final ComponentFactoryList componentFactories) {
-
         addComponentFactoriesActingAsSelectors(componentFactories);
-
         addComponentFactoriesFromPlugins(componentFactories);
-
         addBuiltInComponentFactories(componentFactories);
     }
 
