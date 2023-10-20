@@ -42,6 +42,7 @@ import org.apache.causeway.viewer.commons.applib.services.tabular.CollectionCont
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.causeway.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanelFactory;
@@ -112,11 +113,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     @Override
     public void addComponentFactories(final ComponentFactoryList componentFactories) {
-
         addComponentFactoriesActingAsSelectors(componentFactories);
-
         addComponentFactoriesFromPlugins(componentFactories);
-
         addBuiltInComponentFactories(componentFactories);
     }
 

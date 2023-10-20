@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.registries.components;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -67,8 +70,10 @@ implements ComponentFactoryRegistry {
     @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;
     @Inject private MetaModelContext metaModelContext;
 
-    private final ListMultimap<UiComponentType, ComponentFactory> componentFactoriesByType =
+    private final ListMultimap<UiComponentType, ComponentFactory> componentFactoriesByComponentType =
             _Multimaps.newListMultimap();
+    private final Map<Class<? extends ComponentFactory>, ComponentFactory> componentFactoriesByType =
+            new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -90,6 +95,7 @@ implements ComponentFactoryRegistry {
 
         for (val componentFactory : componentFactories) {
             registerComponentFactory(commonContext, componentFactory);
+            componentFactoriesByType.put(componentFactory.getClass(), componentFactory);
         }
 
         ensureAllComponentTypesRegistered();
@@ -105,7 +111,7 @@ implements ComponentFactoryRegistry {
             ((ComponentFactoryAbstract)componentFactory).setMetaModelContext(commonContext);
         }
 
-        componentFactoriesByType.putElement(componentFactory.getComponentType(), componentFactory);
+        componentFactoriesByComponentType.putElement(componentFactory.getComponentType(), componentFactory);
     }
 
     private void ensureAllComponentTypesRegistered() {
@@ -115,7 +121,7 @@ implements ComponentFactoryRegistry {
                 continue;
             }
 
-            if (componentFactoriesByType.getOrElseEmpty(componentType).isEmpty()) {
+            if (componentFactoriesByComponentType.getOrElseEmpty(componentType).isEmpty()) {
                 throw new IllegalStateException("No component factories registered for " + componentType);
             }
         }
@@ -159,7 +165,7 @@ implements ComponentFactoryRegistry {
 
         val exclusiveIfAny = _Refs.<ComponentFactory>objectRef(null);
 
-        val allThatApply = componentFactoriesByType.streamElements(uiComponentType)
+        val allThatApply = componentFactoriesByComponentType.streamElements(uiComponentType)
                 .filter(componentFactory->{
                     val advice = componentFactory.appliesTo(uiComponentType, model);
                     if(advice.appliesExclusively()) {
@@ -186,6 +192,12 @@ implements ComponentFactoryRegistry {
                 .flatMap(componentType->streamComponentFactories(componentType, model));
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends ComponentFactory> Optional<T> lookupFactory(final Class<T> factoryClass) {
+        return Optional.ofNullable((T)componentFactoriesByType.get(factoryClass));
+    }
+
     // -- DEBUG LOGGING
 
     private static void logComponentResolving(
@@ -205,7 +217,7 @@ implements ComponentFactoryRegistry {
         val factory = new ComponentFactoryRegistryDefault();
         _NullSafe.stream(componentFactories)
         .forEach(componentFactory->
-            factory.componentFactoriesByType.putElement(
+            factory.componentFactoriesByComponentType.putElement(
                     componentFactory.getComponentType(),
                     componentFactory));
         return factory;

@@ -87,7 +87,11 @@ public final class ComponentFactoryKey implements Serializable {
     public ComponentFactory resolve(final @NonNull Supplier<ServiceRegistry> serviceRegistrySupplier) {
         return componentFactory != null
                 ? componentFactory
-                : (this.componentFactory = serviceRegistrySupplier.get().lookupServiceElseFail(factoryClass));
+                : (this.componentFactory = componentFactoryRegistry(serviceRegistrySupplier).lookupFactoryElseFail(factoryClass));
+    }
+    
+    ComponentFactoryRegistry componentFactoryRegistry(final @NonNull Supplier<ServiceRegistry> serviceRegistrySupplier) {
+        return serviceRegistrySupplier.get().lookupServiceElseFail(ComponentFactoryRegistry.class);
     }
 
 }
