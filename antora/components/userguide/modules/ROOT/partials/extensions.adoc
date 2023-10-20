@@ -5,4 +5,5 @@ include::userguide:executionoutbox:partial$module-nav.adoc[]
 include::userguide:executionrepublisher:partial$module-nav.adoc[]
 include::userguide:excel:partial$module-nav.adoc[]
 include::userguide:flyway:partial$module-nav.adoc[]
+include::userguide:layoutloaders:partial$module-nav.adoc[]
 

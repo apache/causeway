@@ -30,7 +30,7 @@ This milestone also introduces a number of new features:
 ** xref:vro:cors:[CORS] for the REST API (xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)])
 ** xref:vw:pdfjs:about.adoc[PDF.js] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
 ** xref:vw:fullcalendar:about.adoc[fullcalendar] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
-** xref:vw:exceldownload:about.adoc[excel download] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
+** xref:vw:tabular:about.adoc[excel download] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
 
 Improvements:
 

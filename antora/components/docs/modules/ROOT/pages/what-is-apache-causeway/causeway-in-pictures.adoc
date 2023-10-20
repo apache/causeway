@@ -115,7 +115,7 @@ Similarly the xref:vw:fullcalendar:about.adoc[Fullcalendar2] extension will rend
 image::what-is-apache-causeway/causeway-in-pictures/090-fullcalendar2-view.png[width="800px"]
 
 
-The xref:vw:exceldownload:about.adoc[Excel Download] component is rather simple: it simply provides a download button to the table as a spreadsheet:
+The xref:vw:tabular:about.adoc[Tabular Download] component is rather simple: it simply allows the table to be downloaded as a spreadsheet:
 
 image::what-is-apache-causeway/causeway-in-pictures/100-excel-view-and-docx.png[width="800px"]
 

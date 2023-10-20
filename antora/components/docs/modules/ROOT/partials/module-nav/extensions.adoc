@@ -27,10 +27,10 @@
 
 ** _Web UI (Wicket viewer)_
 
-*** xref:vw:exceldownload:about.adoc[Excel Download]
 *** xref:vw:fullcalendar:about.adoc[Full Calendar]
 *** xref:vw:pdfjs:about.adoc[PDF.js]
 *** xref:vw:sse:about.adoc[Server Side Events]
+*** xref:vw:tabular:about.adoc[Tabular Download]
 
 
 ** _REST API (Restful Objects)_

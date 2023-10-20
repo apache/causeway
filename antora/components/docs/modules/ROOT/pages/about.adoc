@@ -113,7 +113,7 @@ _Security_
 
 _Web UI (Wicket)_
 
-** *xref:vw:exceldownload:about.adoc[]*
+** *xref:vw:tabular:about.adoc[]*
 ** *xref:vw:pdfjs:about.adoc[]*
 
 
