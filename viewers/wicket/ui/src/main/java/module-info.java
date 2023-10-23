@@ -124,7 +124,6 @@ module org.apache.causeway.viewer.wicket.ui {
     requires java.sql;
     requires jakarta.validation;
     requires jakarta.servlet;
-    requires jquery.selectors;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
@@ -156,5 +155,6 @@ module org.apache.causeway.viewer.wicket.ui {
     requires wicket.bootstrap.themes;
     requires de.agilecoders.wicket.webjars;
     requires org.wicketstuff.select2;
+    requires de.agilecoders.wicket.jquery;
 
 }
