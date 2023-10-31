@@ -29,8 +29,6 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
-
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.util.ClassUtils;
 
@@ -92,6 +90,7 @@ import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
@@ -454,7 +453,7 @@ implements MetaModelContext {
     private final GridLoaderService gridLoaderService = createGridLoaderService();
     //XXX lombok issue: won't compile if inlined
     private final GridLoaderService createGridLoaderService() {
-        return new GridLoaderServiceDefault(getMessageService(), List.of(new LayoutResourceLoaderDefault()), /*support reloading*/true);
+        return new GridLoaderServiceDefault(getMessageService(), Can.of(new LayoutResourceLoaderDefault()), /*support reloading*/true);
     }
 
     @Getter(lazy = true)
