@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Priority;
@@ -40,7 +41,6 @@ import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Reflect;
@@ -70,7 +70,7 @@ import lombok.extern.log4j.Log4j2;
 public class GridLoaderServiceDefault implements GridLoaderService {
 
     private final MessageService messageService;
-    final List<LayoutResourceLoader> layoutResourceLoaders;
+    final Can<LayoutResourceLoader> layoutResourceLoaders;
 
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final boolean supportsReloading;
@@ -82,7 +82,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final List<LayoutResourceLoader> layoutResourceLoaders) {
         this.messageService = messageService;
         this.supportsReloading = causewaySystemEnvironment.isPrototyping();
-        this.layoutResourceLoaders = layoutResourceLoaders;
+        this.layoutResourceLoaders = Can.ofCollection(layoutResourceLoaders);
     }
 
     @Value
@@ -123,11 +123,12 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         val layoutKey = new LayoutKey(domainClass, layoutIfAny);
         val layoutResource = loadLayoutResource(layoutKey, supportedFormats).orElse(null);
         if(layoutResource == null) {
-            log.warn(
+            log.debug(
                     "Failed to locate or load layout resource for class {}, "
                     + "with layout-suffix (if any) {}, "
                     + "using layout-resource-loaders {}.",
-                    domainClass.getName(), layoutIfAny, Can.ofCollection(layoutResourceLoaders));
+                    domainClass.getName(), layoutIfAny,
+                    layoutResourceLoaders.stream().map(Object::getClass).map(Class::getName).collect(Collectors.joining(", ")));
             return Optional.empty();
         }
 
@@ -236,7 +237,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final @NonNull Class<?> type,
             final @NonNull String candidateResourceName) {
 
-        return _NullSafe.stream(layoutResourceLoaders)
+        return layoutResourceLoaders.stream()
             .flatMap(loader->loader.lookupLayoutResource(type, candidateResourceName).stream())
             .findFirst();
     }
