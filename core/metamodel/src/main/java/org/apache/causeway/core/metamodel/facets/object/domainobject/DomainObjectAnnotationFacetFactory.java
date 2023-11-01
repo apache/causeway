@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -560,8 +561,8 @@ implements
         .addValidator(
             new MetaModelValidatorAbstract(getMetaModelContext(), spec->!spec.isAbstract()){
 
-                final _Multimaps.ListMultimap<String, ObjectSpecification> specsByLogicalTypeName =
-                        _Multimaps.newConcurrentListMultimap();
+                final _Multimaps.SetMultimap<String, ObjectSpecification> specsByLogicalTypeName =
+                        _Multimaps.newConcurrentSetMultimap();
 
                 @Override
                 public void validateObjectEnter(final ObjectSpecification objSpec) {
@@ -614,11 +615,11 @@ implements
                     return true;
                 }
 
-                private boolean isObjectTypeCollision(final List<ObjectSpecification> specs) {
+                private boolean isObjectTypeCollision(final Set<ObjectSpecification> specs) {
                     return specs.size()>1;
                 }
 
-                private String asCsv(final List<ObjectSpecification> specList) {
+                private String asCsv(final Set<ObjectSpecification> specList) {
                     return stream(specList)
                             .map(ObjectSpecification::getFullIdentifier)
                             .sorted()
