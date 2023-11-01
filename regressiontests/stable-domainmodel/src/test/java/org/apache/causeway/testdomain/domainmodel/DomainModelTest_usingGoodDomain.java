@@ -24,6 +24,10 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.testdomain.model.good.ProperObjectWithNameAsAnAlias;
+
+import org.apache.causeway.testdomain.model.good.ProperServiceWithNameAsAnAlias;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -680,6 +684,26 @@ class DomainModelTest_usingGoodDomain {
     }
 
     @Test
+    void nameUsedAsAnAliasOnDomainServices_shouldBeHonored() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperServiceWithNameAsAnAlias.class);
+        assertTrue(objectSpec.isInjectable());
+        assertTrue(objectSpec.getAction("now").isPresent());
+
+        assertEquals(Can.of(
+                        "testdomain.ProperServiceWithNameAsAnAlias",
+                        "testdomain.other.ProperServiceWithNameAsAnAlias"),
+                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.ProperServiceWithNameAsAnAlias")
+                        .orElse(null));
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.other.ProperServiceWithNameAsAnAlias")
+                        .orElse(null));
+    }
+
+    @Test
     void aliasesOnDomainObjects_shouldBeHonored() {
 
         val objectSpec = specificationLoader.specForTypeElseFail(ProperObjectWithAlias.class);
@@ -696,6 +720,26 @@ class DomainModelTest_usingGoodDomain {
                 .orElse(null));
         assertEquals(objectSpec,
                 specificationLoader.specForLogicalTypeName("testdomain.v2.ProperObjectWithAlias")
+                .orElse(null));
+    }
+
+    @Test
+    void nameUsedAsAnAliasOnDomainObjects_shouldBeHonored() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperObjectWithNameAsAnAlias.class);
+        assertTrue(objectSpec.isViewModel());
+        assertTrue(objectSpec.getAction("now").isPresent());
+
+        assertEquals(Can.of(
+                "testdomain.ProperObjectWithNameAsAnAlias",
+                "testdomain.other.ProperObjectWithNameAsAnAlias"),
+                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.ProperObjectWithNameAsAnAlias")
+                .orElse(null));
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.other.ProperObjectWithNameAsAnAlias")
                 .orElse(null));
     }
 
