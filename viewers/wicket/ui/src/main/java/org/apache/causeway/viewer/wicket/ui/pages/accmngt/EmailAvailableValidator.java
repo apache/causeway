@@ -35,11 +35,11 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public static EmailAvailableValidator exists(MetaModelContext commonContext) {
+    public static EmailAvailableValidator exists(final MetaModelContext commonContext) {
         return new EmailAvailableValidator(commonContext, true, "noSuchUserByEmail");
     }
 
-    public static EmailAvailableValidator doesntExist(MetaModelContext commonContext) {
+    public static EmailAvailableValidator doesntExist(final MetaModelContext commonContext) {
         return new EmailAvailableValidator(commonContext, false, "emailIsNotAvailable");
     }
 
@@ -47,11 +47,11 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
     private final String resourceKey;
 
     private EmailAvailableValidator(
-            MetaModelContext commonContext,
-            boolean emailExists,
-            String resourceKey) {
+            final MetaModelContext commonContext,
+            final boolean emailExists,
+            final String resourceKey) {
 
-        super(commonContext);
+        super();
         this.emailExists = emailExists;
         this.resourceKey = resourceKey;
     }

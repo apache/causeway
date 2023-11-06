@@ -29,12 +29,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
@@ -52,25 +50,20 @@ import lombok.val;
  */
 public abstract class GenericColumnAbstract
 extends AbstractColumn<DataRow, String>
-implements GenericColumn {
-
+implements GenericColumn, HasMetaModelContext {
     private static final long serialVersionUID = 1L;
 
-    private transient MetaModelContext commonContext;
     private transient ComponentFactoryRegistry componentRegistry;
 
     protected GenericColumnAbstract(
-            final MetaModelContext commonContext,
             final String columnName) {
-        this(commonContext, Model.of(columnName), null);
+        this(Model.of(columnName), null);
     }
 
     protected GenericColumnAbstract(
-            final MetaModelContext commonContext,
             final IModel<String> columnNameModel,
             final String sortColumn) {
         super(columnNameModel, sortColumn);
-        this.commonContext = commonContext;
     }
 
     @Override
@@ -91,10 +84,6 @@ implements GenericColumn {
     protected abstract Component createCellComponent(
             final String componentId, final DataRow dataRow, IModel<Boolean> dataRowToggle);
 
-    public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
-    }
-
     protected ComponentFactory findComponentFactory(final UiComponentType uiComponentType, final IModel<?> model) {
         return getComponentRegistry().findComponentFactory(uiComponentType, model);
     }
@@ -105,10 +94,6 @@ implements GenericColumn {
             componentRegistry = componentFactoryRegistryAccessor.getComponentFactoryRegistry();
         }
         return componentRegistry;
-    }
-
-    protected PlaceholderRenderService getPlaceholderRenderService() {
-        return getMetaModelContext().getPlaceholderRenderService();
     }
 
     protected String translate(final String raw) {

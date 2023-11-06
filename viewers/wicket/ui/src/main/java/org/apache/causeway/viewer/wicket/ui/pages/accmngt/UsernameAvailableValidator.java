@@ -23,7 +23,6 @@ import org.apache.wicket.validation.ValidationError;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.validation.ValidatorBase;
 
 import lombok.val;
@@ -33,15 +32,10 @@ import lombok.val;
  */
 public class UsernameAvailableValidator extends ValidatorBase<String> {
 
-
     private static final long serialVersionUID = 1L;
 
-    public static UsernameAvailableValidator instance(MetaModelContext commonContext) {
-        return new UsernameAvailableValidator(commonContext);
-    }
-
-    private UsernameAvailableValidator(MetaModelContext commonContext) {
-        super(commonContext);
+    public static UsernameAvailableValidator newInstance() {
+        return new UsernameAvailableValidator();
     }
 
     @Override

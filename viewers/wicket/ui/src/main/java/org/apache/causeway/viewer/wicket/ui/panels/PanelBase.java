@@ -26,13 +26,11 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
@@ -57,12 +55,6 @@ implements HasCommonContext {
 
     public PanelBase(final String id, @Nullable final IModel<T> model) {
         super(id, model);
-    }
-
-    private transient MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
     private transient PageClassRegistry pageClassRegistry;

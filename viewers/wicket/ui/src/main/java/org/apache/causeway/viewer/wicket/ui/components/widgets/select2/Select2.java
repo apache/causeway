@@ -31,14 +31,12 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithSingleChoice;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
@@ -190,14 +188,5 @@ implements
         this.mementoModel().setObject(convertedInput);
         return convertedInput;
     }
-
-    // -- DEPENDENCIES
-
-    private transient MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
-
 
 }

@@ -33,7 +33,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
@@ -51,7 +50,7 @@ class CausewayToWicketTreeAdapter {
         return valueModel==null
                 || ManagedObjects.isNullOrUnspecifiedOrEmpty(valueModel.getObject())
             ? emptyTreeComponent(id)
-            : DomainObjectTree.of(id, valueModel.getObject(), valueModel.getMetaModelContext());
+            : DomainObjectTree.of(id, valueModel.getObject());
     }
 
     /**
@@ -61,7 +60,7 @@ class CausewayToWicketTreeAdapter {
         return scalarModel==null
                 || ManagedObjects.isNullOrUnspecifiedOrEmpty(scalarModel.getObject())
             ? emptyTreeComponent(id)
-            : DomainObjectTree.of(id, scalarModel.getObject(), scalarModel.getMetaModelContext());
+            : DomainObjectTree.of(id, scalarModel.getObject());
     }
 
     // -- FALLBACK
@@ -80,15 +79,13 @@ class CausewayToWicketTreeAdapter {
 
         private static final long serialVersionUID = 1L;
 
-        private transient MetaModelContext metaModelContext;
-
         public static DomainObjectTree of(
-                final String id, final ManagedObject treeNodeObject, final MetaModelContext mmc) {
+                final String id, final ManagedObject treeNodeObject) {
 
             val treeNode = (TreeNode<?>) treeNodeObject.getPojo();
             val treeAdapterClass = treeNode.getTreeAdapterClass();
 
-            val wrappingTreeAdapter = new _TreeModelTreeAdapter(mmc, treeAdapterClass);
+            val wrappingTreeAdapter = new _TreeModelTreeAdapter(treeAdapterClass);
 
             val treeModelTreeProvider = new _TreeModelTreeProvider(
                     wrappingTreeAdapter.mementify(treeNode.getValue(), treeNode.getPositionAsPath()),

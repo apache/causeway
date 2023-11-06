@@ -23,17 +23,14 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNav
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public class CausewayAjaxNavigationToolbar extends AjaxNavigationToolbar
 implements HasCommonContext {
-
     private static final long serialVersionUID = 1L;
 
     private static final String navigatorContainerId = "span";
@@ -111,11 +108,4 @@ implements HasCommonContext {
     private UiHintContainer getUiHintContainer() {
         return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);
     }
-
-    private transient MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
-
 }

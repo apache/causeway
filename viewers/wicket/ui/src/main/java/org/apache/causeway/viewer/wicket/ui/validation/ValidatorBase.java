@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.validation;
 import org.apache.wicket.validation.IValidator;
 
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 /**
  * Provides the <em>common context</em> for implementing sub-classes.
@@ -35,16 +33,5 @@ implements
     IValidator<T> {
 
     private static final long serialVersionUID = 1L;
-
-    private transient MetaModelContext commonContext;
-
-    protected ValidatorBase(final MetaModelContext commonContext) {
-        this.commonContext = commonContext;
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
-    }
 
 }

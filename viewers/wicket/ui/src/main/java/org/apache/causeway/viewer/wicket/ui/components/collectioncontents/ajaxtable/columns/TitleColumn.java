@@ -23,7 +23,6 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -42,13 +41,12 @@ extends GenericColumnAbstract {
     private final Bookmark contextBookmark;
 
     public TitleColumn(
-            final MetaModelContext commonContext,
             final Variant variant,
             final Bookmark contextBookmark,
             final int maxColumnTitleLength,
             final ColumnAbbreviationOptions opts) {
 
-        super(commonContext, columnName(variant, maxColumnTitleLength)); // i18n
+        super(columnName(variant, maxColumnTitleLength)); // i18n
         this.variant = variant;
         this.contextBookmark = contextBookmark;
         this.opts = opts;

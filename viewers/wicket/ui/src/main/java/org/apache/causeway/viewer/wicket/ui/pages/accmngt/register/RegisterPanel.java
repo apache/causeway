@@ -67,9 +67,9 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
     private final String uuid;
 
     public RegisterPanel(
-            String id,
-            UserDetails userDetails,
-            String uuid) {
+            final String id,
+            final UserDetails userDetails,
+            final String uuid) {
 
         super(id);
         this.userDetails = userDetails;
@@ -98,8 +98,8 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
 
     private IFormValidator newEqualPasswordInputValidator(
-            MarkupContainer password,
-            MarkupContainer confirmPassword) {
+            final MarkupContainer password,
+            final MarkupContainer confirmPassword) {
 
         val passwordField = (FormComponent<?>) password.get(ID_PASSWORD);
         val confirmPasswordField = (FormComponent<?>) confirmPassword.get(ID_CONFIRM_PASSWORD);
@@ -126,7 +126,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
          *            id of the form component
          * @param userDetails
          */
-        public RegisterForm(final String id, final String uuid, UserDetails userDetails) {
+        public RegisterForm(final String id, final String uuid, final UserDetails userDetails) {
 
             super(id, new CompoundPropertyModel<>(userDetails));
 
@@ -152,7 +152,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
             setResponsePage(getApplication().getHomePage());
         }
 
-        private boolean signIn(String username, String password) {
+        private boolean signIn(final String username, final String password) {
             return AuthenticatedWebSession.get().signIn(username, password);
         }
 
@@ -198,7 +198,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
     protected MarkupContainer newUsernameField() {
         RequiredTextField<String> username = new RequiredTextField<>(ID_USERNAME);
-        username.add(UsernameAvailableValidator.instance(super.getMetaModelContext()));
+        username.add(UsernameAvailableValidator.newInstance());
         FormGroup usernameFormGroup = new FormGroup(ID_USERNAME_FORM_GROUP, username);
         usernameFormGroup.add(username);
         return usernameFormGroup;

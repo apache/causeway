@@ -29,7 +29,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.services.linking.DeepLinkService;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataColumn;
@@ -63,7 +62,6 @@ extends AssociationColumnAbstract {
     private final RenderOptions opts;
 
     public PluralColumn(
-            final MetaModelContext commonContext,
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
             final String sortProperty,
@@ -71,7 +69,7 @@ extends AssociationColumnAbstract {
             final String parentTypeName,
             final Optional<String> describedAs,
             final RenderOptions opts) {
-        super(commonContext, collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
+        super(collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
         this.opts = opts;
     }
 

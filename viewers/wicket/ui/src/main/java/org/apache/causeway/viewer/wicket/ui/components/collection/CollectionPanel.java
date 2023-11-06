@@ -95,7 +95,7 @@ implements
             val collModel = getModel();
             val collMetaModel = collModel.getMetaModel();
             toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
-                    ? Optional.of(new ToggleboxColumn(super.getMetaModelContext(), collModel.delegate()))
+                    ? Optional.of(new ToggleboxColumn(collModel.delegate()))
                     : Optional.empty();
         }
         return toggleboxColumn.orElse(null);

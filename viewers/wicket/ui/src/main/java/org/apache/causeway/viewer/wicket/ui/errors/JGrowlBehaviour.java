@@ -28,10 +28,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 import lombok.val;
 
@@ -52,10 +50,6 @@ extends AbstractDefaultAjaxBehavior
 implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
-
-    public JGrowlBehaviour(final MetaModelContext commonContext) {
-        this.mmc = commonContext;
-    }
 
     @Override
     protected void respond(final AjaxRequestTarget target) {
@@ -90,13 +84,5 @@ implements HasCommonContext {
             }
 
         });
-
     }
-
-    private transient MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
-
 }
