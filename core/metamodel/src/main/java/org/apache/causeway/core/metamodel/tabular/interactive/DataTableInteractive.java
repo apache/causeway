@@ -39,6 +39,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
@@ -123,8 +124,8 @@ implements MultiselectChoices {
         this.where = where;
 
         //dataElements = _Observables.lazy(elementSupplier);
-        dataElements = _Observables.lazy(()->elementSupplier.get().map(e->
-            e.getMetaModelContext().getServiceInjector().injectServicesInto(e)));
+        dataElements = _Observables.lazy(()->elementSupplier.get().map(
+            MetaModelContext.instanceElseFail()::injectServicesInto));
 
         searchArgument = _Bindables.forValue(null);
 

@@ -44,7 +44,6 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -52,7 +51,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
@@ -82,21 +81,15 @@ import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelV
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class DomainObjectTesterFactory {
-
-    @Getter
-    private final @NonNull MetaModelContext metaModelContext;
-    private final @NonNull ServiceInjector serviceInjector;
+public class DomainObjectTesterFactory implements HasMetaModelContext {
 
     public <T> ObjectTester<T> objectTester(
             final Class<T> domainObjectType) {
-        val tester = serviceInjector.injectServicesInto(
+        val tester = getServiceInjector().injectServicesInto(
                 new ObjectTester<T>(domainObjectType));
         tester.init();
         return tester;
@@ -106,7 +99,7 @@ public class DomainObjectTesterFactory {
             final Class<T> domainObjectType,
             final String actionName,
             final Where where) {
-        val tester = serviceInjector.injectServicesInto(
+        val tester = getServiceInjector().injectServicesInto(
                 new ActionTester<T>(domainObjectType, actionName, where));
         tester.init();
         return tester;
@@ -118,7 +111,7 @@ public class DomainObjectTesterFactory {
         val managedAction = actionInteraction.getManagedActionElseFail();
         assertEquals(domainObjectType,
                 managedAction.getOwner().getSpecification().getCorrespondingClass());
-        val actionTester = serviceInjector.injectServicesInto(
+        val actionTester = getServiceInjector().injectServicesInto(
                 new ActionTester<>(domainObjectType, actionInteraction, managedAction));
         actionTester.init();
         return actionTester;
@@ -128,7 +121,7 @@ public class DomainObjectTesterFactory {
             final Class<T> domainObjectType,
             final String propertyName,
             final Where where) {
-        val tester = serviceInjector.injectServicesInto(
+        val tester = getServiceInjector().injectServicesInto(
                 new PropertyTester<T>(domainObjectType, propertyName, where));
         tester.init();
         return tester;
@@ -138,7 +131,7 @@ public class DomainObjectTesterFactory {
             final Class<T> domainObjectType,
             final String collectionName,
             final Where where) {
-        val tester = serviceInjector.injectServicesInto(
+        val tester = getServiceInjector().injectServicesInto(
                 new CollectionTester<T>(domainObjectType, collectionName, where));
         tester.init();
         return tester;
