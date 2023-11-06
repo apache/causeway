@@ -18,20 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.model.util;
 
-import java.util.Optional;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
-import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -41,44 +33,10 @@ import lombok.experimental.UtilityClass;
 public class WktContext {
 
     @Nullable
-    public String getApplicationKey() {
-        final Application application = ThreadContext.getApplication(); // nullable
-        return Optional.ofNullable(application)
-                .map(Application::getName)
-                .orElse(null);
-    }
-
-    @Nullable
-    public MetaModelContext getMetaModelContext() {
-        final Application application = ThreadContext.getApplication(); // nullable
-        return _Casts.castTo(HasMetaModelContext.class, application)
-                .map(HasMetaModelContext::getMetaModelContext)
-                .orElse(null);
-    }
-
-    @Nullable
-    public MetaModelContext getMetaModelContext(final @NonNull String applicationKey) {
-        final Application application = Application.get(applicationKey); // nullable
-        return _Casts.castTo(HasMetaModelContext.class, application)
-                .map(HasMetaModelContext::getMetaModelContext)
-                .orElse(null);
-    }
-
-    @Nullable
     public MetaModelContext computeIfAbsent(final MetaModelContext mmc) {
         return mmc!=null
                 ? mmc
-                : getMetaModelContext();
-    }
-
-    @Nullable
-    public MetaModelContext computeIfAbsent(
-            final @Nullable MetaModelContext mmc, final @Nullable String applicationKey) {
-        return mmc!=null
-                ? mmc
-                : _Strings.isEmpty(applicationKey)
-                        ? getMetaModelContext()
-                        : getMetaModelContext(applicationKey);
+                : MetaModelContext.instanceNullable();
     }
 
     public void pageReload() {

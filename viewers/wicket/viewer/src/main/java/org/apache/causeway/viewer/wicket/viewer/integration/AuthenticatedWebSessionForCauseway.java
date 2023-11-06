@@ -105,7 +105,7 @@ implements
     @Nullable
     @Override
     public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc, applicationKey);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
     /**
@@ -162,7 +162,6 @@ implements
     @Getter
     private UUID sessionGuid;
     private String cachedSessionId;
-    private @Nullable String applicationKey; // nullable ... JUnit support
 
     /**
      * Optionally the current HttpSession's Id,
@@ -181,7 +180,6 @@ implements
     public AuthenticatedWebSessionForCauseway(final Request request) {
         super(request);
         sessionGuid = UUID.randomUUID();
-        applicationKey = WktContext.getApplicationKey();
     }
 
     @Override

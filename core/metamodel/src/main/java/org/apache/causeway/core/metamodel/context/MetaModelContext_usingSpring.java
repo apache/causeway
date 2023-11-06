@@ -64,6 +64,14 @@ class MetaModelContext_usingSpring implements MetaModelContext {
         this.iocContainer = iocContainer;
     }
 
+    /**
+     * Called by Spring as instructed by bean declaration
+     * {@link MetaModelContexts#metaModelContext(CausewaySystemEnvironment)}.
+     */
+    void onDestroy() {
+        MetaModelContext.INSTANCE_HOLDER.set(null);
+    }
+
     @Getter(lazy=true)
     private final CausewaySystemEnvironment systemEnvironment =
     getSingletonElseFail(CausewaySystemEnvironment.class);

@@ -17,7 +17,6 @@
 package org.apache.causeway.viewer.wicket.ui.util;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -30,7 +29,6 @@ import org.apache.causeway.core.config.viewer.web.TextMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
@@ -205,7 +203,7 @@ public class WktTooltips {
      * Lookup in config, else returns default.
      */
     private static TextMode getTooltipTextMode() {
-        val textMode = Optional.ofNullable(WktContext.getMetaModelContext())
+        val textMode = MetaModelContext.instance()
                 .map(MetaModelContext::getConfiguration)
                 .map(cfg->cfg.getViewer().getWicket().getTooltipTextMode())
                 .orElseGet(TextMode::defaults);

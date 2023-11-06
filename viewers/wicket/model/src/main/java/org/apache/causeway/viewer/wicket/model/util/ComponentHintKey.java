@@ -163,7 +163,7 @@ public class ComponentHintKey implements Serializable {
     private <X> X computeIfAbsent(final Class<X> type, final X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                : WktContext.getMetaModelContext().lookupServiceElseFail(type);
+                : MetaModelContext.instanceElseFail().lookupServiceElseFail(type);
     }
 
 }

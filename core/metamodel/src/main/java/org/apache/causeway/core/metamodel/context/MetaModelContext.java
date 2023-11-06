@@ -18,6 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.context;
 
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
@@ -30,9 +36,25 @@ public interface MetaModelContext extends HasMetaModelContext {
         return this;
     }
 
+    // -- INSTANCE (SINGLETON)
+
+    static final AtomicReference<MetaModelContext> INSTANCE_HOLDER = new AtomicReference<>();
+    @Nullable
+    static MetaModelContext instanceNullable() {
+        return INSTANCE_HOLDER.get();
+    }
+    static Optional<MetaModelContext> instance() {
+        return Optional.ofNullable(instanceNullable());
+    }
+    static MetaModelContext instanceElseFail() {
+        return instance()
+                .orElseThrow(()->_Exceptions.noSuchElement("MetaModelContext not yet or no longer available."));
+    }
+
     // -- EXTRACTORS
 
-    public static MetaModelContext from(final ManagedObject adapter) {
+    @Deprecated
+    static MetaModelContext from(final ManagedObject adapter) {
         return adapter.getSpecification().getMetaModelContext();
     }
 
