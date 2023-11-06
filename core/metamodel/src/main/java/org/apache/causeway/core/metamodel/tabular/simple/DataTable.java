@@ -48,11 +48,10 @@ public class DataTable implements Serializable {
 
     // -- CONSTRUCTION
 
-    @Getter private final @NonNull String tableFriendlyName;
     @Getter private final @NonNull ObjectSpecification elementType;
     @Getter private final @NonNull Can<DataColumn> dataColumns;
     @Getter private @NonNull Can<DataRow> dataRows;
-
+    @Getter private @NonNull String tableFriendlyName;
 
     /**
      * Returns an empty {@link DataTable} for given domain object type.
@@ -146,12 +145,14 @@ public class DataTable implements Serializable {
 
         private final @NonNull Class<?> elementTypeClass;
         private final @NonNull Can<Bookmark> rowElementBookmarks;
+        private final @Nullable String tableFriendlyName;
 
         private SerializationProxy(final DataTable dataTable) {
             this.elementTypeClass = dataTable.getElementType().getCorrespondingClass();
             this.rowElementBookmarks = dataTable.streamDataElements()
                     .map(ManagedObject::getBookmarkElseFail)
                     .collect(Can.toCan());
+            this.tableFriendlyName = dataTable.getTableFriendlyName();
         }
 
         private Object readResolve() {
@@ -159,6 +160,7 @@ public class DataTable implements Serializable {
             var dataTable = DataTable.forDomainType(elementTypeClass);
             var rowElements = rowElementBookmarks.map(objectManager::loadObjectElseFail);
             dataTable.setDataElements(rowElements);
+            dataTable.tableFriendlyName = tableFriendlyName;
             return dataTable;
         }
     }
