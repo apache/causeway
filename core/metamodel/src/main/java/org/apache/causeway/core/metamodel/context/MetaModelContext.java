@@ -28,24 +28,27 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 /**
  * @since 2.0
  */
-public interface MetaModelContext extends HasMetaModelContext {
+public abstract class MetaModelContext implements HasMetaModelContext {
 
     @Override
-    default MetaModelContext getMetaModelContext() {
+    public final MetaModelContext getMetaModelContext() {
         return this;
     }
 
     // -- INSTANCE (SINGLETON)
 
-    static final AtomicReference<MetaModelContext> INSTANCE_HOLDER = new AtomicReference<>();
+    public static final AtomicReference<MetaModelContext> INSTANCE_HOLDER = new AtomicReference<>();
+
     @Nullable
-    static MetaModelContext instanceNullable() {
+    public static MetaModelContext instanceNullable() {
         return INSTANCE_HOLDER.get();
     }
-    static Optional<MetaModelContext> instance() {
+
+    public static Optional<MetaModelContext> instance() {
         return Optional.ofNullable(instanceNullable());
     }
-    static MetaModelContext instanceElseFail() {
+
+    public static MetaModelContext instanceElseFail() {
         return instance()
                 .orElseThrow(()->_Exceptions.noSuchElement("MetaModelContext not yet or no longer available."));
     }

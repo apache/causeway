@@ -57,7 +57,7 @@ import lombok.Getter;
 import lombok.val;
 
 
-class MetaModelContext_usingSpring implements MetaModelContext {
+class MetaModelContext_usingSpring extends MetaModelContext {
 
     private final _IocContainer iocContainer;
     public MetaModelContext_usingSpring(final _IocContainer iocContainer) {
