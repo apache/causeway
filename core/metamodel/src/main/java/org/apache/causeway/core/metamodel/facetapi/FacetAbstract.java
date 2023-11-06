@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -60,11 +59,6 @@ implements Facet, HasMetaModelContext {
     @Override
     public final Class<? extends Facet> facetType() {
         return facetType;
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return facetHolder.getMetaModelContext();
     }
 
     @Override

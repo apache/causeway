@@ -27,7 +27,6 @@ import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -171,7 +170,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
     @Qualifier("transaction-aware-pmf-proxy")
     @Bean @Primary
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
-            final MetaModelContext metaModelContext,
+            final MetaModelContext metaModelContext, // no longer used, but perhaps keep to enforce a dependency relation
             final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean,
             final CausewayBeanTypeRegistry beanTypeRegistry,
             final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
@@ -181,7 +180,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
 
         notifyJdoEntityDiscoveryListeners(pmf, beanTypeRegistry, jdoEntityDiscoveryListeners, dnSettings);
 
-        val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy(metaModelContext);
+        val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);
         tapmfProxy.setAllowCreate(false);
         return tapmfProxy;

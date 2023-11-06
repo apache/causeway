@@ -25,7 +25,6 @@ import org.apache.wicket.model.ChainingModel;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
@@ -90,11 +89,6 @@ implements EntityCollectionModel {
     @Override
     public final ManagedObject getParentObject() {
         return delegate().getBookmarkedOwner();
-    }
-
-    @Override
-    public final MetaModelContext getMetaModelContext() {
-        return delegate().getMetaModelContext();
     }
 
     // -- VARIANT SUPPORT

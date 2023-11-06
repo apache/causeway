@@ -22,7 +22,6 @@ import org.apache.wicket.model.ChainingModel;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
@@ -88,11 +87,6 @@ implements ObjectAdapterModel {
     @Override
     public void setViewOrEditMode(final ViewOrEditMode mode) {
         throw _Exceptions.unexpectedCodeReach();
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return scalarModel().getMetaModelContext();
     }
 
 }

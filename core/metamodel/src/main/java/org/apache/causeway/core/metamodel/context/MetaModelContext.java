@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
  * @since 2.0
@@ -49,13 +48,6 @@ public interface MetaModelContext extends HasMetaModelContext {
     static MetaModelContext instanceElseFail() {
         return instance()
                 .orElseThrow(()->_Exceptions.noSuchElement("MetaModelContext not yet or no longer available."));
-    }
-
-    // -- EXTRACTORS
-
-    @Deprecated
-    static MetaModelContext from(final ManagedObject adapter) {
-        return adapter.getSpecification().getMetaModelContext();
     }
 
 }

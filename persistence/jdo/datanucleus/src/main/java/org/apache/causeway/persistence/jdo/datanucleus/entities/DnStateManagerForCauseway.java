@@ -21,8 +21,6 @@ package org.apache.causeway.persistence.jdo.datanucleus.entities;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.jdo.PersistenceManager;
-
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.api.jdo.DataNucleusHelperJDO;
 import org.datanucleus.cache.CachedPC;
@@ -38,7 +36,6 @@ import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
-import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -52,11 +49,8 @@ import lombok.extern.log4j.Log4j2;
 public class DnStateManagerForCauseway
 extends ReferentialStateManagerImpl {
 
-    private Optional<MetaModelContext> mmcIfAny;
-
     public DnStateManagerForCauseway(final ExecutionContext ec, final AbstractClassMetaData cmd) {
         super(ec, cmd);
-        this.mmcIfAny = extractMetaModelContextFrom(ec);
     }
 
     @SuppressWarnings("rawtypes")
@@ -144,32 +138,6 @@ extends ReferentialStateManagerImpl {
 
     // -- HELPER
 
-    private Optional<MetaModelContext> extractMetaModelContextFrom(final ExecutionContext ec) {
-
-        val pm = ec.getOwner();
-        if(! (pm instanceof PersistenceManager)) {
-            log.error("could not extract the current PersistenceManager from given ExecutionContext");
-            return Optional.empty();
-        }
-
-        val mmcKey = TransactionAwarePersistenceManagerFactoryProxy.MMC_USER_OBJECT_KEY;
-        val mmcValue = ((PersistenceManager)pm)
-                .getUserObject(mmcKey);
-        if(! (mmcValue instanceof MetaModelContext)) {
-            log.error("MetaModelContext, stored as key/value pair with key '" + mmcKey +
-                    "', was not found amoung current PersistenceManager's user objects");
-            return Optional.empty();
-        }
-
-        val mmc = (MetaModelContext)mmcValue;
-        if(mmc.getServiceInjector() == null) {
-            log.error("could not find a usable ServiceInjector within given MetaModelContext");
-            return Optional.empty();
-        }
-
-        return Optional.of(mmc);
-    }
-
     private boolean injectionPointsResolved = false;
 
     /**
@@ -184,7 +152,8 @@ extends ReferentialStateManagerImpl {
             return true;
         }
 
-        mmcIfAny.ifPresentOrElse(
+        MetaModelContext.instance()
+        .ifPresentOrElse(
                 mmc->{
                     mmc.getServiceInjector().injectServicesInto(myPC);
                     this.injectionPointsResolved = true;
@@ -229,7 +198,7 @@ extends ReferentialStateManagerImpl {
         if(myPC==null) {
             return Optional.empty();
         }
-        val entityFacet = mmcIfAny
+        val entityFacet = MetaModelContext.instance()
             .map(MetaModelContext::getSpecificationLoader)
             .flatMap(specLoader->specLoader.specForType(myPC.getClass()))
             .flatMap(ObjectSpecification::entityFacet)

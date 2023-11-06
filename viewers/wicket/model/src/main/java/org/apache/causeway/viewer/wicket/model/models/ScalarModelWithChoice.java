@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 
 public interface ScalarModelWithChoice<T>
@@ -31,10 +30,5 @@ extends
     ScalarModel scalarModel();
 
     default ManagedValue pendingValue() { return scalarModel().proposedValue(); }
-
-    @Override
-    default MetaModelContext getMetaModelContext() {
-        return scalarModel().getMetaModelContext();
-    }
 
 }
