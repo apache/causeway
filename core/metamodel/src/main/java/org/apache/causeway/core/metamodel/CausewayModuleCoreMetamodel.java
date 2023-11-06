@@ -37,7 +37,7 @@ import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.metamodel.context.MetaModelContexts;
+import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelMixins;
 import org.apache.causeway.core.metamodel.inspect.model.ActionNode;
@@ -124,7 +124,7 @@ import lombok.NonNull;
         CausewayModuleCoreSecurity.class,
 
         // @Configuration's
-        MetaModelContexts.class,
+        MetaModelContextFactory.class,
         CausewayModuleCoreMetamodelMixins.class,
 
         // @Component's

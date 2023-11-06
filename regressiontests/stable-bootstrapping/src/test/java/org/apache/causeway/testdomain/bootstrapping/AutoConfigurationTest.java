@@ -39,7 +39,7 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.context.MetaModelContexts;
+import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.causeway.testdomain.conf.Configuration_usingStereotypes;
 import org.apache.causeway.testdomain.model.stereotypes.MyObject;
@@ -52,7 +52,7 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 CausewaySystemEnvironment.class,
-                MetaModelContexts.class,
+                MetaModelContextFactory.class,
                 CausewayBeanFactoryPostProcessorForSpring.class,
                 CausewayBeanTypeRegistryDefault.class,
                 Configuration_usingStereotypes.class,

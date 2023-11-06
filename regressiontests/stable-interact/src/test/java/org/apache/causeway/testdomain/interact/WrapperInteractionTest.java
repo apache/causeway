@@ -22,6 +22,9 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,6 +64,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
+@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD, classMode = ClassMode.BEFORE_CLASS)
 class WrapperInteractionTest
 extends InteractionTestAbstract {
 
@@ -72,7 +76,7 @@ extends InteractionTestAbstract {
 
     // an abstract mixin class
     static abstract class MixinAbstract<T extends Object> {
-        public T act(String startTime, String endTime) {
+        public T act(final String startTime, final String endTime) {
             return null;
         }
     }
@@ -84,7 +88,7 @@ extends InteractionTestAbstract {
         @SuppressWarnings("unused")
         private final Customer mixee;
         @Override
-        public String act(String startTime, String endTime) {
+        public String act(final String startTime, final String endTime) {
             return "acted";
         }
     }
@@ -97,7 +101,7 @@ extends InteractionTestAbstract {
         private final Customer mixee;
 
         @Override
-        public String act(String startTime, String endTime) {
+        public String act(final String startTime, final String endTime) {
             return "acted2";
         }
     }
