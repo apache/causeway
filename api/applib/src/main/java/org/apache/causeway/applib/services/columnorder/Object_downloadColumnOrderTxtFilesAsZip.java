@@ -56,7 +56,6 @@ import lombok.RequiredArgsConstructor;
  * @see TableColumnOrderService
  * @see ColumnOrderTxtFileService
  */
-@SuppressWarnings({"CdiManagedBeanInconsistencyInspection"})
 @Action(
         commandPublishing = Publishing.DISABLED,
         domainEvent = Object_downloadColumnOrderTxtFilesAsZip.ActionDomainEvent.class,

@@ -46,7 +46,6 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Named(Bookmark.LOGICAL_TYPE_NAME)
 @org.apache.causeway.applib.annotation.Value
 @XmlJavaTypeAdapter(Bookmark.JaxbToStringAdapter.class) // for JAXB view model support

@@ -18,25 +18,33 @@
  */
 package org.apache.causeway.core.metamodel.tabular.simple;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Represents a collection of domain objects (typically entity instances).
  *
  * @since 2.0 {@index}
  */
-public class DataTable {
+public class DataTable implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     // -- CONSTRUCTION
 
@@ -45,6 +53,35 @@ public class DataTable {
     @Getter private final @NonNull Can<DataColumn> dataColumns;
     @Getter private @NonNull Can<DataRow> dataRows;
 
+
+    /**
+     * Returns an empty {@link DataTable} for given domain object type.
+     * It can be populated later on using {@link DataTable#setDataElements(Can)}.
+     */
+    public static DataTable forDomainType(final Class<?> domainType) {
+        val elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
+        return new DataTable(elementType);
+    }
+
+    /**
+     * Returns an empty {@link DataTable} for given domain object type.
+     * It can be populated later on using {@link DataTable#setDataElements(Can)}.
+     */
+    public DataTable(
+            final @NonNull ObjectSpecification elementType) {
+        this(elementType,
+                elementType.getSingularName(),
+                elementType
+                    .streamProperties(MixedIn.EXCLUDED)
+                    .filter(prop->prop.isIncludedWithSnapshots())
+                    .collect(Can.toCan()),
+                Can.empty());
+    }
+
+    /**
+     * Returns an empty {@link DataTable} for given domain object type.
+     * It can be populated later on using {@link DataTable#setDataElements(Can)}.
+     */
     public DataTable(
             final @NonNull ObjectSpecification elementType,
             final @NonNull Can<? extends ObjectAssociation> dataColumns) {
@@ -92,6 +129,38 @@ public class DataTable {
     public Stream<ManagedObject> streamDataElements() {
         return dataRows.stream()
             .map(DataRow::getRowElement);
+    }
+
+    // -- SERIALIZATION PROXY
+
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private final @NonNull Class<?> elementTypeClass;
+        private final @NonNull Can<Bookmark> rowElementBookmarks;
+
+        private SerializationProxy(final DataTable dataTable) {
+            this.elementTypeClass = dataTable.getElementType().getCorrespondingClass();
+            this.rowElementBookmarks = dataTable.streamDataElements()
+                    .map(ManagedObject::getBookmarkElseFail)
+                    .collect(Can.toCan());
+        }
+
+        private Object readResolve() {
+            var objectManager = MetaModelContext.instanceElseFail().getObjectManager();
+            var dataTable = DataTable.forDomainType(elementTypeClass);
+            var rowElements = rowElementBookmarks.map(objectManager::loadObjectElseFail);
+            dataTable.setDataElements(rowElements);
+            return dataTable;
+        }
     }
 
 }

@@ -25,11 +25,8 @@ import javax.inject.Inject;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
-
-import lombok.val;
 
 /**
  * TODO Early draft (wip) - could also easily move to MetamodelService
@@ -44,12 +41,7 @@ public abstract class DataTableProvider {
      * It can be populated later on using {@link DataTable#setDataElements(Can)}.
      */
     public DataTable getDataTable(final Class<?> domainType) {
-        val elementType = specLoader.specForTypeElseFail(domainType);
-        var dataColumns = elementType
-                .streamProperties(MixedIn.EXCLUDED)
-                .filter(prop->prop.isIncludedWithSnapshots())
-                .collect(Can.toCan());
-        return new DataTable(elementType, dataColumns);
+        return DataTable.forDomainType(domainType);
     }
 
     public Stream<DataTable> streamDataTables() {
