@@ -121,12 +121,12 @@ extends AssociationColumnAbstract {
             final String componentId, final DataColumn dataColumn, final ManagedObject cellElement) {
 
         if(ManagedObjects.isValue(cellElement)) {
-            val valueModel = ValueModel.of(super.getMetaModelContext(), dataColumn.getAssociationMetaModel(), cellElement);
+            val valueModel = ValueModel.of(dataColumn.getAssociationMetaModel(), cellElement);
             val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(componentId, valueModel);
         }
 
-        val uiObject = UiObjectWkt.ofAdapterForCollection(super.getMetaModelContext(), cellElement, collectionVariant);
+        val uiObject = UiObjectWkt.ofAdapterForCollection(cellElement, collectionVariant);
 
         val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
         final Component entityLink =

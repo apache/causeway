@@ -100,8 +100,7 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
-            final var commonContext = actionModel.getMetaModelContext();
-            final var valueModel = ValueModel.of(commonContext, actionModel.getAction(), resultAdapter);
+            final var valueModel = ValueModel.of(actionModel.getAction(), resultAdapter);
             valueModel.setActionHint(actionModel);
             final var valuePage = new ValuePage(valueModel);
             return ActionResultResponse.toPage(ValuePage.class, valuePage);
@@ -194,8 +193,7 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final @Nullable ManagedObject resultAdapter, // arg is not used
                 final Can<ManagedObject> args) {
-            final var commonContext = actionModel.getMetaModelContext();
-            final VoidModel voidModel = new VoidModel(commonContext);
+            final VoidModel voidModel = new VoidModel();
             voidModel.setActionHint(actionModel);
             return ActionResultResponse.toPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
         }

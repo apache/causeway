@@ -111,7 +111,7 @@ implements
     }
     private @Nullable Object demementify(final _TreeNodeMemento model) {
         Objects.requireNonNull(model);
-        return model.getPojo(getMetaModelContext());
+        return model.getPojo();
     }
 
     private Function<Object, _TreeNodeMemento> newPojoToTreeModelMapper(final _TreeNodeMemento parent) {

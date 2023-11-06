@@ -120,7 +120,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
         val objectSpec = domainObject.getSpecification();
-        val entityModel = UiObjectWkt.ofAdapter(commonContext, domainObject);
+        val entityModel = UiObjectWkt.ofAdapter(domainObject);
 
         assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());
         assertEquals(domainObject.getTitle(), entityModel.getTitle());
@@ -167,7 +167,6 @@ class InteractionTestWkt extends InteractionTestAbstract {
             assertEquals(
                     propBackendValue,
                     propUIValue);
-
 
             return true; // continue
 

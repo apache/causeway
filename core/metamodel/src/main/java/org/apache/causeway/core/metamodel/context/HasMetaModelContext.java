@@ -51,12 +51,13 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
-@FunctionalInterface
 public interface HasMetaModelContext {
 
     // -- INTERFACE
 
-    MetaModelContext getMetaModelContext();
+    default MetaModelContext getMetaModelContext() {
+        return MetaModelContext.instanceElseFail();
+    }
 
     // -- SHORTCUTS
 

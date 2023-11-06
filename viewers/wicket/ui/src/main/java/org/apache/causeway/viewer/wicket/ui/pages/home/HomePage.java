@@ -64,7 +64,7 @@ public class HomePage extends PageAbstract {
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, UiComponentType.WELCOME, null);
         } else {
             val requestCycle = RequestCycle.get();
-            val page = EntityPage.forAdapter(getMetaModelContext(), homePageAdapter);
+            val page = EntityPage.forAdapter(homePageAdapter);
             requestCycle.setResponsePage(page);
         }
 

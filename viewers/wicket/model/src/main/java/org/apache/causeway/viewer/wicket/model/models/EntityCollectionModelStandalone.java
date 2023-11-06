@@ -44,7 +44,7 @@ extends EntityCollectionModelAbstract {
         return new EntityCollectionModelStandalone(
                 DataTableModelWkt.forActionModel(
                         BookmarkedObjectWkt
-                            .ofAdapter(actionModel.getMetaModelContext(), actionModel.getParentObject()),
+                            .ofAdapter(actionModel.getParentObject()),
                         action,
                         args,
                         collectionAsAdapter));

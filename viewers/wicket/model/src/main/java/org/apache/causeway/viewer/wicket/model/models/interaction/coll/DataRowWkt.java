@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
+import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -63,7 +63,7 @@ extends ChainingModel<DataRow> {
                     .orElse(null);
             if(dataRow==null) {
                 // XXX[CAUSEWAY-3005] UI out of sync with model: reload page
-                WktContext.pageReload();
+                PageUtils.pageReload();
             }
         }
         return dataRow;

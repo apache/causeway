@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-
-
 
 /**
  * Represents the result of invoking a <tt>void</tt> action.
@@ -30,17 +27,12 @@ public class VoidModel extends ModelAbstract<Void> {
 
     private static final long serialVersionUID = 1L;
 
-    public VoidModel(final MetaModelContext commonContext) {
-        super(commonContext);
-    }
-
     @Override
     protected Void load() {
         return null;
     }
 
-
-    // //////////////////////////////////////
+    // --
 
     private ActionModel actionModelHint;
     /**

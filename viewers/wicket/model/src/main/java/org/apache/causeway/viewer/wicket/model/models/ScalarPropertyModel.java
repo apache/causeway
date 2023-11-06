@@ -56,7 +56,7 @@ implements HasUiProperty {
             final UiPropertyWkt uiProperty,
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
-        super(UiObjectWkt.ofAdapter(uiProperty.getMetaModelContext(), uiProperty.getOwner()),
+        super(UiObjectWkt.ofAdapter(uiProperty.getOwner()),
                 viewOrEdit, renderingHint);
         this.uiProperty = uiProperty;
     }

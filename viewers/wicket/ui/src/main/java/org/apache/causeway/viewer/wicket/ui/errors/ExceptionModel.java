@@ -60,13 +60,11 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
     /**
      * Three cases: authorization exception, else recognized, else or not recognized.
-     * @param commonContext
-     * @param recognizedMessageIfAny
-     * @param ex
      */
-    private ExceptionModel(final MetaModelContext commonContext, final String recognizedMessageIfAny, final Exception ex) {
+    private ExceptionModel(
+            final MetaModelContext commonContext, final String recognizedMessageIfAny, final Exception ex) {
 
-        super(commonContext);
+        super();
 
         final ObjectMember.AuthorizationException authorizationException =
                 causalChainOf(ex, ObjectMember.AuthorizationException.class);

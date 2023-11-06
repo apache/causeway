@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
 /**
  * Backing model for actions of application services menu bar (typically, as
@@ -32,14 +30,11 @@ public class ServiceActionsModel extends ModelAbstract<MenuUiModel> {
     private final MenuUiModel menuUiModel;
 
     /**
-     * @param commonContext
      * @param menuUiModel - may be null in special case of rendering the tertiary menu on the error page.
      */
     public ServiceActionsModel(
-            final MetaModelContext commonContext,
             final MenuUiModel menuUiModel) {
-
-        super(commonContext);
+        super();
         this.menuUiModel = menuUiModel;
     }
 

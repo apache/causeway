@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 
 import lombok.val;
@@ -110,11 +109,6 @@ class CausewayToWicketTreeAdapter {
             super(id, provider, collapseExpandState);
         }
 
-        @Override
-        public MetaModelContext getMetaModelContext() {
-            return this.metaModelContext = WktContext.computeIfAbsent(metaModelContext);
-        }
-
         /**
          * To use a custom component for the representation of a node's content we override this method.
          */
@@ -122,7 +116,7 @@ class CausewayToWicketTreeAdapter {
         protected Component newContentComponent(final String id, final IModel<_TreeNodeMemento> node) {
             final _TreeNodeMemento treeModel = node.getObject();
             final Component entityIconAndTitle = new EntityIconAndTitlePanel(
-                    id, treeModel.asObjectAdapterModel(getMetaModelContext()));
+                    id, treeModel.asObjectAdapterModel());
             return entityIconAndTitle;
         }
 

@@ -28,12 +28,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
-public class BreadcrumbModel implements Serializable {
+public class BreadcrumbModel implements HasMetaModelContext, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,11 +41,6 @@ public class BreadcrumbModel implements Serializable {
     private final Map<String, Bookmark> bookmarkByOidStr = _Maps.newHashMap();
     private final Map<Bookmark, String> oidStrByBookmark = _Maps.newHashMap();
     private final List<Bookmark> list = _Lists.newArrayList();
-
-    public BreadcrumbModel(final MetaModelContext mmc) {
-        super();
-        this.mmc = mmc;
-    }
 
     public List<UiObjectWkt> getList() {
         List<UiObjectWkt> entityModels = _Lists.newArrayList();
@@ -160,7 +154,7 @@ public class BreadcrumbModel implements Serializable {
     }
 
     protected UiObjectWkt toEntityModel(final Bookmark bookmark) {
-        return UiObjectWkt.ofBookmark(getMetaModelContext(), bookmark);
+        return UiObjectWkt.ofBookmark(bookmark);
     }
 
     private void remove(final String oid, final Bookmark bookmark) {
@@ -176,8 +170,4 @@ public class BreadcrumbModel implements Serializable {
         mostRecentlyVisitedOidStr = null;
     }
 
-    private transient MetaModelContext mmc;
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
 }

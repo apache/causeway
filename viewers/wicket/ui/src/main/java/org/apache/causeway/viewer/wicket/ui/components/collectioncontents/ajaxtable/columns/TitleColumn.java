@@ -61,12 +61,12 @@ extends GenericColumnAbstract {
 
         if(ManagedObjects.isValue(rowElement)) {
             val objectMember = dataRow.getParentTable().getMetaModel();
-            val valueModel = ValueModel.of(super.getMetaModelContext(), objectMember, rowElement);
+            val valueModel = ValueModel.of(objectMember, rowElement);
             val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(componentId, valueModel);
         }
 
-        val uiObject = UiObjectWkt.ofAdapterForCollection(super.getMetaModelContext(), rowElement, variant);
+        val uiObject = UiObjectWkt.ofAdapterForCollection(rowElement, variant);
         uiObject.setContextBookmarkIfAny(contextBookmark);
 
         // will use EntityLinkSimplePanelFactory as model is an EntityModel

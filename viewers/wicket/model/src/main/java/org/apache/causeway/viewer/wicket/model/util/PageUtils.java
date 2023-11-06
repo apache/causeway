@@ -18,24 +18,33 @@
  */
 package org.apache.causeway.viewer.wicket.model.util;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.wicket.core.request.handler.ListenerRequestHandler;
+import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import lombok.experimental.UtilityClass;
 
-/**
- * @since 2.0
- */
 @UtilityClass
-public class WktContext {
+public class PageUtils {
 
-    @Deprecated
-    @Nullable
-    public MetaModelContext computeIfAbsent(final MetaModelContext mmc) {
-        return mmc!=null
-                ? mmc
-                : MetaModelContext.instanceNullable();
+    // -- PAGE RELOAD
+
+    public void pageReload() {
+        var requestCycle = RequestCycle.get();
+        if(requestCycle==null) return;
+        var handler = requestCycle.getActiveRequestHandler();
+        if(handler instanceof ListenerRequestHandler) {
+            var currentPage = ((ListenerRequestHandler)handler).getPage();
+            requestCycle.setResponsePage(currentPage);
+        }
+    }
+
+    // -- PAGE REDIRECT
+
+    public void pageRedirect(final IRequestablePage page) {
+        final RequestCycle requestCycle = RequestCycle.get();
+        if(requestCycle==null) return;
+        requestCycle.setResponsePage(page);
     }
 
 }

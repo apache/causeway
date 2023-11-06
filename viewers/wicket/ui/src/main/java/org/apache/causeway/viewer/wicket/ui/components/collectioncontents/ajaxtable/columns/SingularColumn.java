@@ -52,7 +52,7 @@ extends AssociationColumnAbstract {
     protected Component createCellComponent(
             final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
         val rowElement = dataRow.getRowElement();
-        val rowElementModel = UiObjectWkt.ofAdapter(super.getMetaModelContext(), rowElement);
+        val rowElementModel = UiObjectWkt.ofAdapter(rowElement);
         val property = rowElement.getSpecification().getPropertyElseFail(memberId);
 
         val scalarModel = rowElementModel

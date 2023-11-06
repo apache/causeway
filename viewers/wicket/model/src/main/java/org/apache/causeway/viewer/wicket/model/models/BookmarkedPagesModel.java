@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.val;
 
@@ -32,10 +31,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     private static final long serialVersionUID = 1L;
 
     private final List<BookmarkTreeNode> rootNodes = _Lists.newArrayList();
-
-    public BookmarkedPagesModel(final MetaModelContext commonContext) {
-        super(commonContext);
-    }
 
     public void bookmarkPage(final BookmarkableModel bookmarkableModel) {
 
