@@ -96,7 +96,7 @@ public class WhereAmIHelper {
 
     private UiObjectWkt toEntityModel(final Object domainObject) {
         val objectAdapter = commonContext.getObjectManager().adapt(domainObject);
-        return UiObjectWkt.ofAdapter(commonContext, objectAdapter);
+        return UiObjectWkt.ofAdapter(objectAdapter);
     }
 
 }

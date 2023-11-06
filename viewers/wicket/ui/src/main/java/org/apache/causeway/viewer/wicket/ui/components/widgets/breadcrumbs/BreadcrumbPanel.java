@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Predicate;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -61,7 +60,7 @@ extends PanelAbstract<Void, IModel<Void>> {
 
         final BreadcrumbModel breadcrumbModel = _Casts.castTo(BreadcrumbModelProvider.class, getSession())
                 .map(BreadcrumbModelProvider::getBreadcrumbModel)
-                .orElseGet(()->new BreadcrumbModel(getMetaModelContext())); // for testing
+                .orElseGet(()->new BreadcrumbModel()); // for testing
 
         final IModel<UiObjectWkt> entityModel = new Model<>();
         ChoiceProvider<UiObjectWkt> choiceProvider = new ChoiceProvider<UiObjectWkt>() {
@@ -100,12 +99,9 @@ extends PanelAbstract<Void, IModel<Void>> {
             public void query(final String term, final int page, final Response<UiObjectWkt> response) {
                 final List<UiObjectWkt> breadCrumbList = _Lists.newArrayList(breadcrumbModel.getList());
                 final List<UiObjectWkt> checkedList = _Lists.filter(breadCrumbList,
-                        new Predicate<UiObjectWkt>() {
-                            @Override
-                            public boolean test(final UiObjectWkt input) {
-                                final Object id = getIdValue(input);
-                                return id != null;
-                            }
+                        input -> {
+                            final Object id = getIdValue(input);
+                            return id != null;
                         });
                 response.addAll(checkedList);
             }

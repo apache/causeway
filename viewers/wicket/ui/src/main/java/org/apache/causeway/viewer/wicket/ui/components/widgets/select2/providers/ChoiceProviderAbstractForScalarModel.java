@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers;
 
-
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
 import lombok.AccessLevel;
@@ -39,13 +37,6 @@ extends ChoiceProviderAbstract {
     @Override
     protected final boolean isRequired() {
         return scalarModel().isRequired();
-    }
-
-    // -- DEPS
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return scalarModel().getMetaModelContext();
     }
 
 }

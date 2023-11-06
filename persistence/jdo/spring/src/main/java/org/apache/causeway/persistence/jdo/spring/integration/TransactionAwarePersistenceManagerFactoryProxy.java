@@ -30,7 +30,7 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 
 import lombok.NonNull;
 
@@ -68,25 +68,14 @@ import lombok.NonNull;
  */
 public class TransactionAwarePersistenceManagerFactoryProxy
 implements
-    FactoryBean<PersistenceManagerFactory> {
-
-    /**
-     * Key of the key-value pair into the map of the PM's user objects,
-     * we store the Causeway MetaModelContext to.
-     * @see PersistenceManager#putUserObject(Object, Object)
-     */
-    public static final String MMC_USER_OBJECT_KEY = "causeway.mmc";
+    FactoryBean<PersistenceManagerFactory>,
+    HasMetaModelContext {
 
 	private PersistenceManagerFactory target;
 
 	private boolean allowCreate = true;
 
 	private PersistenceManagerFactory proxy;
-	private final MetaModelContext metaModelContext;
-
-	public TransactionAwarePersistenceManagerFactoryProxy(final @NonNull MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
-    }
 
     /**
 	 * Set the target JDO PersistenceManagerFactory that this proxy should
@@ -173,7 +162,6 @@ implements
 				PersistenceManagerFactory pmf = getTargetPersistenceManagerFactory();
 				PersistenceManager pm =
 						PersistenceManagerFactoryUtils.doGetPersistenceManager(pmf, isAllowCreate());
-				pm.putUserObject(MMC_USER_OBJECT_KEY, metaModelContext);
 				Class<?>[] ifcs = ClassUtils.getAllInterfacesForClass(pm.getClass(), pm.getClass().getClassLoader());
 				return Proxy.newProxyInstance(
 						pm.getClass().getClassLoader(),

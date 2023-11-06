@@ -35,6 +35,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.RedirectRequestHandlerWithOpenUrlStrategy;
 import org.apache.causeway.viewer.wicket.model.models.VoidModel;
+import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 public enum ActionResultResponseHandlingStrategy {
@@ -44,8 +45,7 @@ public enum ActionResultResponseHandlingStrategy {
                 final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
-            final RequestCycle requestCycle = RequestCycle.get();
-            requestCycle.setResponsePage(new VoidReturnPage(new VoidModel(commonContext)));
+            PageUtils.pageRedirect(new VoidReturnPage(new VoidModel()));
         }
     },
     REDIRECT_TO_PAGE {

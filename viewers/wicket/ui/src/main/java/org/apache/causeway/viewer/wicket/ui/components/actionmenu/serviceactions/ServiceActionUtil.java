@@ -93,10 +93,10 @@ public final class ServiceActionUtil {
 
     }
 
+
     @RequiredArgsConstructor(staticName = "of")
     private static class MenuBuilderWkt implements MenuVisitor {
 
-        private final MetaModelContext commonContext;
         private final Consumer<CssMenuItem> onNewMenuItem;
 
         private CssMenuItem currentTopLevelMenu = null;
@@ -117,7 +117,7 @@ public final class ServiceActionUtil {
         public void onMenuAction(final MenuAction menuAction) {
             val menuItem = CssMenuItem.newMenuItemWithLink(menuAction.name());
             currentTopLevelMenu.addSubMenuItem(menuItem);
-            menuItem.setLinkAndLabel(LinkAndLabelFactory.linkAndLabelForMenu(commonContext, menuAction));
+            menuItem.setLinkAndLabel(LinkAndLabelFactory.linkAndLabelForMenu(menuAction));
         }
 
         @Override
@@ -128,13 +128,11 @@ public final class ServiceActionUtil {
     }
 
     public static void buildMenu(
-            final MetaModelContext commonContext,
             final NavbarSection navBarSection,
             final Consumer<CssMenuItem> onNewMenuItem) {
 
         navBarSection.visitMenuItems(
                 MenuBuilderWkt.of(
-                        commonContext,
                         onNewMenuItem));
     }
 

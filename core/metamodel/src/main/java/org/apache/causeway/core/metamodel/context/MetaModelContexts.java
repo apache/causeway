@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.context;
 
 import jakarta.inject.Named;
-import jakarta.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,9 +36,12 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelContexts")
 public class MetaModelContexts {
 
-    @Bean @Singleton @Primary
+    @Primary
+    @Bean(destroyMethod = "onDestroy")
     public MetaModelContext metaModelContext(final CausewaySystemEnvironment systemEnvironment) {
-        return new MetaModelContext_usingSpring(systemEnvironment.getIocContainer());
+        var mmc = new MetaModelContext_usingSpring(systemEnvironment.getIocContainer());
+        MetaModelContext.INSTANCE_HOLDER.set(mmc);
+        return mmc;
     }
 
 }

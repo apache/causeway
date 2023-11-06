@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer;
 import org.apache.wicket.RestartResponseException;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -30,20 +30,18 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.CalendarRe
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.FullCalendar;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.ClickedEvent;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.val;
 
-final class FullCalendarWithEventHandling extends FullCalendar {
+final class FullCalendarWithEventHandling extends FullCalendar
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
     @SuppressWarnings("unused")
 	private final NotificationPanel feedback;
-    private transient MetaModelContext commonContext;
-
 
     FullCalendarWithEventHandling(
             final String id,
@@ -72,7 +70,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         val managedObject = objectManager
                 .loadObject(ProtoObject.resolveElseFail(specificationLoader, bookmark));
 
-        final UiObjectWkt entityModel = UiObjectWkt.ofAdapter(commonContext, managedObject);
+        final UiObjectWkt entityModel = UiObjectWkt.ofAdapter(managedObject);
 
         val pageParameters = entityModel.getPageParameters();
         if(pageParameters!=null) {
@@ -80,10 +78,6 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         }
 
         // otherwise ignore
-    }
-
-    public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
 }

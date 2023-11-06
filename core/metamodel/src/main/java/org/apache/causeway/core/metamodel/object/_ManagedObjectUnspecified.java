@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -49,13 +48,6 @@ implements ManagedObject, Bookmarkable.NoBookmark {
     @Override
     public Object getPojo() {
         return null;
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        throw _Exceptions
-                .illegalArgument("Can only retrieve MetaModelContext from ManagedObjects "
-                        + "that have an ObjectSpecification.");
     }
 
     @Override

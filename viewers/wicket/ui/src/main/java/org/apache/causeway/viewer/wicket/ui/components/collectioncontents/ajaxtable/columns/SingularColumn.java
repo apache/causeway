@@ -24,7 +24,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
@@ -38,21 +37,20 @@ extends AssociationColumnAbstract {
     private static final long serialVersionUID = 1L;
 
     public SingularColumn(
-            final MetaModelContext commonContext,
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
             final String sortProperty,
             final String propertyId,
             final String parentTypeName,
             final Optional<String> describedAs) {
-        super(commonContext, collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
+        super(collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
     }
 
     @Override
     protected Component createCellComponent(
             final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
         val rowElement = dataRow.getRowElement();
-        val rowElementModel = UiObjectWkt.ofAdapter(super.getMetaModelContext(), rowElement);
+        val rowElementModel = UiObjectWkt.ofAdapter(rowElement);
         val property = rowElement.getSpecification().getPropertyElseFail(memberId);
 
         val scalarModel = rowElementModel

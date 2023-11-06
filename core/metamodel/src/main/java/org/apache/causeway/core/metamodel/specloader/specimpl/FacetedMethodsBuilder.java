@@ -141,11 +141,6 @@ implements HasMetaModelContext {
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
     }
 
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return inspectedTypeSpec.getMetaModelContext();
-    }
-
     // ////////////////////////////////////////////////////////////////////////////
     // Class and stuff immediately derived from class
     // ////////////////////////////////////////////////////////////////////////////

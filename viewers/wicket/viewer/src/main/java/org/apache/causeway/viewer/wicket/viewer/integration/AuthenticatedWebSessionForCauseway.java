@@ -39,17 +39,14 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -78,37 +75,6 @@ implements
     }
 
     /**
-     * lazily populated in {@link #getMetaModelContext()}
-     */
-    private transient MetaModelContext mmc;
-
-    /**
-     * Returns the {@link MetaModelContext} as held by the {@link CausewayWicketApplication application}.
-     * <p>
-     * Previously the {@link MetaModelContext} was injected by the {@link CausewayWicketApplication} when it created
-     * the session.  However, the field was marked as transient because an {@link AuthenticatedWebSession session}
-     * object (obviously) has to be persistent, so in certain circumstances it could become null, resulting in NPEs
-     * and 500s.
-     * <p>
-     * The design now is simply to look up the {@link MetaModelContext} each time it is required. The dependent
-     * {@link BookmarkedPagesModel} and {@link BreadcrumbModel} are created lazily.
-     * <p>
-     * Nullable, as an edge condition that likely only occurs in a development environment:
-     * <p>
-     * If there is a session in the web browser from a previous run of the app on localhost:8080,
-     * but for _this_ run the CausewayWicketApplication has not yet been created,
-     * then there will be no metamodel context available to us yet.
-     *
-     * @see #getBookmarkedPagesModel()
-     * @see #getBreadcrumbModel()
-     */
-    @Nullable
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc, applicationKey);
-    }
-
-    /**
      * lazily populated in {@link #getBreadcrumbModel()}
      */
     private BreadcrumbModel breadcrumbModel;
@@ -116,7 +82,7 @@ implements
     public BreadcrumbModel getBreadcrumbModel() {
         return breadcrumbModel != null
                 ? breadcrumbModel
-                : (breadcrumbModel = new BreadcrumbModel(getMetaModelContext()));
+                : (breadcrumbModel = new BreadcrumbModel());
     }
 
 
@@ -128,7 +94,7 @@ implements
     public BookmarkedPagesModel getBookmarkedPagesModel() {
         return bookmarkedPagesModel != null
                 ? bookmarkedPagesModel
-                : (bookmarkedPagesModel = new BookmarkedPagesModel(getMetaModelContext()));
+                : (bookmarkedPagesModel = new BookmarkedPagesModel());
     }
 
     /**
@@ -162,7 +128,6 @@ implements
     @Getter
     private UUID sessionGuid;
     private String cachedSessionId;
-    private @Nullable String applicationKey; // nullable ... JUnit support
 
     /**
      * Optionally the current HttpSession's Id,
@@ -181,7 +146,6 @@ implements
     public AuthenticatedWebSessionForCauseway(final Request request) {
         super(request);
         sessionGuid = UUID.randomUUID();
-        applicationKey = WktContext.getApplicationKey();
     }
 
     @Override

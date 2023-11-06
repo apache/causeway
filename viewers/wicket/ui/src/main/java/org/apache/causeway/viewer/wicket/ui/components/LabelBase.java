@@ -24,8 +24,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 /**
  * Provides all the system dependencies for sub-classes.
@@ -47,21 +45,15 @@ implements HasMetaModelContext {
 
     private transient CausewayConfiguration causewayConfiguration;
     private transient WebAppContextPath webAppContextPath;
-    private transient MetaModelContext commonContext;
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
-    }
 
     public CausewayConfiguration getCausewayConfiguration() {
         return causewayConfiguration = computeIfAbsent(CausewayConfiguration.class, causewayConfiguration);
     }
 
+    @Override
     public WebAppContextPath getWebAppContextPath() {
         return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
     }
-
 
     // -- HELPER
 

@@ -95,14 +95,13 @@ public class EntityPage extends PageAbstract {
 
         return new EntityPage(
                 pageParameters,
-                UiObjectWkt.ofPageParameters(commonContext, pageParameters));
+                UiObjectWkt.ofPageParameters(pageParameters));
     }
 
     /**
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
     public static EntityPage forAdapter(
-            final MetaModelContext commonContext,
             final ManagedObject adapter) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
@@ -111,7 +110,7 @@ public class EntityPage extends PageAbstract {
 
         return new EntityPage(
                 PageParameterUtils.createPageParametersForObject(adapter),
-                UiObjectWkt.ofAdapter(commonContext, adapter));
+                UiObjectWkt.ofAdapter(adapter));
     }
 
     // -- CONSTRUCTOR

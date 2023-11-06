@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.Allow;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;
@@ -78,11 +77,6 @@ implements
 
         this.javaSourceParamName =
                 objectAction.getFacetedMethod().getMethod().getParameterName(parameterIndex);
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return parentAction.getMetaModelContext();
     }
 
     @Override

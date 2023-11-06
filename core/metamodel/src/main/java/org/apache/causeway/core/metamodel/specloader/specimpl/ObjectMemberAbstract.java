@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -325,11 +324,6 @@ implements
 
     protected CommandDtoFactory getCommandDtoFactory() {
         return getServiceRegistry().lookupServiceElseFail(CommandDtoFactory.class);
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return facetedMethod.getMetaModelContext();
     }
 
 }

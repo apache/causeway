@@ -251,7 +251,7 @@ implements ActionPromptProvider {
         response.render(LiveQueryJsResourceReference.asHeaderItem());
         response.render(CausewayWicketViewerJsResourceReference.asHeaderItem());
 
-        new JGrowlBehaviour(getMetaModelContext())
+        new JGrowlBehaviour()
             .renderFeedbackMessages(response);
 
         getWicketViewerSettings().getCss()

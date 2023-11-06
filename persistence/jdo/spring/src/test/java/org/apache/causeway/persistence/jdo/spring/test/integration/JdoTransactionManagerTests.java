@@ -30,7 +30,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
 import javax.sql.DataSource;
-
 import jakarta.transaction.Status;
 import jakarta.transaction.TransactionManager;
 import jakarta.transaction.UserTransaction;
@@ -60,7 +59,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.persistence.jdo.spring.exceptions.JdoResourceFailureException;
 import org.apache.causeway.persistence.jdo.spring.integration.JdoDialect;
 import org.apache.causeway.persistence.jdo.spring.integration.JdoTransactionManager;
@@ -74,7 +72,7 @@ import lombok.val;
 
 class JdoTransactionManagerTests {
 
-    private MetaModelContext mmc;
+    //private MetaModelContext mmc;
 	private PersistenceManagerFactory pmf;
 	private PersistenceManager pm;
 	private Transaction tx;
@@ -82,7 +80,7 @@ class JdoTransactionManagerTests {
 
 	@BeforeEach
 	void setUp() {
-	    mmc = mock(MetaModelContext.class);
+	    //mmc = mock(MetaModelContext.class);
 		pmf = mock(PersistenceManagerFactory.class);
 		pm = mock(PersistenceManager.class);
 		tx = mock(Transaction.class);
@@ -113,7 +111,7 @@ class JdoTransactionManagerTests {
         	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
 
         	TransactionAwarePersistenceManagerFactoryProxy proxyFactory =
-        			new TransactionAwarePersistenceManagerFactoryProxy(mmc);
+        			new TransactionAwarePersistenceManagerFactoryProxy();
         	proxyFactory.setTargetPersistenceManagerFactory(pmf);
         	PersistenceManagerFactory pmfProxy = proxyFactory.getObject();
         	assertEquals(pm.toString(), pmfProxy.getPersistenceManager().toString());

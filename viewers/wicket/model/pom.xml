@@ -64,6 +64,11 @@
         </dependency>
         
         <dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-commons-applib</artifactId>
+        </dependency>
+        
+        <dependency>
 			<groupId>org.apache.causeway.viewer</groupId>
 			<artifactId>causeway-viewer-commons-model</artifactId>
 		</dependency>

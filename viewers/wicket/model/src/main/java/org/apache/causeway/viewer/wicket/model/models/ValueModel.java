@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -38,10 +37,9 @@ extends ModelAbstract<ManagedObject> {
     // -- FACTORIES
 
     public static ValueModel of(
-            final @NonNull MetaModelContext commonContext,
             final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject valueAdapter) {
-        return new ValueModel(commonContext, objectMember, valueAdapter);
+        return new ValueModel(objectMember, valueAdapter);
     }
 
     // --
@@ -49,10 +47,9 @@ extends ModelAbstract<ManagedObject> {
     private final ObjectMemento adapterMemento;
 
     private ValueModel(
-            final MetaModelContext commonContext,
             final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject valueAdapter) {
-        super(commonContext);
+        super();
         this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
         this.adapterMemento = valueAdapter.getMemento().orElseThrow();
     }

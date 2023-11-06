@@ -99,7 +99,7 @@ class UiObjectWkt_hintsTest {
 
         ThreadContext.setApplication(new WicketAppStup(metaModelContext));
 
-        target = UiObjectWkt.ofBookmark(metaModelContext,
+        target = UiObjectWkt.ofBookmark(
                 Bookmark.forLogicalTypeNameAndIdentifier("hi", "there"));
 
         mockParent = Mockito.mock(MarkupContainer.class);

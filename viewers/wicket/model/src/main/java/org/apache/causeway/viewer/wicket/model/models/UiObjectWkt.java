@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -77,44 +76,39 @@ implements
     // -- FACTORIES
 
     public static UiObjectWkt ofPageParameters(
-            final MetaModelContext commonContext,
             final PageParameters pageParameters) {
         val bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
-        return ofBookmark(commonContext, bookmark);
+        return ofBookmark(bookmark);
     }
 
     public static UiObjectWkt ofAdapter(
-            final @NonNull MetaModelContext commonContext,
             final @Nullable ManagedObject adapter) {
-        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
+        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(adapter),
                 ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 
     public static UiObjectWkt ofAdapterForCollection(
-            final MetaModelContext commonContext,
             final ManagedObject adapter,
             final @NonNull EntityCollectionModel.Variant variant) {
-        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
+        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(adapter),
                 ViewOrEditMode.VIEWING, variant.getTitleColumnRenderingHint());
     }
 
 
     public static UiObjectWkt ofBookmark(
-            final @NonNull MetaModelContext commonContext,
             final @Nullable Bookmark bookmark) {
-        return new UiObjectWkt(BookmarkedObjectWkt.ofBookmark(commonContext, bookmark),
+        return new UiObjectWkt(BookmarkedObjectWkt.ofBookmark(bookmark),
                 ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 
     // -- CONSTRUCTORS
 
     /**
-     * As used by TreeModel (same as {@link #ofAdapter(MetaModelContext, ManagedObject)}
+     * As used by TreeModel (same as {@link #ofAdapter(ManagedObject)}
      */
     protected UiObjectWkt(
-            final MetaModelContext commonContext,
             final ManagedObject adapter) {
-        this(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
+        this(BookmarkedObjectWkt.ofAdapter(adapter),
                 ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 

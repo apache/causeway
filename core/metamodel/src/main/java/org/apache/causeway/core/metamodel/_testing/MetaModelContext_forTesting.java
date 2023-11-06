@@ -112,7 +112,18 @@ import lombok.val;
 
 @Builder @Getter
 public final class MetaModelContext_forTesting
-implements MetaModelContext {
+extends MetaModelContext {
+
+    public static MetaModelContext_forTestingBuilder builder() {
+        return new MetaModelContext_forTestingBuilder() {
+            @Override
+            public MetaModelContext_forTesting build() {
+                var mmc = super.build();
+                MetaModelContext.INSTANCE_HOLDER.set(mmc);
+                return mmc;
+            }
+        };
+    }
 
     public static MetaModelContext buildDefault() {
         return MetaModelContext_forTesting.builder()

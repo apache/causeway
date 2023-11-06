@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -138,11 +137,5 @@ public interface UiParameter extends UiScalar {
     default ActionInteractionHead getPendingParamHead() {
         return getMetaModel().getAction().interactionHead(getOwner());
     }
-
-    @Override
-    default MetaModelContext getMetaModelContext() {
-        return getMetaModel().getMetaModelContext();
-    }
-
 
 }

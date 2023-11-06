@@ -60,7 +60,7 @@ extends FormAbstract<ManagedObject>{
     protected abstract void onCancelSubmitted(AjaxRequestTarget target);
 
     protected void configureOkButton(final AjaxButton okButton) {
-        okButton.add(new JGrowlBehaviour(getMetaModelContext()));
+        okButton.add(new JGrowlBehaviour());
     }
 
     protected void configureCancelButton(final AjaxButton cancelButton) {

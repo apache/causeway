@@ -42,7 +42,7 @@ public class AboutPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new AboutPanel(id, new AboutModel(getMetaModelContext()));
+        return new AboutPanel(id, new AboutModel());
     }
 
 }

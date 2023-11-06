@@ -59,8 +59,7 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         val navBarSection = ((ServiceActionsModel) model).getObject();
 
         val menuItems = _Lists.<CssMenuItem>newArrayList();
-        ServiceActionUtil.buildMenu(
-                super.getMetaModelContext(), navBarSection, menuItems::add);
+        ServiceActionUtil.buildMenu(navBarSection, menuItems::add);
 
         return new TertiaryActionsPanel(id, menuItems);
     }

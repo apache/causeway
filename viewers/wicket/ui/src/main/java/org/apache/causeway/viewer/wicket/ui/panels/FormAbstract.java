@@ -21,9 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.panels;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.HasPageClassRegistry;
@@ -46,12 +44,6 @@ implements
     }
 
     // -- DEPENDENCIES
-
-    private transient MetaModelContext mmc;
-    @Override
-    public final MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
 
     private transient ComponentFactoryRegistry componentFactoryRegistry;
     @Override

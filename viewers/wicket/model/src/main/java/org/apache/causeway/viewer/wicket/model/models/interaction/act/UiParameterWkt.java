@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
 import org.apache.wicket.model.ChainingModel;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -91,11 +90,6 @@ implements
     @Override
     public ParameterNegotiationModel getParameterNegotiationModel() {
         return actionInteractionModel().parameterNegotiationModel();
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return actionInteractionModel().getMetaModelContext();
     }
 
 }

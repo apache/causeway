@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.model.models.interaction.prop;
 
 import org.apache.wicket.model.ChainingModel;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -76,11 +75,6 @@ implements
     @Override
     public final PropertyNegotiationModel getPendingPropertyModel() {
         return propertyInteractionModel().propertyNegotiationModel();
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return propertyInteractionModel().getMetaModelContext();
     }
 
 }

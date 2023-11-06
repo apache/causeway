@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 public interface HasFacetHolder extends FacetHolder {
 
@@ -31,11 +30,6 @@ public interface HasFacetHolder extends FacetHolder {
     FacetHolder getFacetHolder();
 
     // -- SHORTCUTS
-
-    @Override
-    default MetaModelContext getMetaModelContext() {
-        return getFacetHolder().getMetaModelContext();
-    }
 
     @Override
     default Identifier getFeatureIdentifier() {

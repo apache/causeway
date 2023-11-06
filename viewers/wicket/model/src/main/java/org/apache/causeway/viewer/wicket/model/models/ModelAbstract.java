@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.model.models;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s,
@@ -35,19 +34,8 @@ implements HasCommonContext {
 
     protected ModelAbstract() {}
 
-    protected ModelAbstract(final MetaModelContext mmc) {
-        this.mmc = mmc;
-    }
-
-    protected ModelAbstract(final MetaModelContext mmc, final T t) {
-        this.mmc = mmc;
+    protected ModelAbstract(final T t) {
         super.setObject(t);
-    }
-
-    private transient MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
 }

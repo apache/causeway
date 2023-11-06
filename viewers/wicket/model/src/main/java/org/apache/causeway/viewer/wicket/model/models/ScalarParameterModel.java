@@ -52,7 +52,7 @@ implements HasUiParameter {
     private ScalarParameterModel(
             final UiParameterWkt uiParameter) {
         super(
-                UiObjectWkt.ofAdapter(uiParameter.getMetaModelContext(), uiParameter.getOwner()),
+                UiObjectWkt.ofAdapter(uiParameter.getOwner()),
                 ViewOrEditMode.EDITING); // always init params in editing mode, decide usability later dynamically
         this.uiParameter = uiParameter;
     }

@@ -125,7 +125,7 @@ extends PanelAbstract<String, Model<String>> {
             final NavbarSection menuUiModel) {
 
         final MarkupContainer container = this;
-        val menuModel = new ServiceActionsModel(super.getMetaModelContext(), menuUiModel);
+        val menuModel = new ServiceActionsModel(menuUiModel);
         val menuBarComponent = getComponentFactoryRegistry()
                 .createComponent(id, UiComponentType.SERVICE_ACTIONS, menuModel);
         Wkt.cssAppend(menuBarComponent, menuUiModel.cssClass());

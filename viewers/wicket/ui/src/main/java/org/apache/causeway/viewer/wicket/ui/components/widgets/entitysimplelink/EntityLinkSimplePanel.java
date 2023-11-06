@@ -24,11 +24,9 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -45,7 +43,7 @@ import lombok.val;
  */
 public class EntityLinkSimplePanel
 extends FormComponentPanelAbstract<ManagedObject>
-implements CancelHintRequired  {
+implements CancelHintRequired, HasMetaModelContext  {
 
     private static final long serialVersionUID = 1L;
 
@@ -119,19 +117,8 @@ implements CancelHintRequired  {
      * Translate without context: Tooltips, Button-Labels, etc.
      */
     public final String translate(final String input) {
-        return getMetaModelContext().getTranslationService()
+        return getTranslationService()
                 .translate(TranslationContext.empty(), input);
     }
-
-    // -- DEPENDENCIES
-
-    private PlaceholderRenderService getPlaceholderRenderService() {
-        return getMetaModelContext().getPlaceholderRenderService();
-    }
-
-    private MetaModelContext getMetaModelContext() {
-        return ((HasMetaModelContext)getModel()).getMetaModelContext();
-    }
-
 
 }

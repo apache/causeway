@@ -42,7 +42,7 @@ public class WelcomePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new WelcomePanel(id, new WelcomeModel(getMetaModelContext()));
+        return new WelcomePanel(id, new WelcomeModel());
     }
 
 }

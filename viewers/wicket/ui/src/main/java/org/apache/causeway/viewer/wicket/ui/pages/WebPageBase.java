@@ -25,9 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 /**
  * Provides all the system dependencies for sub-classes.
@@ -65,12 +63,6 @@ implements HasCommonContext {
     }
 
     // -- DEPENDENCIES
-
-    private transient MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
 
     private transient PageClassRegistry pageClassRegistry;
     public PageClassRegistry getPageClassRegistry() {

@@ -20,10 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.ident.title;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,13 +34,11 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.val;
 
-@ExtendWith(MockitoExtension.class)
 class TitleFacetViaTitleAnnotationTest {
 
-    @Mock FacetHolder mockFacetHolder;
-    @Mock ManagedObject mockManagedObject;
-
-    protected MetaModelContext metaModelContext;
+    MetaModelContext metaModelContext;
+    FacetHolder mockFacetHolder;
+    ManagedObject mockManagedObject;
 
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
         @Title
@@ -63,6 +58,9 @@ class TitleFacetViaTitleAnnotationTest {
     void setUp() {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
+
+        mockFacetHolder = Mockito.mock(FacetHolder.class);
+        mockManagedObject = Mockito.mock(ManagedObject.class);
     }
 
     @Test

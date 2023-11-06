@@ -144,8 +144,7 @@ implements CollectionCountProvider {
                             : -1 /* don't override */)
             .build();
 
-        columns.add(0, new TitleColumn(
-                super.getMetaModelContext(), variant, contextBookmark, maxColumnTitleLength, opts));
+        columns.add(0, new TitleColumn(variant, contextBookmark, maxColumnTitleLength, opts));
     }
 
     private void addPropertyColumnsIfRequired(final List<GenericColumn> columns) {
@@ -173,7 +172,6 @@ implements CollectionCountProvider {
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
 
         return new SingularColumn(
-                super.getMetaModelContext(),
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),
                 property.getId(),
@@ -187,7 +185,6 @@ implements CollectionCountProvider {
         final String parentTypeName = collection.getDeclaringType().getLogicalTypeName();
 
         return new PluralColumn(
-                super.getMetaModelContext(),
                 collectionModel.getVariant(),
                 Model.of(collection.getCanonicalFriendlyName()),
                 collection.getId(),

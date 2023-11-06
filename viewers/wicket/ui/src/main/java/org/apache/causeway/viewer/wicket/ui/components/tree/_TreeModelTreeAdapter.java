@@ -30,9 +30,7 @@ import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 import lombok.NonNull;
 import lombok.val;
@@ -52,18 +50,10 @@ implements
     private final Class<? extends TreeAdapter> treeAdapterClass;
 
     private transient TreeAdapter wrappedTreeAdapter;
-    private transient MetaModelContext metaModelContext;
 
     _TreeModelTreeAdapter(
-            final MetaModelContext metaModelContext,
             final Class<? extends TreeAdapter> treeAdapterClass) {
-        this.metaModelContext = metaModelContext;
         this.treeAdapterClass = treeAdapterClass;
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return this.metaModelContext = WktContext.computeIfAbsent(metaModelContext);
     }
 
     @Override
@@ -111,7 +101,7 @@ implements
     }
     private @Nullable Object demementify(final _TreeNodeMemento model) {
         Objects.requireNonNull(model);
-        return model.getPojo(getMetaModelContext());
+        return model.getPojo();
     }
 
     private Function<Object, _TreeNodeMemento> newPojoToTreeModelMapper(final _TreeNodeMemento parent) {
