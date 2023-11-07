@@ -113,7 +113,7 @@ implements CollectionContentsAsFactory {
         public File getObject() {
             val tempFile = File.createTempFile(CollectionContentsAsExportFactory.class.getCanonicalName(), fileName);
             Try.run(()->
-                exporter().createExport(model.getDataTableModel().export(), tempFile))
+                exporter().createExport(model.getDataTableModel().exportFiltered(), tempFile))
             .ifFailure(__->{
                 Files.remove(tempFile); // cleanup after sad case
             })
