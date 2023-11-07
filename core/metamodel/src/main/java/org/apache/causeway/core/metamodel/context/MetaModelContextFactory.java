@@ -33,8 +33,8 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
  *
  */
 @Configuration
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelContexts")
-public class MetaModelContexts {
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelContextFactory")
+public class MetaModelContextFactory {
 
     @Primary
     @Bean(destroyMethod = "onDestroy")

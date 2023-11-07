@@ -27,6 +27,9 @@ import jakarta.inject.Inject;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,6 +67,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
+@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD, classMode = ClassMode.BEFORE_CLASS)
 class WrapperInteractionTest4
 extends InteractionTestAbstract {
 

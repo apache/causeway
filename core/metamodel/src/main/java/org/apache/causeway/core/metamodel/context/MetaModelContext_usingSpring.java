@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
@@ -66,7 +65,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
 
     /**
      * Called by Spring as instructed by bean declaration
-     * {@link MetaModelContexts#metaModelContext(CausewaySystemEnvironment)}.
+     * {@link MetaModelContextFactory#metaModelContext(CausewaySystemEnvironment)}.
      */
     void onDestroy() {
         MetaModelContext.INSTANCE_HOLDER.set(null);
@@ -107,10 +106,6 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     @Getter(lazy=true)
     private final AuthenticationManager authenticationManager =
     getSingletonElseFail(AuthenticationManager.class);
-
-    @Getter(lazy=true)
-    private final InteractionProvider interactionProvider =
-    getSingletonElseFail(InteractionProvider.class);
 
     @Getter(lazy=true)
     private final ObjectIconService objectIconService =

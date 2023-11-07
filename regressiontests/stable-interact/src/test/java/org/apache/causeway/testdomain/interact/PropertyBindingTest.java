@@ -21,6 +21,9 @@ package org.apache.causeway.testdomain.interact;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,10 +42,10 @@ import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingInteractionDomain.class
-        }, 
+        },
         properties = {
                 "causeway.core.meta-model.introspector.mode=FULL",
                 "causeway.applib.annotation.domain-object.editing=TRUE",
@@ -52,71 +55,72 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
+@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD, classMode = ClassMode.BEFORE_CLASS)
 class PropertyBindingTest extends InteractionTestAbstract {
 
     PropertyNegotiationModel proposalA;
     PropertyNegotiationModel proposalB;
-    
+
     SimulatedUiComponent uiPropStringMultiline;
-    
-    // UI components for the new value negotiation dialog 
+
+    // UI components for the new value negotiation dialog
     SimulatedUiComponent uiPropA;
     SimulatedUiChoices uiPropAChoices;
     SimulatedUiAutoComplete uiPropBAutoComplete;
-    
+
     @BeforeEach
     void setUpSimulatedUi() {
 
-        val propertyInteractionA = startPropertyInteractionOn(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS);  
+        val propertyInteractionA = startPropertyInteractionOn(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS);
         assertTrue(propertyInteractionA.getManagedProperty().isPresent(), "prop is expected to be editable");
-        
-        val propertyInteractionB = startPropertyInteractionOn(InteractionDemo.class, "string2", Where.OBJECT_FORMS);  
+
+        val propertyInteractionB = startPropertyInteractionOn(InteractionDemo.class, "string2", Where.OBJECT_FORMS);
         assertTrue(propertyInteractionB.getManagedProperty().isPresent(), "prop is expected to be editable");
-        
+
         val managedPropA = propertyInteractionA.getManagedProperty().get();
         this.proposalA = managedPropA.startNegotiation();
-        
+
         val managedPropB = propertyInteractionB.getManagedProperty().get();
         this.proposalB = managedPropB.startNegotiation();
-        
+
         // setting up and binding all the simulated UI components
-        
+
         uiPropStringMultiline = new SimulatedUiComponent();
         uiPropA = new SimulatedUiComponent();
         uiPropAChoices = new SimulatedUiChoices();
         uiPropBAutoComplete = new SimulatedUiAutoComplete();
-        
+
         uiPropStringMultiline.bind(managedPropA);
-        
+
         uiPropA.bind(proposalA);
         uiPropAChoices.bind(proposalA);
         uiPropBAutoComplete.bind(proposalB);
-        
+
         // verify that initial defaults are as expected
-        
+
         assertEquals("initial", uiPropStringMultiline.getValue().getPojo());
         assertEquals("initial", uiPropA.getValue().getPojo());
-        
+
         // verify that initial choices are as expected
-        
+
         assertTrue(managedPropA.getMetaModel().hasChoices());
         assertComponentWiseUnwrappedEquals(new String[] {"Hello", "World"}, uiPropAChoices.getChoices());
-        
+
         assertTrue(managedPropB.getMetaModel().hasAutoComplete());
         assertComponentWiseUnwrappedEquals(new String[] {}, uiPropBAutoComplete.getChoices());
-        
-        // verify that initial validation messages are all empty, 
-        // because we don't validate anything until a user initiated submit attempt occurs 
-        
+
+        // verify that initial validation messages are all empty,
+        // because we don't validate anything until a user initiated submit attempt occurs
+
         assertEmpty(uiPropA.getValidationMessage());
-        
+
         // verify that validation feedback is not active
-        
+
         assertFalse(proposalA.getObservableValidationFeedbackActive().getValue());
         assertFalse(proposalB.getObservableValidationFeedbackActive().getValue());
-        
+
     }
-    
+
     @Test
     void propA_whenChanging_shouldPropagteNewValue() {
 
@@ -127,23 +131,23 @@ class PropertyBindingTest extends InteractionTestAbstract {
         proposalA.submit();
         assertEquals("Hi", uiPropStringMultiline.getValue().getPojo());
     }
-    
+
     @Test
     void propB_whenSettingSearchArgument_shouldProvideChoices() {
-        
+
         // verify that changing the search argument fires change event
         assertDoesIncrement(
                 uiPropBAutoComplete::getChoiceBoxUpdateEventCount,
                 ()->uiPropBAutoComplete.setSimulatedSearchArgument("H")); // select "Hello"
-                        
-        
+
+
         // verify that no additional changes are triggered
-        assertDoesNotIncrement(        
+        assertDoesNotIncrement(
                 uiPropBAutoComplete::getChoiceBoxUpdateEventCount,
                 ()->assertComponentWiseUnwrappedEquals(new String[] {"Hello"}, uiPropBAutoComplete.getChoices()));
-        
+
         // TODO such a change might set or clear propA validation message once validation feedback is active
     }
 
-    
+
 }
