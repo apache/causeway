@@ -19,6 +19,7 @@
 package org.apache.causeway.client.kroviz.utils
 
 import kotlinx.browser.document
+import org.apache.causeway.client.kroviz.to.Vega5
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
@@ -55,6 +56,20 @@ object DomUtil {
         append(uuid, svgDoc, true)
     }
 
+    fun replaceWith(uuid: UUID, vegaCode: Vega5) {
+        //val svgDoc = newImage.document
+        append(uuid, vegaCode, true)
+    }
+
+    private fun append(uuid: UUID, vegaCode: Vega5, replace: Boolean) {
+        val element = getById(uuid.value)
+        if (element != null) {
+            if (replace) {
+                element.firstChild?.let { element.removeChild(it) }
+            }
+            element.asDynamic().appendChild(vegaCode.toString())
+        }
+    }
     private fun append(uuid: UUID, svgDoc: Document, replace: Boolean) {
         val element = getById(uuid.value)
         if (element != null) {

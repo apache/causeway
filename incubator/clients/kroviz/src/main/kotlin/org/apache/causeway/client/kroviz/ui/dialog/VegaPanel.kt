@@ -32,12 +32,14 @@ class VegaPanel : SimplePanel() {
         this.addAfterInsertHook {
             val json = VEGA_SAMPLE.str
             val specFromClass = JSON.parse<Vega5>(json)
+            console.log("[VP#init]")
             console.log(specFromClass)
             val view = Vega.View(Vega.parse(specFromClass), obj {
                 this.renderer = "canvas"
                 this.container = getElement()
                 this.hover = true
             })
+            console.log(view)
             view.runAsync()
         }
     }

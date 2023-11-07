@@ -143,12 +143,10 @@ class ColumnFactory {
             title = it.name,
             field = it.id,
             width = (it.typicalLength * 8).toString(),
-            headerFilter = Editor.INPUT,
-            formatterComponentFunction = { cellComponent: dynamic, _, _: dynamic ->
-                console.log("[CF_buildVega]")
-                console.log(cellComponent)
-                this.buildDiagramPanel(cellComponent.unsafeCast<Tabulator.CellComponent>())
-            })
+            formatterComponentFunction = { cellComponent: Tabulator.CellComponent, _: (callback: () -> Unit) -> Unit, nothing: Nothing ->
+                buildDiagramPanel(cellComponent)
+            }
+        )
     }
 
     private fun buildDiagramPanel(cellComponent: Tabulator.CellComponent): Component {
@@ -156,13 +154,12 @@ class ColumnFactory {
         console.log(cellComponent)
         val panel = VPanel()
         panel.addAfterInsertHook {
-            val row = cellComponent.getRow()
-            val dynamic = row.getData().asDynamic()
-            val json = dynamic.get("readOnlyProperty") as String
+            val json = cellComponent.getValue().unsafeCast<String>()
+            console.log(json)
             val spec = JSON.parse<Vega5>(json)
             val view = Vega.View(Vega.parse(spec), obj {
                 this.renderer = "canvas"
-                this.container = getElement()
+                //this.container = getElement()
                 this.hover = true
             })
             view.runAsync()
