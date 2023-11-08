@@ -19,7 +19,6 @@
 package org.apache.causeway.client.kroviz.ui.core
 
 import io.kvision.core.Component
-import io.kvision.panel.VPanel
 import io.kvision.tabulator.Align
 import io.kvision.tabulator.ColumnDefinition
 import io.kvision.tabulator.Editor
@@ -31,9 +30,8 @@ import org.apache.causeway.client.kroviz.core.model.Exposer
 import org.apache.causeway.client.kroviz.core.model.PropertyDetails
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.ValueType
-import org.apache.causeway.client.kroviz.to.Vega5
+import org.apache.causeway.client.kroviz.ui.dialog.VegaPanel
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
-import org.apache.causeway.client.kroviz.utils.js.Vega
 
 /**
  * Create ColumnDefinitions for Tabulator tables
@@ -143,7 +141,7 @@ class ColumnFactory {
             title = it.name,
             field = it.id,
             width = (it.typicalLength * 8).toString(),
-            formatterComponentFunction = { cellComponent: Tabulator.CellComponent, _: (callback: () -> Unit) -> Unit, nothing: Nothing ->
+            formatterComponentFunction = { cellComponent: Tabulator.CellComponent, _: (callback: () -> Unit) -> Unit, _: Nothing ->
                 buildDiagramPanel(cellComponent)
             }
         )
@@ -152,19 +150,9 @@ class ColumnFactory {
     private fun buildDiagramPanel(cellComponent: Tabulator.CellComponent): Component {
         console.log("[CF_buildDiagramPanel]")
         console.log(cellComponent)
-        val panel = VPanel()
-        panel.addAfterInsertHook {
-            val json = cellComponent.getValue().unsafeCast<String>()
-            console.log(json)
-            val spec = JSON.parse<Vega5>(json)
-            val view = Vega.View(Vega.parse(spec), obj {
-                this.renderer = "canvas"
-                //this.container = getElement()
-                this.hover = true
-            })
-            view.runAsync()
-        }
-        return panel
+        val json = cellComponent.getValue().unsafeCast<String>()
+        console.log(json)
+        return VegaPanel(json)
     }
 
     private fun buildLink(): ColumnDefinition<dynamic> {

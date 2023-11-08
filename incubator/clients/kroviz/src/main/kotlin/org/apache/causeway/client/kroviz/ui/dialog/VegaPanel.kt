@@ -20,17 +20,15 @@ package org.apache.causeway.client.kroviz.ui.dialog
 
 import io.kvision.panel.SimplePanel
 import io.kvision.utils.obj
-import org.apache.causeway.client.kroviz.to.VEGA_SAMPLE
 import org.apache.causeway.client.kroviz.to.Vega5
 import org.apache.causeway.client.kroviz.utils.js.Vega
 
-class VegaPanel : SimplePanel() {
+class VegaPanel(val json: String) : SimplePanel() {
 
     // https://vega.github.io/vega/examples/
 
     init {
         this.addAfterInsertHook {
-            val json = VEGA_SAMPLE.str
             val specFromClass = JSON.parse<Vega5>(json)
             console.log("[VP#init]")
             console.log(specFromClass)

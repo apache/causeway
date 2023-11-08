@@ -36,6 +36,7 @@ import io.kvision.html.Button
 import io.kvision.html.Div
 import io.kvision.html.Iframe
 import io.kvision.html.Image
+import io.kvision.panel.SimplePanel
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.auto
@@ -45,6 +46,7 @@ import io.kvision.utils.vh
 import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.Vega5
 import org.apache.causeway.client.kroviz.ui.dialog.Controller
+import org.apache.causeway.client.kroviz.ui.dialog.VegaPanel
 import org.apache.causeway.client.kroviz.ui.panel.SvgPanel
 import org.apache.causeway.client.kroviz.utils.DateHelper
 import org.apache.causeway.client.kroviz.utils.IconManager
@@ -77,7 +79,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.SVG_INLINE -> add(createInline(fi))
                     ValueType.SVG_MAPPED -> add(createSvgMap(fi))
                     ValueType.BUTTON -> add(createButton(fi))
-                    ValueType.CANVAS -> add(createCanvas(fi))
+                    ValueType.CANVAS -> add(createVega(fi))
                     else -> {
                     }
                 }
@@ -248,20 +250,10 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         return item
     }
 
-    private fun createCanvas(fi: FormItem): VPanel {
+    private fun createVega(fi: FormItem): SimplePanel {
         console.log("[FPF_createCanvas]")
-        val panel = VPanel()
-        panel.addAfterInsertHook {
-            val json = fi.content as String
-            val specFromClass = JSON.parse<Vega5>(json)
-//            console.log(specFromClass)
-            val view = Vega.View(Vega.parse(specFromClass), obj {
-                this.renderer = "canvas"
-                this.container = getElement()
-                this.hover = true
-            })
-            view.runAsync()
-        }
+        val json = fi.content as String
+        val panel = VegaPanel(json)
         console.log(panel)
         return panel
     }
