@@ -90,7 +90,7 @@ implements ActionPrompt {
     @Override
     protected WebMarkupContainer createDialog(final String id) {
         WebMarkupContainer dialog = super.createDialog(id);
-        Wkt.cssAppend(dialog, "modal-dialog-center");
+        Wkt.cssAppend(dialog, "modal-lg modal-dialog-center");
         dialog.add(new Draggable(new DraggableConfig().withHandle(".modal-header").withCursor("move")));
         return dialog;
     }
