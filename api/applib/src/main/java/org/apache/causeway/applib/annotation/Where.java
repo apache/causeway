@@ -26,7 +26,7 @@ import jakarta.xml.bind.annotation.XmlType;
  * Represents the location in the user interface where a class member is to be rendered.
  *
  * <p>
- * Used to control visibility (eg using the {@link Property#hidden()} annotation) and
+ * Used to control visibility (eg using the {@link PropertyLayout#hidden()} annotation) and
  * enablement (eg using the {@link Property#editing()} annotation) in different regions
  * of the user interface.
  *

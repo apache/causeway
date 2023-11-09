@@ -24,6 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.core.annotation.AliasFor;
+
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
@@ -125,6 +127,7 @@ public @interface Property {
      * @see Property#editingDisabledReason()
      * @see DomainObject#editing()
      */
+    @AliasFor(annotation=DomainObject.class, attribute="editing")
     Editing editing()
             default Editing.NOT_SPECIFIED;
 
@@ -136,6 +139,7 @@ public @interface Property {
      *
      * @see Property#editing()
      */
+    @AliasFor(annotation=DomainObject.class, attribute="editingDisabledReason")
     String editingDisabledReason()
             default "";
 
@@ -150,6 +154,7 @@ public @interface Property {
      * @see DomainObject#entityChangePublishing()
      * @apiNote does only apply to persistent properties of entity objects
      */
+    @AliasFor(annotation=DomainObject.class, attribute="entityChangePublishing")
     Publishing entityChangePublishing()
             default Publishing.NOT_SPECIFIED;
 
