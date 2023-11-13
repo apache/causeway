@@ -114,7 +114,7 @@ public class LayoutLoadersGitHubMenu {
     }
 
     boolean isConfigured() {
-        val layoutLoadersGitHub = causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub();
+        val layoutLoadersGitHub = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub();
         return layoutLoadersGitHub.getRepository() != null &&
                layoutLoadersGitHub.getApiKey() != null;
     }

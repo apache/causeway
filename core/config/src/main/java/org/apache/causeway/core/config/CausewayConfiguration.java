@@ -3446,9 +3446,9 @@ public class CausewayConfiguration {
         @Data
         public static class LayoutLoaders {
 
-            private final GitHub gitHub = new GitHub();
+            private final Github github = new Github();
             @Data
-            public static class GitHub {
+            public static class Github {
 
                 /**
                  * eg <code>apache/causeway-app-simpleapp</code>

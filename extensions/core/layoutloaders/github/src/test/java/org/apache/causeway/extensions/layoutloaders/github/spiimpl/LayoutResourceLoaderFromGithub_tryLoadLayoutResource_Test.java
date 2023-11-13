@@ -34,8 +34,8 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     void setup() {
 
         val causewayConfiguration = new CausewayConfiguration(null);
-        causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().setApiKey(getApiKey());
-        causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().setRepository("apache/causeway-app-simpleapp");
+        causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().setApiKey(getApiKey());
+        causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().setRepository("apache/causeway-app-simpleapp");
 
         val module = new CausewayModuleExtLayoutLoadersGithub();
         val restTemplateForSearch = module.restTemplateForGithubSearch(causewayConfiguration);
@@ -46,7 +46,7 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
         layoutLoaderMenu.new enableDynamicLayoutLoading().act();
         Assertions.assertThat(layoutLoaderMenu.isEnabled()).isTrue();
 
-        loader = new LayoutResourceLoaderFromGithub(restTemplateForSearch, restTemplateForContent, causewayConfiguration, layoutLoaderMenu, queryResultsCache);
+        loader = new LayoutResourceLoaderFromGithub(restTemplateForSearch, restTemplateForContent, causewayConfiguration, layoutLoaderMenu, () -> queryResultsCache);
     }
 
     @Test
