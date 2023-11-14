@@ -33,7 +33,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.5</version>
+		<version>3.2.0-RC2</version>
 		<relativePath />
 	</parent>
 
@@ -46,15 +46,46 @@
 
 	<properties>
 
-		<maven.compiler.release>17</maven.compiler.release>
+		<maven.compiler.release>21</maven.compiler.release>
 
-		<spring-boot.version>3.1.5</spring-boot.version>
+		<spring-boot.version>3.2.0-RC2</spring-boot.version>
 		<approvaltests.version>22.2.1</approvaltests.version>
 
 		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
 		<resteasy.version>6.0.0.Alpha2</resteasy.version>
 
 	</properties>
+
+    <!-- remove the entire tag, after Spring Boot 3.2 release! -->	
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <!-- Spring Milestones, until release of Spring Boot 3.2 -->
+            <id>Spring Milestones</id>
+            <url>https://repo.spring.io/milestone/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <!-- remove the entire tag, after Spring Boot 3.2 release! -->  
+    <pluginRepositories>
+        <pluginRepository>
+            <!-- Spring Milestones, until release of Spring Boot 3.2 -->
+            <id>Spring Milestones</id>
+            <url>https://repo.spring.io/milestone/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
 	<build>
 		<pluginManagement>

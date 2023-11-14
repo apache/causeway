@@ -40,7 +40,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<maven.compiler.release>17</maven.compiler.release>
+		<maven.compiler.release>21</maven.compiler.release>
 
 		<jar-plugin.automaticModuleName>org.apache.causeway.testing</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/testing</git-plugin.propertiesDir>

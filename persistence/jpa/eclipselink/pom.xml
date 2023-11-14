@@ -98,6 +98,11 @@
 		    <artifactId>jakarta.el-api</artifactId>
 		    <version>5.0.1</version>
 		</dependency>
+		<!-- provides EL Impl -->        
+        <dependency>
+          <groupId>org.apache.tomcat.embed</groupId>
+          <artifactId>tomcat-embed-el</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
