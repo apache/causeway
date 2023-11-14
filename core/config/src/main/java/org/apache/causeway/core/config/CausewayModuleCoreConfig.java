@@ -21,7 +21,6 @@ package org.apache.causeway.core.config;
 import java.util.Collections;
 import java.util.Map;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -66,13 +65,14 @@ import lombok.Data;
         EclipselinkConfiguration.Jdbc.BatchWriting.class,
         EclipselinkConfiguration.Jdbc.CacheStatements.class,
         RestEasyConfiguration.class,
-        CausewayModuleCoreConfig.ConfigProps.class,
+        //CausewayModuleCoreConfig.ConfigProps.class,
 })
 public class CausewayModuleCoreConfig {
 
     public static final String NAMESPACE = "causeway.config";
 
-    @ConfigurationProperties(prefix = "", ignoreUnknownFields = true)
+    //@ConfigurationProperties("")
+    @Deprecated
     @Data
     public static class ConfigProps {
         private Map<String, String> causeway = Collections.emptyMap();
