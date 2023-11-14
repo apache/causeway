@@ -81,7 +81,7 @@ public class CausewayModuleExtLayoutLoadersGithub {
     @Bean(name = "GithubSearch")
     public RestTemplate restTemplateForGithubSearch(final CausewayConfiguration causewayConfiguration) {
 
-        val apiKey = causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().getApiKey();
+        val apiKey = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getApiKey();
 
         return new RestTemplateBuilder()
                 .rootUri("https://api.github.com")
@@ -108,8 +108,8 @@ public class CausewayModuleExtLayoutLoadersGithub {
     @Bean(name = "GithubContent")
     public RestTemplate restTemplateForGithubContent(final CausewayConfiguration causewayConfiguration) {
 
-        val apiKey = causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().getApiKey();
-        val repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().getRepository();
+        val apiKey = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getApiKey();
+        val repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getRepository();
 
         return new RestTemplateBuilder()
                 .rootUri(String.format("https://api.github.com/repos/%s", repo))

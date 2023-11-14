@@ -23,6 +23,7 @@ import java.util.HashMap;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
@@ -56,7 +57,7 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     final RestTemplate restTemplateForContent;
     final CausewayConfiguration causewayConfiguration;
     final LayoutLoadersGitHubMenu layoutLoadersGitHubMenu;
-    final QueryResultsCache queryResultsCache;
+    final Provider<QueryResultsCache> queryResultsCacheProvider;
 
     @Inject
     public LayoutResourceLoaderFromGithub(
@@ -64,12 +65,12 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
             final @Qualifier("GithubContent") RestTemplate restTemplateForContent,
             final CausewayConfiguration causewayConfiguration,
             final LayoutLoadersGitHubMenu layoutLoadersGitHubMenu,
-            final QueryResultsCache queryResultsCache) {
+            final Provider<QueryResultsCache> queryResultsCacheProvider) {
         this.restTemplateForSearch = restTemplateForSearch;
         this.restTemplateForContent = restTemplateForContent;
         this.causewayConfiguration = causewayConfiguration;
         this.layoutLoadersGitHubMenu = layoutLoadersGitHubMenu;
-        this.queryResultsCache = queryResultsCache;
+        this.queryResultsCacheProvider = queryResultsCacheProvider;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
             final @NonNull Class<?> type,
             final @NonNull String candidateResourceName) {
         return layoutLoadersGitHubMenu.isEnabled()
-                ? queryResultsCache.execute(() -> tryLoadLayoutResource(candidateResourceName),
+                ? queryResultsCacheProvider.get().execute(() -> tryLoadLayoutResource(candidateResourceName),
                         getClass(), "tryLoadLayoutResource", candidateResourceName)
                 : Try.empty();
     }
@@ -94,7 +95,7 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     private Try<String> search(final @NonNull String candidateResourceName) {
 
         try {
-            val repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGitHub().getRepository();
+            val repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getRepository();
             val searchParams = new HashMap<String, String>();
             searchParams.put("q", String.format("%s+in:path+repo:%s", candidateResourceName, repo));
 
