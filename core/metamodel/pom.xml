@@ -116,6 +116,16 @@
             <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Remove with release of Spring Boot 3.2!
+            works around bug https://github.com/spring-projects/spring-boot/commit/9eda564d063e347e7f937e61cd8c84819c670604
+        -->
+        <dependency>
+            <groupId>org.crac</groupId>
+            <artifactId>crac</artifactId>
+            <version>1.4.0</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
