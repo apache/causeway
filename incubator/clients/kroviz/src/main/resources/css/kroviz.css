@@ -62,7 +62,8 @@ div.tabulator-row {
 }
 
 div.tabulator-cell {
-    height: 35px;
+    display: flex;
+    flex-direction: column;
 }
 
 div.tabulator-header, label.control-label {

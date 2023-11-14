@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to
+package org.apache.causeway.client.kroviz.ui.samples
 
 object VEGA_SAMPLE {
     val schema = "\$schema"
