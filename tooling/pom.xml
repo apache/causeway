@@ -36,15 +36,12 @@
 	<description>
         Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
         eg. code mining, automated documentation.
-        (Targeted for JVM 17+)
+        (Targeted for JVM 21+)
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-
-		<maven.compiler.release>17</maven.compiler.release>
-
 		<jar-plugin.automaticModuleName>org.apache.causeway.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/tooling</git-plugin.propertiesDir>
 		<gradle-tooling.version>7.3-20210825160000+0000</gradle-tooling.version>
@@ -154,7 +151,7 @@
 		</plugins>
 
 	</build>
-
+	
 	<dependencyManagement>
 		<dependencies>
 

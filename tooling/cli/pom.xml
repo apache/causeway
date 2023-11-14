@@ -23,10 +23,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.tooling</groupId>
-		<artifactId>causeway-tooling</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
-	</parent>
+        <groupId>org.apache.causeway.tooling</groupId>
+        <artifactId>causeway-tooling</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+    </parent>
 
 	<artifactId>causeway-tooling-cli</artifactId>
 
@@ -67,7 +67,6 @@
 				</executions>
 			</plugin>
 -->
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -84,8 +83,9 @@
 				</executions>
 			</plugin>
 		</plugins>
+		
 	</build>
-
+	
 	<dependencies>
 
 		<dependency>

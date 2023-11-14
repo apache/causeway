@@ -154,7 +154,7 @@
 						<configuration>
 							<toolchains>
 								<jdk>
-									<version>17</version>
+									<version>21</version>
 									<vendor>openjdk</vendor>
 								</jdk>
 							</toolchains>

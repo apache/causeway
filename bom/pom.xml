@@ -34,7 +34,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.2.0-RC2</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -57,9 +57,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
         <gpg.useagent>true</gpg.useagent>
-        <minimalMavenBuildVersion>3.8.0</minimalMavenBuildVersion> <!-- enforces https repos -->
-        <minimalJavaBuildVersion>17</minimalJavaBuildVersion>
-        <maven.compiler.release>17</maven.compiler.release>
+        <minimalMavenBuildVersion>3.9.5</minimalMavenBuildVersion>
+        <minimalJavaBuildVersion>21</minimalJavaBuildVersion>
+        <maven.compiler.release>21</maven.compiler.release>
         
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
@@ -93,8 +93,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <approvaltests.version>22.2.1</approvaltests.version>
 
         <assertj-guava.version>3.24.2</assertj-guava.version>
-
-        <camel.version>3.14.9</camel.version>
 
         <commons-email.version>1.5</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
@@ -173,7 +171,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.9</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.1.5</spring-boot.version>
+        <spring-boot.version>3.2.0-RC2</spring-boot.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.19</swagger-core.version>
@@ -2056,6 +2054,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+            <!-- Spring Milestones, until release of Spring Boot 3.2 -->
+            <id>Spring Milestones</id>
+            <url>https://repo.spring.io/milestone/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
     <pluginRepositories>
 		<pluginRepository>
@@ -2065,6 +2071,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
+	    <pluginRepository>
+            <!-- Spring Milestones, until release of Spring Boot 3.2 -->
+            <id>Spring Milestones</id>
+            <url>https://repo.spring.io/milestone/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
     </pluginRepositories>
     <distributionManagement>
         <repository>
@@ -2645,10 +2659,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <configuration>
                     <rules>
                         <requireMavenVersion>
-                            <version>[3.6,)</version>
+                            <version>[3.9,)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
-                            <version>[17,)</version>
+                            <version>[21,)</version>
                         </requireJavaVersion>
                         <!-- seemingly not compatible with use of 3.0.0-SNAPSHOT placeholders
                             <requirePluginVersions> <message>All plugin versions must be defined!</message>
