@@ -57,7 +57,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
         <gpg.useagent>true</gpg.useagent>
-        <minimalMavenBuildVersion>3.9.5</minimalMavenBuildVersion>
+        <minimalMavenBuildVersion>3.8.8</minimalMavenBuildVersion> <!-- latest from github actions/setup-java@v3 -->
         <minimalJavaBuildVersion>21</minimalJavaBuildVersion>
         <maven.compiler.release>21</maven.compiler.release>
         
