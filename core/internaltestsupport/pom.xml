@@ -133,7 +133,6 @@
             <groupId>org.crac</groupId>
             <artifactId>crac</artifactId>
             <version>1.4.0</version>
-            <scope>test</scope>
         </dependency>
 
 	</dependencies>
