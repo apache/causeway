@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -41,7 +42,7 @@ import lombok.Data;
 @Configuration
 @Import({
 
-    // @Component's
+    // @Component
     PatternsConverter.class,
     CausewayBeanFactoryPostProcessorForSpring.class,
     CausewayLocaleInitializer.class,
@@ -49,12 +50,14 @@ import lombok.Data;
     PatternOptionalStringConstraintValidator.class,
     RestfulPathProvider.class,
 
-    // @Service's
+    // @Service
     DataSourceIntrospectionService.class,
     CausewayBeanTypeRegistryDefault.class,
     CausewaySystemEnvironment.class,
     WebAppContextPath.class,
 
+    // @Bean
+    CausewayModuleCoreConfig.ConfigProps.class,
 })
 @EnableConfigurationProperties({
         CausewayConfiguration.class,
@@ -65,14 +68,16 @@ import lombok.Data;
         EclipselinkConfiguration.Jdbc.BatchWriting.class,
         EclipselinkConfiguration.Jdbc.CacheStatements.class,
         RestEasyConfiguration.class,
-        //CausewayModuleCoreConfig.ConfigProps.class,
 })
 public class CausewayModuleCoreConfig {
 
     public static final String NAMESPACE = "causeway.config";
 
-    //@ConfigurationProperties("")
-    @Deprecated
+    @Bean
+    public ConfigProps configProps() {
+        return new ConfigProps();
+    }
+
     @Data
     public static class ConfigProps {
         private Map<String, String> causeway = Collections.emptyMap();
