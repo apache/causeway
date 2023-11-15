@@ -1388,3 +1388,7 @@ div.dataTables_wrapper table.dataTable>thead>tr>th {
 
 /* --- */
 
+li.additionalLinkItem.list-inline-item.hidden {
+    padding-left: 0;
+    display: none;
+}

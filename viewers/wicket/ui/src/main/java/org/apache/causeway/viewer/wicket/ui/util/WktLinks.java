@@ -66,9 +66,7 @@ public final class WktLinks {
         val link = linkAndLabel.getUiComponent();
         val action = linkAndLabel.getManagedAction().getAction();
 
-        val hasDisabledReason = link instanceof ActionLink
-                ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
-                : false;
+        val hasDisabledReason = link instanceof ActionLink && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny());
 
         WktTooltips.addTooltip(tooltipReceiver, hasDisabledReason
                 ? ((ActionLink) link).getReasonDisabledIfAny()
