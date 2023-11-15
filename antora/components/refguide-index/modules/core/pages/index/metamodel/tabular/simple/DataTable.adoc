@@ -9,8 +9,10 @@ Represents a collection of domain objects (typically entity instances).
 .DataTable.java
 ----
 class DataTable {
-  DataTable(ObjectSpecification elementType, Can<? extends ObjectAssociation> dataColumns)
+  DataTable(ObjectSpecification elementType)     // <.>
+  DataTable(ObjectSpecification elementType, Can<? extends ObjectAssociation> dataColumns)     // <.>
   DataTable(ObjectSpecification elementType, String tableFriendlyName, Can<? extends ObjectAssociation> dataColumns, Can<ManagedObject> dataElements)
+  DataTable forDomainType(Class<?> domainType)     // <.>
   void setDataElements(Can<ManagedObject> dataElements)
   String getLogicalName()     // <.>
   int getElementCount()     // <.>
@@ -18,6 +20,21 @@ class DataTable {
 }
 ----
 
+<.> xref:#DataTable_ObjectSpecification[DataTable(ObjectSpecification)]
++
+--
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+--
+<.> xref:#DataTable_ObjectSpecification_Can[DataTable(ObjectSpecification, Can)]
++
+--
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+--
+<.> xref:#forDomainType_Class[forDomainType(Class)]
++
+--
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+--
 <.> xref:#getLogicalName_[getLogicalName()]
 +
 --
@@ -30,6 +47,21 @@ Count data rows.
 --
 
 == Members
+
+[#DataTable_ObjectSpecification]
+=== DataTable(ObjectSpecification)
+
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+
+[#DataTable_ObjectSpecification_Can]
+=== DataTable(ObjectSpecification, Can)
+
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+
+[#forDomainType_Class]
+=== forDomainType(Class)
+
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
 
 [#getLogicalName_]
 === getLogicalName()

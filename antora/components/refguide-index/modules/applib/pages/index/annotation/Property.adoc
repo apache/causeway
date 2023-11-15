@@ -12,9 +12,12 @@ Collects together all the domain semantics for the property of a domain object.
   Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;     // <.>
   Publishing commandPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Class<? extends PropertyDomainEvent<?, ?>> domainEvent() default PropertyDomainEvent.Default.class;     // <.>
-  Editing editing() default Editing.NOT_SPECIFIED;     // <.>
-  String editingDisabledReason() default "";     // <.>
-  Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  @AliasFor(annotation = DomainObject.class, attribute = "editing")
+Editing editing() default Editing.NOT_SPECIFIED;     // <.>
+  @AliasFor(annotation = DomainObject.class, attribute = "editingDisabledReason")
+String editingDisabledReason() default "";     // <.>
+  @AliasFor(annotation = DomainObject.class, attribute = "entityChangePublishing")
+Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   String fileAccept() default "";     // <.>
   int maxLength() default -1;     // <.>

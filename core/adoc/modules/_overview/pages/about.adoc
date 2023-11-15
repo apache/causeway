@@ -613,7 +613,7 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
-io.cucumber:messages:jar:22.0.0 +
+io.cucumber:messages:jar:23.0.0 +
 org.apache.causeway.testing:causeway-testing-fakedata-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -1089,7 +1089,6 @@ o.a.i.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy +
 ****
 net.bytebuddy:byte-buddy:jar:<managed> +
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.objenesis:objenesis:jar:<managed> +
 ****
 
 |Apache Causeway Core - Configuration
@@ -2315,13 +2314,13 @@ xref:refguide:security:index/spring/CausewayModuleSecuritySpring.adoc[CausewayMo
 
 == Viewer
 
-=== Common
+=== Viewer Commons
 
-[plantuml,Common,svg]
+[plantuml,Viewer Commons,svg]
 ----
 @startuml
 set separator none
-title Common - Containers
+title Viewer Commons - Containers
 
 left to right direction
 
@@ -2334,58 +2333,58 @@ skinparam {
 
 hide stereotype
 
-skinparam rectangle<<Common.ApacheCausewayCommonsPrism>> {
+skinparam rectangle<<ViewerCommons.ApacheCausewayCommonsPrism>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Common.ApacheCausewayViewerCommons>> {
+skinparam rectangle<<ViewerCommons.ApacheCausewayViewerCommons>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Common.ApacheCausewayViewerCommonsApplib>> {
+skinparam rectangle<<ViewerCommons.ApacheCausewayViewerCommonsApplib>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Common.ApacheCausewayViewerCommonsModel>> {
+skinparam rectangle<<ViewerCommons.ApacheCausewayViewerCommonsModel>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Common.ApacheCausewayViewerCommonsServices>> {
+skinparam rectangle<<ViewerCommons.ApacheCausewayViewerCommonsServices>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Common>> {
+skinparam rectangle<<ViewerCommons>> {
   BorderColor #9a9a9a
   FontColor #9a9a9a
   shadowing false
 }
 
-rectangle "Common\n<size:10>[Software System]</size>" <<Common>> {
-  rectangle "==Apache Causeway Viewer - Commons\n<size:10>[Container: packaging: pom]</size>" <<Common.ApacheCausewayViewerCommons>> as Common.ApacheCausewayViewerCommons
-  rectangle "==Apache Causeway Viewer - Commons Applib\n<size:10>[Container: packaging: jar]</size>" <<Common.ApacheCausewayViewerCommonsApplib>> as Common.ApacheCausewayViewerCommonsApplib
-  rectangle "==Apache Causeway Viewer - Commons Model\n<size:10>[Container: packaging: jar]</size>" <<Common.ApacheCausewayViewerCommonsModel>> as Common.ApacheCausewayViewerCommonsModel
-  rectangle "==Apache Causeway Commons - Prism\n<size:10>[Container: packaging: jar]</size>" <<Common.ApacheCausewayCommonsPrism>> as Common.ApacheCausewayCommonsPrism
-  rectangle "==Apache Causeway Viewer - Commons Services\n<size:10>[Container: packaging: jar]</size>" <<Common.ApacheCausewayViewerCommonsServices>> as Common.ApacheCausewayViewerCommonsServices
+rectangle "Viewer Commons\n<size:10>[Software System]</size>" <<ViewerCommons>> {
+  rectangle "==Apache Causeway Viewer - Commons\n<size:10>[Container: packaging: pom]</size>" <<ViewerCommons.ApacheCausewayViewerCommons>> as ViewerCommons.ApacheCausewayViewerCommons
+  rectangle "==Apache Causeway Viewer - Commons Applib\n<size:10>[Container: packaging: jar]</size>" <<ViewerCommons.ApacheCausewayViewerCommonsApplib>> as ViewerCommons.ApacheCausewayViewerCommonsApplib
+  rectangle "==Apache Causeway Viewer - Commons Model\n<size:10>[Container: packaging: jar]</size>" <<ViewerCommons.ApacheCausewayViewerCommonsModel>> as ViewerCommons.ApacheCausewayViewerCommonsModel
+  rectangle "==Apache Causeway Commons - Prism\n<size:10>[Container: packaging: jar]</size>" <<ViewerCommons.ApacheCausewayCommonsPrism>> as ViewerCommons.ApacheCausewayCommonsPrism
+  rectangle "==Apache Causeway Viewer - Commons Services\n<size:10>[Container: packaging: jar]</size>" <<ViewerCommons.ApacheCausewayViewerCommonsServices>> as ViewerCommons.ApacheCausewayViewerCommonsServices
 }
 
-Common.ApacheCausewayViewerCommons .[#707070,thickness=2].> Common.ApacheCausewayViewerCommonsServices : "<color:#707070>"
-Common.ApacheCausewayViewerCommons .[#707070,thickness=2].> Common.ApacheCausewayViewerCommonsApplib : "<color:#707070>"
-Common.ApacheCausewayViewerCommons .[#707070,thickness=2].> Common.ApacheCausewayViewerCommonsModel : "<color:#707070>"
-Common.ApacheCausewayViewerCommons .[#707070,thickness=2].> Common.ApacheCausewayCommonsPrism : "<color:#707070>"
+ViewerCommons.ApacheCausewayViewerCommons .[#707070,thickness=2].> ViewerCommons.ApacheCausewayViewerCommonsServices : "<color:#707070>"
+ViewerCommons.ApacheCausewayViewerCommons .[#707070,thickness=2].> ViewerCommons.ApacheCausewayViewerCommonsApplib : "<color:#707070>"
+ViewerCommons.ApacheCausewayViewerCommons .[#707070,thickness=2].> ViewerCommons.ApacheCausewayViewerCommonsModel : "<color:#707070>"
+ViewerCommons.ApacheCausewayViewerCommons .[#707070,thickness=2].> ViewerCommons.ApacheCausewayCommonsPrism : "<color:#707070>"
 @enduml
 ----
 
-.Projects/Modules (Common)
+.Projects/Modules (Viewer Commons)
 [cols="3a,5a", options="header"]
 |===
 |Coordinates |Description 
@@ -2958,6 +2957,7 @@ o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
 o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
 o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
 o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
+o.a.i.viewer.wicket.viewer.wicketapp.CausewayWicketApplication$ServiceInjectorHolder +
 ****
 
 .Dependencies
@@ -3919,13 +3919,13 @@ skinparam rectangle<<Extensions.ApacheCausewayExtFullCalendarWicketUI>> {
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Extensions.ApacheCausewayExtLayoutGitHub>> {
+skinparam rectangle<<Extensions.ApacheCausewayExtLayoutLoaders>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Extensions.ApacheCausewayExtLayoutGitHubLoader>> {
+skinparam rectangle<<Extensions.ApacheCausewayExtLayoutLoadersGitHub>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
@@ -4039,24 +4039,6 @@ skinparam rectangle<<Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA>>
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Extensions.ApacheCausewayExtTabularApplib>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtTabularExcel>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtTabularparent>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
 skinparam rectangle<<Extensions.ApacheCausewayExtpdfjsApplib>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -4110,8 +4092,8 @@ rectangle "Extensions\n<size:10>[Software System]</size>" <<Extensions>> {
   rectangle "==Apache Causeway Ext - FullCalendar Wicket\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtFullCalendarWicket>> as Extensions.ApacheCausewayExtFullCalendarWicket
   rectangle "==Apache Causeway Ext - FullCalendar Wicket (Integration)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtFullCalendarWicketIntegration>> as Extensions.ApacheCausewayExtFullCalendarWicketIntegration
   rectangle "==Apache Causeway Ext - FullCalendar Wicket (UI)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtFullCalendarWicketUI>> as Extensions.ApacheCausewayExtFullCalendarWicketUI
-  rectangle "==Apache Causeway Ext - LayoutGitHub\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtLayoutGitHub>> as Extensions.ApacheCausewayExtLayoutGitHub
-  rectangle "==Apache Causeway Ext - LayoutGitHub Loader\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtLayoutGitHubLoader>> as Extensions.ApacheCausewayExtLayoutGitHubLoader
+  rectangle "==Apache Causeway Ext - LayoutLoaders\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtLayoutLoaders>> as Extensions.ApacheCausewayExtLayoutLoaders
+  rectangle "==Apache Causeway Ext - LayoutLoaders GitHub\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtLayoutLoadersGitHub>> as Extensions.ApacheCausewayExtLayoutLoadersGitHub
   rectangle "==Apache Causeway Ext - pdf.js - Parent\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtpdfjsParent>> as Extensions.ApacheCausewayExtpdfjsParent
   rectangle "==Apache Causeway Ext - pdf.js - Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtpdfjsApplib>> as Extensions.ApacheCausewayExtpdfjsApplib
   rectangle "==Apache Causeway Ext - pdf.js - Metamodel\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtpdfjsMetamodel>> as Extensions.ApacheCausewayExtpdfjsMetamodel
@@ -4139,9 +4121,6 @@ rectangle "Extensions\n<size:10>[Software System]</size>" <<Extensions>> {
   rectangle "==Apache Causeway Ext - Server Sent Events (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEventsmetamodel>> as Extensions.ApacheCausewayExtServerSentEventsmetamodel
   rectangle "==Apache Causeway Ext - Server Sent Events (Wicket)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEventsWicket>> as Extensions.ApacheCausewayExtServerSentEventsWicket
   rectangle "==Apache Causeway Ext - Audit Trail Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailApplib>> as Extensions.ApacheCausewayExtAuditTrailApplib
-  rectangle "==Apache Causeway Ext - Tabular (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtTabularparent>> as Extensions.ApacheCausewayExtTabularparent
-  rectangle "==Apache Causeway Ext - Tabular (Applib)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtTabularApplib>> as Extensions.ApacheCausewayExtTabularApplib
-  rectangle "==Apache Causeway Ext - Tabular (Excel)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtTabularExcel>> as Extensions.ApacheCausewayExtTabularExcel
   rectangle "==Apache Causeway Ext - Audit Trail Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO>> as Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO
   rectangle "==Apache Causeway Ext - Audit Trail Persistence (using JPA)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA>> as Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA
   rectangle "==Apache Causeway Ext - CORS (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtCORSparent>> as Extensions.ApacheCausewayExtCORSparent
@@ -4152,13 +4131,12 @@ rectangle "Extensions\n<size:10>[Software System]</size>" <<Extensions>> {
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrail : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtCORSparent : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtFullCalendarparent : "<color:#707070>"
-Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtLayoutGitHub : "<color:#707070>"
+Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtLayoutLoaders : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtpdfjsParent : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecMan : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLog : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecuritySpringOauth2 : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsparent : "<color:#707070>"
-Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtTabularparent : "<color:#707070>"
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailApplib : "<color:#707070>"
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO : "<color:#707070>"
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA : "<color:#707070>"
@@ -4167,7 +4145,7 @@ Extensions.ApacheCausewayExtFullCalendarparent .[#707070,thickness=2].> Extensio
 Extensions.ApacheCausewayExtFullCalendarparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtFullCalendarWicket : "<color:#707070>"
 Extensions.ApacheCausewayExtFullCalendarWicket .[#707070,thickness=2].> Extensions.ApacheCausewayExtFullCalendarWicketIntegration : "<color:#707070>"
 Extensions.ApacheCausewayExtFullCalendarWicket .[#707070,thickness=2].> Extensions.ApacheCausewayExtFullCalendarWicketUI : "<color:#707070>"
-Extensions.ApacheCausewayExtLayoutGitHub .[#707070,thickness=2].> Extensions.ApacheCausewayExtLayoutGitHubLoader : "<color:#707070>"
+Extensions.ApacheCausewayExtLayoutLoaders .[#707070,thickness=2].> Extensions.ApacheCausewayExtLayoutLoadersGitHub : "<color:#707070>"
 Extensions.ApacheCausewayExtpdfjsParent .[#707070,thickness=2].> Extensions.ApacheCausewayExtpdfjsApplib : "<color:#707070>"
 Extensions.ApacheCausewayExtpdfjsParent .[#707070,thickness=2].> Extensions.ApacheCausewayExtpdfjsMetamodel : "<color:#707070>"
 Extensions.ApacheCausewayExtpdfjsParent .[#707070,thickness=2].> Extensions.ApacheCausewayExtpdfjsWicket : "<color:#707070>"
@@ -4187,8 +4165,6 @@ Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.Apach
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEvents : "<color:#707070>"
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsmetamodel : "<color:#707070>"
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsWicket : "<color:#707070>"
-Extensions.ApacheCausewayExtTabularparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtTabularApplib : "<color:#707070>"
-Extensions.ApacheCausewayExtTabularparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtTabularExcel : "<color:#707070>"
 @enduml
 ----
 
@@ -4421,29 +4397,29 @@ org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
 xref:refguide:extensions:index/fullcalendar/wkt/ui/CausewayModuleExtFullcalendarWicketUi.adoc[CausewayModuleExtFullcalendarWicketUi], xref:refguide:extensions:index/fullcalendar/wkt/ui/viewer/CausewayModuleExtFullCalendarWicketUi.adoc[CausewayModuleExtFullCalendarWicketUi]
 ****
 
-|Apache Causeway Ext - LayoutGitHub
+|Apache Causeway Ext - LayoutLoaders
 [source,yaml]
 ----
 Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-layoutgithub
+Artifact: causeway-extensions-layoutloaders
 Type: pom
-Directory: /extensions/core/layoutgithub
+Directory: /extensions/core/layoutloaders
 ----
-|Allows layouts to be dynamically loaded from a github repo.
+|Allows layouts to be dynamically loaded from an external source.
 
-|Apache Causeway Ext - LayoutGitHub Loader
+|Apache Causeway Ext - LayoutLoaders GitHub
 [source,yaml]
 ----
 Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-layoutgithub-loader
+Artifact: causeway-extensions-layoutloaders-github
 Type: jar
-Directory: /extensions/core/layoutgithub/loader
+Directory: /extensions/core/layoutloaders/github
 ----
 |Allows layout.xml files to be dynamically loaded from a github repo.
 
 .Components
 ****
-o.a.i.extensions.layoutgithub.loader.spi.LayoutResourceLoaderFromGithub +
+o.a.i.extensions.layoutloaders.github.spiimpl.LayoutResourceLoaderFromGithub +
 ****
 
 .Dependencies
@@ -4458,7 +4434,7 @@ org.springframework:spring-web:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/layoutgithub/loader/CausewayModuleExtLayoutGithubLoader.adoc[CausewayModuleExtLayoutGithubLoader], xref:refguide:extensions:index/layoutgithub/loader/menu/LayoutLoaderMenu.adoc[LayoutLoaderMenu]
+xref:refguide:extensions:index/layoutloaders/github/CausewayModuleExtLayoutLoadersGithub.adoc[CausewayModuleExtLayoutLoadersGithub], xref:refguide:extensions:index/layoutloaders/github/menu/LayoutLoadersGitHubMenu.adoc[LayoutLoadersGitHubMenu]
 ****
 
 |Apache Causeway Ext - pdf.js - Parent
@@ -4611,7 +4587,7 @@ org.springframework.security:spring-security-crypto:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/secman/applib/CausewayModuleExtSecmanApplib.adoc[CausewayModuleExtSecmanApplib], xref:refguide:extensions:index/secman/applib/feature/api/ApplicationFeatureChoices.adoc[ApplicationFeatureChoices], xref:refguide:extensions:index/secman/applib/feature/contributions/ApplicationFeatureViewModel_permissions.adoc[ApplicationFeatureViewModel_permissions], xref:refguide:extensions:index/secman/applib/permission/app/ApplicationOrphanedPermissionManager.adoc[ApplicationOrphanedPermissionManager], xref:refguide:extensions:index/secman/applib/permission/app/mixins/ApplicationOrphanedPermissionManager_relocateSelected.adoc[ApplicationOrphanedPermissionManager_relocateSelected], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionMode.adoc[ApplicationPermissionMode], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepository.adoc[ApplicationPermissionRepository], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepositoryAbstract.adoc[ApplicationPermissionRepositoryAbstract], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRule.adoc[ApplicationPermissionRule], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValue.adoc[ApplicationPermissionValue], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_allow.adoc[ApplicationPermission_allow], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_changing.adoc[ApplicationPermission_changing], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_delete.adoc[ApplicationPermission_delete], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_feature.adoc[ApplicationPermission_feature], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_updateRole.adoc[ApplicationPermission_updateRole], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_veto.adoc[ApplicationPermission_veto], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_viewing.adoc[ApplicationPermission_viewing], xref:refguide:extensions:index/secman/applib/permission/menu/ApplicationPermissionMenu.adoc[ApplicationPermissionMenu], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationService.adoc[PermissionsEvaluationService], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepositoryAbstract.adoc[ApplicationRoleRepositoryAbstract], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_addPermission.adoc[ApplicationRole_addPermission], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_addUser.adoc[ApplicationRole_addUser], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_delete.adoc[ApplicationRole_delete], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_removePermissions.adoc[ApplicationRole_removePermissions], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_removeUsers.adoc[ApplicationRole_removeUsers], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_updateDescription.adoc[ApplicationRole_updateDescription], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_updateName.adoc[ApplicationRole_updateName], xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript], xref:refguide:extensions:index/secman/applib/role/man/ApplicationRoleManager.adoc[ApplicationRoleManager], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_allRoles.adoc[ApplicationRoleManager_allRoles], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_exportAsYaml.adoc[ApplicationRoleManager_exportAsYaml], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_newRole.adoc[ApplicationRoleManager_newRole], xref:refguide:extensions:index/secman/applib/role/menu/ApplicationRoleMenu.adoc[ApplicationRoleMenu], xref:refguide:extensions:index/secman/applib/role/seed/CausewayAppFeatureRoleAndPermissions.adoc[CausewayAppFeatureRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayConfigurationRoleAndPermissions.adoc[CausewayConfigurationRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtAuditTrailRoleAndPermissions.adoc[CausewayExtAuditTrailRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtCommandLogRoleAndPermissions.adoc[CausewayExtCommandLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtDocgenRoleAndPermissions.adoc[CausewayExtDocgenRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionLogRoleAndPermissions.adoc[CausewayExtExecutionLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionOutboxRoleAndPermissions.adoc[CausewayExtExecutionOutboxRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtH2ConsoleRoleAndPermissions.adoc[CausewayExtH2ConsoleRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtLayoutGithubRoleAndPermissions.adoc[CausewayExtLayoutGithubRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSecmanAdminRoleAndPermissions.adoc[CausewayExtSecmanAdminRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSecmanRegularUserRoleAndPermissions.adoc[CausewayExtSecmanRegularUserRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSessionLogRoleAndPermissions.adoc[CausewayExtSessionLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayPersistenceJdoMetaModelRoleAndPermissions.adoc[CausewayPersistenceJdoMetaModelRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewaySudoImpersonateRoleAndPermissions.adoc[CausewaySudoImpersonateRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.adoc[CausewayViewerRestfulObjectsSwaggerRoleAndPermissions], xref:refguide:extensions:index/secman/applib/seed/SeedSecurityModuleService.adoc[SeedSecurityModuleService], xref:refguide:extensions:index/secman/applib/seed/scripts/SeedUsersAndRolesFixtureScript.adoc[SeedUsersAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepository.adoc[ApplicationTenancyRepository], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepositoryAbstract.adoc[ApplicationTenancyRepositoryAbstract], xref:refguide:extensions:index/secman/applib/tenancy/dom/HasAtPath.adoc[HasAtPath], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_addChild.adoc[ApplicationTenancy_addChild], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_addUser.adoc[ApplicationTenancy_addUser], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_delete.adoc[ApplicationTenancy_delete], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_removeChild.adoc[ApplicationTenancy_removeChild], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_removeUser.adoc[ApplicationTenancy_removeUser], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_updateName.adoc[ApplicationTenancy_updateName], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_users.adoc[ApplicationTenancy_users], xref:refguide:extensions:index/secman/applib/tenancy/fixtures/AbstractTenancyFixtureScript.adoc[AbstractTenancyFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/man/ApplicationTenancyManager.adoc[ApplicationTenancyManager], xref:refguide:extensions:index/secman/applib/tenancy/man/mixins/ApplicationTenancyManager_allTenancies.adoc[ApplicationTenancyManager_allTenancies], xref:refguide:extensions:index/secman/applib/tenancy/man/mixins/ApplicationTenancyManager_newTenancy.adoc[ApplicationTenancyManager_newTenancy], xref:refguide:extensions:index/secman/applib/tenancy/menu/ApplicationTenancyMenu.adoc[ApplicationTenancyMenu], xref:refguide:extensions:index/secman/applib/tenancy/seed/GlobalTenancy.adoc[GlobalTenancy], xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator], xref:refguide:extensions:index/secman/applib/user/contributions/HasUsername_associatedUser.adoc[HasUsername_associatedUser], xref:refguide:extensions:index/secman/applib/user/dom/AccountType.adoc[AccountType], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepositoryAbstract.adoc[ApplicationUserRepositoryAbstract], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserStatus.adoc[ApplicationUserStatus], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_addRole.adoc[ApplicationUser_addRole], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_delete.adoc[ApplicationUser_delete], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_duplicate.adoc[ApplicationUser_duplicate], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_lock.adoc[ApplicationUser_lock], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_removeRoles.adoc[ApplicationUser_removeRoles], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_resetPassword.adoc[ApplicationUser_resetPassword], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_timeZone.adoc[ApplicationUser_timeZone], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_unlock.adoc[ApplicationUser_unlock], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateAccountType.adoc[ApplicationUser_updateAccountType], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateAtPath.adoc[ApplicationUser_updateAtPath], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateEmailAddress.adoc[ApplicationUser_updateEmailAddress], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateFaxNumber.adoc[ApplicationUser_updateFaxNumber], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateLocale.adoc[ApplicationUser_updateLocale], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateName.adoc[ApplicationUser_updateName], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updatePassword.adoc[ApplicationUser_updatePassword], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updatePhoneNumber.adoc[ApplicationUser_updatePhoneNumber], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateUsername.adoc[ApplicationUser_updateUsername], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/ApplicationUser_effectiveMemberPermissions.adoc[ApplicationUser_effectiveMemberPermissions], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/ApplicationUser_filterEffectiveMemberPermissions.adoc[ApplicationUser_filterEffectiveMemberPermissions], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/UserPermissionViewModel.adoc[UserPermissionViewModel], xref:refguide:extensions:index/secman/applib/user/events/UserCreatedEvent.adoc[UserCreatedEvent], xref:refguide:extensions:index/secman/applib/user/fixtures/AbstractUserAndRolesFixtureScript.adoc[AbstractUserAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/user/man/ApplicationUserManager.adoc[ApplicationUserManager], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_allUsers.adoc[ApplicationUserManager_allUsers], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_newDelegateUser.adoc[ApplicationUserManager_newDelegateUser], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_newLocalUser.adoc[ApplicationUserManager_newLocalUser], xref:refguide:extensions:index/secman/applib/user/menu/ApplicationUserMenu.adoc[ApplicationUserMenu], xref:refguide:extensions:index/secman/applib/user/menu/MeService.adoc[MeService], xref:refguide:extensions:index/secman/applib/user/seed/CausewayExtSecmanAdminUser.adoc[CausewayExtSecmanAdminUser], xref:refguide:extensions:index/secman/applib/util/RegexReplacer.adoc[RegexReplacer]
+xref:refguide:extensions:index/secman/applib/CausewayModuleExtSecmanApplib.adoc[CausewayModuleExtSecmanApplib], xref:refguide:extensions:index/secman/applib/feature/api/ApplicationFeatureChoices.adoc[ApplicationFeatureChoices], xref:refguide:extensions:index/secman/applib/feature/contributions/ApplicationFeatureViewModel_permissions.adoc[ApplicationFeatureViewModel_permissions], xref:refguide:extensions:index/secman/applib/permission/app/ApplicationOrphanedPermissionManager.adoc[ApplicationOrphanedPermissionManager], xref:refguide:extensions:index/secman/applib/permission/app/mixins/ApplicationOrphanedPermissionManager_relocateSelected.adoc[ApplicationOrphanedPermissionManager_relocateSelected], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionMode.adoc[ApplicationPermissionMode], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepository.adoc[ApplicationPermissionRepository], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepositoryAbstract.adoc[ApplicationPermissionRepositoryAbstract], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRule.adoc[ApplicationPermissionRule], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValue.adoc[ApplicationPermissionValue], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_allow.adoc[ApplicationPermission_allow], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_changing.adoc[ApplicationPermission_changing], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_delete.adoc[ApplicationPermission_delete], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_feature.adoc[ApplicationPermission_feature], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_updateRole.adoc[ApplicationPermission_updateRole], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_veto.adoc[ApplicationPermission_veto], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_viewing.adoc[ApplicationPermission_viewing], xref:refguide:extensions:index/secman/applib/permission/menu/ApplicationPermissionMenu.adoc[ApplicationPermissionMenu], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationService.adoc[PermissionsEvaluationService], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepositoryAbstract.adoc[ApplicationRoleRepositoryAbstract], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_addPermission.adoc[ApplicationRole_addPermission], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_addUser.adoc[ApplicationRole_addUser], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_delete.adoc[ApplicationRole_delete], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_removePermissions.adoc[ApplicationRole_removePermissions], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_removeUsers.adoc[ApplicationRole_removeUsers], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_updateDescription.adoc[ApplicationRole_updateDescription], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_updateName.adoc[ApplicationRole_updateName], xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript], xref:refguide:extensions:index/secman/applib/role/man/ApplicationRoleManager.adoc[ApplicationRoleManager], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_allRoles.adoc[ApplicationRoleManager_allRoles], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_exportAsYaml.adoc[ApplicationRoleManager_exportAsYaml], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_newRole.adoc[ApplicationRoleManager_newRole], xref:refguide:extensions:index/secman/applib/role/menu/ApplicationRoleMenu.adoc[ApplicationRoleMenu], xref:refguide:extensions:index/secman/applib/role/seed/CausewayAppFeatureRoleAndPermissions.adoc[CausewayAppFeatureRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayConfigurationRoleAndPermissions.adoc[CausewayConfigurationRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtAuditTrailRoleAndPermissions.adoc[CausewayExtAuditTrailRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtCommandLogRoleAndPermissions.adoc[CausewayExtCommandLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtDocgenRoleAndPermissions.adoc[CausewayExtDocgenRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionLogRoleAndPermissions.adoc[CausewayExtExecutionLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionOutboxRoleAndPermissions.adoc[CausewayExtExecutionOutboxRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtH2ConsoleRoleAndPermissions.adoc[CausewayExtH2ConsoleRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtLayoutLoadersRoleAndPermissions.adoc[CausewayExtLayoutLoadersRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSecmanAdminRoleAndPermissions.adoc[CausewayExtSecmanAdminRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSecmanRegularUserRoleAndPermissions.adoc[CausewayExtSecmanRegularUserRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSessionLogRoleAndPermissions.adoc[CausewayExtSessionLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayPersistenceJdoMetaModelRoleAndPermissions.adoc[CausewayPersistenceJdoMetaModelRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewaySudoImpersonateRoleAndPermissions.adoc[CausewaySudoImpersonateRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.adoc[CausewayViewerRestfulObjectsSwaggerRoleAndPermissions], xref:refguide:extensions:index/secman/applib/seed/SeedSecurityModuleService.adoc[SeedSecurityModuleService], xref:refguide:extensions:index/secman/applib/seed/scripts/SeedUsersAndRolesFixtureScript.adoc[SeedUsersAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepository.adoc[ApplicationTenancyRepository], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepositoryAbstract.adoc[ApplicationTenancyRepositoryAbstract], xref:refguide:extensions:index/secman/applib/tenancy/dom/HasAtPath.adoc[HasAtPath], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_addChild.adoc[ApplicationTenancy_addChild], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_addUser.adoc[ApplicationTenancy_addUser], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_delete.adoc[ApplicationTenancy_delete], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_removeChild.adoc[ApplicationTenancy_removeChild], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_removeUser.adoc[ApplicationTenancy_removeUser], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_updateName.adoc[ApplicationTenancy_updateName], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_users.adoc[ApplicationTenancy_users], xref:refguide:extensions:index/secman/applib/tenancy/fixtures/AbstractTenancyFixtureScript.adoc[AbstractTenancyFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/man/ApplicationTenancyManager.adoc[ApplicationTenancyManager], xref:refguide:extensions:index/secman/applib/tenancy/man/mixins/ApplicationTenancyManager_allTenancies.adoc[ApplicationTenancyManager_allTenancies], xref:refguide:extensions:index/secman/applib/tenancy/man/mixins/ApplicationTenancyManager_newTenancy.adoc[ApplicationTenancyManager_newTenancy], xref:refguide:extensions:index/secman/applib/tenancy/menu/ApplicationTenancyMenu.adoc[ApplicationTenancyMenu], xref:refguide:extensions:index/secman/applib/tenancy/seed/GlobalTenancy.adoc[GlobalTenancy], xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator], xref:refguide:extensions:index/secman/applib/user/contributions/HasUsername_associatedUser.adoc[HasUsername_associatedUser], xref:refguide:extensions:index/secman/applib/user/dom/AccountType.adoc[AccountType], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepositoryAbstract.adoc[ApplicationUserRepositoryAbstract], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserStatus.adoc[ApplicationUserStatus], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_addRole.adoc[ApplicationUser_addRole], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_delete.adoc[ApplicationUser_delete], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_duplicate.adoc[ApplicationUser_duplicate], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_lock.adoc[ApplicationUser_lock], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_removeRoles.adoc[ApplicationUser_removeRoles], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_resetPassword.adoc[ApplicationUser_resetPassword], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_timeZone.adoc[ApplicationUser_timeZone], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_unlock.adoc[ApplicationUser_unlock], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateAccountType.adoc[ApplicationUser_updateAccountType], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateAtPath.adoc[ApplicationUser_updateAtPath], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateEmailAddress.adoc[ApplicationUser_updateEmailAddress], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateFaxNumber.adoc[ApplicationUser_updateFaxNumber], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateLocale.adoc[ApplicationUser_updateLocale], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateName.adoc[ApplicationUser_updateName], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updatePassword.adoc[ApplicationUser_updatePassword], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updatePhoneNumber.adoc[ApplicationUser_updatePhoneNumber], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateUsername.adoc[ApplicationUser_updateUsername], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/ApplicationUser_effectiveMemberPermissions.adoc[ApplicationUser_effectiveMemberPermissions], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/ApplicationUser_filterEffectiveMemberPermissions.adoc[ApplicationUser_filterEffectiveMemberPermissions], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/UserPermissionViewModel.adoc[UserPermissionViewModel], xref:refguide:extensions:index/secman/applib/user/events/UserCreatedEvent.adoc[UserCreatedEvent], xref:refguide:extensions:index/secman/applib/user/fixtures/AbstractUserAndRolesFixtureScript.adoc[AbstractUserAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/user/man/ApplicationUserManager.adoc[ApplicationUserManager], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_allUsers.adoc[ApplicationUserManager_allUsers], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_newDelegateUser.adoc[ApplicationUserManager_newDelegateUser], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_newLocalUser.adoc[ApplicationUserManager_newLocalUser], xref:refguide:extensions:index/secman/applib/user/menu/ApplicationUserMenu.adoc[ApplicationUserMenu], xref:refguide:extensions:index/secman/applib/user/menu/MeService.adoc[MeService], xref:refguide:extensions:index/secman/applib/user/seed/CausewayExtSecmanAdminUser.adoc[CausewayExtSecmanAdminUser], xref:refguide:extensions:index/secman/applib/util/RegexReplacer.adoc[RegexReplacer]
 ****
 
 |Apache Causeway Ext - Sec Man Delegated (Using Shiro)
@@ -4992,55 +4968,6 @@ org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
 .Document Index Entries
 ****
 xref:refguide:extensions:index/sse/wicket/CausewayModuleExtSseWicket.adoc[CausewayModuleExtSseWicket], xref:refguide:extensions:index/sse/wicket/services/SseServiceDefault.adoc[SseServiceDefault], xref:refguide:extensions:index/sse/wicket/webmodule/WebModuleServerSentEvents.adoc[WebModuleServerSentEvents]
-****
-
-|Apache Causeway Ext - Tabular (parent)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-tabular
-Type: pom
-Directory: /extensions/vw/tabular
-----
-|Tabular Data Extensions such as download of representations of collections.
-
-|Apache Causeway Ext - Tabular (Applib)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-tabular-applib
-Type: jar
-Directory: /extensions/vw/tabular/applib
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
-****
-
-|Apache Causeway Ext - Tabular (Excel)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-tabular-excel
-Type: jar
-Directory: /extensions/vw/tabular/excel
-----
-|.Components
-****
-o.a.i.extensions.tabular.excel.exporter.CollectionContentsAsExcelExporter +
-****
-
-.Dependencies
-****
-org.apache.causeway.extensions:causeway-extensions-tabular-applib:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
-org.apache.poi:poi-ooxml:jar:<managed> +
-org.apache.poi:poi-ooxml-lite:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/tabular/excel/CausewayModuleExtTabularExcel.adoc[CausewayModuleExtTabularExcel]
 ****
 |===
 
@@ -6005,6 +5932,115 @@ org.springframework.boot:spring-boot-autoconfigure:jar:<managed> +
 ****
 |===
 
+=== Core: Tabular
+
+[plantuml,Core~ Tabular,svg]
+----
+@startuml
+set separator none
+title Core: Tabular - Containers
+
+left to right direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<CoreTabular.ApacheCausewayExtTabularApplib>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreTabular.ApacheCausewayExtTabularExcel>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreTabular.ApacheCausewayExtTabularparent>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreTabular>> {
+  BorderColor #9a9a9a
+  FontColor #9a9a9a
+  shadowing false
+}
+
+rectangle "Core: Tabular\n<size:10>[Software System]</size>" <<CoreTabular>> {
+  rectangle "==Apache Causeway Ext - Tabular (parent)\n<size:10>[Container: packaging: pom]</size>" <<CoreTabular.ApacheCausewayExtTabularparent>> as CoreTabular.ApacheCausewayExtTabularparent
+  rectangle "==Apache Causeway Ext - Tabular (Applib)\n<size:10>[Container: packaging: jar]</size>" <<CoreTabular.ApacheCausewayExtTabularApplib>> as CoreTabular.ApacheCausewayExtTabularApplib
+  rectangle "==Apache Causeway Ext - Tabular (Excel)\n<size:10>[Container: packaging: jar]</size>" <<CoreTabular.ApacheCausewayExtTabularExcel>> as CoreTabular.ApacheCausewayExtTabularExcel
+}
+
+CoreTabular.ApacheCausewayExtTabularparent .[#707070,thickness=2].> CoreTabular.ApacheCausewayExtTabularApplib : "<color:#707070>"
+CoreTabular.ApacheCausewayExtTabularparent .[#707070,thickness=2].> CoreTabular.ApacheCausewayExtTabularExcel : "<color:#707070>"
+@enduml
+----
+
+.Projects/Modules (Core: Tabular)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Causeway Ext - Tabular (parent)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-tabular
+Type: pom
+Directory: /extensions/vw/tabular
+----
+|Tabular Data Extensions such as download of representations of collections.
+
+|Apache Causeway Ext - Tabular (Applib)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-tabular-applib
+Type: jar
+Directory: /extensions/vw/tabular/applib
+----
+|.Dependencies
+****
+org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
+****
+
+|Apache Causeway Ext - Tabular (Excel)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-tabular-excel
+Type: jar
+Directory: /extensions/vw/tabular/excel
+----
+|.Components
+****
+o.a.i.extensions.tabular.excel.exporter.CollectionContentsAsExcelExporter +
+****
+
+.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-tabular-applib:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
+org.apache.poi:poi-ooxml:jar:<managed> +
+org.apache.poi:poi-ooxml-lite:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/tabular/excel/CausewayModuleExtTabularExcel.adoc[CausewayModuleExtTabularExcel]
+****
+|===
+
 === Security: Audit Trail
 
 === Security: Secman
@@ -6014,8 +6050,6 @@ org.springframework.boot:spring-boot-autoconfigure:jar:<managed> +
 === Security: Spring Oauth2
 
 === RO Viewer: CORS
-
-=== Wicket Viewer: Excel Download
 
 === Wicket Viewer: Full Calendar
 
@@ -6129,7 +6163,7 @@ eg. code mining, automated documentation.
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.checkerframework:checker-qual:jar:3.39.0 +
+org.checkerframework:checker-qual:jar:3.40.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.5.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
