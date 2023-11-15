@@ -9,7 +9,7 @@ SPI to provide file export to table views.
 .CollectionContentsExporter.java
 ----
 interface CollectionContentsExporter {
-  void createExport(DataTable dataTable, File tempFile)
+  void createExport(DataTable dataTable, File tempFile)     // <.>
   CommonMimeType getMimeType()
   String getTitleLabel()     // <.>
   String getCssClass()     // <.>
@@ -18,6 +18,11 @@ interface CollectionContentsExporter {
 }
 ----
 
+<.> xref:#createExport_DataTable_File[createExport(DataTable, File)]
++
+--
+Implementing exporters need to write given tabular data from xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] into the _File tempFile_ , which is provided by the framework for the duration of a single request cycle.
+--
 <.> xref:#getTitleLabel_[getTitleLabel()]
 <.> xref:#getCssClass_[getCssClass()]
 <.> xref:#orderOfAppearanceInUiDropdown_[orderOfAppearanceInUiDropdown()]
@@ -32,6 +37,11 @@ Whether this exporter applies to given _objectType_ . If `false` , this exporter
 --
 
 == Members
+
+[#createExport_DataTable_File]
+=== createExport(DataTable, File)
+
+Implementing exporters need to write given tabular data from xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] into the _File tempFile_ , which is provided by the framework for the duration of a single request cycle.
 
 [#getTitleLabel_]
 === getTitleLabel()

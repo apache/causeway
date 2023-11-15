@@ -27,10 +27,18 @@ import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 /**
  * SPI to provide file export to table views.
  *
- * @since 2.0 {@index}}
+ * @since 2.0 {@index}
  */
 public interface CollectionContentsExporter {
 
+    /**
+     * Implementing exporters need to write given tabular data from
+     * {@link DataTable} into the {@link File tempFile},
+     * which is provided by the framework for the duration of a single request cycle.
+     *
+     * @param dataTable data model for the table
+     * @param tempFile destination, this exporter writes its data to
+     */
     void createExport(DataTable dataTable, File tempFile);
 
     CommonMimeType getMimeType();
