@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.commons.collections.Can;
@@ -32,8 +30,6 @@ import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbs
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
-
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 
 import lombok.val;
 
