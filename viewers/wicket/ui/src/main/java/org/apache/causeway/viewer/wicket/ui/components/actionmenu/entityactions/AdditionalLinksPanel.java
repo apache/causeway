@@ -84,6 +84,9 @@ extends MenuablePanelAbstract {
         Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
             val linkAndLabel = item.getModelObject();
             item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style==Style.DROPDOWN));
+            if (!linkAndLabel.isVisible()) {
+                Wkt.cssAppend(item, "hidden");
+            }
         });
 
         //refactoring hint: in CssSubMenuItemsPanel we use a RepeatingView instead
