@@ -56,7 +56,7 @@ public @interface DomainObjectLayout {
             default BookmarkPolicy.NOT_SPECIFIED;
 
     /**
-     * Indicates the css class that a domain class (type) should have, to
+     * Indicates the CSS class that a domain class (type) should have, to
      * allow more targeted styling in <code>application.css</code>.
      *
      * @see ActionLayout#cssClass()
@@ -68,9 +68,10 @@ public @interface DomainObjectLayout {
             default "";
 
     /**
-     * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
-     * domain object.
-     *
+     * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class that
+     * is used as icon for the annotated domain object.
+     * <p>
+     * Use the {@code FontAwesomeLayers iconFaLayers()} object support method for more advanced icons.
      * @see ActionLayout#cssClassFa()
      */
     String cssClassFa()
@@ -79,10 +80,6 @@ public @interface DomainObjectLayout {
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
      * icon. The icon could be rendered on the left or the right of the object's title.
-     *
-     * <p>
-     *     This attribute is currently ignored by Causeway viewers.
-     * </p>
      */
     CssClassFaPosition cssClassFaPosition()
             default CssClassFaPosition.LEFT;
