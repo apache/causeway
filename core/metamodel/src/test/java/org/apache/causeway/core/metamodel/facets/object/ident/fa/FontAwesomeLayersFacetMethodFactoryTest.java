@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.IconFaLayersFacet;
+import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacet;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-class IconFaLayersFacetMethodFactoryTest
+class FontAwesomeLayersFacetMethodFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
 
     @Test
@@ -34,7 +34,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
         class Customer {
             public FontAwesomeLayers iconFaLayers() { return null; }
         }
-        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON_FA_LAYERS, IconFaLayersFacet.class);
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON_FA_LAYERS, FontAwesomeLayersFacet.class);
     }
 
 }

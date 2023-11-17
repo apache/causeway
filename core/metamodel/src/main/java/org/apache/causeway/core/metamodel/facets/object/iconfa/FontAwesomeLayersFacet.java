@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  *
  * @since 2.0
  */
-public interface IconFaLayersFacet extends Facet {
+public interface FontAwesomeLayersFacet extends Facet {
 
     public FontAwesomeLayers layers(final ManagedObject object);
 }

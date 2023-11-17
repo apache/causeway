@@ -28,31 +28,31 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.IconFaLayersFacet;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.IconFaLayersFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacet;
+import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
 
-public class IconFaLayersFacetViaIconFaLayersMethod
-extends IconFaLayersFacetAbstract
+public class FontAwesomeLayersFacetViaIconFaLayersMethod
+extends FontAwesomeLayersFacetAbstract
 implements HasImperativeAspect {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
 
-    public static Optional<IconFaLayersFacet> create(
+    public static Optional<FontAwesomeLayersFacet> create(
             final @Nullable ResolvedMethod methodIfAny,
             final FacetHolder holder) {
 
         return Optional.ofNullable(methodIfAny)
         .map(method->
-            new IconFaLayersFacetViaIconFaLayersMethod(
+            new FontAwesomeLayersFacetViaIconFaLayersMethod(
                     ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
                     holder));
     }
 
-    private IconFaLayersFacetViaIconFaLayersMethod(
+    private FontAwesomeLayersFacetViaIconFaLayersMethod(
             final ImperativeAspect imperativeAspect,
             final FacetHolder holder) {
         super(holder);

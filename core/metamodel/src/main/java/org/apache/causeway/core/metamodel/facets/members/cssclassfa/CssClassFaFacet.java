@@ -22,7 +22,8 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 /**
- * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> css class(es) for an action.
+ * The <a href="https://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
+ * CSS class(es) for an action or domain object.
  *
  * <p>
  * In the standard Apache Causeway Programming Model, corresponds to annotating the
@@ -31,6 +32,5 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 public interface CssClassFaFacet extends Facet {
 
     Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> getSpecialization();
-
 
 }

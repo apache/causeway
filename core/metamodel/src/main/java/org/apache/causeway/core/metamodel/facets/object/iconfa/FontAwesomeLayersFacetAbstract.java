@@ -22,19 +22,19 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public abstract class IconFaLayersFacetAbstract
+public abstract class FontAwesomeLayersFacetAbstract
 extends FacetAbstract
-implements IconFaLayersFacet {
+implements FontAwesomeLayersFacet {
 
     private static final Class<? extends Facet> type() {
-        return IconFaLayersFacet.class;
+        return FontAwesomeLayersFacet.class;
     }
 
-    public IconFaLayersFacetAbstract(final FacetHolder holder) {
+    public FontAwesomeLayersFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
     }
 
-    public IconFaLayersFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+    public FontAwesomeLayersFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
         super(type(), holder, precedence);
     }
 

@@ -31,13 +31,13 @@ import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.IconFaLayersFacet;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.method.IconFaLayersFacetViaIconFaLayersMethod;
+import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacet;
+import org.apache.causeway.core.metamodel.facets.object.iconfa.method.FontAwesomeLayersFacetViaIconFaLayersMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 
 import lombok.val;
 
-class IconFaLayersFacetMethodTest
+class FontAwesomeLayersFacetMethodTest
 extends FacetFactoryTestAbstract {
 
     static final FontAwesomeLayers FONTAWESOME_LAYERS_SAMPLE = new FontAwesomeLayers(null, null, null, null);
@@ -70,10 +70,10 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            val iconFaLayersFacet = facetHolder.getFacet(IconFaLayersFacet.class);
-            assertNotNull(iconFaLayersFacet, ()->"IconFaLayersFacet required");
-            assertTrue(iconFaLayersFacet instanceof IconFaLayersFacetViaIconFaLayersMethod);
-            val imperativeCssClassFacet = (IconFaLayersFacetViaIconFaLayersMethod)iconFaLayersFacet;
+            val fontAwesomeLayersFacet = facetHolder.getFacet(FontAwesomeLayersFacet.class);
+            assertNotNull(fontAwesomeLayersFacet, ()->"FontAwesomeLayersFacet required");
+            assertTrue(fontAwesomeLayersFacet instanceof FontAwesomeLayersFacetViaIconFaLayersMethod);
+            val imperativeCssClassFacet = (FontAwesomeLayersFacetViaIconFaLayersMethod)fontAwesomeLayersFacet;
             assertEquals(FONTAWESOME_LAYERS_SAMPLE,
                     imperativeCssClassFacet.layers(domainObject));
         });
