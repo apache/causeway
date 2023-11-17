@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -108,6 +107,16 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
             Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated("(no object)"));
         } else {
+
+//TODO[CAUSEWAY-3646] debugging
+//            WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
+//            Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME,
+//                    //FontAwesomeLayers.singleIcon("fa fa-cube fa-lg")
+//                    FontAwesomeLayers.iconStack(
+//                            new FontAwesomeLayers.IconEntry("fa-solid fa-circle fa-stack-2x", null),
+//                            new FontAwesomeLayers.IconEntry("fa-solid fa-flag fa-stack-1x fa-inverse", null))
+//                    );
+
             linkedDomainObject.eitherIconOrFaClass()
             .accept(
                     objectIcon->{
@@ -115,13 +124,9 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                                 getImageResourceCache().resourceReferenceForObjectIcon(objectIcon));
                         WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
                     },
-                    cssClassFaFactory->{
+                    faFactory->{
                         WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-                        final Label dummyLabel = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
-                        val faSizeModifier = getModel().getRenderingHint().isInTable()
-                                ? "fa-lg"
-                                : "fa-2x";
-                        Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional(faSizeModifier));
+                        Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME, faFactory.createLayers());
                     });
 
             final TitleRecord title = determineTitle(linkedDomainObject);

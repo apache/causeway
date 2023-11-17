@@ -91,7 +91,9 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.debug._Probe;
@@ -643,6 +645,30 @@ public class Wkt {
         return String.format("<i class=\"%s\"></i>", faClasses);
     }
 
+    public MarkupComponent faIconLayers(
+            final String id,
+            final FontAwesomeLayers fontAwesomeLayers) {
+        var iconEntries = Can.ofCollection(fontAwesomeLayers.iconEntries());
+        if(iconEntries.isEmpty()) {
+            // fallback to cube icon
+            return markup(id, faIcon("fa fa-cube fa-lg"));
+        }
+        if(iconEntries.isCardinalityOne()) {
+            // use simple rendering (not a stack nor layered)
+            return markup(id, faIcon(iconEntries.getFirstElseFail().cssClasses()));
+        }
+        var sb = new StringBuilder();
+        iconEntries.forEach(iconEntry->sb.append(faIcon(iconEntry.cssClasses())));
+        var span = markup(id, sb.toString());
+        Wkt.cssAppend(span, "fa-stack");
+        return span;
+    }
+
+    public MarkupComponent faIconLayersAdd(final MarkupContainer container, final String id,
+            final FontAwesomeLayers faLayers) {
+        return add(container, faIconLayers(id, faLayers));
+    }
+
     // -- FRAGMENT
 
     /**
@@ -1139,5 +1165,6 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
+
 
 }

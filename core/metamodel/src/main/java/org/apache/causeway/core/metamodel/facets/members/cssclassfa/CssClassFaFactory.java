@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -63,6 +64,14 @@ public interface CssClassFaFactory {
         .distinct()
         .collect(Collectors.joining(" "));
 
+    }
+
+    /**
+     * Creates the model object that is used for FA icon rendering.
+     * TODO[CAUSEWAY-3646] override in yet to be implemented new Factory sub class, that will handle the new object support method
+     */
+    default FontAwesomeLayers createLayers() {
+        return FontAwesomeLayers.singleIcon(asSpaceSeparatedWithAdditional("fa-lg"));
     }
 
     /**

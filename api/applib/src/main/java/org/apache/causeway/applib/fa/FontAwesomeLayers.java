@@ -58,6 +58,10 @@ public class FontAwesomeLayers {
         return new FontAwesomeLayers(null, null, List.of(new IconEntry(faClasses, null)), null);
     }
 
+    public static FontAwesomeLayers iconStack(final IconEntry baseEntry, final IconEntry overlayEntry) {
+        return new FontAwesomeLayers(null, null, List.of(baseEntry, overlayEntry), null);
+    }
+
     //TODO[CAUSEWAY-3646] design more factories as we write the tests
 
 }
