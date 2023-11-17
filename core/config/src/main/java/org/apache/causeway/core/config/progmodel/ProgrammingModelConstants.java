@@ -42,6 +42,7 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectLifecycle;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -229,7 +230,8 @@ public final class ProgrammingModelConstants {
         VOID(void.class),
         BOOLEAN(boolean.class),
         STRING(String.class),
-        TRANSLATABLE(String.class, TranslatableString.class);
+        TRANSLATABLE(String.class, TranslatableString.class),
+        FONTAWESOME_LAYERS(FontAwesomeLayers.class);
         ReturnTypeCategory(final Class<?> ...returnTypes) {
             this.returnTypes = Can.of(returnTypes);
         }
@@ -273,6 +275,7 @@ public final class ProgrammingModelConstants {
         TITLE(ReturnTypeCategory.TRANSLATABLE, "title"),
         CSS_CLASS(ReturnTypeCategory.STRING, "cssClass"),
         ICON_NAME(ReturnTypeCategory.STRING, "iconName"),
+        ICON_FA_LAYERS(ReturnTypeCategory.FONTAWESOME_LAYERS, "iconFaLayers"),
         LAYOUT(ReturnTypeCategory.STRING, "layout"),
 
         /** as a fallback in the absence of other title providers */

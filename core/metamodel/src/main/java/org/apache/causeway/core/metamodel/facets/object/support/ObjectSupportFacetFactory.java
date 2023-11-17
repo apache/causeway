@@ -40,6 +40,7 @@ import org.apache.causeway.core.metamodel.facets.object.disabled.method.Disabled
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
+import org.apache.causeway.core.metamodel.facets.object.iconfa.method.IconFaLayersFacetViaIconFaLayersMethod;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
@@ -87,6 +88,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         processObjectSupport(processClassContext, ObjectSupportMethod.TITLE, TitleFacetViaTitleMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.LAYOUT, LayoutFacetViaLayoutMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.ICON_NAME, IconFacetViaIconNameMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.ICON_FA_LAYERS, IconFaLayersFacetViaIconFaLayersMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.CSS_CLASS, CssClassFacetViaCssClassMethod::create);
     }
 
