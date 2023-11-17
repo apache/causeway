@@ -22,12 +22,12 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 /**
- * The <a href="https://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
- * CSS class(es) for an action or domain object.
+ * The <i>Font Awesome</i> CSS class (or space separated classes) for an action or domain object.
  *
  * <p>
  * In the standard Apache Causeway Programming Model, corresponds to annotating the
- * member with <tt>{@literal @}{@link org.apache.causeway.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
+ * member with
+ * <tt>{@literal @}{@link org.apache.causeway.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
  */
 public interface CssClassFaFacet extends Facet {
 

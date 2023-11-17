@@ -31,7 +31,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 public interface CssClassFaFactory {
 
     /**
-     * Position of <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon.
+     * Position of <i>Font Awesome</i> icon.
      */
     CssClassFaPosition getPosition();
 

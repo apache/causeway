@@ -482,6 +482,7 @@ implements ObjectSpecification {
     public Optional<CssClassFaFactory> getCssClassFaFactory() {
         return lookupFacet(CssClassFaFacet.class)
         .map(CssClassFaFacet::getSpecialization)
+        ////TODO[CAUSEWAY-3646] not any more ...
         // assuming CssClassFaFacet on objects are always 'static' not 'imperative'
         .flatMap(either->either.left())
         .map(CssClassFaFactory.class::cast);

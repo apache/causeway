@@ -40,7 +40,7 @@ import lombok.val;
 class FontAwesomeLayersFacetMethodTest
 extends FacetFactoryTestAbstract {
 
-    static final FontAwesomeLayers FONTAWESOME_LAYERS_SAMPLE = new FontAwesomeLayers(null, null, null, null);
+    static final FontAwesomeLayers FONTAWESOME_LAYERS_SAMPLE = FontAwesomeLayers.singleIcon("fa-solid fa-bookmark");
 
     @DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED)
     static class DomainObjectWithFontAwesomeLayersMethod {
@@ -62,7 +62,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void cssClassFacetViaCssClassMethod() {
+    void fontAwesomeLayersFacetViaIconFaLayersMethod() {
 
         val domainObject = getObjectManager().adapt(new DomainObjectWithFontAwesomeLayersMethod());
 
@@ -74,8 +74,10 @@ extends FacetFactoryTestAbstract {
             assertNotNull(fontAwesomeLayersFacet, ()->"FontAwesomeLayersFacet required");
             assertTrue(fontAwesomeLayersFacet instanceof FontAwesomeLayersFacetViaIconFaLayersMethod);
             val imperativeCssClassFacet = (FontAwesomeLayersFacetViaIconFaLayersMethod)fontAwesomeLayersFacet;
-            assertEquals(FONTAWESOME_LAYERS_SAMPLE,
-                    imperativeCssClassFacet.layers(domainObject));
+
+            var actual = imperativeCssClassFacet.layers(domainObject);
+            assertEquals(FONTAWESOME_LAYERS_SAMPLE, actual);
+            assertEquals("fa-solid fa-bookmark", actual.iconEntries().get(0).cssClasses());
         });
     }
 

@@ -54,6 +54,10 @@ public class FontAwesomeLayers {
 
     // -- FACTORIES
 
-    //TODO[CAUSEWAY-3646] design some factories as we write the tests
+    public static FontAwesomeLayers singleIcon(final String faClasses) {
+        return new FontAwesomeLayers(null, null, List.of(new IconEntry(faClasses, null)), null);
+    }
+
+    //TODO[CAUSEWAY-3646] design more factories as we write the tests
 
 }
