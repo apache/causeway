@@ -23,6 +23,7 @@ package org.apache.causeway.testing.integtestsupport.applib;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.core.security.authentication.manager.UserMementoRefiner;
 
@@ -47,7 +48,7 @@ public class UserMementoRefiners implements BeforeEachCallback {
         _Helper.getInteractionFactory(extensionContext)
             .ifPresent(interactionService ->
                 interactionService.currentInteractionContext().ifPresent(
-                    currentInteractionContext -> _Helper.getServiceRegistry(extensionContext).ifPresent(
+                    currentInteractionContext -> _Helper.lookup(ServiceRegistry.class, extensionContext).ifPresent(
                         serviceRegistry -> {
                             UserMemento user = currentInteractionContext.getUser();
                             for (UserMementoRefiner userMementoRefiner : serviceRegistry.select(UserMementoRefiner.class)) {
