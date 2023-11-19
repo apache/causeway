@@ -18,11 +18,16 @@
  */
 package org.apache.causeway.testing.integtestsupport.applib;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.springframework.context.ApplicationContext;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 /**
  * @since 2.0 {@index}
@@ -31,6 +36,17 @@ public class CausewayInteractionHandler implements BeforeEachCallback, AfterEach
 
     @Override
     public void beforeEach(final ExtensionContext extensionContext) throws Exception {
+
+        //[CAUSEWAY-3647] set MMC singleton reference explicitly on each test run
+        _Helper
+            .getSpringContext(extensionContext)
+            .ifPresent(springContext->{
+                var mmc = springContext.getBean(MetaModelContext.class);
+                _Assert.assertNotNull(mmc, ()->
+                        "MetaModelContext not found on Spring's test context.");
+                MetaModelContext.setOrReplace(mmc);
+            });
+
         _Helper
             .getInteractionFactory(extensionContext)
             .ifPresent(interactionService->
@@ -48,5 +64,19 @@ public class CausewayInteractionHandler implements BeforeEachCallback, AfterEach
             .ifPresent(InteractionService::closeInteractionLayers);
     }
 
+
+    static Optional<ApplicationContext> getSpringContext(final ExtensionContext extensionContext) {
+        return extensionContext.getTestInstance()
+            .filter(CausewayIntegrationTestAbstract.class::isInstance)
+            .map(CausewayIntegrationTestAbstract.class::cast)
+            .map(causewayIntegrationTestAbstract -> causewayIntegrationTestAbstract.springContext)
+            .map(springContext->{
+                var mmc = springContext.getBean(MetaModelContext.class);
+                _Assert.assertNotNull(mmc, ()->
+                        "MetaModelContext not found on Spring's test context.");
+                MetaModelContext.setOrReplace(mmc);
+                return springContext;
+            });
+    }
 
 }
