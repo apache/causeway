@@ -142,10 +142,9 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                                 Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, icon));
                             WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
                         },
-                        cssFaClass->{
+                        faLayers->{
                             WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON);
-                            final Label dummyLabel = Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_ICON_FA, "");
-                            Wkt.cssAppend(dummyLabel, cssFaClass);
+                            Wkt.faIconLayersAdd(link, ID_BOOKMARKED_PAGE_ICON_FA, faLayers);
                         });
 
                 Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.getTitle());

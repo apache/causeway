@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.iconfa.method;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
@@ -28,6 +29,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacet;
 import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -62,6 +64,12 @@ implements HasImperativeAspect {
     @Override
     public FontAwesomeLayers layers(final ManagedObject domainObject) {
         return imperativeAspect.eval(domainObject, (FontAwesomeLayers)null);
+    }
+
+    @Override
+    public CssClassFaFactory getCssClassFaFactory(final Supplier<ManagedObject> domainObjectProvider) {
+        //TODO[CAUSEWAY-3646] implement
+        return null;
     }
 
     @Override

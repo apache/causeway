@@ -20,13 +20,12 @@ package org.apache.causeway.viewer.commons.model.decorators;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 
 import lombok.AccessLevel;
@@ -56,12 +55,8 @@ public interface IconDecorator<T, R> {
 
         private static final long serialVersionUID = 1L;
 
-        /**
-         * Enforced in drop-dows, but not in horizontal action panels,
-         * where e.g. LinkAndLabel correspond to a UI button.
-         */
-        private final boolean forceAlignmentOnIconAbsence;
-        private final @NonNull String cssClassesSpaceSeparated;
+        @Getter
+        private final @NonNull FontAwesomeLayers fontAwesomeLayers;
 
         @Getter
         private final @NonNull CssClassFaPosition position;
@@ -74,23 +69,21 @@ public interface IconDecorator<T, R> {
         public static Optional<FontAwesomeDecorationModel> create(
                 final @Nullable CssClassFaFactory cssClassFaFactoryIfAny,
                 final boolean forceAlignmentOnIconAbsence) {
+
             return Optional.ofNullable(cssClassFaFactoryIfAny)
                 .map(cssClassFaFactory->new FontAwesomeDecorationModel(
-                        forceAlignmentOnIconAbsence,
-                        cssClassFaFactory.streamCssClasses().collect(Collectors.joining(" ")),
-                        Optional.ofNullable(cssClassFaFactory.getPosition()).orElse(CssClassFaPosition.LEFT)));
+                        forceAlignmentOnIconAbsence
+                            ? emptyToBlank(cssClassFaFactory.getLayers())
+                            : cssClassFaFactory.getLayers(),
+                        Optional.ofNullable(cssClassFaFactory.getPosition())
+                            .orElse(CssClassFaPosition.LEFT)));
 
         }
 
-        public Stream<String> streamCssClasses() {
-            return _Strings.splitThenStream(getCssClassesSpaceSeparated(), " ");
-        }
-
-        public String getCssClassesSpaceSeparated(){
-            return forceAlignmentOnIconAbsence
-                    && _Strings.isEmpty(cssClassesSpaceSeparated)
-                    ? "fa fa-blank"
-                    : cssClassesSpaceSeparated;
+        private static FontAwesomeLayers emptyToBlank(final FontAwesomeLayers faLayers) {
+            return _NullSafe.size(faLayers.iconEntries())>0
+                    ? faLayers
+                    : FontAwesomeLayers.blank();
         }
 
     }

@@ -22,9 +22,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -102,10 +102,10 @@ extends CssClassFaImperativeFacetAbstract {
             }
 
             @Override
-            public Stream<String> streamCssClasses() {
+            public FontAwesomeLayers getLayers() {
                 return cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
-                        .map(CssClassFaFactory::streamCssClasses)
-                        .orElseGet(Stream::empty);
+                        .map(CssClassFaFactory::getLayers)
+                        .orElseGet(FontAwesomeLayers::empty);
             }
 
         });

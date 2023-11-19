@@ -126,7 +126,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                     },
                     faFactory->{
                         WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-                        Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME, faFactory.createLayers());
+                        Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME, faFactory.getLayers());
                     });
 
             final TitleRecord title = determineTitle(linkedDomainObject);

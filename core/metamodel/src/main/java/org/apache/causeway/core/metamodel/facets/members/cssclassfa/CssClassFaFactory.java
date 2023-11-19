@@ -18,13 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * @since 2.0
@@ -36,43 +31,10 @@ public interface CssClassFaFactory {
      */
     CssClassFaPosition getPosition();
 
-    Stream<String> streamCssClasses();
-
-    /**
-     * Space separated (distinct) CSS-class strings.
-     */
-    default String asSpaceSeparated() {
-        return streamCssClasses()
-                .collect(Collectors.joining(" "));
-    }
-
-    /**
-     * Space separated (distinct) CSS-class strings.
-     * @param additionalClasses - trimmed and filtered by non-empty, then added to the resulting string
-     */
-    default String asSpaceSeparatedWithAdditional(final String ... additionalClasses) {
-
-        if(_NullSafe.size(additionalClasses)==0) {
-            return asSpaceSeparated();
-        }
-
-        return Stream.concat(
-                streamCssClasses(),
-                _NullSafe.stream(additionalClasses)
-                    .map(String::trim)
-                    .filter(_Strings::isNotEmpty))
-        .distinct()
-        .collect(Collectors.joining(" "));
-
-    }
-
     /**
      * Creates the model object that is used for FA icon rendering.
-     * TODO[CAUSEWAY-3646] override in yet to be implemented new Factory sub class, that will handle the new object support method
      */
-    default FontAwesomeLayers createLayers() {
-        return FontAwesomeLayers.singleIcon(asSpaceSeparatedWithAdditional("fa-lg"));
-    }
+    FontAwesomeLayers getLayers();
 
     /**
      * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,

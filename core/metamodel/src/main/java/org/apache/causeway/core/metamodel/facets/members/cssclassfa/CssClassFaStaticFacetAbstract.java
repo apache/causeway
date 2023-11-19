@@ -22,6 +22,7 @@ import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -78,8 +79,13 @@ implements CssClassFaStaticFacet {
     }
 
     @Override
-    public Stream<String> streamCssClasses() {
+    public final Stream<String> streamCssClasses() {
         return cssClasses.stream();
+    }
+
+    @Override
+    public final FontAwesomeLayers getLayers() {
+        return FontAwesomeLayers.singleIcon(asSpaceSeparatedWithAdditional("fa-lg"));
     }
 
     @Override
