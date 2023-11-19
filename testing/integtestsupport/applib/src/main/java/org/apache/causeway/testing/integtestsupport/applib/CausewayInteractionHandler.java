@@ -31,19 +31,21 @@ public class CausewayInteractionHandler implements BeforeEachCallback, AfterEach
 
     @Override
     public void beforeEach(final ExtensionContext extensionContext) throws Exception {
-        _Helper.getInteractionFactory(extensionContext)
-        .ifPresent(interactionService->
-            _Helper
-                .getCustomInteractionContext(extensionContext)
-                .ifPresentOrElse(
+        _Helper
+            .getInteractionFactory(extensionContext)
+            .ifPresent(interactionService->
+                _Helper
+                    .getCustomInteractionContext(extensionContext)
+                    .ifPresentOrElse(
                         interactionService::openInteraction,
                         interactionService::openInteraction));
     }
 
     @Override
     public void afterEach(final ExtensionContext extensionContext) throws Exception {
-        _Helper.getInteractionFactory(extensionContext)
-        .ifPresent(InteractionService::closeInteractionLayers);
+        _Helper
+            .getInteractionFactory(extensionContext)
+            .ifPresent(InteractionService::closeInteractionLayers);
     }
 
 
