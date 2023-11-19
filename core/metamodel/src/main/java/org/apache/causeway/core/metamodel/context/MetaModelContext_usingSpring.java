@@ -68,7 +68,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
      * {@link MetaModelContextFactory#metaModelContext(CausewaySystemEnvironment)}.
      */
     void onDestroy() {
-        MetaModelContext.INSTANCE_HOLDER.set(null);
+        MetaModelContext.clear();
     }
 
     @Getter(lazy=true)

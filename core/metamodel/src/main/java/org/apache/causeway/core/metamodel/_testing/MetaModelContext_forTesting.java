@@ -119,7 +119,7 @@ extends MetaModelContext {
             @Override
             public MetaModelContext_forTesting build() {
                 var mmc = super.build();
-                MetaModelContext.INSTANCE_HOLDER.set(mmc);
+                MetaModelContext.setOrReplace(mmc);
                 return mmc;
             }
         };

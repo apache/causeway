@@ -39,9 +39,31 @@ public class MetaModelContextFactory {
     @Primary
     @Bean(destroyMethod = "onDestroy")
     public MetaModelContext metaModelContext(final CausewaySystemEnvironment systemEnvironment) {
-        var mmc = new MetaModelContext_usingSpring(systemEnvironment.getIocContainer());
-        MetaModelContext.INSTANCE_HOLDER.set(mmc);
+
+        var ioc = systemEnvironment.getIocContainer();
+        var mmc = new MetaModelContext_usingSpring(ioc);
+
+        if(isIntegrationTesting()) {
+            MetaModelContext.setOrReplace(mmc);
+            return mmc;
+        }
+
+        MetaModelContext.set(mmc);
         return mmc;
+    }
+
+    // -- HELPER
+
+    /**
+     * Whether we find Spring's ContextCache on the class path.
+     */
+    private static boolean isIntegrationTesting() {
+        try {
+            Class.forName("org.springframework.test.context.cache.ContextCache");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
