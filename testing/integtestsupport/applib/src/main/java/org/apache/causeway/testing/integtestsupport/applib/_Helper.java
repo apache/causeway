@@ -26,9 +26,7 @@ import org.springframework.context.ApplicationContext;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.reflection._Annotations;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAs;
 import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAsUtils;
 
@@ -38,14 +36,7 @@ class _Helper {
         return extensionContext.getTestInstance()
             .filter(CausewayIntegrationTestAbstract.class::isInstance)
             .map(CausewayIntegrationTestAbstract.class::cast)
-            .map(causewayIntegrationTestAbstract -> causewayIntegrationTestAbstract.springContext)
-            .map(springContext->{
-                var mmc = springContext.getBean(MetaModelContext.class);
-                _Assert.assertNotNull(mmc, ()->
-                        "MetaModelContext not found on Spring's test context.");
-                MetaModelContext.setOrReplace(mmc);
-                return springContext;
-            });
+            .map(causewayIntegrationTestAbstract -> causewayIntegrationTestAbstract.springContext);
     }
 
     static <T> Optional<T> lookup(final Class<T> requiredType, final ExtensionContext extensionContext) {
