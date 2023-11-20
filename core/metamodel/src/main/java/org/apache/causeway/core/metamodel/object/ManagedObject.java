@@ -30,7 +30,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
@@ -373,7 +373,7 @@ extends
      * Domain Objects may either have an icon corresponding to an icon resource,
      * or they use a font awesome icon.
      */
-    default Either<ObjectIcon, FontAwesomeLayersProvider> eitherIconOrFaClass() {
+    default Either<ObjectIcon, FaLayersProvider> eitherIconOrFaClass() {
         val iconName = getIconName();
         val cssClassFaFactory = getSpecification().getCssClassFaFactory().orElse(null);
         if (iconName != null

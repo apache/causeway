@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
 
 import lombok.val;
 
@@ -117,10 +117,10 @@ extends FacetFactoryTestAbstract {
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
-            Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
+            Facet facet = facetedMethod.getFacet(FaFacet.class);
             assertThat(facet, is(notNullValue()));
-            assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
-            val classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
+            assertThat(facet, is(instanceOf(FaFacetForActionLayoutAnnotation.class)));
+            val classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
             assertThat(classFaFacetForActionLayoutAnnotation.asSpaceSeparated(), is(equalTo("fa fa-fw fa-font-awesome")));
             assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.LEFT));
 
@@ -138,10 +138,10 @@ extends FacetFactoryTestAbstract {
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
-            Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
+            Facet facet = facetedMethod.getFacet(FaFacet.class);
             assertThat(facet, is(notNullValue()));
-            assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
-            val classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
+            assertThat(facet, is(instanceOf(FaFacetForActionLayoutAnnotation.class)));
+            val classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
             assertThat(classFaFacetForActionLayoutAnnotation.asSpaceSeparated(), is(equalTo("fa fa-fw fa-font-awesome")));
             assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.RIGHT));
 

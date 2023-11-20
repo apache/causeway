@@ -20,40 +20,36 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
+import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaStaticFacetAbstract;
 
-public class CssClassFaFacetForActionLayoutAnnotation
-extends CssClassFaStaticFacetAbstract {
+public class FaFacetForMenuBarXml
+extends FaStaticFacetAbstract {
 
-    public static Optional<CssClassFaFacetForActionLayoutAnnotation> create(
-            final Optional<ActionLayout> actionLayoutIfAny,
+    public static Optional<FaFacet> create(
+            final @Nullable ServiceActionLayoutData actionLayout,
             final FacetHolder holder) {
 
-        class Annot {
-            private Annot(final ActionLayout actionLayout) {
-                this.cssClassFa = _Strings.emptyToNull(actionLayout.cssClassFa());
-                this.cssClassFaPosition = actionLayout.cssClassFaPosition();
-            }
-            String cssClassFa;
-            CssClassFaPosition cssClassFaPosition;
-        }
-
-        return actionLayoutIfAny
-                .map(Annot::new)
-                .filter(a -> a.cssClassFa != null )
-                .map(a -> new CssClassFaFacetForActionLayoutAnnotation(
-                        a.cssClassFa, a.cssClassFaPosition, holder));
+        return actionLayout != null
+                ? _Strings.nonEmpty(actionLayout.getCssClassFa())
+                        .map(cssClassFa->new FaFacetForMenuBarXml(
+                                cssClassFa,
+                                CssClassFaPosition.LEFT, // defaults to left
+                                holder))
+                : Optional.empty();
     }
 
-    private CssClassFaFacetForActionLayoutAnnotation(
+    private FaFacetForMenuBarXml(
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder) {
-        super(value, position, holder);
+        super(value, position, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
     }
 
 }

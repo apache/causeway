@@ -41,7 +41,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
-import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFaFacetForActionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutXml;
@@ -60,7 +60,7 @@ import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAnd
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForLayoutXml;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml;
-import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.FaFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectDescribedFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectLayoutXml;
@@ -174,7 +174,7 @@ implements GridSystemService<G> {
                         CssClassFacetForDomainObjectLayoutXml
                             .create(domainObjectLayoutData, objectSpec, precedence));
                 updateFacetIfPresent(
-                        CssClassFaFacetForDomainObjectLayoutXml
+                        FaFacetForDomainObjectLayoutXml
                             .create(domainObjectLayoutData, objectSpec, precedence));
                 updateFacetIfPresent(
                         ObjectDescribedFacetForDomainObjectLayoutXml
@@ -263,7 +263,7 @@ implements GridSystemService<G> {
                         CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
                 updateFacetIfPresent(
-                        CssClassFaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        FaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
                 updateFacetIfPresent(
                         MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));

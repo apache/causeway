@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+package org.apache.causeway.core.metamodel.facets.members.fa;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,8 +25,8 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 
-public interface CssClassFaStaticFacet
-extends CssClassFaFacet, FontAwesomeLayersProvider {
+public interface FaStaticFacet
+extends FaFacet, FaLayersProvider {
 
     /**
      * Position of <i>Font Awesome</i> icon, relative to its accompanied title.

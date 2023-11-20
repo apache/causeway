@@ -41,8 +41,8 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -358,12 +358,12 @@ public interface ObjectAction extends ObjectMember {
                         : ActionLayout.Position.PANEL);
         }
 
-        public static Optional<FontAwesomeLayersProvider> cssClassFaFactoryFor(
+        public static Optional<FaLayersProvider> cssClassFaFactoryFor(
                 final ObjectAction action,
                 final ManagedObject domainObject) {
 
-            return Optional.ofNullable(action.getFacet(CssClassFaFacet.class))
-                .map(CssClassFaFacet::getSpecialization)
+            return Optional.ofNullable(action.getFacet(FaFacet.class))
+                .map(FaFacet::getSpecialization)
                 .map(specialization->specialization
                         .fold(
                                 hasStaticFaIcon->hasStaticFaIcon, // identity operator

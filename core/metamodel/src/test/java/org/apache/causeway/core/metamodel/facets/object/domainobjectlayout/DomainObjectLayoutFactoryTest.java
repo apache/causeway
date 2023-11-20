@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -158,11 +158,11 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
+                final Facet facet = facetHolder.getFacet(FaFacet.class);
                 assertNotNull(facet);
-                assertTrue(facet instanceof CssClassFaFacetForDomainObjectLayoutAnnotation);
+                assertTrue(facet instanceof FaFacetForDomainObjectLayoutAnnotation);
 
-                final CssClassFaFacetForDomainObjectLayoutAnnotation facetImpl = (CssClassFaFacetForDomainObjectLayoutAnnotation) facet;
+                final FaFacetForDomainObjectLayoutAnnotation facetImpl = (FaFacetForDomainObjectLayoutAnnotation) facet;
                 assertThat(facetImpl.asSpaceSeparated(), equalTo("fa fa-fw fa-foo"));
                 assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
 
@@ -176,7 +176,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
+                final Facet facet = facetHolder.getFacet(FaFacet.class);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();

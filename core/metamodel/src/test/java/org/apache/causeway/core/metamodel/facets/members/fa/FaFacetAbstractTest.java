@@ -16,16 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+package org.apache.causeway.core.metamodel.facets.members.fa;
 
-import java.util.function.Supplier;
+import org.junit.jupiter.api.Test;
 
-import org.springframework.lang.Nullable;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+public class FaFacetAbstractTest {
 
-public interface CssClassFaImperativeFacet
-extends CssClassFaFacet {
+    public static class Sanitize extends FaFacetAbstractTest {
 
-    FontAwesomeLayersProvider getFaLayersProvider(@Nullable final Supplier<ManagedObject> domainObjectProvider);
+        @Test
+        public void present() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("fab foo").toString(), is("[fab, fa-fw, fa-foo]"));
+        }
+
+        @Test
+        public void presentAtEnd() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("foo far ").toString(), is("[far, fa-fw, fa-foo]"));
+        }
+
+        @Test
+        public void missing() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("foo").toString(), is("[fa, fa-fw, fa-foo]"));
+        }
+    }
 }

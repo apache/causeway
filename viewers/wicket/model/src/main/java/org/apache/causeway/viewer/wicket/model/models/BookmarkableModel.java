@@ -26,7 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.viewer.commons.model.mixin.HasIcon;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
@@ -67,7 +67,7 @@ extends HasTitle, HasIcon {
      * I believe actions only support the former. Hence the asymmetry here.
      */
     @Override
-    default Either<ObjectIcon, FontAwesomeLayersProvider> getIcon() {
+    default Either<ObjectIcon, FaLayersProvider> getIcon() {
         return Either.left(null); // overwritten for domain objects
     }
 

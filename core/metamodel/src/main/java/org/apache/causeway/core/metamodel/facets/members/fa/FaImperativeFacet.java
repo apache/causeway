@@ -16,18 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+package org.apache.causeway.core.metamodel.facets.members.fa;
 
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import java.util.function.Supplier;
 
-/**
- * @since 2.0
- */
-public interface FontAwesomeLayersProvider {
+import org.springframework.lang.Nullable;
 
-    /**
-     * Provides the model object that is used for FA icon rendering.
-     */
-    FontAwesomeLayers getLayers();
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
+public interface FaImperativeFacet
+extends FaFacet {
+
+    FaLayersProvider getFaLayersProvider(@Nullable final Supplier<ManagedObject> domainObjectProvider);
 }

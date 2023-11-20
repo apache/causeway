@@ -16,15 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.model.mixin;
+package org.apache.causeway.core.metamodel.facets.members.fa;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 
-@FunctionalInterface
-public interface HasIcon {
+/**
+ * @since 2.0
+ */
+public interface FaLayersProvider {
 
-    Either<ObjectIcon, FaLayersProvider> getIcon();
+    /**
+     * Provides the model object that is used for FA icon rendering.
+     */
+    FontAwesomeLayers getLayers();
 
 }

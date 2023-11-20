@@ -53,7 +53,7 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
@@ -276,7 +276,7 @@ extends
      */
     String getCssClass(ManagedObject objectAdapter);
 
-    Optional<FontAwesomeLayersProvider> getCssClassFaFactory();
+    Optional<FaLayersProvider> getCssClassFaFactory();
 
     /**
      * @return optionally the element type spec based on presence of the TypeOfFacet

@@ -20,14 +20,14 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.FaFacetForDomainObjectLayoutAnnotation;
 
-public class CssClassFaFacetForDomainObjectLayoutFactory
-extends CssClassFaStaticFacetAbstract {
+public class FaFacetForDomainObjectLayoutFactory
+extends FaStaticFacetAbstract {
 
-    public static CssClassFaFacet create(
+    public static FaFacet create(
             final DomainObjectLayout domainObjectLayout,
             final FacetHolder holder) {
 
@@ -39,11 +39,11 @@ extends CssClassFaStaticFacetAbstract {
         final CssClassFaPosition position = domainObjectLayout.cssClassFaPosition();
 
         return cssClassFa != null
-                ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder)
+                ? new FaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder)
                 : null;
     }
 
-    private CssClassFaFacetForDomainObjectLayoutFactory(
+    private FaFacetForDomainObjectLayoutFactory(
             final String value,
             final CssClassFaPosition position, //NOSONAR false positive: method is used in create()
             final FacetHolder holder) {

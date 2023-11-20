@@ -58,8 +58,8 @@ import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
@@ -479,13 +479,13 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<FontAwesomeLayersProvider> getCssClassFaFactory() {
-        return lookupFacet(CssClassFaFacet.class)
-        .map(CssClassFaFacet::getSpecialization)
+    public Optional<FaLayersProvider> getCssClassFaFactory() {
+        return lookupFacet(FaFacet.class)
+        .map(FaFacet::getSpecialization)
         ////TODO[CAUSEWAY-3646] not any more ...
         // assuming CssClassFaFacet on objects are always 'static' not 'imperative'
         .flatMap(either->either.left())
-        .map(FontAwesomeLayersProvider.class::cast);
+        .map(FaLayersProvider.class::cast);
     }
 
     // -- HIERARCHICAL

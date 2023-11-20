@@ -36,7 +36,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -184,11 +184,11 @@ implements
     }
 
     @Override
-    public Either<ObjectIcon, FontAwesomeLayersProvider> getIcon() {
+    public Either<ObjectIcon, FaLayersProvider> getIcon() {
         return getManagedObject().eitherIconOrFaClass();
     }
 
-    public Either<ResourceReference, FontAwesomeLayersProvider> getIconAsResourceReference() {
+    public Either<ResourceReference, FaLayersProvider> getIconAsResourceReference() {
         return getIcon()
                 .mapLeft(objectIcon->
                     imageResourceCache().resourceReferenceForObjectIcon(objectIcon));

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop;
+package org.apache.causeway.core.metamodel.facets.members.fa.annotprop;
 
 import java.util.Map;
 import java.util.Optional;
@@ -29,10 +29,10 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaImperativeFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaImperativeFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
@@ -49,29 +49,29 @@ import lombok.val;
  * <p>
  * Supports imperative action naming, if required.
  */
-public class CssClassFaFacetOnMemberFromConfiguredRegex
-extends CssClassFaImperativeFacetAbstract {
+public class FaFacetOnMemberFromConfiguredRegex
+extends FaImperativeFacetAbstract {
 
     private final @NonNull Map<Pattern, String> faIconByPattern;
     private final @NonNull MemberNamedFacet memberNamedFacet;
 
     /**
      * If the memberNamedFacet provides static names,
-     * we can also provide a static {@link FontAwesomeLayersProvider}.
+     * we can also provide a static {@link FaLayersProvider}.
      */
-    private final @NonNull Optional<FontAwesomeLayersProvider> staticCssClassFaFactory;
+    private final @NonNull Optional<FaLayersProvider> staticCssClassFaFactory;
     private ObjectSpecification objectSpecification;
 
-    public static Optional<CssClassFaFacet> create(
+    public static Optional<FaFacet> create(
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction) {
         return objectAction.lookupFacet(MemberNamedFacet.class)
         .map(memberNamedFacet->
-                new CssClassFaFacetOnMemberFromConfiguredRegex(
+                new FaFacetOnMemberFromConfiguredRegex(
                         objectSpecification, memberNamedFacet, objectAction));
     }
 
-    private CssClassFaFacetOnMemberFromConfiguredRegex(
+    private FaFacetOnMemberFromConfiguredRegex(
             final ObjectSpecification objectSpecification,
             final MemberNamedFacet memberNamedFacet,
             final FacetHolder facetHolder) {
@@ -90,11 +90,11 @@ extends CssClassFaImperativeFacetAbstract {
     }
 
     @Override
-    public FontAwesomeLayersProvider getFaLayersProvider(final Supplier<ManagedObject> domainObjectProvider) {
+    public FaLayersProvider getFaLayersProvider(final Supplier<ManagedObject> domainObjectProvider) {
 
         return staticCssClassFaFactory
         .orElseGet(()->() -> cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
-                .map(FontAwesomeLayersProvider::getLayers)
+                .map(FaLayersProvider::getLayers)
                 .orElseGet(FontAwesomeLayers::empty));
     }
 
@@ -111,7 +111,7 @@ extends CssClassFaImperativeFacetAbstract {
         return Optional.empty();
     }
 
-    private Optional<FontAwesomeLayersProvider> cssClassFaFactoryForConfiguredRegexIfPossible(
+    private Optional<FaLayersProvider> cssClassFaFactoryForConfiguredRegexIfPossible(
             final Supplier<ManagedObject> domainObjectProvider) {
 
         final String memberFriendlyName = memberNamedFacet
@@ -137,7 +137,7 @@ extends CssClassFaImperativeFacetAbstract {
                 : ownerAdapter;
     }
 
-    private Optional<FontAwesomeLayersProvider> cssClassFaFactoryForMemberFriendlyName(
+    private Optional<FaLayersProvider> cssClassFaFactoryForMemberFriendlyName(
             final String memberFriendlyName) {
 
         return _Strings.nonEmpty(memberFriendlyName)
@@ -160,11 +160,11 @@ extends CssClassFaImperativeFacetAbstract {
     }
 
     /**
-     * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,
+     * @implNote because {@link FaStaticFacetAbstract} has all the fa-icon logic,
      * we simply reuse it here by creating an anonymous instance
      */
-    private static FontAwesomeLayersProvider ofIconAndPosition(final String faIcon, final CssClassFaPosition position) {
-        return new CssClassFaStaticFacetAbstract(
+    private static FaLayersProvider ofIconAndPosition(final String faIcon, final CssClassFaPosition position) {
+        return new FaStaticFacetAbstract(
                 faIcon, position, null) {};
     }
 
