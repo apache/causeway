@@ -30,9 +30,13 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 
+import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 /**
+ * <h1>EXPERIMENTAL FEATURE WARNING</h1>
+ * This class is still subject to changes without warning or notice!
+ * <p>
  * Model for a single or multiple (layered) <i>Font Awesome</i> icon(s).
  *
  * @since 2.0 {@index}
@@ -53,23 +57,34 @@ public class FontAwesomeLayers implements Serializable {
         return singleIcon("fa-blank");
     }
 
-    public static FontAwesomeLayers singleIcon(final String faClasses) {
-        return new FontAwesomeLayers(null, null, List.of(new IconEntry(normalizeFaClasses(faClasses), null)), null);
+    public static FontAwesomeLayers fallback() {
+        return singleIcon("fa-cube");
     }
 
-    public static FontAwesomeLayers iconStack(final IconEntry baseEntry, final IconEntry overlayEntry) {
-        return new FontAwesomeLayers(null, null, List.of(baseEntry, overlayEntry), null);
+    public static FontAwesomeLayers singleIcon(final String faClasses) {
+        return new FontAwesomeLayers(null, null, List.of(new IconEntry(normalizeCssClasses(faClasses, "fa"), null)), null);
+    }
+
+    public static FontAwesomeLayers iconStack(
+            final @Nullable String containerCssClasses,
+            final @Nullable String containerCssStyle,
+            final @NonNull IconEntry baseEntry,
+            final @NonNull IconEntry overlayEntry) {
+        return new FontAwesomeLayers(
+                normalizeCssClasses(containerCssClasses, "fa-stack"),
+                containerCssStyle,
+                List.of(baseEntry, overlayEntry), null);
     }
 
     // -- UTILITIES
 
-    public static String normalizeFaClasses(final String faClasses) {
-        var elements = _Strings.splitThenStream(faClasses, " ")
-                .map(String::trim)
-                .filter(_Strings::isNotEmpty)
-                .sorted((a, b)->a.compareTo(b))
-                .collect(Collectors.toCollection(TreeSet::new));
-        elements.add("fa"); // mandatory
+    public static String normalizeCssClasses(final String cssClasses, final String... mandatory) {
+        var elements = _Strings.splitThenStream(cssClasses, " ")
+            .map(String::trim)
+            .filter(_Strings::isNotEmpty)
+            .collect(Collectors.toCollection(TreeSet::new));
+        _NullSafe.stream(mandatory)
+            .forEach(elements::add);
         return elements.stream().collect(Collectors.joining(" "));
     }
 
@@ -79,6 +94,18 @@ public class FontAwesomeLayers implements Serializable {
     public static class IconEntry {
         @Nullable String cssClasses;
         @Nullable String cssStyle;
+        public String toHtml() {
+            return faIconHtml(cssClasses, cssStyle);
+        }
+        // -- HELPER
+        private static String faIconHtml(final @Nullable String faClasses) {
+            if(_Strings.isEmpty(faClasses)) return "";
+            return String.format("<i class=\"%s\"></i>", faClasses);
+        }
+        private static String faIconHtml(final @Nullable String faClasses, final @Nullable String faStyle) {
+            if(_Strings.isEmpty(faStyle)) return faIconHtml(faClasses);
+            return String.format("<i class=\"%s\" style=\"%s\"></i>", faClasses, faStyle);
+        }
     }
 
     @lombok.Value @Accessors(fluent=true) // record candidate
@@ -103,22 +130,15 @@ public class FontAwesomeLayers implements Serializable {
         var iconEntries = Can.ofCollection(iconEntries());
         if(iconEntries.isEmpty()) {
             // fallback to cube icon
-            return "<span>"
-                + faIcon("fa-cube")
-                + "</span>";
+            return fallback().toHtml();
         }
         if(iconEntries.isCardinalityOne()) {
             // use simple rendering (not a stack nor layered)
-            return "<span>"
-                + faIcon(iconEntries.getFirstElseFail().cssClasses())
-                + "</span>";
+            return faSpanHtml(iconEntries.getFirstElseFail().toHtml(), null, null);
         }
         var sb = new StringBuilder();
-        iconEntries.forEach(iconEntry->sb.append(faIcon(iconEntry.cssClasses())));
-        //TODO[CAUSEWAY-3646] remove hardcoded tweaks
-        return "<span class=\"fa-stack\" style=\"width: 1.2rem;\">"
-                + sb.toString()
-                + "</span>";
+        iconEntries.forEach(iconEntry->sb.append(iconEntry.toHtml()));
+        return faSpanHtml(sb.toString(), containerCssClasses, containerCssStyle);
     }
 
     // -- UTILITY
@@ -132,8 +152,17 @@ public class FontAwesomeLayers implements Serializable {
 
     // -- HELPER
 
-    private String faIcon(final String faClasses) {
-        return String.format("<i class=\"%s\"></i>", faClasses);
+    private static String faSpanHtml(
+            final @Nullable String innerHtml,
+            final @Nullable String cssClasses,
+            final @Nullable String cssStyle) {
+        if(_Strings.isEmpty(innerHtml)) return "";
+        var attrClass = _Strings.nonEmpty(cssClasses)
+                .map(s->String.format(" class=\"%s\"", s))
+                .orElse("");
+        var attrStyle = _Strings.nonEmpty(cssStyle)
+                .map(s->String.format(" style=\"%s\"", s))
+                .orElse("");
+        return String.format("<span%s%s>%s</span>", attrClass, attrStyle, innerHtml);
     }
-
 }
