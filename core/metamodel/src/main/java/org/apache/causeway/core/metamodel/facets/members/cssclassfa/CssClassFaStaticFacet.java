@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 
 public interface CssClassFaStaticFacet
-extends CssClassFaFacet, CssClassFaFactory {
+extends CssClassFaFacet, FontAwesomeLayersProvider {
 
     /**
      * Position of <i>Font Awesome</i> icon, relative to its accompanied title.

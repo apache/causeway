@@ -27,5 +27,5 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 public interface CssClassFaImperativeFacet
 extends CssClassFaFacet {
 
-    CssClassFaFactory getCssClassFaFactory(@Nullable Supplier<ManagedObject> domainObjectProvider);
+    FontAwesomeLayersProvider getFaLayersProvider(@Nullable final Supplier<ManagedObject> domainObjectProvider);
 }

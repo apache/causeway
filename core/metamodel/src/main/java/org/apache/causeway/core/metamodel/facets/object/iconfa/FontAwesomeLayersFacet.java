@@ -24,7 +24,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
@@ -45,5 +45,5 @@ public interface FontAwesomeLayersFacet extends Facet {
 
     public FontAwesomeLayers layers(final ManagedObject object);
 
-    CssClassFaFactory getCssClassFaFactory(@Nullable Supplier<ManagedObject> domainObjectProvider);
+    FontAwesomeLayersProvider getCssClassFaFactory(@Nullable Supplier<ManagedObject> domainObjectProvider);
 }

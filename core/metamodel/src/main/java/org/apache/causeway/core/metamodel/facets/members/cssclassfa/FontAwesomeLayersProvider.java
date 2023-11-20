@@ -19,25 +19,15 @@
 package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 /**
  * @since 2.0
  */
-public interface CssClassFaFactory {
+public interface FontAwesomeLayersProvider {
 
     /**
-     * Creates the model object that is used for FA icon rendering.
+     * Provides the model object that is used for FA icon rendering.
      */
     FontAwesomeLayers getLayers();
-
-    /**
-     * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,
-     * we simply reuse it here by creating an anonymous instance
-     */
-    public static CssClassFaFactory ofIconAndPosition(final String faIcon, final CssClassFaPosition position) {
-        return new CssClassFaStaticFacetAbstract(
-                faIcon, position, null) {};
-    }
 
 }

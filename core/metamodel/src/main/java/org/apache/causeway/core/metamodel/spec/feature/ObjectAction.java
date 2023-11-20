@@ -42,7 +42,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -358,7 +358,7 @@ public interface ObjectAction extends ObjectMember {
                         : ActionLayout.Position.PANEL);
         }
 
-        public static Optional<CssClassFaFactory> cssClassFaFactoryFor(
+        public static Optional<FontAwesomeLayersProvider> cssClassFaFactoryFor(
                 final ObjectAction action,
                 final ManagedObject domainObject) {
 
@@ -370,7 +370,7 @@ public interface ObjectAction extends ObjectMember {
                                 hasImperativeFaIcon->
                                     ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
                                         ? null
-                                        : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asSupplier())))
+                                        : hasImperativeFaIcon.getFaLayersProvider(domainObject.asSupplier())))
                 .filter(_NullSafe::isPresent);
         }
 

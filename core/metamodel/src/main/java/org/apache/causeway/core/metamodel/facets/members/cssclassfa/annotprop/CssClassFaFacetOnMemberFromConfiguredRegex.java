@@ -30,8 +30,9 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaImperativeFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.FontAwesomeLayersProvider;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
@@ -56,9 +57,9 @@ extends CssClassFaImperativeFacetAbstract {
 
     /**
      * If the memberNamedFacet provides static names,
-     * we can also provide a static {@link CssClassFaFactory}.
+     * we can also provide a static {@link FontAwesomeLayersProvider}.
      */
-    private final @NonNull Optional<CssClassFaFactory> staticCssClassFaFactory;
+    private final @NonNull Optional<FontAwesomeLayersProvider> staticCssClassFaFactory;
     private ObjectSpecification objectSpecification;
 
     public static Optional<CssClassFaFacet> create(
@@ -89,11 +90,11 @@ extends CssClassFaImperativeFacetAbstract {
     }
 
     @Override
-    public CssClassFaFactory getCssClassFaFactory(final Supplier<ManagedObject> domainObjectProvider) {
+    public FontAwesomeLayersProvider getFaLayersProvider(final Supplier<ManagedObject> domainObjectProvider) {
 
         return staticCssClassFaFactory
         .orElseGet(()->() -> cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
-                .map(CssClassFaFactory::getLayers)
+                .map(FontAwesomeLayersProvider::getLayers)
                 .orElseGet(FontAwesomeLayers::empty));
     }
 
@@ -110,7 +111,7 @@ extends CssClassFaImperativeFacetAbstract {
         return Optional.empty();
     }
 
-    private Optional<CssClassFaFactory> cssClassFaFactoryForConfiguredRegexIfPossible(
+    private Optional<FontAwesomeLayersProvider> cssClassFaFactoryForConfiguredRegexIfPossible(
             final Supplier<ManagedObject> domainObjectProvider) {
 
         final String memberFriendlyName = memberNamedFacet
@@ -136,7 +137,7 @@ extends CssClassFaImperativeFacetAbstract {
                 : ownerAdapter;
     }
 
-    private Optional<CssClassFaFactory> cssClassFaFactoryForMemberFriendlyName(
+    private Optional<FontAwesomeLayersProvider> cssClassFaFactoryForMemberFriendlyName(
             final String memberFriendlyName) {
 
         return _Strings.nonEmpty(memberFriendlyName)
@@ -153,9 +154,18 @@ extends CssClassFaImperativeFacetAbstract {
                 faIcon = _faIcon;
                 position = CssClassFaPosition.LEFT;
             }
-            return CssClassFaFactory.ofIconAndPosition(faIcon, position);
+            return ofIconAndPosition(faIcon, position);
         });
 
+    }
+
+    /**
+     * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,
+     * we simply reuse it here by creating an anonymous instance
+     */
+    private static FontAwesomeLayersProvider ofIconAndPosition(final String faIcon, final CssClassFaPosition position) {
+        return new CssClassFaStaticFacetAbstract(
+                faIcon, position, null) {};
     }
 
 }
