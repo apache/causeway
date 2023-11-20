@@ -69,7 +69,7 @@ implements HasImperativeAspect {
     @Override
     public CssClassFaFactory getCssClassFaFactory(final Supplier<ManagedObject> domainObjectProvider) {
         //TODO[CAUSEWAY-3646] implement
-        return null;
+        return () -> layers(domainObjectProvider.get());
     }
 
     @Override

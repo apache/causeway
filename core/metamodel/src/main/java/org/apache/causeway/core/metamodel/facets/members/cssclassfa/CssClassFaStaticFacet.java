@@ -21,11 +21,17 @@ package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 
 public interface CssClassFaStaticFacet
 extends CssClassFaFacet, CssClassFaFactory {
+
+    /**
+     * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
+     */
+    CssClassFaPosition getPosition();
 
     Stream<String> streamCssClasses();
 

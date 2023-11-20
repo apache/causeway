@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.io.JsonUtils;
@@ -79,6 +80,11 @@ public class FontAwesomeLayers implements Serializable {
     @Nullable List<IconEntry> iconEntries;
     @Nullable List<SpanEntry> spanEntries;
 
+    /**
+     * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
+     */
+    @Nullable CssClassFaPosition postition = CssClassFaPosition.LEFT;
+
     //TODO[CAUSEWAY-3646] toJson will not work with records?
     public String toJson() {
         return JsonUtils.toStringUtf8(this);
@@ -103,6 +109,7 @@ public class FontAwesomeLayers implements Serializable {
 
     // -- UTILITY
 
+    //TODO[CAUSEWAY-3646] how to determine position when empty
     public FontAwesomeLayers emptyToBlank() {
         return _NullSafe.size(this.iconEntries())>0
                 ? this

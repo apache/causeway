@@ -26,7 +26,6 @@ import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwe
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * A behavior that prepends or appends the markup needed to show a Font Awesome icon
@@ -42,16 +41,16 @@ public class CssClassFaBehavior extends Behavior {
     @Override
     public void beforeRender(final Component component) {
         super.beforeRender(component);
-        val position = fontAwesomeDecorationModel.getPosition();
-        if (position == null || CssClassFaPosition.LEFT == position) {
+        var faLayers = fontAwesomeDecorationModel.getFontAwesomeLayers();
+        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
             component.getResponse().write(fontAwesomeDecorationModel.getFontAwesomeLayers().toHtml());
         }
     }
 
     @Override
     public void afterRender(final Component component) {
-        val position = fontAwesomeDecorationModel.getPosition();
-        if (CssClassFaPosition.RIGHT == position) {
+        var faLayers = fontAwesomeDecorationModel.getFontAwesomeLayers();
+        if(!CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
             component.getResponse().write(fontAwesomeDecorationModel.getFontAwesomeLayers().toHtml());
         }
         super.afterRender(component);

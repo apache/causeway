@@ -24,8 +24,6 @@ import java.util.Optional;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 
 import lombok.AccessLevel;
@@ -58,9 +56,6 @@ public interface IconDecorator<T, R> {
         @Getter
         private final @NonNull FontAwesomeLayers fontAwesomeLayers;
 
-        @Getter
-        private final @NonNull CssClassFaPosition position;
-
         /**
          * @param forceAlignmentOnIconAbsence enforced in drop-dows,
          *      but not in horizontal action panels,
@@ -73,17 +68,9 @@ public interface IconDecorator<T, R> {
             return Optional.ofNullable(cssClassFaFactoryIfAny)
                 .map(cssClassFaFactory->new FontAwesomeDecorationModel(
                         forceAlignmentOnIconAbsence
-                            ? emptyToBlank(cssClassFaFactory.getLayers())
-                            : cssClassFaFactory.getLayers(),
-                        Optional.ofNullable(cssClassFaFactory.getPosition())
-                            .orElse(CssClassFaPosition.LEFT)));
-
-        }
-
-        private static FontAwesomeLayers emptyToBlank(final FontAwesomeLayers faLayers) {
-            return _NullSafe.size(faLayers.iconEntries())>0
-                    ? faLayers
-                    : FontAwesomeLayers.blank();
+                            ? cssClassFaFactory.getLayers().emptyToBlank()
+                            : cssClassFaFactory.getLayers()
+                        ));
         }
 
     }

@@ -92,23 +92,9 @@ extends CssClassFaImperativeFacetAbstract {
     public CssClassFaFactory getCssClassFaFactory(final Supplier<ManagedObject> domainObjectProvider) {
 
         return staticCssClassFaFactory
-        .orElseGet(()->new CssClassFaFactory() {
-
-            @Override
-            public CssClassFaPosition getPosition() {
-                return cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
-                        .map(CssClassFaFactory::getPosition)
-                        .orElse(CssClassFaPosition.LEFT);
-            }
-
-            @Override
-            public FontAwesomeLayers getLayers() {
-                return cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
-                        .map(CssClassFaFactory::getLayers)
-                        .orElseGet(FontAwesomeLayers::empty);
-            }
-
-        });
+        .orElseGet(()->() -> cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
+                .map(CssClassFaFactory::getLayers)
+                .orElseGet(FontAwesomeLayers::empty));
     }
 
     // -- HELPER

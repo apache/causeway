@@ -27,11 +27,6 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 public interface CssClassFaFactory {
 
     /**
-     * Position of <i>Font Awesome</i> icon.
-     */
-    CssClassFaPosition getPosition();
-
-    /**
      * Creates the model object that is used for FA icon rendering.
      */
     FontAwesomeLayers getLayers();
