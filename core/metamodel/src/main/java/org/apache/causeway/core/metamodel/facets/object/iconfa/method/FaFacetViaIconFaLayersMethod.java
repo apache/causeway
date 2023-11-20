@@ -56,7 +56,7 @@ implements HasImperativeAspect {
     private FaFacetViaIconFaLayersMethod(
             final ImperativeAspect imperativeAspect,
             final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.IMPERATIVE);
         this.imperativeAspect = imperativeAspect;
     }
 

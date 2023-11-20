@@ -42,11 +42,13 @@ implements FaImperativeFacet {
     @Getter(onMethod_ = {@Override})
     private final Either<FaStaticFacet, FaImperativeFacet> specialization = Either.right(this);
 
-    protected FaImperativeFacetAbstract(
-            final FacetHolder holder) {
+    protected FaImperativeFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
     }
 
+    protected FaImperativeFacetAbstract(final FacetHolder holder, final Precedence precedence) {
+        super(type(), holder, precedence);
+    }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
