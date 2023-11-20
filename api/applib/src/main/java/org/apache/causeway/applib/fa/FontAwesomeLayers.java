@@ -57,9 +57,9 @@ public class FontAwesomeLayers implements Serializable {
         return singleIcon("fa-blank");
     }
 
-    public static FontAwesomeLayers fallback() {
-        return singleIcon("fa-cube");
-    }
+//    public static FontAwesomeLayers fallback() {
+//        return singleIcon("fa-cube");
+//    }
 
     public static FontAwesomeLayers singleIcon(final String faClasses) {
         return new FontAwesomeLayers(null, null, List.of(new IconEntry(normalizeCssClasses(faClasses, "fa"), null)), null);
@@ -91,7 +91,8 @@ public class FontAwesomeLayers implements Serializable {
     // --
 
     @lombok.Value @Accessors(fluent=true) // record candidate
-    public static class IconEntry {
+    public static class IconEntry implements Serializable {
+        private static final long serialVersionUID = 1L;
         @Nullable String cssClasses;
         @Nullable String cssStyle;
         public String toHtml() {
@@ -109,7 +110,8 @@ public class FontAwesomeLayers implements Serializable {
     }
 
     @lombok.Value @Accessors(fluent=true) // record candidate
-    public static class SpanEntry {
+    public static class SpanEntry implements Serializable {
+        private static final long serialVersionUID = 1L;
         @Nullable String cssClasses;
         @Nullable String cssStyle;
         @Nullable String transform;
@@ -129,8 +131,7 @@ public class FontAwesomeLayers implements Serializable {
     public String toHtml() {
         var iconEntries = Can.ofCollection(iconEntries());
         if(iconEntries.isEmpty()) {
-            // fallback to cube icon
-            return fallback().toHtml();
+            return "";
         }
         if(iconEntries.isCardinalityOne()) {
             // use simple rendering (not a stack nor layered)
