@@ -16,39 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.layout;
+package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 
-public class CssClassFaFacetForActionLayoutXml
-extends CssClassFaStaticFacetAbstract {
+public class FaFacetForDomainObjectLayoutXml
+extends FaStaticFacetAbstract {
 
-    public static Optional<CssClassFaFacet> create(
-            final ActionLayoutData actionLayout,
+    public static Optional<FaFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(actionLayout == null) {
+            final Facet.Precedence precedence) {
+        if(domainObjectLayout == null) {
             return Optional.empty();
         }
-        final String cssClassFa = _Strings.emptyToNull(actionLayout.getCssClassFa());
-        CssClassFaPosition cssClassFaPosition = actionLayout.getCssClassFaPosition();
+        final String cssClassFa = _Strings.emptyToNull(domainObjectLayout.getCssClassFa());
+        CssClassFaPosition cssClassFaPosition = domainObjectLayout.getCssClassFaPosition();
         return cssClassFa != null
-                ? Optional.of(new CssClassFaFacetForActionLayoutXml(cssClassFa, cssClassFaPosition, holder, precedence))
+                ? Optional.of(new FaFacetForDomainObjectLayoutXml(
+                        cssClassFa, cssClassFaPosition, holder, precedence))
                 : Optional.empty();
     }
 
-    private CssClassFaFacetForActionLayoutXml(
+    private FaFacetForDomainObjectLayoutXml(
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Facet.Precedence precedence) {
         super(value, position, holder, precedence);
     }
 

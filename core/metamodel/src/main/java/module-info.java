@@ -38,8 +38,8 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.all.named;
     exports org.apache.causeway.core.metamodel.facets.collections;
     exports org.apache.causeway.core.metamodel.facets.members.cssclass;
-    exports org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop;
-    exports org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+    exports org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop;
+    exports org.apache.causeway.core.metamodel.facets.members.iconfa;
     exports org.apache.causeway.core.metamodel.facets.members.disabled;
     exports org.apache.causeway.core.metamodel.facets.members.layout.group;
     exports org.apache.causeway.core.metamodel.facets.members.publish.command;

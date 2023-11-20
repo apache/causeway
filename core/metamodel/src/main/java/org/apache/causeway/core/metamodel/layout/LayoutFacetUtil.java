@@ -50,7 +50,7 @@ import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
@@ -108,8 +108,8 @@ public class LayoutFacetUtil {
             final HasCssClassFa hasCssClassFa,
             final FacetHolder facetHolder) {
 
-        facetHolder.lookupNonFallbackFacet(CssClassFaFacet.class)
-        .map(CssClassFaFacet::getSpecialization)
+        facetHolder.lookupNonFallbackFacet(FaFacet.class)
+        .map(FaFacet::getSpecialization)
         .ifPresent(specialization->
             specialization.accept(
                     hasStaticFaIcon->{

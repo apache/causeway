@@ -16,30 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+package org.apache.causeway.core.metamodel.facets.object.ident.iconfa;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-public class CssClassFaFacetAbstractTest {
+class FontAwesomeLayersFacetMethodFactoryTest
+extends ObjectSupportFacetFactoryTestAbstract {
 
-    public static class Sanitize extends CssClassFaFacetAbstractTest {
-
-        @Test
-        public void present() throws Exception {
-            assertThat(CssClassFaStaticFacetAbstract.parse("fab foo").toString(), is("[fab, fa-fw, fa-foo]"));
+    @Test
+    void iconNameMethodPickedUpOnClassAndMethodRemoved() {
+        @SuppressWarnings("unused")
+        class Customer {
+            public FontAwesomeLayers iconFaLayers() { return null; }
         }
-
-        @Test
-        public void presentAtEnd() throws Exception {
-            assertThat(CssClassFaStaticFacetAbstract.parse("foo far ").toString(), is("[far, fa-fw, fa-foo]"));
-        }
-
-        @Test
-        public void missing() throws Exception {
-            assertThat(CssClassFaStaticFacetAbstract.parse("foo").toString(), is("[fa, fa-fw, fa-foo]"));
-        }
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON_FA_LAYERS, FaFacet.class);
     }
+
 }

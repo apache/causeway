@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,13 +25,11 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 
-/**
- * @since 2.0
- */
-public interface CssClassFaFactory {
+public interface FaStaticFacet
+extends FaFacet, FaLayersProvider {
 
     /**
-     * Position of <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon.
+     * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
      */
     CssClassFaPosition getPosition();
 
@@ -58,20 +56,10 @@ public interface CssClassFaFactory {
         return Stream.concat(
                 streamCssClasses(),
                 _NullSafe.stream(additionalClasses)
-                    .map(String::trim)
-                    .filter(_Strings::isNotEmpty))
-        .distinct()
-        .collect(Collectors.joining(" "));
-
-    }
-
-    /**
-     * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,
-     * we simply reuse it here by creating an anonymous instance
-     */
-    public static CssClassFaFactory ofIconAndPosition(final String faIcon, final CssClassFaPosition position) {
-        return new CssClassFaStaticFacetAbstract(
-                faIcon, position, null) {};
+                .map(String::trim)
+                .filter(_Strings::isNotEmpty))
+                .distinct()
+                .collect(Collectors.joining(" "));
     }
 
 }

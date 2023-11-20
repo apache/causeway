@@ -14,7 +14,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
 import java.util.function.BiConsumer;
 
@@ -26,27 +26,29 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 
 /**
- * One of two bases for the {@link CssClassFaFacet}.
+ * One of two bases for the {@link FaFacet}.
  *
- * @see CssClassFaStaticFacetAbstract
+ * @see FaStaticFacetAbstract
  * @since 2.0
  */
-public abstract class CssClassFaImperativeFacetAbstract
+public abstract class FaImperativeFacetAbstract
 extends FacetAbstract
-implements CssClassFaImperativeFacet {
+implements FaImperativeFacet {
 
     private static final Class<? extends Facet> type() {
-        return CssClassFaFacet.class;
+        return FaFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
-    private final Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> specialization = Either.right(this);
+    private final Either<FaStaticFacet, FaImperativeFacet> specialization = Either.right(this);
 
-    protected CssClassFaImperativeFacetAbstract(
-            final FacetHolder holder) {
+    protected FaImperativeFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
     }
 
+    protected FaImperativeFacetAbstract(final FacetHolder holder, final Precedence precedence) {
+        super(type(), holder, precedence);
+    }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
@@ -54,6 +56,5 @@ implements CssClassFaImperativeFacet {
         visitor.accept("position", "!imperative");
         visitor.accept("classes", "!imperative");
     }
-
 
 }

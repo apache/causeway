@@ -16,21 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-/**
- * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> css class(es) for an action.
- *
- * <p>
- * In the standard Apache Causeway Programming Model, corresponds to annotating the
- * member with <tt>{@literal @}{@link org.apache.causeway.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
- */
-public interface CssClassFaFacet extends Facet {
+public interface FaImperativeFacet
+extends FaFacet {
 
-    Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> getSpecialization();
-
-
+    FaLayersProvider getFaLayersProvider(ManagedObject domainObject);
 }

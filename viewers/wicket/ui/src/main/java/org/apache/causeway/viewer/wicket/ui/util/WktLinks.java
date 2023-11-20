@@ -107,10 +107,10 @@ public final class WktLinks {
         val viewTitleLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
 
-        val fontAwesome = linkAndLabel.getFontAwesomeUiModel(isForceAlignmentWithBlankIcon);
+        val faLayers = linkAndLabel.lookupFontAwesomeLayers(isForceAlignmentWithBlankIcon);
 
-        WktDecorators.getIcon().decorate(viewTitleLabel, fontAwesome);
-        WktDecorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
+        WktDecorators.getIcon().decorate(viewTitleLabel, faLayers);
+        WktDecorators.getMissingIcon().decorate(viewTitleLabel, faLayers);
         return link;
     }
 

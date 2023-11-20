@@ -21,40 +21,35 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * A behavior that prepends or appends the markup needed to show a Font Awesome icon
  * for a LinkAndLabel
  */
 @RequiredArgsConstructor
-public class CssClassFaBehavior extends Behavior {
+public class FontAwesomeBehavior extends Behavior {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull private final FontAwesomeDecorationModel fontAwesomeDecorationModel;
+    @NonNull private final FontAwesomeLayers faLayers;
 
     @Override
     public void beforeRender(final Component component) {
         super.beforeRender(component);
-        val position = fontAwesomeDecorationModel.getPosition();
-        if (position == null || CssClassFaPosition.LEFT == position) {
-            val cssClassFa = fontAwesomeDecorationModel.getCssClassesSpaceSeparated();
-            component.getResponse().write("<span class=\""+cssClassFa+" fontAwesomeIcon\"></span>");
+        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
+            component.getResponse().write(faLayers.toHtml());
         }
     }
 
     @Override
     public void afterRender(final Component component) {
-        val position = fontAwesomeDecorationModel.getPosition();
-        if (CssClassFaPosition.RIGHT == position) {
-            val cssClassFa = fontAwesomeDecorationModel.getCssClassesSpaceSeparated();
-            component.getResponse().write("<span class=\""+cssClassFa+" fontAwesomeIcon\"></span>");
+        if(!CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
+            component.getResponse().write(faLayers.toHtml());
         }
         super.afterRender(component);
     }

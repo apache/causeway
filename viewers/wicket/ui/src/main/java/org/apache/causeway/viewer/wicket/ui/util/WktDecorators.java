@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -41,7 +42,7 @@ import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
+import org.apache.causeway.viewer.wicket.ui.components.actionmenu.FontAwesomeBehavior;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
@@ -145,9 +146,9 @@ public class WktDecorators {
 
     public final static class IconDecoratorWkt implements IconDecorator<Component, Component> {
         @Override
-        public Component decorate(final Component uiComponent, final Optional<FontAwesomeDecorationModel> fontAwesome) {
-            if(fontAwesome.isPresent()) {
-                uiComponent.add(new CssClassFaBehavior(fontAwesome.get()));
+        public Component decorate(final Component uiComponent, final Optional<FontAwesomeLayers> faLayers) {
+            if(faLayers.isPresent()) {
+                uiComponent.add(new FontAwesomeBehavior(faLayers.get()));
             }
             return uiComponent;
         }
@@ -155,8 +156,8 @@ public class WktDecorators {
 
     public final static class MissingIconDecorator implements IconDecorator<Component, Component> {
         @Override
-        public Component decorate(final Component uiComponent, final Optional<FontAwesomeDecorationModel> fontAwesome) {
-            if(fontAwesome.isEmpty()) {
+        public Component decorate(final Component uiComponent, final Optional<FontAwesomeLayers> faLayers) {
+            if(faLayers.isEmpty()) {
                 Wkt.cssAppend(uiComponent, "menuLinkSpacer");
             }
             return uiComponent;

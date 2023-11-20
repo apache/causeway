@@ -16,25 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.model.decorators;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import java.util.Optional;
+import org.junit.jupiter.api.Test;
 
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-/**
- * @param <T> UI component type to decorate
- * @param <R> resulting UI component type
- */
-@FunctionalInterface
-public interface IconDecorator<T, R> {
+public class FaFacetAbstractTest {
 
-    /**
-     * corresponds to the webjars path as provided by the maven artifact
-     * {@code org.webjars:font-awesome}
-     */
-    public static final String FONTAWESOME_RESOURCE = "font-awesome/6.4.2/css/all.min.css";
+    public static class Sanitize extends FaFacetAbstractTest {
 
-    R decorate(T uiComponent, Optional<FontAwesomeLayers> faLayers);
+        @Test
+        public void present() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("fab foo").toString(), is("[fab, fa-fw, fa-foo]"));
+        }
 
+        @Test
+        public void presentAtEnd() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("foo far ").toString(), is("[far, fa-fw, fa-foo]"));
+        }
+
+        @Test
+        public void missing() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("foo").toString(), is("[fa, fa-fw, fa-foo]"));
+        }
+    }
 }
