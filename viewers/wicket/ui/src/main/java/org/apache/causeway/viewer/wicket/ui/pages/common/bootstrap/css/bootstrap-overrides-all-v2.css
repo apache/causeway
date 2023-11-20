@@ -573,8 +573,9 @@ span.containedButtonPanel {
 }
 
 /* fa icon size for page titles */
-.entityHeaderPanel .fa {
-  font-size: 1.5em;
+.entityHeaderPanel .entityIconAndTitlePanel .fa,
+.entityHeaderPanel .entityIconAndTitlePanel .fa-stack {
+    font-size: calc(1.275rem + .3vw);
 }
 
 /** top alignment for additional buttons on scalar value inputs */

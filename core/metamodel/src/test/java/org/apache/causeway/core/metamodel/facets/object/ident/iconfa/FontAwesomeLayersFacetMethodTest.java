@@ -78,7 +78,7 @@ extends FacetFactoryTestAbstract {
             var actual = imperativeCssClassFacet.getFaLayersProvider(domainObject).getLayers();
             assertEquals(FONTAWESOME_LAYERS_SAMPLE, actual);
             assertEquals(
-                    FontAwesomeLayers.normalizeFaClasses("fa-solid fa-bookmark"),
+                    FontAwesomeLayers.normalizeCssClasses("fa-solid fa-bookmark", "fa"),
                     actual.iconEntries().get(0).cssClasses());
         });
     }
