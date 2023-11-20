@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.commons.model.mixin;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 
 @FunctionalInterface
 public interface HasIcon {
 
-    Either<ObjectIcon, FaLayersProvider> getIcon();
+    Either<ObjectIcon, FontAwesomeLayers> getIcon();
 
 }

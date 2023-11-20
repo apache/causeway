@@ -117,16 +117,16 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 //                            new FontAwesomeLayers.IconEntry("fa-solid fa-flag fa-stack-1x fa-inverse", null))
 //                    );
 
-            linkedDomainObject.eitherIconOrFaClass()
+            linkedDomainObject.eitherIconOrFaLayers()
             .accept(
                     objectIcon->{
                         Wkt.imageAddCachable(link, ID_ENTITY_ICON,
                                 getImageResourceCache().resourceReferenceForObjectIcon(objectIcon));
                         WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
                     },
-                    faFactory->{
+                    faLayers->{
                         WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-                        Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME, faFactory.getLayers());
+                        Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME, faLayers);
                     });
 
             final TitleRecord title = determineTitle(linkedDomainObject);

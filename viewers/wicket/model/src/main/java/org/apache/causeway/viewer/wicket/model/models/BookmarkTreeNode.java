@@ -84,8 +84,8 @@ implements
         .ifPresent(either->either.accept(
                 iconResourceReference->
                     this.iconResourceReference = iconResourceReference,
-                faFactory->
-                    this.faLayers = faFactory.getLayers()
+                faLayers->
+                    this.faLayers = faLayers
                 )
         );
 

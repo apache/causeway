@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -53,7 +54,6 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
@@ -274,9 +274,9 @@ extends
      *
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
      */
-    String getCssClass(ManagedObject objectAdapter);
+    String getCssClass(ManagedObject domainObject);
 
-    Optional<FaLayersProvider> getCssClassFaFactory();
+    Optional<FontAwesomeLayers> getFaLayers(ManagedObject domainObject);
 
     /**
      * @return optionally the element type spec based on presence of the TypeOfFacet

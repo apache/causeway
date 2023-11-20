@@ -28,6 +28,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.functional.Either;
@@ -36,7 +37,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -184,11 +184,11 @@ implements
     }
 
     @Override
-    public Either<ObjectIcon, FaLayersProvider> getIcon() {
-        return getManagedObject().eitherIconOrFaClass();
+    public Either<ObjectIcon, FontAwesomeLayers> getIcon() {
+        return getManagedObject().eitherIconOrFaLayers();
     }
 
-    public Either<ResourceReference, FaLayersProvider> getIconAsResourceReference() {
+    public Either<ResourceReference, FontAwesomeLayers> getIconAsResourceReference() {
         return getIcon()
                 .mapLeft(objectIcon->
                     imageResourceCache().resourceReferenceForObjectIcon(objectIcon));

@@ -31,6 +31,7 @@ import org.springframework.util.ClassUtils;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
@@ -472,20 +473,20 @@ implements ObjectSpecification {
     }
 
     @Override
+    public Optional<FontAwesomeLayers> getFaLayers(final ManagedObject reference){
+        return lookupFacet(FaFacet.class)
+                .map(FaFacet::getSpecialization)
+                .map(either->either.fold(
+                        faStaticFacet->(FaLayersProvider)faStaticFacet,
+                        faImperativeFacet->faImperativeFacet.getFaLayersProvider(()->reference)))
+                .map(FaLayersProvider::getLayers);
+    }
+
+    @Override
     public Can<LogicalType> getAliases() {
         return aliasedFacet != null
                 ? aliasedFacet.getAliases()
                 : Can.empty();
-    }
-
-    @Override
-    public Optional<FaLayersProvider> getCssClassFaFactory() {
-        return lookupFacet(FaFacet.class)
-        .map(FaFacet::getSpecialization)
-        ////TODO[CAUSEWAY-3646] not any more ...
-        // assuming CssClassFaFacet on objects are always 'static' not 'imperative'
-        .flatMap(either->either.left())
-        .map(FaLayersProvider.class::cast);
     }
 
     // -- HIERARCHICAL
