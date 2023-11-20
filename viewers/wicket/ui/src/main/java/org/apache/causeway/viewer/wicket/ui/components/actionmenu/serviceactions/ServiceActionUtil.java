@@ -59,9 +59,9 @@ public final class ServiceActionUtil {
                 actionUiModel,
                 commonContext.getTranslationService());
 
-        val fontAwesome = actionUiModel.getFontAwesomeUiModel(true);
-        WktDecorators.getIcon().decorate(menuItemLabel, fontAwesome);
-        WktDecorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
+        val faLayers = actionUiModel.lookupFontAwesomeLayers(true);
+        WktDecorators.getIcon().decorate(menuItemLabel, faLayers);
+        WktDecorators.getMissingIcon().decorate(menuItemActionLink, faLayers);
 
         val leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);

@@ -134,8 +134,8 @@ implements Menuable {
 
             Wkt.cssAppend(actionLink, linkAndLabel.getFeatureIdentifier());
 
-            val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel(true);
-            WktDecorators.getIcon().decorate(label, fontAwesome);
+            val faLayers = getLinkAndLabel().lookupFontAwesomeLayers(true);
+            WktDecorators.getIcon().decorate(label, faLayers);
 
             linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 WktDecorators.getDisable().decorate(actionLink, disableUiModel);

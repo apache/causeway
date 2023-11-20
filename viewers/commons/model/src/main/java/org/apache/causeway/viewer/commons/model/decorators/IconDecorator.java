@@ -18,18 +18,9 @@
  */
 package org.apache.causeway.viewer.commons.model.decorators;
 
-import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  * @param <T> UI component type to decorate
@@ -44,35 +35,6 @@ public interface IconDecorator<T, R> {
      */
     public static final String FONTAWESOME_RESOURCE = "font-awesome/6.4.2/css/all.min.css";
 
-    R decorate(T uiComponent, Optional<FontAwesomeDecorationModel> decorationModel);
-
-    // -- DECORATION MODEL
-
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public class FontAwesomeDecorationModel implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        @Getter
-        private final @NonNull FontAwesomeLayers fontAwesomeLayers;
-
-        /**
-         * @param forceAlignmentOnIconAbsence enforced in drop-dows,
-         *      but not in horizontal action panels,
-         *      where e.g. LinkAndLabel correspond to a UI button.
-         */
-        public static Optional<FontAwesomeDecorationModel> create(
-                final @Nullable CssClassFaFactory cssClassFaFactoryIfAny,
-                final boolean forceAlignmentOnIconAbsence) {
-
-            return Optional.ofNullable(cssClassFaFactoryIfAny)
-                .map(cssClassFaFactory->new FontAwesomeDecorationModel(
-                        forceAlignmentOnIconAbsence
-                            ? cssClassFaFactory.getLayers().emptyToBlank()
-                            : cssClassFaFactory.getLayers()
-                        ));
-        }
-
-    }
+    R decorate(T uiComponent, Optional<FontAwesomeLayers> faLayers);
 
 }

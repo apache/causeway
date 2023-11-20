@@ -21,8 +21,8 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -32,26 +32,24 @@ import lombok.RequiredArgsConstructor;
  * for a LinkAndLabel
  */
 @RequiredArgsConstructor
-public class CssClassFaBehavior extends Behavior {
+public class FontAwesomeBehavior extends Behavior {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull private final FontAwesomeDecorationModel fontAwesomeDecorationModel;
+    @NonNull private final FontAwesomeLayers faLayers;
 
     @Override
     public void beforeRender(final Component component) {
         super.beforeRender(component);
-        var faLayers = fontAwesomeDecorationModel.getFontAwesomeLayers();
         if(CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
-            component.getResponse().write(fontAwesomeDecorationModel.getFontAwesomeLayers().toHtml());
+            component.getResponse().write(faLayers.toHtml());
         }
     }
 
     @Override
     public void afterRender(final Component component) {
-        var faLayers = fontAwesomeDecorationModel.getFontAwesomeLayers();
         if(!CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
-            component.getResponse().write(fontAwesomeDecorationModel.getFontAwesomeLayers().toHtml());
+            component.getResponse().write(faLayers.toHtml());
         }
         super.afterRender(component);
     }
