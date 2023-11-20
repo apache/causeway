@@ -24,6 +24,7 @@ import java.util.Objects;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -53,7 +54,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_LINK_WRAPPER = "entityLinkWrapper";
-    private static final String ID_ENTITY_FONT_AWESOME = "entityFontAwesome";
+    private static final String ID_ENTITY_FONT_AWESOME_LEFT = "entityIconFaLeft";
+    private static final String ID_ENTITY_FONT_AWESOME_RIGHT = "entityIconFaRight";
     private static final String ID_ENTITY_LINK = "entityLink";
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
@@ -113,11 +115,18 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                     objectIcon->{
                         Wkt.imageAddCachable(link, ID_ENTITY_ICON,
                                 getImageResourceCache().resourceReferenceForObjectIcon(objectIcon));
-                        WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+                        WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME_LEFT);
+                        WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME_RIGHT);
                     },
                     faLayers->{
                         WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-                        Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME, faLayers);
+                        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
+                            Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME_LEFT, faLayers);
+                            WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME_RIGHT);
+                        } else {
+                            WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME_LEFT);
+                            Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME_RIGHT, faLayers);
+                        }
                     });
 
             final TitleRecord title = determineTitle(linkedDomainObject);

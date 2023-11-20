@@ -103,15 +103,20 @@ public class FontAwesomeLayers implements Serializable {
         var iconEntries = Can.ofCollection(iconEntries());
         if(iconEntries.isEmpty()) {
             // fallback to cube icon
-            return faIcon("fa-cube");
+            return "<span>"
+                + faIcon("fa-cube")
+                + "</span>";
         }
         if(iconEntries.isCardinalityOne()) {
             // use simple rendering (not a stack nor layered)
-            return faIcon(iconEntries.getFirstElseFail().cssClasses());
+            return "<span>"
+                + faIcon(iconEntries.getFirstElseFail().cssClasses())
+                + "</span>";
         }
         var sb = new StringBuilder();
         iconEntries.forEach(iconEntry->sb.append(faIcon(iconEntry.cssClasses())));
-        return "<span class=\"fa-stack\">"
+        //TODO[CAUSEWAY-3646] remove hardcoded tweaks
+        return "<span class=\"fa-stack\" style=\"width: 1.2rem;\">"
                 + sb.toString()
                 + "</span>";
     }
