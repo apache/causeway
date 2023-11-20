@@ -85,7 +85,7 @@ implements FaStaticFacet {
 
     @Override
     public final FontAwesomeLayers getLayers() {
-        return FontAwesomeLayers.singleIcon(asSpaceSeparatedWithAdditional("fa-lg"));
+        return FontAwesomeLayers.singleIcon(asSpaceSeparatedWithAdditional(FIXED_WIDTH));
     }
 
     @Override

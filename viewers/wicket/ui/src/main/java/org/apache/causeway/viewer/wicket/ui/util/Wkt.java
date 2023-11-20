@@ -651,7 +651,7 @@ public class Wkt {
         var iconEntries = Can.ofCollection(fontAwesomeLayers.iconEntries());
         if(iconEntries.isEmpty()) {
             // fallback to cube icon
-            return markup(id, faIcon("fa fa-cube fa-lg"));
+            return markup(id, faIcon("fa fa-cube"));
         }
         if(iconEntries.isCardinalityOne()) {
             // use simple rendering (not a stack nor layered)

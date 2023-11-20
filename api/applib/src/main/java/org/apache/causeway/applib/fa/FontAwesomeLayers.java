@@ -20,12 +20,15 @@ package org.apache.causeway.applib.fa;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.experimental.Accessors;
 
@@ -47,15 +50,27 @@ public class FontAwesomeLayers implements Serializable {
     }
 
     public static FontAwesomeLayers blank() {
-        return singleIcon("fa fa-blank");
+        return singleIcon("fa-blank");
     }
 
     public static FontAwesomeLayers singleIcon(final String faClasses) {
-        return new FontAwesomeLayers(null, null, List.of(new IconEntry(faClasses, null)), null);
+        return new FontAwesomeLayers(null, null, List.of(new IconEntry(normalizeFaClasses(faClasses), null)), null);
     }
 
     public static FontAwesomeLayers iconStack(final IconEntry baseEntry, final IconEntry overlayEntry) {
         return new FontAwesomeLayers(null, null, List.of(baseEntry, overlayEntry), null);
+    }
+
+    // -- UTILITIES
+
+    public static String normalizeFaClasses(final String faClasses) {
+        var elements = _Strings.splitThenStream(faClasses, " ")
+                .map(String::trim)
+                .filter(_Strings::isNotEmpty)
+                .sorted((a, b)->a.compareTo(b))
+                .collect(Collectors.toCollection(TreeSet::new));
+        elements.add("fa"); // mandatory
+        return elements.stream().collect(Collectors.joining(" "));
     }
 
     // --
@@ -88,7 +103,7 @@ public class FontAwesomeLayers implements Serializable {
         var iconEntries = Can.ofCollection(iconEntries());
         if(iconEntries.isEmpty()) {
             // fallback to cube icon
-            return faIcon("fa fa-cube fa-lg");
+            return faIcon("fa-cube");
         }
         if(iconEntries.isCardinalityOne()) {
             // use simple rendering (not a stack nor layered)
@@ -115,7 +130,5 @@ public class FontAwesomeLayers implements Serializable {
     private String faIcon(final String faClasses) {
         return String.format("<i class=\"%s\"></i>", faClasses);
     }
-
-
 
 }

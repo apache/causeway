@@ -108,15 +108,6 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated("(no object)"));
         } else {
 
-//TODO[CAUSEWAY-3646] debugging
-//            WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-//            Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME,
-//                    //FontAwesomeLayers.singleIcon("fa fa-cube fa-lg")
-//                    FontAwesomeLayers.iconStack(
-//                            new FontAwesomeLayers.IconEntry("fa-solid fa-circle fa-stack-2x", null),
-//                            new FontAwesomeLayers.IconEntry("fa-solid fa-flag fa-stack-1x fa-inverse", null))
-//                    );
-
             linkedDomainObject.eitherIconOrFaLayers()
             .accept(
                     objectIcon->{
