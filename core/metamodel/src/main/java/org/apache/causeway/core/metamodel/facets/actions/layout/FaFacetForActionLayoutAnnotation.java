@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 
 public class FaFacetForActionLayoutAnnotation
 extends FaStaticFacetAbstract {

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.fa.annotprop;
+package org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop;
 
 import java.util.Map;
 import java.util.Optional;
@@ -29,10 +29,10 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaImperativeFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaStaticFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaImperativeFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
@@ -86,14 +86,14 @@ extends FaImperativeFacetAbstract {
                 .getSpecialization()
                 .left()
                 .map(hasStaticName->hasStaticName.translated())
-                .flatMap(this::cssClassFaFactoryForMemberFriendlyName);
+                .flatMap(this::faLayersProviderForMemberFriendlyName);
     }
 
     @Override
     public FaLayersProvider getFaLayersProvider(final Supplier<ManagedObject> domainObjectProvider) {
 
         return staticCssClassFaFactory
-        .orElseGet(()->() -> cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
+        .orElseGet(()->() -> faLayersProviderForConfiguredRegexIfPossible(domainObjectProvider)
                 .map(FaLayersProvider::getLayers)
                 .orElseGet(FontAwesomeLayers::empty));
     }
@@ -111,7 +111,7 @@ extends FaImperativeFacetAbstract {
         return Optional.empty();
     }
 
-    private Optional<FaLayersProvider> cssClassFaFactoryForConfiguredRegexIfPossible(
+    private Optional<FaLayersProvider> faLayersProviderForConfiguredRegexIfPossible(
             final Supplier<ManagedObject> domainObjectProvider) {
 
         final String memberFriendlyName = memberNamedFacet
@@ -120,7 +120,7 @@ extends FaImperativeFacetAbstract {
                 hasStaticName->hasStaticName.translated(), // unexpected code reach, due to optimization above
                 hasImperativeName->hasImperativeName.textElseNull(targetFor(domainObjectProvider)));
 
-        return cssClassFaFactoryForMemberFriendlyName(memberFriendlyName);
+        return faLayersProviderForMemberFriendlyName(memberFriendlyName);
     }
 
     private ManagedObject targetFor(final Supplier<ManagedObject> domainObjectProvider) {
@@ -137,24 +137,24 @@ extends FaImperativeFacetAbstract {
                 : ownerAdapter;
     }
 
-    private Optional<FaLayersProvider> cssClassFaFactoryForMemberFriendlyName(
+    private Optional<FaLayersProvider> faLayersProviderForMemberFriendlyName(
             final String memberFriendlyName) {
 
         return _Strings.nonEmpty(memberFriendlyName)
         .flatMap(this::faIconForName)
-        .map(_faIcon->{
-            final String faIcon;
+        .map(faIcon->{
+            final String faCssClasses;
             final CssClassFaPosition position;
-            int idxOfSeparator = _faIcon.indexOf(':');
+            int idxOfSeparator = faIcon.indexOf(':');
             if (idxOfSeparator > -1) {
-                faIcon = _faIcon.substring(0, idxOfSeparator);
-                String rest = faIcon.substring(idxOfSeparator + 1);
+                faCssClasses = faIcon.substring(0, idxOfSeparator);
+                String rest = faCssClasses.substring(idxOfSeparator + 1);
                 position = CssClassFaPosition.valueOf(rest.toUpperCase());
             } else {
-                faIcon = _faIcon;
+                faCssClasses = faIcon;
                 position = CssClassFaPosition.LEFT;
             }
-            return ofIconAndPosition(faIcon, position);
+            return faIconProvider(faCssClasses, position);
         });
 
     }
@@ -163,7 +163,7 @@ extends FaImperativeFacetAbstract {
      * @implNote because {@link FaStaticFacetAbstract} has all the fa-icon logic,
      * we simply reuse it here by creating an anonymous instance
      */
-    private static FaLayersProvider ofIconAndPosition(final String faIcon, final CssClassFaPosition position) {
+    private static FaLayersProvider faIconProvider(final String faIcon, final CssClassFaPosition position) {
         return new FaStaticFacetAbstract(
                 faIcon, position, null) {};
     }

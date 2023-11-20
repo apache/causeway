@@ -25,8 +25,8 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 
 public class FaFacetForDomainObjectLayoutXml
 extends FaStaticFacetAbstract {

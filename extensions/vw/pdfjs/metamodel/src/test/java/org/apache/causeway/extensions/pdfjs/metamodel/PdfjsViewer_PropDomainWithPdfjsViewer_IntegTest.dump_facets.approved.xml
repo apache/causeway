@@ -270,7 +270,7 @@
             <mml:attr name="precedence" value="LOW"/>
             <mml:attr name="value" value="table"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
             <mml:attr name="classes" value="fa fa-fw fa-download"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>
@@ -430,7 +430,7 @@
             <mml:attr name="precedence" value="LOW"/>
             <mml:attr name="value" value="table"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
             <mml:attr name="classes" value="fa fa-fw fa-download"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>
@@ -694,7 +694,7 @@
             <mml:attr name="precedence" value="LOW"/>
             <mml:attr name="value" value="table"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
             <mml:attr name="classes" value="fa fa-fw fa-download"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>
@@ -861,7 +861,7 @@
             <mml:attr name="precedence" value="LOW"/>
             <mml:attr name="value" value="table"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
             <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>
@@ -975,7 +975,7 @@
             <mml:attr name="precedence" value="LOW"/>
             <mml:attr name="value" value="table"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
             <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>
@@ -1089,7 +1089,7 @@
             <mml:attr name="precedence" value="LOW"/>
             <mml:attr name="value" value="table"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
             <mml:attr name="classes" value="fa fa-fw fa-sync"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>

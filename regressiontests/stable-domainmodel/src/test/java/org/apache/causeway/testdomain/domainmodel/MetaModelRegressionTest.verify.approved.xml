@@ -148,7 +148,7 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.MixinConcrete.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -262,7 +262,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -400,7 +400,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -608,7 +608,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -753,7 +753,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -862,7 +862,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -971,7 +971,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -1175,7 +1175,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -1313,7 +1313,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -1521,7 +1521,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -1666,7 +1666,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -1775,7 +1775,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -1884,7 +1884,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -1963,7 +1963,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -2208,7 +2208,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -2346,7 +2346,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -2554,7 +2554,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -2669,7 +2669,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -2820,7 +2820,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -2929,7 +2929,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -3038,7 +3038,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -3117,7 +3117,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -3418,7 +3418,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -3556,7 +3556,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -3764,7 +3764,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -3909,7 +3909,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -4018,7 +4018,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -4127,7 +4127,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -4218,7 +4218,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -4424,7 +4424,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -4700,7 +4700,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -4838,7 +4838,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -5046,7 +5046,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -5191,7 +5191,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -5300,7 +5300,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -5409,7 +5409,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -5500,7 +5500,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -5712,7 +5712,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -5976,7 +5976,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -6123,7 +6123,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -6261,7 +6261,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -6469,7 +6469,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -6614,7 +6614,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -6723,7 +6723,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -6832,7 +6832,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -7547,7 +7547,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -7687,7 +7687,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -7825,7 +7825,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -8033,7 +8033,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -8178,7 +8178,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -8287,7 +8287,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -8396,7 +8396,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -8788,7 +8788,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -8926,7 +8926,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -9134,7 +9134,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -9279,7 +9279,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -9388,7 +9388,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -9497,7 +9497,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -9590,7 +9590,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -9872,7 +9872,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -10010,7 +10010,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -10218,7 +10218,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -10363,7 +10363,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -10472,7 +10472,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -10581,7 +10581,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -10660,7 +10660,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -10973,7 +10973,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -11111,7 +11111,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -11319,7 +11319,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -11464,7 +11464,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -11573,7 +11573,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -11682,7 +11682,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -11761,7 +11761,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -12104,7 +12104,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -12242,7 +12242,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -12450,7 +12450,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -12595,7 +12595,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -12704,7 +12704,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -12813,7 +12813,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -13302,7 +13302,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -13440,7 +13440,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -13648,7 +13648,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -13793,7 +13793,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -13902,7 +13902,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -14011,7 +14011,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -14104,7 +14104,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -14195,7 +14195,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -14658,7 +14658,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -14796,7 +14796,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -15004,7 +15004,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -15149,7 +15149,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -15258,7 +15258,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -15367,7 +15367,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -15460,7 +15460,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -15551,7 +15551,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -15642,7 +15642,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -15844,7 +15844,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -15947,7 +15947,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -16085,7 +16085,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -16293,7 +16293,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -16438,7 +16438,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -16547,7 +16547,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -16656,7 +16656,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -16835,7 +16835,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -16938,7 +16938,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -17076,7 +17076,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -17284,7 +17284,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -17429,7 +17429,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -17538,7 +17538,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -17647,7 +17647,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -17826,7 +17826,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -17929,7 +17929,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -18067,7 +18067,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -18275,7 +18275,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -18420,7 +18420,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -18529,7 +18529,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -18638,7 +18638,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -19829,17 +19829,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1.hideAct()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation">
@@ -20059,17 +20059,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2.hideAct()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
@@ -20285,17 +20285,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3.hideAct()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
@@ -20525,17 +20525,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4.hideAct()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
@@ -20758,7 +20758,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -20855,7 +20855,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -21100,7 +21100,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -21238,7 +21238,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -21446,7 +21446,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -21561,7 +21561,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -21664,7 +21664,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -21762,7 +21762,7 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.MixinConcrete.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -21874,17 +21874,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport.disableMyAction()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideMyAction" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport.hideMyAction()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
@@ -22111,7 +22111,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -22220,7 +22220,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -22628,7 +22628,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -22766,7 +22766,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -22974,7 +22974,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -23119,7 +23119,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -23228,7 +23228,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -23331,17 +23331,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.disablePlaceOrder()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hidePlaceOrder" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hidePlaceOrder()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
@@ -23567,7 +23567,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -23975,7 +23975,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -24113,7 +24113,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -24321,7 +24321,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -24466,7 +24466,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -24575,7 +24575,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -24682,17 +24682,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.disablePlaceOrder()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hidePlaceOrder" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hidePlaceOrder()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
@@ -24918,7 +24918,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -25326,7 +25326,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -25464,7 +25464,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -25672,7 +25672,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -25817,7 +25817,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -25926,7 +25926,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -26033,17 +26033,17 @@
                         <mml:attr name="methods" value="protected java.lang.String org.apache.causeway.testdomain.model.base.MemberDetection$ProtectedBase.disablePlaceOrder()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hidePlaceOrder" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="protected boolean org.apache.causeway.testdomain.model.base.MemberDetection$ProtectedBase.hidePlaceOrder()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
@@ -26269,7 +26269,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -26472,17 +26472,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1.hideAct()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation">
@@ -26793,17 +26793,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2.hideAct()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
@@ -27110,17 +27110,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3.hideAct()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
@@ -27441,17 +27441,17 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4.disableAct()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
-                        <mml:attr name="classes" value="!imperative"/>
-                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
-                        <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
                         <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
                         <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4.hideAct()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
@@ -27765,7 +27765,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -27953,7 +27953,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -29596,7 +29596,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -29681,7 +29681,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -29766,7 +29766,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -29851,7 +29851,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -29936,7 +29936,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -30021,7 +30021,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -30124,7 +30124,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -30262,7 +30262,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -30470,7 +30470,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -30615,7 +30615,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -30694,7 +30694,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -30854,7 +30854,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -30963,7 +30963,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -31150,7 +31150,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -31331,7 +31331,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -31512,7 +31512,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -31693,7 +31693,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -31874,7 +31874,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -32055,7 +32055,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -32223,7 +32223,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -32528,7 +32528,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -32666,7 +32666,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -32874,7 +32874,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -33019,7 +33019,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -33128,7 +33128,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -33237,7 +33237,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -33441,7 +33441,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -33579,7 +33579,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -33787,7 +33787,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -33902,7 +33902,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -34005,7 +34005,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -34114,7 +34114,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -34223,7 +34223,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -34484,7 +34484,7 @@
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperPrefixedMember.disableDisableSomething()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -34587,7 +34587,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -34725,7 +34725,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -34933,7 +34933,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -35078,7 +35078,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -35187,7 +35187,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -35296,7 +35296,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -35478,7 +35478,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -35870,7 +35870,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -36008,7 +36008,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -36216,7 +36216,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -36361,7 +36361,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -36447,7 +36447,7 @@
                         <mml:attr name="methods" value="private java.lang.String org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport.disableMyAction()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -36564,7 +36564,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -36673,7 +36673,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -37024,7 +37024,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -37162,7 +37162,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -37370,7 +37370,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-download"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -37515,7 +37515,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sitemap"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -37601,7 +37601,7 @@
                         <mml:attr name="methods" value="private java.lang.String org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers.disableMyAction()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.fa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
@@ -37704,7 +37704,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-external-link-alt"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>
@@ -37813,7 +37813,7 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="value" value="table"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.fa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
                         <mml:attr name="classes" value="fa fa-fw fa-sync"/>
                         <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
                         <mml:attr name="position" value="LEFT"/>

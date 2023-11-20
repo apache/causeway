@@ -26,7 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.viewer.commons.model.mixin.HasIcon;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;

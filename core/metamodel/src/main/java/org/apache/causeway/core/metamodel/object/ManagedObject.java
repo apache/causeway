@@ -30,7 +30,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;

@@ -16,20 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.fa;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import java.util.function.Supplier;
 
-/**
- * Represents <i>Font Awesome</i> icons for an action or domain object.
- * <p>
- * In the standard Apache Causeway Programming Model, corresponds to annotating the
- * member with
- * <tt>{@literal @}{@link org.apache.causeway.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
- */
-public interface FaFacet extends Facet {
+import org.springframework.lang.Nullable;
 
-    Either<FaStaticFacet, FaImperativeFacet> getSpecialization();
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
+public interface FaImperativeFacet
+extends FaFacet {
+
+    FaLayersProvider getFaLayersProvider(@Nullable final Supplier<ManagedObject> domainObjectProvider);
 }

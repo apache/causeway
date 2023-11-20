@@ -26,7 +26,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.io.JsonUtils;
 
 import lombok.experimental.Accessors;
 
@@ -84,11 +83,6 @@ public class FontAwesomeLayers implements Serializable {
      * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
      */
     @Nullable CssClassFaPosition postition = CssClassFaPosition.LEFT;
-
-    //TODO[CAUSEWAY-3646] toJson will not work with records?
-    public String toJson() {
-        return JsonUtils.toStringUtf8(this);
-    }
 
     public String toHtml() {
         var iconEntries = Can.ofCollection(iconEntries());

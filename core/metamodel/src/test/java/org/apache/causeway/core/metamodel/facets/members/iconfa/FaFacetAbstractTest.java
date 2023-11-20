@@ -16,26 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.iconfa;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.junit.jupiter.api.Test;
 
-public abstract class FontAwesomeLayersFacetAbstract
-extends FacetAbstract
-implements FontAwesomeLayersFacet {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-    private static final Class<? extends Facet> type() {
-        return FontAwesomeLayersFacet.class;
+public class FaFacetAbstractTest {
+
+    public static class Sanitize extends FaFacetAbstractTest {
+
+        @Test
+        public void present() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("fab foo").toString(), is("[fab, fa-fw, fa-foo]"));
+        }
+
+        @Test
+        public void presentAtEnd() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("foo far ").toString(), is("[far, fa-fw, fa-foo]"));
+        }
+
+        @Test
+        public void missing() throws Exception {
+            assertThat(FaStaticFacetAbstract.parse("foo").toString(), is("[fa, fa-fw, fa-foo]"));
+        }
     }
-
-    public FontAwesomeLayersFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
-
-    public FontAwesomeLayersFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-    }
-
 }

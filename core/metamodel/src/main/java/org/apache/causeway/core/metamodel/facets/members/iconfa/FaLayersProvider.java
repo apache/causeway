@@ -16,25 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.ident.fa;
-
-import org.junit.jupiter.api.Test;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacet;
-import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-class FontAwesomeLayersFacetMethodFactoryTest
-extends ObjectSupportFacetFactoryTestAbstract {
+/**
+ * @since 2.0
+ */
+public interface FaLayersProvider {
 
-    @Test
-    void iconNameMethodPickedUpOnClassAndMethodRemoved() {
-        @SuppressWarnings("unused")
-        class Customer {
-            public FontAwesomeLayers iconFaLayers() { return null; }
-        }
-        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON_FA_LAYERS, FontAwesomeLayersFacet.class);
-    }
+    /**
+     * Provides the model object that is used for FA icon rendering.
+     */
+    FontAwesomeLayers getLayers();
 
 }

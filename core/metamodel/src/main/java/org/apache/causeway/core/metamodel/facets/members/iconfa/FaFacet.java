@@ -16,30 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.fa;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import org.junit.jupiter.api.Test;
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+/**
+ * Represents <i>Font Awesome</i> icons for an action or domain object.
+ * <p>
+ * In the standard Apache Causeway Programming Model, corresponds to annotating the
+ * member with
+ * <tt>{@literal @}{@link org.apache.causeway.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
+ */
+public interface FaFacet extends Facet {
 
-public class FaFacetAbstractTest {
+    Either<FaStaticFacet, FaImperativeFacet> getSpecialization();
 
-    public static class Sanitize extends FaFacetAbstractTest {
-
-        @Test
-        public void present() throws Exception {
-            assertThat(FaStaticFacetAbstract.parse("fab foo").toString(), is("[fab, fa-fw, fa-foo]"));
-        }
-
-        @Test
-        public void presentAtEnd() throws Exception {
-            assertThat(FaStaticFacetAbstract.parse("foo far ").toString(), is("[far, fa-fw, fa-foo]"));
-        }
-
-        @Test
-        public void missing() throws Exception {
-            assertThat(FaStaticFacetAbstract.parse("foo").toString(), is("[fa, fa-fw, fa-foo]"));
-        }
-    }
 }

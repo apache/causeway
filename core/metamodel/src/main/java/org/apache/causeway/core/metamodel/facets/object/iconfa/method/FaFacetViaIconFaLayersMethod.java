@@ -29,32 +29,32 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaLayersProvider;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacet;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaImperativeFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
 
-public class FontAwesomeLayersFacetViaIconFaLayersMethod
-extends FontAwesomeLayersFacetAbstract
+public class FaFacetViaIconFaLayersMethod
+extends FaImperativeFacetAbstract
 implements HasImperativeAspect {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
 
-    public static Optional<FontAwesomeLayersFacet> create(
+    public static Optional<FaFacet> create(
             final @Nullable ResolvedMethod methodIfAny,
             final FacetHolder holder) {
 
         return Optional.ofNullable(methodIfAny)
         .map(method->
-            new FontAwesomeLayersFacetViaIconFaLayersMethod(
+            new FaFacetViaIconFaLayersMethod(
                     ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
                     holder));
     }
 
-    private FontAwesomeLayersFacetViaIconFaLayersMethod(
+    private FaFacetViaIconFaLayersMethod(
             final ImperativeAspect imperativeAspect,
             final FacetHolder holder) {
         super(holder);
@@ -62,20 +62,20 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public FontAwesomeLayers layers(final ManagedObject domainObject) {
-        return imperativeAspect.eval(domainObject, (FontAwesomeLayers)null);
-    }
-
-    @Override
-    public FaLayersProvider getCssClassFaFactory(final Supplier<ManagedObject> domainObjectProvider) {
-        //TODO[CAUSEWAY-3646] implement
-        return () -> layers(domainObjectProvider.get());
+    public FaLayersProvider getFaLayersProvider(final Supplier<ManagedObject> domainObjectProvider) {
+        return () -> evalLayers(domainObjectProvider.get());
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         imperativeAspect.visitAttributes(visitor);
+    }
+
+    // -- HELPER
+
+    FontAwesomeLayers evalLayers(final ManagedObject domainObject) {
+        return imperativeAspect.eval(domainObject, (FontAwesomeLayers)null);
     }
 
 }

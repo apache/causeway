@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.ident.fa;
+package org.apache.causeway.core.metamodel.facets.object.ident.iconfa;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +31,8 @@ import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.FontAwesomeLayersFacet;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.method.FontAwesomeLayersFacetViaIconFaLayersMethod;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.object.iconfa.method.FaFacetViaIconFaLayersMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 
 import lombok.val;
@@ -70,12 +70,12 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            val fontAwesomeLayersFacet = facetHolder.getFacet(FontAwesomeLayersFacet.class);
-            assertNotNull(fontAwesomeLayersFacet, ()->"FontAwesomeLayersFacet required");
-            assertTrue(fontAwesomeLayersFacet instanceof FontAwesomeLayersFacetViaIconFaLayersMethod);
-            val imperativeCssClassFacet = (FontAwesomeLayersFacetViaIconFaLayersMethod)fontAwesomeLayersFacet;
+            val fontAwesomeLayersFacet = facetHolder.getFacet(FaFacet.class);
+            assertNotNull(fontAwesomeLayersFacet, ()->"FaFacet required");
+            assertTrue(fontAwesomeLayersFacet instanceof FaFacetViaIconFaLayersMethod);
+            val imperativeCssClassFacet = (FaFacetViaIconFaLayersMethod)fontAwesomeLayersFacet;
 
-            var actual = imperativeCssClassFacet.layers(domainObject);
+            var actual = imperativeCssClassFacet.getFaLayersProvider(()->domainObject).getLayers();
             assertEquals(FONTAWESOME_LAYERS_SAMPLE, actual);
             assertEquals("fa-solid fa-bookmark", actual.iconEntries().get(0).cssClasses());
         });

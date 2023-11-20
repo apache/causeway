@@ -14,7 +14,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.causeway.core.metamodel.facets.members.fa;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
 import java.util.function.BiConsumer;
 
@@ -54,6 +54,5 @@ implements FaImperativeFacet {
         visitor.accept("position", "!imperative");
         visitor.accept("classes", "!imperative");
     }
-
 
 }

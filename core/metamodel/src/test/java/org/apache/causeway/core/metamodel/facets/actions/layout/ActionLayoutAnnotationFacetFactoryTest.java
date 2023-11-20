@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.members.fa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 
 import lombok.val;
 
