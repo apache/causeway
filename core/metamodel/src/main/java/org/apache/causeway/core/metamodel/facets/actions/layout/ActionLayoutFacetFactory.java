@@ -57,7 +57,7 @@ extends FacetFactoryAbstract {
 
         // cssClassFa
         addFacetIfPresent(
-                CssClassFaFacetForActionLayoutAnnotation
+                FaFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder));
 
         // describedAs

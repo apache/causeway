@@ -572,6 +572,11 @@ span.containedButtonPanel {
 	margin-right: 2px;
 }
 
+/* fa icon size for page titles */
+.entityHeaderPanel .fa {
+  font-size: 1.5em;
+}
+
 /** top alignment for additional buttons on scalar value inputs */
 .scalarValueInput .additionalButtons .btn-group {
   vertical-align: top;

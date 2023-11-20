@@ -24,12 +24,12 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 
-public class CssClassFaFacetForActionLayoutAnnotation
-extends CssClassFaStaticFacetAbstract {
+public class FaFacetForActionLayoutAnnotation
+extends FaStaticFacetAbstract {
 
-    public static Optional<CssClassFaFacetForActionLayoutAnnotation> create(
+    public static Optional<FaFacetForActionLayoutAnnotation> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
@@ -45,11 +45,11 @@ extends CssClassFaStaticFacetAbstract {
         return actionLayoutIfAny
                 .map(Annot::new)
                 .filter(a -> a.cssClassFa != null )
-                .map(a -> new CssClassFaFacetForActionLayoutAnnotation(
+                .map(a -> new FaFacetForActionLayoutAnnotation(
                         a.cssClassFa, a.cssClassFaPosition, holder));
     }
 
-    private CssClassFaFacetForActionLayoutAnnotation(
+    private FaFacetForActionLayoutAnnotation(
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder) {

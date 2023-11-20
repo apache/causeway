@@ -31,6 +31,7 @@ import org.springframework.util.ClassUtils;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
@@ -58,8 +59,8 @@ import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
@@ -472,19 +473,20 @@ implements ObjectSpecification {
     }
 
     @Override
+    public Optional<FontAwesomeLayers> getFaLayers(final ManagedObject reference){
+        return lookupFacet(FaFacet.class)
+                .map(FaFacet::getSpecialization)
+                .map(either->either.fold(
+                        faStaticFacet->(FaLayersProvider)faStaticFacet,
+                        faImperativeFacet->faImperativeFacet.getFaLayersProvider(reference)))
+                .map(FaLayersProvider::getLayers);
+    }
+
+    @Override
     public Can<LogicalType> getAliases() {
         return aliasedFacet != null
                 ? aliasedFacet.getAliases()
                 : Can.empty();
-    }
-
-    @Override
-    public Optional<CssClassFaFactory> getCssClassFaFactory() {
-        return lookupFacet(CssClassFaFacet.class)
-        .map(CssClassFaFacet::getSpecialization)
-        // assuming CssClassFaFacet on objects are always 'static' not 'imperative'
-        .flatMap(either->either.left())
-        .map(CssClassFaFactory.class::cast);
     }
 
     // -- HIERARCHICAL

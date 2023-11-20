@@ -24,13 +24,13 @@ import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
@@ -373,14 +373,14 @@ extends
      * Domain Objects may either have an icon corresponding to an icon resource,
      * or they use a font awesome icon.
      */
-    default Either<ObjectIcon, CssClassFaFactory> eitherIconOrFaClass() {
+    default Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers() {
         val iconName = getIconName();
-        val cssClassFaFactory = getSpecification().getCssClassFaFactory().orElse(null);
+        val faLayers = getSpecification().getFaLayers(this).orElse(null);
         if (iconName != null
-                || cssClassFaFactory == null) {
+                || faLayers == null) {
             return Either.left(getIcon());
         } else {
-            return Either.right(cssClassFaFactory);
+            return Either.right(faLayers);
         }
     }
 

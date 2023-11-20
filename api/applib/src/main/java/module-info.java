@@ -30,6 +30,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.exceptions.recoverable;
     exports org.apache.causeway.applib.exceptions.unrecoverable;
     exports org.apache.causeway.applib.exceptions;
+    exports org.apache.causeway.applib.fa;
     exports org.apache.causeway.applib.graph.tree;
     exports org.apache.causeway.applib.graph;
     exports org.apache.causeway.applib.id;

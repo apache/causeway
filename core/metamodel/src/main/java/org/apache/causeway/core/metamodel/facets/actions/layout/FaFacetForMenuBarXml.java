@@ -26,26 +26,26 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 
-public class CssClassFaFacetForMenuBarXml
-extends CssClassFaStaticFacetAbstract {
+public class FaFacetForMenuBarXml
+extends FaStaticFacetAbstract {
 
-    public static Optional<CssClassFaFacet> create(
+    public static Optional<FaFacet> create(
             final @Nullable ServiceActionLayoutData actionLayout,
             final FacetHolder holder) {
 
         return actionLayout != null
                 ? _Strings.nonEmpty(actionLayout.getCssClassFa())
-                        .map(cssClassFa->new CssClassFaFacetForMenuBarXml(
+                        .map(cssClassFa->new FaFacetForMenuBarXml(
                                 cssClassFa,
                                 CssClassFaPosition.LEFT, // defaults to left
                                 holder))
                 : Optional.empty();
     }
 
-    private CssClassFaFacetForMenuBarXml(
+    private FaFacetForMenuBarXml(
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder) {

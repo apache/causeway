@@ -91,6 +91,7 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -643,6 +644,17 @@ public class Wkt {
         return String.format("<i class=\"%s\"></i>", faClasses);
     }
 
+    public MarkupComponent faIconLayers(
+            final String id,
+            final FontAwesomeLayers fontAwesomeLayers) {
+        return markup(id, fontAwesomeLayers.toHtml());
+    }
+
+    public MarkupComponent faIconLayersAdd(final MarkupContainer container, final String id,
+            final FontAwesomeLayers faLayers) {
+        return add(container, faIconLayers(id, faLayers));
+    }
+
     // -- FRAGMENT
 
     /**
@@ -1139,5 +1151,6 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
+
 
 }

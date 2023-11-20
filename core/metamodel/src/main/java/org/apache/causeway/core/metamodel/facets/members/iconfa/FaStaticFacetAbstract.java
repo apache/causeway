@@ -14,7 +14,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
 import java.util.List;
 import java.util.Set;
@@ -22,6 +22,7 @@ import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -36,17 +37,17 @@ import lombok.Getter;
 import lombok.val;
 
 /**
- * One of two bases for the {@link CssClassFaFacet}.
+ * One of two bases for the {@link FaFacet}.
  *
- * @see CssClassFaImperativeFacetAbstract
+ * @see FaImperativeFacetAbstract
  * @since 2.0
  */
-public abstract class CssClassFaStaticFacetAbstract
+public abstract class FaStaticFacetAbstract
 extends FacetAbstract
-implements CssClassFaStaticFacet {
+implements FaStaticFacet {
 
-    public static final Class<CssClassFaFacet> type() {
-        return CssClassFaFacet.class;
+    public static final Class<FaFacet> type() {
+        return FaFacet.class;
     }
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
@@ -54,19 +55,19 @@ implements CssClassFaStaticFacet {
     private static final String DEFAULT_PRIMARY_PREFIX = "fa";
 
     @Getter(onMethod_ = {@Override})
-    private final Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> specialization = Either.left(this);
+    private final Either<FaStaticFacet, FaImperativeFacet> specialization = Either.left(this);
 
     @Getter(onMethod_ = {@Override}) private CssClassFaPosition position;
     private final List<String> cssClasses; // serializable list implementation
 
-    protected CssClassFaStaticFacetAbstract(
+    protected FaStaticFacetAbstract(
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder) {
         this(value, position, holder, Precedence.DEFAULT);
     }
 
-    protected CssClassFaStaticFacetAbstract(
+    protected FaStaticFacetAbstract(
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder,
@@ -78,8 +79,13 @@ implements CssClassFaStaticFacet {
     }
 
     @Override
-    public Stream<String> streamCssClasses() {
+    public final Stream<String> streamCssClasses() {
         return cssClasses.stream();
+    }
+
+    @Override
+    public final FontAwesomeLayers getLayers() {
+        return FontAwesomeLayers.singleIcon(asSpaceSeparatedWithAdditional(FIXED_WIDTH));
     }
 
     @Override
@@ -106,7 +112,7 @@ implements CssClassFaStaticFacet {
         //XXX cannot use lombok val here
         final Set<String> cssClassesSet = _Sets.<String>newLinkedHashSet(); // preserved order
         _Strings.splitThenStreamTrimmed(value.trim(), WHITESPACE)
-        .map(CssClassFaStaticFacetAbstract::faPrefix)
+        .map(FaStaticFacetAbstract::faPrefix)
         .forEach(cssClass->cssClassesSet.add(faPrefix(cssClass)));
 
         return sanitize(cssClassesSet);
@@ -116,7 +122,7 @@ implements CssClassFaStaticFacet {
         val cssClasses = _Lists.<String>newArrayList();
 
         val primaryPrefix = parsedClasses.stream()
-        .filter(CssClassFaStaticFacetAbstract::isFaPrimaryPrefix)
+        .filter(FaStaticFacetAbstract::isFaPrimaryPrefix)
         .findFirst()
         .orElse(DEFAULT_PRIMARY_PREFIX);
 
@@ -124,8 +130,8 @@ implements CssClassFaStaticFacet {
         cssClasses.add(FIXED_WIDTH);
 
         parsedClasses.stream()
-        .filter(_Predicates.not(CssClassFaStaticFacetAbstract::isFaPrimaryPrefix))
-        .filter(_Predicates.not(CssClassFaStaticFacetAbstract::isFixedWidth))
+        .filter(_Predicates.not(FaStaticFacetAbstract::isFaPrimaryPrefix))
+        .filter(_Predicates.not(FaStaticFacetAbstract::isFixedWidth))
         .forEach(cssClasses::add);
 
         return cssClasses;

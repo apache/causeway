@@ -22,9 +22,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -54,7 +54,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_LINK_WRAPPER = "entityLinkWrapper";
-    private static final String ID_ENTITY_FONT_AWESOME = "entityFontAwesome";
+    private static final String ID_ENTITY_FONT_AWESOME_LEFT = "entityIconFaLeft";
+    private static final String ID_ENTITY_FONT_AWESOME_RIGHT = "entityIconFaRight";
     private static final String ID_ENTITY_LINK = "entityLink";
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
@@ -108,20 +109,24 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
             Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated("(no object)"));
         } else {
-            linkedDomainObject.eitherIconOrFaClass()
+
+            linkedDomainObject.eitherIconOrFaLayers()
             .accept(
                     objectIcon->{
                         Wkt.imageAddCachable(link, ID_ENTITY_ICON,
                                 getImageResourceCache().resourceReferenceForObjectIcon(objectIcon));
-                        WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+                        WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME_LEFT);
+                        WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME_RIGHT);
                     },
-                    cssClassFaFactory->{
+                    faLayers->{
                         WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-                        final Label dummyLabel = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
-                        val faSizeModifier = getModel().getRenderingHint().isInTable()
-                                ? "fa-lg"
-                                : "fa-2x";
-                        Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional(faSizeModifier));
+                        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
+                            Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME_LEFT, faLayers);
+                            WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME_RIGHT);
+                        } else {
+                            WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME_LEFT);
+                            Wkt.faIconLayersAdd(link, ID_ENTITY_FONT_AWESOME_RIGHT, faLayers);
+                        }
                     });
 
             final TitleRecord title = determineTitle(linkedDomainObject);

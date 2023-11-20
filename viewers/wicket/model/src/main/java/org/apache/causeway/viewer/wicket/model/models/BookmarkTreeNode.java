@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.LongAdder;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -51,8 +52,8 @@ implements
 
     /** its either a iconResourceReference or a iconFaClass or neither (decomposed for easy serialization) */
     private ResourceReference iconResourceReference;
-    /** its either a iconResourceReference or a iconFaClass or neither (decomposed for easy serialization) */
-    private String iconFaClass;
+    /** its either a iconResourceReference or a FontAwesomeLayers or neither (decomposed for easy serialization) */
+    private FontAwesomeLayers faLayers;
 
     //private final Set<Bookmark> propertyBookmarks; ... in support of parents referencing their child
 
@@ -83,8 +84,8 @@ implements
         .ifPresent(either->either.accept(
                 iconResourceReference->
                     this.iconResourceReference = iconResourceReference,
-                faFactory->
-                    this.iconFaClass = faFactory.asSpaceSeparated()
+                faLayers->
+                    this.faLayers = faLayers
                 )
         );
 
@@ -93,10 +94,10 @@ implements
 
     // -- ICON
 
-    public Either<ResourceReference, String> eitherIconOrFaClass() {
-        return iconFaClass==null
+    public Either<ResourceReference, FontAwesomeLayers> eitherIconOrFaClass() {
+        return faLayers==null
                 ? Either.left(iconResourceReference)
-                : Either.right(iconFaClass);
+                : Either.right(faLayers);
     }
 
     // -- COMPARATOR
