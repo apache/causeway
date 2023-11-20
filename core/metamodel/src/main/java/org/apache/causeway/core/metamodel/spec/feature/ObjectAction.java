@@ -370,7 +370,7 @@ public interface ObjectAction extends ObjectMember {
                                 hasImperativeFaIcon->
                                     ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
                                         ? null
-                                        : hasImperativeFaIcon.getFaLayersProvider(domainObject.asSupplier())))
+                                        : hasImperativeFaIcon.getFaLayersProvider(domainObject)))
                 .filter(_NullSafe::isPresent);
         }
 

@@ -18,14 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import java.util.function.Supplier;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public interface FaImperativeFacet
 extends FaFacet {
 
-    FaLayersProvider getFaLayersProvider(@Nullable final Supplier<ManagedObject> domainObjectProvider);
+    FaLayersProvider getFaLayersProvider(ManagedObject domainObject);
 }

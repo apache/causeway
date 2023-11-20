@@ -478,7 +478,7 @@ implements ObjectSpecification {
                 .map(FaFacet::getSpecialization)
                 .map(either->either.fold(
                         faStaticFacet->(FaLayersProvider)faStaticFacet,
-                        faImperativeFacet->faImperativeFacet.getFaLayersProvider(()->reference)))
+                        faImperativeFacet->faImperativeFacet.getFaLayersProvider(reference)))
                 .map(FaLayersProvider::getLayers);
     }
 

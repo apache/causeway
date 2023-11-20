@@ -75,7 +75,7 @@ extends FacetFactoryTestAbstract {
             assertTrue(fontAwesomeLayersFacet instanceof FaFacetViaIconFaLayersMethod);
             val imperativeCssClassFacet = (FaFacetViaIconFaLayersMethod)fontAwesomeLayersFacet;
 
-            var actual = imperativeCssClassFacet.getFaLayersProvider(()->domainObject).getLayers();
+            var actual = imperativeCssClassFacet.getFaLayersProvider(domainObject).getLayers();
             assertEquals(FONTAWESOME_LAYERS_SAMPLE, actual);
             assertEquals("fa-solid fa-bookmark", actual.iconEntries().get(0).cssClasses());
         });

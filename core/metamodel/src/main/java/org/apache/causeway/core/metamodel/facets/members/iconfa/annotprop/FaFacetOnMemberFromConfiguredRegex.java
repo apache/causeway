@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -40,7 +39,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Installed by {@link CssOnActionFromConfiguredRegexPostProcessor},
@@ -90,10 +88,9 @@ extends FaImperativeFacetAbstract {
     }
 
     @Override
-    public FaLayersProvider getFaLayersProvider(final Supplier<ManagedObject> domainObjectProvider) {
-
+    public FaLayersProvider getFaLayersProvider(final ManagedObject domainObject) {
         return staticCssClassFaFactory
-        .orElseGet(()->() -> faLayersProviderForConfiguredRegexIfPossible(domainObjectProvider)
+        .orElse(() -> faLayersProviderForConfiguredRegexIfPossible(domainObject)
                 .map(FaLayersProvider::getLayers)
                 .orElseGet(FontAwesomeLayers::empty));
     }
@@ -112,20 +109,19 @@ extends FaImperativeFacetAbstract {
     }
 
     private Optional<FaLayersProvider> faLayersProviderForConfiguredRegexIfPossible(
-            final Supplier<ManagedObject> domainObjectProvider) {
+            final ManagedObject domainObject) {
 
         final String memberFriendlyName = memberNamedFacet
         .getSpecialization()
         .fold(
                 hasStaticName->hasStaticName.translated(), // unexpected code reach, due to optimization above
-                hasImperativeName->hasImperativeName.textElseNull(targetFor(domainObjectProvider)));
+                hasImperativeName->hasImperativeName.textElseNull(targetFor(domainObject)));
 
         return faLayersProviderForMemberFriendlyName(memberFriendlyName);
     }
 
-    private ManagedObject targetFor(final Supplier<ManagedObject> domainObjectProvider) {
-        val ownerAdapter = domainObjectProvider.get();
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(ownerAdapter)) {
+    private ManagedObject targetFor(final ManagedObject domainObject) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
             return ManagedObject.empty(objectSpecification);
         }
         return objectSpecification.isMixin()
@@ -133,8 +129,8 @@ extends FaImperativeFacetAbstract {
                         objectSpecification,
                         objectSpecification
                             .getFactoryService()
-                            .mixin(objectSpecification.getCorrespondingClass(), ownerAdapter.getPojo()))
-                : ownerAdapter;
+                            .mixin(objectSpecification.getCorrespondingClass(), domainObject.getPojo()))
+                : domainObject;
     }
 
     private Optional<FaLayersProvider> faLayersProviderForMemberFriendlyName(

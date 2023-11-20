@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.iconfa.method;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
@@ -62,8 +61,8 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public FaLayersProvider getFaLayersProvider(final Supplier<ManagedObject> domainObjectProvider) {
-        return () -> evalLayers(domainObjectProvider.get());
+    public FaLayersProvider getFaLayersProvider(final ManagedObject domainObject) {
+        return () -> evalLayers(domainObject);
     }
 
     @Override
