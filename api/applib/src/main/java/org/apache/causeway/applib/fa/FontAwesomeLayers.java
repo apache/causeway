@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
@@ -29,9 +30,9 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.JsonUtils;
 
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 /**
  * <h1>EXPERIMENTAL FEATURE WARNING</h1>
@@ -42,7 +43,7 @@ import lombok.experimental.Accessors;
  * @since 2.0 {@index}
  * @see <a href="https://fontawesome.com/docs/web/style/layer">Font Awesome Layers</a>
  */
-@lombok.Value @Accessors(fluent=true) // record candidate
+@lombok.Value
 public class FontAwesomeLayers implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,30 +51,43 @@ public class FontAwesomeLayers implements Serializable {
     // -- FACTORIES
 
     public static FontAwesomeLayers empty() {
-        return new FontAwesomeLayers(null, null, null, null);
+        return new FontAwesomeLayers(IconType.SINGLE, null, null, null, null);
     }
 
     public static FontAwesomeLayers blank() {
         return singleIcon("fa-blank");
     }
 
-//    public static FontAwesomeLayers fallback() {
-//        return singleIcon("fa-cube");
-//    }
-
     public static FontAwesomeLayers singleIcon(final String faClasses) {
-        return new FontAwesomeLayers(null, null, List.of(new IconEntry(normalizeCssClasses(faClasses, "fa"), null)), null);
+        return new FontAwesomeLayers(IconType.SINGLE, null, null,
+                List.of(new IconEntry(normalizeCssClasses(faClasses, "fa"), null)),
+                null);
     }
 
     public static FontAwesomeLayers iconStack(
             final @Nullable String containerCssClasses,
             final @Nullable String containerCssStyle,
             final @NonNull IconEntry baseEntry,
-            final @NonNull IconEntry overlayEntry) {
+            final @NonNull IconEntry overlayEntry,
+            final IconEntry ...additionalOverlayEntries) {
+        var iconEntries = Stream.concat(
+                    Stream.of(baseEntry, overlayEntry),
+                    Can.ofArray(additionalOverlayEntries).stream() // does not collect nulls
+                )
+                .collect(Collectors.toList());
         return new FontAwesomeLayers(
+                IconType.STACKED,
                 normalizeCssClasses(containerCssClasses, "fa-stack"),
                 containerCssStyle,
-                List.of(baseEntry, overlayEntry), null);
+                iconEntries,
+                null);
+    }
+
+    //TODO[CAUSEWAY-3646] work in progress
+    //see https://www.baeldung.com/jackson-deserialize-immutable-objects
+    public static FontAwesomeLayers fromJson(final @Nullable String json) {
+        return JsonUtils.tryRead(FontAwesomeLayers.class, json)
+                .valueAsNonNullElseFail();
     }
 
     // -- UTILITIES
@@ -90,7 +104,13 @@ public class FontAwesomeLayers implements Serializable {
 
     // --
 
-    @lombok.Value @Accessors(fluent=true) // record candidate
+    public enum IconType {
+        SINGLE,
+        STACKED,
+        LAYERED
+    }
+
+    @lombok.Value
     public static class IconEntry implements Serializable {
         private static final long serialVersionUID = 1L;
         @Nullable String cssClasses;
@@ -109,7 +129,7 @@ public class FontAwesomeLayers implements Serializable {
         }
     }
 
-    @lombok.Value @Accessors(fluent=true) // record candidate
+    @lombok.Value
     public static class SpanEntry implements Serializable {
         private static final long serialVersionUID = 1L;
         @Nullable String cssClasses;
@@ -118,18 +138,18 @@ public class FontAwesomeLayers implements Serializable {
         @Nullable String text;
     }
 
+    @NonNull IconType iconType;
+    /**
+     * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
+     */
+    @Nullable CssClassFaPosition postition = CssClassFaPosition.LEFT;
     @Nullable String containerCssClasses;
     @Nullable String containerCssStyle;
     @Nullable List<IconEntry> iconEntries;
     @Nullable List<SpanEntry> spanEntries;
 
-    /**
-     * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
-     */
-    @Nullable CssClassFaPosition postition = CssClassFaPosition.LEFT;
-
     public String toHtml() {
-        var iconEntries = Can.ofCollection(iconEntries());
+        var iconEntries = Can.ofCollection(getIconEntries());
         if(iconEntries.isEmpty()) {
             return "";
         }
@@ -142,11 +162,15 @@ public class FontAwesomeLayers implements Serializable {
         return faSpanHtml(sb.toString(), containerCssClasses, containerCssStyle);
     }
 
+    public String toJson() {
+        return JsonUtils.toStringUtf8(this, JsonUtils::indentedOutput);
+    }
+
     // -- UTILITY
 
     //TODO[CAUSEWAY-3646] how to determine position when empty
     public FontAwesomeLayers emptyToBlank() {
-        return _NullSafe.size(this.iconEntries())>0
+        return _NullSafe.size(this.getIconEntries())>0
                 ? this
                 : FontAwesomeLayers.blank();
     }
