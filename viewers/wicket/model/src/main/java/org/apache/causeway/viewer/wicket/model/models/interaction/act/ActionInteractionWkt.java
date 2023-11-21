@@ -30,7 +30,6 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -136,10 +135,6 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     @Override
     protected ActionInteraction load() {
 
-        // setup the lazy, don't yet evaluate
-        parameterNegotiationModel =
-                _Lazy.threadSafe(()->actionInteraction().startParameterNegotiation());
-
         if(associatedWithParameterIfAny!=null) {
             final int paramIndex = associatedWithParameterIfAny.getParameterIndex();
             // supports composite-value-types via mixin
@@ -206,18 +201,18 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         return childModels.stream();
     }
 
-    // -- PARAMETER NEGOTIATION WITH MEMOIZATION (TRANSIENT)
-
-    private transient _Lazy<Optional<ParameterNegotiationModel>> parameterNegotiationModel;
+    // -- PARAMETER NEGOTIATION
 
     public final ParameterNegotiationModel parameterNegotiationModel() {
-        _Assert.assertTrue(this.isAttached(), "model is not attached");
-        return parameterNegotiationModel.get()
-                .orElseThrow(()->_Exceptions.noSuchElement(memberId));
+        guardAgainstNotAttached();
+        return parameterNegotiationModel!=null
+                ? parameterNegotiationModel
+                : startParameterNegotiationModel();
     }
 
     public void resetParametersToDefault() {
-        parameterNegotiationModel.clear();
+        // in effect invalidates the currently memoized parameterNegotiationModel (if any)
+        this.parameterNegotiationModel = null;
     }
 
     public InlinePromptContext getInlinePromptContext() {
@@ -226,6 +221,31 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
                 : associatedWithParameterIfAny!=null
                     ? associatedWithParameterIfAny.getInlinePromptContext()
                     : null;
+    }
+
+    // -- HELPER
+
+    /**
+     * memoized transiently
+     */
+    private transient ParameterNegotiationModel parameterNegotiationModel;
+    /**
+     * Start and transiently memoize a new {@link ParameterNegotiationModel}.
+     */
+    private ParameterNegotiationModel startParameterNegotiationModel() {
+        return this.parameterNegotiationModel = actionInteraction().startParameterNegotiation()
+                .orElseThrow(()->_Exceptions.noSuchElement(memberId));
+    }
+    /**
+     * [CAUSEWAY-3649] safe guard against access to the model while it is not attached
+     */
+    private void guardAgainstNotAttached() {
+        if(!this.isAttached()) {
+            // start over
+            this.parameterNegotiationModel = null;
+            getObject();
+        }
+        _Assert.assertTrue(this.isAttached(), ()->"model is not attached");
     }
 
 }
