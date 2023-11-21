@@ -41,14 +41,14 @@ public class FontAwesomeBehavior extends Behavior {
     @Override
     public void beforeRender(final Component component) {
         super.beforeRender(component);
-        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
+        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.getPostition())) {
             component.getResponse().write(faLayers.toHtml());
         }
     }
 
     @Override
     public void afterRender(final Component component) {
-        if(!CssClassFaPosition.isLeftOrUnspecified(faLayers.postition())) {
+        if(!CssClassFaPosition.isLeftOrUnspecified(faLayers.getPostition())) {
             component.getResponse().write(faLayers.toHtml());
         }
         super.afterRender(component);

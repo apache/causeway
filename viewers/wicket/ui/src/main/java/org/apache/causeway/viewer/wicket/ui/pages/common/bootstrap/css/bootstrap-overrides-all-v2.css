@@ -482,12 +482,10 @@ div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
 }
 
 .entityHeaderPanel .entityTitle {
-    font-size: 1.52em;
     font-weight:normal;
     text-decoration:none;
     padding-right: 30px;
 }
-
 
 /* from BreadcrumbPanel.css */
 
@@ -570,12 +568,6 @@ span.containedButtonPanel {
 /* add some space between an FA icon and the text on the right */
 .additionalLinkItem .fa {
 	margin-right: 2px;
-}
-
-/* fa icon size for page titles */
-.entityHeaderPanel .entityIconAndTitlePanel .fa,
-.entityHeaderPanel .entityIconAndTitlePanel .fa-stack {
-    font-size: calc(1.275rem + .3vw);
 }
 
 /** top alignment for additional buttons on scalar value inputs */
