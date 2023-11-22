@@ -26,36 +26,56 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 
 class FontAwesomeLayersTest {
 
-    @Test
-    void jsonRoundtrip() {
+    FontAwesomeLayers iconStackSample = FontAwesomeLayers.iconStack(
+            "fa-lg",
+            "width:1.25em",
+            new FontAwesomeLayers.IconEntry("fa-solid fa-layer-group fa-stack-1x",
+                    "color:darkgreen;"),
+            new FontAwesomeLayers.IconEntry("fa-solid fa-circle-chevron-down fa-stack-1x",
+                    "color:Tomato;"
+                    + "font-size:0.5em;"
+                    + "left:1em;"
+                    + "top:1em;"
+                    + "background-image:radial-gradient(circle at center, white 20%, transparent 20%);"),
+            new FontAwesomeLayers.IconEntry("fa-solid fa-exclamation fa-stack-1x overlay", null));
 
-        var iconStack = FontAwesomeLayers.iconStack(
-                "fa-lg",
-                "width:1.25em",
-                new FontAwesomeLayers.IconEntry("fa-solid fa-layer-group fa-stack-1x",
-                        "color:darkgreen;"),
-                new FontAwesomeLayers.IconEntry("fa-solid fa-circle-chevron-down fa-stack-1x",
-                        "color:Tomato;"
+    @Test
+    void builder() {
+        var iconStack = FontAwesomeLayers.stackBuilder()
+                .containerCssClasses("fa-lg")
+                .containerCssStyle("width:1.25em")
+                .addIconEntry("fa-solid fa-layer-group fa-stack-1x", "color:darkgreen;")
+                .addIconEntry("fa-solid fa-circle-chevron-down fa-stack-1x", "color:Tomato;"
                         + "font-size:0.5em;"
                         + "left:1em;"
                         + "top:1em;"
-                        + "background-image:radial-gradient(at center, white 20%, transparent 20%);"),
-                new FontAwesomeLayers.IconEntry("fa-solid fa-circle-chevron-down fa-stack-1x",
-                        "color:Tomato;"
-                        + "font-size:0.5em;"
-                        + "left:-1em;"
-                        + "top:1em;"
-                        + "background-image:radial-gradient(at center, white 20%, transparent 20%);"));
-
-        assertEquals(3, _NullSafe.size(iconStack.getIconEntries()));
-
+                        + "background-image:radial-gradient(circle at center, white 20%, transparent 20%);")
+                .addIconEntry("fa-solid fa-exclamation fa-stack-1x overlay")
+                .build();
 
         //debug
         //System.err.printf("%s%n", iconStack.toJson());
 
-        //TODO[CAUSEWAY-3646] work in progress
-        //var iconStackAfterRoundtrip = FontAwesomeLayers.fromJson(iconStack.toJson());
-        //assertEquals(iconStack, iconStackAfterRoundtrip);
+        assertEquals(iconStackSample, iconStack);
+        assertEquals(iconStackSample.toJson(), iconStack.toJson());
+    }
+
+    @Test
+    void jsonRoundtrip() {
+
+        var iconStack = iconStackSample;
+
+        assertEquals(3, _NullSafe.size(iconStack.getIconEntries()));
+
+        //debug
+        //System.err.printf("%s%n", iconStack.toJson());
+
+        var iconStackAfterRoundtrip = FontAwesomeLayers.fromJson(iconStack.toJson());
+
+        //debug
+        //System.err.printf("%s%n", iconStackAfterRoundtrip.toJson());
+
+        assertEquals(iconStack, iconStackAfterRoundtrip);
 
     }
 
