@@ -21,8 +21,6 @@ package org.apache.causeway.applib.fa;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -94,35 +92,18 @@ public class FontAwesomeLayers implements Serializable {
                 null);
     }
 
-    //TODO[CAUSEWAY-3646] work in progress
-    //see https://www.baeldung.com/jackson-deserialize-immutable-objects
     public static FontAwesomeLayers fromJson(final @Nullable String json) {
-        var map = JsonUtils.tryRead(Map.class, json)
-                .valueAsNonNullElseFail();
-        var iconType = IconType.valueOf((String)map.get("iconType"));
-        switch (iconType) {
-        case STACKED:{
-            final var stackBuilder = FontAwesomeLayers.stackBuilder()
-                    .postition(Optional.ofNullable((String)map.get("postition"))
-                            .map(CssClassFaPosition::valueOf)
-                            .orElse(CssClassFaPosition.LEFT))
-                    .containerCssClasses((String)map.get("containerCssClasses"))
-                    .containerCssStyle((String)map.get("containerCssStyle"));
+        return FontAwesomeJsonParser.parse(json);
+    }
 
-            _NullSafe.streamAutodetect(map.get("iconEntries"))
-                .map(Map.class::cast)
-                .forEach(iconEntryAsMap->{
-                    stackBuilder.addIconEntry(
-                            (String)iconEntryAsMap.get("cssClasses"),
-                            (String)iconEntryAsMap.get("cssStyle"));
-                });
-
-            return stackBuilder
-                    .build();
-        }
-        default:
-            throw _Exceptions.unmatchedCase(iconType);
-        }
+    /**
+     * Example:
+     * <pre>
+     * solid person-walking-arrow-right .my-color,
+     * solid scale-balanced .my-color .bottom-right-overlay</pre>
+     */
+    public static FontAwesomeLayers fromQuickNotation(final @Nullable String quickNotation) {
+        return FontAwesomeQuickNotationParser.parse(quickNotation);
     }
 
     // -- BUILDER

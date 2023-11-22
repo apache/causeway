@@ -79,4 +79,23 @@ class FontAwesomeLayersTest {
 
     }
 
+    @Test
+    void quickNotation() {
+        var iconStackFromQuick = FontAwesomeLayers.fromQuickNotation(
+                "solid layer-group .my-color, "
+                + "solid circle-chevron-down .my-color .bottom-right-overlay");
+
+        var iconStackReference = FontAwesomeLayers.stackBuilder()
+                .containerCssClasses("fa-lg")
+                .containerCssStyle("width:1.25em")
+                .addIconEntry("fa-solid fa-layer-group fa-stack-1x my-color")
+                .addIconEntry("fa-solid fa-circle-chevron-down fa-stack-1x my-color bottom-right-overlay")
+                .build();
+
+
+        System.err.printf("%s%n", iconStackFromQuick.toJson());
+
+        assertEquals(iconStackReference.toJson(), iconStackFromQuick.toJson());
+    }
+
 }
