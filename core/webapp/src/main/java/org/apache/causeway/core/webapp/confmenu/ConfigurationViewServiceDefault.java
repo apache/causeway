@@ -53,7 +53,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
@@ -82,7 +81,6 @@ implements
     private final CausewayConfiguration configuration;
     private final DataSourceIntrospectionService datasourceInfoService;
     private final List<WebModule> webModules;
-    private final CausewayModuleCoreConfig.ConfigProps configProps;
 
     private LocalDateTime startupTime = LocalDateTime.MIN; // so it is not uninitialized
 
@@ -139,7 +137,11 @@ implements
                 new ArrayList<Map<String, ConfigurationProperty>>();
 
         val env = loadEnvironment();
-        val primary = loadPrimary();
+        val primary = loadPrimary(List.of(
+                "causeway.",
+                "resteasy.",
+                "datanucleus.",
+                "eclipselink."));
         // we dont't want any duplicates to appear in secondary
         val secondary = loadSecondary(Stream.concat(env.keySet().stream(), primary.keySet().stream())
                 .distinct()
@@ -190,14 +192,16 @@ implements
         return map;
     }
 
-    private Map<String, ConfigurationProperty> loadPrimary() {
+    private Map<String, ConfigurationProperty> loadPrimary(final List<String> primaryPrefixes) {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-
-            configProps.getCauseway().forEach((k, v)->add("causeway." + k, v, map));
-            configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
-            configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
-            configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));
+            final ConfigurableEnvironment springEnv = configuration.getEnvironment();
+            streamConfigurationPropertyNames(springEnv)
+            .filter(propName->primaryPrefixes.stream().anyMatch(propName::startsWith))
+            .forEach(propName -> {
+                String propertyValue = springEnv.getProperty(propName);
+                add(propName, propertyValue, map);
+            });
 
             val dsInfos = datasourceInfoService.getDataSourceInfos();
 
@@ -218,16 +222,8 @@ implements
     private Map<String, ConfigurationProperty> loadSecondary(final Set<String> toBeExcluded) {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-
-            ConfigurableEnvironment springEnv = configuration.getEnvironment();
-            MutablePropertySources propertySources = springEnv.getPropertySources();
-            StreamSupport
-            .stream(propertySources.spliterator(), false)
-            .filter(EnumerablePropertySource.class::isInstance)
-            .map(EnumerablePropertySource.class::cast)
-            .filter(ps->!"systemEnvironment".equalsIgnoreCase(ps.getName())) // exclude system env
-            .map(EnumerablePropertySource::getPropertyNames)
-            .flatMap(_NullSafe::stream)
+            final ConfigurableEnvironment springEnv = configuration.getEnvironment();
+            streamConfigurationPropertyNames(springEnv)
             .filter(propName->!toBeExcluded.contains(propName))
             .forEach(propName -> {
                 String propertyValue = springEnv.getProperty(propName);
@@ -269,6 +265,17 @@ implements
                 configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())
                 // fallback to configuration default policy
                 .orElseGet(()->new CausewayConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
+    }
+
+    private static Stream<String> streamConfigurationPropertyNames(final ConfigurableEnvironment springEnv) {
+        MutablePropertySources propertySources = springEnv.getPropertySources();
+            return StreamSupport
+            .stream(propertySources.spliterator(), false)
+            .filter(EnumerablePropertySource.class::isInstance)
+            .map(EnumerablePropertySource.class::cast)
+            .filter(ps->!"systemEnvironment".equalsIgnoreCase(ps.getName())) // exclude system env
+            .map(EnumerablePropertySource::getPropertyNames)
+            .flatMap(_NullSafe::stream);
     }
 
 }
