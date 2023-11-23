@@ -34,7 +34,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0-RC2</version>
+        <version>3.2.0</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -171,7 +171,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.9</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.2.0-RC2</spring-boot.version>
+        <spring-boot.version>3.2.0</spring-boot.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.19</swagger-core.version>
@@ -214,7 +214,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			[6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
     </properties>
     <dependencyManagement>
-
 
 		<dependencies>
 
@@ -2054,14 +2053,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-            <!-- Spring Milestones, until release of Spring Boot 3.2 -->
-            <id>Spring Milestones</id>
-            <url>https://repo.spring.io/milestone/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     </repositories>
     <pluginRepositories>
 		<pluginRepository>
@@ -2071,14 +2062,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
-	    <pluginRepository>
-            <!-- Spring Milestones, until release of Spring Boot 3.2 -->
-            <id>Spring Milestones</id>
-            <url>https://repo.spring.io/milestone/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
     </pluginRepositories>
     <distributionManagement>
         <repository>
