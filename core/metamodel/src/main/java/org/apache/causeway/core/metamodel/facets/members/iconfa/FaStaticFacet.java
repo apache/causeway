@@ -18,15 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-
 public interface FaStaticFacet
 extends FaFacet, FaLayersProvider {
-
-    //TODO[CAUSEWAY-3646] remove - can be directly queried from FA layers
-    /**
-     * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
-     */
-    CssClassFaPosition getPosition();
 
 }

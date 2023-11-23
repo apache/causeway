@@ -112,11 +112,11 @@ public class LayoutFacetUtil {
         .map(FaFacet::getSpecialization)
         .ifPresent(specialization->
             specialization.accept(
-                    hasStaticFaIcon->{
-                        final String cssClassFa = hasStaticFaIcon.getLayers().toQuickNotation();
+                    faStaticFacet->{
+                        final String cssClassFa = faStaticFacet.getLayers().toQuickNotation();
                         if(!_Strings.isNullOrEmpty(cssClassFa)) {
                             hasCssClassFa.setCssClassFa(cssClassFa);
-                            hasCssClassFa.setCssClassFaPosition(hasStaticFaIcon.getPosition());
+                            hasCssClassFa.setCssClassFaPosition(faStaticFacet.getLayers().getPosition());
                         }
                     },
                     _Functions.noopConsumer())); // not supported for imperative fa-icons

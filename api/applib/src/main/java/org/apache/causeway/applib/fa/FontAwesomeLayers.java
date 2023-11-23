@@ -39,6 +39,7 @@ import org.apache.causeway.commons.io.JsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.With;
 import lombok.experimental.Accessors;
 
 /**
@@ -60,7 +61,7 @@ public class FontAwesomeLayers implements Serializable {
     // -- FACTORIES
 
     public static FontAwesomeLayers empty() {
-        return new FontAwesomeLayers(IconType.SINGLE, null, null, null, null);
+        return new FontAwesomeLayers(IconType.SINGLE, null, null, null, null, null);
     }
 
     public static FontAwesomeLayers blank() {
@@ -68,7 +69,7 @@ public class FontAwesomeLayers implements Serializable {
     }
 
     public static FontAwesomeLayers singleIcon(final String faClasses) {
-        return new FontAwesomeLayers(IconType.SINGLE, null, null,
+        return new FontAwesomeLayers(IconType.SINGLE, null, null, null,
                 List.of(new IconEntry(normalizeCssClasses(faClasses, "fa"), null)),
                 null);
     }
@@ -86,6 +87,7 @@ public class FontAwesomeLayers implements Serializable {
                 .collect(Collectors.toList());
         return new FontAwesomeLayers(
                 IconType.STACKED,
+                null,
                 normalizeCssClasses(containerCssClasses, "fa-stack"),
                 containerCssStyle,
                 iconEntries,
@@ -121,6 +123,7 @@ public class FontAwesomeLayers implements Serializable {
             case STACKED:{
                 return new FontAwesomeLayers(
                     IconType.STACKED,
+                    null,
                     normalizeCssClasses(containerCssClasses, "fa-stack"),
                     containerCssStyle,
                     Can.ofCollection(iconEntries).toList(),
@@ -140,7 +143,7 @@ public class FontAwesomeLayers implements Serializable {
     }
 
     public static StackBuilder stackBuilder() {
-        return new StackBuilder(IconType.STACKED, CssClassFaPosition.LEFT,
+        return new StackBuilder(IconType.STACKED, null,
                 null, null, new ArrayList<FontAwesomeLayers.IconEntry>());
     }
 
@@ -204,7 +207,8 @@ public class FontAwesomeLayers implements Serializable {
     /**
      * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
      */
-    @Nullable CssClassFaPosition postition = CssClassFaPosition.LEFT;
+    @With
+    @Nullable CssClassFaPosition position;
     @Nullable String containerCssClasses;
     @Nullable String containerCssStyle;
     @Nullable List<IconEntry> iconEntries;

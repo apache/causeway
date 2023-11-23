@@ -123,7 +123,7 @@ extends FacetFactoryTestAbstract {
             val classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
             assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getIconEntries().get(0).getCssClasses(),
                     is(equalTo("fa fa-font-awesome fa-fw")));
-            assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.LEFT));
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getPosition(), is(CssClassFaPosition.LEFT));
 
         });
     }
@@ -145,7 +145,7 @@ extends FacetFactoryTestAbstract {
             val classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
             assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getIconEntries().get(0).getCssClasses(),
                     is(equalTo("fa fa-font-awesome fa-fw")));
-            assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.RIGHT));
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getPosition(), is(CssClassFaPosition.RIGHT));
 
         });
 

@@ -44,9 +44,6 @@ implements FaStaticFacet {
     private final Either<FaStaticFacet, FaImperativeFacet> specialization = Either.left(this);
 
     @Getter(onMethod_ = {@Override})
-    private CssClassFaPosition position;
-
-    @Getter(onMethod_ = {@Override})
     private final FontAwesomeLayers layers; // serializable
 
     protected FaStaticFacetAbstract(
@@ -63,14 +60,16 @@ implements FaStaticFacet {
             final Precedence precedence) {
 
         super(type(), holder, precedence);
-        this.position = position;
-        this.layers = FontAwesomeLayers.fromQuickNotation(quickNotation);
+        this.layers = position == null
+                ? FontAwesomeLayers.fromQuickNotation(quickNotation)
+                : FontAwesomeLayers.fromQuickNotation(quickNotation)
+                    .withPosition(position);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("position", position);
+        visitor.accept("position", layers.getPosition());
         visitor.accept("classes", layers.toQuickNotation());
     }
 
