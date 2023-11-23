@@ -163,7 +163,7 @@ extends FacetFactoryTestAbstract {
                 assertTrue(facet instanceof FaFacetForDomainObjectLayoutAnnotation);
 
                 final FaFacetForDomainObjectLayoutAnnotation facetImpl = (FaFacetForDomainObjectLayoutAnnotation) facet;
-                assertThat(facetImpl.asSpaceSeparated(), equalTo("fa fa-fw fa-foo"));
+                assertThat(facetImpl.getLayers().getIconEntries().get(0).getCssClasses(), equalTo("fa fa-foo fa-fw"));
                 assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
 
                 assertNoMethodsRemoved();

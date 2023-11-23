@@ -92,8 +92,8 @@ class FontAwesomeLayersTest {
                 .addIconEntry("fa-solid fa-circle-chevron-down fa-stack-1x my-color bottom-right-overlay")
                 .build();
 
-
-        System.err.printf("%s%n", iconStackFromQuick.toJson());
+        //debug
+        //System.err.printf("%s%n", iconStackFromQuick.toJson());
 
         assertEquals(iconStackReference.toJson(), iconStackFromQuick.toJson());
     }

@@ -18,48 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Strings;
 
 public interface FaStaticFacet
 extends FaFacet, FaLayersProvider {
 
+    //TODO[CAUSEWAY-3646] remove - can be directly queried from FA layers
     /**
      * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
      */
     CssClassFaPosition getPosition();
-
-    Stream<String> streamCssClasses();
-
-    /**
-     * Space separated (distinct) CSS-class strings.
-     */
-    default String asSpaceSeparated() {
-        return streamCssClasses()
-                .collect(Collectors.joining(" "));
-    }
-
-    /**
-     * Space separated (distinct) CSS-class strings.
-     * @param additionalClasses - trimmed and filtered by non-empty, then added to the resulting string
-     */
-    default String asSpaceSeparatedWithAdditional(final String ... additionalClasses) {
-
-        if(_NullSafe.size(additionalClasses)==0) {
-            return asSpaceSeparated();
-        }
-
-        return Stream.concat(
-                streamCssClasses(),
-                _NullSafe.stream(additionalClasses)
-                .map(String::trim)
-                .filter(_Strings::isNotEmpty))
-                .distinct()
-                .collect(Collectors.joining(" "));
-    }
 
 }

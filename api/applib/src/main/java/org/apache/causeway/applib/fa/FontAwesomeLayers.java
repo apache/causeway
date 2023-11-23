@@ -228,6 +228,14 @@ public class FontAwesomeLayers implements Serializable {
         return JsonUtils.toStringUtf8(this, JsonUtils::indentedOutput);
     }
 
+    /**
+     * If this instance was not created from a quick-notation,
+     * the result may loose style information.
+     */
+    public String toQuickNotation() {
+        return FontAwesomeQuickNotationGenerator.generate(this);
+    }
+
     // -- UTILITY
 
     //TODO[CAUSEWAY-3646] how to determine position when empty

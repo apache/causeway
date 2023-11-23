@@ -113,7 +113,7 @@ public class LayoutFacetUtil {
         .ifPresent(specialization->
             specialization.accept(
                     hasStaticFaIcon->{
-                        final String cssClassFa = hasStaticFaIcon.asSpaceSeparated();
+                        final String cssClassFa = hasStaticFaIcon.getLayers().toQuickNotation();
                         if(!_Strings.isNullOrEmpty(cssClassFa)) {
                             hasCssClassFa.setCssClassFa(cssClassFa);
                             hasCssClassFa.setCssClassFaPosition(hasStaticFaIcon.getPosition());
