@@ -43,8 +43,9 @@ class FontAwesomeQuickNotationParser {
                 .singleIcon(processPrefixes(iconEntryCssClasses.getFirstElseFail(), "fa-fw"));
         }
         var stackBuilder = FontAwesomeLayers.stackBuilder()
-            .containerCssClasses("fa-lg")
-            .containerCssStyle("width:1.25em");
+            //.containerCssClasses("fa-fw") ... does not work here, using style instead ...
+            .containerCssStyle("width:1.25em")
+            ;
         iconEntryCssClasses.stream()
             .map(x->processPrefixes(x, "fa-stack-1x"))
             .forEach(stackBuilder::addIconEntry);
