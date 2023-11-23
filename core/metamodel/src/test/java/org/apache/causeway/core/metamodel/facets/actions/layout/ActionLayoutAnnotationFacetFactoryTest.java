@@ -121,8 +121,9 @@ extends FacetFactoryTestAbstract {
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(FaFacetForActionLayoutAnnotation.class)));
             val classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
-            assertThat(classFaFacetForActionLayoutAnnotation.asSpaceSeparated(), is(equalTo("fa fa-fw fa-font-awesome")));
-            assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.LEFT));
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getIconEntries().get(0).getCssClasses(),
+                    is(equalTo("fa fa-font-awesome fa-fw")));
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getPosition(), is(CssClassFaPosition.LEFT));
 
         });
     }
@@ -142,8 +143,9 @@ extends FacetFactoryTestAbstract {
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(FaFacetForActionLayoutAnnotation.class)));
             val classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
-            assertThat(classFaFacetForActionLayoutAnnotation.asSpaceSeparated(), is(equalTo("fa fa-fw fa-font-awesome")));
-            assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.RIGHT));
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getIconEntries().get(0).getCssClasses(),
+                    is(equalTo("fa fa-font-awesome fa-fw")));
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getPosition(), is(CssClassFaPosition.RIGHT));
 
         });
 

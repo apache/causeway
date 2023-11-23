@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.experimental.UtilityClass;
@@ -33,27 +34,30 @@ class FontAwesomeQuickNotationParser {
         var iconEntryCssClasses = _Strings.splitThenStream(quickNotation, ",")
             .map(String::trim)
             .map(_Strings::emptyToNull)
-            .map(FontAwesomeQuickNotationParser::processPrefixes)
             .collect(Can.toCan());
         if(iconEntryCssClasses.isEmpty()) {
             return FontAwesomeLayers.empty();
         }
         if(iconEntryCssClasses.isCardinalityOne()) {
-            return FontAwesomeLayers.singleIcon(iconEntryCssClasses.getFirstElseFail());
+            return FontAwesomeLayers
+                .singleIcon(processPrefixes(iconEntryCssClasses.getFirstElseFail(), "fa-fw"));
         }
         var stackBuilder = FontAwesomeLayers.stackBuilder()
             .containerCssClasses("fa-lg")
             .containerCssStyle("width:1.25em");
-        iconEntryCssClasses.forEach(stackBuilder::addIconEntry);
+        iconEntryCssClasses.stream()
+            .map(x->processPrefixes(x, "fa-stack-1x"))
+            .forEach(stackBuilder::addIconEntry);
         return stackBuilder.build();
     }
 
-    private String processPrefixes(final String cssQuickClasses) {
+    private String processPrefixes(final String cssQuickClasses, final String... mandatory) {
         var elements = _Strings.splitThenStream(cssQuickClasses, " ")
             .map(String::trim)
             .filter(_Strings::isNotEmpty)
             .collect(Collectors.toCollection(TreeSet::new));
-        elements.add("fa-stack-1x"); // mandatory
+        _NullSafe.stream(mandatory)
+            .forEach(elements::add);
         return elements.stream()
                 .map(FontAwesomeQuickNotationParser::processPrefix)
                 .collect(Collectors.joining(" "));

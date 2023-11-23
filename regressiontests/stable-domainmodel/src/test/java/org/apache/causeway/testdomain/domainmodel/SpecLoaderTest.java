@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.testdomain.domainmodel;
 
-import java.util.stream.Stream;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -38,11 +36,11 @@ import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingValidDomain.class,
-                
-        }, 
+
+        },
         properties = {
                 "causeway.core.meta-model.introspector.mode=FULL",
                 "causeway.applib.annotation.domain-object.editing=TRUE",
@@ -54,33 +52,31 @@ import lombok.val;
     CausewayPresets.SilenceProgrammingModel
 })
 class SpecLoaderTest {
-    
+
     @Inject private SpecificationLoader specificationLoader;
-    
+
     @ParameterizedTest
-    @MethodSource("providePrimitiveTypes")
-    void primitiveRoundtrip_shouldSucceed(Class<?> type) {
-        
+    @ValueSource(classes = {
+            boolean.class,
+            byte.class,
+            short.class,
+            int.class,
+            long.class,
+            float.class,
+            double.class,
+            char.class
+    })
+    void primitiveRoundtrip_shouldSucceed(final Class<?> type) {
+
         val spec1 = specificationLoader.loadSpecification(type);
         assertNotNull(spec1);
-        
+
         val logicalType = spec1.getLogicalType();
-        
+
         val spec2 = specificationLoader.specForLogicalType(logicalType).orElse(null);
         assertNotNull(spec2);
-        
+
         assertEquals(spec1.getLogicalType(), spec2.getLogicalType());
-    }
-    
-    private static Stream<Class<?>> providePrimitiveTypes() {
-        return Stream.of(boolean.class,
-                byte.class,
-                short.class,
-                int.class,
-                long.class,
-                float.class,
-                double.class,
-                char.class);
     }
 
 }
