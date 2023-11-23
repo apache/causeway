@@ -21,8 +21,6 @@ package org.apache.causeway.applib.fa;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,6 +39,7 @@ import org.apache.causeway.commons.io.JsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.With;
 import lombok.experimental.Accessors;
 
 /**
@@ -62,7 +61,7 @@ public class FontAwesomeLayers implements Serializable {
     // -- FACTORIES
 
     public static FontAwesomeLayers empty() {
-        return new FontAwesomeLayers(IconType.SINGLE, null, null, null, null);
+        return new FontAwesomeLayers(IconType.SINGLE, null, null, null, null, null);
     }
 
     public static FontAwesomeLayers blank() {
@@ -70,7 +69,7 @@ public class FontAwesomeLayers implements Serializable {
     }
 
     public static FontAwesomeLayers singleIcon(final String faClasses) {
-        return new FontAwesomeLayers(IconType.SINGLE, null, null,
+        return new FontAwesomeLayers(IconType.SINGLE, null, null, null,
                 List.of(new IconEntry(normalizeCssClasses(faClasses, "fa"), null)),
                 null);
     }
@@ -88,41 +87,25 @@ public class FontAwesomeLayers implements Serializable {
                 .collect(Collectors.toList());
         return new FontAwesomeLayers(
                 IconType.STACKED,
+                null,
                 normalizeCssClasses(containerCssClasses, "fa-stack"),
                 containerCssStyle,
                 iconEntries,
                 null);
     }
 
-    //TODO[CAUSEWAY-3646] work in progress
-    //see https://www.baeldung.com/jackson-deserialize-immutable-objects
     public static FontAwesomeLayers fromJson(final @Nullable String json) {
-        var map = JsonUtils.tryRead(Map.class, json)
-                .valueAsNonNullElseFail();
-        var iconType = IconType.valueOf((String)map.get("iconType"));
-        switch (iconType) {
-        case STACKED:{
-            final var stackBuilder = FontAwesomeLayers.stackBuilder()
-                    .postition(Optional.ofNullable((String)map.get("postition"))
-                            .map(CssClassFaPosition::valueOf)
-                            .orElse(CssClassFaPosition.LEFT))
-                    .containerCssClasses((String)map.get("containerCssClasses"))
-                    .containerCssStyle((String)map.get("containerCssStyle"));
+        return FontAwesomeJsonParser.parse(json);
+    }
 
-            _NullSafe.streamAutodetect(map.get("iconEntries"))
-                .map(Map.class::cast)
-                .forEach(iconEntryAsMap->{
-                    stackBuilder.addIconEntry(
-                            (String)iconEntryAsMap.get("cssClasses"),
-                            (String)iconEntryAsMap.get("cssStyle"));
-                });
-
-            return stackBuilder
-                    .build();
-        }
-        default:
-            throw _Exceptions.unmatchedCase(iconType);
-        }
+    /**
+     * Example:
+     * <pre>
+     * solid person-walking-arrow-right .my-color,
+     * solid scale-balanced .my-color .bottom-right-overlay</pre>
+     */
+    public static FontAwesomeLayers fromQuickNotation(final @Nullable String quickNotation) {
+        return FontAwesomeQuickNotationParser.parse(quickNotation);
     }
 
     // -- BUILDER
@@ -140,6 +123,7 @@ public class FontAwesomeLayers implements Serializable {
             case STACKED:{
                 return new FontAwesomeLayers(
                     IconType.STACKED,
+                    null,
                     normalizeCssClasses(containerCssClasses, "fa-stack"),
                     containerCssStyle,
                     Can.ofCollection(iconEntries).toList(),
@@ -159,7 +143,7 @@ public class FontAwesomeLayers implements Serializable {
     }
 
     public static StackBuilder stackBuilder() {
-        return new StackBuilder(IconType.STACKED, CssClassFaPosition.LEFT,
+        return new StackBuilder(IconType.STACKED, null,
                 null, null, new ArrayList<FontAwesomeLayers.IconEntry>());
     }
 
@@ -223,7 +207,8 @@ public class FontAwesomeLayers implements Serializable {
     /**
      * Position of <i>Font Awesome</i> icon, relative to its accompanied title.
      */
-    @Nullable CssClassFaPosition postition = CssClassFaPosition.LEFT;
+    @With
+    @Nullable CssClassFaPosition position;
     @Nullable String containerCssClasses;
     @Nullable String containerCssStyle;
     @Nullable List<IconEntry> iconEntries;
@@ -245,6 +230,14 @@ public class FontAwesomeLayers implements Serializable {
 
     public String toJson() {
         return JsonUtils.toStringUtf8(this, JsonUtils::indentedOutput);
+    }
+
+    /**
+     * If this instance was not created from a quick-notation,
+     * the result may loose style information.
+     */
+    public String toQuickNotation() {
+        return FontAwesomeQuickNotationGenerator.generate(this);
     }
 
     // -- UTILITY

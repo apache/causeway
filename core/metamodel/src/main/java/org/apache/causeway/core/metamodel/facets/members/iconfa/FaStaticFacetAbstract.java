@@ -16,25 +16,15 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.facets.members.iconfa;
 
-import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * One of two bases for the {@link FaFacet}.
@@ -50,15 +40,11 @@ implements FaStaticFacet {
         return FaFacet.class;
     }
 
-    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-    private static final String FIXED_WIDTH = "fa-fw";
-    private static final String DEFAULT_PRIMARY_PREFIX = "fa";
-
     @Getter(onMethod_ = {@Override})
     private final Either<FaStaticFacet, FaImperativeFacet> specialization = Either.left(this);
 
-    @Getter(onMethod_ = {@Override}) private CssClassFaPosition position;
-    private final List<String> cssClasses; // serializable list implementation
+    @Getter(onMethod_ = {@Override})
+    private final FontAwesomeLayers layers; // serializable
 
     protected FaStaticFacetAbstract(
             final String value,
@@ -68,100 +54,23 @@ implements FaStaticFacet {
     }
 
     protected FaStaticFacetAbstract(
-            final String value,
+            final String quickNotation,
             final CssClassFaPosition position,
             final FacetHolder holder,
             final Precedence precedence) {
 
         super(type(), holder, precedence);
-        this.position = position;
-        this.cssClasses = parse(value);
-    }
-
-    @Override
-    public final Stream<String> streamCssClasses() {
-        return cssClasses.stream();
-    }
-
-    @Override
-    public final FontAwesomeLayers getLayers() {
-        return FontAwesomeLayers.singleIcon(asSpaceSeparatedWithAdditional("fa-lg"));
+        this.layers = position == null
+                ? FontAwesomeLayers.fromQuickNotation(quickNotation)
+                : FontAwesomeLayers.fromQuickNotation(quickNotation)
+                    .withPosition(position);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("position", position);
-        visitor.accept("classes", asSpaceSeparated());
-    }
-
-    // -- HELPER
-
-    /**
-     * Parses given value for CSS classes (space separated).
-     * <ul>
-     * <li>
-     * Adds the optional <em>fa-fw</em> fixed width FontAwesome class, if not provided.
-     * <li>
-     * Adds the default <em>fa</em> FontAwesome prefix class, if no other prefix class provided (fab, far or fas).
-     * </ul>
-     * @param parsedClasses
-     * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
-     */
-    static List<String> parse(final String value) {
-        //XXX cannot use lombok val here
-        final Set<String> cssClassesSet = _Sets.<String>newLinkedHashSet(); // preserved order
-        _Strings.splitThenStreamTrimmed(value.trim(), WHITESPACE)
-        .map(FaStaticFacetAbstract::faPrefix)
-        .forEach(cssClass->cssClassesSet.add(faPrefix(cssClass)));
-
-        return sanitize(cssClassesSet);
-    }
-
-    private static List<String> sanitize(final Set<String> parsedClasses) {
-        val cssClasses = _Lists.<String>newArrayList();
-
-        val primaryPrefix = parsedClasses.stream()
-        .filter(FaStaticFacetAbstract::isFaPrimaryPrefix)
-        .findFirst()
-        .orElse(DEFAULT_PRIMARY_PREFIX);
-
-        cssClasses.add(primaryPrefix);
-        cssClasses.add(FIXED_WIDTH);
-
-        parsedClasses.stream()
-        .filter(_Predicates.not(FaStaticFacetAbstract::isFaPrimaryPrefix))
-        .filter(_Predicates.not(FaStaticFacetAbstract::isFixedWidth))
-        .forEach(cssClasses::add);
-
-        return cssClasses;
-    }
-
-    private static String faPrefix(final String cssClass) {
-        return cssClass.startsWith("fa-")
-                || isFaPrimaryPrefix(cssClass)
-                        ? cssClass
-                        : "fa-" + cssClass;
-    }
-
-    private static boolean isFixedWidth(final String cssClass) {
-        return FIXED_WIDTH.equals(cssClass);
-    }
-
-    private static boolean isFaPrimaryPrefix(final String cssClass) {
-        if(_NullSafe.isEmpty(cssClass)) {
-            return false;
-        }
-        switch(cssClass) {
-        case "fa":
-        case "far":
-        case "fab":
-        case "fas":
-            return true;
-        default:
-            return false;
-        }
-
+        visitor.accept("position", layers.getPosition());
+        visitor.accept("classes", layers.toQuickNotation());
     }
 
 }
