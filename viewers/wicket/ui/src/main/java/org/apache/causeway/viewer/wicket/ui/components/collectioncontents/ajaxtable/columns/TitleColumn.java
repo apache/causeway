@@ -74,6 +74,10 @@ extends GenericColumnAbstract {
         return entityLink;
     }
 
+    boolean isTitleSuppressed() {
+        return opts.getMaxElementTitleLength()<=3;
+    }
+
     // -- HELPER
 
     private static String columnName(

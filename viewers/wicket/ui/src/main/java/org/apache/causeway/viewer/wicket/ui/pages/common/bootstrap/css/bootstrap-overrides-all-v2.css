@@ -288,6 +288,10 @@ footer > .navbar {
     width: 3%;
 }
 
+.collectionContentsAsAjaxTablePanel table.contents tbody .title-suppressed {
+    font-size: 1.25em;
+}
+
 .collectionContentsAsAjaxTablePanel table.contents a:hover {
     text-decoration:underline;
 }
