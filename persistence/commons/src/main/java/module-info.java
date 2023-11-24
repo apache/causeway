@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.commons {
-    exports org.apache.causeway.persistence.commons;
-    exports org.apache.causeway.persistence.commons.metamodel.facets.prop.column;
-    exports org.apache.causeway.persistence.commons.integration.changetracking;
+module org.apache.isis.persistence.commons {
+    exports org.apache.isis.persistence.commons;
+    exports org.apache.isis.persistence.commons.metamodel.facets.prop.column;
+    exports org.apache.isis.persistence.commons.integration.changetracking;
 
     requires java.annotation;
     requires java.desktop;
@@ -27,14 +27,14 @@ module org.apache.causeway.persistence.commons {
     requires java.sql;
     requires java.xml;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.runtime;
-    requires org.apache.causeway.core.transaction;
-    requires org.apache.causeway.schema;
-    requires org.apache.causeway.security.api;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.core.runtime;
+    requires org.apache.isis.core.transaction;
+    requires org.apache.isis.schema;
+    requires org.apache.isis.security.api;
     requires org.apache.logging.log4j;
     requires spring.beans;
     requires spring.context;

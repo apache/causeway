@@ -21,31 +21,31 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-sessionlog</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions-sessionlog</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>causeway-extensions-sessionlog-applib</artifactId>
-    <name>Apache Causeway Ext - Session Log Applib</name>
+    <artifactId>isis-extensions-sessionlog-applib</artifactId>
+    <name>Apache Isis Ext - Session Log Applib</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.extensions.sessionlog.applib</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/extensions/sessionlog/applib</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.sessionlog.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/sessionlog/applib</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-runtime</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.causeway.testing</groupId>
-            <artifactId>causeway-testing-integtestsupport-applib</artifactId>
+            <groupId>org.apache.isis.testing</groupId>
+            <artifactId>isis-testing-integtestsupport-applib</artifactId>
             <scope>test</scope>
         </dependency>
 

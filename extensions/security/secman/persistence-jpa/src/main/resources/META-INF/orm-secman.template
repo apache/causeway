@@ -25,23 +25,23 @@
 
 	<!-- rename file to .xml then customize-->
 
-	<entity class="org.apache.causeway.extensions.secman.jpa.permission.dom.ApplicationPermission">
-		<table schema="causewayExtSecman" name="ApplicationPermission"/>
+	<entity class="org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission">
+		<table schema="isisExtSecman" name="ApplicationPermission"/>
 	</entity>
 	
-	<entity class="org.apache.causeway.extensions.secman.jpa.role.dom.ApplicationRole">
-		<table schema="causewayExtSecman" name="ApplicationRole"/>
+	<entity class="org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole">
+		<table schema="isisExtSecman" name="ApplicationRole"/>
 	</entity>
 	
-	<entity class="org.apache.causeway.extensions.secman.jpa.tenancy.dom.ApplicationTenancy">
-		<table schema="causewayExtSecman" name="ApplicationTenancy"/>
+	<entity class="org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy">
+		<table schema="isisExtSecman" name="ApplicationTenancy"/>
 	</entity>
 	
-	<entity class="org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser">
-		<table schema="causewayExtSecman" name="ApplicationUser"/>
+	<entity class="org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser">
+		<table schema="isisExtSecman" name="ApplicationUser"/>
 		<attributes>
 			<many-to-many name="roles">
-				<join-table schema="causewayExtSecman" name="ApplicationUserRoles">
+				<join-table schema="isisExtSecman" name="ApplicationUserRoles">
 					<join-column name="userId" />
 					<inverse-join-column name="roleId" />
 				</join-table>

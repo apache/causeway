@@ -29,7 +29,7 @@
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.causeway.schema.chg.v2"/>
+            <jaxb:package name="org.apache.isis.schema.chg.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="chg" />
@@ -42,7 +42,7 @@
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.causeway.schema.ixn.v2"/>
+            <jaxb:package name="org.apache.isis.schema.ixn.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="ixn" />
@@ -55,7 +55,7 @@
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.causeway.schema.common.v2"/>
+            <jaxb:package name="org.apache.isis.schema.common.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="com" />
@@ -68,7 +68,7 @@
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.causeway.schema.cmd.v2"/>
+            <jaxb:package name="org.apache.isis.schema.cmd.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="cmd" />
@@ -81,7 +81,7 @@
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.causeway.schema.metamodel.v2"/>
+            <jaxb:package name="org.apache.isis.schema.metamodel.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="mml" />

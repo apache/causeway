@@ -16,15 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jdo.applib {
-    exports org.apache.causeway.persistence.jdo.applib.services;
-    exports org.apache.causeway.persistence.jdo.applib.types;
-    exports org.apache.causeway.persistence.jdo.applib;
+module org.apache.isis.persistence.jdo.applib {
+    exports org.apache.isis.persistence.jdo.applib.services;
+    exports org.apache.isis.persistence.jdo.applib.types;
+    exports org.apache.isis.persistence.jdo.applib;
 
     requires java.inject;
     requires java.validation;
     requires transitive javax.jdo;
-    requires org.apache.causeway.applib;
+    requires org.apache.isis.applib;
     requires org.datanucleus.store.rdbms;
     requires spring.context;
     requires spring.core;

@@ -16,22 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jdo.provider {
-    exports org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.version;
-    exports org.apache.causeway.persistence.jdo.provider.persistence;
-    exports org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.primarykey;
-    exports org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.query;
-    exports org.apache.causeway.persistence.jdo.provider.config;
-    exports org.apache.causeway.persistence.jdo.provider.entities;
-    exports org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.datastoreidentity;
-    exports org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable;
-    exports org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent;
+module org.apache.isis.persistence.jdo.provider {
+    exports org.apache.isis.persistence.jdo.provider.metamodel.facets.object.version;
+    exports org.apache.isis.persistence.jdo.provider.persistence;
+    exports org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.primarykey;
+    exports org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query;
+    exports org.apache.isis.persistence.jdo.provider.config;
+    exports org.apache.isis.persistence.jdo.provider.entities;
+    exports org.apache.isis.persistence.jdo.provider.metamodel.facets.object.datastoreidentity;
+    exports org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable;
+    exports org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent;
 
     requires javax.jdo;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
     requires spring.core;
 }

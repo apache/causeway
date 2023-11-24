@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.vega.persistence.jdo {
-    exports org.apache.causeway.valuetypes.vega.persistence.jdo.dn;
-    exports org.apache.causeway.valuetypes.vega.persistence.jdo.dn.converters;
+module org.apache.isis.valuetypes.vega.persistence.jdo {
+    exports org.apache.isis.valuetypes.vega.persistence.jdo.dn;
+    exports org.apache.isis.valuetypes.vega.persistence.jdo.dn.converters;
 
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.valuetypes.vega.applib;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.valuetypes.vega.applib;
     requires org.datanucleus;
     requires spring.context;
 }

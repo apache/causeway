@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jdo.integration {
-    exports org.apache.causeway.persistence.jdo.integration.metamodel;
-    exports org.apache.causeway.persistence.jdo.integration;
+module org.apache.isis.persistence.jdo.integration {
+    exports org.apache.isis.persistence.jdo.integration.metamodel;
+    exports org.apache.isis.persistence.jdo.integration;
 
     requires javax.jdo;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.runtime;
-    requires org.apache.causeway.persistence.commons;
-    requires org.apache.causeway.persistence.jdo.applib;
-    requires org.apache.causeway.persistence.jdo.metamodel;
-    requires org.apache.causeway.persistence.jdo.provider;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.core.runtime;
+    requires org.apache.isis.persistence.commons;
+    requires org.apache.isis.persistence.jdo.applib;
+    requires org.apache.isis.persistence.jdo.metamodel;
+    requires org.apache.isis.persistence.jdo.provider;
     requires spring.context;
 }

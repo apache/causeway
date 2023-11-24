@@ -15,13 +15,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.testing</groupId>
-		<artifactId>causeway-testing</artifactId>
+		<groupId>org.apache.isis.testing</groupId>
+		<artifactId>isis-testing</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-testing-integtestsupport</artifactId>
-	<name>Apache Causeway Tst - Integ Test Support (parent)</name>
+	<artifactId>isis-testing-integtestsupport</artifactId>
+	<name>Apache Isis Tst - Integ Test Support (parent)</name>
 
 	<description>
         Support for writing integ tests in JUnit 5; should be added as a dependency with scope=test only

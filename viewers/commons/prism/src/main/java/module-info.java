@@ -16,8 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.viewer.commons.prism {
-    exports org.apache.causeway.viewer.commons.prism;
+module org.apache.isis.viewer.commons.prism {
+    exports org.apache.isis.viewer.commons.prism;
 
     requires lombok;
 }

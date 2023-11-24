@@ -24,9 +24,9 @@ directive @specifiedBy(
 
 type Query {
   gqltestdomain_GQLTestDomainMenu: gqltestdomain_GQLTestDomainMenu
-  causeway_applib_UserMenu: causeway_applib_UserMenu
-  causeway_conf_ConfigurationMenu: causeway_conf_ConfigurationMenu
-  causeway_security_LogoutMenu: causeway_security_LogoutMenu
+  isis_applib_UserMenu: isis_applib_UserMenu
+  isis_conf_ConfigurationMenu: isis_conf_ConfigurationMenu
+  isis_security_LogoutMenu: isis_security_LogoutMenu
   numServices: Int
 }
 
@@ -52,7 +52,7 @@ type gqltestdomain_E2 {
   name: String!
   objectIdentifier: String
   otherE2List: [gqltestdomain_E2]
-  otherEntities: [org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity]
+  otherEntities: [org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity]
   stringList: [String]
   zintList: [Int]
 }
@@ -72,48 +72,48 @@ type gqltestdomain_GQLTestDomainMenu {
   createE1(e2: _gql_input__gqltestdomain_E2, name: String): gqltestdomain_E1
   findAllE1: [gqltestdomain_E1]
   findAllE2: [gqltestdomain_E2]
-  findAllTestEntities: [org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity]
+  findAllTestEntities: [org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity]
 }
 
-type causeway_applib_ActionNode {
-  _gql_meta: causeway_applib_ActionNode__DomainObject_meta
-  _gql_mutations: causeway_applib_ActionNode__DomainObject_mutators
+type isis_applib_ActionNode {
+  _gql_meta: isis_applib_ActionNode__DomainObject_meta
+  _gql_mutations: isis_applib_ActionNode__DomainObject_mutators
   action: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type causeway_applib_ActionNode__DomainObject_meta {
+type isis_applib_ActionNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_ActionNode__DomainObject_mutators {
+type isis_applib_ActionNode__DomainObject_mutators {
   createTitle: String
   streamChildNodes: java_util_stream_Stream
 }
 
-type causeway_applib_CollectionNode {
-  _gql_meta: causeway_applib_CollectionNode__DomainObject_meta
-  _gql_mutations: causeway_applib_CollectionNode__DomainObject_mutators
+type isis_applib_CollectionNode {
+  _gql_meta: isis_applib_CollectionNode__DomainObject_meta
+  _gql_mutations: isis_applib_CollectionNode__DomainObject_mutators
   collection: String!
   logicalTypeName: String
   objectIdentifier: String
-  parentNode: causeway_applib_TypeNode!
+  parentNode: isis_applib_TypeNode!
 }
 
-type causeway_applib_CollectionNode__DomainObject_meta {
+type isis_applib_CollectionNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_CollectionNode__DomainObject_mutators {
+type isis_applib_CollectionNode__DomainObject_mutators {
   createTitle: String
   streamChildNodes: java_util_stream_Stream
 }
 
-type causeway_applib_DomainObjectList {
-  _gql_meta: causeway_applib_DomainObjectList__DomainObject_meta
+type isis_applib_DomainObjectList {
+  _gql_meta: isis_applib_DomainObjectList__DomainObject_meta
   actionArguments: String
   actionId: String
   actionOwningFqcn: String
@@ -122,138 +122,138 @@ type causeway_applib_DomainObjectList {
   objectIdentifier: String
 }
 
-type causeway_applib_DomainObjectList__DomainObject_meta {
+type isis_applib_DomainObjectList__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_FacetAttrNode {
-  _gql_meta: causeway_applib_FacetAttrNode__DomainObject_meta
-  _gql_mutations: causeway_applib_FacetAttrNode__DomainObject_mutators
+type isis_applib_FacetAttrNode {
+  _gql_meta: isis_applib_FacetAttrNode__DomainObject_meta
+  _gql_mutations: isis_applib_FacetAttrNode__DomainObject_mutators
   facetAttr: String!
   logicalTypeName: String
   objectIdentifier: String
-  parentNode: causeway_applib_FacetNode!
+  parentNode: isis_applib_FacetNode!
 }
 
-type causeway_applib_FacetAttrNode__DomainObject_meta {
+type isis_applib_FacetAttrNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_FacetAttrNode__DomainObject_mutators {
+type isis_applib_FacetAttrNode__DomainObject_mutators {
   createTitle: String
   streamChildNodes: java_util_stream_Stream
 }
 
-type causeway_applib_FacetGroupNode {
-  _gql_meta: causeway_applib_FacetGroupNode__DomainObject_meta
-  _gql_mutations: causeway_applib_FacetGroupNode__DomainObject_mutators
+type isis_applib_FacetGroupNode {
+  _gql_meta: isis_applib_FacetGroupNode__DomainObject_meta
+  _gql_mutations: isis_applib_FacetGroupNode__DomainObject_mutators
   facets: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type causeway_applib_FacetGroupNode__DomainObject_meta {
+type isis_applib_FacetGroupNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_FacetGroupNode__DomainObject_mutators {
+type isis_applib_FacetGroupNode__DomainObject_mutators {
   createTitle: String
   streamChildNodes: java_util_stream_Stream
 }
 
-type causeway_applib_FacetNode {
-  _gql_meta: causeway_applib_FacetNode__DomainObject_meta
-  _gql_mutations: causeway_applib_FacetNode__DomainObject_mutators
+type isis_applib_FacetNode {
+  _gql_meta: isis_applib_FacetNode__DomainObject_meta
+  _gql_mutations: isis_applib_FacetNode__DomainObject_mutators
   facet: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type causeway_applib_FacetNode__DomainObject_meta {
+type isis_applib_FacetNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_FacetNode__DomainObject_mutators {
+type isis_applib_FacetNode__DomainObject_mutators {
   createTitle: String
   streamChildNodes: java_util_stream_Stream
 }
 
-type causeway_applib_ParameterNode {
-  _gql_meta: causeway_applib_ParameterNode__DomainObject_meta
-  _gql_mutations: causeway_applib_ParameterNode__DomainObject_mutators
+type isis_applib_ParameterNode {
+  _gql_meta: isis_applib_ParameterNode__DomainObject_meta
+  _gql_mutations: isis_applib_ParameterNode__DomainObject_mutators
   logicalTypeName: String
   objectIdentifier: String
   parameter: String!
-  parentNode: causeway_applib_ActionNode!
+  parentNode: isis_applib_ActionNode!
 }
 
-type causeway_applib_ParameterNode__DomainObject_meta {
+type isis_applib_ParameterNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_ParameterNode__DomainObject_mutators {
+type isis_applib_ParameterNode__DomainObject_mutators {
   createTitle: String
   streamChildNodes: java_util_stream_Stream
 }
 
-type causeway_applib_PropertyNode {
-  _gql_meta: causeway_applib_PropertyNode__DomainObject_meta
-  _gql_mutations: causeway_applib_PropertyNode__DomainObject_mutators
+type isis_applib_PropertyNode {
+  _gql_meta: isis_applib_PropertyNode__DomainObject_meta
+  _gql_mutations: isis_applib_PropertyNode__DomainObject_mutators
   logicalTypeName: String
   objectIdentifier: String
-  parentNode: causeway_applib_TypeNode!
+  parentNode: isis_applib_TypeNode!
   property: String!
 }
 
-type causeway_applib_PropertyNode__DomainObject_meta {
+type isis_applib_PropertyNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_PropertyNode__DomainObject_mutators {
+type isis_applib_PropertyNode__DomainObject_mutators {
   createTitle: String
   streamChildNodes: java_util_stream_Stream
 }
 
-type causeway_applib_RoleMemento {
-  _gql_meta: causeway_applib_RoleMemento__DomainObject_meta
+type isis_applib_RoleMemento {
+  _gql_meta: isis_applib_RoleMemento__DomainObject_meta
   description: String!
   logicalTypeName: String
   name: String!
   objectIdentifier: String
 }
 
-type causeway_applib_RoleMemento__DomainObject_meta {
+type isis_applib_RoleMemento__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_TypeNode {
-  _gql_meta: causeway_applib_TypeNode__DomainObject_meta
-  _gql_mutations: causeway_applib_TypeNode__DomainObject_mutators
+type isis_applib_TypeNode {
+  _gql_meta: isis_applib_TypeNode__DomainObject_meta
+  _gql_mutations: isis_applib_TypeNode__DomainObject_mutators
   domainClassDto: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type causeway_applib_TypeNode__DomainObject_meta {
+type isis_applib_TypeNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_TypeNode__DomainObject_mutators {
+type isis_applib_TypeNode__DomainObject_mutators {
   createTitle: String
   streamChildNodes: java_util_stream_Stream
 }
 
-type causeway_applib_UserMemento {
-  _gql_meta: causeway_applib_UserMemento__DomainObject_meta
-  _gql_mutations: causeway_applib_UserMemento__DomainObject_mutators
+type isis_applib_UserMemento {
+  _gql_meta: isis_applib_UserMemento__DomainObject_meta
+  _gql_mutations: isis_applib_UserMemento__DomainObject_mutators
   authenticationCode: String!
   authenticationSource: String!
   avatarUrl: String
@@ -265,69 +265,55 @@ type causeway_applib_UserMemento {
   numberFormatLocale: String
   objectIdentifier: String
   realName: String
-  roles: [causeway_applib_RoleMemento]
+  roles: [isis_applib_RoleMemento]
   timeFormatLocale: String
 }
 
-type causeway_applib_UserMemento__DomainObject_meta {
+type isis_applib_UserMemento__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_UserMemento__DomainObject_mutators {
+type isis_applib_UserMemento__DomainObject_mutators {
   isCurrentUser(userName: String): Boolean
 }
 
-type causeway_applib_UserMenu {
-  me: causeway_applib_UserMemento
+type isis_applib_UserMenu {
+  me: isis_applib_UserMemento
 }
 
-type causeway_conf_ConfigurationMenu {
-  configuration: causeway_conf_ConfigurationViewmodel
+type isis_conf_ConfigurationMenu {
+  configuration: isis_conf_ConfigurationViewmodel
 }
 
-type causeway_conf_ConfigurationProperty {
-  _gql_meta: causeway_conf_ConfigurationProperty__DomainObject_meta
+type isis_conf_ConfigurationProperty {
+  _gql_meta: isis_conf_ConfigurationProperty__DomainObject_meta
   key: String!
   logicalTypeName: String
   objectIdentifier: String
   value: String!
 }
 
-type causeway_conf_ConfigurationProperty__DomainObject_meta {
+type isis_conf_ConfigurationProperty__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_conf_ConfigurationViewmodel {
-  _gql_meta: causeway_conf_ConfigurationViewmodel__DomainObject_meta
-  configuration: [causeway_conf_ConfigurationProperty]
-  environment: [causeway_conf_ConfigurationProperty]
+type isis_conf_ConfigurationViewmodel {
+  _gql_meta: isis_conf_ConfigurationViewmodel__DomainObject_meta
+  configuration: [isis_conf_ConfigurationProperty]
+  environment: [isis_conf_ConfigurationProperty]
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type causeway_conf_ConfigurationViewmodel__DomainObject_meta {
+type isis_conf_ConfigurationViewmodel__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationFeatureViewModel {
-  _gql_meta: causeway_feat_ApplicationFeatureViewModel__DomainObject_meta
-  logicalTypeName: String
-  memberName: String!
-  namespaceName: String!
-  objectIdentifier: String
-  typeSimpleName: String!
-}
-
-type causeway_feat_ApplicationFeatureViewModel__DomainObject_meta {
-  id: String!
-  logicalTypeName: String!
-}
-
-type causeway_feat_ApplicationNamespace {
-  _gql_meta: causeway_feat_ApplicationNamespace__DomainObject_meta
+type isis_feat_ApplicationFeatureViewModel {
+  _gql_meta: isis_feat_ApplicationFeatureViewModel__DomainObject_meta
   logicalTypeName: String
   memberName: String!
   namespaceName: String!
@@ -335,25 +321,39 @@ type causeway_feat_ApplicationNamespace {
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationNamespace__DomainObject_meta {
+type isis_feat_ApplicationFeatureViewModel__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationType {
-  _gql_meta: causeway_feat_ApplicationType__DomainObject_meta
-  actions: [causeway_feat_ApplicationTypeAction]
-  collections: [causeway_feat_ApplicationTypeCollection]
+type isis_feat_ApplicationNamespace {
+  _gql_meta: isis_feat_ApplicationNamespace__DomainObject_meta
   logicalTypeName: String
   memberName: String!
   namespaceName: String!
   objectIdentifier: String
-  properties: [causeway_feat_ApplicationTypeProperty]
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationTypeAction {
-  _gql_meta: causeway_feat_ApplicationTypeAction__DomainObject_meta
+type isis_feat_ApplicationNamespace__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_feat_ApplicationType {
+  _gql_meta: isis_feat_ApplicationType__DomainObject_meta
+  actions: [isis_feat_ApplicationTypeAction]
+  collections: [isis_feat_ApplicationTypeCollection]
+  logicalTypeName: String
+  memberName: String!
+  namespaceName: String!
+  objectIdentifier: String
+  properties: [isis_feat_ApplicationTypeProperty]
+  typeSimpleName: String!
+}
+
+type isis_feat_ApplicationTypeAction {
+  _gql_meta: isis_feat_ApplicationTypeAction__DomainObject_meta
   actionSemantics: String!
   logicalTypeName: String
   memberName: String!
@@ -363,13 +363,13 @@ type causeway_feat_ApplicationTypeAction {
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationTypeAction__DomainObject_meta {
+type isis_feat_ApplicationTypeAction__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationTypeCollection {
-  _gql_meta: causeway_feat_ApplicationTypeCollection__DomainObject_meta
+type isis_feat_ApplicationTypeCollection {
+  _gql_meta: isis_feat_ApplicationTypeCollection__DomainObject_meta
   derived: String!
   elementType: String!
   logicalTypeName: String
@@ -379,13 +379,13 @@ type causeway_feat_ApplicationTypeCollection {
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationTypeCollection__DomainObject_meta {
+type isis_feat_ApplicationTypeCollection__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationTypeMember {
-  _gql_meta: causeway_feat_ApplicationTypeMember__DomainObject_meta
+type isis_feat_ApplicationTypeMember {
+  _gql_meta: isis_feat_ApplicationTypeMember__DomainObject_meta
   logicalTypeName: String
   memberName: String!
   namespaceName: String!
@@ -393,13 +393,13 @@ type causeway_feat_ApplicationTypeMember {
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationTypeMember__DomainObject_meta {
+type isis_feat_ApplicationTypeMember__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationTypeProperty {
-  _gql_meta: causeway_feat_ApplicationTypeProperty__DomainObject_meta
+type isis_feat_ApplicationTypeProperty {
+  _gql_meta: isis_feat_ApplicationTypeProperty__DomainObject_meta
   derived: String!
   logicalTypeName: String
   maxLength: String
@@ -411,33 +411,33 @@ type causeway_feat_ApplicationTypeProperty {
   typicalLength: String
 }
 
-type causeway_feat_ApplicationTypeProperty__DomainObject_meta {
+type isis_feat_ApplicationTypeProperty__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationType__DomainObject_meta {
+type isis_feat_ApplicationType__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_security_LoginRedirect {
-  _gql_meta: causeway_security_LoginRedirect__DomainObject_meta
+type isis_security_LoginRedirect {
+  _gql_meta: isis_security_LoginRedirect__DomainObject_meta
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type causeway_security_LoginRedirect__DomainObject_meta {
+type isis_security_LoginRedirect__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_security_LogoutMenu {
+type isis_security_LogoutMenu {
   logout: String
 }
 
-type causeway_testing_fixtures_FixtureResult {
-  _gql_meta: causeway_testing_fixtures_FixtureResult__DomainObject_meta
+type isis_testing_fixtures_FixtureResult {
+  _gql_meta: isis_testing_fixtures_FixtureResult__DomainObject_meta
   className: String!
   fixtureScriptClassName: String
   key: String!
@@ -445,7 +445,7 @@ type causeway_testing_fixtures_FixtureResult {
   objectIdentifier: String
 }
 
-type causeway_testing_fixtures_FixtureResult__DomainObject_meta {
+type isis_testing_fixtures_FixtureResult__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
@@ -472,54 +472,54 @@ type java_util_stream_Stream__DomainObject_meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_applib_services_inject_ServiceInjector {
-  _gql_meta: org_apache_causeway_applib_services_inject_ServiceInjector__DomainObject_meta
-  _gql_mutations: org_apache_causeway_applib_services_inject_ServiceInjector__DomainObject_mutators
+type org_apache_isis_applib_services_inject_ServiceInjector {
+  _gql_meta: org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_meta
+  _gql_mutations: org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_mutators
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type org_apache_causeway_applib_services_inject_ServiceInjector__DomainObject_meta {
+type org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_applib_services_inject_ServiceInjector__DomainObject_mutators {
+type org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_mutators {
   injectServicesInto(domainObject: String): String
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MMNode {
-  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__DomainObject_meta
+type org_apache_isis_core_metamodel_inspect_model_MMNode {
+  _gql_meta: org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MMNode__DomainObject_meta {
+type org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
-  _gql_meta: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta
+type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript {
+  _gql_meta: org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta
   friendlyName: String!
   logicalTypeName: String
   objectIdentifier: String
   qualifiedName: String!
 }
 
-type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta {
+type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
-  _gql_meta: org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta
+type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
+  _gql_meta: org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta
   logicalTypeName: String
   name: String!
   objectIdentifier: String
 }
 
-type org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta {
+type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
@@ -532,91 +532,91 @@ input _gql_input__gqltestdomain_E2 {
   id: ID!
 }
 
-input _gql_input__causeway_applib_ActionNode {
+input _gql_input__isis_applib_ActionNode {
   id: ID!
 }
 
-input _gql_input__causeway_applib_CollectionNode {
+input _gql_input__isis_applib_CollectionNode {
   id: ID!
 }
 
-input _gql_input__causeway_applib_DomainObjectList {
+input _gql_input__isis_applib_DomainObjectList {
   id: ID!
 }
 
-input _gql_input__causeway_applib_FacetAttrNode {
+input _gql_input__isis_applib_FacetAttrNode {
   id: ID!
 }
 
-input _gql_input__causeway_applib_FacetGroupNode {
+input _gql_input__isis_applib_FacetGroupNode {
   id: ID!
 }
 
-input _gql_input__causeway_applib_FacetNode {
+input _gql_input__isis_applib_FacetNode {
   id: ID!
 }
 
-input _gql_input__causeway_applib_ParameterNode {
+input _gql_input__isis_applib_ParameterNode {
   id: ID!
 }
 
-input _gql_input__causeway_applib_PropertyNode {
+input _gql_input__isis_applib_PropertyNode {
   id: ID!
 }
 
-input _gql_input__causeway_applib_RoleMemento {
+input _gql_input__isis_applib_RoleMemento {
   id: ID!
 }
 
-input _gql_input__causeway_applib_TypeNode {
+input _gql_input__isis_applib_TypeNode {
   id: ID!
 }
 
-input _gql_input__causeway_applib_UserMemento {
+input _gql_input__isis_applib_UserMemento {
   id: ID!
 }
 
-input _gql_input__causeway_conf_ConfigurationProperty {
+input _gql_input__isis_conf_ConfigurationProperty {
   id: ID!
 }
 
-input _gql_input__causeway_conf_ConfigurationViewmodel {
+input _gql_input__isis_conf_ConfigurationViewmodel {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationFeatureViewModel {
+input _gql_input__isis_feat_ApplicationFeatureViewModel {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationNamespace {
+input _gql_input__isis_feat_ApplicationNamespace {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationType {
+input _gql_input__isis_feat_ApplicationType {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationTypeAction {
+input _gql_input__isis_feat_ApplicationTypeAction {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationTypeCollection {
+input _gql_input__isis_feat_ApplicationTypeCollection {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationTypeMember {
+input _gql_input__isis_feat_ApplicationTypeMember {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationTypeProperty {
+input _gql_input__isis_feat_ApplicationTypeProperty {
   id: ID!
 }
 
-input _gql_input__causeway_security_LoginRedirect {
+input _gql_input__isis_security_LoginRedirect {
   id: ID!
 }
 
-input _gql_input__causeway_testing_fixtures_FixtureResult {
+input _gql_input__isis_testing_fixtures_FixtureResult {
   id: ID!
 }
 
@@ -628,18 +628,18 @@ input _gql_input__java_util_stream_Stream {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_applib_services_inject_ServiceInjector {
+input _gql_input__org_apache_isis_applib_services_inject_ServiceInjector {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_core_metamodel_inspect_model_MMNode {
+input _gql_input__org_apache_isis_core_metamodel_inspect_model_MMNode {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
+input _gql_input__org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
+input _gql_input__org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
   id: ID!
 }

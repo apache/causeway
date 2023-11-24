@@ -16,23 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jdo.metamodel {
+module org.apache.isis.persistence.jdo.metamodel {
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.runtime;
-    requires org.apache.causeway.persistence.jdo.applib;
-    requires org.apache.causeway.persistence.jdo.provider;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.core.runtime;
+    requires org.apache.isis.persistence.jdo.applib;
+    requires org.apache.isis.persistence.jdo.provider;
     requires javax.jdo;
-    requires org.apache.causeway.security.api;
+    requires org.apache.isis.security.api;
     requires org.datanucleus.store.rdbms;
-    requires org.apache.causeway.persistence.commons;
+    requires org.apache.isis.persistence.commons;
 
-    exports org.apache.causeway.persistence.jdo.metamodel;
-    exports org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable;
+    exports org.apache.isis.persistence.jdo.metamodel;
+    exports org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable;
 
-    provides org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier
-        with org.apache.causeway.persistence.jdo.metamodel.beans.JdoBeanTypeClassifier;
+    provides org.apache.isis.core.config.beans.IsisBeanTypeClassifier
+        with org.apache.isis.persistence.jdo.metamodel.beans.JdoBeanTypeClassifier;
 }

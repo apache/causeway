@@ -21,51 +21,51 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>causeway-extensions-sessionlog</artifactId>
-    <name>Apache Causeway Ext - Session Log</name>
+    <artifactId>isis-extensions-sessionlog</artifactId>
+    <name>Apache Isis Ext - Session Log</name>
 
     <packaging>pom</packaging>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.extensions.sessionlog</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/extensions/sessionlog</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.sessionlog</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/sessionlog</git-plugin.propertiesDir>
     </properties>
 
     <dependencyManagement>
         <dependencies>
 
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-sessionlog-applib</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-sessionlog-applib</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-sessionlog-applib</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-sessionlog-applib</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-sessionlog-persistence-jpa</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-sessionlog-persistence-jdo</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.causeway.testing</groupId>
-                <artifactId>causeway-testing-integtestsupport</artifactId>
+                <groupId>org.apache.isis.testing</groupId>
+                <artifactId>isis-testing-integtestsupport</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -77,8 +77,8 @@
     <dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-metamodel</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
     </dependencies>

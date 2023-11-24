@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.asciidoc.persistence.jdo {
-    exports org.apache.causeway.valuetypes.asciidoc.persistence.jdo;
-    exports org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters;
+module org.apache.isis.valuetypes.asciidoc.persistence.jdo {
+    exports org.apache.isis.valuetypes.asciidoc.persistence.jdo;
+    exports org.apache.isis.valuetypes.asciidoc.persistence.jdo.converters;
 
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.valuetypes.asciidoc.applib;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.valuetypes.asciidoc.applib;
     requires org.datanucleus;
     requires spring.context;
 }

@@ -16,31 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.viewer.wicket.model {
-    exports org.apache.causeway.viewer.wicket.model.value;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction.prop;
-    exports org.apache.causeway.viewer.wicket.model.modelhelpers;
-    exports org.apache.causeway.viewer.wicket.model.hints;
-    exports org.apache.causeway.viewer.wicket.model.models;
-    exports org.apache.causeway.viewer.wicket.model.models.binding;
-    exports org.apache.causeway.viewer.wicket.model;
-    exports org.apache.causeway.viewer.wicket.model.links;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction.act;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction;
-    exports org.apache.causeway.viewer.wicket.model.util;
-    exports org.apache.causeway.viewer.wicket.model.mementos;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction.coll;
-    exports org.apache.causeway.viewer.wicket.model.causeway;
+module org.apache.isis.viewer.wicket.model {
+    exports org.apache.isis.viewer.wicket.model.value;
+    exports org.apache.isis.viewer.wicket.model.models.interaction.prop;
+    exports org.apache.isis.viewer.wicket.model.modelhelpers;
+    exports org.apache.isis.viewer.wicket.model.hints;
+    exports org.apache.isis.viewer.wicket.model.models;
+    exports org.apache.isis.viewer.wicket.model.models.binding;
+    exports org.apache.isis.viewer.wicket.model;
+    exports org.apache.isis.viewer.wicket.model.links;
+    exports org.apache.isis.viewer.wicket.model.models.interaction.act;
+    exports org.apache.isis.viewer.wicket.model.models.interaction;
+    exports org.apache.isis.viewer.wicket.model.util;
+    exports org.apache.isis.viewer.wicket.model.mementos;
+    exports org.apache.isis.viewer.wicket.model.models.interaction.coll;
+    exports org.apache.isis.viewer.wicket.model.isis;
 
     requires jakarta.activation;
     requires lombok;
-    requires transitive org.apache.causeway.applib;
-    requires transitive org.apache.causeway.commons;
-    requires transitive org.apache.causeway.core.config;
-    requires transitive org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.webapp;
-    requires transitive org.apache.causeway.viewer.commons.applib;
-    requires transitive org.apache.causeway.viewer.commons.model;
+    requires transitive org.apache.isis.applib;
+    requires transitive org.apache.isis.commons;
+    requires transitive org.apache.isis.core.config;
+    requires transitive org.apache.isis.core.metamodel;
+    requires org.apache.isis.core.webapp;
+    requires transitive org.apache.isis.viewer.commons.applib;
+    requires transitive org.apache.isis.viewer.commons.model;
     requires org.apache.logging.log4j;
     requires org.danekja.jdk.serializable.functional;
     requires org.slf4j;

@@ -15,29 +15,29 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.extensions</groupId>
-		<artifactId>causeway-extensions-cors</artifactId>
+		<groupId>org.apache.isis.extensions</groupId>
+		<artifactId>isis-extensions-cors</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-extensions-cors-impl</artifactId>
-	<name>Apache Causeway Ext - CORS (impl)</name>
+	<artifactId>isis-extensions-cors-impl</artifactId>
+	<name>Apache Isis Ext - CORS (impl)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.extensions.cors.impl</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/extensions/cors/impl</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.cors.impl</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/cors/impl</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-metamodel</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-webapp</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-webapp</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
@@ -49,8 +49,8 @@
         <!-- TESTING -->
         
         <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-internaltestsupport</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

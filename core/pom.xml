@@ -23,20 +23,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway</groupId>
-		<artifactId>causeway-bom</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>isis-bom</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.causeway.core</groupId>
-	<artifactId>causeway-core</artifactId>
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-core</artifactId>
 
 	<packaging>pom</packaging>
 
-	<name>Apache Causeway Core</name>
+	<name>Apache Isis Core</name>
 
-	<url>https://causeway.apache.org</url>
+	<url>https://isis.apache.org</url>
 
 	<description>
         Core framework, providing metamodel, runtime and core APIs.
@@ -46,7 +46,7 @@
 
 		<coreBaseDir>${project.build.directory}/..</coreBaseDir>
 
-		<git-plugin.propertiesDir>org/apache/causeway/core</git-plugin.propertiesDir>
+		<git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
 		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
 		<dependency.locations.enabled>false</dependency.locations.enabled>
@@ -259,7 +259,7 @@
 			<id>datanucleusenhance</id>
 			<activation>
 				<property>
-					<name>causeway-app-starter-datanucleusenhance</name>
+					<name>isis-app-starter-datanucleusenhance</name>
 					<value>true</value>
 				</property>
 				<!-- <file> <exists>${basedir}/logging-dn-enhance.properties</exists>

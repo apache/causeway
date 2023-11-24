@@ -1,34 +1,34 @@
-Web site: https://causeway.apache.org/
+Web site: https://isis.apache.org/
 
 Description
 
-  Apache Causeway software is a framework for rapidly developing domain-driven
+  Apache Isis software is a framework for rapidly developing domain-driven
   apps in Java. Write your business logic in entities, domain services and
   repositories, and the framework dynamically generates a representation of
   that domain model as a webapp or a RESTful API.  Licensed under ASL v2.0.
   Suitable for prototyping or for production.
 
-  Causeway was accepted into the Apache Incubator in Sept 2010 and graduated
+  Isis was accepted into the Apache Incubator in Sept 2010 and graduated
   in Oct 2012.  Its first release as a TLP was in Dec 2012.  The framework's
-  original name was Isis; it was renamed to Causeway in Oct 2022.
+  original name was Isis; it was renamed to Isis in Oct 2022.
 
-  You can participate in the Apache Causeway community through either the
+  You can participate in the Apache Isis community through either the
   mailing lists or our slack channel.  Join the mailing list by sending an
-  empty message to users-subscribe@causeway.apache.org.  If you participate
+  empty message to users-subscribe@isis.apache.org.  If you participate
   using slack (most users do), then just send a message to the mailing list
   asking for an invite.  If you are interested in also contributing to the
-  framework, subscribe to dev-subscribe@causeway.apache.org.  Significant
+  framework, subscribe to dev-subscribe@isis.apache.org.  Significant
   contributions over a sustained period of time can earn a contributor commit
   access to the codebase.
 
 
 TLP releases:
 
-  * causeway-2.0.0-RC3                             :  9 Oct 2023
+  * isis-2.0.0-RC3                             :  9 Oct 2023
 
-  * causeway-2.0.0-RC2                             : 13 Jul 2023
+  * isis-2.0.0-RC2                             : 13 Jul 2023
 
-  * causeway-2.0.0-RC1                             : 25 Mar 2023
+  * isis-2.0.0-RC1                             : 25 Mar 2023
 
   * isis-2.0.0-M9                                  : 18 Oct 2022
 
@@ -191,17 +191,17 @@ Resources:
 
   item            type   URL
   -------------   -----  -----------------------------------------------------
-  Source code     git    https://github.com/apache/causeway.git
-  Source code     gitrw  https://github.com/apache/causeway.git
-  Status file     www    https://raw.githubusercontent.com/apache/causeway/master/STATUS
-  Website         www    https://causeway.apache.org
-  Mailing list    dev    dev@causeway.apache.org
-  Mailing list    users  users@causeway.apache.org
-  JIRA            www    https://issues.apache.org/jira/browse/CAUSEWAY
-  Wiki            www    https://cwiki.apache.org/confluence/display/CAUSEWAY/Index
-  Sonarcloud      www    https://sonarcloud.io/project/overview?id=apache_causeway
-  CI (unofficial) www    https://github.com/apache-causeway-committers/causeway-nightly/actions
-  CI (demo apps)  www    https://github.com/apache-causeway-committers/causeway-nightly-deploys/actions
+  Source code     git    https://github.com/apache/isis.git
+  Source code     gitrw  https://github.com/apache/isis.git
+  Status file     www    https://raw.githubusercontent.com/apache/isis/master/STATUS
+  Website         www    https://isis.apache.org
+  Mailing list    dev    dev@isis.apache.org
+  Mailing list    users  users@isis.apache.org
+  JIRA            www    https://issues.apache.org/jira/browse/ISIS
+  Wiki            www    https://cwiki.apache.org/confluence/display/ISIS/Index
+  Sonarcloud      www    https://sonarcloud.io/project/overview?id=apache_isis
+  CI (unofficial) www    https://github.com/apache-isis-committers/isis-nightly/actions
+  CI (demo apps)  www    https://github.com/apache-isis-committers/isis-nightly-deploys/actions
 
 
 Team:

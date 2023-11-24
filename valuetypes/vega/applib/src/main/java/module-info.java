@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.vega.applib {
-    exports org.apache.causeway.valuetypes.vega.applib;
-    exports org.apache.causeway.valuetypes.vega.applib.value;
-    exports org.apache.causeway.valuetypes.vega.applib.jaxb;
-    exports org.apache.causeway.valuetypes.vega.applib.stringify to
-        org.apache.causeway.valuetypes.vega.metamodel,
-        org.apache.causeway.valuetypes.vega.persistence.jdo,
-        org.apache.causeway.valuetypes.vega.persistence.jpa;
+module org.apache.isis.valuetypes.vega.applib {
+    exports org.apache.isis.valuetypes.vega.applib;
+    exports org.apache.isis.valuetypes.vega.applib.value;
+    exports org.apache.isis.valuetypes.vega.applib.jaxb;
+    exports org.apache.isis.valuetypes.vega.applib.stringify to
+        org.apache.isis.valuetypes.vega.metamodel,
+        org.apache.isis.valuetypes.vega.persistence.jdo,
+        org.apache.isis.valuetypes.vega.persistence.jpa;
 
     requires java.inject;
     requires java.xml.bind;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
     requires spring.context;
     requires spring.core;
 }

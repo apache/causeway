@@ -20,9 +20,9 @@ package /*${java-package}*/;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.commons.functional.IndexedConsumer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

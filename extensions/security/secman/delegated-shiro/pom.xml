@@ -21,39 +21,39 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-secman</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions-secman</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
-    <name>Apache Causeway Ext - Sec Man Delegated (Using Shiro)</name>
+    <artifactId>isis-extensions-secman-delegated-shiro</artifactId>
+    <name>Apache Isis Ext - Sec Man Delegated (Using Shiro)</name>
     <description>Provides an implementation of a Shiro Realm that will automatically created delegated ApplicationUsers for any users externally authenticated in a delegate realm</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.extensions.secman.shiro.realm</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/extensions/secman/shiro-realm</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.shiro.realm</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/secman/shiro-realm</git-plugin.propertiesDir>
 
     </properties>
 
     <dependencies>
 
     	<dependency>
-            <groupId>org.apache.causeway.security</groupId>
-			<artifactId>causeway-security-shiro</artifactId>
+            <groupId>org.apache.isis.security</groupId>
+			<artifactId>isis-security-shiro</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtime</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-secman-applib</artifactId>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-applib</artifactId>
 			<version>2.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>

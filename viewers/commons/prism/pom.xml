@@ -15,18 +15,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.viewer</groupId>
-    	<artifactId>causeway-viewer-commons</artifactId>
+		<groupId>org.apache.isis.viewer</groupId>
+    	<artifactId>isis-viewer-commons</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-viewer-commons-prism</artifactId>
-	<name>Apache Causeway Commons - Prism</name>
+	<artifactId>isis-viewer-commons-prism</artifactId>
+	<name>Apache Isis Commons - Prism</name>
 	<description>Client Side Syntax Highlighting</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.commons.prism</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/viewer/commons/prism</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.viewer.commons.prism</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/viewer/commons/prism</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>

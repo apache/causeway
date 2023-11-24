@@ -1,0 +1,275 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.isis.testdomain.value;
+
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.value.semantics.OrderRelation;
+import org.apache.isis.applib.value.semantics.Parser;
+import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.testdomain.model.valuetypes.ValueTypeExample;
+
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
+
+class ValueSemanticsTester<T> {
+
+    @Inject InteractionService interactionService;
+    @Inject SpecificationLoader specLoader;
+    @Inject WrapperFactory wrapperFactory;
+
+    @SuppressWarnings("unused")
+    private final Class<T> valueType;
+    private final ValueTypeExample<T> domainObject;
+    private Optional<OrderRelation<T, ?>> currentOrderRelation = Optional.empty();
+
+    public ValueSemanticsTester(final Class<T> valueType, final ValueTypeExample<T> domainObject) {
+        this.valueType = valueType;
+        this.domainObject = domainObject;
+    }
+
+    // -- ACTIONS
+
+    public static interface ActionInteractionProbe<T> {
+        void testCommandWithNonEmptyArg(ValueSemanticsProvider.Context context, Command command);
+        void testCommandWithEmptyArg(ValueSemanticsProvider.Context context, Command command);
+    }
+
+    public void actionInteraction(
+            final @NonNull String actionId,
+            final @NonNull InteractionContext interactionContext,
+            final @NonNull Supplier<T> actionArgumentProvider,
+            final @NonNull ActionInteractionProbe<T> probe) {
+
+        val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
+        val act = objSpec.getActionElseFail(actionId);
+        val context = valueFacet(act.getParameters().getFirstElseFail())
+                .createValueSemanticsContext(act);
+
+        {
+            val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+                val actInteraction = ActionInteraction
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+
+                val params = actInteraction.startParameterNegotiation().orElseThrow();
+                val singleArgPojoToUse = actionArgumentProvider.get();
+
+                params.updateParamValuePojo(0, __->singleArgPojoToUse);
+
+                actInteraction.invokeWith(params);
+
+                return command;
+            });
+
+            probe.testCommandWithNonEmptyArg(context, actionCommandWithNonEmptyArg);
+        }
+
+        {
+            val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+                val actInteraction = ActionInteraction
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+
+                val params = actInteraction.startParameterNegotiation().orElseThrow();
+
+                params.updateParamValuePojo(0, __->null); // overrides default values from value semantics
+
+                actInteraction.invokeWith(params);
+
+                return command;
+            });
+
+            probe.testCommandWithEmptyArg(context, actionCommandWithEmptyArg);
+        }
+
+        {
+            val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+
+                domainObject.invokeSampleActionUsingWrapper(wrapperFactory,
+                        actionArgumentProvider.get());
+
+                return command;
+            });
+
+            probe.testCommandWithNonEmptyArg(context, actionCommandWithNonEmptyArg);
+        }
+
+        {
+            val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+
+                domainObject.invokeSampleActionUsingWrapper(wrapperFactory, null); // overrides default values from value semantics
+
+                return command;
+            });
+
+            probe.testCommandWithEmptyArg(context, actionCommandWithEmptyArg);
+        }
+
+    }
+
+    // -- PROPERTIES
+
+    public static interface PropertyInteractionProbe<T> {
+        void testComposer(ValueSemanticsProvider.Context context, ValueSemanticsProvider<T> semantics);
+        void testParser(ValueSemanticsProvider.Context context, Parser<T> parser);
+        void testRenderer(ValueSemanticsProvider.Context context, Renderer<T> renderer);
+        void testCommand(ValueSemanticsProvider.Context context, Command command);
+    }
+
+    @SneakyThrows
+    public void propertyInteraction(
+            final @NonNull String propertyId,
+            final @NonNull InteractionContext interactionContext,
+            final @NonNull Function<ManagedProperty, Object> newProperyValueProvider,
+            final @NonNull PropertyInteractionProbe<T> probe) {
+
+        val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
+        val prop = objSpec.getPropertyElseFail(propertyId);
+
+        val context = valueFacet(prop)
+                .createValueSemanticsContext(prop);
+
+        val semanticsIfAny = semantics(prop);
+
+        assertTrue(semanticsIfAny.isPresent(), ()->
+            "value semantics must be available for "
+                + context.getFeatureIdentifier());
+
+        probe.testComposer(context, semanticsIfAny.get());
+
+
+        val parserIfAny = parser(prop);
+        if(parserIfAny.isPresent()) {
+            probe.testParser(context, parserIfAny.get());
+        }
+
+        val rendererIfAny = renderer(prop);
+        if(rendererIfAny.isPresent()) {
+            probe.testRenderer(context, rendererIfAny.get());
+        }
+
+        interactionService.run(interactionContext, ()->{
+
+            val command = interactionService.currentInteractionElseFail().getCommand();
+
+            val propInteraction = PropertyInteraction
+                    .wrap(ManagedProperty.of(ManagedObject.adaptSingular(objSpec, domainObject), prop, Where.OBJECT_FORMS));
+
+            propInteraction.modifyProperty(managedProp->
+                ManagedObject.adaptSingular(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));
+
+            probe.testCommand(context, command);
+        });
+    }
+
+    // -- COLLECTIONS
+
+    public void collectionInteraction(
+            final @NonNull String collectionId,
+            final @NonNull InteractionContext interactionContext) {
+        val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
+        val coll = objSpec.getCollectionElseFail(collectionId);
+        assertNotNull(coll);
+        // collections have no interactions (removed in v2)
+    }
+
+    // -- UTILITY
+
+    public void assertValueEquals(final T a, final Object _b, final String message) {
+
+        val b = _Casts.<T>uncheckedCast(_b);
+
+        if(currentOrderRelation.isPresent()) {
+            assertTrue(currentOrderRelation.get().equals(a, b), ()->
+                String.format("%s ==> expected: %s but was: %s",
+                        message, ""+a, ""+b));
+        } else {
+            assertEquals(a, b, message);
+        }
+    }
+
+    // -- HELPER
+
+    private ValueFacet<T> valueFacet(
+            final ObjectFeature feature) {
+
+        val valueFacet = feature.getElementType()
+                .lookupFacet(ValueFacet.class)
+                .orElseThrow(()->_Exceptions.noSuchElement(
+                        "Value type Property or Parameter %s is missing a ValueFacet",
+                        feature.getFeatureIdentifier()));
+
+        currentOrderRelation = _Casts.uncheckedCast(valueFacet.selectDefaultOrderRelation());
+
+        return _Casts.uncheckedCast(valueFacet);
+    }
+
+    private Optional<ValueSemanticsProvider<T>> semantics(
+            final ObjectFeature feature) {
+        val valueFacet = valueFacet(feature);
+        return valueFacet.selectDefaultSemantics();
+    }
+
+    private Optional<Parser<T>> parser(
+            final ObjectFeature feature) {
+        val valueFacet = valueFacet(feature);
+        return valueFacet.selectParserForFeature(feature);
+    }
+
+    private Optional<Renderer<T>> renderer(
+            final ObjectFeature feature) {
+        val valueFacet = valueFacet(feature);
+        return valueFacet.selectDefaultRenderer();
+    }
+
+
+
+}

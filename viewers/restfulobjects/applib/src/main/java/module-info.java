@@ -16,27 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.viewer.restfulobjects.applib {
-    exports org.apache.causeway.viewer.restfulobjects.applib.homepage;
-    exports org.apache.causeway.viewer.restfulobjects.applib.errors;
-    exports org.apache.causeway.viewer.restfulobjects.applib.util;
-    exports org.apache.causeway.viewer.restfulobjects.applib.domaintypes;
-    exports org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
-    exports org.apache.causeway.viewer.restfulobjects.applib.version;
-    exports org.apache.causeway.viewer.restfulobjects.applib.boot;
-    exports org.apache.causeway.viewer.restfulobjects.applib;
-    exports org.apache.causeway.viewer.restfulobjects.applib.health;
-    exports org.apache.causeway.viewer.restfulobjects.applib.menubars;
-    exports org.apache.causeway.viewer.restfulobjects.applib.user;
-    exports org.apache.causeway.viewer.restfulobjects.applib.dtos;
+module org.apache.isis.viewer.restfulobjects.applib {
+    exports org.apache.isis.viewer.restfulobjects.applib.homepage;
+    exports org.apache.isis.viewer.restfulobjects.applib.errors;
+    exports org.apache.isis.viewer.restfulobjects.applib.util;
+    exports org.apache.isis.viewer.restfulobjects.applib.domaintypes;
+    exports org.apache.isis.viewer.restfulobjects.applib.domainobjects;
+    exports org.apache.isis.viewer.restfulobjects.applib.version;
+    exports org.apache.isis.viewer.restfulobjects.applib.boot;
+    exports org.apache.isis.viewer.restfulobjects.applib;
+    exports org.apache.isis.viewer.restfulobjects.applib.health;
+    exports org.apache.isis.viewer.restfulobjects.applib.menubars;
+    exports org.apache.isis.viewer.restfulobjects.applib.user;
+    exports org.apache.isis.viewer.restfulobjects.applib.dtos;
 
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires java.ws.rs;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
     requires org.joda.time;
     requires spring.context;
     requires spring.core;

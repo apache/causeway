@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Apache Causeway JDO Persistence DataNucleus Implementation
-Bundle-SymbolicName: org.apache.causeway.persistence.jdo.datanucleus
+Bundle-Name: Apache Isis JDO Persistence DataNucleus Implementation
+Bundle-SymbolicName: org.apache.isis.persistence.jdo.datanucleus
 Bundle-Version: 2.0.0
-Bundle-Vendor: Apache Causeway
+Bundle-Vendor: Apache Isis

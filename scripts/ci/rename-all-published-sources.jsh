@@ -104,7 +104,7 @@ class RenameProject {
             "yml"
             );
 
-    static final List<String> PATH_EXLUSIONS = List.of(
+    static final List<String> PATH_EXCLUSIONS = List.of(
             "/build/",
             "/target/",
             "/adoc/", // not published in its legacy form
@@ -289,7 +289,9 @@ class RenameProject {
 
     private static boolean isPathExcluded(final File file) {
         var path = pathOf(file);
-        for (String excl : PATH_EXLUSIONS) {
+//        System.out.println(path);
+
+        for (String excl : PATH_EXCLUSIONS) {
             if (path.contains(excl)) {
                 return true;
             }
@@ -375,4 +377,4 @@ if (valid) {
 }
 
 
-// exit
+/exit

@@ -16,22 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.core.runtime {
-    exports org.apache.causeway.core.runtime;
-    exports org.apache.causeway.core.runtime.events;
+module org.apache.isis.core.runtime {
+    exports org.apache.isis.core.runtime;
+    exports org.apache.isis.core.runtime.events;
 
     requires java.annotation;
     requires java.desktop;
     requires java.inject;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.interaction;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.transaction;
-    requires org.apache.causeway.security.api;
-    requires org.apache.causeway.valuetypes.jodatime.integration;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.interaction;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.core.transaction;
+    requires org.apache.isis.security.api;
+    requires org.apache.isis.valuetypes.jodatime.integration;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

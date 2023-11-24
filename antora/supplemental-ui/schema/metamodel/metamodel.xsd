@@ -18,9 +18,9 @@
   under the License.
 -->
 <xs:schema
-        targetNamespace="https://causeway.apache.org/schema/metamodel"
+        targetNamespace="http://isis.apache.org/schema/metamodel"
         elementFormDefault="qualified"
-        xmlns="https://causeway.apache.org/schema/metamodel"
+        xmlns="http://isis.apache.org/schema/metamodel"
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
 
         xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1"
@@ -34,7 +34,7 @@
                     classes, the metamodel.
                 </xs:documentation>
                 <xs:appinfo>
-                    <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.MetamodelDto")</annox:annotate>
+                    <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.MetamodelDto")</annox:annotate>
                 </xs:appinfo>
             </xs:annotation>
             <xs:sequence minOccurs="1" maxOccurs="unbounded">
@@ -51,7 +51,7 @@
                     to ObjectSpecification in the internal metamodel.
                 </xs:documentation>
                 <xs:appinfo>
-                    <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.DomainClassDto")
+                    <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.DomainClassDto")
                     </annox:annotate>
                 </xs:appinfo>
             </xs:annotation>
@@ -162,7 +162,7 @@
                 metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.Member")
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.Member")
                 </annox:annotate>
             </xs:appinfo>
         </xs:annotation>
@@ -196,7 +196,7 @@
                 metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.Property")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.Property")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -225,7 +225,7 @@
                 metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.Collection")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.Collection")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -253,7 +253,7 @@
                 Corresponds to ObjectAction in the internal metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.Action")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.Action")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -292,7 +292,7 @@
                 metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.Param")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.Param")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -331,7 +331,7 @@
                 metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.ScalarParam")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.ScalarParam")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -350,7 +350,7 @@
                 internal metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.VectorParam")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.VectorParam")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -367,7 +367,7 @@
                 Corresponds to FacetHolder interface in the internal metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.FacetHolder")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.FacetHolder")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -396,7 +396,7 @@
                 metamodel.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.Facet")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.Facet")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -428,7 +428,7 @@
                 an attribute of the value).
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.FacetAttr")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.FacetAttr")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -458,7 +458,7 @@
                 tools to add arbitrary meta data.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.Annotation")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.Annotation")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:simpleContent>
@@ -482,7 +482,7 @@
             <xs:documentation>Common ancestor of facet and facetHolder.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.metamodel.v2.MetamodelElement")</annox:annotate>
+                <annox:annotate>@javax.inject.Named("isis.schema.metamodel.v2.MetamodelElement")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>

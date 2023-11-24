@@ -24,51 +24,51 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>causeway-extensions-audittrail</artifactId>
-    <name>Apache Causeway Ext - Audit Trail</name>
+    <artifactId>isis-extensions-audittrail</artifactId>
+    <name>Apache Isis Ext - Audit Trail</name>
 
     <packaging>pom</packaging>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.extensions.audittrail</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/extensions/audittrail</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.audittrail</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/audittrail</git-plugin.propertiesDir>
     </properties>
 
     <dependencyManagement>
         <dependencies>
 
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-audittrail-applib</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-audittrail-applib</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-audittrail-applib</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-audittrail-applib</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-audittrail-persistence-jpa</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-audittrail-persistence-jdo</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.causeway.testing</groupId>
-                <artifactId>causeway-testing-integtestsupport</artifactId>
+                <groupId>org.apache.isis.testing</groupId>
+                <artifactId>isis-testing-integtestsupport</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -80,8 +80,8 @@
     <dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-metamodel</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
     </dependencies>

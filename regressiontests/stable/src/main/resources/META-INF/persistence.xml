@@ -16,10 +16,10 @@
 	version="2.2">
 
 	<persistence-unit name="PUinSupportOfGradleBuild">
-		<class>org.apache.causeway.testdomain.jdo.entities.JdoProductComment</class>
-		<class>org.apache.causeway.testdomain.jdo.entities.JdoInventory</class>
-		<class>org.apache.causeway.testdomain.jdo.entities.JdoBook</class>
-		<class>org.apache.causeway.testdomain.jdo.entities.JdoProduct</class>
+		<class>org.apache.isis.testdomain.jdo.entities.JdoProductComment</class>
+		<class>org.apache.isis.testdomain.jdo.entities.JdoInventory</class>
+		<class>org.apache.isis.testdomain.jdo.entities.JdoBook</class>
+		<class>org.apache.isis.testdomain.jdo.entities.JdoProduct</class>
 	</persistence-unit>
 
 </persistence>

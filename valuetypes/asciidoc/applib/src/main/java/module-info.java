@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.asciidoc.applib {
-    exports org.apache.causeway.valuetypes.asciidoc.applib;
-    exports org.apache.causeway.valuetypes.asciidoc.applib.value;
-    exports org.apache.causeway.valuetypes.asciidoc.applib.jaxb;
+module org.apache.isis.valuetypes.asciidoc.applib {
+    exports org.apache.isis.valuetypes.asciidoc.applib;
+    exports org.apache.isis.valuetypes.asciidoc.applib.value;
+    exports org.apache.isis.valuetypes.asciidoc.applib.jaxb;
 
     requires asciidoctorj.api;
     requires java.inject;
     requires java.xml.bind;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
     requires spring.context;
     requires spring.core;
-    requires org.apache.causeway.core.config;
+    requires org.apache.isis.core.config;
     requires spring.boot.autoconfigure;
     requires java.net.http;
 }

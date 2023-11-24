@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.asciidoc.builder {
-    exports org.apache.causeway.valuetypes.asciidoc.builder;
-    exports org.apache.causeway.valuetypes.asciidoc.builder.ast;
-    exports org.apache.causeway.valuetypes.asciidoc.builder.include;
-    exports org.apache.causeway.valuetypes.asciidoc.builder.xref;
+module org.apache.isis.valuetypes.asciidoc.builder {
+    exports org.apache.isis.valuetypes.asciidoc.builder;
+    exports org.apache.isis.valuetypes.asciidoc.builder.ast;
+    exports org.apache.isis.valuetypes.asciidoc.builder.include;
+    exports org.apache.isis.valuetypes.asciidoc.builder.xref;
 
     requires transitive asciidoctorj.api;
     requires static lombok;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
     requires spring.core;
     requires org.objectweb.asm; // waiting for lombok 1.12.30 see https://github.com/projectlombok/lombok/issues/3474
 }

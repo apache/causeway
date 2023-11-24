@@ -2,118 +2,118 @@
   "properties": [
     {
       "name": "datanucleus.identifier.case",
-      "type": "org.apache.causeway.core.config.DatanucleusConfiguration.Identifier.Case",
+      "type": "org.apache.isis.core.config.DatanucleusConfiguration.Identifier.Case",
       "description": "Which case to use in generated table/column identifier names. See also the Datastore Identifier Guide. RDBMS defaults to UPPERCASE."
     }
   ],
   "hints": [
     {
-      "name": "causeway.testing.fixtures.initial-script",
+      "name": "isis.testing.fixtures.initial-script",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
+          "target": "org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript"
         }
       }]
     },
     {
-      "name": "causeway.testing.fixtures.fixture-scripts-specification.recreate",
+      "name": "isis.testing.fixtures.fixture-scripts-specification.recreate",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
+          "target": "org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript"
         }
       }]
     },
     {
-      "name": "causeway.testing.fixtures.fixture-scripts-specification.run-script-default",
+      "name": "isis.testing.fixtures.fixture-scripts-specification.run-script-default",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
+          "target": "org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript"
         }
       }]
     },
     {
-      "name": "causeway.value-types.temporal.editing.date-pattern",
+      "name": "isis.value-types.temporal.editing.date-pattern",
       "type": "java.lang.String",
       "defaultValue": "yyyy-MM-dd"
     },
     {
-      "name": "causeway.value-types.temporal.editing.time-pattern-nano-second",
+      "name": "isis.value-types.temporal.editing.time-pattern-nano-second",
       "type": "java.lang.String",
       "defaultValue": "HH[:mm[:ss][.SSSSSSSSS]]"
     },
     {
-      "name": "causeway.value-types.temporal.editing.time-pattern-micro-second",
+      "name": "isis.value-types.temporal.editing.time-pattern-micro-second",
       "type": "java.lang.String",
       "defaultValue": "HH[:mm[:ss][.SSSSSS]]"
     },
     {
-      "name": "causeway.value-types.temporal.editing.time-pattern-milli-second",
+      "name": "isis.value-types.temporal.editing.time-pattern-milli-second",
       "type": "java.lang.String",
       "defaultValue": "HH[:mm[:ss][.SSS]]"
     },
     {
-      "name": "causeway.value-types.temporal.editing.time-pattern-second",
+      "name": "isis.value-types.temporal.editing.time-pattern-second",
       "type": "java.lang.String",
       "defaultValue": "HH[:mm[:ss]]"
     },
     {
-      "name": "causeway.value-types.temporal.editing.time-pattern-minute",
+      "name": "isis.value-types.temporal.editing.time-pattern-minute",
       "type": "java.lang.String",
       "defaultValue": "HH[:mm]"
     },
     {
-      "name": "causeway.value-types.temporal.editing.time-pattern-hour",
+      "name": "isis.value-types.temporal.editing.time-pattern-hour",
       "type": "java.lang.String",
       "defaultValue": "HH"
     },
     {
-      "name": "causeway.value-types.temporal.editing.zone-id-pattern-for-output",
+      "name": "isis.value-types.temporal.editing.zone-id-pattern-for-output",
       "type": "java.lang.String",
       "defaultValue": "VV"
     },
     {
-      "name": "causeway.value-types.temporal.editing.zone-id-pattern-for-input",
+      "name": "isis.value-types.temporal.editing.zone-id-pattern-for-input",
       "type": "java.lang.String",
       "defaultValue": "VV"
     },
     {
-      "name": "causeway.value-types.temporal.editing.offset-pattern-for-output",
+      "name": "isis.value-types.temporal.editing.offset-pattern-for-output",
       "type": "java.lang.String",
       "defaultValue": "XXX"
     },
     {
-      "name": "causeway.value-types.temporal.editing.offset-pattern-for-input",
+      "name": "isis.value-types.temporal.editing.offset-pattern-for-input",
       "type": "java.lang.String",
       "defaultValue": "[XXX][X]"
     },
     {
-      "name": "causeway.value-types.temporal.editing.date-time-joining-pattern",
+      "name": "isis.value-types.temporal.editing.date-time-joining-pattern",
       "type": "java.lang.String",
       "defaultValue": "%1$s %2$s"
     },
     {
-      "name": "causeway.value-types.temporal.editing.zone-joining-pattern",
+      "name": "isis.value-types.temporal.editing.zone-joining-pattern",
       "type": "java.lang.String",
       "defaultValue": "%1$s %2$s"
     },
     {
-      "name": "causeway.viewer.wicket.themes.provider",
+      "name": "isis.viewer.wicket.themes.provider",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.causewayWicketThemeSupport"
+          "target": "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.isisWicketThemeSupport"
         }
       }]
     },
     {
-      "name": "causeway.viewer.wicket.app",
+      "name": "isis.viewer.wicket.app",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.causeway.viewer.wicket.viewer.wicketapp.causewayWicketApplication"
+          "target": "org.apache.isis.viewer.wicket.viewer.wicketapp.isisWicketApplication"
         }
       }]
     },

@@ -16,24 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.viewer.commons.model {
-    exports org.apache.causeway.viewer.commons.model;
-    exports org.apache.causeway.viewer.commons.model.action.decorator;
-    exports org.apache.causeway.viewer.commons.model.layout;
-    exports org.apache.causeway.viewer.commons.model.components;
-    exports org.apache.causeway.viewer.commons.model.binding;
-    exports org.apache.causeway.viewer.commons.model.mixin;
-    exports org.apache.causeway.viewer.commons.model.mock;
-    exports org.apache.causeway.viewer.commons.model.object;
-    exports org.apache.causeway.viewer.commons.model.action;
-    exports org.apache.causeway.viewer.commons.model.decorators;
-    exports org.apache.causeway.viewer.commons.model.scalar;
-    exports org.apache.causeway.viewer.commons.model.hints;
+module org.apache.isis.viewer.commons.model {
+    exports org.apache.isis.viewer.commons.model;
+    exports org.apache.isis.viewer.commons.model.action.decorator;
+    exports org.apache.isis.viewer.commons.model.layout;
+    exports org.apache.isis.viewer.commons.model.components;
+    exports org.apache.isis.viewer.commons.model.binding;
+    exports org.apache.isis.viewer.commons.model.mixin;
+    exports org.apache.isis.viewer.commons.model.mock;
+    exports org.apache.isis.viewer.commons.model.object;
+    exports org.apache.isis.viewer.commons.model.action;
+    exports org.apache.isis.viewer.commons.model.decorators;
+    exports org.apache.isis.viewer.commons.model.scalar;
+    exports org.apache.isis.viewer.commons.model.hints;
 
     requires lombok;
-    requires transitive org.apache.causeway.applib;
-    requires transitive org.apache.causeway.commons;
-    requires transitive org.apache.causeway.core.config;
-    requires transitive org.apache.causeway.core.metamodel;
+    requires transitive org.apache.isis.applib;
+    requires transitive org.apache.isis.commons;
+    requires transitive org.apache.isis.core.config;
+    requires transitive org.apache.isis.core.metamodel;
     requires spring.core;
 }

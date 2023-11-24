@@ -21,76 +21,76 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>causeway-extensions-secman</artifactId>
-    <name>Apache Causeway Ext - Sec Man</name>
+    <artifactId>isis-extensions-secman</artifactId>
+    <name>Apache Isis Ext - Sec Man</name>
     <description></description>
 
     <packaging>pom</packaging>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.extensions.secman</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/extensions/secman</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/secman</git-plugin.propertiesDir>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-applib</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-applib</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-applib</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-applib</artifactId>
                 <scope>test</scope>
                 <type>test-jar</type>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-integration</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-integration</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-encryption-spring</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-encryption-spring</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-persistence-jdo</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-persistence-jpa</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-delegated-shiro</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-delegated-springoauth2</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-delegated-springoauth2</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.causeway.testing</groupId>
-                <artifactId>causeway-testing-integtestsupport</artifactId>
+                <groupId>org.apache.isis.testing</groupId>
+                <artifactId>isis-testing-integtestsupport</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -102,13 +102,13 @@
     <dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-metamodel</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-security</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-security</artifactId>
 		</dependency>
 
     </dependencies>

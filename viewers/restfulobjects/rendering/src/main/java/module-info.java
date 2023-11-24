@@ -16,19 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.viewer.restfulobjects.rendering {
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service.swagger;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.util;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
-    exports org.apache.causeway.viewer.restfulobjects.rendering;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service;
+module org.apache.isis.viewer.restfulobjects.rendering {
+    exports org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
+    exports org.apache.isis.viewer.restfulobjects.rendering.service.swagger;
+    exports org.apache.isis.viewer.restfulobjects.rendering.service.valuerender;
+    exports org.apache.isis.viewer.restfulobjects.rendering.util;
+    exports org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
+    exports org.apache.isis.viewer.restfulobjects.rendering;
+    exports org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
+    exports org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
+    exports org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader;
+    exports org.apache.isis.viewer.restfulobjects.rendering.service;
 
-    requires org.apache.causeway.viewer.restfulobjects.applib;
+    requires org.apache.isis.viewer.restfulobjects.applib;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires jakarta.activation;
@@ -38,12 +38,12 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires java.ws.rs;
     requires java.xml.bind;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.runtime;
-    requires org.apache.causeway.schema;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.core.runtime;
+    requires org.apache.isis.schema;
     requires org.apache.logging.log4j;
     requires org.joda.time;
     requires spring.beans;

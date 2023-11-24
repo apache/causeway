@@ -15,28 +15,28 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.valuetypes</groupId>
-		<artifactId>causeway-valuetypes-markdown</artifactId>
+		<groupId>org.apache.isis.valuetypes</groupId>
+		<artifactId>isis-valuetypes-markdown</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-valuetypes-markdown-applib</artifactId>
-	<name>Apache Causeway Val - Markdown (applib)</name>
+	<artifactId>isis-valuetypes-markdown-applib</artifactId>
+	<name>Apache Isis Val - Markdown (applib)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes.markdown.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/valuetypes/markdown/applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.markdown.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/markdown/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.causeway.commons</groupId>
-			<artifactId>causeway-commons</artifactId>
+			<groupId>org.apache.isis.commons</groupId>
+			<artifactId>isis-commons</artifactId>
 		</dependency>
 
 		<dependency>

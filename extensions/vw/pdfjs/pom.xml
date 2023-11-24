@@ -21,51 +21,51 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>causeway-extensions-pdfjs</artifactId>
-    <name>Apache Causeway Ext - pdf.js - Parent</name>
+    <artifactId>isis-extensions-pdfjs</artifactId>
+    <name>Apache Isis Ext - pdf.js - Parent</name>
     <packaging>pom</packaging>
 
     <description>
-        A component for Apache Causeway' Wicket viewer, allowing BLOBs containing PDFs to be rendered in a panel using pdf.js.
+        A component for Apache Isis' Wicket viewer, allowing BLOBs containing PDFs to be rendered in a panel using pdf.js.
     </description>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-pdfjs-applib</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-pdfjs-applib</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-pdfjs-fixtures</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-pdfjs-fixtures</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-pdfjs-metamodel</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-pdfjs-metamodel</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-pdfjs-wicket</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-pdfjs-wicket</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
                 <type>pom</type>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-pdfjs-wicket-integration</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-pdfjs-wicket-integration</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-pdfjs-wicket-ui</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>

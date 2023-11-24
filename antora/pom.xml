@@ -23,8 +23,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway</groupId>
-		<artifactId>causeway-bom</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>isis-bom</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
@@ -33,7 +33,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>Apache Causeway - Antora</name>
+	<name>Apache Isis - Antora</name>
 
 	<build>
 		<plugins>
@@ -104,7 +104,7 @@
 
                         <exclude>**/jquery.zclip.js</exclude>
                         <exclude>**/simple-sidebar.css</exclude>
-                        <exclude>**/causeway-bootstrap-growl.js</exclude>
+                        <exclude>**/isis-bootstrap-growl.js</exclude>
                         <exclude>**/moment.js</exclude>
                         <exclude>**/prism*.js</exclude>
                         <exclude>**/prism*.css</exclude>
@@ -138,7 +138,7 @@
                         <exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
                         <exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
 
-                        <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
+                        <exclude>**/isis/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
 
                         <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
                         <exclude>**/kroviz/webpack.config.d/**</exclude>

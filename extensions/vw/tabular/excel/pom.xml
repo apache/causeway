@@ -21,29 +21,29 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-tabular</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions-tabular</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>causeway-extensions-tabular-excel</artifactId>
-    <name>Apache Causeway Ext - Tabular (Excel)</name>
+    <artifactId>isis-extensions-tabular-excel</artifactId>
+    <name>Apache Isis Ext - Tabular (Excel)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.extensions.tabular.excel</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/extensions/tabular/excel</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.tabular.excel</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/tabular/excel</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.causeway.extensions</groupId>
-            <artifactId>causeway-extensions-tabular-applib</artifactId>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-tabular-applib</artifactId>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.causeway.viewer</groupId>
-            <artifactId>causeway-viewer-commons-applib</artifactId>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>isis-viewer-commons-applib</artifactId>
         </dependency>
 
         <dependency>

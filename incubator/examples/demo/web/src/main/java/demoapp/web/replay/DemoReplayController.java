@@ -22,13 +22,13 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
 
 @Named("demo.web.DemoReplayController")
 @DomainService(

@@ -1,1 +1,1 @@
-org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator
+org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator

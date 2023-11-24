@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.jodatime.integration {
-    exports org.apache.causeway.valuetypes.jodatime.integration;
-    exports org.apache.causeway.valuetypes.jodatime.integration.valuesemantics;
+module org.apache.isis.valuetypes.jodatime.integration {
+    exports org.apache.isis.valuetypes.jodatime.integration;
+    exports org.apache.isis.valuetypes.jodatime.integration.valuesemantics;
 
     requires java.inject;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.schema;
-    requires org.apache.causeway.valuetypes.jodatime.applib;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.schema;
+    requires org.apache.isis.valuetypes.jodatime.applib;
     requires org.joda.time;
     requires spring.context;
 
-    opens org.apache.causeway.valuetypes.jodatime.integration.valuesemantics to org.apache.causeway.commons;
+    opens org.apache.isis.valuetypes.jodatime.integration.valuesemantics to org.apache.isis.commons;
 }

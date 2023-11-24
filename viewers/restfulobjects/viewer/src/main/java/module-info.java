@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.viewer.restfulobjects.viewer {
-    exports org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.webmodule;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.context;
-    exports org.apache.causeway.viewer.restfulobjects.viewer;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.resources;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.util;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.mappers.entity;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.mappers;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization;
+module org.apache.isis.viewer.restfulobjects.viewer {
+    exports org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp;
+    exports org.apache.isis.viewer.restfulobjects.viewer.webmodule;
+    exports org.apache.isis.viewer.restfulobjects.viewer.context;
+    exports org.apache.isis.viewer.restfulobjects.viewer;
+    exports org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth;
+    exports org.apache.isis.viewer.restfulobjects.viewer.resources;
+    exports org.apache.isis.viewer.restfulobjects.viewer.util;
+    exports org.apache.isis.viewer.restfulobjects.viewer.mappers.entity;
+    exports org.apache.isis.viewer.restfulobjects.viewer.mappers;
+    exports org.apache.isis.viewer.restfulobjects.viewer.resources.serialization;
 
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
@@ -37,16 +37,16 @@ module org.apache.causeway.viewer.restfulobjects.viewer {
     requires java.xml.bind;
     requires javax.servlet.api;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.webapp;
-    requires org.apache.causeway.security.api;
-    requires org.apache.causeway.viewer.commons.applib;
-    requires org.apache.causeway.viewer.commons.services;
-    requires org.apache.causeway.viewer.restfulobjects.applib;
-    requires org.apache.causeway.viewer.restfulobjects.rendering;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.core.webapp;
+    requires org.apache.isis.security.api;
+    requires org.apache.isis.viewer.commons.applib;
+    requires org.apache.isis.viewer.commons.services;
+    requires org.apache.isis.viewer.restfulobjects.applib;
+    requires org.apache.isis.viewer.restfulobjects.rendering;
     requires org.apache.logging.log4j;
     requires spring.beans;
     requires spring.context;

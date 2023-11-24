@@ -16,29 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jpa.integration {
-    exports org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2;
-    exports org.apache.causeway.persistence.jpa.integration.entity;
-    exports org.apache.causeway.persistence.jpa.integration.services;
-    exports org.apache.causeway.persistence.jpa.integration.typeconverters.java.time;
-    exports org.apache.causeway.persistence.jpa.integration.typeconverters.java.util;
-    exports org.apache.causeway.persistence.jpa.integration.typeconverters.java.awt;
-    exports org.apache.causeway.persistence.jpa.integration.typeconverters.applib;
-    exports org.apache.causeway.persistence.jpa.integration;
+module org.apache.isis.persistence.jpa.integration {
+    exports org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2;
+    exports org.apache.isis.persistence.jpa.integration.entity;
+    exports org.apache.isis.persistence.jpa.integration.services;
+    exports org.apache.isis.persistence.jpa.integration.typeconverters.java.time;
+    exports org.apache.isis.persistence.jpa.integration.typeconverters.java.util;
+    exports org.apache.isis.persistence.jpa.integration.typeconverters.java.awt;
+    exports org.apache.isis.persistence.jpa.integration.typeconverters.applib;
+    exports org.apache.isis.persistence.jpa.integration;
 
     requires java.desktop;
     requires java.inject;
     requires java.persistence;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.runtime;
-    requires org.apache.causeway.persistence.commons;
-    requires org.apache.causeway.persistence.jpa.applib;
-    requires org.apache.causeway.persistence.jpa.metamodel;
-    requires org.apache.causeway.schema;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.core.runtime;
+    requires org.apache.isis.persistence.commons;
+    requires org.apache.isis.persistence.jpa.applib;
+    requires org.apache.isis.persistence.jpa.metamodel;
+    requires org.apache.isis.schema;
     requires org.apache.logging.log4j;
     requires org.eclipse.persistence.core;
     requires spring.boot.autoconfigure;

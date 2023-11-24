@@ -23,10 +23,10 @@ set -o nounset
 set -o errexit
 
 
-# Usage: jira-release-notes.sh causeway 1.9.0
+# Usage: jira-release-notes.sh isis 1.9.0
 #
 #        where 
-#               - causeway is the JIRA project and repo
+#               - isis is the JIRA project and repo
 #               - 1.9.0 is the JIRA ticket number
 #
 # uses 'jq' to parse JSON

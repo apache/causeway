@@ -16,28 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.core.config {
-    exports org.apache.causeway.core.config;
-    exports org.apache.causeway.core.config.applib;
-    exports org.apache.causeway.core.config.beans.aoppatch;
-    exports org.apache.causeway.core.config.beans;
-    exports org.apache.causeway.core.config.converters;
-    exports org.apache.causeway.core.config.datasources;
-    exports org.apache.causeway.core.config.environment;
-    exports org.apache.causeway.core.config.messages;
-    exports org.apache.causeway.core.config.metamodel.facets;
-    exports org.apache.causeway.core.config.metamodel.services;
-    exports org.apache.causeway.core.config.metamodel.specloader;
-    exports org.apache.causeway.core.config.presets;
-    exports org.apache.causeway.core.config.progmodel;
-    exports org.apache.causeway.core.config.util;
-    exports org.apache.causeway.core.config.validators;
-    exports org.apache.causeway.core.config.viewer.web;
+module org.apache.isis.core.config {
+    exports org.apache.isis.core.config;
+    exports org.apache.isis.core.config.applib;
+    exports org.apache.isis.core.config.beans.aoppatch;
+    exports org.apache.isis.core.config.beans;
+    exports org.apache.isis.core.config.converters;
+    exports org.apache.isis.core.config.datasources;
+    exports org.apache.isis.core.config.environment;
+    exports org.apache.isis.core.config.messages;
+    exports org.apache.isis.core.config.metamodel.facets;
+    exports org.apache.isis.core.config.metamodel.services;
+    exports org.apache.isis.core.config.metamodel.specloader;
+    exports org.apache.isis.core.config.presets;
+    exports org.apache.isis.core.config.progmodel;
+    exports org.apache.isis.core.config.util;
+    exports org.apache.isis.core.config.validators;
+    exports org.apache.isis.core.config.viewer.web;
 
     requires static lombok;
 
-    requires transitive org.apache.causeway.applib;
-    requires transitive org.apache.causeway.commons;
+    requires transitive org.apache.isis.applib;
+    requires transitive org.apache.isis.commons;
     requires jakarta.activation;
     requires java.annotation;
     requires java.persistence;
@@ -55,8 +55,8 @@ module org.apache.causeway.core.config {
     requires spring.core;
     requires spring.tx;
 
-    uses org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
+    uses org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 
-    opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;
-    opens org.apache.causeway.core.config.environment to spring.core;
+    opens org.apache.isis.core.config to spring.core, org.hibernate.validator;
+    opens org.apache.isis.core.config.environment to spring.core;
 }

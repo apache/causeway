@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jdo.spring {
-    exports org.apache.causeway.persistence.jdo.spring.support;
-    exports org.apache.causeway.persistence.jdo.spring.exceptions;
-    exports org.apache.causeway.persistence.jdo.spring;
-    exports org.apache.causeway.persistence.jdo.spring.integration;
+module org.apache.isis.persistence.jdo.spring {
+    exports org.apache.isis.persistence.jdo.spring.support;
+    exports org.apache.isis.persistence.jdo.spring.exceptions;
+    exports org.apache.isis.persistence.jdo.spring;
+    exports org.apache.isis.persistence.jdo.spring.integration;
 
     requires glassfish.corba.omgapi;
     requires java.naming;
@@ -31,9 +31,9 @@ module org.apache.causeway.persistence.jdo.spring {
     requires javax.jdo;
     requires javax.servlet.api;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

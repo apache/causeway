@@ -1,7 +1,7 @@
-module org.apache.causeway.incubator.viewer.graphql.model {
-    exports org.apache.causeway.viewer.graphql.model;
+module org.apache.isis.incubator.viewer.graphql.model {
+    exports org.apache.isis.viewer.graphql.model;
 
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.incubator.viewer.graphql.applib;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.incubator.viewer.graphql.applib;
     requires spring.context;
 }

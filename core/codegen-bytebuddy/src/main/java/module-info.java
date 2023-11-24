@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.core.codegen.bytebuddy {
-    exports org.apache.causeway.core.codegen.bytebuddy.services;
-    exports org.apache.causeway.core.codegen.bytebuddy;
+module org.apache.isis.core.codegen.bytebuddy {
+    exports org.apache.isis.core.codegen.bytebuddy.services;
+    exports org.apache.isis.core.codegen.bytebuddy;
 
     requires net.bytebuddy;
-    requires org.apache.causeway.commons;
+    requires org.apache.isis.commons;
     requires spring.context;
     requires spring.core;
 }

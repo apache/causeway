@@ -28,7 +28,7 @@ do
     git tag -d $a
 done
 
-for a in `git tag --list | grep ^causeway-`
+for a in `git tag --list | grep ^isis-`
 do
     git tag -d $a
 done

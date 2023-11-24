@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.security.keycloak {
-    exports org.apache.causeway.security.keycloak;
-    exports org.apache.causeway.security.keycloak.handler;
-    exports org.apache.causeway.security.keycloak.services;
+module org.apache.isis.security.keycloak {
+    exports org.apache.isis.security.keycloak;
+    exports org.apache.isis.security.keycloak.handler;
+    exports org.apache.isis.security.keycloak.services;
 
-    requires org.apache.causeway.core.webapp;
-    requires org.apache.causeway.security.spring;
+    requires org.apache.isis.core.webapp;
+    requires org.apache.isis.security.spring;
     requires lombok;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.runtimeservices;
-    requires org.apache.causeway.security.api;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.runtimeservices;
+    requires org.apache.isis.security.api;
     requires org.slf4j;
     requires spring.beans;
     requires spring.boot.autoconfigure;
@@ -39,5 +39,5 @@ module org.apache.causeway.security.keycloak {
     requires spring.security.oauth2.jose;
     requires spring.security.web;
     requires spring.web;
-    requires org.apache.causeway.commons;
+    requires org.apache.isis.commons;
 }

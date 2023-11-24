@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.viewer.restfulobjects.client {
-    exports org.apache.causeway.viewer.restfulobjects.client.log;
-    exports org.apache.causeway.viewer.restfulobjects.client;
-    exports org.apache.causeway.viewer.restfulobjects.client.auth;
-    exports org.apache.causeway.viewer.restfulobjects.client.auth.basic;
-    exports org.apache.causeway.viewer.restfulobjects.client.auth.oauth2;
-    exports org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure;
+module org.apache.isis.viewer.restfulobjects.client {
+    exports org.apache.isis.viewer.restfulobjects.client.log;
+    exports org.apache.isis.viewer.restfulobjects.client;
+    exports org.apache.isis.viewer.restfulobjects.client.auth;
+    exports org.apache.isis.viewer.restfulobjects.client.auth.basic;
+    exports org.apache.isis.viewer.restfulobjects.client.auth.oauth2;
+    exports org.apache.isis.viewer.restfulobjects.client.auth.oauth2.azure;
 
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
@@ -30,11 +30,11 @@ module org.apache.causeway.viewer.restfulobjects.client {
     requires java.ws.rs;
     requires java.xml.bind;
     requires lombok;
-    requires transitive org.apache.causeway.applib;
-    requires transitive org.apache.causeway.commons;
-    requires transitive org.apache.causeway.viewer.restfulobjects.applib;
+    requires transitive org.apache.isis.applib;
+    requires transitive org.apache.isis.commons;
+    requires transitive org.apache.isis.viewer.restfulobjects.applib;
     requires org.apache.logging.log4j;
     requires spring.core;
-    requires org.apache.causeway.schema;
+    requires org.apache.isis.schema;
     requires org.slf4j;
 }

@@ -21,41 +21,41 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>causeway-extensions-fullcalendar</artifactId>
-    <name>Apache Causeway Ext - FullCalendar (parent)</name>
+    <artifactId>isis-extensions-fullcalendar</artifactId>
+    <name>Apache Isis Ext - FullCalendar (parent)</name>
     <packaging>pom</packaging>
 
     <description>
-        A component for Apache Causeway' Wicket viewer, displaying collections of objects that have a date on a fullcalendar.io (JavaScript widget).
+        A component for Apache Isis' Wicket viewer, displaying collections of objects that have a date on a fullcalendar.io (JavaScript widget).
     </description>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-fullcalendar-applib</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-fullcalendar-applib</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-fullcalendar-wicket</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-fullcalendar-wicket</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
                 <type>pom</type>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-fullcalendar-wicket-integration</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-fullcalendar-wicket-integration</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-fullcalendar-wicket-ui</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>

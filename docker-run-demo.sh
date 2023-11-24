@@ -20,8 +20,8 @@
 #
 #
 
-NAME="apache-causeway-demo-app"
-IMAGE="apachecauseway/demo-springboot:latest"
+NAME="apache-isis-demo-app"
+IMAGE="apacheisis/demo-springboot:latest"
 PORT=8080
 
 echo ""

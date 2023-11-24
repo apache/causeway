@@ -3,7 +3,7 @@ static_files:
 - support.html
 - _headers
 - robots.txt
-- doap_causeway.rdf
+- doap_isis.rdf
 - applib/layout/component/component.xsd
 - applib/layout/grid/bootstrap3/bootstrap3.xsd
 - applib/layout/links/links.xsd

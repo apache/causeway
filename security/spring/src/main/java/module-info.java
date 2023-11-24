@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.security.spring {
-    exports org.apache.causeway.security.spring;
-    exports org.apache.causeway.security.spring.authconverters;
-    exports org.apache.causeway.security.spring.authentication;
-    exports org.apache.causeway.security.spring.webmodule;
+module org.apache.isis.security.spring {
+    exports org.apache.isis.security.spring;
+    exports org.apache.isis.security.spring.authconverters;
+    exports org.apache.isis.security.spring.authentication;
+    exports org.apache.isis.security.spring.webmodule;
 
     requires java.annotation;
     requires java.inject;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.runtimeservices;
-    requires org.apache.causeway.core.webapp;
-    requires org.apache.causeway.security.api;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.runtimeservices;
+    requires org.apache.isis.core.webapp;
+    requires org.apache.isis.security.api;
     requires org.apache.logging.log4j;
     requires spring.beans;
     requires spring.context;

@@ -30,8 +30,8 @@ usage() {
   echo "" >&2
   echo "eg: $(basename $0) -x 3576 " >&2
   echo "" >&2
-  echo "    git branch -D CAUSEWAY-3576             # if exists" >&2
-  echo "    git push origin CAUSEWAY-3576 --delete  # if exists" >&2
+  echo "    git branch -D ISIS-3576             # if exists" >&2
+  echo "    git push origin ISIS-3576 --delete  # if exists" >&2
 }
 
 BRANCHNUM=""
@@ -66,7 +66,7 @@ echo "BRANCHNUM : $BRANCHNUM"
 echo "EXECUTE   : $EXEC"
 echo ""
 
-BRANCH="CAUSEWAY-${BRANCHNUM}"
+BRANCH="ISIS-${BRANCHNUM}"
 
 LOCAL=$(git branch | grep $BRANCH)
 

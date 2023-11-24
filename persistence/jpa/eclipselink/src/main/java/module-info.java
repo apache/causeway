@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jpa.eclipselink {
-    exports org.apache.causeway.persistence.jpa.eclipselink.inject;
-    exports org.apache.causeway.persistence.jpa.eclipselink;
-    exports org.apache.causeway.persistence.jpa.eclipselink.config;
+module org.apache.isis.persistence.jpa.eclipselink {
+    exports org.apache.isis.persistence.jpa.eclipselink.inject;
+    exports org.apache.isis.persistence.jpa.eclipselink;
+    exports org.apache.isis.persistence.jpa.eclipselink.config;
 
     requires jakarta.el.api;
     requires jakarta.enterprise.cdi.api;
@@ -28,10 +28,10 @@ module org.apache.causeway.persistence.jpa.eclipselink {
     requires java.persistence;
     requires java.sql;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.persistence.jpa.integration;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.persistence.jpa.integration;
     requires org.apache.logging.log4j;
     requires org.eclipse.persistence.core;
     requires spring.beans;

@@ -23,27 +23,27 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.regressiontests</groupId>
-		<artifactId>causeway-regressiontests</artifactId>
+		<groupId>org.apache.isis.regressiontests</groupId>
+		<artifactId>isis-regressiontests</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>causeway-regressiontests-stable-eventhandling</artifactId>
-	<name>Apache Causeway - Regression Tests (stable) - Event Handling</name>
+	<artifactId>isis-regressiontests-stable-eventhandling</artifactId>
+	<name>Apache Isis - Regression Tests (stable) - Event Handling</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.eventhandling</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-eventhandling</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.regressiontests.stable.eventhandling</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/regressiontests/stable-eventhandling</git-plugin.propertiesDir>
     </properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.causeway.regressiontests</groupId>
-			<artifactId>causeway-regressiontests-stable</artifactId>
+			<groupId>org.apache.isis.regressiontests</groupId>
+			<artifactId>isis-regressiontests-stable</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

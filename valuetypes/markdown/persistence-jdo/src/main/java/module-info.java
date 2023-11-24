@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.markdown.persistence.jdo {
-    exports org.apache.causeway.valuetypes.markdown.persistence.jdo;
-    exports org.apache.causeway.valuetypes.markdown.persistence.jdo.converters;
+module org.apache.isis.valuetypes.markdown.persistence.jdo {
+    exports org.apache.isis.valuetypes.markdown.persistence.jdo;
+    exports org.apache.isis.valuetypes.markdown.persistence.jdo.converters;
 
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.valuetypes.markdown.applib;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.valuetypes.markdown.applib;
     requires org.datanucleus;
     requires spring.context;
 }

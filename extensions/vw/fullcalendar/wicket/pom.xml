@@ -21,13 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-fullcalendar</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions-fullcalendar</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>causeway-extensions-fullcalendar-wicket</artifactId>
-    <name>Apache Causeway Ext - FullCalendar Wicket</name>
+    <artifactId>isis-extensions-fullcalendar-wicket</artifactId>
+    <name>Apache Isis Ext - FullCalendar Wicket</name>
 
     <packaging>pom</packaging>
     

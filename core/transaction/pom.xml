@@ -21,35 +21,35 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.core</groupId>
-        <artifactId>causeway-core</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis-core</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>causeway-core-transaction</artifactId>
-    <name>Apache Causeway Core - Transaction</name>
+    <artifactId>isis-core-transaction</artifactId>
+    <name>Apache Isis Core - Transaction</name>
     <description>
     	Provides transaction integration with Spring and also 
     	entity change tracking, with associated publishing and pre/post value events.
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.core.transaction</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/core/transaction</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.transaction</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/transaction</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-metamodel</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-metamodel</artifactId>
         </dependency>
 
 		<!--  TESTING -->
 
         <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-internaltestsupport</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

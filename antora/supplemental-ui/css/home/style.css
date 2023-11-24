@@ -41,14 +41,14 @@
   --color-dark-blue: #0c2e8a;
 
   /* https://coolors.co/5ab1bb-8f3985-eeb4b3-2364aa-fec601 */
-  --color-causeway-purple: #8F3985;
-  --color-causeway-cyan: #5AB1BB;
-  --color-causeway-pink: #EEB4B3;
-  --color-causeway-blue: #2364AA;
-  --color-causeway-yellow: #FEC601;
+  --color-isis-purple: #8F3985;
+  --color-isis-cyan: #5AB1BB;
+  --color-isis-pink: #EEB4B3;
+  --color-isis-blue: #2364AA;
+  --color-isis-yellow: #FEC601;
 
-  --color-theme-blue: var(--color-causeway-purple);
-  --color-theme-green: var(--color-causeway-yellow);
+  --color-theme-blue: var(--color-isis-purple);
+  --color-theme-green: var(--color-isis-yellow);
 
   --color-dark-overlay: #0000002e; /* black with some opacity*/
 }
@@ -191,11 +191,11 @@ h6 {
 }
 
 #header #logo h1 a span.asf {
-  color: var(--color-causeway-cyan);
+  color: var(--color-isis-cyan);
 }
 
 #header #logo h1 a span.brand {
-  color: var(--color-causeway-purple);
+  color: var(--color-isis-purple);
 }
 
 #header #logo h1 a span {
@@ -274,13 +274,13 @@ h6 {
 }
 
 #intro .intro-content .btn-docs {
-  background: var(--color-causeway-cyan);
-  border: 2px solid var(--color-causeway-cyan);
+  background: var(--color-isis-cyan);
+  border: 2px solid var(--color-isis-cyan);
 }
 
 #intro .intro-content .btn-docs:hover {
   background: none;
-  color: var(--color-causeway-cyan);
+  color: var(--color-isis-cyan);
 }
 
 #intro .intro-content .btn-get-started {
@@ -294,13 +294,13 @@ h6 {
 }
 
 #intro .intro-content .btn-projects {
-  background: var(--color-causeway-yellow);
-  border: 2px solid var(--color-causeway-yellow);
+  background: var(--color-isis-yellow);
+  border: 2px solid var(--color-isis-yellow);
 }
 
 #intro .intro-content .btn-projects:hover {
   background: none;
-  color: var(--color-causeway-yellow);
+  color: var(--color-isis-yellow);
 }
 
 #intro #intro-carousel {
@@ -891,7 +891,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 --------------------------------*/
 
 #call-to-action {
-  background: var(--color-causeway-purple);
+  background: var(--color-isis-purple);
   background-size: cover;
   padding: 40px 0;
 }

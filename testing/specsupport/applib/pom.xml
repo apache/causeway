@@ -15,17 +15,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.testing</groupId>
-		<artifactId>causeway-testing-specsupport</artifactId>
+		<groupId>org.apache.isis.testing</groupId>
+		<artifactId>isis-testing-specsupport</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-testing-specsupport-applib</artifactId>
-	<name>Apache Causeway Tst - Spec/Cucumber (applib)</name>
+	<artifactId>isis-testing-specsupport-applib</artifactId>
+	<name>Apache Isis Tst - Spec/Cucumber (applib)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.testing.specsupport.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/testing/specsupport.applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.testing.specsupport.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/testing/specsupport.applib</git-plugin.propertiesDir>
 
 		<cucumber.impl>io.cucumber</cucumber.impl>
 
@@ -34,8 +34,8 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.testing</groupId>
-			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-integtestsupport-applib</artifactId>
 		</dependency>
 
 		<!-- CUCUMBER -->
@@ -99,14 +99,14 @@
 
 		<!-- convenience -->
 		<dependency>
-			<groupId>org.apache.causeway.testing</groupId>
-			<artifactId>causeway-testing-fakedata-applib</artifactId>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fakedata-applib</artifactId>
 		</dependency>
 
 		<!-- convenience -->
 		<dependency>
-			<groupId>org.apache.causeway.testing</groupId>
-			<artifactId>causeway-testing-fixtures-applib</artifactId>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fixtures-applib</artifactId>
 		</dependency>
 
 	</dependencies>

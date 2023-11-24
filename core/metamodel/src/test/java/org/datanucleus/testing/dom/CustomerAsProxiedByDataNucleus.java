@@ -18,7 +18,7 @@
  */
 package org.datanucleus.testing.dom;
 
-import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeInferenceTest;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeInferenceTest;
 
 public class CustomerAsProxiedByDataNucleus
 extends LogicalTypeInferenceTest.Customer {

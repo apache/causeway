@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.core.transaction {
-    exports org.apache.causeway.core.transaction;
-    exports org.apache.causeway.core.transaction.changetracking;
-    exports org.apache.causeway.core.transaction.changetracking.events;
-    exports org.apache.causeway.core.transaction.events;
+module org.apache.isis.core.transaction {
+    exports org.apache.isis.core.transaction;
+    exports org.apache.isis.core.transaction.changetracking;
+    exports org.apache.isis.core.transaction.changetracking.events;
+    exports org.apache.isis.core.transaction.events;
 
     requires java.annotation;
     requires java.sql;
     requires java.inject;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

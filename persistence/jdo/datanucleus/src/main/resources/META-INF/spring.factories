@@ -1,2 +1,2 @@
 org.springframework.boot.diagnostics.FailureAnalyzer=\
-  org.apache.causeway.persistence.jdo.datanucleus.bootfailureanalyzer.NonEnhancedClassesFailureAnalyzer
+  org.apache.isis.persistence.jdo.datanucleus.bootfailureanalyzer.NonEnhancedClassesFailureAnalyzer

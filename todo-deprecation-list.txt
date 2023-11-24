@@ -4,13 +4,13 @@ for 2.0.0-M2
 remove:
 - [REMOVED] @MemberGroupLayout
 - contributed domain services (use mixins instead)
-- org.apache.causeway.applib.clock
+- org.apache.isis.applib.clock
   - Clock singleton
 - SwitchUserService
 - AbstractFixtureSusa
-- org.apache.causeway.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava
+- org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava
 
-- [DONE] org.apache.causeway.applib.services.memento  (19 usages found)
+- [DONE] org.apache.isis.applib.services.memento  (19 usages found)
   - [REMOVED] MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
 
 to change:
@@ -23,20 +23,20 @@ support for legacy implementation of UrlEncodingService
 
 inline paraname8 from incode platform
 
-[DONE] remove causeway-core-wicket-applib 
+[DONE] remove isis-core-wicket-applib 
 - [DONE] contains only WicketDeveloperUtilitiesService, which is hidden anyway and seems to not be required.
 
 update .xsd for layout, make render optional and deprecated.    
    
 - deprecate FixtureScripts service with view to removing from applib ... the framework provides an implementation by default
 - get rid of automatic initialization of fields (perhaps behind a config property)
-- deprecate the Apache Causeway' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
+- deprecate the Apache Isis' DateTime classes for removal in the future) ... and probably all of the custom value types, subclasses of Magnitude
 - merge metamodel and runtime
 - remove *Installer
 
 move ContentMappingServiceForCommandDto and ContentMappingServiceForCommandsDto from applib.conmap to applib.services.conmap.commands
 
-[DONE] CausewayContext:
+[DONE] IsisContext:
 - [REMOVED] resetLogging()
 
 TitleFacetViaAnnotation may not work if on a field, due to DN lazy loading.
@@ -86,7 +86,7 @@ not thread-safe:
 
 
 
-link:https://issues.apache.org/jira/browse/CAUSEWAY-743[CAUSEWAY-743] - @NotPersistable annotation
+link:https://issues.apache.org/jira/browse/ISIS-743[ISIS-743] - @NotPersistable annotation
 
 
 
@@ -97,30 +97,30 @@ PROPOSE TO RETAIN:
 
 
 Below is the code currently deprecated in the applib, but I propose to retain even in 2.0.0 (on the grounds that a replacement for them is not fully designed):
-org.apache.causeway.applib.adapters  - custom value type support
+org.apache.isis.applib.adapters  - custom value type support
 
 
-org.apache.causeway.applib.annotation
+org.apache.isis.applib.annotation
 
     Encodable.java - entire annotation, part of custom value types support
     Parseable.java - entire annotation, part of custom value types support
 
 
-org.apache.causeway.applib.fixtures  - "legacy" fixture support package ... by and large can use FixtureScripts (though not sure if there's feature parity in all cases)
+org.apache.isis.applib.fixtures  - "legacy" fixture support package ... by and large can use FixtureScripts (though not sure if there's feature parity in all cases)
     AbstractFixture.java
     AbstractFixtureSusa.java
     BaseFixture.java
     CompositeFixture.java
     DateFixture.java
     LogonFixture.java
-org.apache.causeway.applib.fixtures.switchuser
+org.apache.isis.applib.fixtures.switchuser
     SwitchUserService.java
     SwitchUserServiceAware.java
 
 
 
 
-org.apache.causeway.applib.services.command
+org.apache.isis.applib.services.command
     Command.java  - methods that pertain to the execution of the command and its completion (for that, use Interaction) [suggest we retain for now]
         getCompletedAt()
         getException()
@@ -153,9 +153,9 @@ DONE (ADDED)
 
 DONE (MOVED)
 
-    org.apache.causeway.applib.events        - moved to services.wrapper.events.  (Still useful as provide context for exceptions, for a "transcript" framework).
-    org.apache.causeway.applib.events.system - move to fixturescripts.events.
-    org.apache.causeway.applib.conmap.ContentMappingService to applib.services.conmap
+    org.apache.isis.applib.events        - moved to services.wrapper.events.  (Still useful as provide context for exceptions, for a "transcript" framework).
+    org.apache.isis.applib.events.system - move to fixturescripts.events.
+    org.apache.isis.applib.conmap.ContentMappingService to applib.services.conmap
 
 
 DONE (REMOVED):
@@ -180,22 +180,22 @@ DONE (REMOVED):
 
 
 
-org.apache.causeway.applib.clock
+org.apache.isis.applib.clock
     Clock.java -
         getTimeAsCalendar()
         getTimeAsDate()
 
 
 		
-org.apache.causeway.applib.services.actinvoc
+org.apache.isis.applib.services.actinvoc
     ActionInvocationContext.java -remove unused constructors
 
 
-org.apache.causeway.applib.services.audit  (2 usages found)
+org.apache.isis.applib.services.audit  (2 usages found)
     AuditingService3.java - remove entire service, use AuditerService instead
 
 
-org.apache.causeway.applib.services.background  (10 usages found)
+org.apache.isis.applib.services.background  (10 usages found)
     ActionInvocationMemento.java - remove entire class, use InteractionDto and CommandDto are used internally instead
     BackgroundCommandService.java - remove methods using AIM, instead keep those using CommandDto (in BackgroundCommandService2)
     BackgroundService.java
@@ -205,34 +205,34 @@ org.apache.causeway.applib.services.background  (10 usages found)
 
 
 
-org.apache.causeway.applib.services.bookmark  (8 usages found)
+org.apache.isis.applib.services.bookmark  (8 usages found)
     BookmarkService2.java - pull up its methods into BookmarkService supertype, and delete
 
 
-org.apache.causeway.applib.services.classdiscovery
+org.apache.isis.applib.services.classdiscovery
     ClassDiscoveryService2.java , pull up its methods into ClassDiscoveryService supertype, and delete
 
 
 
-org.apache.causeway.applib.services.command.spi
+org.apache.isis.applib.services.command.spi
     CommandService.java
         startTransaction(Command, UUID) - no longer required to do anything, so remove
 
 
 
 
-org.apache.causeway.applib.services.command
+org.apache.isis.applib.services.command
     Command2.java  - methods for working with interaction events (remove with those event types)
         flushActionInteractionEvents()
         peekActionInteractionEvent()
         popActionInteractionEvent()
         pushActionInteractionEvent(ActionInteractionEvent<?>)
 
-org.apache.causeway.applib.services.command
+org.apache.isis.applib.services.command
     Command3 rolled up into Command
 
 
-org.apache.causeway.applib.services.eventbus
+org.apache.isis.applib.services.eventbus
     AbstractInteractionEvent.java - remove
     ActionInteractionEvent.java - remove
     ActionInvokedEvent.java - remove
@@ -243,18 +243,18 @@ org.apache.causeway.applib.services.eventbus
     PropertyInteractionEvent.java - remove
 
 
-org.apache.causeway.applib.services.exceprecog
+org.apache.isis.applib.services.exceprecog
 
     rolls ExceptionRecognizer2 up into ExceptionRecognizer
 
 
-org.apache.causeway.applib.services.metamodel
+org.apache.isis.applib.services.metamodel
     MetaModelService2.java and MetaModelService3 - pulled up to MetaModelService supertype
 
 
 
 
-org.apache.causeway.applib.services.publish - remove classes pertaining to original PublishingService (payload factories etc).
+org.apache.isis.applib.services.publish - remove classes pertaining to original PublishingService (payload factories etc).
     EventMetadata.java - remove class
     EventType.java - remove class
     EventPayload.java - remove class
@@ -265,32 +265,32 @@ org.apache.causeway.applib.services.publish - remove classes pertaining to origi
     PublishingService.java - remove domain service interface
     StatusMessageMessageType.java - remove class
 
-org.apache.causeway.applib.services.registry
+org.apache.isis.applib.services.registry
     ServiceRegistry2 - roll up to ServiceRegistry
 
 
 
 
-org.apache.causeway.applib.services.settings
+org.apache.isis.applib.services.settings
     SettingTypes.java - remove, used only by 3rd party code (incode platform settings module)
 
-org.apache.causeway.applib.services.wrapper
+org.apache.isis.applib.services.wrapper
     WrapperObject.java
-        save() and wrapped() - remove to avoid name clashes, use __causeway_Xxx() methods instead
+        save() and wrapped() - remove to avoid name clashes, use __isis_Xxx() methods instead
 
 
-org.apache.causeway.applib.snapshot
+org.apache.isis.applib.snapshot
     Snapshottable.java - remove, since unused
 
 
-org.apache.causeway.applib.value
+org.apache.isis.applib.value
     DateTime.java
         longValue() - use #millisSinceEpoch()
     Time.java
         longValue() - use #millisSinceEpoch()
 
 
-org.apache.causeway.applib
+org.apache.isis.applib
 
     DomainObjectContainer.java
     - titleOf       ... use TitleService#titleOf(...) instead
@@ -308,33 +308,33 @@ org.apache.causeway.applib
     - isPersistent, persistIfNotAlready, removeIfNotAlready - use RepositoryService instead
 
 
-org.apache.causeway.objectstore.jdo.applib.service
+org.apache.isis.objectstore.jdo.applib.service
     DomainChangeJdoAbstract.java
         - deleted, not replacement (used only by incode platform)
-        - https://github.com/apache/causeway/blob/rel/causeway-1.15.1/core/applib/src/main/java/org/apache/causeway/objectstore/jdo/applib/service/DomainChangeJdoAbstract.java
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/DomainChangeJdoAbstract.java
     JdoColumnLength.java
         - ditto
-        - https://github.com/apache/causeway/blob/rel/causeway-1.15.1/core/applib/src/main/java/org/apache/causeway/objectstore/jdo/applib/service/JdoColumnLength.java
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/JdoColumnLength.java
     Util.java
         - ditto
-        - https://github.com/apache/causeway/blob/rel/causeway-1.15.1/core/applib/src/main/java/org/apache/causeway/objectstore/jdo/applib/service/Util.java
+        - https://github.com/apache/isis/blob/rel/isis-1.15.1/core/applib/src/main/java/org/apache/isis/objectstore/jdo/applib/service/Util.java
 
 
-org.apache.causeway.core.objectstore.jdo.applib.annotations - remove package entirely
+org.apache.isis.core.objectstore.jdo.applib.annotations - remove package entirely
     Auditable.java - use @DomainObject(audited=...) instead.
-org.apache.causeway.objectstore.jdo.applib
+org.apache.isis.objectstore.jdo.applib
     Auditable.java interface - use @DomainObject(audited=...) instead.
 
 
-org.apache.causeway.objectstore.jdo.applib.service.support
-    CausewayJdoSupport.java - replaced by org.apache.causeway.persistence.jdo.applib.services.CausewayJdoSupport
+org.apache.isis.objectstore.jdo.applib.service.support
+    IsisJdoSupport.java - replaced by org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport
 
 
 
-org.apache.causeway.viewer.restfulobjects.rendering.service.conmap.ContentMappingService
+org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMappingService
     - replaced by non-applib
 
-org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects
+org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects
     - unused
 
 

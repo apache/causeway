@@ -14,15 +14,15 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-causeway:
+isis:
   persistence:
     schema:
       auto-create-schemas:
-      - "CAUSEWAYEXTCOMMANDLOG"
-      - "CAUSEWAYEXTEXECUTIONLOG"
-      - "CAUSEWAYEXTEXECUTIONOUTBOX"
-      - "CAUSEWAYEXTAUDITTRAIL"
-      - "CAUSEWAYEXTSESSIONLOG"
+      - "ISISEXTCOMMANDLOG"
+      - "ISISEXTEXECUTIONLOG"
+      - "ISISEXTEXECUTIONOUTBOX"
+      - "ISISEXTAUDITTRAIL"
+      - "ISISEXTSESSIONLOG"
 
 
 datanucleus:

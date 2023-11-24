@@ -23,14 +23,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions</artifactId>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>causeway-extensions-docgen</artifactId>
-    <name>Apache Causeway Ext - Docgen</name>
+    <artifactId>isis-extensions-docgen</artifactId>
+    <name>Apache Isis Ext - Docgen</name>
 
     <description>
         Provides a set of code mining features that can help building documentation for your application.

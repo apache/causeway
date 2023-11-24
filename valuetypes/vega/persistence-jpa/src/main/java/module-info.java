@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.vega.persistence.jpa {
-    exports org.apache.causeway.valuetypes.vega.persistence.jpa;
-    exports org.apache.causeway.valuetypes.vega.persistence.jpa.converters;
+module org.apache.isis.valuetypes.vega.persistence.jpa {
+    exports org.apache.isis.valuetypes.vega.persistence.jpa;
+    exports org.apache.isis.valuetypes.vega.persistence.jpa.converters;
 
     requires java.persistence;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.valuetypes.vega.applib;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.valuetypes.vega.applib;
     requires spring.boot.autoconfigure;
     requires spring.context;
 }

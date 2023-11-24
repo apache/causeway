@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.markdown.applib {
-    exports org.apache.causeway.valuetypes.markdown.applib;
-    exports org.apache.causeway.valuetypes.markdown.applib.value;
-    exports org.apache.causeway.valuetypes.markdown.applib.jaxb;
+module org.apache.isis.valuetypes.markdown.applib {
+    exports org.apache.isis.valuetypes.markdown.applib;
+    exports org.apache.isis.valuetypes.markdown.applib.value;
+    exports org.apache.isis.valuetypes.markdown.applib.jaxb;
 
     requires flexmark;
     requires flexmark.ext.gfm.strikethrough;
@@ -32,7 +32,7 @@ module org.apache.causeway.valuetypes.markdown.applib {
     requires java.inject;
     requires java.xml.bind;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
     requires spring.context;
 }

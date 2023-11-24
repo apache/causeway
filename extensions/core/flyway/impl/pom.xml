@@ -15,23 +15,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.extensions</groupId>
-		<artifactId>causeway-extensions-flyway</artifactId>
+		<groupId>org.apache.isis.extensions</groupId>
+		<artifactId>isis-extensions-flyway</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-extensions-flyway-impl</artifactId>
-	<name>Apache Causeway Ext - Flyway Impl</name>
+	<artifactId>isis-extensions-flyway-impl</artifactId>
+	<name>Apache Isis Ext - Flyway Impl</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.extensions.flyway.impl</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/extensions/flyway/impl</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.flyway.impl</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/flyway/impl</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-config</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-config</artifactId>
 		</dependency>
 
 		<dependency>

@@ -30,17 +30,17 @@ set -o errexit
 # ('https://github.com/apache/xxx')
 #
 # Process:
-# - locate/raise JIRA ticket, eg CAUSEWAY-1162
+# - locate/raise JIRA ticket, eg ISIS-1162
 # - checkout branch from which PR was forked (usually just 'master')
 # - merge PR into temporary branch using this script
 # - check build
 # - merge temporary branch into mainline, and commit
 #
 #
-# Usage: github-pr.sh -p CAUSEWAY -j 1162 -g 31
+# Usage: github-pr.sh -p ISIS -j 1162 -g 31
 #
 #        where
-#               - causeway is the JIRA project and repo
+#               - isis is the JIRA project and repo
 #               - 1162 is the JIRA ticket number
 #               - 31   is the gthub PR issue number
 #
@@ -56,7 +56,7 @@ function die {
 	exit 10
 }
 
-project="CAUSEWAY"
+project="ISIS"
 jira_suffix=""
 pr_number=""
 skip_build="false"

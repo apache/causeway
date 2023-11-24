@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.security.bypass {
-    exports org.apache.causeway.security.bypass;
-    exports org.apache.causeway.security.bypass.authentication;
-    exports org.apache.causeway.security.bypass.authorization;
+module org.apache.isis.security.bypass {
+    exports org.apache.isis.security.bypass;
+    exports org.apache.isis.security.bypass.authentication;
+    exports org.apache.isis.security.bypass.authorization;
 
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.security.api;
-    requires org.apache.causeway.core.runtimeservices;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.security.api;
+    requires org.apache.isis.core.runtimeservices;
     requires java.annotation;
     requires java.inject;
     requires spring.beans;

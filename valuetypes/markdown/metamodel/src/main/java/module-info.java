@@ -16,15 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.markdown.metamodel {
-    exports org.apache.causeway.valuetypes.markdown.metamodel;
-    exports org.apache.causeway.valuetypes.markdown.metamodel.semantics;
+module org.apache.isis.valuetypes.markdown.metamodel {
+    exports org.apache.isis.valuetypes.markdown.metamodel;
+    exports org.apache.isis.valuetypes.markdown.metamodel.semantics;
 
     requires java.inject;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.schema;
-    requires org.apache.causeway.valuetypes.markdown.applib;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.schema;
+    requires org.apache.isis.valuetypes.markdown.applib;
     requires spring.context;
 }

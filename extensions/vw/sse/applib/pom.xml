@@ -15,36 +15,36 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.extensions</groupId>
-		<artifactId>causeway-extensions-sse</artifactId>
+		<groupId>org.apache.isis.extensions</groupId>
+		<artifactId>isis-extensions-sse</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-extensions-sse-applib</artifactId>
-	<name>Apache Causeway Ext - Server Sent Events</name>
+	<artifactId>isis-extensions-sse-applib</artifactId>
+	<name>Apache Isis Ext - Server Sent Events</name>
 	<description></description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.extensions.sse.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/extensions/sse/applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.sse.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/sse/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-metamodel</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-webapp</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-webapp</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-wicket-ui</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>isis-viewer-wicket-ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

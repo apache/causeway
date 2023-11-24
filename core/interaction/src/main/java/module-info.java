@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.core.interaction {
-    exports org.apache.causeway.core.interaction;
-    exports org.apache.causeway.core.interaction.integration;
-    exports org.apache.causeway.core.interaction.scope;
-    exports org.apache.causeway.core.interaction.session;
+module org.apache.isis.core.interaction {
+    exports org.apache.isis.core.interaction;
+    exports org.apache.isis.core.interaction.integration;
+    exports org.apache.isis.core.interaction.scope;
+    exports org.apache.isis.core.interaction.session;
 
     requires java.annotation;
     requires java.sql;
     requires java.inject;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.schema;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.schema;
     requires org.apache.logging.log4j;
     requires spring.beans;
     requires spring.context;

@@ -1,6 +1,6 @@
-module org.apache.causeway.incubator.viewer.graphql.viewer {
-    exports org.apache.causeway.viewer.graphql.viewer;
-    exports org.apache.causeway.viewer.graphql.viewer.source;
+module org.apache.isis.incubator.viewer.graphql.viewer {
+    exports org.apache.isis.viewer.graphql.viewer;
+    exports org.apache.isis.viewer.graphql.viewer.source;
 
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
@@ -10,11 +10,11 @@ module org.apache.causeway.incubator.viewer.graphql.viewer {
     requires java.net.http;
     requires java.persistence;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.incubator.viewer.graphql.model;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
+    requires org.apache.isis.incubator.viewer.graphql.model;
     requires org.reactivestreams;
     requires reactor.core;
     requires spring.beans;

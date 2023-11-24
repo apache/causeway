@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jpa.applib {
-    exports org.apache.causeway.persistence.jpa.applib;
-    exports org.apache.causeway.persistence.jpa.applib.services;
-    exports org.apache.causeway.persistence.jpa.applib.integration;
-    exports org.apache.causeway.persistence.jpa.applib.types;
+module org.apache.isis.persistence.jpa.applib {
+    exports org.apache.isis.persistence.jpa.applib;
+    exports org.apache.isis.persistence.jpa.applib.services;
+    exports org.apache.isis.persistence.jpa.applib.integration;
+    exports org.apache.isis.persistence.jpa.applib.types;
 
     requires jakarta.activation;
     requires java.inject;
     requires java.persistence;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
+    requires org.apache.isis.applib;
+    requires org.apache.isis.commons;
+    requires org.apache.isis.core.config;
+    requires org.apache.isis.core.metamodel;
     requires org.apache.logging.log4j;
     requires org.eclipse.persistence.core;
     requires spring.context;
