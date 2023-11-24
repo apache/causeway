@@ -354,21 +354,25 @@ class RenameProject {
 
 }
 
-var rootPath = "" + System.getenv("ROOT_PATH_LEGACY");
-if(rootPath.isBlank()
-        || ! new File(rootPath).exists()) {
+boolean valid = true;
+
+String rootPath = System.getenv("ROOT_PATH_LEGACY");
+if(rootPath.isBlank() || ! new File(rootPath).exists()) {
     System.err.println("env ROOT_PATH_LEGACY must point to an existing directory");
-    /exit 1
+    valid = false;
 }
 
-var root = new File(rootPath);
+if (valid) {
+    var root = new File(rootPath);
 
-var renamer = RenameProject.renameBackToLegacy(root);
-System.out.printf("processing root %s%n", root.getAbsolutePath());
+    var renamer = RenameProject.renameBackToLegacy(root);
+    System.out.printf("processing root %s%n", root.getAbsolutePath());
 
-renamer.renameAllFiles();
-renamer.rewriteAllFileContents();
+    renamer.renameAllFiles();
+    renamer.rewriteAllFileContents();
 
-System.out.println("done.");
+    System.out.println("done.");
+}
 
-/exit
+
+// exit
