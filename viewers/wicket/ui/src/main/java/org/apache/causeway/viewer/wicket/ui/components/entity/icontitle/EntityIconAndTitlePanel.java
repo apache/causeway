@@ -263,7 +263,9 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         if (length <= maxLength) {
             return str;
         }
-        return maxLength <= 3 ? "" : str.substring(0, maxLength - 3) + "...";
+        return maxLength <= 3
+                ? ""
+                : str.substring(0, maxLength - 3) + "...";
     }
 
     private static void guardAgainstNonEmptyAbstractSingular(final ObjectAdapterModel objectAdapterModel) {

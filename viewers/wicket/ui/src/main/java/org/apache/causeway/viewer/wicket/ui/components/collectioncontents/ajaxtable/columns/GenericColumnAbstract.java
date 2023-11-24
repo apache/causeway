@@ -74,6 +74,10 @@ implements GenericColumn, HasMetaModelContext {
         cellItem.add(createCellComponent(componentId, rowModel.getObject(), ((DataRowWkt)rowModel).getDataRowToggle()));
         if(this instanceof TitleColumn) {
             Wkt.cssAppend(cellItem, "title-column");
+            if(((TitleColumn)this).isTitleSuppressed()) {
+                // governed via CSS: render icon slightly larger, when title-suppressed e.g. 1.25em vs 0.9em (default)
+                Wkt.cssAppend(cellItem, "title-suppressed");
+            }
         } else if(this instanceof ToggleboxColumn) {
             Wkt.cssAppend(cellItem, "togglebox-column");
             final MarkupContainer row = cellItem.getParent().getParent();
