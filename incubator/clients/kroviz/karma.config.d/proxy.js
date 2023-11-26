@@ -23,7 +23,7 @@ config.singleRun = true;
 // @link https://stackoverflow.com/questions/61839800/unit-testing-in-kotlin-js
 const path = require('path');
 const resourcesSourcePath = path.resolve(__dirname, '../../../../build/processedResources/js/main');
-const setupFile = path.resolve(__dirname, '../../../../src/test/setup.js');
+const setupFile = path.resolve(__dirname, '../../../../src/jsTest/setup.js');
 config.files.unshift(setupFile);
 config.proxies = {
     "/strings/": "absolute" + resourcesSourcePath + "/strings/",

@@ -16,13 +16,12 @@
 //  specific language governing permissions and limitations
 //  under the License.
 //
-
-
 pluginManagement {
     repositories {
         mavenCentral()
         maven { url = uri("https://plugins.gradle.org/m2/") }
         mavenLocal()
+        gradlePluginPortal()
     }
     resolutionStrategy {
         eachPlugin {
