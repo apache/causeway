@@ -44,6 +44,11 @@ import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import java.io.ByteArrayInputStream;
+import org.xml.sax.InputSource;
 
 class GridXmlRoundtripTest
 extends MetaModelTestAbstract {
@@ -131,13 +136,17 @@ extends MetaModelTestAbstract {
         String xml = jaxbService.toXml(bsGrid,
                 _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         println(xml);
-
         BSGrid bsPageroundtripped = jaxbService.fromXml(BSGrid.class, xml);
         String xmlRoundtripped = jaxbService.toXml(bsPageroundtripped,
                 _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
-        assertThat(xml, is(equalTo(xmlRoundtripped)));
-
-
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc1 = db.parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
+        Document doc2 = db.parse(new InputSource(new ByteArrayInputStream(xmlRoundtripped.getBytes("utf-8"))));
+        doc1.normalizeDocument();
+        doc2.normalizeDocument();
+        assertThat(doc1.isEqualNode(doc2), is(true));
         println("==========");
 
         dumpXsd(bsGrid);

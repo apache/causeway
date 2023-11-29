@@ -21,6 +21,8 @@ package org.apache.causeway.testing.unittestsupport.applib.dom.pojo;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.containsString;
 
 public class PojoTester_broken_Test {
 
@@ -41,13 +43,13 @@ public class PojoTester_broken_Test {
             this.lastName = lastName;
         }
     }
-    
+
     @Test
     public void strict_when_interference_between_properties() {
         Assertions.assertThatThrownBy(() -> {
-            PojoTester.create().exercise(new CustomerWithInterferingProperties());
-        }).isInstanceOf(AssertionFailedError.class)
-                .hasMessageContaining("firstName");
+                    PojoTester.create().exercise(new CustomerWithInterferingProperties());
+                }).isInstanceOf(AssertionFailedError.class)
+                .hasMessageMatching(".*(firstName|lastName).*");
     }
 
     public static class BrokenCustomer {

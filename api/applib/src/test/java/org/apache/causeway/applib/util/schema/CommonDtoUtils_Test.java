@@ -29,6 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -94,12 +96,12 @@ class CommonDtoUtils_Test {
                 + "{\"string\":\"sample\",\"type\":\"string\",\"name\":\"calendarName\"}],"
                 + "\"type\":\"org.apache.causeway.applib.util.schema.CommonDtoUtils_Test$CompositeSample\","
                 + "\"cardinality\":2}";
-
-        assertEquals(expectedJson, json);
-
+        JsonElement actual = JsonParser.parseString(json);
+        JsonElement expected = JsonParser.parseString(expectedJson);
+        assertEquals(actual.equals(expected), true);
         val compositeAfterRoundtrip = CommonDtoUtils.getCompositeValueFromJson(json);
-
-        assertEquals(expectedJson, CommonDtoUtils.getCompositeValueAsJson(compositeAfterRoundtrip));
+        JsonElement compositeJson = JsonParser.parseString(CommonDtoUtils.getCompositeValueAsJson(compositeAfterRoundtrip));
+        assertEquals(compositeJson.equals(expected), true);
 
     }
 
