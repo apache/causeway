@@ -22,13 +22,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.commons.internal.testing._DocumentTester;
 
 public class BSMenuBars_roundtrip_Test {
 
@@ -69,17 +67,15 @@ public class BSMenuBars_roundtrip_Test {
         menuBars.getPrimary().getMenus().add(menu);
 
         // when
-        String xml = jaxbService.toXml(menuBars);
+        String xml1 = jaxbService.toXml(menuBars);
 
         // when
         BSMenuBars menuBars2 =
-                jaxbService.fromXml(BSMenuBars.class, xml);
+                jaxbService.fromXml(BSMenuBars.class, xml1);
 
         // then
         String xml2 = jaxbService.toXml(menuBars2);
-
-        assertThat(xml, is(equalTo(xml2)));
-
+        _DocumentTester.assertXmlEqualsIgnoreOrder(xml1, xml2);
     }
 
 }

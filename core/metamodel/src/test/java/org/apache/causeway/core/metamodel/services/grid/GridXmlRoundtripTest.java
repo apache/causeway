@@ -24,10 +24,6 @@ import javax.xml.bind.Marshaller;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -43,6 +39,7 @@ import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 
 class GridXmlRoundtripTest
@@ -135,8 +132,7 @@ extends MetaModelTestAbstract {
         BSGrid bsPageroundtripped = jaxbService.fromXml(BSGrid.class, xml);
         String xmlRoundtripped = jaxbService.toXml(bsPageroundtripped,
                 _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
-        assertThat(xml, is(equalTo(xmlRoundtripped)));
-
+        _DocumentTester.assertXmlEqualsIgnoreOrder(xml, xmlRoundtripped);
 
         println("==========");
 
@@ -151,7 +147,7 @@ extends MetaModelTestAbstract {
         }
     }
 
-    private void println(String string) {
+    private void println(final String string) {
         //for test debugging only
     }
 
