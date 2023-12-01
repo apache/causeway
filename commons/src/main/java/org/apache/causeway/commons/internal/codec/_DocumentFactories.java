@@ -103,8 +103,10 @@ public class _DocumentFactories {
         var dbf = _DocumentFactories.documentBuilderFactory();
         dbf.setNamespaceAware(true);
         var documentBuilder = dbf.newDocumentBuilder();
-        var doc = documentBuilder.parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
-        return doc;
+        try(var bis = new ByteArrayInputStream(xml.getBytes("utf-8"))) {
+            var doc = documentBuilder.parse(new InputSource(bis));
+            return doc;
+        }
     }
 
 }
