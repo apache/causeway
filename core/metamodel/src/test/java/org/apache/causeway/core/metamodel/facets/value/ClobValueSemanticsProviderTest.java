@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.value;
 
+import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -52,9 +53,7 @@ extends ValueSemanticsProviderAbstractTestCase<Clob> {
 
     @Override
     protected void assertValueEncodesToJsonAs(final Clob a, final String json) {
-        assertEquals(
-                "{\"name\":\"myfile1.xml\",\"mimeType\":\"application/xml\",\"chars\":\"abcdef\"}",
-                json);
+        _DocumentTester.assertJsonEqualsIgnoreOrder("{\"name\":\"myfile1.xml\",\"mimeType\":\"application/xml\",\"chars\":\"abcdef\"}", json);
     }
 
 }
