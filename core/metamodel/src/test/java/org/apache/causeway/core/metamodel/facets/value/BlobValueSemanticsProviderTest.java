@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
+import org.apache.causeway.commons.internal.testing._DocumentTester;
 
 class BlobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Blob> {
@@ -50,9 +51,7 @@ extends ValueSemanticsProviderAbstractTestCase<Blob> {
 
     @Override
     protected void assertValueEncodesToJsonAs(final Blob a, final String json) {
-        assertEquals(
-                "{\"name\":\"myfile1.docx\",\"mimeType\":\"application/vnd.ms-word\",\"bytes\":\"AQIDBA==\"}",
-                json);
+        _DocumentTester.assertJsonEqualsIgnoreOrder("{\"name\":\"myfile1.docx\",\"mimeType\":\"application/vnd.ms-word\",\"bytes\":\"AQIDBA==\"}", json);
     }
 
 }
