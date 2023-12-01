@@ -141,6 +141,7 @@ class ColumnFactory {
             title = it.name,
             field = it.id,
             width = (it.typicalLength * 8).toString(),
+            headerFilter = Editor.INPUT,
             formatterComponentFunction = { cellComponent: Tabulator.CellComponent, _: (callback: () -> Unit) -> Unit, _: Nothing ->
                 buildDiagramPanel(cellComponent)
             }

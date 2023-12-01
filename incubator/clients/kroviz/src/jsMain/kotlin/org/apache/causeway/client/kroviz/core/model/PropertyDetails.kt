@@ -42,10 +42,9 @@ class PropertyDetails(member: Member) {
 
     fun amendWith(pbs: PropertyBs) {
         name = pbs.named
-        //static analysis pretends pbs.hidden can't be null, but runtime proves the opposite
-        hidden = !(pbs.hidden != null && pbs.hidden.isNotEmpty())
-        //This is hacky
-        if (id == "sources") {
+        hidden = pbs.isHidden()
+        //FIXME This is hacky
+        if (id == "sources" || id == "description") {
             hidden = true
         }
         //static analysis pretends pbs.typicalLength can't be null, but runtime proves the opposite

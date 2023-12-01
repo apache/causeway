@@ -132,6 +132,7 @@ kotlin {
             }
         }
     }
+    jvmToolchain(17)
 }
 
 afterEvaluate {
@@ -162,6 +163,7 @@ dependencies {
     //implementation(kotlin("stdlib-js"))
     //classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
 //    implementation(kotlin("org.jetbrains.kotlin:kotlin-dce-js:$kotlinVersion"))
+    //implementation(kotlin("stdlib"))
 }
 
 classDiagram { // (1)

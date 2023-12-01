@@ -19,13 +19,15 @@
 package org.apache.causeway.client.kroviz.to.bs
 
 import org.apache.causeway.client.kroviz.handler.LayoutXmlHandler
-import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.STRINGS_LAYOUT_XML
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.OBJECT_LAYOUT_XML
+import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.STRINGS_LAYOUT_XML
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.TAB_LAYOUT_XML
+import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.VEGA_LAYOUT_XML
 import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.SO_LAYOUT_XML
 import org.apache.causeway.client.kroviz.to.GridBs
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class LayoutXmlTest {
@@ -106,7 +108,7 @@ class LayoutXmlTest {
         //when
         val grid = LayoutXmlHandler().parse(xmlStr) as GridBs
         // then
-       // assertEquals(2, grid.rows.size)    //1
+        // assertEquals(2, grid.rows.size)    //1
 
         val row1 = grid.rows.get(0)
         val cols1 = row1.colList
@@ -152,8 +154,34 @@ class LayoutXmlTest {
         val grid = LayoutXmlHandler().parse(xmlStr) as GridBs
         // then
         console.log("[LXT_testDemoStringLayout]")
-       assertEquals(3, grid.rows.size)    //1
+        assertEquals(3, grid.rows.size)    //1
         val row2 = grid.rows.get(1)
+    }
+
+    @Test
+    fun testDemoVegaLayout() {
+        //given
+        val xmlStr = VEGA_LAYOUT_XML.str
+        //when
+        val grid = LayoutXmlHandler().parse(xmlStr) as GridBs
+        // then
+        console.log("[LXT_testDemoVegaLayout]")
+        assertEquals(3, grid.rows.size)    //1
+        val row2 = grid.rows.get(1)
+        val cols1 = row2.colList
+        assertEquals(2, cols1.size)       //2
+        val col1 = cols1.first()
+        assertEquals("6", col1.span.toString().trim())    //3
+        val fsList = col1.fieldSetList
+        assertEquals(6, fsList.size)        // 4
+        val fs1 =  fsList.get(0)
+        val ppt1 = fs1.propertyList.get(0)
+        assertEquals("readOnlyProperty", ppt1.id)
+        assertFalse(ppt1.isHidden())
+        val fs2 =  fsList.get(1)
+        val ppt2 = fs2.propertyList.get(0)
+        assertEquals("ALL_TABLES", ppt2.hidden)
+        assertTrue(ppt2.isHidden())
     }
 
 }

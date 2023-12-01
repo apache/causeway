@@ -73,18 +73,18 @@
             </activation>
             <properties>
                 <gradle.skipTests>-xtest</gradle.skipTests>
-                <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
+                <gradle.skipBrowserTests>-xjsBrowserTest</gradle.skipBrowserTests>
             </properties>
         </profile>
         <profile>
             <id>skipBrowserTests</id>
             <activation>
                 <property>
-                    <name>!browserTests</name>
+                    <name>!jsBrowserTests</name>
                 </property>
             </activation>
             <properties>
-                <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
+                <gradle.skipBrowserTests>-xjsBrowserTest</gradle.skipBrowserTests>
             </properties>
         </profile>
 
