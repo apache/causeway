@@ -41,6 +41,7 @@ import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
+import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
@@ -186,7 +187,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
                 /* [CAUSEWAY-3415] do a full page reload when required,
                  * to properly trigger all client side java-script, that decorates HTML (datatable.net, vega, ...) */
                 if(linkEntry.isPageReloadRequiredOnTableViewActivation()) {
-                    linksSelectorPanel.reloadPage();
+                    PageUtils.pageReload();
                 } else {
                     target.add(linksSelectorPanel, views);
                 }
