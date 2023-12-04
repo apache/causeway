@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.menu;
 
+import java.io.File;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.metadata.TypeMetadata;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -36,6 +37,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.io.ZipUtils;
+import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.causeway.persistence.jdo.metamodel.CausewayModulePersistenceJdoMetamodel;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
@@ -93,14 +95,16 @@ public class JdoMetamodelMenu {
         pmFactory.getManagedClasses().stream()
         .filter(jdoFacetContext::isPersistenceEnhanced)
         .map(Class::getName)
-        .map(pmFactory::getMetadata)
-        .forEach(metadata->
-            zipBuilder.addAsUtf8(zipEntryNameFor(metadata), metadata.toString()));
+        .forEach(entityClassName->
+            zipBuilder.addAsUtf8(zipEntryNameFor(entityClassName), pmFactory.getMetadata(entityClassName).toString()));
         return zipBuilder.toBytes();
     }
 
-    private String zipEntryNameFor(final TypeMetadata metadata) {
-        return metadata.getName() + ".xml";
+    /**
+     * Similar code as in {@link LayoutServiceDefault}.
+     */
+    private String zipEntryNameFor(final String className) {
+        return className.replace(".", File.separator) + ".xml";
     }
 
     private PersistenceManagerFactory getPersistenceManagerFactory() {
