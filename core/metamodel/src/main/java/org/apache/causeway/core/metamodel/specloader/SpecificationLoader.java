@@ -36,13 +36,13 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
-import static org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState.FULLY_INTROSPECTED;
-import static org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState.TYPE_INTROSPECTED;
+import static org.apache.causeway.core.metamodel.spec.IntrospectionState.FULLY_INTROSPECTED;
+import static org.apache.causeway.core.metamodel.spec.IntrospectionState.TYPE_INTROSPECTED;
 
 import lombok.NonNull;
 import lombok.val;

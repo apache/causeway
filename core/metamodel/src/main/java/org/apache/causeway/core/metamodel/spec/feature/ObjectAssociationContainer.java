@@ -69,17 +69,23 @@ public interface ObjectAssociationContainer {
     // -- MIXED-IN INCLUDED
 
     default Optional<ObjectAssociation> getAssociation(final String id) {
-        return getAssociation(id, MixedIn.INCLUDED);}
+        return getAssociation(id, MixedIn.INCLUDED);
+    }
     default ObjectAssociation getAssociationElseFail(final String id) {
-        return getAssociationElseFail(id, MixedIn.INCLUDED);}
+        return getAssociationElseFail(id, MixedIn.INCLUDED);
+    }
     default Optional<OneToOneAssociation> getProperty(final String id) {
-        return getProperty(id, MixedIn.INCLUDED);}
+        return getProperty(id, MixedIn.INCLUDED);
+    }
     default OneToOneAssociation getPropertyElseFail(final String id) {
-        return getPropertyElseFail(id, MixedIn.INCLUDED);}
+        return getPropertyElseFail(id, MixedIn.INCLUDED);
+    }
     default Optional<OneToManyAssociation> getCollection(final String id) {
-        return getCollection(id, MixedIn.INCLUDED);}
+        return getCollection(id, MixedIn.INCLUDED);
+    }
     default OneToManyAssociation getCollectionElseFail(final String id) {
-        return getCollectionElseFail(id, MixedIn.INCLUDED);}
+        return getCollectionElseFail(id, MixedIn.INCLUDED);
+    }
 
     // -- ASSOCIATION LOOKUP, DECLARED PROPERTIES/COLLECTIONS (NO INHERITANCE CONSIDERED)
 

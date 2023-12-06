@@ -109,7 +109,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void shouldHaveARequestCycle() {
 
-        val entityPage = EntityPage.forPageParameters(commonContext, pageParameters);
+        val entityPage = EntityPage.forPageParameters(pageParameters);
         wktTester.startPage(entityPage);
 
         assertNotNull(RequestCycle.get());

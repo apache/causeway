@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.specloader.specimpl;
+package org.apache.causeway.core.metamodel.spec;
 
 public enum IntrospectionState implements Comparable<IntrospectionState> {
     /**
