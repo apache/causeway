@@ -80,9 +80,7 @@ public class EntityPage extends PageAbstract {
      * @param pageParameters The page parameters with the OID
      * @return An EntityModel for the requested OID
      */
-    public static EntityPage forPageParameters(
-            final MetaModelContext commonContext,
-            final PageParameters pageParameters) {
+    public static EntityPage forPageParameters(final PageParameters pageParameters) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
             _Debug.log("new EntityPage from PageParameters %s", pageParameters);

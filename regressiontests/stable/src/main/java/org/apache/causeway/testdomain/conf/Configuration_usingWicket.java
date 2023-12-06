@@ -281,7 +281,7 @@ public class Configuration_usingWicket {
          * @see #startPage(IPageProvider)
          */
         public EntityPage startEntityPage(final PageParameters pageParameters) {
-            val entityPage = EntityPage.forPageParameters(getMetaModelContext(), pageParameters);
+            val entityPage = EntityPage.forPageParameters(pageParameters);
             val startedPage = startPage(entityPage);
             assertRenderedPage(EntityPage.class);
             return startedPage;
@@ -321,7 +321,7 @@ public class Configuration_usingWicket {
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
             if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(EntityPage.forPageParameters(holder.getMetaModelContext(), parameters));
+                return _Casts.uncheckedCast(EntityPage.forPageParameters(parameters));
             }
             return delegate.newPage(pageClass, parameters);
         }
