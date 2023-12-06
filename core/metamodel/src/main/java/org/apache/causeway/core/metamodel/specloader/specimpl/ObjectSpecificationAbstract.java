@@ -28,6 +28,8 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 
+import org.apache.causeway.core.metamodel.util.Facets;
+
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
@@ -268,36 +270,32 @@ implements ObjectSpecification {
         switch (introspectionState) {
         case NOT_INTROSPECTED:
             if(isLessThan(upTo)) {
-                // set to avoid infinite loops
-                this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
-                introspectTypeHierarchy();
-                invalidateCachedFacets();
-                this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
+                introspectType();
             }
             if(isLessThan(upTo)) {
-                this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
-                introspectMembers();
-                this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
+                introspectFully();
                 revalidate = true;
             }
             // set to avoid infinite loops
             break;
+
         case TYPE_BEING_INTROSPECTED:
-            // nothing to do
+            // nothing to do (interim state during introspectType)
             break;
+
         case TYPE_INTROSPECTED:
             if(isLessThan(upTo)) {
-                // set to avoid infinite loops
-                this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
-                introspectMembers();
-                this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
+                introspectFully();
                 revalidate = true;
             }
             break;
+
         case MEMBERS_BEING_INTROSPECTED:
-            // nothing to do
+            // nothing to do (interim state during introspectully)
+            break;
+
         case FULLY_INTROSPECTED:
-            // nothing to do
+            // nothing to do ... all done
             break;
 
         default:
@@ -307,6 +305,26 @@ implements ObjectSpecification {
         if(revalidate) {
             getSpecificationLoader().validateLater(this);
         }
+    }
+
+    private void introspectType() {
+
+        // set to avoid infinite loops
+        this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
+        introspectTypeHierarchy();
+        invalidateCachedFacets();
+        this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
+    }
+
+    private void introspectFully() {
+
+        // set to avoid infinite loops
+        this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
+        introspectMembers();
+        this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
+
+        // make sure we've loaded the facets from layout.xml also.
+        Facets.gridPreload(this, null);
     }
 
     boolean isLessThan(final IntrospectionState upTo) {
