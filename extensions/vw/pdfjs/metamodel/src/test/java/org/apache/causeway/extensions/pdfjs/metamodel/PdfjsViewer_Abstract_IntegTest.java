@@ -42,6 +42,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
+import org.apache.causeway.commons.internal.testing._DocumentTester;
 
 public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegrationTestAbstract {
 
@@ -84,8 +85,7 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
                         .ignoreMixins(false)
                         .build());
         val xml = jaxbService.toXml(metamodelDto);
-
-        Approvals.verifyXml(xml, ApprovalsOptions.xmlOptions());
+        _DocumentTester.assertXmlEqualsIgnoreOrder(xml, ApprovalsOptions.xmlOptions().scrub(xml));
     }
 
     @Inject MetaModelService metaModelService;
