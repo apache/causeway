@@ -26,6 +26,8 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.base._Casts;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
@@ -49,27 +51,21 @@ public class WorksheetSpec {
         @Programmatic
         Class<?> getCls();
 
-        static class Default<T> implements RowFactory<T> {
-            private final Class<T> viewModelClass;
+        @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+        @RequiredArgsConstructor
+        class Default<T> implements RowFactory<T> {
 
-            @Inject @Setter
-            private ServiceInjector servicesInjector;
-
-            public Default(final Class<T> viewModelClass) {
-                this.viewModelClass = viewModelClass;
-            }
+            @Getter
+            private final Class<T> cls;
 
             @Override @SneakyThrows
             public T create() {
-                final T t = viewModelClass.getConstructor().newInstance();
+                final T t = cls.getConstructor().newInstance();
                 return servicesInjector.injectServicesInto(t);
             }
 
-            @Override
-            public Class<?> getCls() {
-                return viewModelClass;
-            }
-
+            @Inject @Setter
+            private ServiceInjector servicesInjector;
         }
 
     }

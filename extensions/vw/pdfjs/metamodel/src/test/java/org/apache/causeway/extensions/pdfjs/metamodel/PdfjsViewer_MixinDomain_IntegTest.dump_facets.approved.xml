@@ -16,10 +16,10 @@
         <mml:attr name="precedence" value="SYNTHESIZED"/>
         <mml:attr name="translated" value="Optional[Some View Model]"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
-        <mml:attr name="bookmarkPolicy" value="NEVER"/>
-        <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
-        <mml:attr name="precedence" value="FALLBACK"/>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
+        <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
+        <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
+        <mml:attr name="precedence" value="LOW"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
         <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -165,6 +165,17 @@
             <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
             <mml:attr name="semantics" value="DISABLED"/>
             <mml:attr name="where" value="ANYWHERE"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForLayoutXml">
+            <mml:attr name="facet" value="LayoutGroupFacetForLayoutXml"/>
+            <mml:attr name="groupId" value="other"/>
+            <mml:attr name="groupName" value="Other"/>
+            <mml:attr name="precedence" value="LOW"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
+            <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
+            <mml:attr name="precedence" value="LOW"/>
+            <mml:attr name="sequence" value="1"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
             <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
@@ -1152,10 +1163,10 @@
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="translated" value="Some View Model_pdf"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
-        <mml:attr name="bookmarkPolicy" value="NEVER"/>
-        <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
-        <mml:attr name="precedence" value="FALLBACK"/>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
+        <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
+        <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
+        <mml:attr name="precedence" value="LOW"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
         <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -1307,6 +1318,11 @@
             <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
             <mml:attr name="semantics" value="DISABLED"/>
             <mml:attr name="where" value="ANYWHERE"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
+            <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
+            <mml:attr name="precedence" value="LOW"/>
+            <mml:attr name="sequence" value="1"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
             <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
