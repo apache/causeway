@@ -20,6 +20,8 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 
 import java.util.List;
 
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.model.Model;

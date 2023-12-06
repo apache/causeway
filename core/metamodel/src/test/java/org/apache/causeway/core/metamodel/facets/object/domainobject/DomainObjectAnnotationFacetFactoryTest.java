@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facets.AbstractTestWithMetaModelContext;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
-import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
 import org.junit.jupiter.api.AfterEach;

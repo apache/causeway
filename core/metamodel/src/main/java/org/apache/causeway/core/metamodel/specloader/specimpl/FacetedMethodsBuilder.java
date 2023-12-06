@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;

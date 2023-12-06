@@ -75,7 +75,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
 import lombok.NonNull;
