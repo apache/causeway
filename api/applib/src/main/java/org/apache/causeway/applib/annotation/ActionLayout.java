@@ -26,6 +26,8 @@ import java.lang.annotation.Target;
 
 import javax.xml.bind.annotation.XmlType;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 /**
@@ -211,7 +213,14 @@ public @interface ActionLayout {
         RIGHT,
         PANEL,
         PANEL_DROPDOWN,
-        NOT_SPECIFIED
+        NOT_SPECIFIED;
+        public static boolean isBelow(@Nullable final Position position) { return position==BELOW; }
+        public static boolean isRight(@Nullable final Position position) { return position==RIGHT; }
+        public static boolean isPanel(@Nullable final Position position) { return position==PANEL; }
+        public static boolean isPanelDropdown(@Nullable final Position position) { return position==PANEL_DROPDOWN; }
+        public static boolean isNullOrNotSpecified(@Nullable final Position position) {
+            return position==null || position==NOT_SPECIFIED;
+        }
     }
 
     /**

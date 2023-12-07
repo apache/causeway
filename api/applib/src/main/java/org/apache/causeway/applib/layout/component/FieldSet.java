@@ -64,8 +64,11 @@ Serializable {
         setName(name);
     }
 
-    
-    
+    @Override
+    public PositioningContext positioningContext() {
+        return PositioningContext.HAS_PANEL;
+    }
+
     private String id;
 
     /**
@@ -131,7 +134,7 @@ Serializable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -147,7 +150,7 @@ Serializable {
     }
 
     @Override
-    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+    public void setActions(final List<ActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }
 
@@ -161,7 +164,7 @@ Serializable {
         return properties;
     }
 
-    public void setProperties(List<PropertyLayoutData> properties) {
+    public void setProperties(final List<PropertyLayoutData> properties) {
         this.properties = properties;
     }
 

@@ -67,6 +67,11 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.id = id;
     }
 
+    @Override
+    public PositioningContext positioningContext() {
+        return PositioningContext.HAS_ORIENTATION;
+    }
+
     private String id;
 
     /**

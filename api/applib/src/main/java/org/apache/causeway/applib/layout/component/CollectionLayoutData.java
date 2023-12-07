@@ -71,6 +71,10 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         setId(id);
     }
 
+    @Override
+    public PositioningContext positioningContext() {
+        return PositioningContext.HAS_NONE;
+    }
 
     private String id;
 

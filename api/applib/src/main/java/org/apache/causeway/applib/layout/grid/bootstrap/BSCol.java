@@ -39,17 +39,14 @@ import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Ints.Bound;
 
 /**
- * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
- *
+ * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width,
+ * all the way up to spanning the entire page.
  * <p>
- *     Pretty much other content can be contained within a column, though most commonly it will be {@link FieldSet fieldset}s
- *     (a group of properties) or {@link CollectionLayoutData collection}s.  However, columns can also be used to
- *     contain further {@link BSRow row}s (creating a nested grid of rows/cols/rows/cols) and {@link BSTabGroup tabgroup}s.
- * </p>
- *
+ * Pretty much other content can be contained within a column, though most commonly it will be {@link FieldSet fieldset}s
+ * (a group of properties) or {@link CollectionLayoutData collection}s.  However, columns can also be used to
+ * contain further {@link BSRow row}s (creating a nested grid of rows/cols/rows/cols) and {@link BSTabGroup tabgroup}s.
  * <p>
- *     It is rendered as a (eg) &lt;div class=&quot;col-md-4 ...&quot;&gt;
- * </p>
+ * It is rendered as a (eg) &lt;div class=&quot;col-md-4 ...&quot;&gt;
  *
  * @since 1.x {@index}
  */
@@ -78,6 +75,11 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     private static final _Ints.Range range1_12 = _Ints.Range.of(Bound.inclusive(1), Bound.inclusive(12));
 
     private String id;
+
+    @Override
+    public PositioningContext positioningContext() {
+        return PositioningContext.HAS_NONE;
+    }
 
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
