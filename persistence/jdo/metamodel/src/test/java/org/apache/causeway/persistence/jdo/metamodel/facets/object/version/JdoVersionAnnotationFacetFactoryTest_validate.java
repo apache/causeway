@@ -44,7 +44,7 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
     @BeforeEach
     void setUp() throws Exception {
 
-        val configuration = new CausewayConfiguration(null);
+        val configuration = CausewayConfiguration.builder().build();
 
         metaModelContext = MetaModelContext_forTesting
         .builder()

@@ -57,6 +57,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
@@ -95,6 +96,7 @@ import org.apache.causeway.core.config.viewer.web.TextMode;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -117,9 +119,42 @@ public class CausewayConfiguration {
     public static final String ROOT_PREFIX = "causeway";
 
     private final ConfigurableEnvironment environment;
+
+    /**
+     * To ensure that {@link #getBuildProperties()} is full populated, configure the <code>spring-boot-maven-plugin</code>
+     * as follows:
+     *
+     * <pre>
+     * &lt;plugin&gt;
+     *     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+     *     &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+     *     &lt;executions&gt;
+     *         &lt;execution&gt;
+     *             &lt;id&gt;build-info&lt;/id&gt;
+     *             &lt;goals&gt;
+     *                 &lt;goal&gt;build-info&lt;/goal&gt;
+     *             &lt;/goals&gt;
+     *             &lt;configuration&gt;
+     *                 &lt;additionalProperties&gt;
+     *                     &lt;java.version&gt;${java.version}&lt;/java.version&gt;
+     *                     &lt;description&gt;${project.description}&lt;/description&gt;
+     *                     ...
+     *                 &lt;/additionalProperties&gt;
+     *             &lt;/configuration&gt;
+     *         &lt;/execution&gt;
+     *     &lt;/executions&gt;
+     *     ...
+     * &lt;/plugin&gt;
+     * </pre>
+     */
+    @Getter
+    private final Optional<BuildProperties> buildProperties;
+
+    @Builder // for testing
     @Autowired
-    public CausewayConfiguration(final ConfigurableEnvironment environment) {
+    public CausewayConfiguration(final ConfigurableEnvironment environment, final Optional<BuildProperties> buildProperties) {
         this.environment = environment;
+        this.buildProperties = buildProperties;
     }
 
     private final Security security = new Security();

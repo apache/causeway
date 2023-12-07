@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.facets.properties.propertylayout.Promp
 
 public class PromptStyleFacetFromPropertyAnnotation_Test {
 
-    CausewayConfiguration stubConfiguration = new CausewayConfiguration(null);
+    CausewayConfiguration stubConfiguration = CausewayConfiguration.builder().build();
 
     FacetHolder mockFacetHolder;
     PropertyLayout mockPropertyLayout;
