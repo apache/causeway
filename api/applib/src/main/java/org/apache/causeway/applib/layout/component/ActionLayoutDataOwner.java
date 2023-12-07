@@ -53,10 +53,11 @@ public interface ActionLayoutDataOwner extends Owner {
         HAS_PANEL,
         /**
          * In this context orientation has meaning, eg. detailed <i>Property</i> rendering.
-         * But panel related positioning has NO meaning.
+         * But panel related positioning also has meaning.
          */
         HAS_ORIENTATION;
 
+        //TODO[CAUSEWAY-3655] update java-doc
         /**
          * In a HAS_PANEL context, action's position is normalized to either
          * {@link org.apache.causeway.applib.annotation.ActionLayout.Position#PANEL_DROPDOWN} (default) or
@@ -79,8 +80,9 @@ public interface ActionLayoutDataOwner extends Owner {
                 return Optional.of(position); // keep as is
             case HAS_ORIENTATION:
                 if(ActionLayout.Position.isNullOrNotSpecified(position)
-                    || ActionLayout.Position.isPanelDropdown(position)
-                    || ActionLayout.Position.isPanel(position)) {
+//                    || ActionLayout.Position.isPanelDropdown(position)
+//                    || ActionLayout.Position.isPanel(position)
+                        ) {
                         return Optional.of(ActionLayout.Position.BELOW);
                 }
                 return Optional.of(position); // keep as is

@@ -33,10 +33,6 @@ public interface ActionPositionFacet extends Facet {
     /**
      * If associated with a property, indicates the positioning of the
      * action's button relative to the property.
-     *
-     * <p>
-     * Ignored if the action has not been associated with a property.
-     * </p>
      */
     public ActionLayout.Position position();
 

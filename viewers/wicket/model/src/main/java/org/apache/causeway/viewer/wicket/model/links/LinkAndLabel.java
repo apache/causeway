@@ -35,6 +35,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -95,14 +96,19 @@ implements
 
     // -- UTILITY
 
-    public static Predicate<LinkAndLabel> isPositionedAt(final Position panel) {
-        return HasManagedAction.isPositionedAt(panel);
+    public static Predicate<LinkAndLabel> isPositionedAt(final @NonNull Position pos) {
+        return linkAndLabel->linkAndLabel.hasNormalizedPosition(pos);
+    }
+
+    private boolean hasNormalizedPosition(final @NonNull Position pos) {
+        var normalizedPosition = getManagedAction().normalizePosition().orElse(null);
+        return pos == normalizedPosition;
     }
 
     public boolean isRenderOutlined() {
-        return isPositionedAt(Position.BELOW)
-            .or(isPositionedAt(Position.RIGHT))
-            .test(this);
+        var normalizedPosition = getManagedAction().normalizePosition().orElse(null);
+        return Position.isPanel(normalizedPosition)
+                || Position.isPanelDropdown(normalizedPosition);
     }
 
     @Override

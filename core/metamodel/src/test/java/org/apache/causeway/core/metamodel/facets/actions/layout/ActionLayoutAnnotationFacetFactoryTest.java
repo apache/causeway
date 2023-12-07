@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -34,7 +35,6 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 
@@ -101,8 +101,7 @@ extends FacetFactoryTestAbstract {
             facetFactory.process(processMethodContext);
 
             final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof ActionPositionFacetFallback);
+            assertNull(facet);
         });
     }
 

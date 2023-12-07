@@ -19,10 +19,8 @@
 package org.apache.causeway.viewer.commons.model.action;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -111,15 +109,6 @@ public interface HasManagedAction {
 
     default Optional<String> getAdditionalCssClass() {
         return Facets.cssClass(getAction(), getActionOwner());
-    }
-
-    default ActionLayout.Position getPosition() {
-        return ObjectAction.Util.actionLayoutPositionOf(getAction());
-    }
-
-    public static <T extends HasManagedAction> Predicate<T> isPositionedAt(
-            final ActionLayout.Position position) {
-        return a -> a.getPosition() == position;
     }
 
     default Optional<DisablingDecorationModel> getDisableUiModel() {

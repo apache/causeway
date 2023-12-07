@@ -57,7 +57,6 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
@@ -578,21 +577,18 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 pendingArgs.activateValidationFeedback();
                 then.accept(pendingArgs);
             });
-
         }
 
-        public void assertLayoutPosition(final Position actionPosition) {
-            var action = actionInteraction.getMetamodel().orElseThrow();
+        public void assertAssociatedPropertyId(final @Nullable String expectedPropertyId) {
+            var action = actionInteraction.getManagedAction().orElseThrow();
+            var actualPropertyId = action.associatedProperty().map(OneToOneAssociation::getId).orElse(null);
+            assertEquals(expectedPropertyId, actualPropertyId);
+        }
 
-            //TODO[CAUSEWAY-3655] facet precedence issues - (skipping for now)
-            if(true) {
-                return;
-            }
-
-            val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
-            assertThat(actionPositionFacet)
-                //.satisfies(f -> assertThat(f).isInstanceOf(ActionPositionFacetForActionLayoutXml.class)) //TODO[CAUSEWAY-3655] what do we actually expect?
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(actionPosition));
+        public void assertLayoutPosition(final Position expectedActionPosition) {
+            var action = actionInteraction.getManagedAction().orElseThrow();
+            var normalizedPosition = action.normalizePosition().orElse(null);
+            assertEquals(expectedActionPosition, normalizedPosition);
         }
 
         public void assertLayoutGroup(final String group) {

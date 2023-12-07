@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.position;
+package org.apache.causeway.core.metamodel.facets.actions.associate;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 
-public class ActionPositionFacetFallback extends ActionPositionFacetAbstract {
+public interface ActionAssociateWithFacet extends Facet {
 
-    public ActionPositionFacetFallback(final FacetHolder holder) {
-        super(ActionLayout.Position.BELOW, holder, Precedence.FALLBACK);
-    }
+    /** non-empty */
+    String getAssociateWith();
 
 }

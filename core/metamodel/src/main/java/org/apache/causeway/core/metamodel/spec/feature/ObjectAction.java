@@ -24,7 +24,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
@@ -40,7 +39,6 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
-import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -73,7 +71,7 @@ public interface ObjectAction extends ObjectMember {
      */
     default boolean isImmediateConfirmationRequired() {
         return getSemantics().isAreYouSure()
-        && ObjectAction.Util.isNoParameters(this);
+                && getParameterCount() == 0;
     }
 
     ActionScope getScope();
@@ -313,10 +311,6 @@ public interface ObjectAction extends ObjectMember {
 
     public static final class Util {
 
-        public static boolean isNoParameters(final ObjectAction objectAction) {
-            return objectAction.getParameterCount()==0;
-        }
-
         public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
             final ObjectSpecification returnType = objectAction.getReturnType();
             if (returnType != null) {
@@ -329,41 +323,11 @@ public interface ObjectAction extends ObjectMember {
             return false;
         }
 
-        public static boolean isLayoutAssociatedWithAProperty(
-                final ObjectAction action) {
-
-            val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
-            if (layoutGroupFacet == null) {
-                return false;
-            }
-            val layoutGroupId = layoutGroupFacet.getGroupId();
-            if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                return false;
-            }
-            val prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
-                    .orElse(null);
-            if (prop == null) {
-                return false;
-            }
-            return true;
-        }
-
-        //TODO[CAUSEWAY-3655] inconsistent defaults
-        public static ActionLayout.Position actionLayoutPositionOf(
-                final ObjectAction action) {
-            return action.lookupNonFallbackFacet(ActionPositionFacet.class)
-            .map(ActionPositionFacet::position)
-            .orElseGet(()->
-                isLayoutAssociatedWithAProperty(action)
-                        ? ActionLayout.Position.BELOW
-                        : ActionLayout.Position.PANEL);
-        }
-
         public static Optional<FaLayersProvider> cssClassFaFactoryFor(
                 final ObjectAction action,
                 final ManagedObject domainObject) {
 
-            return Optional.ofNullable(action.getFacet(FaFacet.class))
+            return action.lookupFacet(FaFacet.class)
                 .map(FaFacet::getSpecialization)
                 .map(specialization->specialization
                         .fold(
@@ -442,10 +406,11 @@ public interface ObjectAction extends ObjectMember {
             return (final ObjectAction oa) -> oa.getScope() == scope;
         }
 
-        public static Predicate<ObjectAction> isPositioned(
-                final ActionLayout.Position position) {
-            return (final ObjectAction oa) -> ObjectAction.Util.actionLayoutPositionOf(oa) == position;
-        }
+// no longer used
+//        public static BiPredicate<ObjectAction, ManagedObject> isPositioned(
+//                final ActionLayout.Position position) {
+//            return (final ObjectAction oa, final ManagedObject mo) -> ObjectAction.Util.normalizePosition(oa, mo) == position;
+//        }
 
         public static Predicate<ObjectAction> isSameLayoutGroupAs(
                 final @NonNull ObjectAssociation association) {

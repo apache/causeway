@@ -24,7 +24,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacetFallback;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
@@ -84,12 +83,13 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(PromptStyleFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, getConfiguration(), facetHolder));
 
-        // position
-        val actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder)
-                .orElseGet(()->new ActionPositionFacetFallback(facetHolder));
+        // associateWith
+        addFacetIfPresent(ActionAssociateWithFacetForActionLayoutAnnotation
+                .create(actionLayoutIfAny, facetHolder));
 
-        addFacet(actionPositionFacet);
+        // position
+        addFacetIfPresent(ActionPositionFacetForActionLayoutAnnotation
+                .create(actionLayoutIfAny, facetHolder));
 
         // redirectPolicy
         val redirectFacet = RedirectFacetFromActionLayoutAnnotation
@@ -101,8 +101,6 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(
                 LayoutOrderFacetFromActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder));
-
     }
-
 
 }

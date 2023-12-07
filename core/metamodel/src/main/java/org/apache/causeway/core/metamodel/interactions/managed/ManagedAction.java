@@ -24,7 +24,9 @@ import java.util.Optional;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.routing.RoutingService;
 import org.apache.causeway.commons.collections.Can;
@@ -34,12 +36,19 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.actions.associate.ActionAssociateWithFacet;
+import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
+import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -125,6 +134,50 @@ public final class ManagedAction extends ManagedMember {
     @Override
     public Identifier.Type getMemberType() {
         return Identifier.Type.ACTION;
+    }
+
+    //TODO[CAUSEWAY-3655] perhaps memoize
+    public Optional<ObjectAssociation> associatedObjectAssociation() {
+        return getAction().lookupFacet(ActionAssociateWithFacet.class)
+            .map(ActionAssociateWithFacet::getAssociateWith)
+            .flatMap(id->getOwner().getSpecification().getAssociation(id, MixedIn.INCLUDED));
+    }
+    public Optional<OneToOneAssociation> associatedProperty() {
+        return associatedObjectAssociation()
+            .filter(ObjectAssociation::isProperty)
+            .map(OneToOneAssociation.class::cast);
+    }
+    public Optional<OneToManyAssociation> associatedCollection() {
+        return associatedObjectAssociation()
+            .filter(ObjectAssociation::isCollection)
+            .map(OneToManyAssociation.class::cast);
+    }
+    //TODO[CAUSEWAY-3655] might be wrong in some cases
+    public ActionLayoutDataOwner.PositioningContext positioningContext() {
+        var positioningContext = associatedProperty().isPresent()
+                ? ActionLayoutDataOwner.PositioningContext.HAS_ORIENTATION
+                : associatedCollection().isPresent()
+                    ? ActionLayoutDataOwner.PositioningContext.HAS_PANEL
+                    : getAction().lookupFacet(LayoutGroupFacet.class).isPresent()
+                        ? ActionLayoutDataOwner.PositioningContext.HAS_PANEL
+                        : ActionLayoutDataOwner.PositioningContext.HAS_NONE;
+        return positioningContext;
+    }
+
+    //TODO[CAUSEWAY-3655] perhaps memoize
+    public Optional<ActionLayout.Position> normalizePosition() {
+        var positioningContext = positioningContext();
+        System.err.printf("ctx: %s%n", positioningContext);
+        return getAction().lookupFacet(ActionPositionFacet.class)
+                .map(f->{
+                    System.err.printf("f: %s%n", f.getClass().getName());
+                    return f;})
+            .map(ActionPositionFacet::position)
+            .map(f->{
+                System.err.printf("pos: %s%n", f);
+                return f;})
+            .flatMap(positioningContext::normalizePosition)
+            .or(()->positioningContext.normalizePosition(null));
     }
 
     // -- INTERACTION

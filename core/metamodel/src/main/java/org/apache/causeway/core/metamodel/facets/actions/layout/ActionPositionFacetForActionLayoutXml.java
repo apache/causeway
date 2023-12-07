@@ -35,14 +35,8 @@ public class ActionPositionFacetForActionLayoutXml extends ActionPositionFacetAb
             final FacetHolder holder,
             final Precedence precedence) {
 
-        if(actionLayoutData == null) {
-            return Optional.empty();
-        }
-
-        //TODO[CAUSEWAY-3655] might conflict with layout normalization, that happens earlier or later?
-        // fix up action's position if required
-        var position = positioningContext.normalizePosition(actionLayoutData.getPosition());
-        return position
+        return Optional.ofNullable(actionLayoutData)
+                .map(ActionLayoutData::getPosition)
                 .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence));
     }
 
