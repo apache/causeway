@@ -51,7 +51,6 @@ public class WorksheetSpec {
         @Programmatic
         Class<?> getCls();
 
-        @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
         @RequiredArgsConstructor
         class Default<T> implements RowFactory<T> {
 
