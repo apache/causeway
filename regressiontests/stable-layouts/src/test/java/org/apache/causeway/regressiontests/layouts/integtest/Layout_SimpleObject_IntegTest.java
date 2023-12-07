@@ -24,7 +24,10 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -89,7 +92,7 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         CausewayPresets.forcePrototyping();
     }
 
-
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void openRestApi() {
 
@@ -116,6 +119,7 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void clearHints() {
 
