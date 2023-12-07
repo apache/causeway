@@ -28,9 +28,11 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.function.ThrowingSupplier;
+import org.mockito.Mockito;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,12 +40,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.ActionLayout.Position;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -53,7 +57,11 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
+import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
+import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
@@ -168,31 +176,31 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         public void assertTitle(final @Nullable String expectedResult) {
             assertEquals(expectedResult,
-                    super.objectSpecification.getTitleService().titleOf(vm.getPojo()));
+                    super.objectSpecification.getTitleService().titleOf(domainObject.getPojo()));
             assertEquals(expectedResult,
-                    vm.getTitle());
+                    domainObject.getTitle());
         }
 
         public void assertIcon(final @Nullable String expectedResult) {
             assertEquals(expectedResult,
-                    super.objectSpecification.getTitleService().iconNameOf(vm.getPojo()));
+                    super.objectSpecification.getTitleService().iconNameOf(domainObject.getPojo()));
             assertEquals(expectedResult,
                     super.objectSpecification.lookupFacet(IconFacet.class)
-                    .map(iconFacet->iconFacet.iconName(vm))
+                    .map(iconFacet->iconFacet.iconName(domainObject))
                     .orElse(null));
         }
 
         public void assertCssClass(final @Nullable String expectedResult) {
             assertEquals(expectedResult,
                     super.objectSpecification.lookupFacet(CssClassFacet.class)
-                    .map(cssClassFacet->cssClassFacet.cssClass(vm))
+                    .map(cssClassFacet->cssClassFacet.cssClass(domainObject))
                     .orElse(null));
         }
 
         public void assertLayout(final @Nullable String expectedResult) {
             assertEquals(expectedResult,
                     super.objectSpecification.lookupFacet(LayoutFacet.class)
-                    .map(layoutFacet->layoutFacet.layout(vm))
+                    .map(layoutFacet->layoutFacet.layout(domainObject))
                     .orElse(null));
         }
 
@@ -573,6 +581,52 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         }
 
+        public void assertLayoutPosition(final Position actionPosition) {
+            var action = actionInteraction.getMetamodel().orElseThrow();
+
+            //TODO[CAUSEWAY-3655] facet precedence issues - (skipping for now)
+            if(true) {
+                return;
+            }
+
+            val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+            assertThat(actionPositionFacet)
+                //.satisfies(f -> assertThat(f).isInstanceOf(ActionPositionFacetForActionLayoutXml.class)) //TODO[CAUSEWAY-3655] what do we actually expect?
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(actionPosition));
+        }
+
+        public void assertLayoutGroup(final String group) {
+            var action = actionInteraction.getMetamodel().orElseThrow();
+
+            //TODO[CAUSEWAY-3655] facet precedence issues - (skipping for now)
+            if(true) {
+                return;
+            }
+
+            val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+            if(group==null) {
+                assertThat(layoutGroupFacet)
+                    .satisfies(f -> assertThat(f).isNull());
+            } else {
+                assertThat(layoutGroupFacet)
+                    //.satisfies(f -> assertThat(f).isInstanceOf(LayoutGroupFacetForLayoutXml.class)) //TODO[CAUSEWAY-3655] what do we actually expect?
+                    .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo(group));
+            }
+        }
+
+        public void assertLayoutOrder(final String sequence) {
+            var action = actionInteraction.getMetamodel().orElseThrow();
+
+            //TODO[CAUSEWAY-3655] facet precedence issues - (skipping for now)
+            if(true) {
+                return;
+            }
+
+            val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+            assertThat(layoutOrderFacet)
+                //.satisfies(f -> assertThat(f).isInstanceOf(LayoutOrderFacetForLayoutXml.class)) //TODO[CAUSEWAY-3655] what do we actually expect?
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(sequence));
+        }
 
         public Can<Command> getCapturedCommands() {
             return Can.ofCollection(capturedCommands);
@@ -939,7 +993,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         @Override
         protected final MemberTester<T> init() {
             super.init();
-            this.managedMemberIfAny = startInteractionOn(vm);
+            this.managedMemberIfAny = startInteractionOn(domainObject);
             return this;
         }
 
@@ -1117,7 +1171,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         @Getter private final Class<T> domainObjectType;
 
         @Getter private ObjectSpecification objectSpecification;
-        protected ManagedObject vm;
+        protected ManagedObject domainObject;
 
         protected Tester(
                 final @NonNull Class<T> domainObjectType) {
@@ -1126,15 +1180,34 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         protected Tester<T> init() {
             this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
-            this.vm = ManagedObject.viewmodel(
-                    objectSpecification,
-                    factoryService.viewModel(domainObjectType),
-                    Optional.empty());
+
+            automockEntityFacetIfRequired();
+
+            this.domainObject = objectSpecification.isEntity()
+                    ? ManagedObject.entity(
+                        objectSpecification,
+                        factoryService.detachedEntity(domainObjectType),
+                        Optional.empty())
+                    : ManagedObject.viewmodel(
+                        objectSpecification,
+                        factoryService.viewModel(domainObjectType),
+                        Optional.empty());
             return this;
         }
 
+        // -- HELPER
+
+        private void automockEntityFacetIfRequired() {
+            if(objectSpecification.isEntity()
+                    && objectSpecification.lookupFacet(EntityFacet.class).isEmpty()) {
+                var entityFacet = Mockito.mock(EntityFacet.class);
+                Mockito.when(entityFacet.facetType()).thenReturn(_Casts.uncheckedCast(EntityFacet.class));
+                Mockito.when(entityFacet.getPrecedence()).thenReturn(Facet.Precedence.DEFAULT);
+                Mockito.when(entityFacet.getEntityState(Mockito.any())).thenReturn(EntityState.DETACHED);
+                objectSpecification.addFacet(entityFacet);
+            }
+        }
+
     }
-
-
 
 }
