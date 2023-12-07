@@ -29,6 +29,7 @@ import javax.inject.Singleton;
 import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -122,8 +123,6 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
     @BeforeEach
     void beforeEach() {
-        Assumptions.assumeThat(false); // TODO: reinstate back in CAUSEWAY-3655
-
         interactionService.nextInteraction();
 
         Optional<Bookmark> bookmark = bookmarkService.bookmarkFor(newCounter("counter-1"));
@@ -138,6 +137,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     }
 
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionNoPosition() {
 
@@ -168,6 +168,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionPositionBelow() {
 
@@ -194,6 +195,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionPositionPanel() {
 
@@ -220,6 +222,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionDetailsFieldSetNoPosition() {
 
@@ -247,6 +250,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionDetailsFieldSetPositionBelow() {
 
@@ -274,6 +278,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionDetailsFieldSetPositionPanel() {
 
@@ -301,6 +306,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionDetailsFieldSetPositionPanelDropdown() {
 
@@ -328,6 +334,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionEmptyFieldSetNoPosition() {
 
@@ -354,6 +361,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionEmptyFieldSetPositionBelow() {
 
@@ -380,6 +388,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionEmptyFieldSetPositionPanel() {
 
@@ -406,6 +415,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionEmptyFieldSetPositionPanelDropdown() {
 
@@ -432,6 +442,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyNoPosition() {
 
@@ -458,6 +469,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyBelow() {
 
@@ -484,6 +496,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyPanel() {
 
@@ -510,6 +523,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyPanelDropdown() {
 
@@ -536,6 +550,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyAndDetailsFieldSetNoPosition() {
 
@@ -562,6 +577,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNameAndDetailsFieldSetPropertyBelow() {
 
@@ -588,6 +604,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyAndDetailsFieldSetPanel() {
 
@@ -614,6 +631,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyAndDetailsFieldSetPanelDropdown() {
 
@@ -640,6 +658,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyButEmptyFieldSetNoPosition() {
 
@@ -666,6 +685,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void actionAssociatedWithNamePropertyAndSequenceNoPosition() {
 
@@ -692,6 +712,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void openRestApi() {
 
@@ -718,6 +739,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void clearHints() {
 
