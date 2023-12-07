@@ -30,6 +30,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsSpec;
+import org.springframework.boot.info.BuildProperties;
 
 public class VersionReprRenderer
 extends ReprRendererAbstract<Void> {
@@ -52,7 +53,7 @@ extends ReprRendererAbstract<Void> {
         }
 
         representation.mapPutString("specVersion", RestfulObjectsSpec.SPEC_VERSION);
-        representation.mapPutString("implVersion", getResourceContext().getConfiguration().getBuildProperties().getVersion());
+        representation.mapPutString("implVersion", getResourceContext().getConfiguration().getBuildProperties().map(BuildProperties::getVersion).orElse("UNKNOWN"));
 
         putOptionalCapabilities();
         putExtensions();

@@ -148,11 +148,11 @@ public class CausewayConfiguration {
      * </pre>
      */
     @Getter
-    private final BuildProperties buildProperties;
+    private final Optional<BuildProperties> buildProperties;
 
     @Builder // for testing
     @Autowired
-    public CausewayConfiguration(final ConfigurableEnvironment environment, final BuildProperties buildProperties) {
+    public CausewayConfiguration(final ConfigurableEnvironment environment, final Optional<BuildProperties> buildProperties) {
         this.environment = environment;
         this.buildProperties = buildProperties;
     }
