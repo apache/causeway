@@ -41,8 +41,8 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
-import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetForActionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForActionLayoutXml;
@@ -60,8 +60,8 @@ import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAnd
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForLayoutXml;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml;
-import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.FaFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.FaFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectDescribedFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutXml;
@@ -229,7 +229,8 @@ implements GridSystemService<G> {
                     updateFacet(
                             LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
 
-                    //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
+                    //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation,
+                    //otherwise actions are not shown - don't know why
                     val precedenceHotfix = fcGrid.isFallback()
                             ? Facet.Precedence.DEFAULT
                             : Facet.Precedence.HIGH;
@@ -238,26 +239,9 @@ implements GridSystemService<G> {
                             LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix));
                 }
 
-                // fix up the action position if required
-                if(actionLayoutDataOwner instanceof FieldSet) {
-                    if(actionLayoutData.getPosition() == null ||
-                            actionLayoutData.getPosition() == org.apache.causeway.applib.annotation.ActionLayout.Position.BELOW ||
-                            actionLayoutData.getPosition() == org.apache.causeway.applib.annotation.ActionLayout.Position.RIGHT) {
-                        actionLayoutData.setPosition(org.apache.causeway.applib.annotation.ActionLayout.Position.PANEL);
-                    }
-                } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
-                    if(actionLayoutData.getPosition() == null ||
-                            actionLayoutData.getPosition() == org.apache.causeway.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
-                            actionLayoutData.getPosition() == org.apache.causeway.applib.annotation.ActionLayout.Position.PANEL) {
-                        actionLayoutData.setPosition(org.apache.causeway.applib.annotation.ActionLayout.Position.BELOW);
-                    }
-                } else {
-                    // doesn't do anything for DomainObject or Collection
-                    actionLayoutData.setPosition(null);
-                }
-
                 updateFacetIfPresent(
-                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        ActionPositionFacetForActionLayoutXml
+                        .create(actionLayoutData, actionLayoutDataOwner.positioningContext(), objectAction, precedence));
 
                 updateFacetIfPresent(
                         CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));

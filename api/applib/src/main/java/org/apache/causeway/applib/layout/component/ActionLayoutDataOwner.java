@@ -24,6 +24,26 @@ import java.util.List;
  * @since 1.x {@index}
  */
 public interface ActionLayoutDataOwner extends Owner {
+
     List<ActionLayoutData> getActions();
     void setActions(List<ActionLayoutData> actions);
+
+    public enum PositioningContext {
+        /**
+         * Positioning has NO meaning in this context, eg. <i>DomainObject</i> or <i>Collection</i>.
+         */
+        HAS_NONE,
+        /**
+         * This context provides a panel, eg. field-sets. But orientation has NO meaning.
+         */
+        HAS_PANEL,
+        /**
+         * In this context orientation has meaning, eg. detailed <i>Property</i> rendering.
+         * But panel related positioning has NO meaning.
+         */
+        HAS_ORIENTATION;
+    }
+
+    PositioningContext positioningContext();
+
 }

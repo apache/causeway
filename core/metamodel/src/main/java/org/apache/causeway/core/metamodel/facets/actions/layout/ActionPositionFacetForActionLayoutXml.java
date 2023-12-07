@@ -20,7 +20,9 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner.PositioningContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
@@ -28,20 +30,44 @@ import org.apache.causeway.core.metamodel.facets.actions.position.ActionPosition
 public class ActionPositionFacetForActionLayoutXml extends ActionPositionFacetAbstract {
 
     public static Optional<ActionPositionFacet> create(
-            final ActionLayoutData actionLayout,
+            final ActionLayoutData actionLayoutData,
+            final PositioningContext positioningContext,
             final FacetHolder holder,
             final Precedence precedence) {
-        if(actionLayout == null) {
+
+        if(actionLayoutData == null) {
             return Optional.empty();
         }
-        final org.apache.causeway.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
+
+        var position = actionLayoutData.getPosition();
+        // fix up the action position if required
+        switch (positioningContext) {
+        case HAS_PANEL:
+            if(position == null
+                || ActionLayout.Position.isBelow(position)
+                || ActionLayout.Position.isRight(position)) {
+                    position = ActionLayout.Position.PANEL;
+            }
+            break;
+        case HAS_ORIENTATION:
+            if(position == null
+                || ActionLayout.Position.isPanelDropdown(position)
+                || ActionLayout.Position.isPanel(position)) {
+                    position = ActionLayout.Position.BELOW;
+            }
+            break;
+        case HAS_NONE:
+        default:
+            // positioning has no meaning in this context
+            return Optional.empty();
+        }
 
         return Optional.ofNullable(position)
-        .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence));
+                .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence));
     }
 
     private ActionPositionFacetForActionLayoutXml(
-            final org.apache.causeway.applib.annotation.ActionLayout.Position position,
+            final ActionLayout.Position position,
             final FacetHolder holder,
             final Precedence precedence) {
         super(position, holder, precedence);
