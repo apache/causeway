@@ -33,7 +33,7 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     @BeforeEach
     void setup() {
 
-        val causewayConfiguration = new CausewayConfiguration(null);
+        val causewayConfiguration = CausewayConfiguration.builder().build();
         causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().setApiKey(getApiKey());
         causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().setRepository("apache/causeway-app-simpleapp");
 

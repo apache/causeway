@@ -39,18 +39,18 @@ import lombok.val;
 
 class ExceptionRecognizerForDataAccessExceptionTest {
 
-    private ExceptionRecognizerForDataAccessException recognizerForDae;  
+    private ExceptionRecognizerForDataAccessException recognizerForDae;
 
     @BeforeEach
     public void setUp() {
-        val conf = new CausewayConfiguration(null); 
-        recognizerForDae = new ExceptionRecognizerForDataAccessException(conf);  
+        val conf = CausewayConfiguration.builder().build();
+        recognizerForDae = new ExceptionRecognizerForDataAccessException(conf);
     }
 
     @Test
     void migrationWarning() {
         System.err.printf(
-                "%s - TODO: No tests yet for whether we can recognize Spring's various org.springframework.dao.DataAccessException(s)", 
+                "%s - TODO: No tests yet for whether we can recognize Spring's various org.springframework.dao.DataAccessException(s)",
                 this.getClass().getName());
     }
 
@@ -64,13 +64,13 @@ class ExceptionRecognizerForDataAccessExceptionTest {
         assertCategory(Category.CONSTRAINT_VIOLATION, new DuplicateKeyException("msg"));
         assertCategory(Category.CONCURRENCY, new CannotAcquireLockException("msg"));
     }
-    
+
     // -- HELPER
-    
+
     void assertCategory(
             Category category,
             DataAccessException dae) {
-        
+
         val recognized = recognizerForDae.recognize(dae).orElse(null);
         assertNotNull(recognized);
         assertNotNull(recognized.getReason());
