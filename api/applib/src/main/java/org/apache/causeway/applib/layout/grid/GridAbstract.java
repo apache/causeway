@@ -109,11 +109,11 @@ public abstract class GridAbstract implements Grid {
             final ActionLayoutDataOwner actionLayoutDataOwner,
             final GridAbstract.Visitor visitor) {
 
-        final List<ActionLayoutData> actionLayoutDatas = actionLayoutDataOwner.getActions();
-        if(actionLayoutDatas == null) {
+        final List<ActionLayoutData> actionLayoutDataList = actionLayoutDataOwner.getActions();
+        if(actionLayoutDataList == null) {
             return;
         }
-        for (final ActionLayoutData actionLayoutData : new ArrayList<>(actionLayoutDatas)) {
+        for (final ActionLayoutData actionLayoutData : new ArrayList<>(actionLayoutDataList)) {
             actionLayoutData.setOwner(actionLayoutDataOwner);
             visitor.visit(actionLayoutData);
         }

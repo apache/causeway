@@ -24,8 +24,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-import lombok.Getter;
-
 public abstract class LayoutGroupFacetAbstract
 extends FacetAbstract
 implements LayoutGroupFacet {
@@ -34,7 +32,6 @@ implements LayoutGroupFacet {
         return LayoutGroupFacet.class;
     }
 
-    @Getter(onMethod_ = {@Override})
     private final GroupIdAndName groupIdAndName;
 
     protected LayoutGroupFacetAbstract(
@@ -50,6 +47,16 @@ implements LayoutGroupFacet {
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
         this.groupIdAndName = groupIdAndName;
+    }
+
+    @Override
+    public final String getGroupId() {
+        return groupIdAndName.getId();
+    }
+
+    @Override
+    public final String getGroupName() {
+        return groupIdAndName.getName();
     }
 
     @Override

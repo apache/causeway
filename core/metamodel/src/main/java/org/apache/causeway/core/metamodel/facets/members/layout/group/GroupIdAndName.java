@@ -74,14 +74,16 @@ implements
     public static Optional<GroupIdAndName> forActionLayout(
             final @NonNull ActionLayout actionLayout) {
 
-        val explicit =  GroupIdAndName.inferIfOneMissing(
+        val explicit = GroupIdAndName.inferIfOneMissing(
                 actionLayout.fieldSetId(),
                 actionLayout.fieldSetName());
 
         if(explicit.isPresent()) {
+            //TODO[CAUSEWAY-3655] associateWith information is lost here
             return explicit;
         }
 
+        //TODO[CAUSEWAY-3655] seems wrong for associated properties, correct for associated collections
         return GroupIdAndName.inferIfOneMissing(
                 actionLayout.associateWith(),
                 null);

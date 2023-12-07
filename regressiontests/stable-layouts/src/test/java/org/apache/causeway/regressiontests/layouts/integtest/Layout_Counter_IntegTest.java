@@ -31,11 +31,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.LayoutConstants;
+import org.apache.causeway.applib.mixins.rest.Object_openRestApi;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.regressiontests.layouts.integtest.model.Counter;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory.ActionTester;
+import org.apache.causeway.viewer.wicket.applib.mixins.Object_clearHints;
 
 import lombok.val;
 
@@ -64,6 +66,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         return Counter.builder().name(name).build();
     }
 
+    /** @see Counter#actionNoPosition(String) */
     @Test
     void actionNoPosition() {
         val tester = actionTester("actionNoPosition");
@@ -72,6 +75,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("");
     }
 
+    /** @see Counter#actionPositionBelow(String) */
     @Test
     void actionPositionBelow() {
         val tester = actionTester("actionPositionBelow");
@@ -80,6 +84,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("");
     }
 
+    /** @see Counter#actionPositionPanel(String) */
     @Test
     void actionPositionPanel() {
         val tester = actionTester("actionPositionPanel");
@@ -88,22 +93,25 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("");
     }
 
+    /** @see Counter#actionDetailsFieldSetNoPosition(String) */
     @Test
     void actionDetailsFieldSetNoPosition() {
         val tester = actionTester("actionDetailsFieldSetNoPosition");
-        tester.assertLayoutPosition(ActionLayout.Position.BELOW); // as of fallback behavior
+        tester.assertLayoutPosition(ActionLayout.Position.PANEL_DROPDOWN); // as of field-set fallback behavior
         tester.assertLayoutGroup("details");
         tester.assertLayoutOrder("1");
     }
 
+    /** @see Counter#actionDetailsFieldSetPositionBelow(String) */
     @Test
     void actionDetailsFieldSetPositionBelow() {
         val tester = actionTester("actionDetailsFieldSetPositionBelow");
-        tester.assertLayoutPosition(ActionLayout.Position.BELOW);
+        tester.assertLayoutPosition(ActionLayout.Position.PANEL_DROPDOWN); // as of field-set fallback behavior
         tester.assertLayoutGroup("details");
         tester.assertLayoutOrder("2");
     }
 
+    /** @see Counter#actionDetailsFieldSetPositionPanel(String) */
     @Test
     void actionDetailsFieldSetPositionPanel() {
         val tester = actionTester("actionDetailsFieldSetPositionPanel");
@@ -112,6 +120,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("3");
     }
 
+    /** @see Counter#actionDetailsFieldSetPositionPanelDropdown(String) */
     @Test
     void actionDetailsFieldSetPositionPanelDropdown() {
         val tester = actionTester("actionDetailsFieldSetPositionPanelDropdown");
@@ -120,6 +129,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("4");
     }
 
+    /** @see Counter#actionEmptyFieldSetNoPosition(String) */
     @Test
     void actionEmptyFieldSetNoPosition() {
         val tester = actionTester("actionEmptyFieldSetNoPosition");
@@ -128,6 +138,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("1");
     }
 
+    /** @see Counter#actionEmptyFieldSetPositionBelow(String) */
     @Test
     void actionEmptyFieldSetPositionBelow() {
         val tester = actionTester("actionEmptyFieldSetPositionBelow");
@@ -136,6 +147,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("2");
     }
 
+    /** @see Counter#actionEmptyFieldSetPositionPanel(String) */
     @Test
     void actionEmptyFieldSetPositionPanel() {
         val tester = actionTester("actionEmptyFieldSetPositionPanel");
@@ -144,6 +156,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("3");
     }
 
+    /** @see Counter#actionEmptyFieldSetPositionPanelDropdown(String) */
     @Test
     void actionEmptyFieldSetPositionPanelDropdown() {
         val tester = actionTester("actionEmptyFieldSetPositionPanelDropdown");
@@ -152,6 +165,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("4");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyNoPosition(String) */
     @Test
     void actionAssociatedWithNamePropertyNoPosition() {
         val tester = actionTester("actionAssociatedWithNamePropertyNoPosition");
@@ -160,6 +174,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyBelow(String) */
     @Test
     void actionAssociatedWithNamePropertyBelow() {
         val tester = actionTester("actionAssociatedWithNamePropertyBelow");
@@ -168,6 +183,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyPanel(String) */
     @Test
     void actionAssociatedWithNamePropertyPanel() {
         val tester = actionTester("actionAssociatedWithNamePropertyPanel");
@@ -176,6 +192,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyPanelDropdown(String) */
     @Test
     void actionAssociatedWithNamePropertyPanelDropdown() {
         val tester = actionTester("actionAssociatedWithNamePropertyPanelDropdown");
@@ -184,6 +201,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyAndDetailsFieldSetNoPosition(String) */
     @Test
     void actionAssociatedWithNamePropertyAndDetailsFieldSetNoPosition() {
         val tester = actionTester("actionAssociatedWithNamePropertyAndDetailsFieldSetNoPosition");
@@ -192,6 +210,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("1");
     }
 
+    /** @see Counter#actionAssociatedWithNameAndDetailsFieldSetPropertyBelow(String) */
     @Test
     void actionAssociatedWithNameAndDetailsFieldSetPropertyBelow() {
         val tester = actionTester("actionAssociatedWithNameAndDetailsFieldSetPropertyBelow");
@@ -200,6 +219,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("2");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyAndDetailsFieldSetPanel(String) */
     @Test
     void actionAssociatedWithNamePropertyAndDetailsFieldSetPanel() {
         val tester = actionTester("actionAssociatedWithNamePropertyAndDetailsFieldSetPanel");
@@ -208,6 +228,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("3");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyAndDetailsFieldSetPanelDropdown(String) */
     @Test
     void actionAssociatedWithNamePropertyAndDetailsFieldSetPanelDropdown() {
         val tester = actionTester("actionAssociatedWithNamePropertyAndDetailsFieldSetPanelDropdown");
@@ -216,6 +237,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("4");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyButEmptyFieldSetNoPosition(String) */
     @Test
     void actionAssociatedWithNamePropertyButEmptyFieldSetNoPosition() {
         val tester = actionTester("actionAssociatedWithNamePropertyButEmptyFieldSetNoPosition");
@@ -224,6 +246,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("1");
     }
 
+    /** @see Counter#actionAssociatedWithNamePropertyAndSequenceNoPosition(String) */
     @Test
     void actionAssociatedWithNamePropertyAndSequenceNoPosition() {
         val tester = actionTester("actionAssociatedWithNamePropertyAndSequenceNoPosition");
@@ -232,6 +255,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("1");
     }
 
+    /** @see Object_openRestApi */
     @Test
     void openRestApi() {
         val tester = actionTester("openRestApi");
@@ -240,6 +264,7 @@ public class Layout_Counter_IntegTest extends LayoutTestAbstract {
         tester.assertLayoutOrder("750.1");
     }
 
+    /** @see Object_clearHints */
     @Test
     void clearHints() {
         val tester = actionTester("clearHints");

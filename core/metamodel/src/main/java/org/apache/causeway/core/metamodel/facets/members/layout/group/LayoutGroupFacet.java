@@ -50,23 +50,16 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 public interface LayoutGroupFacet extends Facet {
 
     /**
-     * Id and (Friendly) name of the layout group this member is associated with.
-     */
-    public GroupIdAndName getGroupIdAndName();
-
-    /**
      * Id of the layout group this member is associated with.
+     * <p>
+     * Either a field-set-id or an association-id.
      */
-    public default String getGroupId() {
-        return getGroupIdAndName().getId();
-    }
+    String getGroupId();
 
     /**
      * (Friendly) name of the layout group this member is associated with.
      */
-    public default String getGroupName() {
-        return getGroupIdAndName().getName();
-    }
+    String getGroupName();
 
     /**
      * {@code true} for layouts originating from XML,

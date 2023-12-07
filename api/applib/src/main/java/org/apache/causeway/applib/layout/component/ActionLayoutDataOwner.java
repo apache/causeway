@@ -19,6 +19,12 @@
 package org.apache.causeway.applib.layout.component;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 /**
  * @since 1.x {@index}
@@ -27,6 +33,14 @@ public interface ActionLayoutDataOwner extends Owner {
 
     List<ActionLayoutData> getActions();
     void setActions(List<ActionLayoutData> actions);
+
+    default void addAction(final ActionLayoutData actionLayoutData) {
+        if(getActions() == null) {
+            setActions(_Lists.newArrayList());
+        }
+        actionLayoutData.setOwner(this);
+        getActions().add(actionLayoutData);
+    }
 
     public enum PositioningContext {
         /**
@@ -42,6 +56,41 @@ public interface ActionLayoutDataOwner extends Owner {
          * But panel related positioning has NO meaning.
          */
         HAS_ORIENTATION;
+
+        /**
+         * In a HAS_PANEL context, action's position is normalized to either
+         * {@link org.apache.causeway.applib.annotation.ActionLayout.Position#PANEL_DROPDOWN} (default) or
+         * {@link org.apache.causeway.applib.annotation.ActionLayout.Position#PANEL}.
+         * <p>
+         * In a HAS_ORIENTATION context, action's position is normalized to either
+         * {@link org.apache.causeway.applib.annotation.ActionLayout.Position#BELOW} (default) or
+         * {@link org.apache.causeway.applib.annotation.ActionLayout.Position#RIGHT}.
+         * <p>
+         * In a HAS_NONE context, action's position is without meaning, hence returning {@link Optional#empty()}.
+         */
+        public Optional<ActionLayout.Position> normalizePosition(final @Nullable ActionLayout.Position position) {
+            switch (this) {
+            case HAS_PANEL:
+                if(ActionLayout.Position.isNullOrNotSpecified(position)
+                    || ActionLayout.Position.isBelow(position)
+                    || ActionLayout.Position.isRight(position)) {
+                        return Optional.of(ActionLayout.Position.PANEL_DROPDOWN);
+                }
+                return Optional.of(position); // keep as is
+            case HAS_ORIENTATION:
+                if(ActionLayout.Position.isNullOrNotSpecified(position)
+                    || ActionLayout.Position.isPanelDropdown(position)
+                    || ActionLayout.Position.isPanel(position)) {
+                        return Optional.of(ActionLayout.Position.BELOW);
+                }
+                return Optional.of(position); // keep as is
+            case HAS_NONE:
+            default:
+                // positioning has no meaning in this context
+                return Optional.empty();
+            }
+        }
+
     }
 
     PositioningContext positioningContext();

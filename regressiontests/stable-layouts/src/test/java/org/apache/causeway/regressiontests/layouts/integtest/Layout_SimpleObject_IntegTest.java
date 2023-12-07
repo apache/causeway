@@ -49,7 +49,7 @@ public class Layout_SimpleObject_IntegTest extends LayoutTestAbstract {
     void clearHints() {
         val tester =
                 testerFactory.actionTester(SimpleObject.class, "clearHints", Where.OBJECT_FORMS);
-        tester.assertLayoutPosition(ActionLayout.Position.PANEL_DROPDOWN);
+        tester.assertLayoutPosition(ActionLayout.Position.PANEL);
         tester.assertLayoutGroup(LayoutConstants.FieldSetId.METADATA);
         tester.assertLayoutOrder("400.1");
     }

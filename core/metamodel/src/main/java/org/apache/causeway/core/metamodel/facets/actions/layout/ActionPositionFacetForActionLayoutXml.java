@@ -39,30 +39,10 @@ public class ActionPositionFacetForActionLayoutXml extends ActionPositionFacetAb
             return Optional.empty();
         }
 
-        var position = actionLayoutData.getPosition();
-        // fix up the action position if required
-        switch (positioningContext) {
-        case HAS_PANEL:
-            if(position == null
-                || ActionLayout.Position.isBelow(position)
-                || ActionLayout.Position.isRight(position)) {
-                    position = ActionLayout.Position.PANEL;
-            }
-            break;
-        case HAS_ORIENTATION:
-            if(position == null
-                || ActionLayout.Position.isPanelDropdown(position)
-                || ActionLayout.Position.isPanel(position)) {
-                    position = ActionLayout.Position.BELOW;
-            }
-            break;
-        case HAS_NONE:
-        default:
-            // positioning has no meaning in this context
-            return Optional.empty();
-        }
-
-        return Optional.ofNullable(position)
+        //TODO[CAUSEWAY-3655] might conflict with layout normalization, that happens earlier or later?
+        // fix up action's position if required
+        var position = positioningContext.normalizePosition(actionLayoutData.getPosition());
+        return position
                 .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence));
     }
 

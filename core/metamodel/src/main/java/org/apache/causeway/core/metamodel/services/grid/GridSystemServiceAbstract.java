@@ -229,14 +229,8 @@ implements GridSystemService<G> {
                     updateFacet(
                             LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
 
-                    //TODO[CAUSEWAY-3319] hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation,
-                    //otherwise actions are not shown - don't know why
-                    val precedenceHotfix = fcGrid.isFallback()
-                            ? Facet.Precedence.DEFAULT
-                            : Facet.Precedence.HIGH;
-
                     updateFacetIfPresent(
-                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix));
+                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedence));
                 }
 
                 updateFacetIfPresent(

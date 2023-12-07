@@ -71,8 +71,7 @@ extends MetaModelTestAbstract {
 
         final ActionLayoutData deleteActionLayoutData = new ActionLayoutData();
         deleteActionLayoutData.setId("delete");
-        headerCol.setActions(_Lists.<ActionLayoutData>newArrayList());
-        headerCol.getActions().add(deleteActionLayoutData);
+        headerCol.addAction(deleteActionLayoutData);
 
         // content
         final BSRow contentRow = new BSRow();

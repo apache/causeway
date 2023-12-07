@@ -269,19 +269,19 @@ extends GridSystemServiceAbstract<BSGrid> {
         // catalog which associations are bound to an existing field-set
         // so that (below) we can determine which missing property IDs are not unbound vs
         // which should be included in the field-set that they are bound to.
-        val boundAssociationIdsByFieldSetId = _Maps.<String, Set<String>>newHashMap();
+        val boundPropertyIdsByFieldSetId = _Maps.<String, Set<String>>newHashMap();
 
         for (val fieldSet : gridModel.fieldSets()) {
             val fieldSetId = GroupIdAndName.forFieldSet(fieldSet)
                 .orElseThrow(()->_Exceptions.illegalArgument("invalid fieldSet detected, "
                         + "requires at least an id or a name"))
                 .getId();
-            Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
-            if(boundAssociationIds == null) {
-                boundAssociationIds = stream(fieldSet.getProperties())
+            Set<String> boundPropertyIds = boundPropertyIdsByFieldSetId.get(fieldSetId);
+            if(boundPropertyIds == null) {
+                boundPropertyIds = stream(fieldSet.getProperties())
                         .map(PropertyLayoutData::getId)
                         .collect(Collectors.toCollection(_Sets::newLinkedHashSet));
-                boundAssociationIdsByFieldSetId.put(fieldSetId, boundAssociationIds);
+                boundPropertyIdsByFieldSetId.put(fieldSetId, boundPropertyIds);
             }
         }
 
@@ -297,9 +297,9 @@ extends GridSystemServiceAbstract<BSGrid> {
             }
             val id = layoutGroupFacet.getGroupId();
             if(gridModel.containsFieldSetId(id)) {
-                Set<String> boundAssociationIds =
-                        boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
-                boundAssociationIds.add(oneToOneAssociation.getId());
+                Set<String> boundPropertyIds =
+                        boundPropertyIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
+                boundPropertyIds.add(oneToOneAssociation.getId());
             } else if(id.equals(LayoutConstants.FieldSetId.METADATA)) {
                 unboundMetadataContributingIds.add(oneToOneAssociation.getId());
             }
@@ -309,17 +309,16 @@ extends GridSystemServiceAbstract<BSGrid> {
 
             val unboundPropertyIds = _Sets.newLinkedHashSet(missingPropertyIds);
 
-            for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
-                val boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
+            for (final String fieldSetId : boundPropertyIdsByFieldSetId.keySet()) {
+                val boundPropertyIds = boundPropertyIdsByFieldSetId.get(fieldSetId);
                 unboundPropertyIds.removeAll(boundPropertyIds);
             }
 
-            for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
+            for (final String fieldSetId : boundPropertyIdsByFieldSetId.keySet()) {
                 val fieldSet = gridModel.getFieldSet(fieldSetId);
-                val associationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
 
-                val associations1To1Ids =
-                        associationIds.stream()
+                val propertyIds =
+                        boundPropertyIdsByFieldSetId.get(fieldSetId).stream()
                         .map(oneToOneAssociationById::get)
                         .filter(_NullSafe::isPresent)
                         .sorted(ObjectMember.Comparators.byMemberOrderSequence(false))
@@ -328,7 +327,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
                 addPropertiesTo(
                         fieldSet,
-                        associations1To1Ids,
+                        propertyIds,
                         layoutDataFactory::createPropertyLayoutData,
                         propertyLayoutDataById::put);
             }
@@ -442,7 +441,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                         owner = propertyLayoutData;
                     }
                     actionLayoutData.setPosition(position);
-                    addActionTo(owner, actionLayoutData);
+                    owner.addAction(actionLayoutData);
                 }
 
                 continue;
@@ -456,7 +455,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                         log.warn("failed to lookup CollectionLayoutData by layoutGroupName '{}'", layoutGroupName);
                     } else {
                         val actionLayoutData = new ActionLayoutData(actionId);
-                        addActionTo(collectionLayoutData, actionLayoutData);
+                        collectionLayoutData.addAction(actionLayoutData);
                     }
                 }
                 continue;
@@ -464,24 +463,24 @@ extends GridSystemServiceAbstract<BSGrid> {
             // if the @ActionLayout for the action references a field set (that has bound
             // associations), then don't mark it as missing, but instead explicitly add it to the
             // list of actions of that field-set.
-            final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(layoutGroupName);
-            if(boundAssociationIds != null && !boundAssociationIds.isEmpty()) {
+            final Set<String> boundPropertyIds = boundPropertyIdsByFieldSetId.get(layoutGroupName);
+            if(!_NullSafe.isEmpty(boundPropertyIds)) {
 
                 associatedActionIds.add(actionId);
 
                 final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+                final FieldSet fieldSet = gridModel.getFieldSet(layoutGroupName);
+                fieldSet.addAction(actionLayoutData);
 
+                //TODO[CAUSEWAY-3655] code is correct unless we have a associateWith relation to a property
                 // since the action is to be associated with a fieldSet, the only available positions are PANEL and PANEL_DROPDOWN.
                 // if the action already has a preference for PANEL, then preserve it, otherwise default to PANEL_DROPDOWN
-                val actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
-                if(actionPositionFacet != null && actionPositionFacet.position() == ActionLayout.Position.PANEL) {
-                    actionLayoutData.setPosition(ActionLayout.Position.PANEL);
-                } else {
-                    actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
-                }
-
-                final FieldSet fieldSet = gridModel.getFieldSet(layoutGroupName);
-                addActionTo(fieldSet, actionLayoutData);
+                var actionPosition = objectAction.lookupFacet(ActionPositionFacet.class)
+                    .map(ActionPositionFacet::position)
+                    .orElse(null);
+                fieldSet.positioningContext()
+                    .normalizePosition(actionPosition)
+                    .ifPresent(actionLayoutData::setPosition);
             }
         }
 
@@ -591,7 +590,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
         for (String actionId : actionIds) {
             val actionLayoutData = layoutFactory.apply(actionId);
-            addActionTo(bsCol, actionLayoutData);
+            bsCol.addAction(actionLayoutData);
             onNewLayoutData.accept(actionId, actionLayoutData);
         }
     }
@@ -604,21 +603,9 @@ extends GridSystemServiceAbstract<BSGrid> {
 
         for (String actionId : actionIds) {
             val actionLayoutData = layoutFactory.apply(actionId);
-            addActionTo(fieldSet, actionLayoutData);
+            fieldSet.addAction(actionLayoutData);
             onNewLayoutData.accept(actionId, actionLayoutData);
         }
-    }
-
-    private void addActionTo(
-            final ActionLayoutDataOwner owner,
-            final ActionLayoutData actionLayoutData) {
-
-        List<ActionLayoutData> actions = owner.getActions();
-        if(actions == null) {
-            owner.setActions(actions = _Lists.newArrayList());
-        }
-        actions.add(actionLayoutData);
-        actionLayoutData.setOwner(owner);
     }
 
 }

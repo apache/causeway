@@ -329,7 +329,7 @@ public interface ObjectAction extends ObjectMember {
             return false;
         }
 
-        public static boolean isDirectlyAssociatedWithAnyProperty(
+        public static boolean isLayoutAssociatedWithAProperty(
                 final ObjectAction action) {
 
             val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
@@ -348,12 +348,13 @@ public interface ObjectAction extends ObjectMember {
             return true;
         }
 
+        //TODO[CAUSEWAY-3655] inconsistent defaults
         public static ActionLayout.Position actionLayoutPositionOf(
                 final ObjectAction action) {
             return action.lookupNonFallbackFacet(ActionPositionFacet.class)
             .map(ActionPositionFacet::position)
             .orElseGet(()->
-                isDirectlyAssociatedWithAnyProperty(action)
+                isLayoutAssociatedWithAProperty(action)
                         ? ActionLayout.Position.BELOW
                         : ActionLayout.Position.PANEL);
         }
