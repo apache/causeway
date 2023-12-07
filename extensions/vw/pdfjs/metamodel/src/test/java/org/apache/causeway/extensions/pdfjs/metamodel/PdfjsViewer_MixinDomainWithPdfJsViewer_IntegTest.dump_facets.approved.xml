@@ -131,11 +131,6 @@
             <mml:attr name="facet" value="ContributingFacetAbstract.2"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback">
-            <mml:attr name="facet" value="ActionPositionFacetFallback"/>
-            <mml:attr name="position" value="BELOW"/>
-            <mml:attr name="precedence" value="FALLBACK"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacetFallback">
             <mml:attr name="facet" value="RedirectFacetFallback"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -1290,11 +1285,6 @@
             <mml:attr name="contributing" value="AS_PROPERTY"/>
             <mml:attr name="facet" value="ContributingFacetAbstract.2"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback">
-            <mml:attr name="facet" value="ActionPositionFacetFallback"/>
-            <mml:attr name="position" value="BELOW"/>
-            <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacetFallback">
             <mml:attr name="facet" value="RedirectFacetFallback"/>
