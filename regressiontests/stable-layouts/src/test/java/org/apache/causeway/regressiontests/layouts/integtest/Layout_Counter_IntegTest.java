@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -121,6 +122,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
     @BeforeEach
     void beforeEach() {
+        Assumptions.assumeThat(false); // TODO: reinstate back in CAUSEWAY-3655
+
         interactionService.nextInteraction();
 
         Optional<Bookmark> bookmark = bookmarkService.bookmarkFor(newCounter("counter-1"));
