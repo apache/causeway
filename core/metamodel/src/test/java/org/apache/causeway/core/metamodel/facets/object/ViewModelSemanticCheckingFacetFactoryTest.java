@@ -47,7 +47,7 @@ class ViewModelSemanticCheckingFacetFactoryTest {
     @BeforeEach
     public void setUp() throws Exception {
 
-        val configuration = new CausewayConfiguration(null);
+        val configuration = CausewayConfiguration.builder().build();
         configuration.getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().setEnable(true);
 
         metaModelContext = MetaModelContext_forTesting.builder()

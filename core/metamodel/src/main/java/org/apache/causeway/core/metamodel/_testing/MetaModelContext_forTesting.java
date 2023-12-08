@@ -281,12 +281,12 @@ extends MetaModelContext {
 
     private static CausewayConfiguration newCausewayConfiguration() {
         val properties = _Maps.<String, String>newHashMap();
-        val config = new CausewayConfiguration(new AbstractEnvironment() {
+        val config = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
             @Override
             public String getProperty(final String key) {
                 return properties.get(key);
             }
-        });
+        }).build();
         return config;
     }
 
@@ -424,12 +424,12 @@ extends MetaModelContext {
         val currentConfigBackup = this.configuration;
         try {
 
-            this.configuration = new CausewayConfiguration(new AbstractEnvironment() {
+            this.configuration = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
                 @Override
                 public String getProperty(final String key) {
                     return properties.get(key);
                 }
-            });
+            }).build();
 
             runnable.run();
         } finally {
@@ -507,8 +507,8 @@ extends MetaModelContext {
 
     @lombok.Value(staticConstructor = "of")
     static class ServiceInstance {
-        final ObjectSpecification specification;
-        final Object pojo;
+        ObjectSpecification specification;
+        Object pojo;
     }
 
     @Builder.Default
@@ -547,7 +547,7 @@ extends MetaModelContext {
         return map;
     }
 
-    private final Optional<ServiceInstance> toServiceInstance(final _ManagedBeanAdapter managedBeanAdapter) {
+    private Optional<ServiceInstance> toServiceInstance(final _ManagedBeanAdapter managedBeanAdapter) {
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot get service instance of type '%s'",

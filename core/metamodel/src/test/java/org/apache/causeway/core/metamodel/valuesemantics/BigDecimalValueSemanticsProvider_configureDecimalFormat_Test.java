@@ -57,7 +57,7 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
 
         context = ValueSemanticsProvider.Context.of(mockIdentifier, null);
 
-        causewayConfiguration = new CausewayConfiguration(null);
+        causewayConfiguration = CausewayConfiguration.builder().build();
         causewayConfiguration.getValueTypes().getBigDecimal().setMinScale(null);
 
         // expecting
