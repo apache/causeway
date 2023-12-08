@@ -89,7 +89,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <archunit.version>1.2.1</archunit.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <asm.version>9.6</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-        <approvaltests.version>22.3.2</approvaltests.version>
+        <approvaltests.version>22.3.3</approvaltests.version>
 
         <assertj-guava.version>3.24.2</assertj-guava.version>
 
