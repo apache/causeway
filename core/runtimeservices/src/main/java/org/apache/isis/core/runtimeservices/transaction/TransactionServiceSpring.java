@@ -110,21 +110,21 @@ implements
     @Override
     public <T> Try<T> callTransactional(final TransactionDefinition def, final Callable<T> callable) {
 
-        val txManager = transactionManagerForElseFail(def); // always throws if configuration is wrong
+        val platformTransactionManager = transactionManagerForElseFail(def); // always throws if configuration is wrong
 
         Try<T> result = null;
 
         try {
 
-            TransactionStatus tx = txManager.getTransaction(def);
+            TransactionStatus tx = platformTransactionManager.getTransaction(def);
 
             result = Try.call(callable)
-                    .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
+                    .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
 
             if(result.isFailure()) {
-                txManager.rollback(tx);
+                platformTransactionManager.rollback(tx);
             } else {
-                txManager.commit(tx);
+                platformTransactionManager.commit(tx);
             }
 
         } catch (Exception ex) {
@@ -137,7 +137,7 @@ implements
                     ? result
 
                     // return the failure we just catched
-                    : Try.failure(translateExceptionIfPossible(ex, txManager));
+                    : Try.failure(translateExceptionIfPossible(ex, platformTransactionManager));
 
         }
 
@@ -345,7 +345,7 @@ implements
 
             platformTransactionManagers.forEach(txManager -> {
 
-                val def = new DefaultTransactionDefinition();
+                val def = new TransactionTemplate(txManager);
                 def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
                 // either participate in existing or create new transaction
