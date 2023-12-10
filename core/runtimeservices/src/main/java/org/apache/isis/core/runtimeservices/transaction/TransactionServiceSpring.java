@@ -35,7 +35,6 @@ import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
@@ -248,20 +247,10 @@ implements
 
     private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
 
-    /** INTERACTION BEGIN BOUNDARY */
-    public void beforeEnteringTransactionalBoundary() {
-        txCounter.get().reset();
-    }
-
     /** TRANSACTION END BOUNDARY */
     @EventListener(TransactionAfterCompletionEvent.class)
     public void onTransactionEnded(final TransactionAfterCompletionEvent event) {
         txCounter.get().increment();
-    }
-
-    /** INTERACTION END BOUNDARY */
-    public void afterLeavingTransactionalBoundary() {
-        txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
 
     // -- HELPER
@@ -335,7 +324,7 @@ implements
 
     public void onOpen(final @NonNull IsisInteraction interaction) {
 
-        beforeEnteringTransactionalBoundary();
+        txCounter.get().reset();
 
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
@@ -406,7 +395,7 @@ implements
 
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
 
-        afterLeavingTransactionalBoundary();
+        txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
 
     @Value
