@@ -73,38 +73,6 @@ public class InteractionAwareTransactionalBoundaryHandler {
     // -- HELPER
 
 
-    @Value
-    public static class CloseTask {
-        private final @NonNull TransactionStatus txStatus;
-        private final @NonNull String onErrorInfo;
-        private final @NonNull ThrowingRunnable runnable;
-    }
-
-    @RequiredArgsConstructor
-    public static class OnCloseHandle {
-        private final @NonNull List<CloseTask> onCloseTasks;
-        public void requestRollback() {
-            onCloseTasks.forEach(onCloseTask->{
-                onCloseTask.txStatus.setRollbackOnly();
-            });
-        }
-        public void runOnCloseTasks() {
-            onCloseTasks.forEach(onCloseTask->{
-
-                try {
-                    onCloseTask.getRunnable().run();
-                } catch(final Throwable ex) {
-                    // ignore
-                    log.error(
-                            "failed to close transactional boundary using transaction-manager {}; "
-                            + "continuing to avoid memory leakage",
-                            onCloseTask.getOnErrorInfo(),
-                            ex);
-                }
-
-            });
-        }
-    }
 
 
 }

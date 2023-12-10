@@ -28,6 +28,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
@@ -58,6 +59,8 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -335,8 +338,8 @@ implements
             return; // nothing to do
         }
 
-        val onCloseTasks = _Lists.<InteractionAwareTransactionalBoundaryHandler.CloseTask>newArrayList(platformTransactionManagers.size());
-        interaction.putAttribute(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle.class, new InteractionAwareTransactionalBoundaryHandler.OnCloseHandle(onCloseTasks));
+        val onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
+        interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
 
         platformTransactionManagers.forEach(txManager->newTransactionOrParticipateInExisting(txManager, onCloseTasks::add));
 
@@ -344,7 +347,7 @@ implements
 
     private void newTransactionOrParticipateInExisting(
             final PlatformTransactionManager txManager,
-            final Consumer<InteractionAwareTransactionalBoundaryHandler.CloseTask> onNewCloseTask) {
+            final Consumer<CloseTask> onNewCloseTask) {
 
         val txTemplate = new TransactionTemplate(txManager);
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -360,7 +363,7 @@ implements
         // we have created a new transaction, so need to provide a CloseTask
 
         onNewCloseTask.accept(
-                new InteractionAwareTransactionalBoundaryHandler.CloseTask(
+                new CloseTask(
                         txStatus,
                         txManager.getClass().getName(), // info to be used for display in case of errors
                         ()->{
@@ -376,8 +379,8 @@ implements
 
 
     public void requestRollback(final @NonNull IsisInteraction interaction) {
-        Optional.ofNullable(interaction.getAttribute(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle.class))
-                .ifPresent(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle::requestRollback);
+        Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
+                .ifPresent(OnCloseHandle::requestRollback);
     }
 
     public void onClose(final @NonNull IsisInteraction interaction) {
@@ -390,8 +393,42 @@ implements
             return; // nothing to do
         }
 
-        Optional.ofNullable(interaction.getAttribute(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle.class))
-                .ifPresent(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle::runOnCloseTasks);
+        Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
+                .ifPresent(OnCloseHandle::runOnCloseTasks);
 
     }
+
+    @Value
+    public static class CloseTask {
+        private final @NonNull TransactionStatus txStatus;
+        private final @NonNull String onErrorInfo;
+        private final @NonNull ThrowingRunnable runnable;
+    }
+
+    @RequiredArgsConstructor
+    public static class OnCloseHandle {
+        private final @NonNull List<CloseTask> onCloseTasks;
+        public void requestRollback() {
+            onCloseTasks.forEach(onCloseTask->{
+                onCloseTask.txStatus.setRollbackOnly();
+            });
+        }
+        public void runOnCloseTasks() {
+            onCloseTasks.forEach(onCloseTask->{
+
+                try {
+                    onCloseTask.getRunnable().run();
+                } catch(final Throwable ex) {
+                    // ignore
+                    log.error(
+                            "failed to close transactional boundary using transaction-manager {}; "
+                                    + "continuing to avoid memory leakage",
+                            onCloseTask.getOnErrorInfo(),
+                            ex);
+                }
+
+            });
+        }
+    }
+
 }
