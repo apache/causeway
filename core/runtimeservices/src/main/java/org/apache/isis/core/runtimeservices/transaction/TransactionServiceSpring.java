@@ -399,21 +399,21 @@ implements
     }
 
     @Value
-    public static class CloseTask {
+    private static class CloseTask {
         private final @NonNull TransactionStatus txStatus;
         private final @NonNull String onErrorInfo;
         private final @NonNull ThrowingRunnable runnable;
     }
 
     @RequiredArgsConstructor
-    public static class OnCloseHandle {
+    private static class OnCloseHandle {
         private final @NonNull List<CloseTask> onCloseTasks;
-        public void requestRollback() {
+        void requestRollback() {
             onCloseTasks.forEach(onCloseTask->{
                 onCloseTask.txStatus.setRollbackOnly();
             });
         }
-        public void runOnCloseTasks() {
+        void runOnCloseTasks() {
             onCloseTasks.forEach(onCloseTask->{
 
                 try {
