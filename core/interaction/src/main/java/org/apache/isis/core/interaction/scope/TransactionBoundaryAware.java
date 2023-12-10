@@ -24,11 +24,11 @@ public interface TransactionBoundaryAware {
 
     }
 
-    default void afterEnteringTransactionalBoundary(boolean isSynchronizationActive) {
+    default void afterEnteringTransactionalBoundary() {
 
     }
 
-    default void beforeLeavingTransactionalBoundary(boolean isSynchronizationActive) {
+    default void beforeLeavingTransactionalBoundary() {
 
     }
 

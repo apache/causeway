@@ -365,8 +365,7 @@ implements
     private void postInteractionOpened(final IsisInteraction interaction) {
         transactionBoundaryAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary());
         txBoundaryHandler.onOpen(interaction);
-        val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        transactionBoundaryAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(isSynchronizationActive));
+        transactionBoundaryAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary());
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
@@ -387,8 +386,7 @@ implements
             flushException = e;
         }
 
-        val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(isSynchronizationActive));
+        transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary());
         txBoundaryHandler.onClose(interaction);
         transactionBoundaryAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary());
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)

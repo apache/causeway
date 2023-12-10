@@ -55,8 +55,8 @@ implements TransactionSynchronization, TransactionBoundaryAware {
     }
 
     @Override
-    public void afterEnteringTransactionalBoundary(
-            final boolean isSynchronizationActive) {
+    public void afterEnteringTransactionalBoundary() {
+        val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
         if(isSynchronizationActive) {
             TransactionSynchronizationManager.registerSynchronization(this);
         }
