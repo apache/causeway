@@ -363,7 +363,6 @@ implements
 
     private void postInteractionOpened(final IsisInteraction interaction) {
 
-        transactionServiceSpring.beforeEnteringTransactionalBoundary();
         transactionServiceSpring.onOpen(interaction);
 
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
@@ -387,7 +386,6 @@ implements
         }
 
         transactionServiceSpring.onClose(interaction);
-        transactionServiceSpring.afterLeavingTransactionalBoundary();
 
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
         interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)

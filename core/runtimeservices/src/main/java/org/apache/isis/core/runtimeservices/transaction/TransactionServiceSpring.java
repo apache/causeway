@@ -335,6 +335,7 @@ implements
 
     public void onOpen(final @NonNull IsisInteraction interaction) {
 
+        beforeEnteringTransactionalBoundary();
 
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
@@ -405,6 +406,7 @@ implements
 
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
 
+        afterLeavingTransactionalBoundary();
     }
 
     @Value
