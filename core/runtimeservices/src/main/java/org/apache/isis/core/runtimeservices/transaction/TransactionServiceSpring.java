@@ -69,8 +69,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TransactionServiceSpring
 implements
-    TransactionService,
-    TransactionBoundaryAware {
+    TransactionService {
 
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionLayerTracker interactionLayerTracker;

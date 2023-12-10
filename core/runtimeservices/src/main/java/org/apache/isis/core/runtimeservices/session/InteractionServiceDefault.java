@@ -31,13 +31,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -104,6 +105,8 @@ implements
     final ConfigurableBeanFactory beanFactory;
 
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
+    final TransactionServiceSpring transactionServiceSpring;
+
     final InteractionIdGenerator interactionIdGenerator;
 
     // to allow implementations to have dependencies back on this service.
@@ -115,6 +118,7 @@ implements
             final SpecificationLoader specificationLoader,
             final ServiceInjector serviceInjector,
             final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
+            final TransactionServiceSpring transactionServiceSpring,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
             final Provider<TransactionService> transactionServiceProvider,
@@ -124,6 +128,7 @@ implements
         this.specificationLoader = specificationLoader;
         this.serviceInjector = serviceInjector;
         this.txBoundaryHandler = txBoundaryHandler;
+        this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
         this.transactionServiceProvider = transactionServiceProvider;
@@ -363,9 +368,11 @@ implements
     }
 
     private void postInteractionOpened(final IsisInteraction interaction) {
+        transactionServiceSpring.beforeEnteringTransactionalBoundary();
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeEnteringTransactionalBoundary);
         txBoundaryHandler.onOpen(interaction);
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
+
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
@@ -389,6 +396,8 @@ implements
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeLeavingTransactionalBoundary);
         txBoundaryHandler.onClose(interaction);
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
+        transactionServiceSpring.afterLeavingTransactionalBoundary();
+
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
         interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)
         interaction.close(); // do this last
