@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtimeservices.session;
 
 import java.io.File;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
@@ -35,7 +34,6 @@ import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -63,7 +61,6 @@ import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -204,7 +201,8 @@ implements
         interactionLayerStack.get().push(interactionLayer);
 
         if(isAtTopLevel()) {
-        	postInteractionOpened(isisInteraction);
+            transactionServiceSpring.onOpen(isisInteraction);
+            interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
         }
 
         if(log.isDebugEnabled()) {
@@ -359,13 +357,6 @@ implements
 
     private boolean isAtTopLevel() {
     	return interactionLayerStack.get().size()==1;
-    }
-
-    private void postInteractionOpened(final IsisInteraction interaction) {
-
-        transactionServiceSpring.onOpen(interaction);
-
-        interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
     @SneakyThrows

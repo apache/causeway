@@ -337,13 +337,14 @@ implements
             log.debug("opening on {}", _Probe.currentThreadId());
         }
 
-        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeEnteringTransactionalBoundary);
-
         if (!platformTransactionManagers.isEmpty()) {
             val onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
+
             interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
 
             platformTransactionManagers.forEach(txManager -> {
+
+                transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeEnteringTransactionalBoundary);
 
                 val def = new TransactionTemplate(txManager);
                 def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -357,24 +358,26 @@ implements
                 }
 
                 // we have created a new transaction, so need to provide a CloseTask
-
-                ((Consumer<CloseTask>) onCloseTasks::add).accept(
+                onCloseTasks.add(
                         new CloseTask(
-                                txStatus,
-                                txManager.getClass().getName(), // info to be used for display in case of errors
-                                ()->{
+                            txStatus,
+                            txManager.getClass().getName(), // info to be used for display in case of errors
+                            () -> {
+                                transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeLeavingTransactionalBoundary);
+                                if (txStatus.isRollbackOnly()) {
+                                    txManager.rollback(txStatus);
+                                } else {
+                                    txManager.commit(txStatus);
+                                }
+                                transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
+                            }
+                        )
+                );
 
-                                    if(txStatus.isRollbackOnly()) {
-                                        txManager.rollback(txStatus);
-                                    } else {
-                                        txManager.commit(txStatus);
-                                    }
-
-                                }));
+                transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
             });
         }
 
-        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
     }
 
 
@@ -389,14 +392,10 @@ implements
             log.debug("closing on {}", _Probe.currentThreadId());
         }
 
-        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeLeavingTransactionalBoundary);
-
         if (!platformTransactionManagers.isEmpty()) {
             Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
                     .ifPresent(OnCloseHandle::runOnCloseTasks);
         }
-
-        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
 
         txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
