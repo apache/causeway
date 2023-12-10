@@ -235,7 +235,6 @@ implements
     private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
 
     /** INTERACTION BEGIN BOUNDARY */
-    @Override
     public void beforeEnteringTransactionalBoundary() {
         txCounter.get().reset();
     }
@@ -247,7 +246,6 @@ implements
     }
 
     /** INTERACTION END BOUNDARY */
-    @Override
     public void afterLeavingTransactionalBoundary() {
         txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
