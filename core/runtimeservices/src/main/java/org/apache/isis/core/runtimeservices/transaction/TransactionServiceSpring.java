@@ -115,16 +115,24 @@ implements
         try {
 
             TransactionStatus tx = platformTransactionManager.getTransaction(def);
+            if(tx.isNewTransaction()) {
+                transactionBoundaryAwareBeans.forEach(tba -> tba.afterEnteringTransactionalBoundary(platformTransactionManager));
+            }
 
             result = Try.call(callable)
                     .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
 
+            if(tx.isNewTransaction()) {
+                transactionBoundaryAwareBeans.forEach(tba -> tba.beforeLeavingTransactionalBoundary(platformTransactionManager));
+            }
             if(result.isFailure()) {
                 platformTransactionManager.rollback(tx);
             } else {
                 platformTransactionManager.commit(tx);
             }
-
+            if(tx.isNewTransaction()) {
+                transactionBoundaryAwareBeans.forEach(tba -> tba.afterLeavingTransactionalBoundary(platformTransactionManager));
+            }
         } catch (Exception ex) {
 
             return result!=null
@@ -342,18 +350,18 @@ implements
 
             platformTransactionManagers.forEach(txManager -> {
 
-                transactionBoundaryAwareBeans.forEach(transactionBoundaryAware2 -> transactionBoundaryAware2.beforeEnteringTransactionalBoundary(txManager));
-
                 val def = new TransactionTemplate(txManager);
                 def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
                 // either participate in existing or create new transaction
                 TransactionStatus txStatus = txManager.getTransaction(def);
+
                 if(txStatus==null // in support of JUnit testing (TransactionManagers might be mocked or hollow stubs)
                         || !txStatus.isNewTransaction()) {
                     // we are participating in an exiting transaction (or testing), nothing to do
                     return;
                 }
+                transactionBoundaryAwareBeans.forEach(tbab -> tbab.afterEnteringTransactionalBoundary(txManager));
 
                 // we have created a new transaction, so need to provide a CloseTask
                 onCloseTasks.add(
@@ -361,18 +369,17 @@ implements
                             txStatus,
                             txManager.getClass().getName(), // info to be used for display in case of errors
                             () -> {
-                                transactionBoundaryAwareBeans.forEach(transactionBoundaryAware1 -> transactionBoundaryAware1.beforeLeavingTransactionalBoundary(txManager));
+                                transactionBoundaryAwareBeans.forEach(tbab -> tbab.beforeLeavingTransactionalBoundary(txManager));
                                 if (txStatus.isRollbackOnly()) {
                                     txManager.rollback(txStatus);
                                 } else {
                                     txManager.commit(txStatus);
                                 }
-                                transactionBoundaryAwareBeans.forEach(transactionBoundaryAware -> transactionBoundaryAware.afterLeavingTransactionalBoundary(txManager));
+                                transactionBoundaryAwareBeans.forEach(tbab -> tbab.afterLeavingTransactionalBoundary(txManager));
                             }
                         )
                 );
 
-                transactionBoundaryAwareBeans.forEach(transactionBoundaryAware -> transactionBoundaryAware.afterEnteringTransactionalBoundary(txManager));
             });
         }
 
