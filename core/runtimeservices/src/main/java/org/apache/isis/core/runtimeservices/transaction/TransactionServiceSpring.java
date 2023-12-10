@@ -400,9 +400,9 @@ implements
 
     @Value
     private static class CloseTask {
-        private final @NonNull TransactionStatus txStatus;
-        private final @NonNull String onErrorInfo;
-        private final @NonNull ThrowingRunnable runnable;
+        @NonNull TransactionStatus txStatus;
+        @NonNull String onErrorInfo;
+        @NonNull ThrowingRunnable runnable;
     }
 
     @RequiredArgsConstructor
