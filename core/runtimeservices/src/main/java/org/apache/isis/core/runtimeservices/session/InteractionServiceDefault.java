@@ -394,7 +394,7 @@ implements
         }
 
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeLeavingTransactionalBoundary);
-        txBoundaryHandler.onClose(interaction);
+        transactionServiceSpring.onClose(interaction);
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
         transactionServiceSpring.afterLeavingTransactionalBoundary();
 

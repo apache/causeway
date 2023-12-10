@@ -68,20 +68,6 @@ public class InteractionAwareTransactionalBoundaryHandler {
 
     // -- CLOSE
 
-    public void onClose(final @NonNull IsisInteraction interaction) {
-
-        if (log.isDebugEnabled()) {
-            log.debug("closing on {}", _Probe.currentThreadId());
-        }
-
-        if(txManagers.isEmpty()) {
-            return; // nothing to do
-        }
-
-        Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
-                .ifPresent(OnCloseHandle::runOnCloseTasks);
-
-    }
 
 
     // -- HELPER

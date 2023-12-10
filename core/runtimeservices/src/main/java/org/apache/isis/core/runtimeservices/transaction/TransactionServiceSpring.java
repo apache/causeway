@@ -380,4 +380,18 @@ implements
                 .ifPresent(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle::requestRollback);
     }
 
+    public void onClose(final @NonNull IsisInteraction interaction) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("closing on {}", _Probe.currentThreadId());
+        }
+
+        if(platformTransactionManagers.isEmpty()) {
+            return; // nothing to do
+        }
+
+        Optional.ofNullable(interaction.getAttribute(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle.class))
+                .ifPresent(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle::runOnCloseTasks);
+
+    }
 }
