@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.events;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -55,7 +56,7 @@ implements TransactionSynchronization, TransactionBoundaryAware {
     }
 
     @Override
-    public void afterEnteringTransactionalBoundary() {
+    public void afterEnteringTransactionalBoundary(PlatformTransactionManager platformTransactionManager) {
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
         if(isSynchronizationActive) {
             TransactionSynchronizationManager.registerSynchronization(this);

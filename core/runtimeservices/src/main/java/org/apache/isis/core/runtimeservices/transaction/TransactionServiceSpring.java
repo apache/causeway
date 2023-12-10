@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
-import java.util.function.Consumer;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -42,7 +41,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -344,7 +342,7 @@ implements
 
             platformTransactionManagers.forEach(txManager -> {
 
-                transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeEnteringTransactionalBoundary);
+                transactionBoundaryAwareBeans.forEach(transactionBoundaryAware2 -> transactionBoundaryAware2.beforeEnteringTransactionalBoundary(txManager));
 
                 val def = new TransactionTemplate(txManager);
                 def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -363,18 +361,18 @@ implements
                             txStatus,
                             txManager.getClass().getName(), // info to be used for display in case of errors
                             () -> {
-                                transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeLeavingTransactionalBoundary);
+                                transactionBoundaryAwareBeans.forEach(transactionBoundaryAware1 -> transactionBoundaryAware1.beforeLeavingTransactionalBoundary(txManager));
                                 if (txStatus.isRollbackOnly()) {
                                     txManager.rollback(txStatus);
                                 } else {
                                     txManager.commit(txStatus);
                                 }
-                                transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
+                                transactionBoundaryAwareBeans.forEach(transactionBoundaryAware -> transactionBoundaryAware.afterLeavingTransactionalBoundary(txManager));
                             }
                         )
                 );
 
-                transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
+                transactionBoundaryAwareBeans.forEach(transactionBoundaryAware -> transactionBoundaryAware.afterEnteringTransactionalBoundary(txManager));
             });
         }
 

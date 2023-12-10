@@ -18,21 +18,23 @@
  */
 package org.apache.isis.core.interaction.scope;
 
+import org.springframework.transaction.PlatformTransactionManager;
+
 public interface TransactionBoundaryAware {
 
-    default void beforeEnteringTransactionalBoundary() {
+    default void beforeEnteringTransactionalBoundary(PlatformTransactionManager platformTransactionManager) {
 
     }
 
-    default void afterEnteringTransactionalBoundary() {
+    default void afterEnteringTransactionalBoundary(PlatformTransactionManager platformTransactionManager) {
 
     }
 
-    default void beforeLeavingTransactionalBoundary() {
+    default void beforeLeavingTransactionalBoundary(PlatformTransactionManager platformTransactionManager) {
 
     }
 
-    default void afterLeavingTransactionalBoundary() {
+    default void afterLeavingTransactionalBoundary(PlatformTransactionManager platformTransactionManager) {
 
     }
 
