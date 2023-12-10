@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -115,7 +116,7 @@ implements
 
         try {
 
-            val tx = txManager.getTransaction(def);
+            TransactionStatus tx = txManager.getTransaction(def);
 
             result = Try.call(callable)
                     .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
@@ -248,6 +249,12 @@ implements
     private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
 
     /** TRANSACTION END BOUNDARY */
+
+    /**
+     * This is called by TransactionEventEmitter, which is a TransactionBoundaryAware bean.
+     *
+     * @param event
+     */
     @EventListener(TransactionAfterCompletionEvent.class)
     public void onTransactionEnded(final TransactionAfterCompletionEvent event) {
         txCounter.get().increment();
@@ -336,42 +343,38 @@ implements
             val onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
             interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
 
-            platformTransactionManagers.forEach(txManager->newTransactionOrParticipateInExisting(txManager, onCloseTasks::add));
+            platformTransactionManagers.forEach(txManager -> {
+
+                val def = new DefaultTransactionDefinition();
+                def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+                // either participate in existing or create new transaction
+                TransactionStatus txStatus = txManager.getTransaction(def);
+                if(txStatus==null // in support of JUnit testing (TransactionManagers might be mocked or hollow stubs)
+                        || !txStatus.isNewTransaction()) {
+                    // we are participating in an exiting transaction (or testing), nothing to do
+                    return;
+                }
+
+                // we have created a new transaction, so need to provide a CloseTask
+
+                ((Consumer<CloseTask>) onCloseTasks::add).accept(
+                        new CloseTask(
+                                txStatus,
+                                txManager.getClass().getName(), // info to be used for display in case of errors
+                                ()->{
+
+                                    if(txStatus.isRollbackOnly()) {
+                                        txManager.rollback(txStatus);
+                                    } else {
+                                        txManager.commit(txStatus);
+                                    }
+
+                                }));
+            });
         }
 
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
-    }
-
-    private void newTransactionOrParticipateInExisting(
-            final PlatformTransactionManager txManager,
-            final Consumer<CloseTask> onNewCloseTask) {
-
-        val txTemplate = new TransactionTemplate(txManager);
-        txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-
-        // either participate in existing or create new transaction
-        val txStatus = txManager.getTransaction(txTemplate);
-        if(txStatus==null // in support of JUnit testing (TransactionManagers might be mocked or hollow stubs)
-                || !txStatus.isNewTransaction()) {
-            // we are participating in an exiting transaction (or testing), nothing to do
-            return;
-        }
-
-        // we have created a new transaction, so need to provide a CloseTask
-
-        onNewCloseTask.accept(
-                new CloseTask(
-                        txStatus,
-                        txManager.getClass().getName(), // info to be used for display in case of errors
-                        ()->{
-
-                            if(txStatus.isRollbackOnly()) {
-                                txManager.rollback(txStatus);
-                            } else {
-                                txManager.commit(txStatus);
-                            }
-
-                        }));
     }
 
 
