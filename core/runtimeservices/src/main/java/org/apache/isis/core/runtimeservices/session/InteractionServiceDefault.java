@@ -363,9 +363,9 @@ implements
     }
 
     private void postInteractionOpened(final IsisInteraction interaction) {
-        transactionBoundaryAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary());
+        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeEnteringTransactionalBoundary);
         txBoundaryHandler.onOpen(interaction);
-        transactionBoundaryAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary());
+        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
@@ -386,9 +386,9 @@ implements
             flushException = e;
         }
 
-        transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary());
+        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeLeavingTransactionalBoundary);
         txBoundaryHandler.onClose(interaction);
-        transactionBoundaryAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary());
+        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
         interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)
         interaction.close(); // do this last
