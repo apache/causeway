@@ -363,10 +363,10 @@ implements
     }
 
     private void postInteractionOpened(final IsisInteraction interaction) {
-        transactionBoundaryAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
+        transactionBoundaryAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary());
         txBoundaryHandler.onOpen(interaction);
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        transactionBoundaryAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(interaction, isSynchronizationActive));
+        transactionBoundaryAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(isSynchronizationActive));
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
@@ -388,9 +388,9 @@ implements
         }
 
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
+        transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(isSynchronizationActive));
         txBoundaryHandler.onClose(interaction);
-        transactionBoundaryAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(interaction));
+        transactionBoundaryAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary());
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
         interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)
         interaction.close(); // do this last

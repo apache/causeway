@@ -18,23 +18,21 @@
  */
 package org.apache.isis.core.interaction.scope;
 
-import org.apache.isis.applib.services.iactn.Interaction;
-
 public interface TransactionBoundaryAware {
 
-    default void beforeEnteringTransactionalBoundary(Interaction interaction) {
+    default void beforeEnteringTransactionalBoundary() {
 
     }
 
-    default void afterEnteringTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
+    default void afterEnteringTransactionalBoundary(boolean isSynchronizationActive) {
 
     }
 
-    default void beforeLeavingTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
+    default void beforeLeavingTransactionalBoundary(boolean isSynchronizationActive) {
 
     }
 
-    default void afterLeavingTransactionalBoundary(Interaction interaction) {
+    default void afterLeavingTransactionalBoundary() {
 
     }
 

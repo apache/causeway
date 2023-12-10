@@ -39,7 +39,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -238,7 +237,7 @@ implements
 
     /** INTERACTION BEGIN BOUNDARY */
     @Override
-    public void beforeEnteringTransactionalBoundary(final Interaction interaction) {
+    public void beforeEnteringTransactionalBoundary() {
         txCounter.get().reset();
     }
 
@@ -250,7 +249,7 @@ implements
 
     /** INTERACTION END BOUNDARY */
     @Override
-    public void afterLeavingTransactionalBoundary(final Interaction interaction) {
+    public void afterLeavingTransactionalBoundary() {
         txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
 

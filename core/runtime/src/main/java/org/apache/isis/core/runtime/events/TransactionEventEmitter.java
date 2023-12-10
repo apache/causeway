@@ -25,7 +25,6 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
@@ -57,7 +56,6 @@ implements TransactionSynchronization, TransactionBoundaryAware {
 
     @Override
     public void afterEnteringTransactionalBoundary(
-            final Interaction interaction,
             final boolean isSynchronizationActive) {
         if(isSynchronizationActive) {
             TransactionSynchronizationManager.registerSynchronization(this);
