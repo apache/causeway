@@ -22,11 +22,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Consumer;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 
@@ -78,7 +81,6 @@ implements
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionLayerTracker interactionLayerTracker;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
-
 
     @Inject
     public TransactionServiceSpring(
@@ -323,8 +325,59 @@ implements
         return ex;
     }
 
+    public void onOpen(final @NonNull IsisInteraction interaction) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("opening on {}", _Probe.currentThreadId());
+        }
+
+        if(platformTransactionManagers.isEmpty()) {
+            return; // nothing to do
+        }
+
+        val onCloseTasks = _Lists.<InteractionAwareTransactionalBoundaryHandler.CloseTask>newArrayList(platformTransactionManagers.size());
+        interaction.putAttribute(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle.class, new InteractionAwareTransactionalBoundaryHandler.OnCloseHandle(onCloseTasks));
+
+        platformTransactionManagers.forEach(txManager->newTransactionOrParticipateInExisting(txManager, onCloseTasks::add));
+
+    }
+
+    private void newTransactionOrParticipateInExisting(
+            final PlatformTransactionManager txManager,
+            final Consumer<InteractionAwareTransactionalBoundaryHandler.CloseTask> onNewCloseTask) {
+
+        val txTemplate = new TransactionTemplate(txManager);
+        txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+        // either participate in existing or create new transaction
+        val txStatus = txManager.getTransaction(txTemplate);
+        if(txStatus==null // in support of JUnit testing (TransactionManagers might be mocked or hollow stubs)
+                || !txStatus.isNewTransaction()) {
+            // we are participating in an exiting transaction (or testing), nothing to do
+            return;
+        }
+
+        // we have created a new transaction, so need to provide a CloseTask
+
+        onNewCloseTask.accept(
+                new InteractionAwareTransactionalBoundaryHandler.CloseTask(
+                        txStatus,
+                        txManager.getClass().getName(), // info to be used for display in case of errors
+                        ()->{
+
+                            if(txStatus.isRollbackOnly()) {
+                                txManager.rollback(txStatus);
+                            } else {
+                                txManager.commit(txStatus);
+                            }
+
+                        }));
+    }
+
+
     public void requestRollback(final @NonNull IsisInteraction interaction) {
         Optional.ofNullable(interaction.getAttribute(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle.class))
                 .ifPresent(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle::requestRollback);
     }
+
 }

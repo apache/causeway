@@ -370,7 +370,7 @@ implements
     private void postInteractionOpened(final IsisInteraction interaction) {
         transactionServiceSpring.beforeEnteringTransactionalBoundary();
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeEnteringTransactionalBoundary);
-        txBoundaryHandler.onOpen(interaction);
+        transactionServiceSpring.onOpen(interaction);
         transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
 
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
