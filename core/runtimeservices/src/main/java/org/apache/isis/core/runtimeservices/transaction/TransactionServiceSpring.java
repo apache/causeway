@@ -27,6 +27,9 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
+import org.apache.isis.core.interaction.session.IsisInteraction;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataAccessException;
@@ -51,6 +54,7 @@ import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -319,4 +323,8 @@ implements
         return ex;
     }
 
+    public void requestRollback(final @NonNull IsisInteraction interaction) {
+        Optional.ofNullable(interaction.getAttribute(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle.class))
+                .ifPresent(InteractionAwareTransactionalBoundaryHandler.OnCloseHandle::requestRollback);
+    }
 }

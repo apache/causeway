@@ -360,7 +360,7 @@ implements
             return;
         }
         val interaction = _Casts.<IsisInteraction>uncheckedCast(stack.get(0).getInteraction());
-        txBoundaryHandler.requestRollback(interaction);
+        transactionServiceSpring.requestRollback(interaction);
     }
 
     private boolean isAtTopLevel() {

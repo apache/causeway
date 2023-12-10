@@ -99,10 +99,6 @@ public class InteractionAwareTransactionalBoundaryHandler {
 
     }
 
-    public void requestRollback(final @NonNull IsisInteraction interaction) {
-        Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
-                .ifPresent(OnCloseHandle::requestRollback);
-    }
 
     // -- HELPER
 
@@ -139,21 +135,21 @@ public class InteractionAwareTransactionalBoundaryHandler {
     }
 
     @Value
-    private static class CloseTask {
+    public static class CloseTask {
         private final @NonNull TransactionStatus txStatus;
         private final @NonNull String onErrorInfo;
         private final @NonNull ThrowingRunnable runnable;
     }
 
     @RequiredArgsConstructor
-    private static class OnCloseHandle {
+    public static class OnCloseHandle {
         private final @NonNull List<CloseTask> onCloseTasks;
-        void requestRollback() {
+        public void requestRollback() {
             onCloseTasks.forEach(onCloseTask->{
                 onCloseTask.txStatus.setRollbackOnly();
             });
         }
-        void runOnCloseTasks() {
+        public void runOnCloseTasks() {
             onCloseTasks.forEach(onCloseTask->{
 
                 try {
