@@ -31,7 +31,6 @@ import javax.inject.Named;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,7 +53,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 

@@ -61,7 +61,6 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
@@ -98,7 +97,6 @@ implements
     final SpecificationLoader specificationLoader;
     final ServiceInjector serviceInjector;
 
-    final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     final ClockService clockService;
     final Provider<CommandPublisher> commandPublisherProvider;
     final Provider<TransactionService> transactionServiceProvider;
@@ -117,7 +115,6 @@ implements
             final MetamodelEventService runtimeEventService,
             final SpecificationLoader specificationLoader,
             final ServiceInjector serviceInjector,
-            final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
             final TransactionServiceSpring transactionServiceSpring,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
@@ -127,7 +124,6 @@ implements
         this.runtimeEventService = runtimeEventService;
         this.specificationLoader = specificationLoader;
         this.serviceInjector = serviceInjector;
-        this.txBoundaryHandler = txBoundaryHandler;
         this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
