@@ -107,8 +107,6 @@ implements
 
     final InteractionIdGenerator interactionIdGenerator;
 
-    // to allow implementations to have dependencies back on this service.
-    @Inject @Lazy List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
 
     @Inject
     public InteractionServiceDefault(
@@ -364,10 +362,9 @@ implements
     }
 
     private void postInteractionOpened(final IsisInteraction interaction) {
+
         transactionServiceSpring.beforeEnteringTransactionalBoundary();
-        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeEnteringTransactionalBoundary);
         transactionServiceSpring.onOpen(interaction);
-        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
 
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
@@ -389,9 +386,7 @@ implements
             flushException = e;
         }
 
-        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeLeavingTransactionalBoundary);
         transactionServiceSpring.onClose(interaction);
-        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
         transactionServiceSpring.afterLeavingTransactionalBoundary();
 
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)

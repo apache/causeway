@@ -31,9 +31,11 @@ import javax.inject.Named;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
@@ -82,12 +84,14 @@ implements
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionLayerTracker interactionLayerTracker;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
+    private final Can<TransactionBoundaryAware> transactionBoundaryAwareBeans;
 
     @Inject
     public TransactionServiceSpring(
             final List<PlatformTransactionManager> platformTransactionManagers,
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
-            final InteractionLayerTracker interactionLayerTracker) {
+            final InteractionLayerTracker interactionLayerTracker,
+            final List<TransactionBoundaryAware> transactionBoundaryAwareBeans) {
 
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
         log.info("PlatformTransactionManagers: {}", platformTransactionManagers);
@@ -96,6 +100,9 @@ implements
         log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
 
         this.interactionLayerTracker = interactionLayerTracker;
+
+        this.transactionBoundaryAwareBeans = Can.ofCollection(transactionBoundaryAwareBeans);
+        log.info("TransactionBoundaryAwareBeans: {}", transactionBoundaryAwareBeans);
     }
 
     // -- SPRING INTEGRATION
@@ -328,19 +335,21 @@ implements
 
     public void onOpen(final @NonNull IsisInteraction interaction) {
 
+
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
         }
 
-        if(platformTransactionManagers.isEmpty()) {
-            return; // nothing to do
+        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeEnteringTransactionalBoundary);
+
+        if (!platformTransactionManagers.isEmpty()) {
+            val onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
+            interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
+
+            platformTransactionManagers.forEach(txManager->newTransactionOrParticipateInExisting(txManager, onCloseTasks::add));
         }
 
-        val onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
-        interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
-
-        platformTransactionManagers.forEach(txManager->newTransactionOrParticipateInExisting(txManager, onCloseTasks::add));
-
+        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterEnteringTransactionalBoundary);
     }
 
     private void newTransactionOrParticipateInExisting(
@@ -387,12 +396,14 @@ implements
             log.debug("closing on {}", _Probe.currentThreadId());
         }
 
-        if(platformTransactionManagers.isEmpty()) {
-            return; // nothing to do
+        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::beforeLeavingTransactionalBoundary);
+
+        if (!platformTransactionManagers.isEmpty()) {
+            Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
+                    .ifPresent(OnCloseHandle::runOnCloseTasks);
         }
 
-        Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
-                .ifPresent(OnCloseHandle::runOnCloseTasks);
+        transactionBoundaryAwareBeans.forEach(TransactionBoundaryAware::afterLeavingTransactionalBoundary);
 
     }
 
