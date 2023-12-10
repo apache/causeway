@@ -29,31 +29,43 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.AliasFor;
 
 /**
- * {@code @InteractionScope} is a specialization of {@link Scope @Scope} for a
- * component whose lifecycle is bound to the current top-level Interaction,
- * in other words that it is private to the &quot;current user&quot;.
+ * {@code @TransactionScope} is a specialization of {@link Scope @Scope} for a
+ * service or component whose lifecycle is bound to the current top-level transaction,
+ * within an outer {@link InteractionScope interaction}.
  *
- * <p>Specifically, {@code @InteractionScope} is a <em>composed annotation</em> that
- * acts as a shortcut for {@code @Scope("interaction")}.
+ * <p>Such services should additional implement Spring's
+ * {@link org.springframework.transaction.support.TransactionSynchronization} interface, defining the transaction
+ * lifecycle callbacks.
  *
- * <p>{@code @InteractionScope} may be used as a meta-annotation to create custom
+ * <p>Specifically, {@code @TransactionScope} is a <em>composed annotation</em> that
+ * acts as a shortcut for {@code @Scope("transaction")}.
+ *
+ * <p>{@code @TransactionScope} may be used as a meta-annotation to create custom
  * composed annotations.
+ *
+ * <p> Note that (apparently) the {@link org.springframework.transaction.support.TransactionSynchronization}
+ * infrastructure is only really intended to work with a single {@link org.springframework.transaction.PlatformTransactionManager}.
+ * And indeed, this is going to be typical case.  However, our framework code does at least admit the possibility of
+ * multiple {@link org.springframework.transaction.PlatformTransactionManager}s being defined in the app.  If that is
+ * the case, then (I believe) the callbacks of {@link org.springframework.transaction.support.TransactionSynchronization} might
+ * be called multiple times, once per {@link org.springframework.transaction.PlatformTransactionManager}.  The framework
+ * currently doesn't provide any way to distinguish between these calls.
  *
  * @since 2.0 {@index}
  * @see org.springframework.web.context.annotation.SessionScope
  * @see org.springframework.web.context.annotation.ApplicationScope
- * @see TransactionScope
- * @see org.springframework.context.annotation.Scope
+ * @see InteractionScope
+ * @see Scope
  * @see org.springframework.stereotype.Component
  * @see org.springframework.context.annotation.Bean
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Scope(InteractionScope.SCOPE_NAME)
-public @interface InteractionScope {
+@Scope(TransactionScope.SCOPE_NAME)
+public @interface TransactionScope {
 
-    String SCOPE_NAME = "interaction";
+    String SCOPE_NAME = "transaction";
 
     /**
      * Alias for {@link Scope#proxyMode}.

@@ -33,7 +33,12 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 
+import org.apache.isis.core.runtime.events._Xray;
+import org.apache.isis.core.transaction.events.TransactionCompletionStatus;
+
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
@@ -41,6 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -82,25 +88,30 @@ implements
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionLayerTracker interactionLayerTracker;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
-    private final Can<TransactionBoundaryAware> transactionBoundaryAwareBeans;
+    private final ConfigurableListableBeanFactory configurableListableBeanFactory;
+//    private final Can<TransactionBoundaryAware> transactionBoundaryAwareBeans;
 
     @Inject
     public TransactionServiceSpring(
             final List<PlatformTransactionManager> platformTransactionManagers,
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
             final InteractionLayerTracker interactionLayerTracker,
-            final List<TransactionBoundaryAware> transactionBoundaryAwareBeans) {
+            final ConfigurableListableBeanFactory configurableListableBeanFactory
+//            , final List<TransactionBoundaryAware> transactionBoundaryAwareBeans
+    ) {
 
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
         log.info("PlatformTransactionManagers: {}", platformTransactionManagers);
+
+        this.configurableListableBeanFactory = configurableListableBeanFactory;
 
         this.persistenceExceptionTranslators = Can.ofCollection(persistenceExceptionTranslators);
         log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
 
         this.interactionLayerTracker = interactionLayerTracker;
 
-        this.transactionBoundaryAwareBeans = Can.ofCollection(transactionBoundaryAwareBeans);
-        log.info("TransactionBoundaryAwareBeans: {}", transactionBoundaryAwareBeans);
+//        this.transactionBoundaryAwareBeans = Can.ofCollection(transactionBoundaryAwareBeans);
+//        log.info("TransactionBoundaryAwareBeans: {}", transactionBoundaryAwareBeans);
     }
 
     // -- SPRING INTEGRATION
@@ -115,24 +126,30 @@ implements
         try {
 
             TransactionStatus tx = platformTransactionManager.getTransaction(def);
-            if(tx.isNewTransaction()) {
-                transactionBoundaryAwareBeans.forEach(tba -> tba.afterEnteringTransactionalBoundary(platformTransactionManager));
+//            if(tx.isNewTransaction()) {
+//                transactionBoundaryAwareBeans.forEach(tba -> tba.afterEnteringTransactionalBoundary(platformTransactionManager));
+//            }
+            if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
+                        .values()
+                        .forEach(TransactionSynchronizationManager::registerSynchronization);
             }
+
 
             result = Try.call(callable)
                     .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
 
-            if(tx.isNewTransaction()) {
-                transactionBoundaryAwareBeans.forEach(tba -> tba.beforeLeavingTransactionalBoundary(platformTransactionManager));
-            }
+//            if(tx.isNewTransaction()) {
+//                transactionBoundaryAwareBeans.forEach(tba -> tba.beforeLeavingTransactionalBoundary(platformTransactionManager));
+//            }
             if(result.isFailure()) {
                 platformTransactionManager.rollback(tx);
             } else {
                 platformTransactionManager.commit(tx);
             }
-            if(tx.isNewTransaction()) {
-                transactionBoundaryAwareBeans.forEach(tba -> tba.afterLeavingTransactionalBoundary(platformTransactionManager));
-            }
+//            if(tx.isNewTransaction()) {
+//                transactionBoundaryAwareBeans.forEach(tba -> tba.afterLeavingTransactionalBoundary(platformTransactionManager));
+//            }
         } catch (Exception ex) {
 
             return result!=null
@@ -254,17 +271,6 @@ implements
 
     private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
 
-    /** TRANSACTION END BOUNDARY */
-
-    /**
-     * This is called by TransactionEventEmitter, which is a TransactionBoundaryAware bean.
-     *
-     * @param event
-     */
-    @EventListener(TransactionAfterCompletionEvent.class)
-    public void onTransactionEnded(final TransactionAfterCompletionEvent event) {
-        txCounter.get().increment();
-    }
 
     // -- HELPER
 
@@ -356,12 +362,19 @@ implements
                 // either participate in existing or create new transaction
                 TransactionStatus txStatus = txManager.getTransaction(def);
 
-                if(txStatus==null // in support of JUnit testing (TransactionManagers might be mocked or hollow stubs)
-                        || !txStatus.isNewTransaction()) {
+                if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                    configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
+                            .values()
+                            .forEach(TransactionSynchronizationManager::registerSynchronization);
+                }
+
+                if(
+//                        txStatus==null || // in support of JUnit testing (TransactionManagers might be mocked or hollow stubs)
+                    !txStatus.isNewTransaction()) {
                     // we are participating in an exiting transaction (or testing), nothing to do
                     return;
                 }
-                transactionBoundaryAwareBeans.forEach(tbab -> tbab.afterEnteringTransactionalBoundary(txManager));
+//                transactionBoundaryAwareBeans.forEach(tbab -> tbab.afterEnteringTransactionalBoundary(txManager));
 
                 // we have created a new transaction, so need to provide a CloseTask
                 onCloseTasks.add(
@@ -369,13 +382,17 @@ implements
                             txStatus,
                             txManager.getClass().getName(), // info to be used for display in case of errors
                             () -> {
-                                transactionBoundaryAwareBeans.forEach(tbab -> tbab.beforeLeavingTransactionalBoundary(txManager));
+//                                transactionBoundaryAwareBeans.forEach(tbab -> tbab.beforeLeavingTransactionalBoundary(txManager));
+                                _Xray.txBeforeCompletion(interactionLayerTracker, "tx: beforeCompletion");
                                 if (txStatus.isRollbackOnly()) {
                                     txManager.rollback(txStatus);
                                 } else {
                                     txManager.commit(txStatus);
+                                    val event = TransactionCompletionStatus.COMMITTED;
+                                    _Xray.txAfterCompletion(interactionLayerTracker, String.format("tx: afterCompletion (%s)", event.name()));
                                 }
-                                transactionBoundaryAwareBeans.forEach(tbab -> tbab.afterLeavingTransactionalBoundary(txManager));
+//                                transactionBoundaryAwareBeans.forEach(tbab -> tbab.afterLeavingTransactionalBoundary(txManager));
+                                txCounter.get().increment();
                             }
                         )
                 );

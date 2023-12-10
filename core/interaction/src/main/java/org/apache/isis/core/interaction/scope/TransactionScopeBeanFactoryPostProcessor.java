@@ -23,6 +23,7 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.SimpleTransactionScope;
 
 import lombok.val;
 
@@ -30,17 +31,14 @@ import lombok.val;
  * @since 2.0
  */
 @Component
-public class InteractionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+public class TransactionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
-    public static final String SCOPE_NAME = org.apache.isis.applib.annotation.InteractionScope.SCOPE_NAME;
+    public static final String SCOPE_NAME = org.apache.isis.applib.annotation.TransactionScope.SCOPE_NAME;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        val interactionScope = new InteractionScope(beanFactory);
-        beanFactory.registerScope(SCOPE_NAME, interactionScope);
+        val transactionScope = new SimpleTransactionScope();
+        beanFactory.registerScope(SCOPE_NAME, transactionScope);
     }
 
-    public static InteractionScopeLifecycleHandler lookupScope(ConfigurableBeanFactory beanFactory) throws BeansException {
-        return (InteractionScopeLifecycleHandler) beanFactory.getRegisteredScope(SCOPE_NAME);
-    }
 }

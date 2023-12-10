@@ -32,12 +32,17 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.isis.applib.annotation.TransactionScope;
+
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.EntityChangeKind;
@@ -78,24 +83,22 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * This service keeps track of all of the changes within a transactoin, for entities for which entity property change
+ * This object keeps track of all of the changes within a transaction, for entities for which entity property change
  * publishing is enabled (typically using the
  * {@link DomainObject#entityChangePublishing() @DomainObject(entityChangePublishing=)} annotation attribute.
  *
  * <p>
- * The service is {@link InteractionScope}d.  In theory this could happen multiple times per interaction, so the
- * data structures are cleared on each commit for potential reuse within the same interaction.  (Of course, because the
- * service <i>is</i> interaction-scoped, a new instance of the service is created for each interaction, and so the
- * data held in this service is private to each user's interaction.
+ * The service is transaction-scoped and implements Spring's TransactionSynchronization interface, meaning that
+ * Spring is responsible for calling it thereafter.
  * </p>
  *
  * @since 2.0 {@index}
  */
 @Service
+@TransactionScope
 @Named("isis.persistence.commons.EntityChangeTrackerDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("default")
-@InteractionScope   // see note above regarding this
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class EntityChangeTrackerDefault
@@ -103,8 +106,8 @@ implements
     MetricsService,
     EntityChangeTracker,
     HasEnlistedEntityPropertyChanges,
-    HasEnlistedEntityChanges {
-
+    HasEnlistedEntityChanges,
+    TransactionSynchronization {
 
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
     private final EntityChangesPublisher entityChangesPublisher;

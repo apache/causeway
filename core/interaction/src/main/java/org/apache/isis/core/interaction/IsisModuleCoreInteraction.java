@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.interaction;
 
+import org.apache.isis.core.interaction.scope.TransactionScopeBeanFactoryPostProcessor;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -27,6 +29,7 @@ import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostPro
 @Import({
 
     InteractionScopeBeanFactoryPostProcessor.class,
+    TransactionScopeBeanFactoryPostProcessor.class,
 
 })
 public class IsisModuleCoreInteraction {

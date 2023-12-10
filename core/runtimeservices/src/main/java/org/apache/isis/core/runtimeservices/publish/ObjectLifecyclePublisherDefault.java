@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.isis.applib.annotation.TransactionScope;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Service
+@TransactionScope
 @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectLifecyclePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
