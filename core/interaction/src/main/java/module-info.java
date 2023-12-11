@@ -18,7 +18,6 @@
  */
 module org.apache.isis.core.interaction {
     exports org.apache.isis.core.interaction;
-    exports org.apache.isis.core.interaction.integration;
     exports org.apache.isis.core.interaction.scope;
     exports org.apache.isis.core.interaction.session;
 

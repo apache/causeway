@@ -88,6 +88,9 @@ implements
     InteractionService,
     InteractionLayerTracker {
 
+    // TODO: reading the javadoc for TransactionSynchronizationManager and looking at the implementations
+    //  of TransactionSynchronization (in particular SpringSessionSynchronization), I suspect that this
+    //  ThreadLocal would be considered bad practice and instead should be managed using the TransactionSynchronization mechanism.
     final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
 
     final MetamodelEventService runtimeEventService;

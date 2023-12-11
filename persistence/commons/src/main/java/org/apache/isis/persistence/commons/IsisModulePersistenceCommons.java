@@ -32,7 +32,6 @@ import org.apache.isis.persistence.commons.integration.changetracking.PreAndPost
 
         // @Service's
         EntityChangeTrackerDefault.class,
-        EntityChangeTrackerDefault.TransactionSubscriber.class,
         PreAndPostValueEvaluatorServiceDefault.class,
 })
 public class IsisModulePersistenceCommons {

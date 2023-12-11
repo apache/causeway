@@ -27,31 +27,25 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.TransactionScope;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.EntityChangeKind;
-import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
@@ -73,7 +67,8 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
-import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
+
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -92,12 +87,13 @@ import lombok.extern.log4j.Log4j2;
  * Spring is responsible for calling it thereafter.
  * </p>
  *
+ * <p>NOTE: this service implements {@link org.springframework.core.Ordered} to ensure it isn't called last by {@link TransactionSynchronizationManager}.
+ *
  * @since 2.0 {@index}
  */
 @Service
 @TransactionScope
 @Named("isis.persistence.commons.EntityChangeTrackerDefault")
-@Priority(PriorityPrecedence.EARLY)
 @Qualifier("default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
@@ -107,7 +103,14 @@ implements
     EntityChangeTracker,
     HasEnlistedEntityPropertyChanges,
     HasEnlistedEntityChanges,
-    TransactionSynchronization {
+    TransactionSynchronization,
+    Ordered {
+
+    @Programmatic
+    @Override
+    public int getOrder() {
+        return PriorityPrecedence.EARLY;
+    }
 
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
     private final EntityChangesPublisher entityChangesPublisher;
@@ -196,63 +199,20 @@ implements
         return false;
     }
 
-    /**
-     * Subscribes to transactions and forwards onto the current interaction's EntityChangeTracker, if available.
-     *
-     * <p>
-     *     Note that this service has singleton-scope, unlike {@link EntityChangeTrackerDefault} which has
-     *     {@link InteractionScope interaction scope}. The problem with using {@link EntityChangeTrackerDefault} as
-     *     the direct subscriber is that if there's no {@link Interaction}, then Spring will fail to activate an instance resulting in an
-     *     {@link org.springframework.beans.factory.support.ScopeNotActiveException}.  Now, admittedly that exception
-     *     gets swallowed in the call stack somewhere, but it's still not pretty.
-     * </p>
-     *
-     * <p>
-     *     This design, instead, at least lets us check if there's an interaction in scope, and effectively ignore
-     *     the call if not.
-     * </p>
-     */
-    @Component
-    @Named("isis.persistence.commons.EntityChangeTrackerDefault.TransactionSubscriber")
-    @Priority(PriorityPrecedence.EARLY)
-    @Qualifier("default")
-    @RequiredArgsConstructor(onConstructor_ = {@Inject})
-    public static class TransactionSubscriber {
 
-        private final InteractionService interactionService;
-        private final Provider<EntityChangeTrackerDefault> entityChangeTrackerProvider;
-
-        /**
-         * TRANSACTION END BOUNDARY
-         * @apiNote intended to be called during before transaction completion by the framework internally
-         */
-        @EventListener(value = TransactionBeforeCompletionEvent.class)
-        @Order(PriorityPrecedence.LATE)
-        public void onTransactionCompleting(final TransactionBeforeCompletionEvent event) {
-
-            if(!interactionService.isInInteraction()) {
-                // discard request is there is no interaction in scope.
-                // this shouldn't ever really occur, but some low-level (could be improved?) integration tests do
-                // hit this case.
-                return;
-            }
-            entityChangeTracker().onTransactionCompleting(event);
-        }
-
-        private EntityChangeTrackerDefault entityChangeTracker() {
-            return entityChangeTrackerProvider.get();
-        }
-    }
-
-    /**
-     * As called by {@link TransactionSubscriber}, so long as there is an {@link Interaction} in
-     * {@link InteractionScope scope}.
-     */
-    void onTransactionCompleting(final TransactionBeforeCompletionEvent event) {
+    @Override
+    public void beforeCompletion() {
         try {
             doPublish();
         } finally {
-            postPublishing();
+            log.debug("purging entity change records");
+
+            enlistedPropertyChangeRecordsById.clear();
+            entityPropertyChangeRecordsForPublishing.clear();
+
+            changeKindByEnlistedAdapter.clear();
+            entityChangeEventCount.reset();
+            numberEntitiesLoaded.reset();
         }
     }
 
@@ -262,17 +222,6 @@ implements
         log.debug("about to publish entity changes");
         entityPropertyChangePublisher.publishChangedProperties();
         entityChangesPublisher.publishChangingEntities(this);
-    }
-
-    private void postPublishing() {
-        log.debug("purging entity change records");
-
-        enlistedPropertyChangeRecordsById.clear();
-        entityPropertyChangeRecordsForPublishing.clear();
-
-        changeKindByEnlistedAdapter.clear();
-        entityChangeEventCount.reset();
-        numberEntitiesLoaded.reset();
     }
 
     private void enableCommandPublishing() {

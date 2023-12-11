@@ -68,8 +68,10 @@ public @interface TransactionScope {
     String SCOPE_NAME = "transaction";
 
     /**
-     * Alias for {@link Scope#proxyMode}.
-     * <p>Defaults to {@link ScopedProxyMode#TARGET_CLASS}.
+     * Proxying <i>must</i> be enabled, because we inject {@link TransactionScope}d beans
+     * into beans with wider scopes.
+     *
+     * <p>Alias for {@link Scope#proxyMode}.
      */
     @AliasFor(annotation = Scope.class)
     ScopedProxyMode proxyMode() default ScopedProxyMode.TARGET_CLASS;

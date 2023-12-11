@@ -79,6 +79,7 @@ module org.apache.isis.core.runtimeservices {
     requires spring.core;
     requires spring.tx;
     requires org.apache.isis.core.codegen.bytebuddy;
+    requires spring.aop;
 
     opens org.apache.isis.core.runtimeservices.wrapper;
     opens org.apache.isis.core.runtimeservices.wrapper.proxy; //to org.apache.isis.core.codegen.bytebuddy

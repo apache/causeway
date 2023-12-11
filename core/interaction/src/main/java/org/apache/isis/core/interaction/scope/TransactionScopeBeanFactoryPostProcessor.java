@@ -20,10 +20,8 @@ package org.apache.isis.core.interaction.scope;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.SimpleTransactionScope;
 
 import lombok.val;
 
@@ -37,7 +35,7 @@ public class TransactionScopeBeanFactoryPostProcessor implements BeanFactoryPost
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        val transactionScope = new SimpleTransactionScope();
+        val transactionScope = new StackedTransactionScope();
         beanFactory.registerScope(SCOPE_NAME, transactionScope);
     }
 
