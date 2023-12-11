@@ -32,7 +32,7 @@ import lombok.val;
 @Component
 public class InteractionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
-    public static final String SCOPE_NAME = "interaction";
+    public static final String SCOPE_NAME = org.apache.causeway.applib.annotation.InteractionScope.SCOPE_NAME;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {

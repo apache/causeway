@@ -32,7 +32,6 @@ import org.apache.causeway.persistence.commons.integration.changetracking.PreAnd
 
         // @Service's
         EntityChangeTrackerDefault.class,
-        EntityChangeTrackerDefault.TransactionSubscriber.class,
         PreAndPostValueEvaluatorServiceDefault.class,
 })
 public class CausewayModulePersistenceCommons {

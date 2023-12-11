@@ -69,18 +69,17 @@ public class SessionSubscriberForSessionLog implements SessionSubscriber {
     public void log(final Type type, final String username, final Date date, final CausedBy causedBy, final UUID sessionGuid, final String httpSessionId) {
         interactionService.runAnonymous(() -> {
             transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                val sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionGuid(sessionGuid);
                 if (type == Type.LOGIN) {
-                    sessionLogEntryRepository.create(username, sessionGuid, httpSessionId, causedBy, Timestamp.from(date.toInstant()));
+                    if (sessionLogEntryIfAny.isEmpty()) {
+                        sessionLogEntryRepository.create(username, sessionGuid, httpSessionId, causedBy, Timestamp.from(date.toInstant()));
+                    }
                 } else {
-
-                    val sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionGuid(sessionGuid);
-                    sessionLogEntryIfAny
-                            .ifPresent(entry -> {
-                                        entry.setLogoutTimestamp(Timestamp.from(date.toInstant()));
-                                        entry.setCausedBy(causedBy);
-                                        transactionService.flushTransaction();
-                                    }
-                            );
+                    sessionLogEntryIfAny.ifPresent(entry -> {
+                        entry.setLogoutTimestamp(Timestamp.from(date.toInstant()));
+                        entry.setCausedBy(causedBy);
+                        transactionService.flushTransaction();
+                    });
                 }
             })
             .ifFailureFail(); // throw if rolled back

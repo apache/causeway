@@ -29,9 +29,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
-import org.apache.causeway.core.transaction.events.TransactionAfterCompletionEvent;
-import org.apache.causeway.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;

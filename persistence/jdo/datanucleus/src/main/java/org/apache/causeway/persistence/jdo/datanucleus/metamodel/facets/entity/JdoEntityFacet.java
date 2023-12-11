@@ -32,6 +32,7 @@ import javax.jdo.PersistenceManager;
 import org.datanucleus.api.jdo.JDOQuery;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.query.AllInstancesQuery;

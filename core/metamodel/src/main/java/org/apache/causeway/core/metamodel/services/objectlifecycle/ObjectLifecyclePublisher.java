@@ -32,6 +32,10 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
  * Responsible for collecting and then passing along changes (to the EntityChangeTracker, in persistence commons) so
  * that they can be published; and is responsible for calling the various persistence call-back facets.
  *
+ * <p>
+ *     NOTE: this should really have been called ObjectLifecyclePublisher.
+ * </p>
+ *
  * @since 2.0 {index}
  */
 public interface ObjectLifecyclePublisher {

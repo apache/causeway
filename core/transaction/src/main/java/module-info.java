@@ -34,4 +34,5 @@ module org.apache.causeway.core.transaction {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+    requires java.transaction;
 }

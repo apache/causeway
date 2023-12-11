@@ -46,8 +46,6 @@ import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.transaction.events.TransactionAfterCompletionEvent;
-import org.apache.causeway.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.Getter;
 import lombok.NonNull;

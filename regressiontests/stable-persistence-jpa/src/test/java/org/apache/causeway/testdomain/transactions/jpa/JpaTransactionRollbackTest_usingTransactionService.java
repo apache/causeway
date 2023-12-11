@@ -42,8 +42,6 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.transaction.events.TransactionAfterCompletionEvent;
-import org.apache.causeway.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;

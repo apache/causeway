@@ -16,17 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.transaction.events;
+package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import lombok.Value;
+public enum IntrospectionState implements Comparable<IntrospectionState> {
+    /**
+     * At this stage, {@link LogicalTypeFacet} only.
+     */
+    NOT_INTROSPECTED,
 
-@Value
-public class TransactionBeforeCompletionEvent {
+    /**
+     * Interim stage, to avoid infinite loops while on way to being {@link #TYPE_INTROSPECTED}
+     */
+    TYPE_BEING_INTROSPECTED,
 
-    private final static TransactionBeforeCompletionEvent INSTANCE = new TransactionBeforeCompletionEvent();
+    /**
+     * Type has been introspected (but not its members).
+     */
+    TYPE_INTROSPECTED,
 
-    public static TransactionBeforeCompletionEvent instance() {
-        return INSTANCE;
-    }
+    /**
+     * Interim stage, to avoid infinite loops while on way to being {@link #FULLY_INTROSPECTED}
+     */
+    MEMBERS_BEING_INTROSPECTED,
+
+    /**
+     * Fully introspected... class and also its members.
+     */
+    FULLY_INTROSPECTED
 
 }
