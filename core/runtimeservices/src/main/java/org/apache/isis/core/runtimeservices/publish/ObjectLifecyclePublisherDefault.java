@@ -26,13 +26,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.isis.applib.annotation.TransactionScope;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.TransactionScope;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Either;

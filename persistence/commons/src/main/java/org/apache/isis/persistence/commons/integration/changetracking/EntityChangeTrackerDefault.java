@@ -31,18 +31,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.TransactionScope;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.TransactionScope;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
@@ -68,8 +68,6 @@ import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
 
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -83,11 +81,10 @@ import lombok.extern.log4j.Log4j2;
  * {@link DomainObject#entityChangePublishing() @DomainObject(entityChangePublishing=)} annotation attribute.
  *
  * <p>
- * The service is transaction-scoped and implements Spring's TransactionSynchronization interface, meaning that
- * Spring is responsible for calling it thereafter.
+ * The service is {@link TransactionScope transaction-scope}d and implements Spring's {@link TransactionSynchronization}
+ * interface, meaning that Spring will call the {@link #beforeCompletion()} callback.  This service also implements
+ * {@link org.springframework.core.Ordered} to ensure it isn't called last by {@link TransactionSynchronizationManager}.
  * </p>
- *
- * <p>NOTE: this service implements {@link org.springframework.core.Ordered} to ensure it isn't called last by {@link TransactionSynchronizationManager}.
  *
  * @since 2.0 {@index}
  */
@@ -203,7 +200,12 @@ implements
     @Override
     public void beforeCompletion() {
         try {
-            doPublish();
+            _Xray.publish(this, interactionProviderProvider);
+
+            log.debug("about to publish entity changes");
+            entityPropertyChangePublisher.publishChangedProperties();
+            entityChangesPublisher.publishChangingEntities(this);
+
         } finally {
             log.debug("purging entity change records");
 
@@ -214,14 +216,6 @@ implements
             entityChangeEventCount.reset();
             numberEntitiesLoaded.reset();
         }
-    }
-
-    private void doPublish() {
-        _Xray.publish(this, interactionProviderProvider);
-
-        log.debug("about to publish entity changes");
-        entityPropertyChangePublisher.publishChangedProperties();
-        entityChangesPublisher.publishChangingEntities(this);
     }
 
     private void enableCommandPublishing() {

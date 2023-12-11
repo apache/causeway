@@ -43,8 +43,6 @@ implements BrandingUiService {
 
     @Inject
     public BrandingUiServiceDefault(final IsisConfiguration isisConfiguration) {
-        //TODO application name/logo borrowed from Wicket's configuration,
-        // we might generalize this config option to all viewers
         this.appConfig = isisConfiguration.getViewer().getCommon().getApplication();
     }
 
