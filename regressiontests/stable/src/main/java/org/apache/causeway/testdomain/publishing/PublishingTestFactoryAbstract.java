@@ -24,6 +24,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 
+import org.apache.causeway.applib.annotation.TransactionScope;
+
+import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
+
 import org.junit.jupiter.api.DynamicTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -46,6 +50,8 @@ import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+
+import org.springframework.transaction.support.TransactionSynchronization;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -158,13 +164,17 @@ public abstract class PublishingTestFactoryAbstract {
      * to, until the end of the test's exclusive transaction.
      */
     @Service
-    public static class CommitListener {
+    @TransactionScope
+    public static class CommitListener implements TransactionSynchronization {
 
         private PublishingTestContext testContext;
 
-        /** transaction end boundary (pre) */
-        @EventListener(TransactionBeforeCompletionEvent.class)
-        public void onPreCompletion(final TransactionBeforeCompletionEvent event) {
+//        /** transaction end boundary (pre) */
+//      @EventListener(TransactionBeforeCompletionEvent.class)
+//      public void onPreCompletion(final TransactionBeforeCompletionEvent event) {
+
+        @Override
+        public void beforeCompletion() {
             _Probe.errOut("=== TRANSACTION before completion");
             if(testContext!=null) {
                 testContext.getTraceLog().log("3.1 pre-commit event is occurring");
@@ -172,13 +182,18 @@ public abstract class PublishingTestFactoryAbstract {
             }
         }
 
-        /** transaction end boundary (post) */
-        @EventListener(TransactionAfterCompletionEvent.class)
-        public void onPostCompletion(final TransactionAfterCompletionEvent event) {
+//        /** transaction end boundary (post) */
+//        @EventListener(TransactionAfterCompletionEvent.class)
+//        public void onPostCompletion(final TransactionAfterCompletionEvent event) {
+
+        @Override
+        public void afterCompletion(int status) {
+
+            TransactionCompletionStatus transactionCompletionStatus = TransactionCompletionStatus.forStatus(status);
             _Probe.errOut("=== TRANSACTION after completion");
             if(testContext!=null) {
                 try {
-                    if(event.isCommitted()) {
+                    if(transactionCompletionStatus.isCommitted()) {
                         testContext.getTraceLog().log("3.2 post-commit event is occurring");
                         testContext.runVerify(VerificationStage.POST_COMMIT);
                     } else {

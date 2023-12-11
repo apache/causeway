@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2002-2020 the original author or authors.
  *
@@ -14,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.apache.causeway.core.interaction.scope;
+package org.apache.causeway.core.transaction.scope;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

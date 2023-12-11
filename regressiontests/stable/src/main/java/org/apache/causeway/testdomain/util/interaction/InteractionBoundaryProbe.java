@@ -22,6 +22,10 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.annotation.TransactionScope;
+
+import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
+
 import org.junit.jupiter.api.Assertions;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -31,42 +35,56 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
+import org.springframework.transaction.support.TransactionSynchronization;
+
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
+@TransactionScope
 @Log4j2
-public class InteractionBoundaryProbe implements TransactionBoundaryAware {
+public class InteractionBoundaryProbe implements TransactionSynchronization {
 
     @Inject private KVStoreForTesting kvStoreForTesting;
 
-    /** INTERACTION BEGIN BOUNDARY */
-    @Override
-    public void beforeEnteringTransactionalBoundary(Interaction interaction) {
-        log.debug("iaStarted");
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
-    }
+//    /** INTERACTION BEGIN BOUNDARY */
+//    @Override
+//    public void beforeEnteringTransactionalBoundary(Interaction interaction) {
+//        log.debug("iaStarted");
+//        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
+//    }
 
-    /** INTERACTION END BOUNDARY */
-    @Override
-    public void afterLeavingTransactionalBoundary(Interaction interaction) {
-        log.debug("iaEnded");
-        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
-    }
+//    /** INTERACTION END BOUNDARY */
+//    @Override
+//    public void afterLeavingTransactionalBoundary(Interaction interaction) {
+//        log.debug("iaEnded");
+//        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
+//    }
 
-    /** TRANSACTION BEGIN BOUNDARY */
-    @EventListener(TransactionBeforeCompletionEvent.class) @Order(PriorityPrecedence.FIRST + 100)
-    public void onTransactionEnding(TransactionBeforeCompletionEvent event) {
+
+//    /** TRANSACTION BEGIN BOUNDARY */
+//    @EventListener(TransactionBeforeCompletionEvent.class) @Order(PriorityPrecedence.FIRST + 100)
+//    public void onTransactionEnding(TransactionBeforeCompletionEvent event) {
+
+    @Override
+    public void beforeCompletion() {
+        TransactionSynchronization.super.beforeCompletion();
+
         log.debug("txStarted");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
     }
 
-    /** TRANSACTION END BOUNDARY */
-    @EventListener(TransactionAfterCompletionEvent.class) @Order(PriorityPrecedence.LAST - 100)
-    public void onTransactionEnded(TransactionAfterCompletionEvent event) {
-        if(event.isRolledBack()) {
+//    /** TRANSACTION END BOUNDARY */
+//    @EventListener(TransactionAfterCompletionEvent.class) @Order(PriorityPrecedence.LAST - 100)
+//    public void onTransactionEnded(TransactionAfterCompletionEvent event) {
+
+    @Override
+    public void afterCompletion(int status) {
+        TransactionCompletionStatus transactionCompletionStatus = TransactionCompletionStatus.forStatus(status);
+
+        if(transactionCompletionStatus.isRolledBack()) {
             kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txRolledBack");
-        } else if(event.isCommitted()) {
+        } else if(transactionCompletionStatus.isCommitted()) {
             kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txCommitted");
         }
     }
@@ -129,6 +147,5 @@ public class InteractionBoundaryProbe implements TransactionBoundaryAware {
 
         return result;
     }
-
 
 }

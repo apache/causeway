@@ -42,6 +42,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 
 public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegrationTestAbstract {
 
@@ -60,18 +62,25 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
         @Bean
         @Singleton
         public PlatformTransactionManager platformTransactionManager() {
-            return new PlatformTransactionManager() {
+            return new AbstractPlatformTransactionManager() {
                 @Override
-                public void rollback(final TransactionStatus status) throws TransactionException {
+                protected Object doGetTransaction() throws TransactionException {
+                    return new Object();
                 }
 
                 @Override
-                public TransactionStatus getTransaction(final TransactionDefinition definition) throws TransactionException {
-                    return null;
+                protected void doBegin(Object transaction, TransactionDefinition definition) throws TransactionException {
+
                 }
 
                 @Override
-                public void commit(final TransactionStatus status) throws TransactionException {
+                protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
+
+                }
+
+                @Override
+                protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
+
                 }
             };
         }

@@ -21,6 +21,8 @@ package org.apache.causeway.testdomain.conf;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.causeway.applib.annotation.TransactionScope;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -41,13 +43,16 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
+import org.springframework.transaction.support.TransactionSynchronization;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @Import({
     CausewayModuleCoreRuntimeServices.class,
     CausewayModuleSecurityBypass.class,
-    Configuration_headless.HeadlessCommandSupport.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
     DomainObjectTesterFactory.class // Helper for JUnit Tests
 })
@@ -56,53 +61,29 @@ import lombok.RequiredArgsConstructor;
 })
 public class Configuration_headless {
 
-    @Service
-    @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-    @RequiredArgsConstructor(onConstructor_ = {@Inject})
-    public static class HeadlessCommandSupport
-    implements TransactionBoundaryAware {
-
-        @Override
-        public void beforeEnteringTransactionalBoundary(final Interaction interaction) {
-//            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
-            setupCommandCreateIfMissing();
-        }
-
-        @Override
-        public void afterLeavingTransactionalBoundary(final Interaction interaction) {
-//            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interaction.getInteractionId());
-        }
-
-        public void setupCommandCreateIfMissing() {
-
-//            val interactionProvider = interactionProviderProvider.get();
-//            @SuppressWarnings("unused")
-//            final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
-//                    .orElseGet(()->{
-//                        val newCommand = new Command();
-//                        val newInteraction = new Interaction(newCommand);
-//                        interactionProvider.setInteraction(newInteraction);
-//                        return newInteraction;
-//                    });
-        }
-
-    }
 
     @Bean @Singleton
     public PlatformTransactionManager platformTransactionManager() {
-        return new PlatformTransactionManager() {
+        return new AbstractPlatformTransactionManager() {
 
             @Override
-            public void rollback(final TransactionStatus status) throws TransactionException {
-            }
-
-            @Override
-            public TransactionStatus getTransaction(final TransactionDefinition definition) throws TransactionException {
+            protected Object doGetTransaction() throws TransactionException {
                 return null;
             }
 
             @Override
-            public void commit(final TransactionStatus status) throws TransactionException {
+            protected void doBegin(Object transaction, TransactionDefinition definition) throws TransactionException {
+
+            }
+
+            @Override
+            protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
+
+            }
+
+            @Override
+            protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
+
             }
         };
     }

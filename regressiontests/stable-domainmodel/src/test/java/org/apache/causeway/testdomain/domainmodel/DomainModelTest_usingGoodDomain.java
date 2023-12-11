@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -130,7 +132,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class DomainModelTest_usingGoodDomain {
+class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @Inject private MetaModelService metaModelService;
     @Inject private JaxbService jaxbService;

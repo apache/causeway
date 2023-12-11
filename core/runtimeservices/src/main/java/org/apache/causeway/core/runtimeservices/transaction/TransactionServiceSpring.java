@@ -28,6 +28,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -86,7 +88,6 @@ implements
     private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
     private final ConfigurableListableBeanFactory configurableListableBeanFactory;
-//    private final Can<TransactionBoundaryAware> transactionBoundaryAwareBeans;
 
     @Inject
     public TransactionServiceSpring(
@@ -94,7 +95,6 @@ implements
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
             final Provider<InteractionLayerTracker> interactionLayerTrackerProvider,
             final ConfigurableListableBeanFactory configurableListableBeanFactory
-//            , final List<TransactionBoundaryAware> transactionBoundaryAwareBeans
     ) {
 
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
@@ -106,12 +106,9 @@ implements
         log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
 
         this.interactionLayerTrackerProvider = interactionLayerTrackerProvider;
-
-//        this.transactionBoundaryAwareBeans = Can.ofCollection(transactionBoundaryAwareBeans);
-//        log.info("TransactionBoundaryAwareBeans: {}", transactionBoundaryAwareBeans);
     }
 
-    // -- SPRING INTEGRATION
+    // -- API
 
     @Override
     public <T> Try<T> callTransactional(final TransactionDefinition def, final Callable<T> callable) {
@@ -123,26 +120,22 @@ implements
         try {
 
             TransactionStatus txStatus = platformTransactionManager.getTransaction(def);
-//            if(tx.isNewTransaction()) {
-//                transactionBoundaryAwareBeans.forEach(tba -> tba.afterEnteringTransactionalBoundary(platformTransactionManager));
-//            }
             registerTransactionSynchronizations(txStatus);
 
 
-            result = Try.call(callable)
+            result = Try.call(() -> {
+                        final T callResult = callable.call();
+                        // we flush here to ensure that the result captures any exception, eg from a declarative constraint violation
+                        txStatus.flush();
+                        return callResult;
+                    })
                     .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
 
-//            if(tx.isNewTransaction()) {
-//                transactionBoundaryAwareBeans.forEach(tba -> tba.beforeLeavingTransactionalBoundary(platformTransactionManager));
-//            }
             if(result.isFailure()) {
                 platformTransactionManager.rollback(txStatus);
             } else {
                 platformTransactionManager.commit(txStatus);
             }
-//            if(tx.isNewTransaction()) {
-//                transactionBoundaryAwareBeans.forEach(tba -> tba.afterLeavingTransactionalBoundary(platformTransactionManager));
-//            }
         } catch (Exception ex) {
 
             return result!=null
@@ -152,7 +145,7 @@ implements
                     // (so we don't shadow the original failure)
                     ? result
 
-                    // return the failure we just catched
+                    // return the failure we just caught
                     : Try.failure(translateExceptionIfPossible(ex, platformTransactionManager));
 
         }
@@ -277,6 +270,7 @@ implements
         .orElse(TransactionState.NONE);
     }
 
+
     // -- TRANSACTION SEQUENCE TRACKING
 
     // TODO: this ThreadLocal (as with all thread-locals) should perhaps somehow be managed using
@@ -285,7 +279,8 @@ implements
     private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
 
 
-    // -- HELPER
+    // -- SPRING INTEGRATION
+
 
     private PlatformTransactionManager transactionManagerForElseFail(final TransactionDefinition def) {
         if(def instanceof TransactionTemplate) {
@@ -356,6 +351,12 @@ implements
     }
 
 
+    /**
+     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, sets up
+     * the initial transaction automatically against all available {@link PlatformTransactionManager}s.
+     *
+     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     */
     public void onOpen(final @NonNull CausewayInteraction interaction) {
 
         txCounter.get().reset();
@@ -391,7 +392,6 @@ implements
                             txStatus,
                             txManager.getClass().getName(), // info to be used for display in case of errors
                             () -> {
-//                                transactionBoundaryAwareBeans.forEach(tbab -> tbab.beforeLeavingTransactionalBoundary(txManager));
                                 _Xray.txBeforeCompletion(interactionLayerTrackerProvider.get(), "tx: beforeCompletion");
                                 final TransactionCompletionStatus event;
                                 if (txStatus.isRollbackOnly()) {
@@ -403,7 +403,6 @@ implements
                                 }
                                 _Xray.txAfterCompletion(interactionLayerTrackerProvider.get(), String.format("tx: afterCompletion (%s)", event.name()));
 
-//                                transactionBoundaryAwareBeans.forEach(tbab -> tbab.afterLeavingTransactionalBoundary(txManager));
                                 txCounter.get().increment();
                             }
                         )
@@ -411,15 +410,29 @@ implements
 
             });
         }
-
     }
 
 
+    /**
+     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, if
+     * {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)}
+     * or {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)}
+     * (or their various overloads) result in an exception.
+     *
+     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     */
     public void requestRollback(final @NonNull CausewayInteraction interaction) {
         Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
                 .ifPresent(OnCloseHandle::requestRollback);
     }
 
+    /**
+     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, to close the
+     * transaction initially set up in {@link #onOpen(CausewayInteraction)} against all configured
+     * {@link PlatformTransactionManager}s.
+     *
+     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     */
     public void onClose(final @NonNull CausewayInteraction interaction) {
 
         if (log.isDebugEnabled()) {
@@ -462,9 +475,7 @@ implements
                             onCloseTask.getOnErrorInfo(),
                             ex);
                 }
-
             });
         }
     }
-
 }

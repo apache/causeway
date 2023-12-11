@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.testdomain.transactions.jpa;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import javax.inject.Inject;
+
+import org.apache.causeway.commons.internal.base._Refs;
+
+import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +30,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
@@ -39,8 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
@@ -48,13 +45,12 @@ import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
 
-import lombok.NonNull;
 import lombok.val;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-                JpaTransactionRollbackTest_usingTransactionService.CommitListener.class
+                CommitListener.class
         },
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaTransactionRollbackTest_usingTransactionService",
@@ -74,7 +70,7 @@ class JpaTransactionRollbackTest_usingTransactionService
     @Inject private RepositoryService repository;
     @Inject private CommitListener commitListener;
 
-    private ObjectReference<TransactionAfterCompletionEvent> transactionAfterCompletionEvent;
+    private _Refs.ObjectReference<CommitListener.TransactionAfterCompletionEvent> transactionAfterCompletionEvent;
 
     @BeforeEach
     void setUp() {
@@ -82,8 +78,7 @@ class JpaTransactionRollbackTest_usingTransactionService
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
 
-        transactionAfterCompletionEvent =
-                _Refs.<TransactionAfterCompletionEvent>objectRef(null);
+        transactionAfterCompletionEvent = _Refs.objectRef(null);
     }
 
     @AfterEach
@@ -107,8 +102,8 @@ class JpaTransactionRollbackTest_usingTransactionService
         });
 
         assertEquals(
-                TransactionAfterCompletionEvent.COMMITTED,
-                transactionAfterCompletionEvent.getValueElseDefault(null));
+                TransactionCompletionStatus.COMMITTED,
+                transactionAfterCompletionEvent.getValue().map(x -> x.transactionCompletionStatus).orElse(null));
 
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
@@ -142,8 +137,8 @@ class JpaTransactionRollbackTest_usingTransactionService
 
         assertTrue(result.isFailure());
         assertEquals(
-                TransactionAfterCompletionEvent.ROLLED_BACK,
-                transactionAfterCompletionEvent.getValueElseDefault(null));
+                TransactionCompletionStatus.ROLLED_BACK,
+                transactionAfterCompletionEvent.getValue().map(x -> x.transactionCompletionStatus).orElse(null));
 
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
@@ -187,10 +182,10 @@ class JpaTransactionRollbackTest_usingTransactionService
 
         assertTrue(result.isFailure());
 
-        val actualEvent = transactionAfterCompletionEvent.getValueElseDefault(null);
+        val actualEvent = transactionAfterCompletionEvent.getValue().map(x -> x.transactionCompletionStatus).orElse(null);
         assertTrue(
-                actualEvent == TransactionAfterCompletionEvent.ROLLED_BACK
-                    || actualEvent == TransactionAfterCompletionEvent.UNKNOWN);
+                actualEvent == TransactionCompletionStatus.ROLLED_BACK
+                    || actualEvent == TransactionCompletionStatus.UNKNOWN);
 
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
@@ -201,38 +196,6 @@ class JpaTransactionRollbackTest_usingTransactionService
     }
 
     // -- HELPER
-
-    @Service
-    public static class CommitListener {
-
-        /** transaction end boundary (pre) */
-        @EventListener(TransactionBeforeCompletionEvent.class)
-        public void onPreCompletion(final TransactionBeforeCompletionEvent event) {
-            //_Probe.errOut("=== TRANSACTION before completion");
-        }
-
-        /** transaction end boundary (post) */
-        @EventListener(TransactionAfterCompletionEvent.class)
-        public void onPostCompletion(final TransactionAfterCompletionEvent event) {
-            //_Probe.errOut("=== TRANSACTION after completion (%s)", event.name());
-            Optional.ofNullable(listener)
-            .ifPresent(li->{
-                li.accept(event);
-                unbind();
-            });
-        }
-
-        private Consumer<TransactionAfterCompletionEvent> listener;
-
-        void bind(final @NonNull Consumer<TransactionAfterCompletionEvent> listener) {
-            this.listener = listener;
-        }
-
-        void unbind() {
-            this.listener = null;
-        }
-
-    }
 
 
 }
