@@ -15,10 +15,14 @@
  */
 package org.apache.causeway.core.transaction.scope;
 
+import lombok.val;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
@@ -37,9 +41,30 @@ public class StackedTransactionScope implements Scope {
         ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(key);
 		if (scopedObjects == null) {
 			scopedObjects = new ScopedObjectsHolder();
-			TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(scopedObjects));
+            if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                // this happen when TransactionSynchronization#afterCompletion is called.
+                // it's a catch-22 : we use TransactionSynchronization as a resource to hold the scoped objects,
+                // but those scoped objects shouldn't only be interacted with during the transaction, not after it.
+                //
+                // see the 'else' clause for the handling if we encounter the ScopedObjectsHolder later.
+			    TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(scopedObjects));
+            }
 			TransactionSynchronizationManager.bindResource(key, scopedObjects);
-		}
+		} else {
+            if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                // it's possible that this already-existing scopedObject was added when a synchronization wasn't active
+                // and so wouldn't be known to TSM.  if that's the case, we register it now.
+                val synchronizations = TransactionSynchronizationManager.getSynchronizations();
+                val synchronizedHolders = synchronizations.stream()
+                                                .filter(CleanupSynchronization.class::isInstance)
+                                                .map(CleanupSynchronization.class::cast)
+                                                .map(x -> x.scopedObjects)
+                                                .collect(Collectors.toList());
+                if (! synchronizedHolders.contains(scopedObjects)) {
+                    TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(scopedObjects));
+                }
+            }
+        }
 		// NOTE: Do NOT modify the following to use Map::computeIfAbsent. For details,
 		// see https://github.com/spring-projects/spring-framework/issues/25801.
 		Object scopedObject = scopedObjects.scopedInstances.get(name);
