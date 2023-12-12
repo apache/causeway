@@ -30,6 +30,8 @@ import javax.inject.Provider;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 
+import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
+
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -365,7 +367,6 @@ implements
             log.debug("opening on {}", _Probe.currentThreadId());
         }
 
-
         if (!platformTransactionManagers.isEmpty()) {
             val onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
 
@@ -388,26 +389,25 @@ implements
 
                 // we have created a new transaction, so need to provide a CloseTask
                 onCloseTasks.add(
-                        new CloseTask(
-                            txStatus,
-                            txManager.getClass().getName(), // info to be used for display in case of errors
-                            () -> {
-                                _Xray.txBeforeCompletion(interactionLayerTrackerProvider.get(), "tx: beforeCompletion");
-                                final TransactionCompletionStatus event;
-                                if (txStatus.isRollbackOnly()) {
-                                    txManager.rollback(txStatus);
-                                    event = TransactionCompletionStatus.ROLLED_BACK;
-                                } else {
-                                    txManager.commit(txStatus);
-                                    event = TransactionCompletionStatus.COMMITTED;
-                                }
-                                _Xray.txAfterCompletion(interactionLayerTrackerProvider.get(), String.format("tx: afterCompletion (%s)", event.name()));
-
-                                txCounter.get().increment();
+                    new CloseTask(
+                        txStatus,
+                        txManager.getClass().getName(), // info to be used for display in case of errors
+                        () -> {
+                            _Xray.txBeforeCompletion(interactionLayerTrackerProvider.get(), "tx: beforeCompletion");
+                            final TransactionCompletionStatus event;
+                            if (txStatus.isRollbackOnly()) {
+                                txManager.rollback(txStatus);
+                                event = TransactionCompletionStatus.ROLLED_BACK;
+                            } else {
+                                txManager.commit(txStatus);
+                                event = TransactionCompletionStatus.COMMITTED;
                             }
-                        )
-                );
+                            _Xray.txAfterCompletion(interactionLayerTrackerProvider.get(), String.format("tx: afterCompletion (%s)", event.name()));
 
+                            txCounter.get().increment();
+                        }
+                    )
+                );
             });
         }
     }

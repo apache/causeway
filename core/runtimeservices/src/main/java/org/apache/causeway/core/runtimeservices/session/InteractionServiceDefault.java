@@ -30,8 +30,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -39,6 +37,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Interaction;
@@ -47,7 +46,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
@@ -66,6 +64,7 @@ import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
 import lombok.NonNull;
@@ -99,7 +98,6 @@ implements
 
     final ClockService clockService;
     final Provider<CommandPublisher> commandPublisherProvider;
-    final Provider<TransactionService> transactionServiceProvider;
     final ConfigurableBeanFactory beanFactory;
 
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
@@ -116,7 +114,6 @@ implements
             final TransactionServiceSpring transactionServiceSpring,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
-            final Provider<TransactionService> transactionServiceProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
         this.runtimeEventService = runtimeEventService;
@@ -125,7 +122,6 @@ implements
         this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
-        this.transactionServiceProvider = transactionServiceProvider;
         this.beanFactory = beanFactory;
         this.interactionIdGenerator = interactionIdGenerator;
 
@@ -187,7 +183,7 @@ implements
 
         val causewayInteraction = getOrCreateCausewayInteraction();
 
-        // check whether we should reuse any current authenticationLayer,
+        // check whether we should reuse any current interactionLayer,
         // that is, if current authentication and authToUse are equal
 
         val reuseCurrentLayer = currentInteractionContext()
@@ -367,10 +363,9 @@ implements
 
         Throwable flushException = null;
         try {
-            val txService = transactionServiceProvider.get();
-            val mustAbort = txService.currentTransactionState().mustAbort();
+            val mustAbort = transactionServiceSpring.currentTransactionState().mustAbort();
             if(!mustAbort) {
-                txService.flushTransaction();
+                transactionServiceSpring.flushTransaction();
                 // publish only when flush was successful
                 completeAndPublishCurrentCommand();
             }
@@ -427,7 +422,11 @@ implements
 
     // -- HELPER - COMMAND COMPLETION
 
-    private void completeAndPublishCurrentCommand() {
+    /**
+     * called by {@link TransactionServiceSpring}, but to be moved.
+     */
+    @Programmatic
+    public void completeAndPublishCurrentCommand() {
 
         val interaction = getInternalInteractionElseFail();
         val command = interaction.getCommand();
