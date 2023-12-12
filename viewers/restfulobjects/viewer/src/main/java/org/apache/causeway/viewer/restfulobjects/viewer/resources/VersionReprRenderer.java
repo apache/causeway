@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import java.io.InputStream;
-import java.util.Properties;
+import org.springframework.boot.info.BuildProperties;
 
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -30,7 +28,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsSpec;
-import org.springframework.boot.info.BuildProperties;
 
 public class VersionReprRenderer
 extends ReprRendererAbstract<Void> {
