@@ -47,21 +47,17 @@ public class StackedTransactionScope implements Scope {
                 // but those scoped objects shouldn't only be interacted with during the transaction, not after it.
                 //
                 // see the 'else' clause for the handling if we encounter the ScopedObjectsHolder later.
-			    TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(scopedObjects));
+                registerWithTransitionSynchronizationManager(scopedObjects);
+            } else {
+                scopedObjects.registered = false;
             }
 			TransactionSynchronizationManager.bindResource(key, scopedObjects);
 		} else {
             if (TransactionSynchronizationManager.isSynchronizationActive()) {
                 // it's possible that this already-existing scopedObject was added when a synchronization wasn't active
-                // and so wouldn't be known to TSM.  if that's the case, we register it now.
-                val synchronizations = TransactionSynchronizationManager.getSynchronizations();
-                val synchronizedHolders = synchronizations.stream()
-                                                .filter(CleanupSynchronization.class::isInstance)
-                                                .map(CleanupSynchronization.class::cast)
-                                                .map(x -> x.scopedObjects)
-                                                .collect(Collectors.toList());
-                if (! synchronizedHolders.contains(scopedObjects)) {
-                    TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(scopedObjects));
+                // and so wouldn't be registered to TSM.  if that's the case, we register it now.
+                if (! scopedObjects.registered) {
+                    registerWithTransitionSynchronizationManager(scopedObjects);
                 }
             }
         }
@@ -74,6 +70,11 @@ public class StackedTransactionScope implements Scope {
 		}
 		return scopedObject;
 	}
+
+    private void registerWithTransitionSynchronizationManager(ScopedObjectsHolder scopedObjects) {
+        TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(scopedObjects));
+        scopedObjects.registered = true;
+    }
 
     @Override
 	@Nullable
@@ -168,8 +169,20 @@ public class StackedTransactionScope implements Scope {
 	static class ScopedObjectsHolder {
 
 		final Map<String, Object> scopedInstances = new HashMap<>();
-
 		final Map<String, Runnable> destructionCallbacks = new LinkedHashMap<>();
+
+        /**
+         * Keeps track of whether these objects have been registered with {@link TransactionSynchronizationManager}.
+         *
+         * <p>
+         *     This can only be done if
+         *     {@link TransactionSynchronizationManager#isSynchronizationActive() synchronization is active}, which
+         *     isn't the case for {@link ScopedObjectsHolder scoped objects} that are obtained as a result of the
+         *     {@link TransactionSynchronization#afterCompletion(int)} callback.  We use this flag to keep track in
+         *     case they are reused in a subsequent transaction.
+         * </p>
+         */
+        private boolean registered = false;
 	}
 
 
