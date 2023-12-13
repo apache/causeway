@@ -89,14 +89,9 @@ implements CollectionCountProvider {
 
         // multi select check boxes
         final MultiselectToggleProvider multiselectToggleProvider = getMultiselectToggleProvider();
-
-        ToggleboxColumn toggleboxColumn = null;
-        if(multiselectToggleProvider != null) {
-            toggleboxColumn = multiselectToggleProvider.getToggleboxColumn();
-            if(toggleboxColumn != null) {
-                columns.add(toggleboxColumn);
-            }
-        }
+        final ToggleboxColumn toggleboxColumn = multiselectToggleProvider != null
+            ? multiselectToggleProvider.getToggleboxColumn()
+            : null;
 
         val collectionModel = entityCollectionModel();
 
@@ -108,6 +103,11 @@ implements CollectionCountProvider {
                 columns,
                 collectionModel.getVariant(),
                 getWicketViewerSettings());
+
+        // prepend togglebox column (left most), if enabled
+        if(toggleboxColumn != null) {
+            columns.add(0, toggleboxColumn);
+        }
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
         val dataTable = new CausewayAjaxDataTable(
