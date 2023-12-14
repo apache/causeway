@@ -93,7 +93,7 @@ jobs:
     # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
     - name: "CodeQL: Initialize"
       if: env.SKIP_CODE_QL != 'true'
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
 
@@ -120,11 +120,11 @@ jobs:
     # If this step fails, then you should remove it and run the build manually
     - name: "CodeQL: Autobuild"
       if: env.SKIP_CODE_QL != 'true' && matrix.language == 'javascript'
-      uses: github/codeql-action/autobuild@v2
+      uses: github/codeql-action/autobuild@v3
 
     - name: "CodeQL: Perform Analysis"
       if: env.SKIP_CODE_QL != 'true'
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
 
