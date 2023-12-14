@@ -133,13 +133,14 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             Wkt.labelAdd(link, ID_ENTITY_TITLE, title.abbreviatedTitle());
 
             // If the link title is abbreviated or not shown, add the full-title to the tooltip body.
-            if(isTitleSuppressed()
-                    || title.isTitleAbbreviated()) {
-                WktTooltips.addTooltip(link, title.tooltipTitle(), title.tooltipBodyIncludingFullTitle());
+            if(isTitleSuppressed() || title.isTitleAbbreviated()) {
+                String body = title.isFullTitleEqualToBody() ? title.tooltipBody() : title.tooltipBodyIncludingFullTitle();
+                WktTooltips.addTooltip(link, title.tooltipTitle(), body);
             } else if(title.isTooltipTitleEqualToBody()) {
                 WktTooltips.addTooltip(link, title.tooltipBody());
             } else {
-                WktTooltips.addTooltip(link, title.tooltipTitle(), title.tooltipBody());
+                String body = title.isFullTitleEqualToBody() ? title.tooltipBody() : title.tooltipBodyIncludingFullTitle();
+                WktTooltips.addTooltip(link, title.tooltipTitle(), body);
             }
         }
 
@@ -194,6 +195,12 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             return _Strings.nullToEmpty(tooltipTitle)
                     .equalsIgnoreCase(_Strings.nullToEmpty(tooltipBody));
         }
+
+        public boolean isFullTitleEqualToBody() {
+            return _Strings.nullToEmpty(fullTitle)
+                    .equalsIgnoreCase(_Strings.nullToEmpty(tooltipBody));
+        }
+
         /**
          * Whether not {@link #abbreviatedTitle()} equals {@link #fullTitle()}.
          * <p>
@@ -207,6 +214,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                     + "\n-\n"
                     + _Strings.nullToEmpty(tooltipBody);
         }
+
     }
 
     private TitleRecord cachedTitle;
