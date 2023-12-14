@@ -1486,7 +1486,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.moxy</artifactId>
-				<version>2.7.13</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+				<version>2.7.14</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
