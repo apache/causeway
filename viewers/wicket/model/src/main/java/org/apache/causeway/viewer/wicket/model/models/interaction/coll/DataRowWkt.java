@@ -73,6 +73,10 @@ extends ChainingModel<DataRow> {
         return Optional.ofNullable(getObject());
     }
 
+    public Optional<DataRow> transientDataRow() {
+        return Optional.ofNullable(dataRow);
+    }
+
     // -- HELPER
 
     private DataTableInteractive getDataTableModel() {
