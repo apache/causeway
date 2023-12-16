@@ -67,7 +67,7 @@ extends GenericColumnAbstract {
                 componentId,
                 new BulkToggleWkt(dataTableModelHolder),
                 this::onBulkUpdate);
-        Wkt.cssAppend(bulkToggle, "title-column");
+        Wkt.cssAppend(bulkToggle, "togglebox-column");
         return bulkToggle;
     }
 

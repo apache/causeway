@@ -933,16 +933,6 @@ div.referencePanel.scalarNameAndValueComponentType {
     color: silver;
 }
 
-tr.headers th form input {
-    margin-left: -8px;
-}
-/*
-tbody td.togglebox-column form {
-    margin-left: 6px;
-}
-*/
-
-
 footer .footer-image {
     height: 24px;
 }

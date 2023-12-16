@@ -489,7 +489,7 @@ public class Wkt {
                 super.onEvent(event);
             }
             /**
-             * Whether it is safe (free of side-effects) to re-load given model's object.
+             * Whether it is safe (free of side-effects) to load/access given model's object.
              * <p>
              * As of [CAUSEWAY-3658], don't call
              * {@link org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt#getObject()},
