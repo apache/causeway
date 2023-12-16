@@ -105,6 +105,8 @@ import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteracti
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextAreaWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
@@ -466,22 +468,43 @@ public class Wkt {
             @Override protected void onUpdate(final AjaxRequestTarget target) {
                 onUpdate.accept(target); }
             /**
-             * XXX[CAUSEWAY-3005] Any action dialog submission on the same page will
+             * [CAUSEWAY-3005] Any action dialog submission on the same page will
              * result in a new {@link DataTableInteractive}, where any previously rendered check-boxes
              * run out of sync with their DataRowToggle model.
              * Hence we intercept such events and reset check-boxes to un-checked.
              */
             @Override public void onEvent(final IEvent<?> event) {
+                if(event==null) return; // just in case
                 _Casts.castTo(CausewayEnvelopeEvent.class, event.getPayload())
                 .ifPresent(envelopeEvent->{
                     if(envelopeEvent.getLetter() instanceof CausewayActionCompletedEvent) {
-                        if(Boolean.TRUE.equals(this.getModelObject())) {
+                        var model = this.getModel();
+                        if(hasMemoizedDataRow(model)
+                                && Boolean.TRUE.equals(model.getObject())) {
                             this.setModelObject(false);
                             envelopeEvent.getTarget().add(this);
-                        }
+                       }
                     }
                 });
                 super.onEvent(event);
+            }
+            /**
+             * Whether it is safe (free of side-effects) to load/access given model's object.
+             * <p>
+             * As of [CAUSEWAY-3658], don't call
+             * {@link org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt#getObject()},
+             * when the model's object is not transiently already loaded, because otherwise it would
+             * enforce a page-reload as side-effect.
+             */
+            private boolean hasMemoizedDataRow(final IModel<Boolean> model) {
+                if(model instanceof DataRowToggleWkt) {
+                    var chainedModel = ((DataRowToggleWkt)model).getChainedModel();
+                    if(chainedModel instanceof DataRowWkt) {
+                        final DataRowWkt dataRowWkt = (DataRowWkt)chainedModel;
+                        return dataRowWkt.hasMemoizedDataRow();
+                    }
+                }
+                return false;
             }
         };
     }
