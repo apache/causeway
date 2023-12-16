@@ -479,7 +479,7 @@ public class Wkt {
                 .ifPresent(envelopeEvent->{
                     if(envelopeEvent.getLetter() instanceof CausewayActionCompletedEvent) {
                         var model = this.getModel();
-                        if(hasTransientDataRow(model)
+                        if(hasMemoizedDataRow(model)
                                 && Boolean.TRUE.equals(model.getObject())) {
                             this.setModelObject(false);
                             envelopeEvent.getTarget().add(this);
@@ -496,12 +496,12 @@ public class Wkt {
              * when the model's object is not transiently already loaded, because otherwise it would
              * enforce a page-reload as side-effect.
              */
-            private boolean hasTransientDataRow(final IModel<Boolean> model) {
+            private boolean hasMemoizedDataRow(final IModel<Boolean> model) {
                 if(model instanceof DataRowToggleWkt) {
                     var chainedModel = ((DataRowToggleWkt)model).getChainedModel();
                     if(chainedModel instanceof DataRowWkt) {
                         final DataRowWkt dataRowWkt = (DataRowWkt)chainedModel;
-                        return dataRowWkt.transientDataRow().isPresent();
+                        return dataRowWkt.hasMemoizedDataRow();
                     }
                 }
                 return false;

@@ -62,7 +62,7 @@ extends ChainingModel<DataRow> {
             dataRow = getDataTableModel().lookupDataRow(uuid)
                     .orElse(null);
             if(dataRow==null) {
-                // XXX[CAUSEWAY-3005] UI out of sync with model: reload page
+                // [CAUSEWAY-3005] UI out of sync with model: reload page
                 PageUtils.pageReload();
             }
         }
@@ -73,8 +73,9 @@ extends ChainingModel<DataRow> {
         return Optional.ofNullable(getObject());
     }
 
-    public Optional<DataRow> transientDataRow() {
-        return Optional.ofNullable(dataRow);
+    public boolean hasMemoizedDataRow() {
+        return dataRow!=null
+                || getDataTableModel().lookupDataRow(uuid).isPresent();
     }
 
     // -- HELPER
