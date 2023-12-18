@@ -124,7 +124,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <htmlparser.version>2.1</htmlparser.version>
 
         <javafaker.version>1.0.2</javafaker.version>
-        <javassist.version>3.29.2-GA</javassist.version>
+        <javassist.version>3.30.1-GA</javassist.version>
 
         <jakartaee.version>8.0.0</jakartaee.version>
         <jakarta.inject-api.version>1.0.5</jakarta.inject-api.version> <!-- do not upgrade 1.x to 2.x until Spring 6 -->
