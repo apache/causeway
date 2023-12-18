@@ -29,7 +29,7 @@ import org.apache.causeway.core.security.util.XrayUtil;
 
 import lombok.val;
 
-final class _Xray {
+public final class _Xray {
 
     static void addConfiguration(final ConfigurationViewService configurationService) {
 

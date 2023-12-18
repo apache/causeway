@@ -20,7 +20,12 @@ package org.apache.causeway.testdomain.domainmodel;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -54,7 +59,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class DomainModelTest_usingBadDomain_noAnnotationEnforced {
+class DomainModelTest_usingBadDomain_noAnnotationEnforced extends CausewayIntegrationTestAbstract {
 
     @Inject private CausewayConfiguration configuration;
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;

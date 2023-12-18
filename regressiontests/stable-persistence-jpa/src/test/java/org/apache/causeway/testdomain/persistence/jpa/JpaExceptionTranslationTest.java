@@ -22,14 +22,16 @@ import java.sql.SQLException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.TestPropertySources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestPropertySources;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
@@ -44,12 +46,11 @@ import lombok.val;
         },
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest",
-        })
+        }
+)
 @TestPropertySources({
     @TestPropertySource(CausewayPresets.UseLog4j2Test)
 })
-//@Transactional ... we manage transaction ourselves
-//@DirtiesContext
 class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
     @BeforeAll
@@ -60,7 +61,6 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
     @Test
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
-
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
@@ -102,7 +102,5 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
             testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
         });
 
-
     }
-
 }

@@ -49,9 +49,9 @@ public class OutboxRestClient_E2eTest {
                         .oauthClientSecret("xxx")
                         .build(),
                 OutboxClientConfig.builder()
-                        .pendingUri("services/isis.ext.executionOutbox.OutboxRestApi/actions/pending/invoke")
-                        .deleteUri("services/isis.ext.executionOutbox.OutboxRestApi/actions/delete/invoke")
-                        .deleteManyUri("services/isis.ext.executionOutbox.OutboxRestApi/actions/deleteMany/invoke")
+                        .pendingUri("services/causeway.ext.executionOutbox.OutboxRestApi/actions/pending/invoke")
+                        .deleteUri("services/causeway.ext.executionOutbox.OutboxRestApi/actions/delete/invoke")
+                        .deleteManyUri("services/causeway.ext.executionOutbox.OutboxRestApi/actions/deleteMany/invoke")
                         .build()
                 );
     }

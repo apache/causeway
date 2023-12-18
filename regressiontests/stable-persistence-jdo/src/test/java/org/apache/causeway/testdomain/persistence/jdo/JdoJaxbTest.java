@@ -20,6 +20,7 @@ package org.apache.causeway.testdomain.persistence.jdo;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -45,6 +46,7 @@ class JdoJaxbTest extends RegressionTestWithJdoFixtures {
 
     @Inject private JaxbService jaxbService;
 
+    // @Disabled // CAUSEWAY-3654
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 

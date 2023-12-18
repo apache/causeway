@@ -79,6 +79,7 @@ module org.apache.causeway.core.runtimeservices {
     requires spring.core;
     requires spring.tx;
     requires org.apache.causeway.core.codegen.bytebuddy;
+    requires spring.aop;
 
     opens org.apache.causeway.core.runtimeservices.wrapper;
     opens org.apache.causeway.core.runtimeservices.wrapper.proxy; //to org.apache.causeway.core.codegen.bytebuddy

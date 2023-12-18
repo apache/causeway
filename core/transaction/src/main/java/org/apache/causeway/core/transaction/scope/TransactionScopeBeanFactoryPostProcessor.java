@@ -16,26 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.interaction.scope;
+package org.apache.causeway.core.transaction.scope;
 
-import org.apache.causeway.applib.services.iactn.Interaction;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.stereotype.Component;
 
-public interface TransactionBoundaryAware {
+import lombok.val;
 
-    default void beforeEnteringTransactionalBoundary(Interaction interaction) {
+/**
+ * @since 2.0
+ */
+@Component
+public class TransactionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
-    }
+    public static final String SCOPE_NAME = org.apache.causeway.applib.annotation.TransactionScope.SCOPE_NAME;
 
-    default void afterEnteringTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
-
-    }
-
-    default void beforeLeavingTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
-
-    }
-
-    default void afterLeavingTransactionalBoundary(Interaction interaction) {
-
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        val transactionScope = new StackedTransactionScope();
+        beanFactory.registerScope(SCOPE_NAME, transactionScope);
     }
 
 }

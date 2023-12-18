@@ -69,6 +69,9 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
+
 import lombok.val;
 
 @SpringBootTest(
@@ -94,19 +97,26 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         @Bean
         @Singleton
         public PlatformTransactionManager platformTransactionManager() {
-            return new PlatformTransactionManager() {
+            return new AbstractPlatformTransactionManager() {
 
                 @Override
-                public void rollback(final TransactionStatus status) throws TransactionException {
-                }
-
-                @Override
-                public TransactionStatus getTransaction(final TransactionDefinition definition) throws TransactionException {
+                protected Object doGetTransaction() throws TransactionException {
                     return null;
                 }
 
                 @Override
-                public void commit(final TransactionStatus status) throws TransactionException {
+                protected void doBegin(Object transaction, TransactionDefinition definition) throws TransactionException {
+
+                }
+
+                @Override
+                protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
+
+                }
+
+                @Override
+                protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
+
                 }
             };
         }

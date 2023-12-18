@@ -21,6 +21,7 @@ module org.apache.causeway.core.transaction {
     exports org.apache.causeway.core.transaction.changetracking;
     exports org.apache.causeway.core.transaction.changetracking.events;
     exports org.apache.causeway.core.transaction.events;
+    exports org.apache.causeway.core.transaction.scope;
 
     requires java.annotation;
     requires java.sql;
@@ -34,4 +35,5 @@ module org.apache.causeway.core.transaction {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+    requires java.transaction;
 }
