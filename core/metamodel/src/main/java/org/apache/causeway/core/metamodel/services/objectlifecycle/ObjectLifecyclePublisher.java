@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
  * that they can be published; and is responsible for calling the various persistence call-back facets.
  *
  * <p>
- *     NOTE: this should really have been called ObjectLifecyclePublisher.
+ *     NOTE: this interface should really have been called ObjectLifecycleSubscriber...
  * </p>
  *
  * @since 2.0 {index}
