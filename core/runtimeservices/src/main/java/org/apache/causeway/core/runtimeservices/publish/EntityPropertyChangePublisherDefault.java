@@ -26,8 +26,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -63,7 +61,6 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
     private final UserService userService;
     private final ClockService clockService;
     private final TransactionService transactionService;
-    private final InteractionService interactionService;
     private final InteractionLayerTracker iaTracker;
     private final Provider<HasEnlistedEntityPropertyChanges> hasEnlistedEntityPropertyChangesProvider;
 

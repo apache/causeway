@@ -39,4 +39,5 @@ module org.apache.causeway.persistence.commons {
     requires spring.beans;
     requires spring.context;
     requires spring.core;
+    requires spring.tx;
 }

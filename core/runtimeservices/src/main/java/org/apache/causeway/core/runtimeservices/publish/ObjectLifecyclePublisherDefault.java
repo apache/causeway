@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
@@ -47,6 +48,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Service
+@TransactionScope
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ObjectLifecyclePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")

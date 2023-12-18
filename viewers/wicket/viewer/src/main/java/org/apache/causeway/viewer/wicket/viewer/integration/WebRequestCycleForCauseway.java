@@ -194,7 +194,7 @@ implements
 
             // using side-effect free access to MM validation result
             val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
-            .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
+            .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
 
             if(validationResult.hasFailures()) {
                 RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;

@@ -52,5 +52,4 @@ module org.apache.causeway.viewer.restfulobjects.viewer {
     requires spring.context;
     requires spring.core;
     requires spring.web;
-    requires spring.boot;
 }

@@ -18,7 +18,6 @@
  */
 module org.apache.causeway.core.interaction {
     exports org.apache.causeway.core.interaction;
-    exports org.apache.causeway.core.interaction.integration;
     exports org.apache.causeway.core.interaction.scope;
     exports org.apache.causeway.core.interaction.session;
 

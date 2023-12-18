@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.transaction.events;
 
-import org.springframework.transaction.support.TransactionSynchronization;
+import jakarta.transaction.Status;
 
 /**
  * @since 2.0 {@index}
- * @see TransactionSynchronization
+ * @see Status
  */
-public enum TransactionAfterCompletionEvent {
+public enum TransactionCompletionStatus {
 
     /** Completion status in case of proper commit. */
     COMMITTED,
@@ -36,8 +36,29 @@ public enum TransactionAfterCompletionEvent {
     UNKNOWN,
     ;
 
-    public static TransactionAfterCompletionEvent forStatus(int status) {
-        return TransactionAfterCompletionEvent.values()[status];
+    /**
+     * @param status field from {@link Status}.
+     * @return
+     */
+    public static TransactionCompletionStatus forStatus(final int status) {
+        switch (status) {
+            case 3:
+                // int STATUS_COMMITTED = 3;
+                return COMMITTED;
+            case 4:
+                // int STATUS_ROLLEDBACK = 4;
+                return ROLLED_BACK;
+            default:
+                // int STATUS_ACTIVE = 0;
+                // int STATUS_MARKED_ROLLBACK = 1;
+                // int STATUS_PREPARED = 2;
+                // int STATUS_UNKNOWN = 5;
+                // int STATUS_NO_TRANSACTION = 6;
+                // int STATUS_PREPARING = 7;
+                // int STATUS_COMMITTING = 8;
+                // int STATUS_ROLLING_BACK = 9;
+                return UNKNOWN;
+        }
     }
 
     public boolean isCommitted() {

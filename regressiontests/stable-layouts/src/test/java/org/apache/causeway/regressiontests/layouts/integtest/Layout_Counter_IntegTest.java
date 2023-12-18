@@ -42,7 +42,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -94,19 +95,26 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         @Bean
         @Singleton
         public PlatformTransactionManager platformTransactionManager() {
-            return new PlatformTransactionManager() {
+            return new AbstractPlatformTransactionManager() {
 
                 @Override
-                public void rollback(final TransactionStatus status) throws TransactionException {
-                }
-
-                @Override
-                public TransactionStatus getTransaction(final TransactionDefinition definition) throws TransactionException {
+                protected Object doGetTransaction() throws TransactionException {
                     return null;
                 }
 
                 @Override
-                public void commit(final TransactionStatus status) throws TransactionException {
+                protected void doBegin(final Object transaction, final TransactionDefinition definition) throws TransactionException {
+
+                }
+
+                @Override
+                protected void doCommit(final DefaultTransactionStatus status) throws TransactionException {
+
+                }
+
+                @Override
+                protected void doRollback(final DefaultTransactionStatus status) throws TransactionException {
+
                 }
             };
         }

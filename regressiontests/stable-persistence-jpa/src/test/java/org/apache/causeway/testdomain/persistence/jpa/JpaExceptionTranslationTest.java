@@ -44,12 +44,11 @@ import lombok.val;
         },
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest",
-        })
+        }
+)
 @TestPropertySources({
     @TestPropertySource(CausewayPresets.UseLog4j2Test)
 })
-//@Transactional ... we manage transaction ourselves
-//@DirtiesContext
 class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
     @BeforeAll
@@ -60,7 +59,6 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
     @Test
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
-
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
@@ -102,7 +100,5 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
             testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
         });
 
-
     }
-
 }

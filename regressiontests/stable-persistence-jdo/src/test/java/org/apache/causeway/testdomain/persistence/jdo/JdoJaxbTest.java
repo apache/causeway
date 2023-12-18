@@ -45,6 +45,7 @@ class JdoJaxbTest extends RegressionTestWithJdoFixtures {
 
     @Inject private JaxbService jaxbService;
 
+    // @Disabled // CAUSEWAY-3654
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 

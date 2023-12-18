@@ -25,6 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.annotation.AliasFor;
 
 /**
  * {@code @InteractionScope} is a specialization of {@link Scope @Scope} for a
@@ -40,6 +42,7 @@ import org.springframework.context.annotation.Scope;
  * @since 2.0 {@index}
  * @see org.springframework.web.context.annotation.SessionScope
  * @see org.springframework.web.context.annotation.ApplicationScope
+ * @see TransactionScope
  * @see org.springframework.context.annotation.Scope
  * @see org.springframework.stereotype.Component
  * @see org.springframework.context.annotation.Bean
@@ -47,7 +50,16 @@ import org.springframework.context.annotation.Scope;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Scope("interaction")
+@Scope(InteractionScope.SCOPE_NAME)
 public @interface InteractionScope {
+
+    String SCOPE_NAME = "interaction";
+
+    /**
+     * Alias for {@link Scope#proxyMode}.
+     * <p>Defaults to {@link ScopedProxyMode#TARGET_CLASS}.
+     */
+    @AliasFor(annotation = Scope.class)
+    ScopedProxyMode proxyMode() default ScopedProxyMode.TARGET_CLASS;
 
 }

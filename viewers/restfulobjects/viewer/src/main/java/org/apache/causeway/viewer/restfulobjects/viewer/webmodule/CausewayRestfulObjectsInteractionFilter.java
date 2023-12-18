@@ -412,7 +412,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
     private static void ensureMetamodelIsValid(final SpecificationLoader specificationLoader) {
         // using side-effect free access to MM validation result
         val validationResult = specificationLoader.getValidationResult()
-        .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
+        .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
         if(validationResult.hasFailures()) {
             throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
         }

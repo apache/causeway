@@ -78,7 +78,9 @@ interface ObjectCreator {
             domainObject.getSpecification().streamAssociations(MixedIn.EXCLUDED)
             .forEach(field->field.toDefault(domainObject));
 
-            getPersistenceLifecyclePublisher().onPostCreate(domainObject);
+            if (domainObject.getSpecification().isEntity()) {
+                getPersistenceLifecyclePublisher().onPostCreate(domainObject);
+            }
 
             return domainObject;
 
