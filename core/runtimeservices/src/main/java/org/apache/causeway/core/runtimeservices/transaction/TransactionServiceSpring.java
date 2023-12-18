@@ -28,10 +28,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-
-import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
-
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -47,6 +43,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -59,7 +56,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
-import org.apache.causeway.core.runtime.events._Xray;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 

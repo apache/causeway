@@ -20,12 +20,7 @@ package org.apache.causeway.testdomain.domainmodel;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
-
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -41,6 +36,7 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.badnoactenforce.Configuration_usingInvalidDomain_noActionEnforced;
 import org.apache.causeway.testdomain.model.badnoactenforce.InvalidOrphanedActionSupportNoAnnotationEnforced;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 

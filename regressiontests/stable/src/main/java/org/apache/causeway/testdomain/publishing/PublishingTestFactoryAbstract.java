@@ -24,20 +24,17 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.applib.annotation.TransactionScope;
-
-import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
-
 import org.junit.jupiter.api.DynamicTest;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.support.TransactionSynchronization;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
@@ -50,8 +47,7 @@ import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-
-import org.springframework.transaction.support.TransactionSynchronization;
+import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -187,7 +183,7 @@ public abstract class PublishingTestFactoryAbstract {
 //        public void onPostCompletion(final TransactionAfterCompletionEvent event) {
 
         @Override
-        public void afterCompletion(int status) {
+        public void afterCompletion(final int status) {
 
             TransactionCompletionStatus transactionCompletionStatus = TransactionCompletionStatus.forStatus(status);
             _Probe.errOut("=== TRANSACTION after completion");

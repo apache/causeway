@@ -22,8 +22,6 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;

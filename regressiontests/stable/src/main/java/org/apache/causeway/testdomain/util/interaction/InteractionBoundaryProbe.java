@@ -22,20 +22,13 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.TransactionScope;
-
-import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
-
 import org.junit.jupiter.api.Assertions;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-
 import org.springframework.transaction.support.TransactionSynchronization;
+
+import org.apache.causeway.applib.annotation.TransactionScope;
+import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
+import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -56,7 +49,7 @@ public class InteractionBoundaryProbe implements TransactionSynchronization {
     }
 
     @Override
-    public void afterCompletion(int status) {
+    public void afterCompletion(final int status) {
         TransactionCompletionStatus transactionCompletionStatus = TransactionCompletionStatus.forStatus(status);
 
         if(transactionCompletionStatus.isRolledBack()) {
@@ -68,33 +61,33 @@ public class InteractionBoundaryProbe implements TransactionSynchronization {
 
     // -- ACCESS TO COUNTERS
 
-    public static long totalInteractionsStarted(KVStoreForTesting kvStoreForTesting) {
+    public static long totalInteractionsStarted(final KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iaStarted");
     }
 
-    public static long totalInteractionsEnded(KVStoreForTesting kvStoreForTesting) {
+    public static long totalInteractionsEnded(final KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iaEnded");
     }
 
-    public static long totalTransactionsEnding(KVStoreForTesting kvStoreForTesting) {
+    public static long totalTransactionsEnding(final KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnding");
     }
 
-    public static long totalTransactionsCommitted(KVStoreForTesting kvStoreForTesting) {
+    public static long totalTransactionsCommitted(final KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txCommitted");
     }
 
-    public static long totalTransactionsRolledBack(KVStoreForTesting kvStoreForTesting) {
+    public static long totalTransactionsRolledBack(final KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txRolledBack");
     }
 
     // -- ASSERTIONS (INTERACTIONAL)
 
-    public static void assertInteractional(KVStoreForTesting kvStoreForTesting, Runnable runnable) {
+    public static void assertInteractional(final KVStoreForTesting kvStoreForTesting, final Runnable runnable) {
         assertInteractional(kvStoreForTesting, ()->{ runnable.run(); return null; });
     }
 
-    public static <T> T assertInteractional(KVStoreForTesting kvStoreForTesting, Supplier<T> supplier) {
+    public static <T> T assertInteractional(final KVStoreForTesting kvStoreForTesting, final Supplier<T> supplier) {
 
         final long iaStartCountBefore = totalInteractionsStarted(kvStoreForTesting);
         final long iaEndCountBefore = totalInteractionsEnded(kvStoreForTesting);
@@ -110,11 +103,11 @@ public class InteractionBoundaryProbe implements TransactionSynchronization {
 
     // -- ASSERTIONS (TRANSACTIONAL)
 
-    public static void assertTransactional(KVStoreForTesting kvStoreForTesting, Runnable runnable) {
+    public static void assertTransactional(final KVStoreForTesting kvStoreForTesting, final Runnable runnable) {
         assertTransactional(kvStoreForTesting, ()->{ runnable.run(); return null; });
     }
 
-    public static <T> T assertTransactional(KVStoreForTesting kvStoreForTesting, Supplier<T> supplier) {
+    public static <T> T assertTransactional(final KVStoreForTesting kvStoreForTesting, final Supplier<T> supplier) {
 
         final long txEndCountBefore = totalTransactionsEnding(kvStoreForTesting);
         val result = supplier.get();

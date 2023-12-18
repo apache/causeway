@@ -15,14 +15,10 @@
  */
 package org.apache.causeway.core.transaction.scope;
 
-import lombok.val;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
@@ -34,7 +30,7 @@ public class StackedTransactionScope implements Scope {
 
 
     @Override
-    public Object get(String name, ObjectFactory<?> objectFactory) {
+    public Object get(final String name, final ObjectFactory<?> objectFactory) {
 
         Object key = currentKeyOnTransactionStack();
 
@@ -72,14 +68,14 @@ public class StackedTransactionScope implements Scope {
         return scopedObject;
     }
 
-    private void registerWithTransitionSynchronizationManager(ScopedObjectsHolder scopedObjects) {
+    private void registerWithTransitionSynchronizationManager(final ScopedObjectsHolder scopedObjects) {
         TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(scopedObjects));
         scopedObjects.registered = true;
     }
 
     @Override
     @Nullable
-    public Object remove(String name) {
+    public Object remove(final String name) {
         Object key = currentKeyOnTransactionStack();
         ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(key);
         if (scopedObjects != null) {
@@ -91,7 +87,7 @@ public class StackedTransactionScope implements Scope {
     }
 
     @Override
-    public void registerDestructionCallback(String name, Runnable callback) {
+    public void registerDestructionCallback(final String name, final Runnable callback) {
         ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(this);
         if (scopedObjects != null) {
             scopedObjects.destructionCallbacks.put(name, callback);
@@ -117,7 +113,7 @@ public class StackedTransactionScope implements Scope {
      * </p>
      *
      * <p>
-     * Conversely, when a tranaction is resumed, then the process is reversed; the old key is popped, and the previous
+     * Conversely, when a transaction is resumed, then the process is reversed; the old key is popped, and the previous
      * key is rebound to the {@link TransactionSynchronizationManager}, meaning that the previous transaction's
      * {@link org.apache.causeway.applib.annotation.TransactionScope transaction-scope}d beans are brought back.
      * </p>
@@ -155,7 +151,7 @@ public class StackedTransactionScope implements Scope {
 
     @Override
     @Nullable
-    public Object resolveContextualObject(String key) {
+    public Object resolveContextualObject(final String key) {
         return null;
     }
 
@@ -193,7 +189,7 @@ public class StackedTransactionScope implements Scope {
 
         private final ScopedObjectsHolder scopedObjects;
 
-        public CleanupSynchronization(ScopedObjectsHolder scopedObjects) {
+        public CleanupSynchronization(final ScopedObjectsHolder scopedObjects) {
             this.scopedObjects = scopedObjects;
         }
 
@@ -210,7 +206,7 @@ public class StackedTransactionScope implements Scope {
         }
 
         @Override
-        public void afterCompletion(int status) {
+        public void afterCompletion(final int status) {
             TransactionSynchronizationManager.unbindResourceIfPossible(StackedTransactionScope.this.currentKeyOnTransactionStack());
             for (Runnable callback : this.scopedObjects.destructionCallbacks.values()) {
                 callback.run();

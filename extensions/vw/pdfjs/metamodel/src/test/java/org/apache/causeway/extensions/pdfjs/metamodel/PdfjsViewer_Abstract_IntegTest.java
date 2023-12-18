@@ -18,12 +18,21 @@
  */
 package org.apache.causeway.extensions.pdfjs.metamodel;
 
-import lombok.val;
-
 import java.util.Collections;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import org.approvaltests.Approvals;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.metamodel.Config;
@@ -33,17 +42,8 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-import org.approvaltests.Approvals;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.AbstractPlatformTransactionManager;
-import org.springframework.transaction.support.DefaultTransactionStatus;
+
+import lombok.val;
 
 public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegrationTestAbstract {
 
@@ -69,17 +69,17 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
                 }
 
                 @Override
-                protected void doBegin(Object transaction, TransactionDefinition definition) throws TransactionException {
+                protected void doBegin(final Object transaction, final TransactionDefinition definition) throws TransactionException {
 
                 }
 
                 @Override
-                protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
+                protected void doCommit(final DefaultTransactionStatus status) throws TransactionException {
 
                 }
 
                 @Override
-                protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
+                protected void doRollback(final DefaultTransactionStatus status) throws TransactionException {
 
                 }
             };

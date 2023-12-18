@@ -18,36 +18,25 @@
  */
 package org.apache.causeway.testdomain.conf;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import org.apache.causeway.applib.annotation.TransactionScope;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-
-import org.springframework.transaction.support.AbstractPlatformTransactionManager;
-import org.springframework.transaction.support.DefaultTransactionStatus;
-import org.springframework.transaction.support.TransactionSynchronization;
-
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @Import({
@@ -72,17 +61,17 @@ public class Configuration_headless {
             }
 
             @Override
-            protected void doBegin(Object transaction, TransactionDefinition definition) throws TransactionException {
+            protected void doBegin(final Object transaction, final TransactionDefinition definition) throws TransactionException {
 
             }
 
             @Override
-            protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
+            protected void doCommit(final DefaultTransactionStatus status) throws TransactionException {
 
             }
 
             @Override
-            protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
+            protected void doRollback(final DefaultTransactionStatus status) throws TransactionException {
 
             }
         };

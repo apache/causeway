@@ -20,7 +20,6 @@ package org.apache.causeway.testdomain.persistence.jdo;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
