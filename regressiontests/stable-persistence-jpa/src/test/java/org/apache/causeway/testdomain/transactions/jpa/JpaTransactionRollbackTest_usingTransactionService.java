@@ -70,7 +70,7 @@ class JpaTransactionRollbackTest_usingTransactionService
     @Inject private RepositoryService repository;
     @Inject private CommitListener commitListener;
 
-    private _Refs.ObjectReference<CommitListener.TransactionAfterCompletionEvent> transactionAfterCompletionEvent;
+    private _Refs.ObjectReference<CommitListener.TransactionCompletionStatusHolder> transactionAfterCompletionEvent;
 
     @BeforeEach
     void setUp() {

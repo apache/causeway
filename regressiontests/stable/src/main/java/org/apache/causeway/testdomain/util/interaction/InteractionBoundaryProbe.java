@@ -47,25 +47,6 @@ public class InteractionBoundaryProbe implements TransactionSynchronization {
 
     @Inject private KVStoreForTesting kvStoreForTesting;
 
-//    /** INTERACTION BEGIN BOUNDARY */
-//    @Override
-//    public void beforeEnteringTransactionalBoundary(Interaction interaction) {
-//        log.debug("iaStarted");
-//        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
-//    }
-
-//    /** INTERACTION END BOUNDARY */
-//    @Override
-//    public void afterLeavingTransactionalBoundary(Interaction interaction) {
-//        log.debug("iaEnded");
-//        kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
-//    }
-
-
-//    /** TRANSACTION BEGIN BOUNDARY */
-//    @EventListener(TransactionBeforeCompletionEvent.class) @Order(PriorityPrecedence.FIRST + 100)
-//    public void onTransactionEnding(TransactionBeforeCompletionEvent event) {
-
     @Override
     public void beforeCompletion() {
         TransactionSynchronization.super.beforeCompletion();
@@ -73,10 +54,6 @@ public class InteractionBoundaryProbe implements TransactionSynchronization {
         log.debug("txStarted");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
     }
-
-//    /** TRANSACTION END BOUNDARY */
-//    @EventListener(TransactionAfterCompletionEvent.class) @Order(PriorityPrecedence.LAST - 100)
-//    public void onTransactionEnded(TransactionAfterCompletionEvent event) {
 
     @Override
     public void afterCompletion(int status) {

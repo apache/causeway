@@ -38,25 +38,14 @@ public class CommitListener implements TransactionSynchronization {
 
     @Value
     @RequiredArgsConstructor
-    public static class TransactionAfterCompletionEvent {
+    public static class TransactionCompletionStatusHolder {
         final TransactionCompletionStatus transactionCompletionStatus;
     }
-
-//        /** transaction end boundary (pre) */
-//        @EventListener(TransactionBeforeCompletionEvent.class)
-//        public void onPreCompletion(final TransactionBeforeCompletionEvent event) {
-//            //_Probe.errOut("=== TRANSACTION before completion");
-//        }
-
-
-//        /** transaction end boundary (post) */
-//        @EventListener(TransactionAfterCompletionEvent.class)
-//        public void onPostCompletion(final TransactionAfterCompletionEvent event) {...}
 
     @Override
     public void afterCompletion(int status) {
         TransactionCompletionStatus transactionCompletionStatus = TransactionCompletionStatus.forStatus(status);
-        TransactionAfterCompletionEvent event = new TransactionAfterCompletionEvent(transactionCompletionStatus);
+        TransactionCompletionStatusHolder event = new TransactionCompletionStatusHolder(transactionCompletionStatus);
         //_Probe.errOut("=== TRANSACTION after completion (%s)", event.name());
         Optional.ofNullable(listener)
                 .ifPresent(li -> {
@@ -65,9 +54,9 @@ public class CommitListener implements TransactionSynchronization {
                 });
     }
 
-    private Consumer<TransactionAfterCompletionEvent> listener;
+    private Consumer<TransactionCompletionStatusHolder> listener;
 
-    void bind(final @NonNull Consumer<TransactionAfterCompletionEvent> listener) {
+    void bind(final @NonNull Consumer<TransactionCompletionStatusHolder> listener) {
         this.listener = listener;
     }
 

@@ -18,12 +18,7 @@
  */
 package org.apache.causeway.testdomain.transactions.jpa;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import javax.inject.Inject;
-
-import org.apache.causeway.applib.annotation.TransactionScope;
 
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
@@ -33,8 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
@@ -53,9 +46,6 @@ import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
 
-import org.springframework.transaction.support.TransactionSynchronization;
-
-import lombok.NonNull;
 import lombok.val;
 
 @SpringBootTest(
@@ -82,7 +72,7 @@ class JpaTransactionRollbackTest_usingInteractionService
     @Inject private RepositoryService repository;
     @Inject private CommitListener commitListener;
 
-    private ObjectReference<CommitListener.TransactionAfterCompletionEvent> transactionAfterCompletionEvent;
+    private ObjectReference<CommitListener.TransactionCompletionStatusHolder> transactionAfterCompletionEvent;
 
     @BeforeEach
     void setUp() {
