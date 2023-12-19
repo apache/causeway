@@ -68,7 +68,7 @@ implements ViewModelFacet {
 
         val viewModel = !isBookmarkAvailable
                 ? createViewmodel(spec)
-                : createViewmodel(spec, bookmark); //TODO[CAUSEWAY-3662] optimization: we could use given bookmark for priming memoization
+                : createViewmodel(spec, bookmark);
 
         initialize(viewModel.getPojo());
 
@@ -97,7 +97,8 @@ implements ViewModelFacet {
     /**
      * Create viewmodel instance from a given valid {@link Bookmark}.
      * <p>
-     * The resulting {@link ManagedObject} must have its bookmark memoized.
+     * The resulting {@link ManagedObject} is not required to have its bookmark memoized.
+     * We trigger bookmark memoization later in {@link #instantiate(ObjectSpecification, Optional)}.
      */
     protected abstract ManagedObject createViewmodel(
             @NonNull ObjectSpecification spec,

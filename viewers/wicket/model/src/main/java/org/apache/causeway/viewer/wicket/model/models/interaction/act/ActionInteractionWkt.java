@@ -209,7 +209,6 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         guardAgainstNotAttached();
 
         // [CAUSEWAY-3662] enforce parameter args to not reference any hollow entities
-        //TODO[CAUSEWAY-3662] property negotiation might need the same kind of guard
         if(parameterNegotiationModel!=null) {
             ManagedObjects.stream(parameterNegotiationModel.getParamValues())
             .forEach(domainObj->{
