@@ -33,6 +33,8 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
@@ -205,9 +207,21 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     public final ParameterNegotiationModel parameterNegotiationModel() {
         guardAgainstNotAttached();
-        return parameterNegotiationModel!=null
-                ? parameterNegotiationModel
-                : startParameterNegotiationModel();
+
+        // [CAUSEWAY-3662] enforce parameter args to not reference any hollow entities
+        if(parameterNegotiationModel!=null) {
+            ManagedObjects.stream(parameterNegotiationModel.getParamValues())
+            .forEach(domainObj->{
+                // domainObj might be an entity that is hollow
+                MmEntityUtils.requiresAttached(domainObj);
+                // domainObj might be a viewmodel that holds hollow entities
+                // assuming, viewmodel has its bookmark memoized
+                ManagedObjects.refreshViewmodel(domainObj, /*bookmark supplier*/ null);
+            });
+            return parameterNegotiationModel;
+        }
+
+        return startParameterNegotiationModel();
     }
 
     public void resetParametersToDefault() {
