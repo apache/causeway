@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
@@ -58,7 +59,7 @@ public final class ManagedObjects {
     // -- CATEGORISATION
 
     /** is null or has no ObjectSpecification or has no value (pojo) */
-    public static boolean isNullOrUnspecifiedOrEmpty(final @Nullable ManagedObject adapter) {
+    public boolean isNullOrUnspecifiedOrEmpty(final @Nullable ManagedObject adapter) {
         if(adapter==null
                 || adapter==ManagedObject.unspecified()
                 || adapter.getSpecialization()==null
@@ -74,14 +75,14 @@ public final class ManagedObjects {
     /**
      * Optionally given adapter, based on whether it is not null AND specified AND not empty.
      */
-    public static Optional<ManagedObject> whenNonEmpty(final ManagedObject adapter) {
+    public Optional<ManagedObject> whenNonEmpty(final ManagedObject adapter) {
         return isNullOrUnspecifiedOrEmpty(adapter)
                 ? Optional.empty()
                 : Optional.of(adapter);
     }
 
     /** whether has at least a spec */
-    public static boolean isSpecified(final @Nullable ManagedObject adapter) {
+    public boolean isSpecified(final @Nullable ManagedObject adapter) {
         return adapter!=null
                 && adapter!=ManagedObject.unspecified();
     }
@@ -91,7 +92,7 @@ public final class ManagedObjects {
      * (even if empty, that is, representing null.)
      * @return SPECIFIED
      */
-    public static Optional<ManagedObject> asSpecified(final @Nullable ManagedObject adapter) {
+    public Optional<ManagedObject> asSpecified(final @Nullable ManagedObject adapter) {
         return isSpecified(adapter)
                 ? Optional.of(adapter)
                 : Optional.empty();
@@ -102,7 +103,7 @@ public final class ManagedObjects {
      * (even if empty, that is, representing null.)
      * @return SCALAR or EMTPY
      */
-    public static Optional<ManagedObject> asScalar(final @Nullable ManagedObject adapter) {
+    public Optional<ManagedObject> asScalar(final @Nullable ManagedObject adapter) {
         return asSpecified(adapter)
                 .filter(obj->!obj.getSpecialization().isPacked());
     }
@@ -112,7 +113,7 @@ public final class ManagedObjects {
      * (even if empty, that is, representing null.)
      * @return SCALAR and NOT_EMTPY
      */
-    public static Optional<ManagedObject> asScalarNonEmpty(final @Nullable ManagedObject adapter) {
+    public Optional<ManagedObject> asScalarNonEmpty(final @Nullable ManagedObject adapter) {
         return asScalar(adapter)
                 .filter(obj->!obj.getSpecialization().isEmpty());
     }
@@ -123,7 +124,7 @@ public final class ManagedObjects {
      * <p>
      * returns <code>false</code> for non-scalar objects
      */
-    public static boolean isIdentifiable(final @Nullable ManagedObject managedObject) {
+    public boolean isIdentifiable(final @Nullable ManagedObject managedObject) {
         return (managedObject instanceof PackedManagedObject)
                 ? false
                 : spec(managedObject)
@@ -131,33 +132,33 @@ public final class ManagedObjects {
                     .orElse(false);
     }
 
-    public static boolean isEntity(final ManagedObject managedObject) {
+    public boolean isEntity(final ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::isEntity)
                 .orElse(false);
     }
 
-    public static boolean isValue(final ManagedObject managedObject) {
+    public boolean isValue(final ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::isValue)
                 .orElse(false);
     }
 
-    public static Optional<String> getDomainType(final ManagedObject managedObject) {
+    public Optional<String> getDomainType(final ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::getLogicalTypeName);
     }
 
     // -- INSTANCE-OF CHECKS
 
-    public static boolean isPacked(final @Nullable ManagedObject managedObject) {
+    public boolean isPacked(final @Nullable ManagedObject managedObject) {
         return managedObject instanceof PackedManagedObject;
     }
 
     /**
      * Whether given {@code object} is an instance of given {@code elementType}.
      */
-    public static boolean isInstanceOf(
+    public boolean isInstanceOf(
             final @Nullable ManagedObject object,
             final @NonNull ObjectSpecification elementType) {
         val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
@@ -174,15 +175,15 @@ public final class ManagedObjects {
 
     // -- IDENTIFICATION
 
-    public static Optional<ObjectSpecification> spec(final @Nullable ManagedObject managedObject) {
+    public Optional<ObjectSpecification> spec(final @Nullable ManagedObject managedObject) {
         return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty();
     }
 
-    public static Optional<Bookmark> bookmark(final @Nullable ManagedObject managedObject) {
+    public Optional<Bookmark> bookmark(final @Nullable ManagedObject managedObject) {
         return isSpecified(managedObject) ? managedObject.getBookmark() : Optional.empty();
     }
 
-    public static Bookmark bookmarkElseFail(final @Nullable ManagedObject managedObject) {
+    public Bookmark bookmarkElseFail(final @Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("Object provides no Bookmark: %s", managedObject));
     }
@@ -190,7 +191,7 @@ public final class ManagedObjects {
 //    /**
 //     * eg. transient entities have no bookmark, so can fallback to UUID
 //     */
-//    public static Bookmark bookmarkElseUUID(final @Nullable ManagedObject managedObject) {
+//    public Bookmark bookmarkElseUUID(final @Nullable ManagedObject managedObject) {
 //        return bookmark(managedObject)
 //                .orElseGet(()->managedObject.createBookmark(UUID.randomUUID().toString()));
 //    }
@@ -200,12 +201,12 @@ public final class ManagedObjects {
      * @return optionally a String representing a reference to the <em>identifiable</em>
      * {@code managedObject}, usually made up of the object's type and its ID.
      */
-    public static Optional<String> stringify(final @Nullable ManagedObject managedObject) {
+    public Optional<String> stringify(final @Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
                 .map(Bookmark::stringify);
     }
 
-    public static String stringifyElseFail(final @Nullable ManagedObject managedObject) {
+    public String stringifyElseFail(final @Nullable ManagedObject managedObject) {
         return stringify(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
@@ -218,21 +219,21 @@ public final class ManagedObjects {
      * @return optionally a String representing a reference to the <em>identifiable</em>
      * {@code managedObject}, made of the form &lt;object-type&gt; &lt;separator&gt; &lt;object-id&gt;.
      */
-    public static Optional<String> stringify(
+    public Optional<String> stringify(
             final @Nullable ManagedObject managedObject,
             final @NonNull String separator) {
         return bookmark(managedObject)
                 .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
     }
 
-    public static String stringifyElseFail(
+    public String stringifyElseFail(
             final @Nullable ManagedObject managedObject,
             final @NonNull String separator) {
         return stringify(managedObject, separator)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
 
-    public static String stringifyElseUnidentified(
+    public String stringifyElseUnidentified(
             final @Nullable ManagedObject managedObject,
             final @NonNull String separator) {
         return stringify(managedObject, separator)
@@ -251,11 +252,35 @@ public final class ManagedObjects {
      * Results in an empty Can if {@code any} is {@code null}.
      * @param any - nullable
      */
-    public static Can<ManagedObject> unpack(
+    public Can<ManagedObject> unpack(
             final @Nullable ManagedObject any) {
         return any instanceof PackedManagedObject
                     ? ((PackedManagedObject)any).unpack()
                     : Can.of(any);
+    }
+
+    /**
+     * Flattens given {@link ManagedObject} into a {@link Stream}
+     * (also flattening any {@link PackedManagedObject}).
+     */
+    public Stream<ManagedObject> stream(
+            final @Nullable ManagedObject any) {
+        return any instanceof PackedManagedObject
+                ? ((PackedManagedObject)any).unpack().stream()
+                : Stream.of(any);
+    }
+
+    /**
+     * Flattens given {@link ManagedObject}(s) into a {@link Stream}
+     * (also flattening any {@link PackedManagedObject}).
+     */
+    public Stream<ManagedObject> stream(
+            final @Nullable Can<ManagedObject> many) {
+        if(many==null
+                || many.isEmpty()) {
+            return Stream.empty();
+        }
+        return many.stream().flatMap(ManagedObjects::stream);
     }
 
     // -- SIDE EFFECT FREE POJO GETTER
@@ -264,7 +289,7 @@ public final class ManagedObjects {
      * Peeks at the pojo of given {@link ManagedObject}, without triggering refetches of hollow entities.
      */
     @Nullable
-    public static Object peekAtPojoOf(final @Nullable ManagedObject obj) {
+    public Object peekAtPojoOf(final @Nullable ManagedObject obj) {
         return isNullOrUnspecifiedOrEmpty(obj)
                 ? null
                 : (obj instanceof _Refetchable)
@@ -274,17 +299,17 @@ public final class ManagedObjects {
 
     // -- COMPARE UTILITIES
 
-    public static boolean pojoEquals(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
+    public boolean pojoEquals(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
         val aPojo = MmUnwrapUtils.single(a);
         val bPojo = MmUnwrapUtils.single(b);
         return Objects.equals(aPojo, bPojo);
     }
 
-    public static int compare(final @Nullable ManagedObject p, final @Nullable ManagedObject q) {
+    public int compare(final @Nullable ManagedObject p, final @Nullable ManagedObject q) {
         return NATURAL_NULL_FIRST.compare(p, q);
     }
 
-    public static Comparator<ManagedObject> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
+    public Comparator<ManagedObject> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
 
         final Comparator<ManagedObject> comparator = ascending
                 ? NATURAL_NULL_FIRST
@@ -327,7 +352,7 @@ public final class ManagedObjects {
 
     // -- DEFAULTS UTILITIES
 
-    public static ManagedObject nullToEmpty(
+    public ManagedObject nullToEmpty(
             final @NonNull ObjectSpecification elementSpec,
             final @Nullable ManagedObject adapter) {
 
@@ -337,7 +362,7 @@ public final class ManagedObjects {
         return ManagedObject.empty(elementSpec);
     }
 
-    public static ManagedObject nullOrEmptyToDefault(
+    public ManagedObject nullOrEmptyToDefault(
             final @NonNull ObjectSpecification elementSpec,
             final @Nullable ManagedObject adapter,
             final @NonNull Supplier<Object> pojoDefaultSupplier) {
@@ -352,7 +377,7 @@ public final class ManagedObjects {
      * @implNote TODO this implementation ignores any registered value-semantics,
      *  which should be used for the non-primitive, mandatory case instead
      */
-    public static ManagedObject emptyToDefault(
+    public ManagedObject emptyToDefault(
             final ObjectSpecification elementSpec,
             final boolean mandatory,
             final @NonNull ManagedObject input) {
@@ -381,7 +406,7 @@ public final class ManagedObjects {
 
     // -- ADABT UTILITIES
 
-    public static Can<ManagedObject> adaptMultipleOfType(
+    public Can<ManagedObject> adaptMultipleOfType(
             final @NonNull ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray) {
 
@@ -393,7 +418,7 @@ public final class ManagedObjects {
     /**
      * used eg. to adapt the result of supporting methods, that return choice pojos
      */
-    public static Can<ManagedObject> adaptMultipleOfTypeThenFilterByVisibility(
+    public Can<ManagedObject> adaptMultipleOfTypeThenFilterByVisibility(
             final @NonNull  ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray,
             final @NonNull  InteractionInitiatedBy interactionInitiatedBy) {
@@ -406,7 +431,7 @@ public final class ManagedObjects {
 
     // -- IMPERATIVE TEXT UTILITY
 
-    public static Try<String> imperativeText(
+    public Try<String> imperativeText(
             final @Nullable ManagedObject object,
             final @NonNull ResolvedMethod method,
             final @Nullable TranslationContext translationContext) {
@@ -441,7 +466,7 @@ public final class ManagedObjects {
 
     // -- VIEWMODEL UTILITIES
 
-    public static void refreshViewmodel(
+    public void refreshViewmodel(
             final @Nullable ManagedObject viewmodel,
             final @Nullable Supplier<Bookmark> bookmarkSupplier) {
 
