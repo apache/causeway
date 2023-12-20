@@ -21,17 +21,26 @@ package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.Objects;
 
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collections.Cardinality;
+import org.apache.causeway.commons.functional.IndexedFunction;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.PackedManagedObject;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 /**
  * In the event of page serialization memoizes all the current pending parameter values
@@ -67,27 +76,80 @@ class PendingParamsSnapshot implements Serializable {
 
     private static class SerializationProxy implements Serializable {
         private static final long serialVersionUID = 1L;
-        private final Can<Bookmark> argBookmarks;
+        /**
+         * For each parameter, only set if it is a plural.
+         */
+        private final LogicalType[] cardinalityConstraints;
+        private final Can<Can<Bookmark>> argBookmarks;
 
-        //TODO[CAUSEWAY-3663] also handle PackedManagedObject
-        private SerializationProxy(final PendingParamsSnapshot pvm) {
-            this.argBookmarks = pvm.parameterNegotiationModel.getParamValues()
-                    .map(managedObj->ManagedObjects.bookmark(managedObj)
-                            .orElseGet(()->Bookmark.empty(managedObj.getLogicalType())));
+        private SerializationProxy(final PendingParamsSnapshot pendingParamsSnapshot) {
+            var objectManager = MetaModelContext.instanceElseFail().getObjectManager();
+            this.cardinalityConstraints = new LogicalType[pendingParamsSnapshot.parameterNegotiationModel.getParamCount()];
+            this.argBookmarks = pendingParamsSnapshot.parameterNegotiationModel
+                .getParamModels()
+                .map(paramModel->bookmark(objectManager, paramModel));
         }
 
-        //TODO[CAUSEWAY-3663] also handle PackedManagedObject
         private Object readResolve() {
             var objectManager = MetaModelContext.instanceElseFail().getObjectManager();
             return new PendingParamsSnapshot(
-                    argBookmarks.map(bookmark->
-                        bookmark.isEmpty()
-                        ? ManagedObject.empty(
-                                objectManager.getSpecificationLoader().specForBookmarkElseFail(bookmark))
-                        : objectManager
-                            .loadObject(bookmark)
-                            .orElseThrow()),
+                    argBookmarks
+                        .map(IndexedFunction.zeroBased((final int paramIndex, final Can<Bookmark> bookmarks)->
+                            debookmark(objectManager, paramIndex, bookmarks))),
                     null);
+        }
+
+        /**
+         * For given {@code paramModel} create a {@link Can} of {@link Bookmark}s,
+         * either containing zero to many entries if it is a plural parameter,
+         * otherwise is a singleton (having cardinality ONE, regardless of representing a null param value or not).
+         */
+        private Can<Bookmark> bookmark(
+                final @NonNull ObjectManager objectManager,
+                final @NonNull ManagedParameter paramModel) {
+            var paramValue = paramModel.getValue().getValue();
+            var isPlural = paramModel.getMetaModel().isPlural();
+            { // memoize cardinalityConstraints
+                _Assert.assertEquals(ManagedObjects.isPacked(paramValue), isPlural,
+                        ()->String.format("Framework Bug: cardinality constraint mismatch on parameter %s",
+                                paramModel.getMetaModel().getFeatureIdentifier()));
+                if(isPlural) {
+                    cardinalityConstraints[paramModel.getParamNr()] =
+                            Objects.requireNonNull(((PackedManagedObject)paramValue).getLogicalType());
+                }
+            }
+            return isPlural
+                ? ManagedObjects.unpack(paramValue)
+                        .map(objectManager::bookmark)
+                : Can.of(objectManager.bookmark(paramValue));
+        }
+
+        /**
+         * Recovers a {@link ManagedObject} from a {@link Can} of {@link Bookmark}s,
+         * as previously created via {@link #bookmark(ObjectManager, ManagedParameter)}.
+         * <p>
+         * Automatically packs multiple values, in case the underlying parameter is a plural.
+         */
+        private ManagedObject debookmark(
+                final @NonNull ObjectManager objectManager,
+                final int paramIndex,
+                final @NonNull Can<Bookmark> bookmarks) {
+            var cardinalityConstraint = cardinalityConstraints[paramIndex];
+            var isPlural = cardinalityConstraint!=null;
+            { // sanity checks
+                if(!isPlural) {
+                    _Assert.assertEquals(Cardinality.ONE, bookmarks.getCardinality(),
+                            ()->String.format("Framework Bug: cardinality constraint mismatch on parameter with index %d",
+                                    paramIndex));
+                }
+            }
+            var debookmarked = bookmarks
+                    .map(objectManager::debookmark);
+            return isPlural
+                    ? ManagedObject.packed(
+                            objectManager.getSpecificationLoader().specForLogicalTypeElseFail(cardinalityConstraint),
+                            debookmarked)
+                    : debookmarked.getSingletonOrFail();
         }
 
     }
