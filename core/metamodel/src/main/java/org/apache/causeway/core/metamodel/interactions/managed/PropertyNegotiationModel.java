@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
-import org.apache.causeway.commons.internal.debug._Debug;
+import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
@@ -216,12 +216,11 @@ public class PropertyNegotiationModel implements ManagedValue {
     // -- SUBMISSION
 
     public void submit() {
-
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[PENDING MODEL] submit pending property value '%s' into owning object", getValue().getValue());
-        });
-
-        managedProperty.modifyProperty(getValue().getValue());
+        var newPropertyValue = getValue().getValue();
+        if(XrayUi.isXrayEnabled()) {
+            _XrayEvent.event("[PENDING MODEL] submit pending property value '%s' into owning object", newPropertyValue);
+        }
+        managedProperty.modifyProperty(newPropertyValue);
         isCurrentValueAbsent.invalidate();
     }
 
