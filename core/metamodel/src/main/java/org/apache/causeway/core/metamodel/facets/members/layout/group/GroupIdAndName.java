@@ -165,7 +165,7 @@ implements
      * @implNote could potentially be improved to work similar as the title service
      */
     private static @NonNull String inferNameFromId(final @NonNull String id) {
-        return _Strings.asNaturalName2.apply(id);
+        return _Strings.asNaturalName.apply(id);
     }
 
     /**

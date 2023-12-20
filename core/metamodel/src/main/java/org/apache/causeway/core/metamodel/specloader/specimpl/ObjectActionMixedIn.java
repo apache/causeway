@@ -94,7 +94,7 @@ implements MixedInMember {
                     LogicalType.eager(
                             mixeeSpec.getCorrespondingClass(),
                             mixeeSpec.getLogicalTypeName()),
-                    _MixedInMemberNamingStrategy.determineIdFrom(mixinAction),
+                    _MixedInMemberNamingStrategy.mixinMemberId(mixinAction),
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), false, false);
 
@@ -111,7 +111,7 @@ implements MixedInMember {
                 .isPresent();
 
         if(!isExplicitlyNamed) {
-            val memberName = _MixedInMemberNamingStrategy.determineNameFrom(mixinAction);
+            val memberName = _MixedInMemberNamingStrategy.mixinFriendlyName(mixinAction);
             this.addFacet(
                     new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
         }
@@ -172,7 +172,10 @@ implements MixedInMember {
         _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(),
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
-        setupCommand(head, arguments);
+        if(!interactionInitiatedBy.isPassThrough()) {
+            // skip if is PASS_THROUGH
+            setupCommand(head, arguments);
+        }
         return mixinAction.executeInternal(
                 head, arguments,
                 interactionInitiatedBy);

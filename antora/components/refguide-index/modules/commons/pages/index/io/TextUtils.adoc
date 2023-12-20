@@ -1,0 +1,117 @@
+= TextUtils
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Utilities for text processing and text I/O.
+
+== API
+
+[source,java]
+.TextUtils.java
+----
+class TextUtils {
+  Stream<String> streamLines(String text)     // <.>
+  Can<String> readLines(String text)     // <.>
+  Can<String> readLinesFromInputStream(InputStream input, Charset charset)     // <.>
+  Can<String> readLinesFromResource(Class<?> resourceLocation, String resourceName, Charset charset)     // <.>
+  Can<String> readLinesFromUrl(URL url, Charset charset)     // <.>
+  Can<String> readLinesFromFile(File file, Charset charset)     // <.>
+  Can<String> readLinesFromDataSource(DataSource dataSource, Charset charset)     // <.>
+  void writeLinesToFile(Iterable<String> lines, File file, Charset charset)     // <.>
+  void writeLinesToDataSink(Iterable<String> lines, DataSink dataSink, Charset charset)     // <.>
+  StringDelimiter delimiter(String delimiter)
+  StringCutter cutter(String value)
+}
+----
+
+<.> xref:#streamLines_String[streamLines(String)]
++
+--
+Converts given _text_ into a _Stream_ of lines, removing new line characters _\n,\r_ in the process.
+--
+<.> xref:#readLines_String[readLines(String)]
++
+--
+Converts given _text_ into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ in the process.
+--
+<.> xref:#readLinesFromInputStream_InputStream_Charset[readLinesFromInputStream(InputStream, Charset)]
++
+--
+Reads content from given _input_ into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+--
+<.> xref:#readLinesFromResource_Class_String_Charset[readLinesFromResource(Class, String, Charset)]
++
+--
+Reads content from given resource into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+--
+<.> xref:#readLinesFromUrl_URL_Charset[readLinesFromUrl(URL, Charset)]
++
+--
+Reads content from given _URL_ into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+--
+<.> xref:#readLinesFromFile_File_Charset[readLinesFromFile(File, Charset)]
++
+--
+Reads content from given _File_ into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+--
+<.> xref:#readLinesFromDataSource_DataSource_Charset[readLinesFromDataSource(DataSource, Charset)]
++
+--
+Reads content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+--
+<.> xref:#writeLinesToFile_Iterable_File_Charset[writeLinesToFile(Iterable, File, Charset)]
++
+--
+Writes given lines to given _File_ , using new line character _\n_ .
+--
+<.> xref:#writeLinesToDataSink_Iterable_DataSink_Charset[writeLinesToDataSink(Iterable, DataSink, Charset)]
++
+--
+Writes given lines to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using new line character _\n_ .
+--
+
+== Members
+
+[#streamLines_String]
+=== streamLines(String)
+
+Converts given _text_ into a _Stream_ of lines, removing new line characters _\n,\r_ in the process.
+
+[#readLines_String]
+=== readLines(String)
+
+Converts given _text_ into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ in the process.
+
+[#readLinesFromInputStream_InputStream_Charset]
+=== readLinesFromInputStream(InputStream, Charset)
+
+Reads content from given _input_ into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+
+[#readLinesFromResource_Class_String_Charset]
+=== readLinesFromResource(Class, String, Charset)
+
+Reads content from given resource into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+
+[#readLinesFromUrl_URL_Charset]
+=== readLinesFromUrl(URL, Charset)
+
+Reads content from given _URL_ into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+
+[#readLinesFromFile_File_Charset]
+=== readLinesFromFile(File, Charset)
+
+Reads content from given _File_ into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+
+[#readLinesFromDataSource_DataSource_Charset]
+=== readLinesFromDataSource(DataSource, Charset)
+
+Reads content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a xref:refguide:commons:index/collections/Can.adoc[Can] of lines, removing new line characters _\n,\r_ and BOM file header (if any) in the process.
+
+[#writeLinesToFile_Iterable_File_Charset]
+=== writeLinesToFile(Iterable, File, Charset)
+
+Writes given lines to given _File_ , using new line character _\n_ .
+
+[#writeLinesToDataSink_Iterable_DataSink_Charset]
+=== writeLinesToDataSink(Iterable, DataSink, Charset)
+
+Writes given lines to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using new line character _\n_ .

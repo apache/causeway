@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +42,7 @@ import org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.collections._Multimaps;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -73,7 +73,7 @@ import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
@@ -114,7 +114,6 @@ implements
      * (eg. ValueTypeRegistry, configuration, ...)
      * TODO instead properly validate by implementing a validator that looks into the facets that are created
      */
-    @SuppressWarnings("removal")
     private void validateConflictingTypeSemantics(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
@@ -227,10 +226,10 @@ implements
         }
         final Class<?> autoCompleteRepository;
         final String autoCompleteMethod;
-        Method repositoryMethod;
+        ResolvedMethod repositoryMethod;
     }
 
-    private Method findRepositoryMethod(
+    private ResolvedMethod findRepositoryMethod(
             final FacetHolder facetHolder,
             final Class<?> cls,
             final String annotationName,
@@ -238,15 +237,12 @@ implements
             final String methodName) {
 
         val repoMethod = getClassCache()
-        .streamPublicMethods(repositoryClass)
-        .filter(method->method.getName().equals(methodName))
-        .filter(method->{
-            final Class<?>[] parameterTypes = method.getParameterTypes();
-            return parameterTypes.length == 1
-                    && parameterTypes[0].equals(String.class);
-        })
-        .findFirst()
-        .orElse(null);
+            .streamPublicMethods(repositoryClass)
+            .filter(method->method.name().equals(methodName))
+            .filter(method->method.isSingleArg())
+            .filter(method->method.paramType(0).equals(String.class))
+            .findFirst()
+            .orElse(null);
 
         if(repoMethod!=null) {
             return repoMethod;
@@ -562,13 +558,13 @@ implements
 
         programmingModel
         .addValidator(
-            new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()){
+            new MetaModelValidatorAbstract(getMetaModelContext(), spec->!spec.isAbstract()){
 
                 final _Multimaps.ListMultimap<String, ObjectSpecification> specsByLogicalTypeName =
                         _Multimaps.newConcurrentListMultimap();
 
                 @Override
-                public void validate(final ObjectSpecification objSpec) {
+                public void validateObjectEnter(final ObjectSpecification objSpec) {
 
                     // @DomainObject(logicalTypeName=...) must be unique among non-abstract types
                     // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
@@ -578,9 +574,6 @@ implements
                     // This must be guaranteed by MM validation.
                     // - see also LogicalTypeResolver.register(...)
 
-                    if(objSpec.isAbstract()) {
-                        return;
-                    }
                     specsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
 
                     // also adding aliases to the multi-map
@@ -590,12 +583,14 @@ implements
                 }
 
                 @Override
-                public void summarize() {
+                public void validateExit() {
 
                     specsByLogicalTypeName.forEach((logicalTypeName, collidingSpecs)->{
                         if(isObjectTypeCollision(collidingSpecs)) {
                             val csv = asCsv(collidingSpecs);
-                            collidingSpecs.forEach(spec->{
+                            collidingSpecs.stream()
+                                    .filter(this::logicalTypeNameIsNotIncludedInAliased)
+                                    .forEach(spec->{
                                 ValidationFailure.raiseFormatted(spec,
                                         ProgrammingModelConstants.Violation.NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
                                             .builder()
@@ -608,6 +603,15 @@ implements
 
                     // clean-up
                     specsByLogicalTypeName.clear();
+                }
+
+                private boolean logicalTypeNameIsNotIncludedInAliased(ObjectSpecification objectSpecification) {
+                    if (getConfiguration().getCore().getMetaModel().getValidator().isAllowLogicalTypeNameAsAlias()) {
+                        return objectSpecification.getAliases()
+                                .map(LogicalType::getLogicalTypeName).stream()
+                                .noneMatch(name -> objectSpecification.getLogicalTypeName().equals(name));
+                    }
+                    return true;
                 }
 
                 private boolean isObjectTypeCollision(final List<ObjectSpecification> specs) {

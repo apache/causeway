@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
-	license agreements. See the NOTICE file distributed with this work for additional
-	information regarding copyright ownership. The ASF licenses this file to
-	you under the Apache License, Version 2.0 (the "License"); you may not use
-	this file except in compliance with the License. You may obtain a copy of
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
-	by applicable law or agreed to in writing, software distributed under the
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
-	OF ANY KIND, either express or implied. See the License for the specific
-	language governing permissions and limitations under the License. -->
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -116,7 +124,6 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>examples/demo</module>
 				<module>incubator</module>
 				<module>regressiontests</module>
 				<module>tooling</module>
@@ -132,13 +139,9 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>examples/demo</module>
 
 				<!-- incubator, without kroviz -->
 				<module>incubator/viewers/graphql</module>
-				<module>incubator/viewers/javafx</module>
-				<module>incubator/viewers/vaadin</module>
-				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/extensions/core/commandreplay</module>
 
 				<module>regressiontests</module>
@@ -157,7 +160,6 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>examples/demo</module>
 				<module>regressiontests</module>
 				<module>tooling</module>
 			</modules>
@@ -172,13 +174,9 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>examples/demo</module>
 
 				<!-- incubator, without kroviz -->
 				<module>incubator/viewers/graphql</module>
-				<module>incubator/viewers/javafx</module>
-				<module>incubator/viewers/vaadin</module>
-				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/extensions/core/commandreplay</module>
 
 				<module>regressiontests</module>
@@ -225,65 +223,6 @@
 		</profile>
 
 		<profile>
-			<id>module-examples-demo-testing</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-testing</name>
-				</property>
-			</activation>
-			<modules>
-				<module>examples/demo</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>module-examples-demo-wicket</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-wicket</name>
-				</property>
-			</activation>
-			<modules>
-				<module>examples/demo</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>module-examples-demo-graphql</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-graphql</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/viewers/graphql</module>
-				<module>examples/demo</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>module-examples-demo-vaadin</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-vaadin</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/viewers/vaadin</module>
-				<module>examples/demo</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>module-examples-demo-javafx</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-javafx</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/viewers/javafx</module>
-				<module>examples/demo</module>
-			</modules>
-		</profile>
-
-		<profile>
 			<id>module-incubator-all</id>
 			<activation>
 				<property>
@@ -291,12 +230,9 @@
 				</property>
 			</activation>
 			<modules>
-				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/clients/kroviz</module>
 				<module>incubator/extensions/core/commandreplay</module>
 				<module>incubator/viewers/graphql</module>
-				<module>incubator/viewers/javafx</module>
-				<module>incubator/viewers/vaadin</module>
 			</modules>
 		</profile>
 
@@ -325,18 +261,6 @@
 		</profile>
 
 		<profile>
-			<id>module-incubator-javafx</id>
-			<activation>
-				<property>
-					<name>module-incubator-javafx</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/viewers/javafx</module>
-			</modules>
-		</profile>
-
-		<profile>
 			<id>module-incubator-kroviz</id>
 			<activation>
 				<property>
@@ -345,19 +269,6 @@
 			</activation>
 			<modules>
 				<module>incubator/clients/kroviz</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-incubator-vaadin</id>
-			<activation>
-				<property>
-					<name>module-incubator-vaadin</name>
-				</property>
-			</activation>
-			<modules>
-				<module>valuetypes/asciidoc/ui/vaadin</module>
-				<module>incubator/viewers/vaadin</module>
 			</modules>
 		</profile>
 
@@ -521,7 +432,7 @@
 				</property>
 			</activation>
 			<properties>
-				<jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
+				<jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
 			</properties>
 			<build>
 				<pluginManagement>
@@ -583,7 +494,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>3.0.1</version>
+						<version>3.1.0</version>
 						<executions>
 							<execution>
 								<id>sign-release-artifacts</id>
@@ -669,7 +580,7 @@
 						<version>3.1.1</version>
 						<configuration>
 							<altDeploymentRepository>
-								nightly-localfs-repo::default::file://${MVN_SNAPSHOTS_PATH}
+								nightly-localfs-repo::file://${MVN_SNAPSHOTS_PATH}
 							</altDeploymentRepository>
 						</configuration>
 					</plugin>

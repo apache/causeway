@@ -1,5 +1,3 @@
 
-
-
 ** xref:vw:fullcalendar:about.adoc[Full Calendar]
 

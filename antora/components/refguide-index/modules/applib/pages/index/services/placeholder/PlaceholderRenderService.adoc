@@ -9,31 +9,34 @@ Service that renders various _PlaceholderLiteral_ s, as presented with the UI.
 .PlaceholderRenderService.java
 ----
 interface PlaceholderRenderService {
-  String asText(PlaceholderLiteral placeholderLiteral)     // <.>
-  String asHtml(PlaceholderLiteral placeholderLiteral)     // <.>
+  String asText(PlaceholderLiteral placeholderLiteral, Map<String, String> vars)     // <.>
+  String asText(PlaceholderLiteral placeholderLiteral)
+  String asHtml(PlaceholderLiteral placeholderLiteral, Map<String, String> vars)     // <.>
+  String asHtml(PlaceholderLiteral placeholderLiteral)
+  String interpolate(String raw, Map<String, String> vars)
   PlaceholderRenderService fallback()
 }
 ----
 
-<.> xref:#asText_PlaceholderLiteral[asText(PlaceholderLiteral)]
+<.> xref:#asText_PlaceholderLiteral_Map[asText(PlaceholderLiteral, Map)]
 +
 --
 Textual representation of given _PlaceholderLiteral_ , as used for eg. titles and choice drop-downs.
 --
-<.> xref:#asHtml_PlaceholderLiteral[asHtml(PlaceholderLiteral)]
+<.> xref:#asHtml_PlaceholderLiteral_Map[asHtml(PlaceholderLiteral, Map)]
 +
 --
-Html representation of given _PlaceholderLiteral_ , as used for rendering with the UI (when appropriate).
+HTML representation of given _PlaceholderLiteral_ , as used for rendering with the UI (when appropriate).
 --
 
 == Members
 
-[#asText_PlaceholderLiteral]
-=== asText(PlaceholderLiteral)
+[#asText_PlaceholderLiteral_Map]
+=== asText(PlaceholderLiteral, Map)
 
 Textual representation of given _PlaceholderLiteral_ , as used for eg. titles and choice drop-downs.
 
-[#asHtml_PlaceholderLiteral]
-=== asHtml(PlaceholderLiteral)
+[#asHtml_PlaceholderLiteral_Map]
+=== asHtml(PlaceholderLiteral, Map)
 
-Html representation of given _PlaceholderLiteral_ , as used for rendering with the UI (when appropriate).
+HTML representation of given _PlaceholderLiteral_ , as used for rendering with the UI (when appropriate).

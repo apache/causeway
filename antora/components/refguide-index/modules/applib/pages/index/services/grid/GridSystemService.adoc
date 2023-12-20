@@ -71,14 +71,14 @@ There can be multiple implementations of this service, this indicates the base c
 
 The target namespace for this grid system.
 
-This is used when generating the XML. The Bootstrap3 grid system provided by the framework returns the value `https://causeway.apache.org/applib/layout/grid/bootstrap3`.
+This is used when generating the XML. The Bootstrap grid system provided by the framework returns the value `https://causeway.apache.org/applib/layout/grid/bootstrap3`.
 
 [#schemaLocation_]
 === schemaLocation()
 
 The schema location for the XSD.
 
-Every grid system is expected to provide a schema XSD in order to provide code completion in an IDE. The Bootstrap3 grid system provided by the framework returns the value `https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
+Every grid system is expected to provide a schema XSD in order to provide code completion in an IDE. The Bootstrap grid system provided by the framework returns the value `https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
 
 [#defaultGrid_Class]
 === defaultGrid(Class)

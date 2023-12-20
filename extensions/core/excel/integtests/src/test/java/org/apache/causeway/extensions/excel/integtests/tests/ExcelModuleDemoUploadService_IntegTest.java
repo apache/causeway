@@ -25,6 +25,8 @@ import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.resources._Resources;
@@ -45,7 +47,7 @@ public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTest
         fixtureScripts.run(new ExcelDemoToDoItem_tearDown());
     }
 
-    //@Test @Disabled("TODO[2033] removal of PlatformTransactionManager") 
+    @Test @Disabled
     public void uploadSpreadsheet() throws Exception{
 
         // Given
@@ -60,6 +62,5 @@ public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTest
 
         Assertions.assertThat(all.size()).isEqualTo(8);
     }
-
 
 }

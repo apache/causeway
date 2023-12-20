@@ -24,12 +24,12 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.binding.BooleanBinding;
 
 /**
- * Boolean {@link IModel} to bind to the associated {@link DataTableModel}'s
+ * Boolean {@link IModel} to bind to the associated {@link DataTableInteractive}'s
  * {@link DataRow} model to handle check-box selection.
  */
 public class DataRowToggleWkt

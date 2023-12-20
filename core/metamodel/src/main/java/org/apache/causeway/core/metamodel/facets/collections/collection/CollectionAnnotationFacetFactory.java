@@ -24,18 +24,18 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -52,7 +52,11 @@ extends FacetFactoryAbstract {
 
         val collectionIfAny = collectionIfAny(processMethodContext);
 
-        inferIntentWhenOnTypeLevel(processMethodContext, collectionIfAny);
+        if(processMethodContext.isMixinMain()) {
+            collectionIfAny.ifPresent(collection->{
+                inferMixinSort(collection, processMethodContext.getFacetHolder());
+            });
+        }
 
         processDomainEvent(processMethodContext, collectionIfAny);
         processTypeOf(processMethodContext, collectionIfAny);
@@ -62,26 +66,15 @@ extends FacetFactoryAbstract {
         return processMethodContext
             .synthesizeOnMethodOrMixinType(
                     Collection.class,
-                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                    .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
+                    () -> ValidationFailureUtils
+                    .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Collection.class));
     }
 
-    void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
-        if(!processMethodContext.isMixinMain() || !collectionIfAny.isPresent()) {
-            return; // no @Collection found neither type nor method
-        }
-
-        //          XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
-        //          val isPropertyMethodLevel = processMethodContext.synthesizeOnMethod(Property.class).isPresent();
-        //          if(isPropertyMethodLevel) return;
-
-        //[1998] if @Collection detected on method or type level infer:
-        //@Action(semantics=SAFE)
-        //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
-        val facetedMethod = processMethodContext.getFacetHolder();
+    void inferMixinSort(final Collection collection, final FacetedMethod facetedMethod) {
+        /* if @Collection detected on method or type level infer:
+         * @Action(semantics=SAFE) */
         addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
-
+        addFacet(ContributingFacetAbstract.createAsCollection(facetedMethod));
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
@@ -109,12 +102,11 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        val cls = processMethodContext.getCls();
         val facetHolder = processMethodContext.getFacetHolder();
         val method = processMethodContext.getMethod();
 
         val methodReturnType = method.getReturnType();
-        ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnType)
+        CollectionSemantics.valueOf(methodReturnType)
         .ifPresent(collectionType->{
             addFacetIfPresent(
                     // check for @Collection(typeOf=...)
@@ -123,7 +115,6 @@ extends FacetFactoryAbstract {
                     .or(
                         // else infer from return type
                         ()-> TypeOfFacet.inferFromMethodReturnType(
-                                cls,
                                 method,
                                 facetHolder))
                 );

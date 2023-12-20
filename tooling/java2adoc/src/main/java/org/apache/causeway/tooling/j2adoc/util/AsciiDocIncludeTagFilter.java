@@ -22,26 +22,26 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.val;
 
 public final class AsciiDocIncludeTagFilter {
 
-    public static String read(File source) {
-        return _Text.readLinesFromFile(source, StandardCharsets.UTF_8).stream()
+    public static String read(final File source) {
+        return TextUtils.readLinesFromFile(source, StandardCharsets.UTF_8).stream()
         //.filter(line->!containsIncludeTag(line))
         .filter(line->!isAllLineComment(line))
         .map(AsciiDocIncludeTagFilter::removeFootNoteReference)
         .collect(Collectors.joining("\n"));
     }
 
-    public static void removeAdocExampleTags(File source) {
-        val fixedLines = _Text.readLinesFromFile(source, StandardCharsets.UTF_8)
+    public static void removeAdocExampleTags(final File source) {
+        val fixedLines = TextUtils.readLinesFromFile(source, StandardCharsets.UTF_8)
         .filter(line->!isIncludeTagComment(line))
         .map(AsciiDocIncludeTagFilter::removeFootNoteReference);
 
-        _Text.writeLinesToFile(fixedLines, source, StandardCharsets.UTF_8);
+        TextUtils.writeLinesToFile(fixedLines, source, StandardCharsets.UTF_8);
     }
 
     // -- HELPER
@@ -55,11 +55,11 @@ public final class AsciiDocIncludeTagFilter {
                 || line.contains(" end::");
     }
 
-    private static boolean isAllLineComment(String line) {
+    private static boolean isAllLineComment(final String line) {
         return line.trim().startsWith("//");
     }
 
-    private static String removeFootNoteReference(String line) {
+    private static String removeFootNoteReference(final String line) {
         if(!line.contains("// <")) {
             return line;
         }

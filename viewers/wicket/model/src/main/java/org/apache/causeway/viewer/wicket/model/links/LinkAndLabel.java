@@ -40,6 +40,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LinkAndLabel
 implements
+    Menuable,
     HasUiComponent<AjaxLink<ManagedObject>>,
     HasManagedAction,
     Serializable {
@@ -62,7 +63,7 @@ implements
     }
 
     @Override
-    public  ObjectAction getAction() {
+    public ObjectAction getAction() {
         return actionModel.getAction();
     }
 
@@ -100,8 +101,13 @@ implements
 
     public boolean isRenderOutlined() {
         return isPositionedAt(Position.BELOW)
-                .or(isPositionedAt(Position.RIGHT))
-                        .test(this);
+            .or(isPositionedAt(Position.RIGHT))
+            .test(this);
+    }
+
+    @Override
+    public Kind menuableKind() {
+        return Kind.LINK;
     }
 
 }

@@ -29,6 +29,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.causeway.commons.internal._Constants;
 
@@ -256,21 +258,21 @@ class StringsTest {
     @Test
     void composeIdentityWithNull() throws Exception {
         assertThat(
-                _Strings.operator().apply(null),
+                _Strings.StringOperator.identity().apply(null),
                 nullValue());
     }
 
     @Test
     void composeIdentity() throws Exception {
         assertThat(
-                _Strings.operator().apply(" 12 aBc"),
+                _Strings.StringOperator.identity().apply(" 12 aBc"),
                 is(" 12 aBc"));
     }
 
     @Test
     void compose2WithNull() throws Exception {
         assertThat(
-                _Strings.operator()
+                _Strings.StringOperator.identity()
                 .andThen(_Strings::lower)
                 .apply(null),
                 nullValue());
@@ -279,7 +281,7 @@ class StringsTest {
     @Test
     void compose2() throws Exception {
         assertThat(
-                _Strings.operator()
+                _Strings.StringOperator.identity()
                 .andThen(_Strings::lower)
                 .apply(" 12 aBc"),
                 is(" 12 abc"));
@@ -288,7 +290,7 @@ class StringsTest {
     @Test
     void composeOperatorSequency_LastShouldWin() throws Exception {
         assertThat(
-                _Strings.operator()
+                _Strings.StringOperator.identity()
                 .andThen(_Strings::lower)
                 .andThen(_Strings::upper)
                 .apply(" 12 aBc"),
@@ -310,27 +312,115 @@ class StringsTest {
     // -- SPECIAL COMPOSITES
 
     @Test
-    void asLowerDashed() throws Exception {
-        assertThat(
-                _Strings.asLowerDashed
-                .apply(" 12    aBc"),
-                is("-12-abc"));
-    }
-
-    @Test
     void asNormalized() throws Exception {
-        assertThat(
-                _Strings.asNormalized
-                .apply(" 12 a B         c"),
-                is(" 12 a B c"));
+        assertNull(asNormalized(null)); // null
+        assertThat(asNormalized(""), is("")); // empty string
+        assertThat(asNormalized("yada Foobar"), is("yada Foobar")); // alreadyNormalized
+        assertThat(asNormalized("Yada\tFoobar"), is("Yada Foobar")); // tab
+        assertThat(asNormalized("Yada\t Foobar"), is("Yada Foobar")); // tab and space
+        assertThat(asNormalized("Yada  foobar"), is("Yada foobar")); // two spaces
+        assertThat(asNormalized("Yada\nfoobar"), is("Yada foobar")); // new line
+        assertThat(asNormalized("Yada\n Foobar"), is("Yada Foobar")); // newline and space
+        assertThat(asNormalized("Yada\r\n Foobar"), is("Yada Foobar")); // windows newline
+        assertThat(asNormalized("Yada\r Foobar"), is("Yada Foobar")); // mac-os newline
+        assertThat(asNormalized("Yada\r \tFoo \n\tbar  Baz"), is("Yada Foo bar Baz")); // multiple
+        assertThat(asNormalized(" 12 a B         c"), is(" 12 a B c"));
+    }
+    private String asNormalized(final String string) {
+        return _Strings.asNormalized.apply(string);
     }
 
     @Test
-    void asNaturalName2() throws Exception {
-        assertThat(
-                _Strings.asNaturalName2
-                .apply("NextAvailableDate"),
-                is("Next Available Date"));
+    void asNaturalName() throws Exception {
+        assertThat(asNaturalName("NextAvailableDate"), is("Next Available Date"));
+    }
+    @Test
+    void naturalNameAddsSpacesToCamelCaseWords() {
+        assertEquals("Camel Case Word", asNaturalName("CamelCaseWord"));
+    }
+    @Test
+    void naturalNameAddsSpacesBeforeNumbers() {
+        assertEquals("One 2 One", asNaturalName("One2One"));
+        assertEquals("Type 123", asNaturalName("Type123"));
+        assertEquals("4321 Go", asNaturalName("4321Go"));
+    }
+    @Test
+    void naturalNameRecognisesAcronymns() {
+        assertEquals("TNT Power", asNaturalName("TNTPower"));
+        assertEquals("Spam RAM Can", asNaturalName("SpamRAMCan"));
+        assertEquals("DOB", asNaturalName("DOB"));
+    }
+    @Test
+    void naturalNameWithShortNames() {
+        assertEquals("At", asNaturalName("At"));
+        assertEquals("I", asNaturalName("I"));
+    }
+    @Test
+    void naturalNameNoChange() {
+        assertEquals("Camel Case Word", asNaturalName("CamelCaseWord"));
+        assertEquals("Almost Normal english sentence", asNaturalName("Almost Normal english sentence"));
+    }
+    private static String asNaturalName(final String string) {
+        return _Strings.asNaturalName.apply(string);
+    }
+
+
+    @Test
+    void asCamelCase() {
+        assertThat(asCamelCase("An Upper Case"), is("AnUpperCase"));
+        assertThat(asCamelCase("An_Upper.Case"), is("AnUpperCase"));
+        assertThat(asCamelCase("a Lower Case"), is("aLowerCase"));
+        assertThat(asCamelCase("a_Lower.Case"), is("aLowerCase"));
+        // special use-case in org.apache.causeway.viewer.commons.model.components.UiComponentType#getId()
+        assertThat(asCamelCase("OBJECT_EDIT".toLowerCase()), is("objectEdit"));
+    }
+    private String asCamelCase(final String string) {
+        return _Strings.asCamelCase.apply(string);
+    }
+
+    @Test
+    void asCamelCaseDecapitalized() {
+        assertThat(asCamelCaseDecapitalized("An Upper Case"), is("anUpperCase"));
+        assertThat(asCamelCaseDecapitalized("a Lower Case"), is("aLowerCase"));
+        assertThat(asCamelCaseDecapitalized("AnUpperCase"), is("anUpperCase"));
+        assertThat(asCamelCaseDecapitalized("aLowerCase"), is("aLowerCase"));
+        assertThat(asCamelCaseDecapitalized("a  Lower  Case"), is("aLowerCase"));
+    }
+    private String asCamelCaseDecapitalized(final String string) {
+        return _Strings.asCamelCaseDecapitalized.apply(string);
+    }
+
+    @Test
+    void asLowerDashed() {
+        assertThat(asLowerDashed(" 12    aBc"), is("-12-abc"));
+        assertThat(asLowerDashed("An Upper Case"), is("an-upper-case"));
+        assertThat(asLowerDashed("An   Upper   Case"), is("an-upper-case"));
+        assertThat(asLowerDashed("An\nUpper\tCase"), is("an-upper-case"));
+    }
+    private String asLowerDashed(final String string) {
+        return _Strings.asLowerDashed.apply(string);
+    }
+
+    // -- PREFIX/SUFFIX
+
+    @Test
+    void shouldStripIfThereIsOne() {
+        assertThat(stripLeadingSlash("/foobar"), is("foobar"));
+    }
+    @Test
+    void shouldLeaveUnchangedIfThereIsNone() {
+        assertThat(stripLeadingSlash("foobar"), is("foobar"));
+    }
+    @Test
+    void shouldConvertSolitarySlashToEmptyString() {
+        assertThat(stripLeadingSlash("/"), is(""));
+    }
+    @Test
+    void identityOnNull() {
+        assertNull(stripLeadingSlash(null));
+    }
+    private static String stripLeadingSlash(final String input) {
+        return _Strings.removePrefix(input, "/");
     }
 
 

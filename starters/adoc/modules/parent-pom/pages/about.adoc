@@ -16,7 +16,7 @@ To use it, just add:
 <parent>
     <groupId>org.apache.causeway.app</groupId>
     <artifactId>causeway-app-starter-parent</artifactId>
-    <version>{page-causewayrel}</version>                    <!--.-->
+    <version>{page-causewayprev}</version>                    <!--.-->
 </parent>
 ----
 <.> update as required for new versions of the framework.
@@ -39,21 +39,21 @@ The parent POM also import (using `scope=import, type=pom`) each of the "bill of
 
 * `org.apache.causeway.core:causeway` -
 +
-The two core modules most commonly referenced by domain applications are `o.a.i.core:causeway-applib` and `o.a.i.core:causeway-schema`.
+The two core modules most commonly referenced by domain applications are `o.a.c.core:causeway-applib` and `o.a.c.core:causeway-schema`.
 
-* `o.a.i.testing:causeway-testing`
+* `o.a.c.testing:causeway-testing`
 +
 For the `causeway-testing-xxx` modules (fixture scripts, unit test support, integ test support etc)
 
-* `o.a.i.extensions:causeway-extensions`
+* `o.a.c.extensions:causeway-extensions`
 
-* `o.a.i.subdomains:causeway-subdomains`
+* `o.a.c.subdomains:causeway-subdomains`
 
-* `o.a.i.valuetypes:causeway-valuetypes`
+* `o.a.c.valuetypes:causeway-valuetypes`
 
-* `o.a.i.incubator:causeway-incubator`
+* `o.a.c.incubator:causeway-incubator`
 
-* `o.a.i.legacy:causeway-legacy`
+* `o.a.c.legacy:causeway-legacy`
 
 These all set up `<dependencyManagement>/<dependencies>` entries for all of the modules, meaning that there's only one place to update the version to Apache Causeway (the reference to the parent POM).
 

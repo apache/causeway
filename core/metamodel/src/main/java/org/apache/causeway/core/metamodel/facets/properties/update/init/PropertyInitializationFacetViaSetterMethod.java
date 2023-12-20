@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.update.init;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -38,7 +38,7 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
-    public PropertyInitializationFacetViaSetterMethod(final Method method, final FacetHolder holder) {
+    public PropertyInitializationFacetViaSetterMethod(final ResolvedMethod method, final FacetHolder holder) {
         super(holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
     }
@@ -53,7 +53,7 @@ implements ImperativeFacet {
     @Override
     public void initProperty(final ManagedObject owningAdapter, final ManagedObject initialAdapter) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        MmInvokeUtils.invoke(method, owningAdapter, initialAdapter);
+        MmInvokeUtils.invokeWithSingleArg(method.method(), owningAdapter, initialAdapter);
     }
 
     @Override

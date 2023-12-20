@@ -18,22 +18,65 @@
  */
 package org.apache.causeway.core.metamodel.context;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * @since 2.0
  */
-public interface MetaModelContext extends HasMetaModelContext {
+public abstract class MetaModelContext implements HasMetaModelContext {
 
     @Override
-    default MetaModelContext getMetaModelContext() {
+    public final MetaModelContext getMetaModelContext() {
         return this;
     }
 
-    // -- EXTRACTORS
+    // -- INSTANCE (SINGLETON)
 
-    public static MetaModelContext from(final ManagedObject adapter) {
-        return adapter.getSpecification().getMetaModelContext();
+    public static Optional<MetaModelContext> instance() {
+        return Optional.ofNullable(INSTANCE_HOLDER.get());
+    }
+
+    @Nullable
+    public static MetaModelContext instanceNullable() {
+        return instance().orElse(null);
+    }
+
+    public static MetaModelContext instanceElseFail() {
+        return instance()
+                .orElseThrow(()->_Exceptions.noSuchElement("MetaModelContext not yet or no longer available."));
+    }
+
+    // -- HELPER
+
+    protected static final AtomicReference<MetaModelContext> INSTANCE_HOLDER = new AtomicReference<>();
+
+    /**
+     * Internal: clears the singleton instance reference
+     */
+    protected static void clear() {
+        INSTANCE_HOLDER.set(null);
+    }
+
+    /**
+     * Internal: set singleton. Override NOT allowed.
+     */
+    protected static void set(final MetaModelContext mmc) {
+        _Assert.assertNull(MetaModelContext.INSTANCE_HOLDER.get(),
+                ()->"MetaModelContext singelton is already instantiated, override is not allowed!");
+        setOrReplace(mmc);
+    }
+
+    /**
+     * Internal: set or replace singleton. Override allowed.
+     */
+    public static void setOrReplace(final MetaModelContext mmc) {
+        MetaModelContext.INSTANCE_HOLDER.set(mmc);
     }
 
 }

@@ -62,4 +62,5 @@ extends MixinFacetAbstract {
             final FacetHolder holder) {
         super(mixinClass, mixinMethodName, constructor, holder);
     }
+
 }

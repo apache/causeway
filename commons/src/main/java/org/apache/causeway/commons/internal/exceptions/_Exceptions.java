@@ -33,9 +33,9 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.NonNull;
 import lombok.val;
@@ -77,14 +77,14 @@ public final class _Exceptions {
     public static final IllegalArgumentException illegalArgument(
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalArgumentException(String.format(format, args));
+        return new IllegalArgumentException(safelyFormat(format, args));
     }
 
     public static final IllegalArgumentException illegalArgument(
             final @NonNull Throwable cause,
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalArgumentException(String.format(format, args), cause);
+        return new IllegalArgumentException(safelyFormat(format, args), cause);
     }
 
     // -- ILLEGAL STATE
@@ -92,14 +92,14 @@ public final class _Exceptions {
     public static IllegalStateException illegalState(
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalStateException(String.format(format, args));
+        return new IllegalStateException(safelyFormat(format, args));
     }
 
     public static IllegalStateException illegalState(
             final @NonNull Throwable cause,
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalStateException(String.format(format, args), cause);
+        return new IllegalStateException(safelyFormat(format, args), cause);
     }
 
     // -- ILLEGAL ACCESS
@@ -107,7 +107,7 @@ public final class _Exceptions {
     public static IllegalAccessException illegalAccess(
             final @NonNull String format,
             final @Nullable Object ... args) {
-        return new IllegalAccessException(String.format(format, args));
+        return new IllegalAccessException(safelyFormat(format, args));
     }
 
     // -- NO SUCH ELEMENT
@@ -123,7 +123,15 @@ public final class _Exceptions {
     public static final NoSuchElementException noSuchElement(
             final @NonNull String format,
             final @Nullable Object ...args) {
-        return noSuchElement(String.format(format, args));
+        return noSuchElement(safelyFormat(format, args));
+    }
+
+    // -- NO SUCH METHOD
+
+    public static final NoSuchMethodException noSuchMethodException(
+            final Class<?> type, final String methodName, final Class<?>... paramTypes) {
+        return new NoSuchMethodException(String.format("%s#%s(%s)", type, methodName,
+                Can.ofArray(paramTypes).stream().map(Class::getSimpleName).collect(Collectors.joining(","))));
     }
 
     // -- UNEXPECTED CODE REACH
@@ -153,13 +161,12 @@ public final class _Exceptions {
     }
 
     public static RuntimeException unrecoverable(final String format, final Object ...args) {
-        return new RuntimeException(String.format("unrecoverable error: '%s'",
-                String.format(format, args)));
+        return new RuntimeException(String.format("unrecoverable error: '%s'", safelyFormat(format, args)));
     }
 
     public static RuntimeException unrecoverable(final Throwable cause, final String format, final Object ...args) {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...",
-                String.format(format, args)), cause);
+                safelyFormat(format, args)), cause);
     }
 
     // -- UNSUPPORTED
@@ -173,13 +180,27 @@ public final class _Exceptions {
     }
 
     public static UnsupportedOperationException unsupportedOperation(final String format, final Object ...args) {
-        return new UnsupportedOperationException(String.format(format, args));
+        return new UnsupportedOperationException(safelyFormat(format, args));
+    }
+
+
+    private static String safelyFormat(final String format, final Object... args) {
+        try {
+            return String.format(format, args);
+        } catch (Throwable ex) {
+            // we lose the args
+            return format;
+        }
     }
 
     // -- ASSERT
 
     public static AssertionError assertionError(final String msg) {
         return new AssertionError(msg);
+    }
+
+    public static AssertionError assertionError(final String format, final Object ...args) {
+        return new AssertionError(safelyFormat(format, args));
     }
 
     // -- MESSAGE
@@ -440,9 +461,9 @@ public final class _Exceptions {
                     val replacement = entry.getValue();
                     var s = str;
                     s = s.replace(entry.getKey() + ".", replacement.isEmpty() ? "{" : replacement + ".");
-                    val ref = _Refs.stringRef(s);
-                    val left = ref.cutAtIndexOfAndDrop(".");
-                    val right = ref.getValue();
+                    val cutter = TextUtils.cutter(s);
+                    val left = cutter.keepBefore(".").getValue();
+                    val right = cutter.keepAfter(".").getValue();
                     s = replacement.isEmpty()
                             ? left + "}." + right
                             : left + "." + right;

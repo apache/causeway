@@ -46,9 +46,9 @@ extends ChainingModel<T> {
             final @NonNull ScalarModel scalarModel) {
         super(scalarModel);
         this.type = type;
-        _Assert.assertTrue(scalarModel.getScalarTypeSpec().isAssignableFrom(type), ()->
+        _Assert.assertTrue(scalarModel.getElementType().isAssignableFrom(type), ()->
                 String.format("cannot possibly unwrap model of type %s into target type %s",
-                        scalarModel.getScalarTypeSpec().getCorrespondingClass(),
+                        scalarModel.getElementType().getCorrespondingClass(),
                         type));
     }
 

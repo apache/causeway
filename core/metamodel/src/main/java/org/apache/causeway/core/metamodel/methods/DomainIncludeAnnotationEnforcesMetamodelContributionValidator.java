@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.methods;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +33,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
@@ -56,32 +56,24 @@ import lombok.val;
  * @see org.apache.causeway.applib.annotation.Domain.Include
  */
 public class DomainIncludeAnnotationEnforcesMetamodelContributionValidator
-extends MetaModelVisitingValidatorAbstract {
+extends MetaModelValidatorAbstract {
 
     private final _ClassCache classCache;
 
     @Inject
     public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, spec->((spec instanceof ObjectSpecificationAbstract) && !spec.isAbstract() && !spec.getBeanSort().isManagedBeanNotContributing() && !spec.isValue()));
         this.classCache = _ClassCache.getInstance();
     }
 
     @Override
-    public void validate(final ObjectSpecification spec) {
-
-        if(!(spec instanceof ObjectSpecificationAbstract)
-                || spec.isAbstract()
-                || spec.getBeanSort().isManagedBeanNotContributing()
-                || spec.isValue()) {
-            return;
-        }
+    public void validateObjectEnter(final ObjectSpecification spec) {
 
         final Class<?> type = spec.getCorrespondingClass();
 
         // methods picked up by the framework
-        // assuming 'weak' equality, treating overwritten and overriding methods as same
-        val memberMethods = new TreeSet<Method>(_Reflect::methodWeakCompare);
-        val supportMethods = new TreeSet<Method>(_Reflect::methodWeakCompare);
+        val memberMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodCompare);
+        val supportMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodCompare);
 
         spec
         .streamAnyActions(MixedIn.EXCLUDED)
@@ -111,23 +103,36 @@ extends MetaModelVisitingValidatorAbstract {
         .map(MethodFacade::asMethodForIntrospection)
         .forEach(supportMethods::add);
 
-        val methodsIntendedToBeIncludedButNotPickedUp = _Sets.<Method>newHashSet();
+        val methodsIntendedToBeIncludedButNotPickedUp = _Sets.<ResolvedMethod>newHashSet();
 
         classCache
         // methods intended to be included with the meta-model but missing
         .streamDeclaredMethodsHaving(
                 type,
                 "domain-include",
-                method->_Annotations.synthesize(method, Domain.Include.class).isPresent())
+                method->
+                    _Annotations.synthesize(method.method(), Domain.Include.class).isPresent())
         // filter away those that are recognized
         .filter(Predicate.not(memberMethods::contains))
         .filter(Predicate.not(supportMethods::contains))
+        //[CAUSEWAY-3571] perhaps no longer required, because we only collect resolvable methods ...
+        // special lookup for generic type bounds
+//        .filter(method->{
+//            if(_Reflect.hasGenericBounds(method)) {
+//                if(memberMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
+//                    return false; // found
+//                }
+//                if(supportMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
+//                    return false; // found
+//                }
+//            }
+//            return true; // pass-through
+//        })
         .forEach(methodsIntendedToBeIncludedButNotPickedUp::add);
 
         // find reasons about why these are not recognized
         methodsIntendedToBeIncludedButNotPickedUp.stream()
         .forEach(notPickedUpMethod->{
-
             val unmetContraints =
                     unmetContraints((ObjectSpecificationAbstract) spec, notPickedUpMethod)
                     .stream()
@@ -137,7 +142,7 @@ extends MetaModelVisitingValidatorAbstract {
                     Violation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
                         .builder()
                         .addVariable("type", spec.getFeatureIdentifier().getClassName())
-                        .addVariable("member", _Reflect.methodToShortString(notPickedUpMethod))
+                        .addVariable("member", _Reflect.methodToShortString(notPickedUpMethod.method()))
                         .buildMessage()
 
                     + " Unmet constraint(s): %s",
@@ -153,7 +158,7 @@ extends MetaModelVisitingValidatorAbstract {
 
     private List<String> unmetContraints(
             final ObjectSpecificationAbstract spec,
-            final Method method) {
+            final ResolvedMethod method) {
 
         //val type = spec.getCorrespondingClass();
         val unmetContraints = _Lists.<String>newArrayList();
@@ -166,7 +171,7 @@ extends MetaModelVisitingValidatorAbstract {
 
         // find any inherited methods that have Domain.Include semantics
         val inheritedMethodsWithDomainIncludeSemantics =
-            _Reflect.streamInheritedMethods(method)
+            _Reflect.streamInheritedMethods(method.method())
             .filter(m->!Objects.equals(method.toString(), m.toString())) // exclude self
             .filter(m->_Annotations.synthesize(m, Domain.Include.class).isPresent())
             .collect(Collectors.toSet());

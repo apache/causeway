@@ -3,7 +3,7 @@
 
 Represents the location in the user interface where a class member is to be rendered.
 
-Used to control visibility (eg using the _Property#hidden()_ annotation) and enablement (eg using the _Property#editing()_ annotation) in different regions of the user interface.
+Used to control visibility (eg using the _PropertyLayout#hidden()_ annotation) and enablement (eg using the _Property#editing()_ annotation) in different regions of the user interface.
 
 The application programmer may use any of the values of this enum. Some represent concrete locations (eg _#OBJECT_FORMS_ , _#PARENTED_TABLES_ ), whereas some represent a combination of locations (eg _#ALL_TABLES_ , _#ANYWHERE_ ).
 
@@ -114,6 +114,8 @@ For most viewers, this applies to property and collection members, not actions.
 === REFERENCES_PARENT
 
 The (property) member should be hidden when displayed as a column of a table within parent object's collection, and when it references that parent.
+
+This has no meaning for collections; if set on a collection then it will just be ignored.
 
 [#PARENTED_TABLES]
 === PARENTED_TABLES

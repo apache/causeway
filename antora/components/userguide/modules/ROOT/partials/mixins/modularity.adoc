@@ -1,0 +1,289 @@
+= Modularity
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Mixins separate behaviour away from the underlying mixee, with the mixee operating _upon_ the mixee.
+The mixee itself knows nothing about its caller.
+This simple fact becomes very powerful in that the mixin could even be in a different module than the mixee, xref:modules.adoc[modularity] being an important concern of maintainability.
+
+
+== Contributing to a class
+
+The simple case is for the mixin to contribute directly to a mixee's concrete class.
+
+For example, suppose we have an `orders` module and a `customers` module.
+The `orders` module could provide a mixin that (so far as the end-user is concerned in the UI) would allow a customer to place an order:
+
+[plantuml]
+.`orders` module contributes to `customers`
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package orders {
+    class Customer_placeOrder <<mixin>>
+}
+
+package customers {
+    class Customer <<ppt>>
+}
+Customer_placeOrder -.r-> Customer: "contributes to"
+----
+
+In terms of code:
+
+[source,java]
+----
+package domainapp.orders;                   // <.>
+
+import domainapp.customers.Customer;        // <.>
+
+@Action
+@RequiredArgsConstructor
+public class Customer_placeOrder {
+
+    private final Customer customer;
+
+    // ...
+}
+----
+<.> defined in the `orders` module
+<.> acts upon objects in the `customers` module
+
+
+
+== Contributing to an interface
+
+In the previous section the `Customer` did not know that it was being contributed to; and the mixee had access to the entire (`public`) interface defined by the `Customer` type.
+A variation though is for the mixee to contribute by way of a (Java) `interface`.
+
+This interface needs to be in a module that both the mixee and mixin has access to, and so there are three options:
+
+* interface is defined the mixin's module
+* interface is defined the mixee's module
+* interface is defined in some common/base module
+
+The sections below explore each of these alternatives.
+
+=== Interface defined in mixin's module
+
+For example, suppose that the `docmgmt` module provides document management capabilities, provided to any `DocumentHolder`.
+The `Customer` class might then take advantage of this, saying in effect:  "yes, I want to hold some documents, please manage that concern for me".
+
+[plantuml]
+.`Customer` elects to have contributions made to it by `docmgmt` module
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package docmgmt {
+    class DocumentHolder_documents <<mixin>>
+    interface DocumentHolder
+}
+
+package customers {
+    class Customer <<ppt>>
+}
+DocumentHolder_documents -.r-> DocumentHolder: "contributes to"
+Customer -u-^ DocumentHolder
+----
+
+Therefore `customer` (mixee) --- [depends upon]-> `docmgmt` (mixin).
+
+In terms of code:
+
+* in the `docmgmt` module:
++
+[source,java]
+----
+package domainapp.docmgmt;
+
+public interface DocumentHolder { ... }
+----
++
+and
++
+[source,java]
+----
+package domainapp.docmgmt;
+
+@Collection
+@RequiredArgsConstructor
+public class DocumentHolder_documents {
+
+    private final DocumentHolder documentHolder;
+
+    // ...
+}
+----
+
+* in the `customers` module:
++
+[source,java]
+----
+package domainapp.customer;
+
+import domainapp.docmgmt.DocumentHolder;
+
+public class Customer implements DocumentHolder {
+    // ...
+}
+----
+
+
+=== Interface defined in mixee's module
+
+Alternatively, the interface could be in the mixees's module.
+
+For example, suppose the `customer` module defines `HasAddress`, also implemented by `Customer`.
+The `mailmerge` module provides the ability to send out mailshots, but it only needs the information exposed through `HasAddress`, not all of `Customer`.
+
+
+[plantuml]
+.`mailmerge` module contributes to `customers`
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package mailmerge {
+    class HasAddress_mailshot <<mixin>>
+}
+
+package customers {
+    interface HasAddress
+    class Customer <<ppt>>
+}
+HasAddress_mailshot -.r-> HasAddress: "contributes to"
+Customer -u-^ HasAddress
+----
+
+Therefore `mailmerge` (mixin) --- [depends upon]-> `customer` (mixee).
+
+In terms of code:
+
+* in the `customers` module:
++
+[source,java]
+----
+package domainapp.customer;
+
+public interface HasAddress {
+    // ...
+}
+}
+----
++
+and
++
+[source,java]
+----
+package domainapp.customer;
+
+public class Customer implements HasAddress {
+    // ...
+}
+----
+
+* and in the `mailmerge` module:
++
+[source,java]
+----
+package domainapp.mailmerge;
+
+@Action
+public class HasAddress_mailshot {
+    private final HasAddress hasAddress;
+    // ...
+}
+----
+
+
+
+=== Interface defined in a common module
+
+With this design in the previous section, there's nothing to prevent our "mailmerge" module from accessing the rest of `Customer`.
+We can fix this by moving the interface to some common location:
+
+
+[plantuml]
+.`mailmerge` module contributes to `customers`
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package mailmerge {
+    class HasAddress_mailshot <<mixin>>
+}
+
+package address {
+    interface HasAddress
+}
+
+package customers {
+    class Customer <<ppt>>
+}
+HasAddress_mailshot -.r-> HasAddress: "contributes to"
+Customer -u-^ HasAddress
+----
+
+Therefore neither `mailmerge` (mixin) nor `customer` (mixee) depend upon each other; instead both depend upon `address`.
+
+In terms of code:
+
+* in the `address` module:
++
+[source,java]
+----
+package domainapp.address;
+
+@Action
+public interface HasAddress {
+    private final HasAddress hasAddress;
+    // ...
+}
+----
+
+* in the `customers` module:
++
+[source,java]
+----
+package domainapp.customer;
+
+import domainapp.address.HasAddress;
+
+@Action
+public class Customer implements HasAddress {
+    // ...
+}
+----
+
+* in the `mailmerge` module:
++
+[source,java]
+----
+package domainapp.mailmerge;
+
+@Action
+public class HasAddress_mailshot {
+    private final HasAddress hasAddress;
+    // ...
+}
+----
+
+
+[NOTE]
+====
+Taking this idea to its logical conclusion, that common type could even be `java.lang.Object`.
+And indeed, the framework itself defines a handful of mixins that do exactly this.
+====
+
+
+
+== Micro-frontends
+
+A link:https://micro-frontends.org/[micro-frontend] is an extension of the microservices idea, but for the user interface.
+Rather than having a monolithic front-end UI that calls to multiple backends, instead the user interface that is composed of vertical slices of functionality, each slice calling its corresponding backend microservice.
+UI infrastructure pulls all of these fragments together into a coherent user interface.
+
+Microservices are (of course) just one means to implement modularity and enable product ownership.
+In the context of an Apache Causeway app, we are more likely to use individual Maven modules as our, well, as our modules.
+Each such module provides a set of mixins, and these mixins in effect show up to the end-user as slices of functionality.
+The framework itself brings all this together, acting as the UI infrastructure.

@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.specloader.validator;
 
+import java.util.function.Predicate;
+
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -32,8 +35,18 @@ implements
     @Getter(onMethod_ = {@Override})
     private final @NonNull MetaModelContext metaModelContext;
 
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull Predicate<ObjectSpecification> filter;
+
     protected MetaModelValidatorAbstract(final MetaModelContext metaModelContext) {
+        this(metaModelContext, ALL);
+    }
+
+    protected MetaModelValidatorAbstract(
+            final MetaModelContext metaModelContext,
+            final Predicate<ObjectSpecification> filter) {
         this.metaModelContext = metaModelContext;
+        this.filter = filter;
     }
 
     @Override

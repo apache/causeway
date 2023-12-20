@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -49,6 +51,8 @@ import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -58,8 +62,11 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet;
+import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction;
+import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromElementType;
 import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -74,18 +81,27 @@ import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.causeway.testdomain.model.good.ElementTypeAbstract;
 import org.apache.causeway.testdomain.model.good.ElementTypeConcrete;
 import org.apache.causeway.testdomain.model.good.ElementTypeInterface;
+import org.apache.causeway.testdomain.model.good.ProperActionParamterBoundingWhenUsingEnum;
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference;
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString;
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.causeway.testdomain.model.good.ProperElementTypeVm;
 import org.apache.causeway.testdomain.model.good.ProperFullyImpl;
-import org.apache.causeway.testdomain.model.good.ProperGenericImpl;
+import org.apache.causeway.testdomain.model.good.ProperGenericAbstract;
+import org.apache.causeway.testdomain.model.good.ProperGenericInterface;
 import org.apache.causeway.testdomain.model.good.ProperInterface2;
 import org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface;
-import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract;
-import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingInterface;
+import org.apache.causeway.testdomain.model.good.ProperMemberInheritanceUsingAbstract;
+import org.apache.causeway.testdomain.model.good.ProperMemberInheritanceUsingInterface;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupport;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action2;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action3;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithMixin;
@@ -104,6 +120,7 @@ import lombok.val;
 
         },
         properties = {
+                //"causeway.core.meta-model.introspector.policy=annotation_optional",
                 "causeway.core.meta-model.introspector.mode=FULL",
                 "causeway.applib.annotation.domain-object.editing=TRUE",
                 "causeway.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
@@ -115,7 +132,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class DomainModelTest_usingGoodDomain {
+class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @Inject private MetaModelService metaModelService;
     @Inject private JaxbService jaxbService;
@@ -232,11 +249,26 @@ class DomainModelTest_usingGoodDomain {
         tester.assertLayout("layout");
     }
 
-    @Test
-    void genericInterface_whenImplemented_shouldBeSupported() {
-        val tester = testerFactory.propertyTester(ProperGenericImpl.class, "value");
-        tester.assertExists(true);
-        tester.assertValue("aValue");
+    @ParameterizedTest
+    @ValueSource(classes = {
+            ProperGenericInterface.Impl.class,
+            ProperGenericAbstract.Impl.class,
+    })
+    void genericBaseType_whenImplemented_shouldBeSupported(final Class<?> classUnderTest) {
+        val propTester = testerFactory.propertyTester(classUnderTest, "value");
+        propTester.assertExists(true);
+        propTester.assertValue("aValue");
+
+        val actTester = testerFactory.actionTester(classUnderTest, "sampleAction");
+        actTester.assertExists(true);
+        actTester.assertInvocationResult("aValue", arg0->"aValue");
+
+        // assert that we properly pickup the @Nullable annotation on arg-0
+        val argMeta = actTester.getActionMetaModelElseFail().getParameterByIndex(0);
+        val argMandatoryFacet = argMeta.lookupFacet(MandatoryFacet.class)
+            .orElseThrow(()->_Exceptions.unrecoverable("missing MandatoryFacet on action parameter"));
+        assertEquals(Semantics.OPTIONAL, argMandatoryFacet.getSemantics());
+        actTester.assertInvocationResult(null, arg0->null);
     }
 
     @ParameterizedTest
@@ -260,7 +292,6 @@ class DomainModelTest_usingGoodDomain {
             assertEquals("inherited title", domainObject.getTitle());
             assertEquals("inherited icon", iconFacet.iconName(domainObject));
         }
-
     }
 
     @ParameterizedTest
@@ -471,6 +502,31 @@ class DomainModelTest_usingGoodDomain {
         assertHasProperty(i2Spec, "f");
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    void actionParamChoices_shouldBeImplicitlyBounded_whenEnum() {
+
+        val spec = specificationLoader.specForTypeElseFail(ProperActionParamterBoundingWhenUsingEnum.class);
+
+        val action = spec.getActionElseFail("sampleAction");
+        val param0 = action.getParameters().getFirstElseFail();
+
+        assertEquals(
+                ActionParameterChoicesFacetFromElementType.class,
+                param0.lookupFacet(ActionParameterChoicesFacet.class)
+                    .map(Object::getClass)
+                    .orElse(null));
+
+        val act = testerFactory
+                .actionTester(ProperActionParamterBoundingWhenUsingEnum.class, "sampleAction");
+
+        val expectedParamChoices = Can.ofArray(
+                ProperActionParamterBoundingWhenUsingEnum.SampleEnum.values());
+
+        act.assertParameterChoices(true, ProperActionParamterBoundingWhenUsingEnum.SampleEnum.class,
+                choices0->assertEquals(expectedParamChoices, Can.ofIterable(choices0), ()->"param 0 choices mismatch"));
+    }
+
     @Test
     void actionParamChoices_shouldBeAllowed_toBeDerivedFromChoicesFrom() {
 
@@ -480,7 +536,7 @@ class DomainModelTest_usingGoodDomain {
         val param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
-                ActionParameterChoicesFacetFromChoicesFromFacet.class,
+                ActionParameterChoicesFacetFromAction.class,
                 param0.lookupFacet(ActionParameterChoicesFacet.class)
                     .map(Object::getClass)
                     .orElse(null));
@@ -917,11 +973,35 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
+    @ParameterizedTest
+    @ValueSource(classes = {
+            ProperMixinContribution_action1.class,
+            ProperMixinContribution_action2.class,
+            ProperMixinContribution_action3.class,
+            ProperMixinContribution_action4.class,
+            ProperMixinContribution_action5.class,
+            ProperMixinContribution_action6.class})
+    void mixins_shouldBePickedUp_asTheRightContributingFeature(final Class<?> mixinClass) {
+
+        final String actionName = _Strings.splitThenStream(mixinClass.getSimpleName(), "_")
+                .reduce((a, b)->b)
+                .orElseThrow();
+
+        val vmSpec = specificationLoader.specForTypeElseFail(ProperMixinContribution.class);
+        assertHasAction(vmSpec, "myAction"); // regular action (just a sanity check)
+        assertHasAction(vmSpec, actionName); // contributed action
+        assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
+    }
 
     // -- HELPER
 
     private void assertHasProperty(final ObjectSpecification spec, final String propertyId) {
         spec.getPropertyElseFail(propertyId);
+    }
+
+    private void assertMissesProperty(final ObjectSpecification spec, final String propertyId) {
+        assertFalse(spec.getProperty(propertyId).isPresent(),
+                ()->String.format("unexpected to find a property '%s'", propertyId));
     }
 
     private void assertHasAction(final ObjectSpecification spec, final String actionId) {
@@ -935,8 +1015,8 @@ class DomainModelTest_usingGoodDomain {
 
     static Stream<Arguments> provideProperMemberInheritanceTypes() {
         return Stream.of(
-                Arguments.of(ProperMemberInheritance_usingAbstract.class),
-                Arguments.of(ProperMemberInheritance_usingInterface.class),
+                Arguments.of(ProperMemberInheritanceUsingAbstract.class),
+                Arguments.of(ProperMemberInheritanceUsingInterface.class),
                 Arguments.of(ProperMemberInheritanceInterface.class)
         );
     }

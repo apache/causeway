@@ -31,6 +31,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
@@ -75,6 +76,7 @@ import lombok.extern.log4j.Log4j2;
         , updatingLifecycleEvent = JpaBook.UpdatingLifecycleEvent.class
         , updatedLifecycleEvent = JpaBook.UpdatedLifecycleEvent.class
         , removingLifecycleEvent = JpaBook.RemovingLifecycleEvent.class)
+@DomainObjectLayout(cssClassFa = "book")
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)

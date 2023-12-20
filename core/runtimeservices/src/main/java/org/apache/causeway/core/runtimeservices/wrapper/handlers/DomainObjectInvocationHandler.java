@@ -45,6 +45,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -106,7 +107,10 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ManagedObject targetAdapter,
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
-        super(targetAdapter.getSpecification().getMetaModelContext(), domainObject, syncControl);
+        super(
+                targetAdapter.getSpecification().getMetaModelContext(),
+                domainObject,
+                syncControl);
 
         this.mmContext = targetAdapter.getSpecification().getMetaModelContext();
         this.proxyContextHandler = proxyContextHandler;
@@ -161,8 +165,9 @@ extends DelegatingInvocationHandlerDefault<T> {
             return handleTitleMethod(targetAdapter);
         }
 
-
         final ObjectSpecification targetSpec = targetAdapter.getSpecification();
+        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
+                .orElseThrow();
 
         // save method, through the proxy
         if (method.equals(__causeway_saveMethod)) {
@@ -177,10 +182,10 @@ extends DelegatingInvocationHandlerDefault<T> {
             return getSyncControl().getExecutionModes();
         }
 
-        val objectMember = targetSpec.getMemberElseFail(method);
+        val objectMember = targetSpec.getMemberElseFail(resolvedMethod);
         val memberId = objectMember.getId();
 
-        val intent = ImperativeFacet.getIntent(objectMember, method);
+        val intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
             throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberId));
         }
@@ -441,7 +446,8 @@ extends DelegatingInvocationHandlerDefault<T> {
             return collectionToLookup;
         }
         if(proxyContextHandler == null) {
-            throw new IllegalStateException("Unable to create proxy for collection; proxyContextHandler not provided");
+            throw new IllegalStateException("Unable to create proxy for collection; "
+                    + "proxyContextHandler not provided");
         }
         return proxyContextHandler.proxy(collectionToLookup, this, otma);
     }
@@ -453,7 +459,8 @@ extends DelegatingInvocationHandlerDefault<T> {
             return mapToLookup;
         }
         if(proxyContextHandler == null) {
-            throw new IllegalStateException("Unable to create proxy for collection; proxyContextHandler not provided");
+            throw new IllegalStateException("Unable to create proxy for collection; "
+                    + "proxyContextHandler not provided");
         }
         return proxyContextHandler.proxy(mapToLookup, this, otma);
     }

@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
@@ -33,7 +32,7 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelAbstr
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelHidden;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
@@ -48,7 +47,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
  * view for a backing {@link EntityCollectionModel}.
  */
 public class CollectionContentsMultipleViewsPanel
-extends PanelAbstract<DataTableModel, EntityCollectionModel>
+extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
@@ -94,13 +93,13 @@ implements CollectionCountProvider {
         final EntityCollectionModel hiddenCollModel = EntityCollectionModelHidden
                 .forCollectionModel((EntityCollectionModelAbstract) visibleCollModel);
 
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
+        final Can<ComponentFactoryKey> componentFactories = selectorHelper.getComponentFactories();
 
         final CollectionPresentationSelectorPanel selectorDropdownPanelIfAny =
                 CollectionPresentationSelectorProvider.getCollectionSelectorProvider(this);
         final String selectedCompFactoryName = selectorDropdownPanelIfAny != null
             ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
-            : componentFactories.get(0).getName();
+            : componentFactories.getFirstElseFail().id();
 
 
         // create all, hide the one not selected
@@ -108,11 +107,11 @@ implements CollectionCountProvider {
         int selectedIdx = 0;
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
 
-        for (ComponentFactory componentFactory : componentFactories) {
+        for (ComponentFactoryKey componentFactory : componentFactories) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
 
-            final boolean isSelected = selectedCompFactoryName.equals(componentFactory.getName());
-            final Component underlyingView = componentFactory
+            final boolean isSelected = selectedCompFactoryName.equals(componentFactory.id());
+            final Component underlyingView = componentFactory.resolve(this::getServiceRegistry)
                     .createComponent(underlyingId, isSelected ? visibleCollModel : hiddenCollModel);
             if(isSelected) {
                 selectedIdx = i;

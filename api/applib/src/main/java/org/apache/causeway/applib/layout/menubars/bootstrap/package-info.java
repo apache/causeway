@@ -31,8 +31,9 @@
         namespace = "https://causeway.apache.org/applib/layout/menubars/bootstrap3",
         elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
+
                 @jakarta.xml.bind.annotation.XmlNs(
-                        namespaceURI = "https://causeway.apache.org/applib/layout/menubars/bootstrap3", prefix = "mb3")
+                        namespaceURI = "https://causeway.apache.org/applib/layout/menubars/bootstrap3", prefix = "mb")
         }
         )
 package org.apache.causeway.applib.layout.menubars.bootstrap;

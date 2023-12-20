@@ -23,6 +23,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -39,8 +40,11 @@ public class JdoInventoryManager {
 
     public static class UpdateProductPriceEvent extends ActionDomainEvent {}
 
-    @Action(domainEvent = UpdateProductPriceEvent.class, executionPublishing = Publishing.ENABLED)
-    public JdoProduct updateProductPrice(JdoProduct product, double newPrice) {
+    @Action(
+            domainEvent = UpdateProductPriceEvent.class,
+            executionPublishing = Publishing.ENABLED,
+            choicesFrom = "allProducts")
+    public JdoProduct updateProductPrice(final JdoProduct product, final double newPrice) {
         product.setPrice(newPrice);
         return product;
     }
@@ -49,11 +53,11 @@ public class JdoInventoryManager {
 
     @Action
     public int countProducts() {
-        return listAllProducts().size();
+        return getAllProducts().size();
     }
 
-    @Action
-    public List<JdoProduct> listAllProducts() {
+    @Collection
+    public List<JdoProduct> getAllProducts() {
         return repository.allInstances(JdoProduct.class);
     }
 

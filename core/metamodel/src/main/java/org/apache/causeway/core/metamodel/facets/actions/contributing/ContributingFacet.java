@@ -19,62 +19,45 @@
 package org.apache.causeway.core.metamodel.facets.actions.contributing;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.val;
 
 /**
  * Indicates that the action should be contributed to objects either
- * as ACTION or ASSOCIATION.
+ * as <i>Action</i>, <i>Property</i> or <i>Collection</i>.
  * <p>
  * Since v2 only ever used for mixed in actions.
  * @since 2.0
  */
 public interface ContributingFacet extends Facet {
 
-    enum Contributing {
-
-      /**
-       * Contributed as an action but <i>not</i> as an association.
-       */
-      AS_ACTION,
-
-      /**
-       * (If takes a single argument and has safe semantics) then is contributed as an association
-       * (contributed property if returns a single value, contributed collection if returns a collection) but <i>not</i>
-       * as an action.
-       */
-      AS_ASSOCIATION,
-  }
-
     public Contributing contributed();
 
     default boolean isActionContributionVetoed() {
-        // not contributed to actions if...
-        return contributed() == Contributing.AS_ASSOCIATION;
+        return contributed() == Contributing.AS_PROPERTY
+                || contributed() == Contributing.AS_COLLECTION;
     }
 
     default boolean isAssociationContributionVetoed() {
-        // not contributed to associations if...
         return contributed() == Contributing.AS_ACTION;
     }
 
     // -- UTILITIES
 
     static boolean isActionContributionVetoed(final ObjectAction action) {
-        val notContributed = action.getFacet(ContributingFacet.class);
-        if(notContributed != null
-                && notContributed.isActionContributionVetoed()) {
-            return true;
+        val facet = action.getFacet(ContributingFacet.class);
+        if(facet != null) {
+            return facet.isActionContributionVetoed();
         }
         return false;
     }
 
     static boolean isAssociationContributionVetoed(final ObjectAction action) {
-        val notContributed = action.getFacet(ContributingFacet.class);
-        if(notContributed != null
-                && notContributed.isAssociationContributionVetoed()) {
-            return true;
+        val facet = action.getFacet(ContributingFacet.class);
+        if(facet != null) {
+            return facet.isAssociationContributionVetoed();
         }
         return false;
     }

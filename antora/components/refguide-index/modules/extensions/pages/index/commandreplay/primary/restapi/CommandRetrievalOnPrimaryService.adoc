@@ -15,7 +15,7 @@ class CommandRetrievalOnPrimaryService {
 <.> xref:#findCommandsOnPrimaryAsDto_UUID_Integer[findCommandsOnPrimaryAsDto(UUID, Integer)]
 +
 --
-TODO: outdated info ... These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v1.CommandsDto"` 
+Returns the command(s) that have been executed on the primary with the specified interactionId.
 --
 
 == Members
@@ -23,4 +23,6 @@ TODO: outdated info ... These actions should be called with HTTP Accept Header s
 [#findCommandsOnPrimaryAsDto_UUID_Integer]
 === findCommandsOnPrimaryAsDto(UUID, Integer)
 
-TODO: outdated info ... These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v1.CommandsDto"` 
+Returns the command(s) that have been executed on the primary with the specified interactionId.
+
+This action should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v2.CommandsDto"` 

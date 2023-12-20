@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
@@ -72,16 +74,20 @@ public class ProxyContextHandler {
      * handler.
      */
     public <T, E> Collection<E> proxy(
-            final Collection<E> collectionToProxy,
+            final Collection<E> collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         val collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
-                        collectionToProxy, handler, otma);
+                        collectionToBeProxied, handler, otma);
         collectionInvocationHandler.setResolveObjectChangedEnabled(
                 handler.isResolveObjectChangedEnabled());
 
-        return proxyCreator.instantiateProxy(collectionInvocationHandler);
+        val proxyBase = CollectionSemantics
+                .valueOfElseFail(collectionToBeProxied.getClass())
+                .getContainerType();
+
+        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
     }
 
     /**
@@ -89,15 +95,17 @@ public class ProxyContextHandler {
      * handler.
      */
     public <T, P, Q> Map<P, Q> proxy(
-            final Map<P, Q> collectionToProxy,
+            final Map<P, Q> collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         val mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
-                collectionToProxy, handler, otma);
+                collectionToBeProxied, handler, otma);
         mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
-        return proxyCreator.instantiateProxy(mapInvocationHandler);
+        val proxyBase = Map.class;
+
+        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
     }
 
 

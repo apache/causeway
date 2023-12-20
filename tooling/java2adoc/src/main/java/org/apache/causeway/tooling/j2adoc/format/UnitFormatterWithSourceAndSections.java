@@ -37,7 +37,7 @@ import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.causeway.tooling.javamodel.ast.CallableDeclarations;
 import org.apache.causeway.tooling.javamodel.ast.Javadocs;
-import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import lombok.NonNull;
 import lombok.val;

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.cssclass;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +27,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -51,7 +51,8 @@ class CssClassFacetMethodWithProblemTest {
 
         pojo = new DomainObjectWithProblemInCssClassMethod();
 
-        final Method iconNameMethod = DomainObjectWithProblemInCssClassMethod.class.getMethod("cssClass");
+        final ResolvedMethod iconNameMethod = _GenericResolver.testing
+                .resolveMethod(DomainObjectWithProblemInCssClassMethod.class, "cssClass");
         facet = (CssClassFacetViaCssClassMethod) CssClassFacetViaCssClassMethod
                 .create(iconNameMethod, Mockito.mock(FacetHolder.class))
                 .orElse(null);

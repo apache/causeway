@@ -172,14 +172,10 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 
 # now build the individual docker images
-if [ "$JIB_CMD" != "skip"  ]; then
-  buildDockerImage examples/demo/wicket/jdo
-  buildDockerImage examples/demo/wicket/jpa
-
-  if [ "$INCUBATOR" != "skip"  ]; then
-    buildDockerImage examples/demo/vaadin
-  fi
-fi
+#if [ "$JIB_CMD" != "skip"  ]; then
+#  buildDockerImage examples/demo/wicket/jdo
+#  buildDockerImage examples/demo/wicket/jpa
+#fi
 
 if [ ! -z "$REVISION" ] && [ "$REV_REVERT_FLAG" != "off" ]; then
   cd $PROJECT_ROOT_PATH

@@ -24,11 +24,11 @@ import java.util.SortedSet;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.tooling.cli.CliConfig;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
-import org.apache.causeway.tooling.model4adoc.include.IncludeStatement;
-import org.apache.causeway.tooling.model4adoc.include.IncludeStatements;
+import org.apache.causeway.valuetypes.asciidoc.builder.include.IncludeStatement;
+import org.apache.causeway.valuetypes.asciidoc.builder.include.IncludeStatements;
 
 import lombok.NonNull;
 import lombok.val;
@@ -60,7 +60,7 @@ public final class OrphanedIncludeStatementFixer {
             //_Probe.errOut("adoc file found: %s", adocFile);
 
             val fixedCounter = _Refs.intRef(0);
-            val originLines = _Text.readLinesFromFile(adocFile, StandardCharsets.UTF_8);
+            val originLines = TextUtils.readLinesFromFile(adocFile, StandardCharsets.UTF_8);
 
             val lines = IncludeStatements.rewrite(originLines, include->{
                 final boolean inGlobalIndex =
@@ -112,7 +112,7 @@ public final class OrphanedIncludeStatementFixer {
             if(fixedCounter.getValue()>0) {
 
                 // write lines to file
-                _Text.writeLinesToFile(lines, adocFile, StandardCharsets.UTF_8);
+                TextUtils.writeLinesToFile(lines, adocFile, StandardCharsets.UTF_8);
 
                 totalFixed.update(n->n + fixedCounter.getValue());
             }

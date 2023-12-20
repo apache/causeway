@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
 import static org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter.excluding;
@@ -79,7 +79,7 @@ public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFi
 
     @Override
     public boolean acceptPostProcessor(
-            Class<? extends ObjectSpecificationPostProcessor> postProcessorType,
+            Class<? extends MetaModelPostProcessor> postProcessorType,
             ProgrammingModel.Marker[] markersIfAny) {
 
         return filterOnMarker.test(markersIfAny);

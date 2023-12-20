@@ -1,0 +1,164 @@
+= Action Parameters
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+If you have defined an action as a mixin, then the name of the method is "act" and so supporting methods (which match on the name) are easier to write.
+For example, the supporting method to hide the action will always be called "hideAct".
+However, it can still be tricky to match the supporting methods for individual parameters are matched by number, eg "validate0Act" to validate the 0-th argument.
+
+If using mixins, there are two refinements to the programming model that can make your code easier to maintain.
+
+By way of example, consider this mixin implemented the usual way:
+
+[source,java]
+----
+@Action
+@RequiredArgsConstructor
+public class ShoppingCart_addItem {
+
+    private final ShoppingCart shoppingCart;
+
+    public ShoppingCart_addItem act(                                // <.>
+            @Parameter final Product selected,
+            @Parameter final int quantity) {
+        // ...
+    }
+
+    public boolean hideAct() {                                      // <.>
+        return shoppingCart.isCheckedOutAlready();
+    }
+
+    public List<Product> autoComplete0Act(String codeOrName) {      // <.>
+        return productService.findMatching(codeOrName);
+    }
+
+    public String validate0Act(Product selected) {                   // <.>
+        return selected.isInStock() ? null : "The selected product isn't in stock";
+    }
+
+    public String validate1Act(Product selected, int quantity) {     // <.>
+        if (productService.isInHighDemand(select) && quantity > 5) {
+            return "Sorry, you may not purchase more than 5 items for products that are in high-demand";
+        }
+        if (quantity <= 0) {
+            return "Sorry, can only add a positive number of items to the cart";
+        }
+        return null;
+    }
+
+    @Inject ProductService productService;
+}
+----
+<.> `act(...)` is the action implementation
+<.> `hideAct(...)` hides the action if required
+<.> `autoComplete0Act(...)` returns a list for the 0-th parameter (Product)
+<.> `validate0Act(...)` validates the 0-th parameter (Product)
+<.> `validate1Act(...)` validates the 0-th parameter (Product)
+
+The sections below describes refactor this mixin using the refined syntax.
+
+[#using-the-parameter-name]
+== Using the parameter name
+
+In the first alternative, we use the parameter _name_ (rather than its position) to match the supporting methods to the action parameters.
+
+[source,java]
+----
+@Action
+@RequiredArgsConstructor
+public class ShoppingCart_addItem {
+
+    private final ShoppingCart shoppingCart;
+
+    public ShoppingCart_addItem act(
+            @Parameter final Product selected,
+            @Parameter final int quantity) {
+        // ...
+    }
+
+    public boolean hideAct() {
+        // ...
+    }
+
+    public List<Product> autoCompleteSelected(String codeOrName) {      // <.>
+        // ...
+    }
+
+    public String validateSelected(Product selected) {                  // <.>
+        // ...
+    }
+
+    public String validateQuantity(Product selected, int quantity) {    // <.>
+        // ...
+    }
+
+    // ...
+}
+----
+<.> The autoComplete method for the 0-th parameter name now uses its name "Selected", instead
+<.> The validate method for the 0-th parameter name uses the name "Selected"
+<.> The validate method for the 1-th parameter name uses the name "Quantity"
+
+Note that the supporting methods no longer include the method name of the action itself (ie "act").
+For this reason, it isn't possible to use matching-by-name for non-mixin actions.
+
+
+[#using-a-parameters-class]
+== Using a "parameters" class
+
+In the previous section we made the names of the supporting methods more obvious.
+Even so, for actions that take many parameters, it can still be problematic to ensure that the supporting methods parameter types are correct, and in the correct order.
+
+In the second refinement, we create a data class to hold the parameters:
+
+[source,java]
+----
+@Action
+@RequiredArgsConstructor
+public class ShoppingCart_addItem {
+
+    private final ShoppingCart shoppingCart;
+
+    public ShoppingCart_addItem act(
+            @Parameter final Product selected,
+            @Parameter final int quantity) {
+        // ...
+    }
+
+    @Value @Accessors(fluent = true)
+    static class Parameters {               // <.>
+        final Product selected;             // <.>
+        final int quantity;
+    }
+
+    public boolean hideAct() {
+        // ...
+    }
+
+    public List<Product> autoCompleteSelected(String codeOrName) {
+        // ...
+    }
+
+    public String validateSelected(Parameters parameters) {             // <.>
+        // ...
+    }
+
+    public String validateQuantity(Parameters parameters) {             // <2>
+        // ...
+    }
+
+    // ...
+}
+----
+<.> define a class using Lombok, but could also be a record:
++
+[source,java]
+----
+record Parameters (Product selected, int quantity);
+----
+<.> list of fields matches the parameters of the action method
+<.> All the supporting methods for the various parameters just take a `Parameters` object
+

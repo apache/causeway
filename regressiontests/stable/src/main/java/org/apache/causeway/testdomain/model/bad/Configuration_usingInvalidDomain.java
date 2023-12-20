@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    InvalidDomainObjectOnInterface.class // explicitly import interface
+    InvalidDomainObjectOnInterface.class, // explicitly import interface
 })
 @ComponentScan(
         basePackageClasses= {

@@ -28,7 +28,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 /**
  * Indicates that an object belongs to the UI/application layer and is intended to be used as a view-model.
  * <p>
- * Instances of {@link ViewModel} must include (exactly) one public constructor.
+ * Instances of {@link ViewModel} must include (at least) one public constructor.
  * <p>
  * Contract:
  * <ul>
@@ -58,6 +58,10 @@ public interface ViewModel {
      * <p>
      * Captures the state of this view-model as {@link String},
      * which can be passed in to this view-model's constructor for later re-construction.
+     * <p>
+     * The framework automatically takes care of non-URL-safe strings,
+     * by passing them through {@link java.net.URLEncoder}/
+     * {@link java.net.URLDecoder} for encoding and decoding respectively.
      */
     @Programmatic
     String viewModelMemento();

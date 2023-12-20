@@ -43,11 +43,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import jakarta.activation.DataSource;
 import jakarta.inject.Named;
+import jakarta.persistence.Column;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -55,11 +57,14 @@ import jakarta.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
@@ -77,9 +82,9 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.CausewayConfiguration.Core;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions.SequencePolicy;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
@@ -87,9 +92,14 @@ import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.viewer.web.DialogMode;
+import org.apache.causeway.core.config.viewer.web.TextMode;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
@@ -109,9 +119,42 @@ public class CausewayConfiguration {
     public static final String ROOT_PREFIX = "causeway";
 
     private final ConfigurableEnvironment environment;
+
+    /**
+     * To ensure that {@link #getBuildProperties()} is full populated, configure the <code>spring-boot-maven-plugin</code>
+     * as follows:
+     *
+     * <pre>
+     * &lt;plugin&gt;
+     *     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+     *     &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+     *     &lt;executions&gt;
+     *         &lt;execution&gt;
+     *             &lt;id&gt;build-info&lt;/id&gt;
+     *             &lt;goals&gt;
+     *                 &lt;goal&gt;build-info&lt;/goal&gt;
+     *             &lt;/goals&gt;
+     *             &lt;configuration&gt;
+     *                 &lt;additionalProperties&gt;
+     *                     &lt;java.version&gt;${java.version}&lt;/java.version&gt;
+     *                     &lt;description&gt;${project.description}&lt;/description&gt;
+     *                     ...
+     *                 &lt;/additionalProperties&gt;
+     *             &lt;/configuration&gt;
+     *         &lt;/execution&gt;
+     *     &lt;/executions&gt;
+     *     ...
+     * &lt;/plugin&gt;
+     * </pre>
+     */
+    @Getter
+    private final Optional<BuildProperties> buildProperties;
+
+    @Builder // for testing
     @Autowired
-    public CausewayConfiguration(final ConfigurableEnvironment environment) {
+    public CausewayConfiguration(final ConfigurableEnvironment environment, final Optional<BuildProperties> buildProperties) {
         this.environment = environment;
+        this.buildProperties = buildProperties;
     }
 
     private final Security security = new Security();
@@ -250,6 +293,38 @@ public class CausewayConfiguration {
              * If {@link #isExtractRoles()}  roles are to be extracted}, this allows the resultant role to be optionally prefixed.
              */
             private String rolePrefix = null;
+        }
+    }
+
+    private final Schema schema = new Schema();
+    @Data
+    public static class Schema {
+
+        private final Command command = new Command();
+        @Data
+        public static class Command {
+
+            public enum ParamIdentifierStrategy {
+                BY_ID,
+                /**
+                 * For backward compatibility with v1 behaviour
+                 */
+                BY_CANONICAL_FRIENDLY_NAME;
+            }
+
+            /**
+             * Whether the {@link ParamDto#getName()} field - which uniquely identifies a parameter within the
+             * {@link org.apache.causeway.schema.cmd.v2.ActionDto action}'s
+             * {@link ActionDto#getParameters() list of parameters} - is populated with the parameter's formal Id
+             * (eg &quot;firstName&quot;) or instead using the parameter's friendly name (eg &quot;First Name&quot;).
+             *
+             * <p>
+             *     The default is to use the {@link ParamIdentifierStrategy#BY_ID formal Id}, but the name is provided
+             *     as an alternative for compatibility with v1.  Note that the name is potentially translated, so this
+             *     could also cause issues within integration scenarios.
+             * </p>
+             */
+            private ParamIdentifierStrategy paramIdentifierStrategy = ParamIdentifierStrategy.BY_ID;
         }
     }
 
@@ -857,9 +932,28 @@ public class CausewayConfiguration {
                      * </p>
                      */
                     private String[] patterns = {
+                                    "add.*:btn-info",
+                                    "remove.*:btn-warning",
+
+                                    "start.*:btn-info",
+                                    "play.*:btn-info",
+                                    "stop.*:btn-warning",
+
+                                    "reset.*:btn-warning",
+
+                                    "new.*:btn-info",
+                                    "create.*:btn-info",
                                     "delete.*:btn-danger",
-                                    "discard.*:btn-warning",
-                                    "remove.*:btn-warning"};
+
+                                    "verify.*:btn-success",
+                                    "decline.*:btn-danger",
+
+                                    "save.*:btn-success",
+
+                                    "approve.*:btn-success",
+                                    "reject.*:btn-danger",
+
+                    };
 
                     @Getter(lazy = true)
                     private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
@@ -885,52 +979,110 @@ public class CausewayConfiguration {
                      * </p>
                      */
                     private String[] patterns = {
-                            "add.*:fa-plus-square",
-                            "all.*:fa-list",
-                            "approve.*:fa-thumbs-o-up",
-                            "assign.*:fa-hand-o-right",
-                            "calculate.*:fa-calculator",
-                            "cancel.*:fa-stop",
-                            "categorise.*:fa-folder-open-o",
-                            "change.*:fa-edit",
-                            "clear.*:fa-remove",
-                            "copy.*:fa-copy",
-                            "create.*:fa-plus",
-                            "decline.*:fa-thumbs-o-down",
-                            "delete.*:fa-trash",
-                            "discard.*:fa-trash-o",
-                            "download.*:fa-download",
-                            "edit.*:fa-edit",
-                            "execute.*:fa-bolt",
-                            "export.*:fa-download",
-                            "first.*:fa-star",
+
+                            "all.*:fa-solid fa-list",
+                            "list.*:fa-solid fa-list",
+
                             "find.*:fa-search",
-                            "install.*:fa-wrench",
-                            "list.*:fa-list",
-                            "import.*:fa-upload",
                             "lookup.*:fa-search",
-                            "maintain.*:fa-edit",
-                            "move.*:fa-exchange",
-                            "new.*:fa-plus",
-                            "next.*:fa-step-forward",
-                            "pause.*:fa-pause",
-                            "previous.*:fa-step-backward",
-                            "refresh.*:fa-sync",
-                            "remove.*:fa-minus-square",
-                            "renew.*:fa-redo",
-                            "reset.*:fa-redo",
-                            "resume.*:fa-play",
-                            "run.*:fa-bolt",
-                            "save.*:fa-floppy-o",
                             "search.*:fa-search",
-                            "stop.*:fa-stop",
-                            "suspend.*:fa-pause",
+
+                            "send.*:fa-regular fa-paper-plane",
+
+                            "open.*:fa-solid fa-arrow-up-right-from-square",
+                            "close.*:fa-solid fa-regular fa-rectangle-xmark",
+
+                            "recent.*:fa-solid fa-clock-rotate-left",
+
+                            "lock.*:fa-solid fa-lock",
+                            "unlock.*:fa-solid fa-unlock",
+
+                            "permit.*:fa-solid fa-unlock",
+                            "review.*:fa-solid fa-eye",
+
+                            "add.*:fa-regular fa-square-plus",
+                            "plus.*:fa-regular fa-square-plus",
+                            "remove.*:fa-regular fa-square-minus",
+                            "minus.*:fa-regular fa-square-minus",
+
+                            "sign.*:fa-solid fa-signature",
+
+                            "clear.*:fa-solid fa-broom",
+
+                            "create.*:fa-regular fa-square-plus",
+                            "new.*:fa-regular fa-square-plus",
+                            "delete.*:fa-solid fa-trash",
+
+                            "change.*:fa-regular fa-pen-to-square",
+                            "edit.*:fa-regular fa-pen-to-square",
+                            "maintain.*:fa-regular fa-pen-to-square",
+                            "update.*:fa-regular fa-pen-to-square",
+
+                            "cut.*:fa-solid fa-scissors",
+                            "move.*:fa-solid fa-angles-right",
+                            "copy.*:fa-regular fa-copy",
+                            "duplicate.*:fa-solid fa-clone",
+                            "clone.*:fa-solid fa-clone",
+                            "categorise.*:fa-regular fa-folder-open",
+
+                            "download.*:fa-solid fa-download",
+                            "upload.*:fa-solid fa-upload",
+
+                            "execute.*:fa-solid fa-bolt",
+                            "run.*:fa-solid fa-bolt",
+                            "trigger.*:fa-solid fa-bolt",
+
+                            "link.*:fa-solid fa-link",
+                            "unlink.*:fa-solid fa-link-slash",
+
+                            "start.*:fa-solid fa-play",
+                            "play.*:fa-solid fa-play",
+                            "resume.*:fa-solid fa-play",
+                            "pause.*:fa-solid fa-pause",
+                            "suspend.*:fa-solid fa-pause",
+                            "stop.*:fa-solid fa-stop",
+                            "terminate.*:fa-solid fa-stop",
+
+                            "previous.*:fa-backward-step",
+                            "next.*:fa-forward-step",
+
+                            "approve.*:fa-regular fa-thumbs-up",
+                            "reject.*:fa-regular fa-thumbs-down",
+
+                            "verify.*:fa-solid fa-check",
+                            "decline.*:fa-solid fa-xmark",
+                            "cancel.*:fa-solid fa-xmark",
+
+                            "discard.*:fa-regular fa-trash-can",
+
+                            "assign.*:fa-regular fa-hand-point-right",
+
+                            "calculate.*:fa-calculator",
+
+                            "import.*:fa-solid fa-file-import",
+                            "export.*:fa-solid fa-file-export",
+
+                            "first.*:fa-regular fa-star",
+
+                            "install.*:fa-solid fa-wrench",
+
+                            "setup.*:fa-solid fa-gear",
+                            "configure.*:fa-solid fa-gear",
+
+                            "refresh.*:fa-sync",
+                            "renew.*:fa-rotate-right",
+                            "reset.*:fa-rotate-left",
+
+                            "save.*:fa-regular fa-floppy-disk",
+
                             "switch.*:fa-exchange",
-                            "terminate.*:fa-stop",
-                            "update.*:fa-edit",
-                            "upload.*:fa-upload",
-                            "verify.*:fa-check-circle",
-                            "view.*:fa-search"};
+                            "random.*:fa-shuffle",
+
+                            "view.*:fa-regular fa-eye",
+
+                            "wizard.*:fa-solid fa-wand-magic-sparkles"
+
+                    };
 
                     @Getter(lazy = true)
                     private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
@@ -1034,6 +1186,16 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
+
+                /**
+                 * How {@link org.apache.causeway.applib.annotation.PropertyLayout#sequence()}
+                 * should be handled when calculating the slot-in order for unreferenced <i>Properties</i>.
+                 * {@code AS_PER_SEQUENCE} will use Dewey order based on available 'sequence' attributes,
+                 * whereas {@code ALPHABETICALLY} will use alphabetical order based on member names.
+                 * <p>
+                 * default: {@code AS_PER_SEQUENCE}
+                 */
+                private AssociationLayoutConfigOptions.SequencePolicy sequencePolicyIfUnreferenced = SequencePolicy.AS_PER_SEQUENCE;
             }
 
             private final Collection collection = new Collection();
@@ -1111,6 +1273,17 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 private int paged = 12;
+
+                /**
+                 * How {@link org.apache.causeway.applib.annotation.CollectionLayout#sequence()}
+                 * should be handled when calculating the slot-in order for unreferenced <i>Collections</i>.
+                 * {@code AS_PER_SEQUENCE} will use Dewey order based on available 'sequence' attributes,
+                 * whereas {@code ALPHABETICALLY} will use alphabetical order based on member names.
+                 * <p>
+                 * default: {@code AS_PER_SEQUENCE}
+                 */
+                private AssociationLayoutConfigOptions.SequencePolicy sequencePolicyIfUnreferenced =
+                        SequencePolicy.AS_PER_SEQUENCE;
 
                 /**
                  * Defines whether the table representation of a collection should be decorated using a client-side
@@ -1515,6 +1688,18 @@ public class CausewayConfiguration {
                  */
                 private boolean explicitLogicalTypeNames = false;
 
+                /**
+                 * Allows logical type name in {@link Named} also be included in the list of {@link DomainObject#aliased()}
+                 * or {@link DomainService#aliased()}.
+                 *
+                 * <p>
+                 *     It is <i>highly advisable</i> to leave this disabled. This option is meant as a practical way to
+                 *     enable to transition from old names to new logical type names. Especially when you have a large
+                 *     number of files that have to migrated and you want to do the migration in incremental steps.
+                 * </p>
+                 */
+                private boolean allowLogicalTypeNameAsAlias = false;
+
                 private final JaxbViewModel jaxbViewModel = new JaxbViewModel();
                 @Data
                 public static class JaxbViewModel {
@@ -1564,7 +1749,6 @@ public class CausewayConfiguration {
                      */
                     private boolean variablesClause = true;
                 }
-
             }
         }
 
@@ -2011,7 +2195,7 @@ public class CausewayConfiguration {
                 /**
                  * Defaults to <code>org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
                  */
-                private Optional<String> strategyClassName = Optional.empty();
+                private String strategyClassName = "org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth";
             }
 
             /**
@@ -2174,6 +2358,16 @@ public class CausewayConfiguration {
             private boolean clearFieldButtonEnabled = true;
 
             /**
+             * In prototyping mode, a text icon is appeneded to any property that is disabled, with its tool-tip explaining why the property is disabled.
+             * This configuration property can be used to suppress the icon, even in prototyping mode, if desired.
+             *
+             * <p>
+             *     The default is to enable (show) the text icon (if in prototyping mode).
+             * </p>
+             */
+            private boolean disableReasonExplanationInPrototypingModeEnabled = true;
+
+            /**
              * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
              *
              * <p>
@@ -2298,6 +2492,16 @@ public class CausewayConfiguration {
             }
 
             /**
+             * If a table has no property columns,
+             * for the title column this value is used,
+             * to determine how many characters to render for the table element titles.
+             * <p>
+             * Introduced for the case when max-title-length is set to zero for tables in general,
+             * that if a table has no property columns an exception to that title suppression can be made.
+             */
+            private int maxTitleLengthInTablesNotHavingAnyPropertyColumn = 80;
+
+            /**
              * Whether to use a modal dialog for property edits and for actions associated with properties.
              *
              * <p>
@@ -2396,6 +2600,11 @@ public class CausewayConfiguration {
              * </p>
              */
             private boolean suppressPasswordReset = false;
+
+            /**
+             * How to interpret tooltip content, e.g. as HTML or TEXT. default = TEXT
+             */
+            private TextMode tooltipTextMode = TextMode.defaults();
 
             /**
              * Whether to show an indicator for a form submit button that it has been clicked.
@@ -2501,6 +2710,20 @@ public class CausewayConfiguration {
 //                            DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(input, OffsetDateTime::from)
 //                            .toEpochSecond());
 //                }
+
+                /**
+                 * Whether the date picker should automatically be shown when the field gains focus.
+                 *
+                 * <p>
+                 *     The default is to show the picker when the user clicks into the field.
+                 * </p>
+                 *
+                 * <p>
+                 *     Corresponds to the <code>allowInputToggle</code> config property of the underlying library,
+                 *     (TempusDominus).
+                 * </p>
+                 */
+                private boolean popupOnFocus = false;
 
             }
 
@@ -2666,7 +2889,6 @@ public class CausewayConfiguration {
                     Horizontal horizontal = Horizontal.RIGHT;
                 }
             }
-
         }
     }
 
@@ -2678,6 +2900,48 @@ public class CausewayConfiguration {
         @Data
         public static class Temporal {
             private final TemporalEditingPattern editing = new TemporalEditingPattern();
+        }
+
+        private final BigDecimal bigDecimal = new BigDecimal();
+        @Data
+        public static class BigDecimal {
+
+            /**
+             * Indicates how to derive the min fractional facet (the minimum number of digits after the decimal point).
+             *
+             * <p>
+             * If this flag is set, then the {@link Digits#fraction()} annotation or ORM equivalent (the JDO
+             * <code>@Column#scale</code> or the JPA {@link Column#scale()}) should be used for the
+             * <code>MinFractionalFacet</code> as well as the <code>MaxFractionalFacet</code>.
+             * </p>
+             *
+             * <p>
+             * What this means in practice is that a numeric values will be rendered to the same number of fractional
+             * digits, irrespective of whether they are whole numbers or fractional.  For example, with a scale of 2,
+             * then &quot;123.4532&quot; will be rendered as &quot;123.45&quot;, while &quot;123&quot; will be rendered
+             * as &quot;123.00&quot;.
+             * </p>
+             *
+             * <p>
+             * If this flag is NOT set, or if it is set but there is no annotation, then the {@link #minScale} config
+             * property is used as a fallback.
+             * </p>
+             *
+             * <p>
+             * If there is no fallback, then it means that a big decimal such as &quot;123.00&quot; will be presented as
+             * just &quot;123&quot; (that is, the shortest possible textual representation).
+             * </p>
+             */
+            private boolean useScaleForMinFractionalFacet = true;
+
+            /**
+             * The minimum scale to use for all {@link java.math.BigDecimal}s.
+             *
+             * <p>
+             * Is only used if the minimum scale has not been specified explicitly by some other means, typically
+             * either {@link Digits#fraction()} or an ORM semantic such as the (JPA) {@link Column#scale()}.
+             */
+            private Integer minScale = null;
         }
 
         private final Kroki kroki = new Kroki();
@@ -3213,6 +3477,28 @@ public class CausewayConfiguration {
 
         }
 
+        private final LayoutLoaders layoutLoaders = new LayoutLoaders();
+        @Data
+        public static class LayoutLoaders {
+
+            private final Github github = new Github();
+            @Data
+            public static class Github {
+
+                /**
+                 * eg <code>apache/causeway-app-simpleapp</code>
+                 */
+                private String repository;
+
+                /**
+                 * As per <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>,
+                 * must have permissions to the <code>/search</code> and <code>/contents</code> APIs for the specified
+                 * {@link #getRepository() repository}.
+                 */
+                private String apiKey;
+            }
+        }
+
         private final Secman secman = new Secman();
         @Data
         public static class Secman {
@@ -3231,12 +3517,22 @@ public class CausewayConfiguration {
                                 CausewayModuleApplib.NAMESPACE_FEAT,
                                 "causeway.security",
                                 "causeway.ext.h2Console",
-                                "causeway.ext.secman"
+                                "causeway.ext.secman",
+                                "causeway.ext.layoutLoaders"
                         ));
                 public static final List<String> ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS =
                         Collections.unmodifiableList(listOf());
                 public static final String REGULAR_USER_ROLE_NAME_DEFAULT = "causeway-ext-secman-user";
                 public static final boolean AUTO_UNLOCK_IF_DELEGATED_AND_AUTHENTICATED_DEFAULT = false;
+
+                /**
+                 * Path to local YAML file, if present, to use as an alternative seeding strategy.
+                 * <p>
+                 * Eg. seed from a YAML file, that was previously exported by SecMan's
+                 * ApplicationRoleManager_exportAsYaml mixin.
+                 */
+                @Getter @Setter
+                private String yamlFile = null;
 
                 @Getter
                 private final Admin admin = new Admin();

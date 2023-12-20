@@ -22,28 +22,40 @@ import jakarta.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.junit.jupiter.api.AfterEach;
+import org.apache.wicket.markup.html.basic.Label;
+import org.datanucleus.PropertyNames;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.RegressionTestAbstract;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperties;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperty;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
+import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.BOOK_DELETE_ACTION_JDO;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.STANDALONE_COLLECTION_LABEL;
 
 import lombok.val;
 
@@ -54,34 +66,43 @@ import lombok.val;
                 //XrayEnable.class
                 },
         properties = {
+                "spring.datasource.url=jdbc:h2:mem:InteractionTestJdoWkt",
+                PropertyNames.PROPERTY_RETAIN_VALUES + "=false"  // default anyway
+                /* TODO[CAUSEWAY-3486] default, but should be enforced by causeway:
+                 * datanucleus.detachAllOnCommit = false */
         })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class InteractionTestJdoWkt extends RegressionTestAbstract {
+class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     @Inject private WicketTesterFactory wicketTesterFactory;
-    @Inject private JdoTestFixtures testFixtures;
 
     private EntityPageTester wktTester;
 
+    // optimization: reuse Wicket application across tests
+    private static _Refs.ObjectReference<EntityPageTester> wktTesterHolder =
+            _Refs.objectRef(null);
+
+
     @BeforeEach
     void setUp() throws InterruptedException {
-        wktTester = wicketTesterFactory.createTester(JdoBook::fromDto);
+        wktTester = wktTesterHolder.computeIfAbsent(()->
+                wicketTesterFactory.createTester(JdoBook::fromDto));
     }
 
-    @AfterEach
-    void cleanUp() {
-        wktTester.destroy();
-        XrayUi.waitForShutdown();
+    @AfterAll
+    static void cleanUp() {
+        wktTesterHolder.getValue()
+            .ifPresent(EntityPageTester::destroy);
     }
 
     @Test
     void load_viewmodel_with_referenced_entities_directly() {
 
         val pageParameters = call(()->{
-            val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
+            val inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
             return wktTester.createPageParameters(inventoryJaxbVm);
         });
 
@@ -90,10 +111,11 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
         run(()->{
             wktTester.startEntityPage(pageParameters);
 
+            //XXX activate for test troubleshooting
+            // wktTester.dumpComponentTree(comp->true);
+
             wktTester.assertHeaderBrandText("Smoke Tests");
             wktTester.assertPageTitle("JdoInventoryJaxbVm; Bookstore; 3 products");
-
-            //wktTester.dumpComponentTree(comp->true);
 
             wktTester.assertFavoriteBookIs(BookDto.sample());
 
@@ -168,6 +190,8 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
 
     }
 
+    private ManagedObject bookAdapter;
+
     @Test
     void loadBookPage_Dune_then_change_Isbn() {
         val pageParameters = call(()->{
@@ -177,10 +201,16 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
             .findFirst()
             .orElseThrow();
 
+            System.err.printf("--- adapt %n");
+            bookAdapter = super.objectManager.adapt(jdoBook);
+
             return wktTester.createPageParameters(jdoBook);
         });
 
         //System.err.printf("pageParameters %s%n", pageParameters);
+
+        assertEquals(ManagedObject.Specialization.ENTITY, bookAdapter.getSpecialization());
+        assertTrue(bookAdapter.isBookmarkMemoized(), "bookAdapter should be bookmarked");
 
         // open Dune page
         run(()->{
@@ -206,12 +236,27 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
             val form = wktTester.newFormTester(bookIsbn.editInlinePromptForm());
             form.setValue(bookIsbn.scalarField(), "ISBN-XXXX");
             form.submit();
+
+            val jpaBook = (JdoBook)bookAdapter.getPojo();
+            assertEquals("ISBN-A", jpaBook.getIsbn());
         });
 
         // simulate click on form OK button -> expected to trigger the framework's property change execution
         run(()->{
             wktTester.assertComponent(bookIsbn.editInlinePromptFormOk(), IndicatingAjaxButton.class);
+
+            wktTester.dumpComponentTree(comp->true);
+            System.out.println(
+                wktTester.getLastResponseAsString()
+            );
+
             wktTester.executeAjaxEvent(bookIsbn.editInlinePromptFormOk(), "click");
+
+            System.err.printf("bookAdapter state %s%n", bookAdapter.getEntityState());
+
+            System.err.printf("--- verify %n");
+            val jpaBook = (JdoBook)bookAdapter.getPojo();
+            assertEquals("ISBN-XXXX", jpaBook.getIsbn());
         });
 
         // ... should yield a new Title containing 'Dune [ISBN-XXXX]'
@@ -228,6 +273,52 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
                     .orElseThrow();
             jdoBook.setIsbn("ISBN-A");
         });
+
+    }
+
+    @Test
+    void loadBookPage_Dune_then_delete() {
+        val pageParameters = call(()->{
+
+            val jdoBook = repositoryService.allInstances(JdoBook.class).stream()
+            .filter(book->"Dune".equals(book.getName()))
+            .findFirst()
+            .orElseThrow();
+
+            return wktTester.createPageParameters(jdoBook);
+        });
+
+        // open Dune page and click on the Delete action
+        run(()->{
+            wktTester.startEntityPage(pageParameters);
+            wktTester.clickLink(BOOK_DELETE_ACTION_JDO);
+
+            // then should render a standalone collection labeled 'Delete'
+            val label = (Label)wktTester
+                    .getComponentFromLastRenderedPage(STANDALONE_COLLECTION_LABEL);
+            assertEquals("Delete", label.getDefaultModelObject());
+        });
+    }
+
+    @Test
+    void loadNonExistentBookPage_shouldRender_noSuchObjectError() {
+        val pageParameters = PageParameterUtils.createPageParametersForBookmark(
+                Bookmark.forLogicalTypeAndIdentifier(
+                        LogicalType.eager(JdoBook.class, "testdomain.jdo.Book"),
+                        "99"));
+
+        // open book page for non existent OID '99'
+        // should throw an (causeway) ObjectNotFoundException
+        assertThrows(ObjectNotFoundException.class, ()->{
+            run(()->{
+                wktTester.startEntityPage(pageParameters);
+            });
+        });
+
+        // yet don't know how to verify an error page was rendered
+//        run(()->{
+//            wktTester.dumpComponentTree(comp->true);
+//        });
 
     }
 

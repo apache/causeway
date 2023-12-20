@@ -27,6 +27,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -74,23 +75,24 @@ import lombok.val;
  */
 public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object>  {
 
-    public static DeweyOrderSet createOrderSet(final List<? extends FacetHolder> identifiedHolders) {
+    public static DeweyOrderSet createOrderSet(final Stream<? extends FacetHolder> identifiedHolders) {
 
         final SortedMap<String, SortedSet<FacetHolder>> sortedMembersByGroup = _Maps.newTreeMap();
         final SortedSet<FacetHolder> nonAnnotatedGroup = _Sets.newTreeSet(new MemberIdentifierComparator());
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
-        for (final FacetHolder facetHolder : identifiedHolders) {
+
+        identifiedHolders.forEach(facetHolder->{
             val layoutGroupFacet = facetHolder.getFacet(LayoutGroupFacet.class);
             if (layoutGroupFacet == null) {
                 nonAnnotatedGroup.add(facetHolder);
-                continue;
+                return;
             }
             final SortedSet<FacetHolder> sortedMembersForFieldSet =
                     getSortedSet(sortedMembersByGroup, layoutGroupFacet.getGroupId());
             sortedMembersForFieldSet.add(facetHolder);
-        }
+        });
 
         // add the non-annotated group to the first "" group.
         final SortedSet<FacetHolder> defaultSet = getSortedSet(sortedMembersByGroup, "");
@@ -314,7 +316,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
 
     // ///////////////////////// reorderChildren //////////////////////
 
-    public void reorderChildren(List<String> requiredOrder) {
+    public void reorderChildren(final List<String> requiredOrder) {
         final LinkedHashMap<String,DeweyOrderSet> orderSets = _Maps.newLinkedHashMap();
 
         // remove all OrderSets from elements

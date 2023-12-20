@@ -140,7 +140,12 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
 			<version>${resteasy.version}</version> 
-			<!--			6.2.2.Final-->
+			<exclusions>
+			    <exclusion>
+			        <groupId>commons-logging</groupId>
+			        <artifactId>commons-logging</artifactId>
+			    </exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 		    <groupId>org.jboss.resteasy</groupId>

@@ -63,9 +63,11 @@ public class PivotUtils {
 
     }
 
-    static boolean cellValueEquals(Cell cell, Cell other) {
+    static boolean cellValueEquals(final Cell cell, final Cell other) {
 
-        if (cell != null && other != null && cell.getCellType() == other.getCellType()) {
+        if (cell != null
+                && other != null
+                && cell.getCellType() == other.getCellType()) {
 
             switch (cell.getCellType()) {
                 case BLANK:
@@ -83,8 +85,6 @@ public class PivotUtils {
                         return true;
                     }
                     break;
-                case FORMULA:
-                    break;
                 case NUMERIC:
                     if (cell.getNumericCellValue() == other.getNumericCellValue()){
                         return true;
@@ -94,13 +94,16 @@ public class PivotUtils {
                     if (cell.getStringCellValue().equals(other.getStringCellValue())){
                         return true;
                     }
+                case FORMULA:
+                case _NONE:
+                    break;
             }
         }
 
-        return  false;
+        return false;
     }
 
-    static Cell addCellValueTo(Cell source, Cell target){
+    static Cell addCellValueTo(final Cell source, final Cell target){
 
         if (source == null) {
             return target;
@@ -115,7 +118,7 @@ public class PivotUtils {
         return target;
     }
 
-    static void copyCell(Cell source, Cell target) {
+    static void copyCell(final Cell source, final Cell target) {
 
         // If the source cell is null, return
         if (source == null) {
@@ -137,6 +140,8 @@ public class PivotUtils {
 
         // Set the cell data value
         switch (source.getCellType()) {
+            case _NONE:
+                break;
             case BLANK:
                 target.setBlank();
                 break;

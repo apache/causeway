@@ -23,61 +23,48 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.Vector;
 import java.util.function.Function;
 import java.util.function.IntFunction;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectLifecycle;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.ImmutableCollection;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.collections._Collections;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFrom;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.val;
-import lombok.experimental.Accessors;
 
 public final class ProgrammingModelConstants {
 
@@ -113,9 +100,9 @@ public final class ProgrammingModelConstants {
         ;
         private final Class<? extends Annotation> annotationType;
 
-        public static boolean anyMatchOn(final Method method) {
+        public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodIncludeMarker includeMarker : MethodIncludeMarker.values()) {
-                if(_Annotations.synthesize(method, includeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), includeMarker.getAnnotationType()).isPresent()) {
                     return true;
                 }
             }
@@ -137,66 +124,13 @@ public final class ProgrammingModelConstants {
         ;
         private final Class<? extends Annotation> annotationType;
 
-        public static boolean anyMatchOn(final Method method) {
+        public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodExcludeMarker excludeMarker : MethodExcludeMarker.values()) {
-                if(_Annotations.synthesize(method, excludeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), excludeMarker.getAnnotationType()).isPresent()) {
                     return true;
                 }
             }
             return false;
-        }
-    }
-
-    // -- ACCESSORS
-
-    @Getter
-    @RequiredArgsConstructor
-    public enum AccessorPrefix {
-        GET("get"),
-        IS("is"),
-        SET("set");
-        private final String prefix;
-
-        public String prefix(final @Nullable String input) {
-            return input!=null
-                    ? prefix + input
-                    : prefix;
-        }
-
-        public boolean isPrefixOf(final @Nullable String input) {
-            return input!=null
-                    ? input.startsWith(prefix)
-                    : false;
-        }
-
-        public static boolean isCandidateGetterName(final @Nullable String name) {
-            return GET.isPrefixOf(name)
-                    || IS.isPrefixOf(name);
-        }
-
-        public static boolean isBooleanGetter(final Method method) {
-            return IS.isPrefixOf(method.getName())
-                    && method.getParameterCount() == 0
-                    && !Modifier.isStatic(method.getModifiers())
-                    && (method.getReturnType() == boolean.class
-                        || method.getReturnType() == Boolean.class);
-        }
-
-        public static boolean isNonBooleanGetter(final Method method, final Predicate<Class<?>> typeFilter) {
-            return GET.isPrefixOf(method.getName())
-                    && method.getParameterCount() == 0
-                    && !Modifier.isStatic(method.getModifiers())
-                    && typeFilter.test(method.getReturnType());
-        }
-
-        public static boolean isNonBooleanGetter(final Method method, final Class<?> expectedType) {
-            return isNonBooleanGetter(method, type->
-                expectedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(type)));
-        }
-
-        public static boolean isGetter(final Method method) {
-            return isBooleanGetter(method)
-                    || isNonBooleanGetter(method, type->type != void.class);
         }
     }
 
@@ -296,7 +230,8 @@ public final class ProgrammingModelConstants {
         VOID(void.class),
         BOOLEAN(boolean.class),
         STRING(String.class),
-        TRANSLATABLE(String.class, TranslatableString.class);
+        TRANSLATABLE(String.class, TranslatableString.class),
+        FONTAWESOME_LAYERS(FontAwesomeLayers.class);
         ReturnTypeCategory(final Class<?> ...returnTypes) {
             this.returnTypes = Can.of(returnTypes);
         }
@@ -317,8 +252,8 @@ public final class ProgrammingModelConstants {
 
     @RequiredArgsConstructor
     public static enum ReturnTypePattern {
-        SCALAR(Can::ofSingleton),
-        NON_SCALAR(ReturnTypeCategory::nonScalar),
+        SINGULAR(Can::ofSingleton),
+        PLURAL(ReturnTypeCategory::nonScalar),
         TEXT(__->ReturnTypeCategory.TRANSLATABLE.getReturnTypes()),
         BOOLEAN(__->ReturnTypeCategory.BOOLEAN.getReturnTypes());
         final Function<Class<?>, Can<Class<?>>> matchingTypesForElementType;
@@ -340,6 +275,7 @@ public final class ProgrammingModelConstants {
         TITLE(ReturnTypeCategory.TRANSLATABLE, "title"),
         CSS_CLASS(ReturnTypeCategory.STRING, "cssClass"),
         ICON_NAME(ReturnTypeCategory.STRING, "iconName"),
+        ICON_FA_LAYERS(ReturnTypeCategory.FONTAWESOME_LAYERS, "iconFaLayers"),
         LAYOUT(ReturnTypeCategory.STRING, "layout"),
 
         /** as a fallback in the absence of other title providers */
@@ -359,9 +295,9 @@ public final class ProgrammingModelConstants {
 
     @Getter
     public static enum MemberSupportPrefix {
-        DEFAULT(ReturnTypePattern.SCALAR, "default"),
-        CHOICES(ReturnTypePattern.NON_SCALAR, "choices"),
-        AUTO_COMPLETE(ReturnTypePattern.NON_SCALAR, "autoComplete"),
+        DEFAULT(ReturnTypePattern.SINGULAR, "default"),
+        CHOICES(ReturnTypePattern.PLURAL, "choices"),
+        AUTO_COMPLETE(ReturnTypePattern.PLURAL, "autoComplete"),
         HIDE(ReturnTypePattern.BOOLEAN, "hide"),
         DISABLE(ReturnTypePattern.TEXT, "disable"),
         VALIDATE(ReturnTypePattern.TEXT, "validate"),
@@ -448,7 +384,7 @@ public final class ProgrammingModelConstants {
         PREFIXED_MEMBER_NAME {
             @Override @Nullable
             String nameFor(final MethodFacade member, final String prefix, final boolean isMixin) {
-                return prefix + getCapitalizedMemberName(member.asMethodForIntrospection());
+                return prefix + getCapitalizedMemberName(member.asMethodForIntrospection().method());
             }
         },
         /** eg. hide() */
@@ -475,6 +411,9 @@ public final class ProgrammingModelConstants {
         CONFLICTING_TITLE_STRATEGIES(
                 "${type} has title() method with @Title annotation, which is not allowed; "
                 + "consider either removing the @Title annotation or renaming the method"),
+        CONFLICTING_OPTIONALITY(
+                "${member} has conflicting optionality semantics; facets involved are:\n"
+                + "${conflictingFacets}"),
         ORPHANED_METHOD("${type}#${member}: is public, but orphaned (was not picked up by the framework); "
                 + "reporting orphans, because the class is setup for member introspection, "
                 + "without enforcing annotations"),
@@ -527,10 +466,30 @@ public final class ProgrammingModelConstants {
         UNKNONW_SORT_WITH_ACTION("${type}: is a (concrete) but UNKNOWN sort, yet has ${actionCount} actions: ${actions}"),
         ACTION_METHOD_OVERLOADING_NOT_ALLOWED("Action method overloading is not allowed, "
                 + "yet ${type} has action(s) that have a the same member name: ${overloadedNames}"),
+        PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE("${paramId} has no choices nor autoComplete, "
+                + "yet represents a domain-object or is a plural."),
         PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION("${type}#${member}: "
                 + "Can use @ParameterTuple only on parameter of a single arg action."),
         PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS("${type}#${member}: "
                 + "Tuple type ${patType} referenced by @ParameterTuple annotated parameter has no or more than one public constructor."),
+        INVALID_MEMBER_ELEMENT_TYPE("${type}: has a member with vetoed, mixin or managed "
+                + "element-type ${elementType}, which is not allowed; (allowed types are abstract, value, viewmodel and entity)"),
+        MEMBER_ID_CLASH("${type}: has members using the same member-id "
+                + "'${memberId}', which is not allowed; clashes:\n\t[1]${member1}\n\t[2]${member2}"),
+        AMBIGUOUS_MIXIN_ANNOTATIONS("Annotation ${annot} on both method and type level is not allowed, "
+                + "it must be one or the other. Found with mixin: ${mixinType}"),
+        INVALID_MIXIN_TYPE("Mixin ${type} could not be identified as action, property or collection."),
+        INVALID_MIXIN_MAIN("Mixin ${type} does declare method name '${expectedMethodName}' as"
+                + " the mixin main method to use,"
+                + " but introspection did pick up method '${actualMethodName}' instead."),
+        INVALID_MIXIN_SORT("Mixin ${type} is declared as contributing '${expectedContributing}'"
+                + " but introspection did pick it up as '${actualContributing}' instead."),
+        INVALID_USE_OF_VALIDATION_SUPPORT_METHOD("Validation support method "
+                + "for member '${memberName}' in class '${className}' "
+                + "was returning an empty string, which is invalid use of Apache Causeway's programming model. "
+                + "In case a successful validation was intended, "
+                + "the method should return null instead of an empty string. "
+                + "(Please inform your developers!)"),
         ;
 
         private final String template;
@@ -566,7 +525,7 @@ public final class ProgrammingModelConstants {
      */
     public static enum ViewmodelConstructor {
         PUBLIC_WITH_INJECT_SEMANTICS {
-            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
                 return Try.call(()->
                     _ClassCache.getInstance()
                         .streamPublicConstructorsWithInjectSemantics(cls))
@@ -575,7 +534,7 @@ public final class ProgrammingModelConstants {
             }
         },
         PUBLIC_ANY {
-            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
                 return Try.call(()->
                     _ClassCache.getInstance()
                         .streamPublicConstructors(cls))
@@ -583,167 +542,14 @@ public final class ProgrammingModelConstants {
                         .orElse(Stream.empty());
             }
         };
-        public <T> Can<Constructor<T>> getAll(final Class<T> cls) {
+        public Can<ResolvedConstructor> getAll(final Class<?> cls) {
             return streamAll(cls).collect(Can.toCan());
         }
-        public <T> Optional<Constructor<T>> getFirst(final Class<T> cls) {
+        public Optional<ResolvedConstructor> getFirst(final Class<?> cls) {
             return streamAll(cls).findFirst();
         }
-        public abstract <T> Stream<Constructor<T>> streamAll(Class<T> cls);
+        public abstract Stream<ResolvedConstructor> streamAll(Class<?> cls);
 
-    }
-
-    /**
-     * Supported collection types, including arrays.
-     * Order matters, as class substitution is processed on first matching type.
-     * <p>
-     * Non scalar <i>Action Parameter</i> types cannot be more special than what we offer here.
-     */
-    @RequiredArgsConstructor
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public static enum CollectionSemantics {
-        ARRAY(Array.class){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return _Arrays.toArray(_Casts.uncheckedCast(nonScalar), elementType);
-            }
-        },
-        @Deprecated
-        VECTOR(Vector.class){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return new Vector(nonScalar);
-            }
-        },
-        LIST(List.class){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return Collections.unmodifiableList(nonScalar);
-            }
-        },
-        SORTED_SET(SortedSet.class){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return _Collections.asUnmodifiableSortedSet(nonScalar);
-            }
-        },
-        SET(Set.class){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return _Collections.asUnmodifiableSet(nonScalar);
-            }
-        },
-        COLLECTION(Collection.class){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return Collections.unmodifiableCollection(nonScalar);
-            }
-        },
-        CAN(Can.class){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return Can.ofCollection(nonScalar);
-            }
-        },
-        IMMUTABLE_COLLECTION(ImmutableCollection.class){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return CAN.asContainerType(elementType, nonScalar);
-            }
-        }
-        ;
-        public boolean isArray() {return this == ARRAY;}
-        public boolean isVector() {return this == VECTOR;}
-        public boolean isList() {return this == LIST;}
-        public boolean isSortedSet() {return this == SORTED_SET;}
-        public boolean isSet() {return this == SET;}
-        public boolean isCollection() {return this == COLLECTION;}
-        public boolean isCan() {return this == CAN;}
-        public boolean isImmutableCollection() {return this == IMMUTABLE_COLLECTION;}
-        //
-        public boolean isSetAny() {return isSet() || isSortedSet(); }
-        @Getter private final Class<?> containerType;
-        private static final ImmutableEnumSet<CollectionSemantics> all =
-                ImmutableEnumSet.allOf(CollectionSemantics.class);
-        @Getter @Accessors(fluent = true)
-        private static final ImmutableEnumSet<CollectionSemantics> typeSubstitutors = all.remove(ARRAY);
-        public static Optional<CollectionSemantics> valueOf(final @Nullable Class<?> type) {
-            if(type==null) return Optional.empty();
-            return type.isArray()
-                    ? Optional.of(CollectionSemantics.ARRAY)
-                    : all.stream()
-                        .filter(collType->collType.getContainerType().isAssignableFrom(type))
-                        .findFirst();
-        }
-        public Object unmodifiableCopyOf(
-                final Class<?> elementType, final @NonNull Iterable<?> nonScalar) {
-            // defensive copy
-            return asContainerType(elementType,
-                    _NullSafe.stream(nonScalar).collect(Collectors.toList()));
-        }
-        protected abstract Object asContainerType(
-                final Class<?> elementType, final @NonNull List<?> nonScalar);
-    }
-
-    //TODO perhaps needs an update to reflect Java 7->11 Language changes
-    @RequiredArgsConstructor
-    public static enum WrapperFactoryProxy {
-        COLLECTION(
-                // intercepted ...
-                List.of(
-                        getMethod(Collection.class, "contains", Object.class),
-                        getMethod(Collection.class, "size"),
-                        getMethod(Collection.class, "isEmpty")
-                ),
-                // vetoed ...
-                List.of(
-                        getMethod(Collection.class, "add", Object.class),
-                        getMethod(Collection.class, "remove", Object.class),
-                        getMethod(Collection.class, "addAll", Collection.class),
-                        getMethod(Collection.class, "removeAll", Collection.class),
-                        getMethod(Collection.class, "retainAll", Collection.class),
-                        getMethod(Collection.class, "clear")
-                )),
-        LIST(
-                // intercepted ...
-                _Lists.concat(
-                        COLLECTION.intercepted,
-                        List.of(
-                                getMethod(List.class, "get", int.class)
-                        )
-                ),
-                // vetoed ...
-                _Lists.concat(
-                        COLLECTION.vetoed,
-                        List.of(
-                        )
-                )),
-        MAP(
-                // intercepted ...
-                List.of(
-                        getMethod(Map.class, "containsKey", Object.class),
-                        getMethod(Map.class, "containsValue", Object.class),
-                        getMethod(Map.class, "size"),
-                        getMethod(Map.class, "isEmpty")
-                ),
-                // vetoed ...
-                List.of(
-                        getMethod(Map.class, "put", Object.class, Object.class),
-                        getMethod(Map.class, "remove", Object.class),
-                        getMethod(Map.class, "putAll", Map.class),
-                        getMethod(Map.class, "clear")
-                ))
-        ;
-        @Getter private final List<Method> intercepted;
-        @Getter private final List<Method> vetoed;
-        // -- HELPER
-        @SneakyThrows
-        private static Method getMethod(
-                final Class<?> cls,
-                final String methodName,
-                final Class<?>... parameterClass) {
-            return cls.getMethod(methodName, parameterClass);
-        }
     }
 
     // -- HELPER
@@ -754,12 +560,12 @@ public final class ProgrammingModelConstants {
             val methodName = method.getName();
             if(method.getParameterCount()>0
                     || method.getReturnType().equals(void.class)
-                    || !AccessorPrefix.isCandidateGetterName(methodName)) {
+                    || !AccessorSemantics.isCandidateGetterName(methodName)) {
                 // definitely an action not a getter
                 return _Strings.capitalize(methodName);
             }
             // must be a getter
-            return _Strings.capitalize(_Strings.asPrefixDropped(methodName));
+            return _Strings.baseName(methodName);
         }
         // must be a field then
         return _Strings.capitalize(member.getName());
@@ -773,6 +579,5 @@ public final class ProgrammingModelConstants {
         templateVars.forEach((k, v)->templateRef.update(str->str.replace("${" + k + "}", v)));
         return templateRef.getValue();
     }
-
 
 }

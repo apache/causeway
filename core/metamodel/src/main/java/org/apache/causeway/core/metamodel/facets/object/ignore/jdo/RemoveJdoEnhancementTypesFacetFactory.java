@@ -24,10 +24,10 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 
 /**
  * Removes all methods inherited from <tt>javax.jdo.spi.PersistenceCapable</tt> (if JDO is on the classpath).
@@ -35,8 +35,7 @@ import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.RemoveMe
 public class RemoveJdoEnhancementTypesFacetFactory
 extends FacetFactoryAbstract {
 
-    private final List<RemoveMethodsFacetFactory.MethodAndParameterTypes>
-        jdoEnhancementmethodsToIgnore = _Lists.newArrayList();
+    private final List<ResolvedMethod> jdoEnhancementmethodsToIgnore = _Lists.newArrayList();
 
     @Inject
     public RemoveJdoEnhancementTypesFacetFactory(final MetaModelContext mmc) {
@@ -52,22 +51,16 @@ extends FacetFactoryAbstract {
     }
 
     private void addMethodsToBeIgnored(final Class<?> typeToIgnore) {
-
         getClassCache()
         .streamPublicMethods(typeToIgnore)
-        .forEach(method->{
-            jdoEnhancementmethodsToIgnore
-            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
-        });
-
+        .forEach(jdoEnhancementmethodsToIgnore::add);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        for (final RemoveMethodsFacetFactory.MethodAndParameterTypes mapt : jdoEnhancementmethodsToIgnore) {
-            processClassContext.removeMethod(mapt.methodName, null, mapt.methodParameters);
+        for (final ResolvedMethod mapt : jdoEnhancementmethodsToIgnore) {
+            processClassContext.removeMethod(mapt.name(), null, mapt.paramTypes());
         }
     }
-
 
 }

@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuAction;
@@ -57,9 +57,9 @@ public final class ServiceActionUtil {
                 actionUiModel,
                 commonContext.getTranslationService());
 
-        val fontAwesome = actionUiModel.getFontAwesomeUiModel();
-        WktDecorators.getIcon().decorate(menuItemLabel, fontAwesome);
-        WktDecorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
+        val faLayers = actionUiModel.lookupFontAwesomeLayers(true);
+        WktDecorators.getIcon().decorate(menuItemLabel, faLayers);
+        WktDecorators.getMissingIcon().decorate(menuItemActionLink, faLayers);
 
         val leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);
@@ -79,9 +79,9 @@ public final class ServiceActionUtil {
         listItem.add(folderItem);
 
         Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.getLinkAndLabel().getFriendlyName());
-        final List<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
+        final Can<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
 
-        Wkt.listViewAdd(folderItem, "subMenuItems", menuItems, item->{
+        Wkt.listViewAdd(folderItem, "subMenuItems", menuItems.toList(), item->{
             CssMenuItem menuItem = listItem.getModelObject();
 
             if (menuItem.hasSubMenuItems()) {
@@ -93,17 +93,17 @@ public final class ServiceActionUtil {
 
     }
 
+
     @RequiredArgsConstructor(staticName = "of")
     private static class MenuBuilderWkt implements MenuVisitor {
 
-        private final MetaModelContext commonContext;
         private final Consumer<CssMenuItem> onNewMenuItem;
 
         private CssMenuItem currentTopLevelMenu = null;
 
         @Override
         public void onTopLevel(final MenuDropdown menuDto) {
-            currentTopLevelMenu = CssMenuItem.newMenuItem(menuDto.name());
+            currentTopLevelMenu = CssMenuItem.newMenuItemWithSubmenu(menuDto.name());
             onNewMenuItem.accept(currentTopLevelMenu);
         }
 
@@ -115,9 +115,9 @@ public final class ServiceActionUtil {
 
         @Override
         public void onMenuAction(final MenuAction menuAction) {
-            val menuItem = CssMenuItem.newMenuItem(menuAction.name());
+            val menuItem = CssMenuItem.newMenuItemWithLink(menuAction.name());
             currentTopLevelMenu.addSubMenuItem(menuItem);
-            menuItem.setLinkAndLabel(LinkAndLabelFactory.linkAndLabelForMenu(commonContext, menuAction));
+            menuItem.setLinkAndLabel(LinkAndLabelFactory.linkAndLabelForMenu(menuAction));
         }
 
         @Override
@@ -128,13 +128,11 @@ public final class ServiceActionUtil {
     }
 
     public static void buildMenu(
-            final MetaModelContext commonContext,
             final NavbarSection navBarSection,
             final Consumer<CssMenuItem> onNewMenuItem) {
 
         navBarSection.visitMenuItems(
                 MenuBuilderWkt.of(
-                        commonContext,
                         onNewMenuItem));
     }
 

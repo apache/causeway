@@ -26,6 +26,7 @@ class FileUtils {
   Optional<File> existingDirectory(File file)     // <.>
   File existingDirectoryElseFail(File file)     // <.>
   void copy(File from, File to)     // <.>
+  void copyLines(File from, File to, Charset charset, UnaryOperator<String> lineProcessor, OpenOption... openOptions)     // <.>
 }
 ----
 
@@ -90,6 +91,11 @@ Guard given file against null, non-existence and not representing a directory (n
 +
 --
 Copy _from_ file _to_ file, replacing existing.
+--
+<.> xref:#copyLines_File_File_Charset_UnaryOperator_OpenOption[copyLines(File, File, Charset, UnaryOperator, OpenOption)]
++
+--
+Copy all lines _from_ file _to_ file, using given _Charset_ and processing each line before writing using _lineProcessor_ .
 --
 
 == Members
@@ -159,3 +165,8 @@ Guard given file against null, non-existence and not representing a directory (n
 === copy(File, File)
 
 Copy _from_ file _to_ file, replacing existing.
+
+[#copyLines_File_File_Charset_UnaryOperator_OpenOption]
+=== copyLines(File, File, Charset, UnaryOperator, OpenOption)
+
+Copy all lines _from_ file _to_ file, using given _Charset_ and processing each line before writing using _lineProcessor_ .

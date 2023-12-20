@@ -26,7 +26,6 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -37,10 +36,12 @@ import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorExcept
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
+import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.util.ToString;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
@@ -156,11 +157,11 @@ public class AuthenticationManager {
 
 
     // cannot use final here, as Spring provides a transaction aware proxy for this type
-    public /*final*/ boolean isSessionValid(final @Nullable InteractionContext authentication) {
-        if(authentication==null) {
+    public /*final*/ boolean isSessionValid(final @Nullable InteractionContext interactionContext) {
+        if(interactionContext==null) {
             return false;
         }
-        val userMemento = authentication.getUser();
+        val userMemento = interactionContext.getUser();
         if(userMemento.getAuthenticationSource().isExternal()) {
             return true;
         }
@@ -168,15 +169,16 @@ public class AuthenticationManager {
             return true;
         }
         final String userName = userByValidationCode.get(userMemento.getAuthenticationCode());
-        return authentication.getUser().isCurrentUser(userName);
+        return interactionContext.getUser().isCurrentUser(userName);
     }
 
 
-    public void closeSession(final InteractionContext context) {
+    public void closeSession(final @Nullable UserMemento user) {
         for (val authenticator : authenticators) {
-            authenticator.logout(context);
+            authenticator.logout();
         }
-        userByValidationCode.remove(context.getUser().getAuthenticationCode());
+        if(user==null) return;
+        userByValidationCode.remove(user.getAuthenticationCode());
     }
 
     // -- AUTHENTICATORS
@@ -211,7 +213,5 @@ public class AuthenticationManager {
     public String toString() {
         return toString.toString(this);
     }
-
-
 
 }

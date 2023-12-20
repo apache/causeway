@@ -20,28 +20,32 @@ package org.apache.causeway.core.metamodel.postprocessors.param;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
+import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetFromElementType;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFacet;
-import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet;
+import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction;
+import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromElementType;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.causeway.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetFromChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromDefaultedFacet;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.val;
 
@@ -53,11 +57,11 @@ import lombok.val;
  *
  */
 public class ChoicesAndDefaultsPostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Inject
     public ChoicesAndDefaultsPostProcessor(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+        super(metaModelContext, SKIP_MIXINS);
     }
 
     @Override
@@ -65,44 +69,69 @@ extends ObjectSpecificationPostProcessorAbstract {
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
-        if(!hasMemberLevelChoices(param)) {
 
-            // if available on action, installs as a low precedence facets onto the parameters,
-            // so can be overwritten by member support (imperative) choices
-            val choicesFromFacetIfAny = objectAction
-                    .lookupFacet(ChoicesFromFacet.class);
+        // no need to perform this check if the action is always hidden in the UI
+        // (one use case being if the action exists solely to be called via the WrapperFactory service,
+        //  eg to emit an outbox event for integration)
+        if (Facets.hiddenWhere(objectAction)
+                  .filter(where -> where == Where.EVERYWHERE)
+                  .isPresent()) {
+            return;
+        }
+
+        if(!hasChoicesOrAutoComplete(param)) {
 
             if(FacetUtil
-                .addFacetIfPresent(
-                    ActionParameterChoicesFacetFromChoicesFromFacet
-                    .create(choicesFromFacetIfAny, objectSpecification, param))
-                .isPresent()) {
+                    .addFacetIfPresent(
+                        ActionParameterChoicesFacetFromAction
+                            .create(objectAction, objectSpecification, param))
+                    .isPresent()) {
 
-                // ActionParameterChoicesFacetFromChoicesFromFacet has precedence over
-                // ActionParameterChoicesFacetFromChoicesFacet, so stop processing here
+                /* ActionParameterChoicesFacetFromAction has precedence over
+                 * ActionParameterChoicesFacetFromElementType, so stop processing here.
+                 * (also skips validation below) */
                 return;
             }
 
-            val choicesFacetIfAny = param.getElementType()
-                    .lookupNonFallbackFacet(ChoicesFacet.class);
+            if(FacetUtil
+                    .addFacetIfPresent(
+                        ActionParameterChoicesFacetFromElementType
+                            .create(param))
+                    .isPresent()) {
 
-            FacetUtil.addFacetIfPresent(
-                    ActionParameterChoicesFacetFromChoicesFacet
-                    .create(choicesFacetIfAny, param.getFacetHolder()));
+                /* ActionParameterChoicesFacetFromElementType has precedence over
+                 * ActionParameterAutoCompleteFacetFromElementType, so stop processing here.
+                 * (also skips validation below) */
+                return;
+            }
+
+            if(FacetUtil
+                    .addFacetIfPresent(
+                            ActionParameterAutoCompleteFacetFromElementType
+                                .create(param))
+                    .isPresent()) {
+
+                /* skips validation below */
+                return;
+            }
+
         }
+
+        checkParamHasChoicesOrAutoCompleteWhenRequired(param);
     }
 
     @Override
     public void postProcessProperty(
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation prop) {
+
         if(!hasMemberLevelDefaults(prop)) {
             prop.getElementType()
             .lookupNonFallbackFacet(DefaultedFacet.class)
             .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetFromDefaultedFacet(
                                         specFacet, facetedMethodFor(prop))));
         }
-        if(!hasMemberLevelChoices(prop)) {
+        if(!hasChoicesOrAutoComplete(prop)) {
 
             val choicesFacetIfAny = prop.getElementType()
                     .lookupNonFallbackFacet(ChoicesFacet.class);
@@ -170,12 +199,12 @@ extends ObjectSpecificationPostProcessorAbstract {
         return prop.containsNonFallbackFacet(PropertyDefaultFacet.class);
     }
 
-    private static boolean hasMemberLevelChoices(final ObjectActionParameter param) {
+    private static boolean hasChoicesOrAutoComplete(final ObjectActionParameter param) {
         return param.containsNonFallbackFacet(ActionParameterChoicesFacet.class)
                 || param.containsNonFallbackFacet(ActionParameterAutoCompleteFacet.class);
     }
 
-    private static boolean hasMemberLevelChoices(final OneToOneAssociation prop) {
+    private static boolean hasChoicesOrAutoComplete(final OneToOneAssociation prop) {
         return prop.containsNonFallbackFacet(PropertyChoicesFacet.class)
                 || prop.containsNonFallbackFacet(PropertyAutoCompleteFacet.class);
     }
@@ -192,9 +221,30 @@ extends ObjectSpecificationPostProcessorAbstract {
     private static void addCollectionParamChoicesFacetIfNoneAlready(
             final OneToManyAssociation coll,
             final ObjectActionParameter param) {
-        if(!hasMemberLevelChoices(param)) {
+        if(!hasChoicesOrAutoComplete(param)) {
             FacetUtil.addFacet(
                     new ActionParameterChoicesFacetFromParentedCollection(param, coll));
+        }
+    }
+
+    private void checkParamHasChoicesOrAutoCompleteWhenRequired(final ObjectActionParameter param) {
+        val elementType = param.getElementType();
+        if(elementType == null
+                || elementType.getBeanSort().isManagedBeanAny()
+                || elementType.getBeanSort().isMixin()
+                || elementType.getBeanSort().isVetoed()) {
+            // ignore, as these cases are covered later by meta-model validation
+            return;
+        }
+        if(elementType.isEntityOrViewModel()
+                || param.isPlural()) {
+            if(!hasChoicesOrAutoComplete(param)) {
+
+                ValidationFailure.raiseFormatted(param,
+                        ProgrammingModelConstants.Violation.PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE.builder()
+                            .addVariable("paramId", param.getFeatureIdentifier().toString())
+                            .buildMessage());
+            }
         }
     }
 

@@ -1,0 +1,152 @@
+roles:
+- __name: causeway-conf-ConfigurationMenu
+  description: Access configuration properties
+  permissions:
+  - {featureFqn: causeway.conf, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+  - {featureFqn: causeway.config, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+- __name: causeway-ext-auditTrail
+  description: Access to the audit trail actions
+  permissions:
+  - {featureFqn: causeway.ext.auditTrail, featureSort: NAMESPACE, mode: CHANGING,
+    rule: ALLOW}
+- __name: causeway-ext-commandLog
+  description: Access to the command log actions
+  permissions:
+  - {featureFqn: causeway.ext.commandLog, featureSort: NAMESPACE, mode: CHANGING,
+    rule: ALLOW}
+- __name: causeway-ext-executionLog
+  description: Access to the execution log actions
+  permissions:
+  - {featureFqn: causeway.ext.executionLog, featureSort: NAMESPACE, mode: CHANGING,
+    rule: ALLOW}
+- __name: causeway-ext-executionOutbox
+  description: Access to the execution outbox actions
+  permissions:
+  - {featureFqn: causeway.ext.executionOutbox, featureSort: NAMESPACE, mode: CHANGING,
+    rule: ALLOW}
+- __name: causeway-ext-h2Console
+  description: Access to the H2 console UI
+  permissions:
+  - {featureFqn: causeway.ext.h2Console, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+- __name: causeway-ext-secman-admin
+  description: Administer security
+  permissions:
+  - {featureFqn: causeway.ext.secman, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+  - {featureFqn: simple, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+- __name: causeway-ext-secman-user
+  description: Regular user of the security module
+  permissions:
+  - {featureFqn: causeway.ext.secman.ApplicationUser, featureSort: TYPE, mode: VIEWING,
+    rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.ApplicationRole#name, featureSort: MEMBER, mode: VIEWING,
+    rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.ApplicationRole#description, featureSort: MEMBER,
+    mode: VIEWING, rule: ALLOW}
+  - {featureFqn: causeway.applib, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+  - {featureFqn: causeway.testing.fixtures, featureSort: NAMESPACE, mode: CHANGING,
+    rule: ALLOW}
+  - {featureFqn: causeway.security, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+  - {featureFqn: causeway.security.LogoutMenu, featureSort: TYPE, mode: CHANGING,
+    rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.MeService, featureSort: TYPE, mode: CHANGING,
+    rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#updateName, featureSort: MEMBER,
+    mode: CHANGING, rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#updatePassword, featureSort: MEMBER,
+    mode: CHANGING, rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#updateEmailAddress, featureSort: MEMBER,
+    mode: CHANGING, rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#updatePhoneNumber, featureSort: MEMBER,
+    mode: CHANGING, rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#updateFaxNumber, featureSort: MEMBER,
+    mode: CHANGING, rule: ALLOW}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#effectiveMemberPermissions, featureSort: MEMBER,
+    mode: VIEWING, rule: VETO}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#filterEffectiveMemberPermissions,
+    featureSort: MEMBER, mode: VIEWING, rule: VETO}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#resetPassword, featureSort: MEMBER,
+    mode: VIEWING, rule: VETO}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#lock, featureSort: MEMBER, mode: VIEWING,
+    rule: VETO}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#unlock, featureSort: MEMBER,
+    mode: VIEWING, rule: VETO}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#addRole, featureSort: MEMBER,
+    mode: VIEWING, rule: VETO}
+  - {featureFqn: causeway.ext.secman.ApplicationUser#removeRoles, featureSort: MEMBER,
+    mode: VIEWING, rule: VETO}
+- __name: causeway-ext-sessionLog
+  description: Access to the session log actions
+  permissions:
+  - {featureFqn: causeway.ext.sessionLog, featureSort: NAMESPACE, mode: CHANGING,
+    rule: ALLOW}
+- __name: causeway-feat-ApplicationFeatureMenu
+  description: Access application features
+  permissions:
+  - {featureFqn: causeway.feat, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+- __name: causeway-sudo-ImpersonateMenu
+  description: Access to the ImpersonateMenu (ability to impersonate other users,
+    for testing purposes)
+  permissions:
+  - {featureFqn: causeway.sudo.ImpersonateMenu, featureSort: TYPE, mode: CHANGING,
+    rule: ALLOW}
+- __name: causeway-viewer-roRendering-SwaggerServiceMenu
+  description: Access to the swagger UI
+  permissions:
+  - {featureFqn: causeway.viewer.roRendering.SwaggerServiceMenu, featureSort: TYPE,
+    mode: CHANGING, rule: ALLOW}
+- __name: simple-superuser
+  description: Permission to use everything in the 'simple' module
+  permissions:
+  - {featureFqn: simple, featureSort: NAMESPACE, mode: CHANGING, rule: ALLOW}
+tenancies:
+- {__name: Global, parentPath: null, path: /}
+users:
+- __username: bob
+  accountType: LOCAL
+  atPath: null
+  emailAddress: bob@home.org
+  encryptedPassword: null
+  familyName: null
+  faxNumber: null
+  givenName: null
+  knownAs: null
+  language: en
+  numberFormat: de
+  phoneNumber: null
+  roleNames: [causeway-ext-secman-user, simple-superuser]
+  status: LOCKED
+  timeFormat: es
+- __username: secman-admin
+  accountType: LOCAL
+  atPath: /
+  emailAddress: null
+  encryptedPassword: '{bcrypt}$2a$10$yXDvI5WgWhutWeTwTjaNkOA4.pvyY0ELsOEoMhtMnvit3/boLrr5y'
+  familyName: null
+  faxNumber: null
+  givenName: null
+  knownAs: null
+  language: null
+  numberFormat: null
+  phoneNumber: null
+  roleNames: [causeway-ext-secman-user, causeway-ext-executionOutbox, causeway-ext-commandLog,
+    causeway-conf-ConfigurationMenu, causeway-viewer-roRendering-SwaggerServiceMenu,
+    causeway-sudo-ImpersonateMenu, causeway-ext-executionLog, causeway-ext-h2Console,
+    causeway-ext-secman-admin, causeway-ext-sessionLog, causeway-feat-ApplicationFeatureMenu,
+    causeway-ext-auditTrail]
+  status: UNLOCKED
+  timeFormat: null
+- __username: sven
+  accountType: LOCAL
+  atPath: null
+  emailAddress: null
+  encryptedPassword: '{bcrypt}$2a$10$22XOo2C10EeUw6SircvBnO4JcnOUeTX1A5KqGSUlZMFd.uQc2bDXC'
+  familyName: null
+  faxNumber: null
+  givenName: null
+  knownAs: null
+  language: null
+  numberFormat: null
+  phoneNumber: null
+  roleNames: [causeway-ext-secman-user, simple-superuser]
+  status: UNLOCKED
+  timeFormat: null

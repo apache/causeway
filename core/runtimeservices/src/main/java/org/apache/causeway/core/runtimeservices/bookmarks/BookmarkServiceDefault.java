@@ -88,7 +88,8 @@ public class BookmarkServiceDefault implements BookmarkService {
             return Optional.empty();
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
-        return objectManager.bookmarkObject(adapter);
+        return Optional.ofNullable(adapter)
+                .flatMap(ManagedObject::getBookmark);
     }
 
     @Override
@@ -107,6 +108,7 @@ public class BookmarkServiceDefault implements BookmarkService {
 
     @Override
     public Bookmark bookmarkForElseFail(final @Nullable Object domainObject) {
+
         return bookmarkFor(domainObject)
                 .orElseThrow(
                         ()->_Exceptions.illegalArgument(

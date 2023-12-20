@@ -5,7 +5,7 @@
 
 == See also
 
-* the structure of the xref:userguide:fun:ui.adoc#object-layout[layout XML] is described in the user guide.
+* the structure of the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout XML] is described in the user guide.
 
 * xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService]
 

@@ -34,7 +34,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.user.ImpersonatedUserHolder;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security._testing.InteractionService_forTesting;
@@ -51,7 +51,7 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
     protected Request mockRequest = Mockito.mock(Request.class);
     protected Authenticator mockAuthenticator = Mockito.mock(Authenticator.class);
     protected InteractionService mockInteractionService = Mockito.mock(InteractionService.class);
-    protected ImpersonatedUserHolder mockImpersonatedUserHolder = Mockito.mock(ImpersonatedUserHolder.class);
+    protected UserService mockUserService = Mockito.mock(UserService.class);
     protected InteractionLayerTracker mockInteractionLayerTracker = Mockito.mock(InteractionLayerTracker.class);
 
     protected AuthenticatedWebSessionForCauseway webSession;
@@ -60,17 +60,18 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
     @BeforeEach
     void setUp() throws Exception {
 
-        mmc = MetaModelContext_forTesting.builder()
-                .singleton(mockInteractionService)
-                .singleton(mockImpersonatedUserHolder)
-                .build();
-
         authMgr = new AuthenticationManager(
                 Collections.singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
                 Optional.empty(),
                 Collections.emptyList());
+
+        mmc = MetaModelContext_forTesting.builder()
+                .singleton(mockInteractionService)
+                .singleton(mockUserService)
+                .authenticationManager(authMgr)
+                .build();
 
         Mockito
         .when(mockInteractionLayerTracker.currentInteractionContext())
@@ -85,9 +86,14 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
     protected void setupWebSession() {
         webSession = new AuthenticatedWebSessionForCauseway(mockRequest) {
             private static final long serialVersionUID = 1L;
-            { metaModelContext = mmc; }
+
             @Override public AuthenticationManager getAuthenticationManager() {
                 return authMgr;
+            }
+
+            @Override
+            public MetaModelContext getMetaModelContext() {
+                return mmc;
             }
         };
     }
@@ -96,7 +102,7 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
     void delegatesToAuthenticationManagerAndCachesAuthSessionIfOk() {
 
         Mockito
-        .when(mockImpersonatedUserHolder.getUserMemento())
+        .when(mockUserService.lookupImpersonatedUser())
         .thenReturn(Optional.empty());
 
         Mockito
@@ -112,10 +118,11 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
         setupWebSession();
 
         // when
-        assertThat(webSession.authenticate("jsmith", "secret"), is(true));
+        boolean authenticated = webSession.authenticate("jsmith", "secret");
+        assertThat(authenticated, is(true));
 
         // then
-        assertThat(webSession.getAuthentication(), is(not(nullValue())));
+        assertThat(webSession.getInteractionContext(), is(not(nullValue())));
     }
 
     @Test
@@ -134,7 +141,7 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
         setupWebSession();
 
         assertThat(webSession.authenticate("jsmith", "secret"), is(false));
-        assertThat(webSession.getAuthentication(), is(nullValue()));
+        assertThat(webSession.getInteractionContext(), is(nullValue()));
     }
 
 }

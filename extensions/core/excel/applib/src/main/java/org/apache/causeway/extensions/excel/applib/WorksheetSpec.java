@@ -24,8 +24,12 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.base._Casts;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 /**
  * @since 2.0 {@index}
@@ -47,32 +51,20 @@ public class WorksheetSpec {
         @Programmatic
         Class<?> getCls();
 
-        static class Default<T> implements RowFactory<T> {
-            private final Class<T> viewModelClass;
+        @RequiredArgsConstructor
+        class Default<T> implements RowFactory<T> {
+
+            @Getter
+            private final Class<T> cls;
+
+            @Override @SneakyThrows
+            public T create() {
+                final T t = cls.getConstructor().newInstance();
+                return servicesInjector.injectServicesInto(t);
+            }
 
             @Inject @Setter
             private ServiceInjector servicesInjector;
-
-            public Default(final Class<T> viewModelClass) {
-                this.viewModelClass = viewModelClass;
-            }
-
-            @Override
-            public T create() {
-                try {
-                    final T t = viewModelClass.newInstance();
-                    servicesInjector.injectServicesInto(t);
-                    return t;
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            @Override
-            public Class<?> getCls() {
-                return viewModelClass;
-            }
-
         }
 
     }
@@ -86,11 +78,11 @@ public class WorksheetSpec {
      * @param sheetName - must be 31 chars or less
      * @param <T>
      */
-    public <T> WorksheetSpec(final Class<T> viewModelClass, String sheetName) {
+    public <T> WorksheetSpec(final Class<T> viewModelClass, final String sheetName) {
         this(viewModelClass, sheetName, Mode.STRICT);
     }
 
-    public <T> WorksheetSpec(final Class<T> viewModelClass, String sheetName, final Mode mode) {
+    public <T> WorksheetSpec(final Class<T> viewModelClass, final String sheetName, final Mode mode) {
         this(new RowFactory.Default<>(viewModelClass), sheetName, mode);
     }
 
@@ -115,7 +107,7 @@ public class WorksheetSpec {
     }
 
     @Programmatic
-    public <T> RowFactory<T> getFactory() { return (RowFactory<T>) factory; }
+    public <T> RowFactory<T> getFactory() { return _Casts.uncheckedCast(factory); }
 
     @Programmatic
     public String getSheetName() {

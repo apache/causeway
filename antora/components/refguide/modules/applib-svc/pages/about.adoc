@@ -50,7 +50,7 @@ include::applib-svc:partial$_security-spi.adoc[leveloffset=+2]
 
 == Public API vs Internal Services
 
-The vast majority of Apache Causeway' domain services are defined in Apache Causeway' applib (`o.a.i.core:causeway-applib` module) as stable, public classes.
+The vast majority of Apache Causeway' domain services are defined in Apache Causeway' applib (`o.a.c.core:causeway-applib` module) as stable, public classes.
 Importantly, this also minimizes the coupling between your code and Apache Causeway, allowing you to easily mock out these services in your unit tests.
 
 The framework also defines a number of "internal" services.
@@ -155,7 +155,7 @@ In the majority of cases there is likely to be just a single top-level node of t
 
 * the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] also holds a reference to the xref:refguide:applib:index/services/command/Command.adoc[Command], which represents the top-level intention to invoke the action / edit the property.
 
-* before and after each action invocation/property edit, a xref:applib-classes:events/domainevent.adoc[domain event] is may be broadcast to all subscribers.
+* before and after each action invocation/property edit, a xref:applib-classes:events.adoc#domain-event-classes[domain event] is may be broadcast to all subscribers.
 Whether this occurs depends on whether the action/property has been annotated (using xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent()] or xref:refguide:applib:index/annotation/Property.adoc#domainEvent[@Property#domainEvent()]).
 +
 (Note that subscribers will also receive events for vetoing the action/property; this is not shown on the diagram).

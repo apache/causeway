@@ -41,11 +41,11 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Action(
-        domainEvent = Object_impersonate.ActionDomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Object_impersonate.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         cssClassFa = "fa-mask",

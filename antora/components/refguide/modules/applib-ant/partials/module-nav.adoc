@@ -11,20 +11,35 @@
 ** xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout]
 ** xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService]
 ** xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout]
-** xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage]
-** xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope]
-** xref:refguide:applib:index/annotation/MemberSupport.adoc[@MemberSupport]
-** xref:refguide:applib:index/annotation/MinLength.adoc[@MinLength]
-** xref:refguide:applib:index/annotation/Module.adoc[@Module]
 ** xref:refguide:applib:index/annotation/Parameter.adoc[@Parameter]
 ** xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout]
-** xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic]
 ** xref:refguide:applib:index/annotation/Property.adoc[@Property]
 ** xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout]
-** xref:refguide:applib:index/annotation/Title.adoc[@Title]
-** xref:refguide:applib:index/annotation/Value.adoc[@Value]
 
-** javax.validation
+** Other Causeway Annotations
+
+*** xref:refguide:applib:index/annotation/HomePage.adoc[]
+*** xref:refguide:applib:index/annotation/Title.adoc[]
+*** xref:refguide:applib:index/annotation/MinLength.adoc[]
+
+*** include/exclude
+**** xref:refguide:applib:index/annotation/Domain_Include.adoc[]
+**** xref:refguide:applib:index/annotation/Domain_Exclude.adoc[]
+**** xref:refguide:applib:index/annotation/MemberSupport.adoc[]
+**** xref:refguide:applib:index/annotation/ObjectSupport.adoc[]
+**** xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[]
+**** xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic]
+
+*** architecture
+
+**** xref:refguide:applib:index/annotation/Module.adoc[@Module]
+**** xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope]
+
+*** custom value type support
+**** xref:refguide:applib:index/annotation/Value.adoc[@Value]
+**** xref:refguide:applib:index/annotation/ValueSemantics.adoc[@ValueSemantics]
+
+** Java EE Annotations
 *** xref:refguide:applib-ant:Digits.adoc[@Digits]
 *** xref:refguide:applib-ant:Nullable.adoc[@Nullable]
 *** xref:refguide:applib-ant:Pattern.adoc[@Pattern]
@@ -32,6 +47,9 @@
 ** JAXB
 *** xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[@XmlJavaTypeAdapter]
 *** xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement]
+
+** JPA
+*** xref:refguide:applib-ant:Entity.adoc[@Entity]
 
 ** JDO
 *** xref:refguide:applib-ant:Column.adoc[@Column]

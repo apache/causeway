@@ -20,7 +20,7 @@ xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout]
 === Properties
 
 For properties, the `fieldSetId` and/or `fieldSetName` attribute is used to group properties together, and `sequence` orders the properties within that group.
-It corresponds to a `<fieldset>` if using xref:userguide:fun:ui.adoc#object-layout[layout files].
+It corresponds to a `<fieldset>` if using xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout files].
 
 
 For example:
@@ -54,7 +54,7 @@ public class Customer {
 }
 ----
 
-TIP: It's possible to combine `@PropertyLayout` with xref:userguide:fun:ui.adoc#object-layout[layout file].
+TIP: It's possible to combine `@PropertyLayout` with xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout file].
 Use the layout file to define the positioning of the fieldsets, and use `@PropertyLayout` to organise the properties within the fieldset.
 
 === Actions

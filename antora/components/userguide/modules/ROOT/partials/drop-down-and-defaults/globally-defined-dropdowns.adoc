@@ -1,0 +1,66 @@
+= "Globally" defined drop-downs
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Very often the set of available choices depends on the data type of the property/action parameter, rather than the individual property/parameter itself.
+And similarly the algorithm to search for references again may well depend only on that reference type.
+
+In the case of _choices_, annotating a class as "bounded" (as in a "bounded" or fixed number of instances) means that a _choices_ drop-down will automatically be defined.
+For example:
+
+[source,java]
+----
+@DomainObject(
+    bounded = true
+)
+public class Product { /* ... */ }
+----
+
+For more on this, see xref:refguide:applib:index/annotation/DomainObject.adoc#bounding[@DomainObject#bounding].
+
+Or, if the data type is an enum, then a drop-down will be provided automatically.
+A payment method is a good example of this:
+
+
+[source,java]
+----
+public enum PaymentMethod {
+    VISA, MASTERCARD, AMEX;
+}
+----
+
+Something similar can be achieved for _autoComplete_.
+Here the domain object indicates a repository query to execute.
+For example:
+
+[source,java]
+----
+@DomainObject(
+    autoCompleteRepository = Customers.class,
+    autoCompleteMethod = "findByReferenceOrName"
+)
+public class Customer { /* ... */ }
+----
+
+with:
+
+[source,java]
+.Customers.java
+----
+@DomainService(nature = NatureOfService.VIEW)
+public class Customers {
+    @Action(semantics=SemanticsOf.SAFE)
+    public List<Customer> findByReferenceOrName(@MinLength(3) String refOrName) {
+        ...
+    }
+}
+----
+
+For more on this, see xref:refguide:applib:index/annotation/DomainObject.adoc#autoCompleteRepository[@DomainObject#autoCompleteRepository].
+
+[TIP]
+====
+There's no need for the nominated method to be an actual action; any method of any domain service will do, so long as it accepts a string and returns the correct list.
+====

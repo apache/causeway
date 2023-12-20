@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import java.io.InputStream;
-import java.util.Properties;
+import org.springframework.boot.info.BuildProperties;
 
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -33,8 +31,6 @@ import org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsS
 
 public class VersionReprRenderer
 extends ReprRendererAbstract<Void> {
-
-    private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.causeway.viewer/causeway-viewer-restfulobjects-server/pom.properties";
 
     VersionReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.VERSION, representation);
@@ -54,7 +50,7 @@ extends ReprRendererAbstract<Void> {
         }
 
         representation.mapPutString("specVersion", RestfulObjectsSpec.SPEC_VERSION);
-        representation.mapPutString("implVersion", versionFromManifest());
+        representation.mapPutString("implVersion", getResourceContext().getConfiguration().getBuildProperties().map(BuildProperties::getVersion).orElse("UNKNOWN"));
 
         putOptionalCapabilities();
         putExtensions();
@@ -83,17 +79,6 @@ extends ReprRendererAbstract<Void> {
             link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
-    }
-
-    private static String versionFromManifest() {
-        try {
-            final InputStream resource = _Resources.load(VersionReprRenderer.class, META_INF_POM_PROPERTIES);
-            Properties p = new Properties();
-            p.load(resource);
-            return p.getProperty("version");
-        } catch (final Exception ex) {
-            return "UNKNOWN";
-        }
     }
 
     private void putOptionalCapabilities() {

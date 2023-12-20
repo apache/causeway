@@ -43,8 +43,6 @@ import lombok.val;
  *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
  * </p>
  *
- * @see org.apache.causeway.core.runtime.idstringifier.IdStringifierService
- *
  * @since 2.0 {@index}
  */
 @SuppressWarnings("javadoc")

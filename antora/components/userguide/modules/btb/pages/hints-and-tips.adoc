@@ -6,25 +6,19 @@
 
 
 
-This chapter provides some solutions for problems we've encountered ourselves or have been raised on the Apache Causeway mailing lists.
+This page provides some solutions for problems we've encountered ourselves or have been raised on the Apache Causeway mailing lists.
 
 
 
-include::hints-and-tips/are-you-sure.adoc[leveloffset=+1]
-include::hints-and-tips/custom-css.adoc[leveloffset=+1]
-include::hints-and-tips/replacing-default-service-implementations.adoc[leveloffset=+1]
+include::partial$hints-and-tips/are-you-sure.adoc[leveloffset=+1]
+include::partial$hints-and-tips/custom-css.adoc[leveloffset=+1]
+include::partial$hints-and-tips/replacing-default-service-implementations.adoc[leveloffset=+1]
 
-include::hints-and-tips/vetoing-visibility.adoc[leveloffset=+1]
+include::partial$hints-and-tips/vetoing-visibility.adoc[leveloffset=+1]
 
-include::hints-and-tips/transactions-and-errors.adoc[leveloffset=+1]
-include::hints-and-tips/persisted-title.adoc[leveloffset=+1]
+include::partial$hints-and-tips/transactions-and-errors.adoc[leveloffset=+1]
+include::partial$hints-and-tips/persisted-title.adoc[leveloffset=+1]
 
-// not sure if the advice in here is true or not?
-//include::hints-and-tips/view-model-instantiation.adoc[leveloffset=+1]
-
-// incomplete, placeholder
-//include::hints-and-tips/simulating-collections-of-values.adoc[leveloffset=+1]
-
-include::hints-and-tips/how-to-handle-void-and-null-results.adoc[leveloffset=+1]
-include::hints-and-tips/subclass-properties-in-tables.adoc[leveloffset=+1]
-include::hints-and-tips/how-to-implement-a-spellchecker.adoc[leveloffset=+1]
+include::partial$hints-and-tips/how-to-handle-void-and-null-results.adoc[leveloffset=+1]
+include::partial$hints-and-tips/subclass-properties-in-tables.adoc[leveloffset=+1]
+include::partial$hints-and-tips/how-to-implement-a-spellchecker.adoc[leveloffset=+1]

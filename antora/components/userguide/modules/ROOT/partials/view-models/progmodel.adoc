@@ -1,0 +1,44 @@
+[[programming-model]]
+= Programming Model
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+View models are generally considered to reside in the application layer, and -- unlike xref:domain-entities.adoc[domain entities] -- their state is _not_ persisted to a database.
+Instead, it is serialized into its identifier (in effect, its URL).
+The framework unpacks this URL to infer/recreate the view model's state with each interaction.
+
+View models are typically annotated with xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject(nature=VIEW_MODEL)].
+
+The framework provides four different ways to implement a view model:
+
+* Annotating the class using JAXB annotations; this allows the state of the object's properties and also its collections.
++
+The serialized form of these view models is therefore XML, which also enables these view models to act as DTO (useful for various integration scenarios).
+
+* Using Apache Causeway specific annotations.
++
+This is more concise, but less powerful: only the state of the object's properties is serialized -- collections are ignored -- and not every datatype is recognized.
++
+On the other hand, they are more likely to perform better.
+
+* Implementing the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface.
++
+With this option you take full control of the marshalling and unmarshalling of the object's state to/from a string.
+
+* Implementing `java.io.Serializable`.
++
+View models implemented this way cannot reference entities, either as properties or collections, and indeed must make sure that every other object referenced is also `Serializable`.
++
+Domain services can be injected, but must be annotated declared with the `transient` keyword.
+
+If a view model class employs several of these options, then there is a precedence:
+
+* explicitly implemented interfaces take precedence:
++
+`ViewModel` interface over `Serializable`
+* JAXB-annotated classes are next
+* Causeway-annotated classes are the fallback.
+
+Each of these options are discussed in more detail in the sections below.

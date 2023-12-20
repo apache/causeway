@@ -54,17 +54,17 @@ import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.format.UnitFormatter;
 import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.causeway.tooling.javamodel.ast.CodeClasses;
-import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 import org.apache.causeway.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.causeway.tooling.projectmodel.Dependency;
 import org.apache.causeway.tooling.projectmodel.ProjectNode;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
-import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.block;
-import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.cell;
-import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.doc;
-import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.headRow;
-import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.row;
-import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.table;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.block;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.cell;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.doc;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.headRow;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.row;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.table;
 
 import guru.nidi.codeassert.config.Language;
 import guru.nidi.codeassert.model.CodeClass;
@@ -481,9 +481,10 @@ public class ProjectDocModel {
         return String.format(".%s\n****\n%s\n****\n\n", title, content);
     }
 
+    /* not used
     private static String toAdocListItem(final String element) {
         return String.format("* %s\n", element);
-    }
+    } */
 
     private static String toAdocCompactListItem(final String element) {
         return String.format("%s +\n", element);

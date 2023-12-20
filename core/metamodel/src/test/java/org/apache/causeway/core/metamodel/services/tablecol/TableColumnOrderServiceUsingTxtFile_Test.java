@@ -40,6 +40,9 @@ class TableColumnOrderServiceUsingTxtFile_Test {
     @Nested
     class orderParented {
 
+        /**
+         * should read from Customer#orders.columnOrder.txt
+         */
         @Test
         void happy_case() {
             // when
@@ -50,15 +53,68 @@ class TableColumnOrderServiceUsingTxtFile_Test {
             assertThat(ordered).containsExactly("orderNum", "orderDate", "orderStatus");
         }
 
+        /**
+         * should read from Order.columnOrder.txt
+         */
+        @Test
+        void fallback_to_fallback_file() {
+            // when
+            val ordered = service.orderParented(new Customer(), "moreOrders", Order.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderDate", "orderStatus");
+        }
+
+        /**
+         * should read from Customer#_.Order4.columnOrder.txt
+         */
+        @Test
+        void fallback_to_wildcard_type() {
+            // when
+            val ordered = service.orderParented(new Customer(), "otherOrders", Order4.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderDate", "orderStatus");
+        }
+
+        /**
+         * should read from Customer#_.Order5.columnOrder.fallback.txt
+         */
+        @Test
+        void fallback_to_wildcard_fallback_type() {
+            // when
+            val ordered = service.orderParented(new Customer(), "otherOrders", Order5.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderDate", "orderStatus");
+        }
+
+        /**
+         * should read from Order.columnOrder.txt
+         */
+        @Test
+        void fallback_to_element_type() {
+            // when
+            val ordered = service.orderParented(new Customer(), "previousOrders", Order.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));   // "orderDate" is not in the file being read
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderStatus");
+        }
+
         @Test
         void missing_file() {
             // when
-            val ordered = service.orderParented(new Customer(), "nonExistent", Order.class,
+            val ordered = service.orderParented(new Customer(), "nonExistent", Order2.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
             assertThat(ordered).isNull();
         }
+
     }
 
     @Nested
@@ -71,7 +127,17 @@ class TableColumnOrderServiceUsingTxtFile_Test {
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
-            assertThat(ordered).containsExactly("orderNum", "orderDate", "orderStatus");
+            assertThat(ordered).containsExactly("orderNum", "orderStatus");
+        }
+
+        @Test
+        void fallback_file() {
+            // when
+            val ordered = service.orderStandalone(Order3.class,
+                    Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
+
+            // then
+            assertThat(ordered).containsExactly("orderNum", "orderStatus");
         }
 
         @Test
@@ -89,6 +155,12 @@ class TableColumnOrderServiceUsingTxtFile_Test {
 class Order {
 }
 class Order2 {
+}
+class Order3 {
+}
+class Order4 {
+}
+class Order5 {
 }
 class Customer {
 }

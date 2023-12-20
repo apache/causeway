@@ -19,7 +19,6 @@
 package org.apache.causeway.applib;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -30,6 +29,7 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import lombok.Getter;
@@ -96,15 +96,15 @@ implements
 
     public static Identifier propertyIdentifier(
             final LogicalType typeIdentifier,
-            final String propertyOrCollectionName) {
-        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
+            final String propertyName) {
+        return new Identifier(typeIdentifier, propertyName, Can.empty(),
                 Type.PROPERTY);
     }
 
     public static Identifier collectionIdentifier(
             final LogicalType typeIdentifier,
-            final String propertyOrCollectionName) {
-        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
+            final String collectionName) {
+        return new Identifier(typeIdentifier, collectionName, Can.empty(),
                 Type.COLLECTION);
     }
 
@@ -112,8 +112,8 @@ implements
     /** for reporting orphaned methods */
     public static Identifier methodIdentifier(
             final LogicalType typeIdentifier,
-            final Method method) {
-        return actionIdentifier(typeIdentifier, _Reflect.methodToShortString(method), method.getParameterTypes());
+            final ResolvedMethod method) {
+        return actionIdentifier(typeIdentifier, _Reflect.methodToShortString(method.method()), method.paramTypes());
     }
 
     public static Identifier actionIdentifier(

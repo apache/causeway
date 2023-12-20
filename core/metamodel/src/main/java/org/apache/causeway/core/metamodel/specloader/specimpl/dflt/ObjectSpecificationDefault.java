@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl.dflt;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,14 +30,16 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -49,6 +49,7 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -57,11 +58,10 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.causeway.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
-import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
@@ -79,10 +79,9 @@ implements FacetHolder {
     /**
      * Lazily built by {@link #getMember(Method)}.
      */
-    private Map<Method, ObjectMember> membersByMethod = null;
+    private Map<ResolvedMethod, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
-
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
     @Getter(onMethod_ = {@Override})
@@ -178,12 +177,9 @@ implements FacetHolder {
             return;
         }
 
-        // associations and actions
-        val associations = createAssociations();
-        sortAndUpdateAssociations(associations);
-
-        val actions = createActions();
-        sortCacheAndUpdateActions(actions);
+        // create associations and actions
+        replaceAssociations(createAssociations());
+        replaceActions(createActions());
 
         postProcess();
     }
@@ -191,24 +187,18 @@ implements FacetHolder {
     private void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
             addFacet(new MemberNamedFacetForStaticMemberName(
-                    StringExtensions.asNaturalName2(getShortIdentifier()),
+                    _Strings.asNaturalName.apply(getShortIdentifier()),
                     this));
         }
     }
 
 
     // -- create associations and actions
-    private List<ObjectAssociation> createAssociations() {
-        val associations = _Lists.<ObjectAssociation>newArrayList();
-        val associationFacetedMethods =
-                facetedMethodsBuilder.getAssociationFacetedMethods();
-        for (val facetedMethod : associationFacetedMethods) {
-            val association = createAssociation(facetedMethod);
-            if(association != null) {
-                associations.add(association);
-            }
-        }
-        return associations;
+    private Stream<ObjectAssociation> createAssociations() {
+        return facetedMethodsBuilder.getAssociationFacetedMethods()
+                .stream()
+                .map(this::createAssociation)
+                .filter(_NullSafe::isPresent);
     }
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
@@ -221,20 +211,23 @@ implements FacetHolder {
         }
     }
 
-    private List<ObjectAction> createActions() {
-        val actions = _Lists.<ObjectAction>newArrayList();
-        for (val facetedMethod : facetedMethodsBuilder.getActionFacetedMethods()) {
-            val action = createAction(facetedMethod);
-            if(action != null) {
-                actions.add(action);
-            }
-        }
-        return actions;
+    private Stream<ObjectAction> createActions() {
+        return facetedMethodsBuilder.getActionFacetedMethods()
+                .stream()
+                .map(this::createAction)
+                .filter(_NullSafe::isPresent);
     }
-
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
+            /* Assuming, that facetedMethod was already populated with ContributingFacet,
+             * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
+             * that is held by the mixin's type spec. */
+            mixinFacet()
+            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
+            .ifPresent(mixinFacetAbstract->
+                mixinFacetAbstract.initMixinSortFrom(facetedMethod));
+
             return this.isMixin()
                     ? ObjectActionDefault.forMixinMain(facetedMethod)
                     : ObjectActionDefault.forMethod(facetedMethod);
@@ -252,7 +245,7 @@ implements FacetHolder {
             final MixedIn mixedIn) {
 
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
-        
+
         return _Strings.isEmpty(id)
             ? Optional.empty()
             : streamDeclaredActions(actionScopes, mixedIn)
@@ -264,7 +257,7 @@ implements FacetHolder {
     }
 
     @Override
-    public Optional<? extends ObjectMember> getMember(final Method method) {
+    public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         if (membersByMethod == null) {
@@ -275,55 +268,34 @@ implements FacetHolder {
         return Optional.ofNullable(member);
     }
 
-    private Map<Method, ObjectMember> catalogueMembers() {
-        val membersByMethod = _Maps.<Method, ObjectMember>newHashMap();
+    private Map<ResolvedMethod, ObjectMember> catalogueMembers() {
+        val membersByMethod = _Maps.<ResolvedMethod, ObjectMember>newHashMap();
         cataloguePropertiesAndCollections(membersByMethod::put);
         catalogueActions(membersByMethod::put);
-        postprocessSyntheticMembers(membersByMethod);
         return membersByMethod;
     }
 
-    private void cataloguePropertiesAndCollections(final BiConsumer<Method, ObjectMember> onMember) {
+    private void cataloguePropertiesAndCollections(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
         streamDeclaredAssociations(MixedIn.EXCLUDED)
         .forEach(field->
             field.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodElseFail) // expected regular
+                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
                 .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
-    private void catalogueActions(final BiConsumer<Method, ObjectMember> onMember) {
+    private void catalogueActions(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
         streamDeclaredActions(MixedIn.INCLUDED)
         .forEach(userAction->
             userAction.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodForIntrospection)
+                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
                 .forEach(imperativeFacetMethod->
                     onMember.accept(imperativeFacetMethod, userAction)));
-    }
-
-    /**
-     * for any synthetic method also add an entry with its regular method,
-     * as found in the method's declaring class type-hierarchy
-     */
-    private void postprocessSyntheticMembers(final HashMap<Method, ObjectMember> membersByMethod) {
-        val syntheticEntries = Can.ofStream(
-            membersByMethod
-            .entrySet()
-            .stream()
-            .filter(entry->entry.getKey().isSynthetic()));
-
-        syntheticEntries
-        .forEach(entry->{
-            val objectMember = entry.getValue();
-            val syntheticMethod = entry.getKey();
-            _Reflect
-            .lookupRegularMethodForSynthetic(syntheticMethod)
-            .ifPresent(regularMethod->
-                membersByMethod.computeIfAbsent(regularMethod, key->objectMember));
-        });
     }
 
     // -- ELEMENT SPECIFICATION
@@ -340,12 +312,12 @@ implements FacetHolder {
     // -- TABLE COLUMN RENDERING
 
     @Override
-    public final Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
+    public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             final Identifier memberIdentifier,
             final ManagedObject parentObject) {
 
-        return new _PropertiesAsColumns(getMetaModelContext())
-            .streamPropertiesForColumnRendering(this, memberIdentifier, parentObject);
+        return new _AssociationsAsColumns(getMetaModelContext())
+            .streamAssociationsForColumnRendering(this, memberIdentifier, parentObject);
     }
 
     // -- DETERMINE INJECTABILITY

@@ -28,7 +28,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 @Named("testdomain.RoSpecSampler")
 @DomainService(
@@ -81,12 +80,12 @@ public class RoSpecSampler {
 
     @Action
     public List<String> stringList() {
-        return _Lists.of("Hello", "World!");
+        return List.of("Hello", "World!");
     }
 
     @Action
     public List<String> stringListEmpty() {
-        return _Lists.of();
+        return List.of();
     }
 
     @Action
@@ -125,7 +124,7 @@ public class RoSpecSampler {
 
     @Action
     public List<BigInteger> bigIntegerList() {
-        return _Lists.of(BigInteger.ZERO, bigInteger());
+        return List.of(BigInteger.ZERO, bigInteger());
     }
 
 
@@ -145,14 +144,14 @@ public class RoSpecSampler {
 
     @Action
     public List<Customer> customerList() {
-        return _Lists.of(
+        return List.of(
                 new Customer("Alice", 22),
                 new Customer("Bob", 33));
     }
 
     @Action
     public List<Customer> customerListEmpty() {
-        return _Lists.of();
+        return List.of();
     }
 
     @Action
@@ -164,7 +163,7 @@ public class RoSpecSampler {
 
     @Action
     public List<BigComplex> complexList() {
-        return _Lists.of(BigComplex.zero(), BigComplex.of("2.1", "-4.3"));
+        return List.of(BigComplex.zero(), BigComplex.of("2.1", "-4.3"));
     }
 
     @Action

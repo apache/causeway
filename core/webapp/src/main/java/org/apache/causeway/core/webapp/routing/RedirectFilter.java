@@ -29,7 +29,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.resources._Resources;
 
 public class RedirectFilter implements Filter {
 
@@ -49,7 +49,7 @@ public class RedirectFilter implements Filter {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        httpServletResponse.sendRedirect(StringExtensions.combinePath(httpServletRequest.getContextPath(), redirectTo));
+        httpServletResponse.sendRedirect(_Resources.combinePath(httpServletRequest.getContextPath(), redirectTo));
     }
 
     @Override

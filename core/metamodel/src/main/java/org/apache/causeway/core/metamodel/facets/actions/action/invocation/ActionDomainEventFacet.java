@@ -146,7 +146,7 @@ implements
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        if(!isPostable()) return null; // bale out
+        if(!isPostable()) return Optional.empty(); // bale out
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(

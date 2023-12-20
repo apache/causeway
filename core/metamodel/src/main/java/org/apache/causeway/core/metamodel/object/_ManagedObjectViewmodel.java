@@ -20,13 +20,13 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
@@ -93,13 +93,13 @@ implements
 
     // -- REFRESH OPTIMIZATION
 
-    private UUID interactionIdDuringWhichRefreshed = null;
+    private TransactionId txIdDuringWhichRefreshed = null;
 
     @Override
     public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-        val shouldRefresh = getInteractionService().getInteractionId()
+        val shouldRefresh = getTransactionService().currentTransactionId()
         .map(this::shouldRefresh)
-        .orElse(true); // if there is no current interaction, refresh regardless; unexpected state, might fail later
+        .orElse(true); // if there is no current transaction, refresh regardless; unexpected state, might fail later
 
         if(!shouldRefresh) {
             return;
@@ -119,11 +119,11 @@ implements
 
     // -- HELPER
 
-    private boolean shouldRefresh(final @NonNull UUID interactionId) {
-        if(Objects.equals(this.interactionIdDuringWhichRefreshed, interactionId)) {
-            return false; // already refreshed within current interaction
+    private boolean shouldRefresh(final @NonNull TransactionId transactionId) {
+        if(Objects.equals(this.txIdDuringWhichRefreshed, transactionId)) {
+            return false; // already refreshed within current transaction
         }
-        this.interactionIdDuringWhichRefreshed = interactionId;
+        this.txIdDuringWhichRefreshed = transactionId;
         return true;
     }
 

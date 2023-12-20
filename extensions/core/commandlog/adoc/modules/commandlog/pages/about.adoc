@@ -32,14 +32,14 @@ Add an entry for the _Command Log_ module's own BOM:
             <artifactId>causeway-extensions-commandlog</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
 ----
 
 [#dependencies]
-=== Dependencies
+=== Dependencies / Imports
 
 In the webapp module of your application, add the following dependency:
 
@@ -53,13 +53,13 @@ In the webapp module of your application, add the following dependency:
     </dependency>
 </dependencies>
 ----
-<.> specify either `causeway-extensions-commandlog-persistence-jpa` or `causeway-extensions-commandlog-persistence-jdo`, as required
+<.> either:
+** `causeway-extensions-commandlog-persistence-jpa` (xref:pjpa::about.adoc[]), or
+** `causeway-extensions-commandlog-persistence-jdo` (xref:pjdo::about.adoc[]).
 
 
-[[_update-appmanifest]]
-=== Update AppManifest
-
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the CommandLog modules.
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the CommandLog modules.
+The exact modules to use will depend upon the persistence mechanism in use:
 
 [source,java]
 .AppManifest.java
@@ -73,10 +73,12 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 public class AppManifest {
 }
 ----
-
-<.> specify either `CausewayModuleExtCommandLogPersistenceJdo` or `CausewayModuleExtCommandLogPersistenceJpa`, as required
+<.> either
+** `CausewayModuleExtCommandLogPersistenceJpa` (xref:pjpa::about.adoc[]),or
+** `CausewayModuleExtCommandLogPersistenceJdo`, (xref:pjdo::about.adoc[])
 
 If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
+
 
 [#configure-properties]
 === Configuration Properties
@@ -119,21 +121,21 @@ To get you started, the following fragment adds all of the actions to an "Activi
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:secondary>
+<mb:secondary>
     ...
-    <mb3:menu>
-        <mb3:named>Activity</mb3:named>
+    <mb:menu>
+        <mb:named>Activity</mb:named>
         ...
-        <mb3:section>
-            <mb3:named>Commands</mb3:named>
-            <mb3:serviceAction id="activeCommands" objectType="causeway.ext.commandLog.CommandLogMenu"/>
-            <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.commandLog.CommandLogMenu"/>
-            <mb3:serviceAction id="findCommands" objectType="causeway.ext.commandLog.CommandLogMenu"/>
-            <mb3:serviceAction id="findAll" objectType="causeway.ext.commandLog.CommandLogMenu"/>
-        </mb3:section>
+        <mb:section>
+            <mb:named>Commands</mb:named>
+            <mb:serviceAction id="activeCommands" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+            <mb:serviceAction id="findMostRecent" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+            <mb:serviceAction id="findCommands" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+            <mb:serviceAction id="findAll" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+        </mb:section>
         ...
-    </mb3:menu>
-</mb3:secondary>
+    </mb:menu>
+</mb:secondary>
 ----
 
 [#secman-security-roles]
@@ -158,7 +160,7 @@ The extension also provides these mixins:
 +
 This contributes a `recentCommands` collection to each and every domain object.
 +
-This can be explicit positioned through the domain class' own xref:userguide:fun:ui.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
+This can be explicit positioned through the domain class' own xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
 
 * xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[]
 +

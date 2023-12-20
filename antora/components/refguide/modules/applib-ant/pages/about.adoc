@@ -9,21 +9,21 @@ Most of these are defined by the framework itself, but some are from other libra
 It also identifies a number of annotations that are now deprecated, and indicates their replacement.
 
 
-The annotations supported by Apache Causeway break out into five categories.
+The annotations supported by Apache Causeway break out into several categories.
 
-include::about/main.adoc[leveloffset=+1]
-include::about/other.adoc[leveloffset=+1]
-include::about/jdo.adoc[leveloffset=+1]
-include::about/jpa.adoc[leveloffset=+1]
-include::about/jee.adoc[leveloffset=+1]
-// include::about/partial.adoc[leveloffset=+1]
+include::partial$about/main.adoc[leveloffset=+1]
+include::partial$about/other.adoc[leveloffset=+1]
+include::partial$about/jee.adoc[leveloffset=+1]
+include::partial$about/jaxb.adoc[leveloffset=+1]
+include::partial$about/jpa.adoc[leveloffset=+1]
+include::partial$about/jdo.adoc[leveloffset=+1]
 
 
 == Examples
 
 To give just a few examples of annotations supported by Apache Causeway:
 
-* if a property is read-only, then this can be annotated with `@Property(editing=EditingDISABLED)`.
+* if a property is read-only, then this can be annotated with `@Property(editing=Editing.DISABLED)`.
 * if a class has a small fixed set of instances (eg a picklist), then it can be annotated using `@DomainObject(bounded=true)`
 * if a class is a domain service and should be automatically instantiated as a singleton, then it can be annotated using `@DomainService`
 * if an action is idempotent, then it can be annotated using `@Action(semantics=SemanticsOf.IDEMPOTENT)`.

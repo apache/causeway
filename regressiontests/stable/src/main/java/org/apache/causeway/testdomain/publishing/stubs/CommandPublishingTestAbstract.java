@@ -80,7 +80,7 @@ extends PublishingTestAbstract {
                         formatPersistenceStandardSpecificLowerCase("testdomain.%s.Book#name"));
 
                 commandDto.setMember(propertyDto);
-                command.updater().setCommandDto(commandDto);
+                command.updater().setCommandDtoAndIdentifier(commandDto);
 
                 assertHasCommandEntries(Can.of(command));
                 break;
@@ -91,7 +91,7 @@ extends PublishingTestAbstract {
                         formatPersistenceStandardSpecificLowerCase("testdomain.%s.Book#doubleThePrice"));
 
                 commandDto.setMember(actionDto);
-                command.updater().setCommandDto(commandDto);
+                command.updater().setCommandDtoAndIdentifier(commandDto);
 
                 assertHasCommandEntries(Can.of(command));
                 break;

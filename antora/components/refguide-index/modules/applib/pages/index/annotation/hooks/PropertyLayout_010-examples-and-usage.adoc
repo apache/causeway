@@ -26,7 +26,7 @@ public class ToDoItem {
 
 [TIP]
 ====
-As an alternative to using the `@PropertyLayout` annotation, a xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+As an alternative to using the `@PropertyLayout` annotation, a xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
 ====
 
 
@@ -42,4 +42,4 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 == Usage Notes
 
-As alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can generally be used instead.
+As alternative to using the annotation, the dynamic xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[file-based layout] can generally be used instead.

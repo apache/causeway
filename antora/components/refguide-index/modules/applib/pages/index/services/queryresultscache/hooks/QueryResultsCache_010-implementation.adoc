@@ -5,4 +5,4 @@
 
 == Implementation
 
-The framework provides a default implementation of `o.a.i.core.runtimeservices.queryresultscache.QueryResultsCacheDefault`.
+The framework provides a default implementation of `o.a.c.core.runtimeservices.queryresultscache.QueryResultsCacheDefault`.

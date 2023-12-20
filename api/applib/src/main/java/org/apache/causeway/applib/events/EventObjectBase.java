@@ -27,7 +27,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 /**
  * @since 2.0 {@index}

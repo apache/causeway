@@ -107,14 +107,12 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
             final ObjectAction objectAction,
             final ManagedObject resultObject) {
 
-        val elementSpec = objectAction.getElementType();
-
         if(objectAction.getReturnType().isSingular()) {
-            //scalar
+            //singular
             valueMarshaller.recordActionResultScalar(actionInvocationDto, objectAction, resultObject);
         } else {
-            //non-scalar
-            val values = ManagedObjects.unpack(elementSpec, resultObject);
+            //plural
+            val values = ManagedObjects.unpack(resultObject);
             valueMarshaller.recordActionResultNonScalar(actionInvocationDto, objectAction, values);
         }
         return actionInvocationDto;
@@ -124,9 +122,10 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
     @Override
     public PropertyEditDto asPropertyEditDto(
             final OneToOneAssociation property,
-            final ManagedObject targetAdapter,
-            final ManagedObject newValueAdapterIfAny,
-            final InteractionHead interactionHead) {
+            final InteractionHead interactionHead,
+            final ManagedObject newValueAdapterIfAny) {
+
+        ManagedObject targetAdapter = interactionHead.getOwner();
 
         final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();

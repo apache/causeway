@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.summa
 
 import java.math.BigDecimal;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -28,6 +27,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -46,8 +47,6 @@ public class CollectionContentsAsSummaryFactory
 extends ComponentFactoryAbstract
 implements CollectionContentsAsFactory {
 
-    private static final long serialVersionUID = 1L;
-
     private static final String NAME = "summary";
 
     static final Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {
@@ -56,26 +55,24 @@ implements CollectionContentsAsFactory {
                 && objectSpec.getCorrespondingClass().equals(BigDecimal.class);
     };
 
-    // //////////////////////////////////////
-
     public CollectionContentsAsSummaryFactory() {
         super(UiComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
     }
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if(!(model instanceof EntityCollectionModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        final ObjectSpecification elementSpec = entityCollectionModel.getElementType();
-        final Stream<ObjectAssociation> associations = elementSpec.streamAssociations(MixedIn.EXCLUDED);
-
-        return appliesIf(associations.anyMatch(OF_TYPE_BIGDECIMAL));
+        final boolean hasAnyBigDecProperty =
+            _Casts.castTo(EntityCollectionModel.class, model)
+                .map(EntityCollectionModel::getElementType)
+                .map((final ObjectSpecification elementSpec)->elementSpec.streamAssociations(MixedIn.EXCLUDED)
+                        .anyMatch(OF_TYPE_BIGDECIMAL))
+                .orElse(false);
+        return appliesIf(hasAnyBigDecProperty);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
+        _Assert.assertNullableObjectIsInstanceOf(model, EntityCollectionModel.class);
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
         return new CollectionContentsAsSummary(id, collectionModel);
     }
@@ -94,6 +91,11 @@ implements CollectionContentsAsFactory {
     @Override
     public IModel<String> getCssClass() {
         return Model.of("fa fa-fw fa-usd");
+    }
+
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 1700;
     }
 
 }

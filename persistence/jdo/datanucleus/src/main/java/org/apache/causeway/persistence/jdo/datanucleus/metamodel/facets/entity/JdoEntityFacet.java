@@ -29,11 +29,12 @@ import jakarta.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
 
-import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.api.jdo.JDOQuery;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
-import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
 import org.apache.causeway.applib.query.Query;
@@ -52,12 +53,14 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnOidStoreAndRecoverHelper;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -79,7 +82,7 @@ public class JdoEntityFacet
 extends FacetAbstract
 implements EntityFacet {
 
-    // self managed injections via getPersistenceManager or getTransactionalProcessor
+    // self managed injections via constructor ...
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private TransactionService txService;
     @Inject private ObjectManager objectManager;
@@ -95,12 +98,24 @@ implements EntityFacet {
     // lazily looks up the primaryKeyTypeFor (needs a PersistenceManager)
     @Getter(lazy=true, value = AccessLevel.PROTECTED) @Accessors(fluent = true)
     private final PrimaryKeyType<?> primaryKeyTypeForDecoding = idStringifierLookupService()
-            .primaryKeyTypeFor(entityClass, primaryKeyTypeFor(entityClass));
+            .primaryKeyTypeFor(entityClass, getOrmMetadata().primaryKeyClass());
+
+    // lazily looks up the ORM metadata (needs a PersistenceManager)
+    @Getter(lazy=true)
+    private final EntityOrmMetadata ormMetadata =
+            _MetadataUtil.ormMetadataFor(getPersistenceManager(), entityClass);
 
     public JdoEntityFacet(
             final FacetHolder holder, final Class<?> entityClass) {
         super(EntityFacet.class, holder);
         this.entityClass = entityClass;
+
+        _Assert.assertTrue(isPersistableType(entityClass),
+                ()->String.format("JdoEntityFacet initialized with type '%s' "
+                        + "that is not Persistable (JDO)", entityClass));
+
+        // resolve injection points on self
+        getServiceInjector().injectServicesInto(this);
     }
 
     @Override
@@ -124,8 +139,8 @@ implements EntityFacet {
     @Override
     public boolean isInjectionPointsResolved(final Object pojo) {
         if(pojo instanceof Persistable) {
-            DnObjectProviderForCauseway.extractFrom((Persistable) pojo)
-            .map(DnObjectProviderForCauseway::injectServicesIfNotAlready)
+            DnStateManagerForCauseway.extractFrom((Persistable) pojo)
+            .map(DnStateManagerForCauseway::injectServicesIfNotAlready)
             .orElse(false);
         }
         return pojo==null;
@@ -134,19 +149,32 @@ implements EntityFacet {
     @Override
     public Optional<String> identifierFor(final Object pojo) {
 
-        if (!getEntityState(pojo).hasOid()) {
+        val entityState = getEntityState(pojo);
+
+        if (!entityState.hasOid()) {
             return Optional.empty();
         }
 
-        val pm = getPersistenceManager();
-        var primaryKeyIfAny = Optional.ofNullable(pm.getObjectId(pojo));
+        if(entityState.isHollow()) {
+            /* for previously attached objects that have become hollow,
+             * the OID can be looked up in DnStateManagerForHollow,
+             * that simply acts as a holder of OID. */
+            return DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid();
+        }
 
-        _Assert.assertTrue(primaryKeyIfAny.isPresent(), ()->
+        val pm = getPersistenceManager();
+        val primaryKey = pm.getObjectId(pojo);
+
+        _Assert.assertNotNull(primaryKey, ()->
             String.format("failed to get OID even though entity is attached %s", pojo.getClass().getName()));
 
-        val idIfAny = primaryKeyIfAny
-                .map(primaryKey->
-                    primaryKeyTypeForEncoding(primaryKey).enstringWithCast(primaryKey));
+        return identifierForDnPrimaryKey(primaryKey);
+    }
+
+    public Optional<String> identifierForDnPrimaryKey(final @Nullable Object primaryKey) {
+        val idIfAny = Optional.ofNullable(primaryKey)
+                .map(pk->
+                    primaryKeyTypeForEncoding(pk).enstringWithCast(pk));
         return idIfAny;
     }
 
@@ -176,7 +204,7 @@ implements EntityFacet {
             val recognition = exceptionRecognizerService.recognize(e);
             if(recognition.isPresent()) {
                 if(recognition.get().getCategory() == Category.NOT_FOUND) {
-                    throw new ObjectNotFoundException(""+bookmark, e);
+                    return Optional.empty();
                 }
             }
 
@@ -184,39 +212,6 @@ implements EntityFacet {
         }
 
         return Optional.ofNullable(entityPojo);
-    }
-
-    private Map<Class<?>, Class<?>> primaryKeyClassByEntityClass = new ConcurrentHashMap<>();
-
-    private Class<?> primaryKeyTypeFor(final Class<?> entityClass) {
-        return primaryKeyClassByEntityClass.computeIfAbsent(entityClass, this::lookupPrimaryKeyTypeFor);
-    }
-
-    private Class<?> lookupPrimaryKeyTypeFor(final Class<?> entityClass) {
-
-        val persistenceManager = getPersistenceManager();
-        val pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();
-        val nucleusContext = pmf.getNucleusContext();
-
-        val contextLoader = Thread.currentThread().getContextClassLoader();
-        val clr = nucleusContext.getClassLoaderResolver(contextLoader);
-
-        val typeMetadata = pmf.getMetadata(entityClass.getName());
-
-        val identityType = typeMetadata.getIdentityType();
-        switch (identityType) {
-            case APPLICATION:
-                String objectIdClass = typeMetadata.getObjectIdClass();
-                return clr.classForName(objectIdClass);
-            case DATASTORE:
-                return nucleusContext.getIdentityManager().getDatastoreIdClass();
-            case UNSPECIFIED:
-            case NONDURABLE:
-            default:
-                throw new IllegalStateException(String.format(
-                        "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
-                        entityClass.getName(), identityType));
-        }
     }
 
     @Override
@@ -232,6 +227,9 @@ implements EntityFacet {
 
             val queryFindAllInstances = (AllInstancesQuery<?>) query;
             val queryEntityType = queryFindAllInstances.getResultType();
+
+            // guard against misuse
+            _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
 
             val persistenceManager = getPersistenceManager();
 
@@ -260,6 +258,7 @@ implements EntityFacet {
             val namedParams = _Maps.<String, Object>newHashMap();
             val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
                     .setNamedParameters(namedParams);
+
             namedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
 
             if(!range.isUnconstrained()) {
@@ -280,7 +279,10 @@ implements EntityFacet {
                 .getParametersByName()
                 .forEach(namedParams::put);
 
-            val resultList = fetchWithinTransaction(namedQuery::executeList);
+            Supplier<List<?>> executeMethod = hasResultPhrase(namedQuery)
+                    ? namedQuery::executeResultList     // eg SELECT DISTINCT this.paymentMethod FROM IncomingInvoice WHERE ...
+                    : namedQuery::executeList;          // eg SELECT FROM IncomingInvoice WHERE ...
+            val resultList = fetchWithinTransaction(executeMethod);
 
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
@@ -294,12 +296,21 @@ implements EntityFacet {
                 query.getDescription());
     }
 
+    private static boolean hasResultPhrase(final javax.jdo.Query<?> namedQuery) {
+        if (namedQuery instanceof JDOQuery) {
+            JDOQuery<?> jdoQuery = (JDOQuery<?>) namedQuery;
+            return jdoQuery.getInternalQuery().getResult() != null;
+        }
+        return false;
+    }
+
     @Override
     public void persist(final Object pojo) {
+        // guard against misuse
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         if(pojo==null
-                || !isPersistableType(pojo.getClass())
-                || DnEntityStateProvider.entityState(pojo).hasOid()) {
+                || DnEntityStateProvider.entityState(pojo).isAttached()) {
             return; // nothing to do
         }
 
@@ -313,14 +324,34 @@ implements EntityFacet {
     }
 
     @Override
-    public void delete(final Object pojo) {
-
-        if(pojo==null || !isPersistableType(pojo.getClass())) {
+    public void refresh(final Object pojo) {
+        if(pojo==null) {
             return; // nothing to do
         }
 
+        // guard against misuse
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
+
+        val pm = getPersistenceManager();
+
+        log.debug("about to refresh entity {}", pojo);
+
+        getTransactionalProcessor()
+        .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
+        .ifFailureFail();
+    }
+
+    @Override
+    public void delete(final Object pojo) {
+        if(pojo==null) {
+            return; // nothing to do
+        }
+
+        // guard against misuse
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
+
         if (!DnEntityStateProvider.entityState(pojo).hasOid()) {
-            throw _Exceptions.illegalArgument("can only delete an attached entity");
+            throw _Exceptions.illegalArgument("can only delete an entity with an OID");
         }
 
         val pm = getPersistenceManager();
@@ -329,24 +360,6 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
-        .ifFailureFail();
-    }
-
-    @Override
-    public void refresh(final Object pojo) {
-
-        if(pojo==null
-                || !isPersistableType(pojo.getClass())
-                || !DnEntityStateProvider.entityState(pojo).isPersistable()) {
-            return; // nothing to do
-        }
-
-        val pm = getPersistenceManager();
-
-        log.debug("about to refresh entity {}", pojo);
-
-        getTransactionalProcessor()
-        .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
         .ifFailureFail();
     }
 
@@ -374,16 +387,10 @@ implements EntityFacet {
     // -- DEPENDENCIES
 
     private PersistenceManager getPersistenceManager() {
-        if(pmf==null) {
-            getFacetHolder().getServiceInjector().injectServicesInto(this);
-        }
         return pmf.getPersistenceManagerFactory().getPersistenceManager();
     }
 
     private TransactionalProcessor getTransactionalProcessor() {
-        if(txService==null) {
-            getFacetHolder().getServiceInjector().injectServicesInto(this);
-        }
         return txService;
     }
 

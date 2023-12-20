@@ -29,10 +29,14 @@ interface Try<T> {
   Try<T> ifAbsentFail()     // <.>
   Try<R> mapSuccess(ThrowingFunction<Optional<T>, R> successMapper)     // <.>
   Try<R> mapSuccessAsNullable(ThrowingFunction<T, R> successMapper)     // <.>
+  Try<R> mapSuccessWhenPresent(ThrowingFunction<T, R> successMapper)     // <.>
   Try<T> mapFailure(ThrowingFunction<Throwable, Throwable> failureMapper)     // <.>
   Try<T> mapFailureToSuccess(ThrowingFunction<Throwable, T> recoveryMapper)     // <.>
   Try<T> mapEmptyToFailure()     // <.>
   Either<L, R> mapToEither(ThrowingFunction<Throwable, L> failureMapper, ThrowingFunction<Optional<T>, R> successMapper)     // <.>
+  Try<R> flatMapSuccess(ThrowingFunction<Optional<T>, Try<R>> successMapper)     // <.>
+  Try<R> flatMapSuccessAsNullable(ThrowingFunction<T, Try<R>> successMapper)     // <.>
+  Try<R> flatMapSuccessWhenPresent(ThrowingFunction<T, Try<R>> successMapper)     // <.>
   Try<T> accept(ThrowingConsumer<Throwable> failureConsumer, ThrowingConsumer<Optional<T>> successConsumer)     // <.>
   R fold(ThrowingFunction<Throwable, R> failureMapper, ThrowingFunction<Optional<T>, R> successMapper)     // <.>
   Try<R> thenCall(Callable<R> callable)     // <.>
@@ -87,32 +91,52 @@ Throws _NoSuchElementException_ if _value_ is _null_ .
 <.> xref:#mapSuccess_ThrowingFunction[mapSuccess(ThrowingFunction)]
 +
 --
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ , passing the _value_ wrapped in an _Optional_ . Otherwise if this is a _Failure_ acts as identity operator.
+If this is a _Success_ , maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another, by calling the successMapper with the _value_ wrapped by an _Optional_ . Otherwise if this is a _Failure_ , acts as identity operator, though implementations may return a new instance.
 --
 <.> xref:#mapSuccessAsNullable_ThrowingFunction[mapSuccessAsNullable(ThrowingFunction)]
 +
 --
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ . Otherwise if this is a _Failure_ acts as identity operator.
+If this is a _Success_ , maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another, by calling the successMapper with the _value_ (which may be null). Otherwise if this is a _Failure_ , acts as identity operator, though implementations may return a new instance.
+--
+<.> xref:#mapSuccessWhenPresent_ThrowingFunction[mapSuccessWhenPresent(ThrowingFunction)]
++
+--
+If this xref:refguide:commons:index/functional/Try.adoc[Try] holds a non-null _value_ (and hence is also a _Success_ ), maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another, by calling the successMapper with the _value_ (which is non-null). Otherwise acts as identity operator, that is, either stay an empty _Success_ or stay a _Failure_ , though implementations may return a new instance.
 --
 <.> xref:#mapFailure_ThrowingFunction[mapFailure(ThrowingFunction)]
 +
 --
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+If this is a _Failure_ , maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another. Otherwise if this is a _Success_ acts as identity operator, though implementations may return a new instance.
 --
 <.> xref:#mapFailureToSuccess_ThrowingFunction[mapFailureToSuccess(ThrowingFunction)]
 +
 --
-Recovers from a failed xref:refguide:commons:index/functional/Try.adoc[Try] if its a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+If this is a _Failure_ , recovers to a _Success_ . Otherwise if this is a _Success_ acts as identity operator, though implementations may return a new instance.
 --
 <.> xref:#mapEmptyToFailure_[mapEmptyToFailure()]
 +
 --
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if this is a _Success_ with an empty _value_ . Otherwise acts as identity operator.
+Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if this is a _Success_ with an empty _value_ . Otherwise acts as identity operator, though implementations may return a new instance.
 --
 <.> xref:#mapToEither_ThrowingFunction_ThrowingFunction[mapToEither(ThrowingFunction, ThrowingFunction)]
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
+--
+<.> xref:#flatMapSuccess_ThrowingFunction[flatMapSuccess(ThrowingFunction)]
++
+--
+Variant of _#mapSuccess(ThrowingFunction)_ , utilizing a different successMapper, one that returns a xref:refguide:commons:index/functional/Try.adoc[Try] .
+--
+<.> xref:#flatMapSuccessAsNullable_ThrowingFunction[flatMapSuccessAsNullable(ThrowingFunction)]
++
+--
+Variant of _#mapSuccessAsNullable(ThrowingFunction)_ , utilizing a different successMapper, one that returns a xref:refguide:commons:index/functional/Try.adoc[Try] .
+--
+<.> xref:#flatMapSuccessWhenPresent_ThrowingFunction[flatMapSuccessWhenPresent(ThrowingFunction)]
++
+--
+Variant of _#mapSuccessWhenPresent(ThrowingFunction)_ , utilizing a different successMapper, one that returns a xref:refguide:commons:index/functional/Try.adoc[Try] .
 --
 <.> xref:#accept_ThrowingConsumer_ThrowingConsumer[accept(ThrowingConsumer, ThrowingConsumer)]
 +
@@ -206,35 +230,42 @@ Throws _NoSuchElementException_ if _value_ is _null_ .
 [#mapSuccess_ThrowingFunction]
 === mapSuccess(ThrowingFunction)
 
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ , passing the _value_ wrapped in an _Optional_ . Otherwise if this is a _Failure_ acts as identity operator.
+If this is a _Success_ , maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another, by calling the successMapper with the _value_ wrapped by an _Optional_ . Otherwise if this is a _Failure_ , acts as identity operator, though implementations may return a new instance.
 
 If given successMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
 
 [#mapSuccessAsNullable_ThrowingFunction]
 === mapSuccessAsNullable(ThrowingFunction)
 
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ . Otherwise if this is a _Failure_ acts as identity operator.
+If this is a _Success_ , maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another, by calling the successMapper with the _value_ (which may be null). Otherwise if this is a _Failure_ , acts as identity operator, though implementations may return a new instance.
+
+If given successMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
+
+[#mapSuccessWhenPresent_ThrowingFunction]
+=== mapSuccessWhenPresent(ThrowingFunction)
+
+If this xref:refguide:commons:index/functional/Try.adoc[Try] holds a non-null _value_ (and hence is also a _Success_ ), maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another, by calling the successMapper with the _value_ (which is non-null). Otherwise acts as identity operator, that is, either stay an empty _Success_ or stay a _Failure_ , though implementations may return a new instance.
 
 If given successMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
 
 [#mapFailure_ThrowingFunction]
 === mapFailure(ThrowingFunction)
 
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+If this is a _Failure_ , maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another. Otherwise if this is a _Success_ acts as identity operator, though implementations may return a new instance.
 
 If given failureMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned (hiding the original failure).
 
 [#mapFailureToSuccess_ThrowingFunction]
 === mapFailureToSuccess(ThrowingFunction)
 
-Recovers from a failed xref:refguide:commons:index/functional/Try.adoc[Try] if its a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+If this is a _Failure_ , recovers to a _Success_ . Otherwise if this is a _Success_ acts as identity operator, though implementations may return a new instance.
 
 If given recoveryMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
 
 [#mapEmptyToFailure_]
 === mapEmptyToFailure()
 
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if this is a _Success_ with an empty _value_ . Otherwise acts as identity operator.
+Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if this is a _Success_ with an empty _value_ . Otherwise acts as identity operator, though implementations may return a new instance.
 
 [#mapToEither_ThrowingFunction_ThrowingFunction]
 === mapToEither(ThrowingFunction, ThrowingFunction)
@@ -242,6 +273,21 @@ Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if t
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
 
 Any exceptions thrown by given failureMapper or successMapper are propagated without catching.
+
+[#flatMapSuccess_ThrowingFunction]
+=== flatMapSuccess(ThrowingFunction)
+
+Variant of _#mapSuccess(ThrowingFunction)_ , utilizing a different successMapper, one that returns a xref:refguide:commons:index/functional/Try.adoc[Try] .
+
+[#flatMapSuccessAsNullable_ThrowingFunction]
+=== flatMapSuccessAsNullable(ThrowingFunction)
+
+Variant of _#mapSuccessAsNullable(ThrowingFunction)_ , utilizing a different successMapper, one that returns a xref:refguide:commons:index/functional/Try.adoc[Try] .
+
+[#flatMapSuccessWhenPresent_ThrowingFunction]
+=== flatMapSuccessWhenPresent(ThrowingFunction)
+
+Variant of _#mapSuccessWhenPresent(ThrowingFunction)_ , utilizing a different successMapper, one that returns a xref:refguide:commons:index/functional/Try.adoc[Try] .
 
 [#accept_ThrowingConsumer_ThrowingConsumer]
 === accept(ThrowingConsumer, ThrowingConsumer)

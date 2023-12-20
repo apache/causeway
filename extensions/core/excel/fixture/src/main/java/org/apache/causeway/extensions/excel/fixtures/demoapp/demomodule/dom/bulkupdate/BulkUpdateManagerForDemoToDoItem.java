@@ -146,9 +146,10 @@ public class BulkUpdateManagerForDemoToDoItem {
         return Subcategory.validate(category, subcategory);
     }
 
+    /* not used
     private String currentUserName() {
         return userService.currentUserNameElseNobody();
-    }
+    }*/
 
     @Collection
     @CollectionLayout(defaultView = "table")

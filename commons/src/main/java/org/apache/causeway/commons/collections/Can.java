@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -59,8 +60,10 @@ import lombok.val;
  * <p>
  * Same idiomatic convention applies: References to {@link Can}
  * should never be initialized to {@code null}.
+ *
  * <p>
- * A {@link Can} must not contain elements equal to {@code null}.
+ * <b>IMPORTANT:</b>A {@link Can} must not contain {@code null} elements.  If you need to use store null, then
+ * use a different data structure, for example a regular {@link java.util.List java.util.List}.
  *
  * @param <T>
  * @since 2.0 {@index}
@@ -164,6 +167,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Var-arg version of {@link Can#ofArray(Object[])}.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
      * @param <T>
      * @param array
      * @return non-null
@@ -176,14 +183,17 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code array}
-     * or an empty {@code Can} if the {@code array} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code array} is {@code null}.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
+     * </p>
      * @param <T>
      * @param array
      * @return non-null
      */
     public static <T> Can<T> ofArray(final @Nullable T[] array) {
-
         if(_NullSafe.size(array)==0) {
             return empty();
         }
@@ -195,10 +205,15 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
+
+
     /**
      * Returns either a {@code Can} with all the elements from given {@code collection}
-     * or an empty {@code Can} if the {@code collection} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code collection} is {@code null}.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
      * @param <T>
      * @param collection
      * @return non-null
@@ -220,8 +235,11 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code iterable}
-     * or an empty {@code Can} if the {@code iterable} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code iterable} is {@code null}.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
      * @param <T>
      * @param iterable
      * @return non-null
@@ -244,10 +262,14 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code enumeration}
-     * or an empty {@code Can} if the {@code enumeration} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code enumeration} is {@code null}.
+     *
      * <p>
-     * As side-effect, consumes given {@code enumeration}.
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
+     * <p>
+     * <b>NOTE:</b> As side-effect, consumes given {@code enumeration}.
+     *
      * @param <T>
      * @param enumeration
      * @return non-null
@@ -270,10 +292,14 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code stream}
-     * or an empty {@code Can} if the {@code stream} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code stream} is {@code null}.
+     *
      * <p>
-     * As side-effect, consumes given {@code stream}.
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
+     * <p>
+     * <b>NOTE:</b> As side-effect, consumes given {@code stream}.
+     *
      * @param <T>
      * @param stream
      * @return non-null
@@ -356,8 +382,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}
-     * 'transformed' by the given {@code mapper} function. Any resulting elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * 'transformed' by the given {@code mapper} function.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      *
      * @param <R>
      * @param mapper - if absent throws if this {@code Can} is non-empty
@@ -391,6 +419,17 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
                 .flatMap(Can::stream)
                 .collect(Can.toCan());
     }
+
+    /**
+     * Performs a reduction on all elements, returning a {@link Can} containing
+     * either a singleton reduction result or an empty {@link Can}.
+     * @return non-null
+     * @apiNote Reduction operating on an <i>empty</i> or <i>singleton</i> {@link Can}
+     *      acts as identity operation,
+     *      where given {@code accumulator} is actually never called.
+     * @see Stream#reduce(BinaryOperator)
+     */
+    Can<T> reduce(BinaryOperator<T> accumulator);
 
     // -- CONCATENATION
 

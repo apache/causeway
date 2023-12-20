@@ -36,8 +36,6 @@ public class CollectionContentsHiddenPanelFactory
 extends ComponentFactoryAbstract
 implements CollectionContentsAsFactory {
 
-    private static final long serialVersionUID = 1L;
-
     public static final String NAME = "hidden";
 
     public CollectionContentsHiddenPanelFactory() {
@@ -55,8 +53,7 @@ implements CollectionContentsAsFactory {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsHiddenPanel(id, collectionModel);
+        return new CollectionContentsHiddenPanel(id, (EntityCollectionModel) model);
     }
 
     @Override
@@ -67,5 +64,10 @@ implements CollectionContentsAsFactory {
     @Override
     public IModel<String> getCssClass() {
         return Model.of("fa fa-fw fa-eye-slash");
+    }
+
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 1100;
     }
 }

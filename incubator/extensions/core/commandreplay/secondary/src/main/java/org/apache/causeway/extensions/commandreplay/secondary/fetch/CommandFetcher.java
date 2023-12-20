@@ -27,6 +27,7 @@ import jakarta.inject.Named;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 
+import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -133,14 +134,13 @@ public class CommandFetcher {
             final boolean useRequestDebugLogging) {
 
         val clientConfig = RestfulClientConfig.builder()
-        .restfulBase(secondaryConfig.getPrimaryBaseUrlRestful())
-        // setup basic-auth
-        .useBasicAuth(true)
-        .restfulAuthUser(secondaryConfig.getPrimaryUser())
-        .restfulAuthPassword(secondaryConfig.getPrimaryPassword())
-        // setup request/response debug logging
-        .useRequestDebugLogging(useRequestDebugLogging)
-        .build();
+                .restfulBaseUrl(secondaryConfig.getPrimaryBaseUrlRestful())
+                .authenticationMode(AuthenticationMode.BASIC)
+                .basicAuthUser(secondaryConfig.getPrimaryUser())
+                .basicAuthPassword(secondaryConfig.getPrimaryPassword())
+                // setup request/response debug logging
+                .useRequestDebugLogging(useRequestDebugLogging)
+                .build();
 
         val client = RestfulClient.ofConfig(clientConfig);
         return client;

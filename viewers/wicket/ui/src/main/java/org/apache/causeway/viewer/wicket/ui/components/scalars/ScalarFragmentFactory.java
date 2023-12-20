@@ -32,7 +32,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +66,7 @@ public class ScalarFragmentFactory {
         public <T extends Component> T createComponent(final Function<String, T> factory) {
             return factory.apply(containerId);
         }
-        @Deprecated
+        /* not used
         public void permanentlyHideIn(final MarkupContainer container) {
             val toHide = container.get(containerId);
             if (toHide != null) {
@@ -76,7 +75,7 @@ public class ScalarFragmentFactory {
             } else {
                 WktComponents.permanentlyHide(container, containerId);
             }
-        }
+        }*/
     }
 
     @RequiredArgsConstructor
@@ -88,21 +87,21 @@ public class ScalarFragmentFactory {
         public <T extends Component> T createComponent(final Function<String, T> factory) {
             return factory.apply(containerId);
         }
-        @Deprecated
+        /* not used
         public Component addComponentIfMissing(final MarkupContainer container,
                 final Function<String, ? extends Component> factory) {
             val alreadyExisting = container.get(containerId);
             return alreadyExisting!=null
                     ? alreadyExisting
                     : Wkt.add(container, createComponent(factory));
-        }
+        }*/
         public Optional<Component> lookupIn(final MarkupContainer container) {
             return Optional.ofNullable(container.get(containerId));
         }
     }
 
     @RequiredArgsConstructor
-    public static enum FieldFragement {
+    public enum FieldFragment {
         /**
          * field linking to its editing prompt
          */
@@ -140,10 +139,10 @@ public class ScalarFragmentFactory {
         public boolean isNoLinkViewing() { return this == NO_LINK_VIEWING; }
         public boolean isNoLinkEditing() { return this == NO_LINK_EDITING; }
 
-        public static Optional<FieldFragement> matching(final @Nullable MarkupContainer container) {
+        public static Optional<FieldFragment> matching(final @Nullable MarkupContainer container) {
             if(container instanceof Fragment) {
                 final String fragmentId = ((Fragment)container).getAssociatedMarkupId();
-                for(var fieldFragement : FieldFragement.values()) {
+                for(var fieldFragement : FieldFragment.values()) {
                     if(fieldFragement.getFragmentId().equals(fragmentId)) {
                         return Optional.of(fieldFragement);
                     }
@@ -155,12 +154,13 @@ public class ScalarFragmentFactory {
         @Getter private final String fragmentId;
         @Getter private final String containerId = "container-fieldFrame";
 
+        /* not used
         private boolean isMatching(final @Nullable MarkupContainer container) {
             if(container instanceof Fragment) {
                 return fragmentId.equals(((Fragment)container).getAssociatedMarkupId());
             }
             return false;
-        }
+        }*/
         public abstract RepeatingView createButtonContainer(final MarkupContainer container);
     }
 
@@ -185,8 +185,8 @@ public class ScalarFragmentFactory {
          * @param markupProvider - The component whose markup contains the fragment's markup
          * @param componentFactory - creates the scalarValue component to be added to the fragment
          */
-        public <T extends Component> Fragment
-        createFragment(final String id, final MarkupContainer markupProvider, final Function<String, T> componentFactory) {
+        public <T extends Component> Fragment createFragment(
+                final String id, final MarkupContainer markupProvider, final Function<String, T> componentFactory) {
             val fragment = Wkt.fragment(id, fragmentId, markupProvider);
             fragment.add(componentFactory.apply(ScalarPanelAbstract.ID_SCALAR_VALUE));
             return fragment;
@@ -195,8 +195,8 @@ public class ScalarFragmentFactory {
          * @param id - Where to 'put' the fragment
          * @param markupProvider - The component whose markup contains the fragment's markup
          */
-        public static Fragment
-        createCheckboxFragment(final String id, final MarkupContainer markupProvider, final Boolean value) {
+        public static Fragment createCheckboxFragment(
+                final String id, final MarkupContainer markupProvider, final Boolean value) {
             final CompactFragment chkFragment = value==null
                     ? CHECKBOX_INTERMEDIATE
                     : value
@@ -208,6 +208,7 @@ public class ScalarFragmentFactory {
 
     // INPUT FRAGMENTS
 
+    /** Corresponds to EDITING a field in the UI. */
     @RequiredArgsConstructor
     public static enum InputFragment {
         TEXT("fragment-input-text"),
@@ -232,6 +233,7 @@ public class ScalarFragmentFactory {
 
     // PROMPT FRAGMENTS
 
+    /** Corresponds to VIEWING a field in the UI, that can enter EDITING mode when eg. clicked into. */
     @RequiredArgsConstructor
     public static enum PromptFragment {
         LABEL("fragment-prompt-label", promptLabelModel->
@@ -249,8 +251,8 @@ public class ScalarFragmentFactory {
          * @param markupProvider - The component whose markup contains the fragment's markup
          * @param componentFactory - creates the scalarValue component to be added to the fragment
          */
-        public <T extends Component> Fragment
-        createFragment(final String id, final MarkupContainer markupProvider, final Function<String, T> componentFactory) {
+        public <T extends Component> Fragment createFragment(
+                final String id, final MarkupContainer markupProvider, final Function<String, T> componentFactory) {
             val fragment = Wkt.fragment(id, fragmentId, markupProvider);
             fragment.add(componentFactory.apply(ScalarPanelAbstract.ID_SCALAR_VALUE));
             return fragment;
@@ -276,8 +278,8 @@ public class ScalarFragmentFactory {
          * @param id - Where to 'put' the fragment
          * @param markupProvider - The component whose markup contains the fragment's markup
          */
-        public static Fragment
-        createCheckboxFragment(final String id, final MarkupContainer markupProvider, final Boolean value) {
+        public static Fragment createCheckboxFragment(
+                final String id, final MarkupContainer markupProvider, final Boolean value) {
             final PromptFragment chkFragment = value==null
                     ? CHECKBOX_INTERMEDIATE
                     : value

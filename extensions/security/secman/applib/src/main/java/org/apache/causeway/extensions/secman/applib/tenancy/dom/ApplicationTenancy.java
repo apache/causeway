@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -129,7 +130,8 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     // -- PATH
 
     @Property(
-            domainEvent = Parent.DomainEvent.class
+            domainEvent = Parent.DomainEvent.class,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId = "identity"

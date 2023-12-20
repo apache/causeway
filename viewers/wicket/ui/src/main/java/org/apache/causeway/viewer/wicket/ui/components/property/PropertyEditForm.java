@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-class PropertyEditForm
+final class PropertyEditForm
 extends PromptFormAbstract<ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;

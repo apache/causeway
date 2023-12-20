@@ -64,7 +64,7 @@ extends FacetFactoryAbstract {
                 .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                CssClassFaFacetForDomainObjectLayoutAnnotation
+                FaFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

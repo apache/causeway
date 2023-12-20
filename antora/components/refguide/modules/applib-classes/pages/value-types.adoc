@@ -54,3 +54,10 @@ The framework also defines a number of custom value types:
 
 In addition, there are a number of non-core value types that can be brought in individually.
 These can be found in the catalog of xref:valuetypes:ROOT:about.adoc[Value Types].
+
+
+
+== Custom value types
+
+It is also possible to write your own value types, either scalar or composite.
+For more on this topic, see xref:userguide:ROOT:value-types.adoc[value types] topic in the user guide.

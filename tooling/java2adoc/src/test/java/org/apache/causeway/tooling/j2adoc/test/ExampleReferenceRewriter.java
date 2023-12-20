@@ -22,67 +22,67 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.val;
 
 class ExampleReferenceRewriter {
 
-    static void processAdocExampleReferences(File source) {
-        
-        val lines = _Text.readLinesFromFile(source, StandardCharsets.UTF_8);
-        
+    static void processAdocExampleReferences(final File source) {
+
+        val lines = TextUtils.readLinesFromFile(source, StandardCharsets.UTF_8);
+
         val exampleRefs = ExampleReferenceFinder.find(
-                lines, 
+                lines,
                 line->line.contains("refguide:applib-svc:example$services/"));
-                
+
         if(exampleRefs.isEmpty()) {
             return;
         }
-        
+
         System.out.println(exampleRefs);
-        
+
         val fixedLines = _Lists.<String>newArrayList();
-        
+
         val it = lines.iterator();
         String line;
         int i = 0;
-        
+
         for(val exRef : exampleRefs) {
-            
+
             // seek chapter start
             while(i<exRef.chapterStart) {
                 line = it.next();
                 fixedLines.add(line);
                 ++i;
             }
-            
+
             appendHeader(exRef.name, fixedLines);
-            
+
             // seek chapter end
             while(i<exRef.chapterEnd) {
                 line = it.next();
                 fixedLines.add(line);
                 ++i;
             }
-            
+
             appendFooter(fixedLines);
-            
+
         }
-        
+
         // seek document end
         while(it.hasNext()) {
             fixedLines.add(it.next());
         }
-        
-        _Text.writeLinesToFile(fixedLines, source, StandardCharsets.UTF_8);
+
+        TextUtils.writeLinesToFile(fixedLines, source, StandardCharsets.UTF_8);
 
     }
-    
+
     // -- HELPER
 
-    private static void appendHeader(String key, List<String> lines) {
+    private static void appendHeader(final String key, final List<String> lines) {
         lines.add("== API");
         lines.add("");
         lines.add(String.format("include::system:generated:page$index/%s.adoc[leveloffset=+2]", key));
@@ -94,8 +94,8 @@ class ExampleReferenceRewriter {
         lines.add("================================");
         lines.add("");
     }
-    
-    private static void appendFooter(List<String> lines) {
+
+    private static void appendFooter(final List<String> lines) {
         lines.add("");
         lines.add("================================");
         lines.add("");

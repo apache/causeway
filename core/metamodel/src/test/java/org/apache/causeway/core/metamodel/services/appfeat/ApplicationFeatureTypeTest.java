@@ -94,17 +94,17 @@ class ApplicationFeatureTypeTest {
 
         @Test
         public void whenPackage() throws Exception {
-            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
+            _Asserts.assertIsNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
             assertThrows(IllegalStateException.class, ()->
-                _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx")));
+                _Asserts.assertIsNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx")));
         }
         @Test
         public void whenMember() throws Exception {
             assertThrows(IllegalStateException.class, ()->
-                _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
+                _Asserts.assertIsNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
         }
     }
 
@@ -112,16 +112,16 @@ class ApplicationFeatureTypeTest {
 
         @Test
         public void whenPackage() throws Exception {
-            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
+            _Asserts.assertIsNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
-            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
+            _Asserts.assertIsNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             assertThrows(IllegalStateException.class, ()->
-                _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
+                _Asserts.assertIsNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
         }
 
     }
@@ -131,16 +131,16 @@ class ApplicationFeatureTypeTest {
         @Test
         public void whenPackage() throws Exception {
             assertThrows(IllegalStateException.class, ()->
-                _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx")));
+                _Asserts.assertIsType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx")));
         }
         @Test
         public void whenClass() throws Exception {
-            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
+            _Asserts.assertIsType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             assertThrows(IllegalStateException.class, ()->
-                _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
+                _Asserts.assertIsType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
         }
 
     }
@@ -150,16 +150,16 @@ class ApplicationFeatureTypeTest {
         @Test
         public void whenPackage() throws Exception {
             assertThrows(IllegalStateException.class, ()->
-                _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx")));
+                _Asserts.assertIsMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx")));
         }
         @Test
         public void whenClass() throws Exception {
             assertThrows(IllegalStateException.class, ()->
-                _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx")));
+                _Asserts.assertIsMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx")));
         }
         @Test
         public void whenMember() throws Exception {
-            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
+            _Asserts.assertIsMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
     }
 

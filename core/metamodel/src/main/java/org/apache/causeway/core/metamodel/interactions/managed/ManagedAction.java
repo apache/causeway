@@ -25,7 +25,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.routing.RoutingService;
 import org.apache.causeway.commons.collections.Can;
@@ -148,7 +147,7 @@ public final class ManagedAction extends ManagedMember {
     }
 
     @SneakyThrows
-    public ManagedObject invokeWithRuleChecking(
+    public final ManagedObject invokeWithRuleChecking(
             final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
 
         final ManagedObject actionResult = getAction()
@@ -180,8 +179,6 @@ public final class ManagedAction extends ManagedMember {
                 .findFirst()
                 .orElse(actionResult);
 
-        // resolve injection-points for the result
-        getServiceInjector().injectServicesInto(resultAdapter.getPojo());
         return resultAdapter;
     }
 
@@ -199,10 +196,6 @@ public final class ManagedAction extends ManagedMember {
 
     private MetaModelContext mmc() {
         return getAction().getMetaModelContext();
-    }
-
-    private ServiceInjector getServiceInjector() {
-        return mmc().getServiceInjector();
     }
 
     private ServiceRegistry getServiceRegistry() {

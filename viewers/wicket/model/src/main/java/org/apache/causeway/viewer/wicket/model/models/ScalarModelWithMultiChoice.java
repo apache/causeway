@@ -69,7 +69,7 @@ implements
     public ArrayList<ObjectMemento> getObject() {
 
         val packedValue = pendingValue().getValue().getValue();
-        val unpackedValues = ManagedObjects.unpack(scalarModel().getScalarTypeSpec(), packedValue);
+        val unpackedValues = ManagedObjects.unpack(packedValue);
 
         log.debug("getObject() as unpackedValue {}", unpackedValues);
 
@@ -84,7 +84,7 @@ implements
     @Override
     public void setObject(final ArrayList<ObjectMemento> unpackedMemento) {
         log.debug("setObject() as unpackedMemento {}", unpackedMemento);
-        val logicalType = scalarModel().getScalarTypeSpec().getLogicalType();
+        val logicalType = scalarModel().getElementType().getLogicalType();
         val packedMemento = ObjectMemento.pack(unpackedMemento, logicalType);
         pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
     }

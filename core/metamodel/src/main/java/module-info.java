@@ -38,8 +38,8 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.all.named;
     exports org.apache.causeway.core.metamodel.facets.collections;
     exports org.apache.causeway.core.metamodel.facets.members.cssclass;
-    exports org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop;
-    exports org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+    exports org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop;
+    exports org.apache.causeway.core.metamodel.facets.members.iconfa;
     exports org.apache.causeway.core.metamodel.facets.members.disabled;
     exports org.apache.causeway.core.metamodel.facets.members.layout.group;
     exports org.apache.causeway.core.metamodel.facets.members.publish.command;
@@ -81,7 +81,8 @@ open module org.apache.causeway.core.metamodel {
 
     exports org.apache.causeway.core.metamodel.interactions;
     exports org.apache.causeway.core.metamodel.interactions.managed;
-    exports org.apache.causeway.core.metamodel.interactions.managed.nonscalar;
+    exports org.apache.causeway.core.metamodel.tabular.interactive;
+    exports org.apache.causeway.core.metamodel.tabular.simple;
 
     exports org.apache.causeway.core.metamodel.methods;
 
@@ -139,6 +140,8 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy;
 
     exports org.apache.causeway.core.metamodel.valuetypes;
+    exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
+    exports org.apache.causeway.core.metamodel.services.grid.spi;
 
     requires jakarta.activation;
     requires jakarta.annotation;

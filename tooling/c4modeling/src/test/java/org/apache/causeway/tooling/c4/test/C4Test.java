@@ -32,6 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.tooling.c4.C4;
 
 import lombok.val;
@@ -88,7 +89,7 @@ class C4Test {
         dump(plantUmlSource);
 
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "baeldung-example-v1.puml", StandardCharsets.UTF_8),
+                TextUtils.readLinesFromResource(this.getClass(), "baeldung-example-v1.puml", StandardCharsets.UTF_8),
                 plantUmlSource);
     }
 
@@ -123,7 +124,7 @@ class C4Test {
         dump(plantUmlSource);
 
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "baeldung-example-v2.puml", StandardCharsets.UTF_8),
+                TextUtils.readLinesFromResource(this.getClass(), "baeldung-example-v2.puml", StandardCharsets.UTF_8),
                 plantUmlSource);
 
     }

@@ -43,8 +43,6 @@ import org.apache.wicket.util.cookies.CookieUtils;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -83,13 +81,6 @@ implements HasMetaModelContext {
     /** Timezone id. */
     @Getter @Setter
     private ZoneId timezone;
-
-    private transient MetaModelContext commonContext;
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
-    }
 
     /**
      * @param id

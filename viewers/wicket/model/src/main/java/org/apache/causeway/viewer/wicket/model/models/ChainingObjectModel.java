@@ -21,8 +21,7 @@ package org.apache.causeway.viewer.wicket.model.models;
 import org.apache.wicket.model.ChainingModel;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
@@ -66,18 +65,18 @@ implements ObjectAdapterModel {
 
     @Override
     public ObjectSpecification getTypeOfSpecification() {
-        return scalarModel().getScalarTypeSpec();
+        return scalarModel().getElementType();
     }
 
     @Override
-    public ScalarRepresentation getMode() {
-        return ScalarRepresentation.VIEWING;
+    public ViewOrEditMode getViewOrEditMode() {
+        return ViewOrEditMode.VIEWING;
     }
 
     @Override
     public boolean isInlinePrompt() {
         return scalarModel().getPromptStyle().isInlineAny()
-                && scalarModel().isEnabled();
+                && !scalarModel().disabledReason().isPresent();
     }
 
     @Override
@@ -86,13 +85,8 @@ implements ObjectAdapterModel {
     }
 
     @Override
-    public void setMode(final ScalarRepresentation mode) {
+    public void setViewOrEditMode(final ViewOrEditMode mode) {
         throw _Exceptions.unexpectedCodeReach();
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return scalarModel().getMetaModelContext();
     }
 
 }

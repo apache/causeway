@@ -18,8 +18,63 @@
  */
 package org.apache.causeway.core.metamodel.specloader.validator;
 
-public interface MetaModelValidator {
+import org.apache.causeway.core.metamodel.commons.MetaModelVisitor;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-    void validate();
+public interface MetaModelValidator extends MetaModelVisitor {
+
+    /** entry to meta-model validation */
+    default void validateEnter() {}
+
+    /** exit from meta-model validation */
+    default void validateExit() {}
+
+    /** entry to validation of specified {@code objSpec} */
+    default void validateObjectEnter(final ObjectSpecification objSpec) {}
+
+    /** exit from validation of specified {@code objSpec} */
+    default void validateObjectExit(final ObjectSpecification objSpec) {}
+
+    // -- MEMBER VALIDATORS
+
+    /**
+     * {@link MetaModelValidator}(s) may optionally implement this, to visit all actions.
+     * @apiNote factored out into its own interface to allow for runtime optimizations
+     */
+    static interface ActionValidator {
+        /** validate action - mixed-in included */
+        void validateAction(final ObjectSpecification objSpec, final ObjectAction act);
+    }
+
+    /**
+     * {@link MetaModelValidator}(s) may optionally implement this, to visit all action's parameters.
+     * @apiNote factored out into its own interface to allow for runtime optimizations
+     */
+    static interface ParameterValidator {
+        /** validate action-parameter - mixed-in included */
+        void validateParameter(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param);
+    }
+
+    /**
+     * {@link MetaModelValidator}(s) may optionally implement this, to visit all properties.
+     * @apiNote factored out into its own interface to allow for runtime optimizations
+     */
+    static interface PropertyValidator {
+        /** validate property - mixed-in included */
+        void validateProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop);
+    }
+
+    /**
+     * {@link MetaModelValidator}(s) may optionally implement this, to visit all collections.
+     * @apiNote factored out into its own interface to allow for runtime optimizations
+     */
+    static interface CollectionValidator {
+        /** validate collection - mixed-in included */
+        void validateCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll);
+    }
 
 }

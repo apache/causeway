@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.spec;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Objects;
@@ -32,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -40,6 +40,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -49,16 +50,16 @@ import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFa
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.HasNoun;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
@@ -74,7 +75,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
 import lombok.NonNull;
@@ -143,11 +143,11 @@ extends
      * @return optionally the ObjectMember associated with given {@code method},
      * based on whether such an association exists
      */
-    Optional<? extends ObjectMember> getMember(Method method);
+    Optional<? extends ObjectMember> getMember(ResolvedMethod method);
 
-    default ObjectMember getMemberElseFail(final @NonNull Method method) {
+    default ObjectMember getMemberElseFail(final @NonNull ResolvedMethod method) {
         return getMember(method).orElseThrow(()->{
-            val methodName = method.getName();
+            val methodName = method.name();
             val msg = "Method '" + methodName + "' does not correspond "
                     + "to any of the object's fields or actions.";
             return new UnsupportedOperationException(msg);
@@ -213,8 +213,7 @@ extends
     /**
      * Returns the (singular) name for objects of this specification.
      * <p>
-     * Corresponds to the {@link HasNoun#translated(NounForm)}
-     * with {@link NounForm#SINGULAR}
+     * Corresponds to the {@link HasNoun#translated()}
      * of {@link ObjectNamedFacet}; is
      * not necessarily immutable.
      */
@@ -274,9 +273,9 @@ extends
      *
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
      */
-    String getCssClass(ManagedObject objectAdapter);
+    String getCssClass(ManagedObject domainObject);
 
-    Optional<CssClassFaFactory> getCssClassFaFactory();
+    Optional<FontAwesomeLayers> getFaLayers(ManagedObject domainObject);
 
     /**
      * @return optionally the element type spec based on presence of the TypeOfFacet
@@ -285,10 +284,17 @@ extends
     Optional<ObjectSpecification> getElementSpecification();
 
     /**
-     *
      * @since 2.0
      */
     BeanSort getBeanSort();
+
+    /**
+     * Optionally the mixin sort {@link Contributing},
+     * based on whether the corresponding class is a mixin type.
+     * @since 2.0
+     */
+    Optional<Contributing> contributing();
+
 
     // //////////////////////////////////////////////////////////////
     // TitleContext
@@ -447,18 +453,28 @@ extends
         return getBeanSort().isAbstract();
     }
 
+    /**
+     * Includes abstract types that have {@link EntityFacet}.
+     */
     default boolean isEntity() {
         return getBeanSort().isEntity()
                 || (getBeanSort().isAbstract()
                         && entityFacet().isPresent());
     }
 
+    /**
+     * Includes abstract types that have {@link ViewModelFacet}.
+     */
     default boolean isViewModel() {
         return getBeanSort().isViewModel()
                 || (getBeanSort().isAbstract()
                         && viewmodelFacet().isPresent());
     }
 
+    /**
+     * Includes abstract types that have
+     * {@link ViewModelFacet} or {@link EntityFacet}.
+     */
     default boolean isEntityOrViewModel() {
         return isViewModel() || isEntity();
     }
@@ -499,7 +515,6 @@ extends
      * @since 2.0
      */
     default Stream<FacetHolder> streamFacetHolders(){
-
         val self = Stream.of(this);
         val actions = streamAnyActions(MixedIn.EXCLUDED);
         val actionParameters = streamAnyActions(MixedIn.EXCLUDED)
@@ -510,7 +525,6 @@ extends
         val collections = streamCollections(MixedIn.EXCLUDED);
 
         return _Streams.concat(self, actions, actionParameters, properties, collections);
-
     }
 
     /**
@@ -655,6 +669,13 @@ extends
     default ViewModelFacet viewmodelFacetElseFail() {
         return viewmodelFacet().orElseThrow(()->
             _Exceptions.unrecoverable("ViewModel type %s must have a ViewModelFacet", toString()));
+    }
+
+    /** introduced for lookup optimization / allow memoization */
+    Optional<MixinFacet> mixinFacet();
+    default MixinFacet mixinFacetElseFail() {
+        return mixinFacet().orElseThrow(()->
+            _Exceptions.unrecoverable("Type %s has BeanSort MIXIN but ended up NOT having a MixinFacet", toString()));
     }
 
 }

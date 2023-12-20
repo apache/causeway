@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.resources._Resources;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -45,7 +45,7 @@ public class RedirectServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            response.sendRedirect(StringExtensions.combinePath(request.getContextPath(), redirectTo));
+            response.sendRedirect(_Resources.combinePath(request.getContextPath(), redirectTo));
         } catch (Exception e) {
             log.error("failed to redirect request to {}", redirectTo, e);
         }

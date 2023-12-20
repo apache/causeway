@@ -25,7 +25,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -35,6 +35,17 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class MmAssertionUtils {
+
+    public void assertExactTypeSpecification(final @Nullable ManagedObject obj) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(obj)
+                || ManagedObjects.isPacked(obj)) {
+            return;
+        }
+        val pojo = ManagedObjects.peekAtPojoOf(obj);
+        val requiredType = pojo.getClass();
+        val actualSpec = obj.getSpecification();
+        _Assert.assertEquals(requiredType, actualSpec.getCorrespondingClass());
+    }
 
     public void assertExactType(
             final @Nullable ObjectSpecification requiredSpec,
@@ -110,7 +121,7 @@ public class MmAssertionUtils {
             return;
         }
 
-        _Assert.assertTrue(ProgrammingModelConstants.CollectionSemantics.valueOf(pojo.getClass()).isEmpty(),
+        _Assert.assertTrue(CollectionSemantics.valueOf(pojo.getClass()).isEmpty(),
                 ()->String.format("is scalar %s", pojo.getClass()));
     }
 

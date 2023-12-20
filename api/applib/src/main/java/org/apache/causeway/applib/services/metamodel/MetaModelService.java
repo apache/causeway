@@ -19,16 +19,23 @@
 package org.apache.causeway.applib.services.metamodel;
 
 import java.util.Optional;
+import java.util.function.BiPredicate;
+
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
+
+import lombok.NonNull;
 
 /**
  * This service provides a formal API into the framework's metamodel.
@@ -41,18 +48,19 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 public interface MetaModelService {
 
     /**
-     * Provides a lookup by logicalTypeName of a domain class' object type, as defined by
-     * {@link DomainObject#logicalTypeName()} (or any other mechanism that corresponds to Causeway'
-     * <code>ObjectTypeFacet</code>). Will return an empty result if there is no
+     * Provides a lookup by logicalTypeName of a domain class' object type, corresponding to
+     * {@link Named#value()} or {@link DomainService#aliased()} or
+     * {@link DomainObject#aliased()}.
+     * Will return an empty result if there is no
      * such non-abstract class registered.
      * (interfaces and abstract types are never added to the lookup table).
      */
     Optional<LogicalType> lookupLogicalTypeByName(final String logicalTypeName);
 
     /**
-     * Provides a lookup by class of a domain class' object type, as defined by
-     * {@link DomainObject#logicalTypeName()} (or any other mechanism that corresponds to Causeway'
-     * <code>ObjectTypeFacet</code>).
+     * Provides a lookup by class of a domain class' object type,corresponding to
+     * {@link Named#value()} or {@link DomainService#aliased()} or
+     * {@link DomainObject#aliased()}.
      */
     Optional<LogicalType> lookupLogicalTypeByClass(final Class<?> domainType);
 
@@ -108,7 +116,7 @@ public interface MetaModelService {
                             String logicalMemberIdentifier);
 
     /**
-     * How {@link MetaModelService#sortOf(Class, Mode)} show act if an object
+     * How {@link MetaModelService#sortOf(Class, Mode)} should act if an object
      * type is unknown.
      */
     enum Mode {
@@ -134,5 +142,12 @@ public interface MetaModelService {
      * @param config - restricts/filters to a subsets of the metamodel.
      */
     MetamodelDto exportMetaModel(final Config config);
+
+    /**
+     * Can be used to create object relation diagrams (e.g. Plantuml).
+     *
+     * @param filter by {@link BeanSort} and {@link LogicalType} what to include in the resulting graph
+     */
+    ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter);
 
 }

@@ -23,13 +23,15 @@ import java.util.Locale;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.internal.assertions._Assert;
 
 import lombok.Getter;
@@ -111,20 +113,17 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         return super.with(exceptionHandler);
     }
 
-    @Getter @NonNull
-    private ExecutorService executorService =
-                            ForkJoinPool.commonPool();
+    @Getter @Nullable
+    private ExecutorService executorService = null;
 
     /**
      * Specifies the {@link ExecutorService} to use to obtain the thread
      * to invoke the action.
-     *
      * <p>
-     * The default executor service is the common pool.
-     * </p>
+     * The default is {@code null}, indicating, that its the {@link WrapperFactory}'s
+     * responsibility to provide a suitable {@link ExecutorService}.
      *
-     *
-     * @param executorService
+     * @param executorService - null-able
      */
     public AsyncControl<R> with(final ExecutorService executorService) {
         this.executorService = executorService;

@@ -29,16 +29,14 @@ import lombok.val;
 public class ChoicesSelect2PanelFactory
 extends ComponentFactoryScalarAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     private static enum ComponentSort {
         TITLE_BADGE,
         VALUE_CHOICES,
         OBJECT_CHOICES;
         static ComponentSort valueOf(final ScalarModel scalarModel) {
-            if(scalarModel.getScalarTypeSpec().isValue()
+            if(scalarModel.getElementType().isValue()
                     && scalarModel.getChoiceProviderSort().isChoicesAny()) {
-                return scalarModel.isViewMode()
+                return scalarModel.isViewingMode()
                     ? TITLE_BADGE
                     : VALUE_CHOICES;
             }
@@ -55,7 +53,7 @@ extends ComponentFactoryScalarAbstract {
         val componentSort = ComponentSort.valueOf(scalarModel);
         switch(componentSort) {
         case TITLE_BADGE:
-            val valueType = scalarModel.getScalarTypeSpec().getCorrespondingClass();
+            val valueType = scalarModel.getElementType().getCorrespondingClass();
             return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
         case VALUE_CHOICES:
             return new ValueChoicesSelect2Panel(id, scalarModel);

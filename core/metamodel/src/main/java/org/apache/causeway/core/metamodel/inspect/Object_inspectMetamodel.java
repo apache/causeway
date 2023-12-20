@@ -37,6 +37,7 @@ import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.inspect.model.MMNode;
 import org.apache.causeway.core.metamodel.inspect.model.MMNodeFactory;
 import org.apache.causeway.core.metamodel.inspect.model.MMTreeAdapter;
 
@@ -44,11 +45,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        domainEvent = Object_inspectMetamodel.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Object_inspectMetamodel.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
         cssClassFa = "fa-sitemap",
@@ -102,10 +103,10 @@ public class Object_inspectMetamodel {
 
         // Initialize view-model nodes of the entire tree,
         // because as it stands, all the type information gets cleared,
-        // after the jax-b model got de-serialized.
+        // after the jaxb model got de-serialized.
         tree.streamDepthFirst()
         .map(TreeNode::getValue)
-        .forEach(node->node.title());
+        .forEach(MMNode::title);
 
         tree.expand(TreePath.of(0)); // expand the root node
         return tree;

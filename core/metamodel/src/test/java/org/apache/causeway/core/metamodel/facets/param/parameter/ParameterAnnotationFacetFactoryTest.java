@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.lang.Nullable;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,6 +36,7 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
@@ -63,17 +65,9 @@ extends FacetFactoryTestAbstract {
 
     public static class MaxLength extends ParameterAnnotationFacetFactoryTest {
 
-        @Test
-        public void withAnnotation() {
-
-            class Customer {
-                public void someAction(
-                        @Parameter(maxLength = 30)
-                        final String name) { }
-            }
-
+        private void test(final Class<?> classUnderTest) {
             // given
-            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            parameterScenario(classUnderTest, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
@@ -81,8 +75,110 @@ extends FacetFactoryTestAbstract {
                 assertNotNull(maxLengthFacet);
                 assertTrue(maxLengthFacet instanceof MaxLengthFacetForParameterAnnotation);
                 assertThat(maxLengthFacet.value(), is(30));
+                // and then
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                assertNotNull(mandatoryFacet);
+                assertThat(mandatoryFacet.getSemantics(), is(Semantics.OPTIONAL));
             });
         }
+
+        @Test
+        public void withAnnotation() {
+            class Customer {
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final String name) { }
+            }
+            test(Customer.class);
+        }
+
+        @Test
+        public void withInheritedAnnotation() {
+            abstract class Base {
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final String name) { }
+            }
+            class Customer extends Base {
+            }
+            test(Customer.class);
+        }
+
+        @Test
+        public void withInheritedNonAnnotatedBase() {
+            abstract class Base {
+                public void someAction(
+                        final String name) { }
+            }
+            class Customer extends Base {
+                @Override
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final String name) { }
+            }
+            test(Customer.class);
+        }
+
+        @Test
+        public void withOverwrittenAnnotation() {
+            abstract class Base {
+                public void someAction(
+                        @Parameter(maxLength = 10)
+                        final String name) { }
+            }
+            class Customer extends Base {
+                @Override
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final String name) { }
+            }
+            test(Customer.class);
+        }
+
+        @Test
+        public void withGenericallyOverwrittenAnnotation() {
+            abstract class Base<T> {
+                public void someAction(
+                        @Parameter(maxLength = 10)
+                        final T name) { }
+            }
+            class Customer extends Base<String> {
+                @Override
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final String name) { }
+            }
+            test(Customer.class);
+        }
+
+        @Test
+        public void withGenericallyOverwrittenNonAnnotatedBase() {
+            abstract class Base<T> {
+                public void someAction(
+                        final T name) { }
+            }
+            class Customer extends Base<String> {
+                @Override
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final String name) { }
+            }
+            test(Customer.class);
+        }
+
+        //[CAUSEWAY-3571] support for generic type resolution on inheriting Customer class
+        @Test
+        public void withGenericallyInheritedFullyAnnotatedBase() {
+            abstract class Base<T> {
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final T name) { }
+            }
+            class Customer extends Base<String> {
+            }
+            test(Customer.class);
+        }
+
     }
 
     public static class MustSatisfy extends ParameterAnnotationFacetFactoryTest {

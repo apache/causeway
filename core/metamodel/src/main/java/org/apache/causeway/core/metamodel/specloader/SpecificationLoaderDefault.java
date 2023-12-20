@@ -78,9 +78,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
-import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
@@ -288,7 +287,7 @@ implements
         //XXX[CAUSEWAY-2382] when parallel introspecting, make sure we have the mixins before their holders
         // (observation by experiment, no real understanding as to why)
 
-        _Util.logBefore(log, cache, knownSpecs);
+        _LogUtil.logBefore(log, cache, knownSpecs);
 
         log.info(" - introspecting {} type hierarchies", knownSpecs.size());
         introspect(Can.ofCollection(knownSpecs), IntrospectionState.TYPE_INTROSPECTED);
@@ -312,7 +311,7 @@ implements
 
         introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
-        _Util.logAfter(log, cache, knownSpecs);
+        _LogUtil.logAfter(log, cache, knownSpecs);
 
         if(isFullIntrospect()) {
             val snapshot = cache.snapshotSpecs();
@@ -369,8 +368,8 @@ implements
     public void shutdown() {
         log.debug("shutting down {}", this);
         disposeMetaModel();
-        facetProcessor.shutdown();
-        postProcessor.shutdown();
+        facetProcessor.close();
+        postProcessor.close();
         facetProcessor = null;
     }
 
@@ -511,29 +510,14 @@ implements
     }
 
     private _Lazy<ValidationFailures> validationResult =
-            _Lazy.threadSafe(this::collectFailuresFromMetaModel);
+            _Lazy.threadSafe(this::runMetaModelValidators);
 
     private final AtomicBoolean validationInProgress = new AtomicBoolean(false);
     private final BlockingQueue<ObjectSpecification> validationQueue = new LinkedBlockingQueue<>();
 
-    private ValidationFailures collectFailuresFromMetaModel() {
+    private ValidationFailures runMetaModelValidators() {
         validationInProgress.set(true);
-
-        programmingModel.streamValidators()
-        .map(MetaModelValidatorAbstract.class::cast)
-        .forEach(validator -> {
-            log.debug("Running validator: {}", validator);
-            try {
-                validator.validate();
-            } catch (Throwable t) {
-                log.error(t);
-                throw t;
-            } finally {
-                log.debug("Done validator: {}", validator);
-            }
-        });
-
-        log.debug("Done");
+        _ValidateUtil.runValidators(programmingModel, this);
         validationInProgress.set(false);
 
         return validationFailures;

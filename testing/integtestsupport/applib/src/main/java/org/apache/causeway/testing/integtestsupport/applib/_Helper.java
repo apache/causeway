@@ -21,22 +21,27 @@ package org.apache.causeway.testing.integtestsupport.applib;
 import java.util.Optional;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.springframework.context.ApplicationContext;
 
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAs;
 import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAsUtils;
 
 class _Helper {
 
-    static Optional<ServiceRegistry> getServiceRegistry(final ExtensionContext extensionContext) {
+    static Optional<ApplicationContext> getSpringContext(final ExtensionContext extensionContext) {
         return extensionContext.getTestInstance()
-        .filter(CausewayIntegrationTestAbstract.class::isInstance)
-        .map(CausewayIntegrationTestAbstract.class::cast)
-        .map(causewayIntegrationTestAbstract -> causewayIntegrationTestAbstract.serviceRegistry);
+            .filter(CausewayIntegrationTestAbstract.class::isInstance)
+            .map(CausewayIntegrationTestAbstract.class::cast)
+            .map(causewayIntegrationTestAbstract -> causewayIntegrationTestAbstract.springContext);
+    }
+
+    static <T> Optional<T> lookup(final Class<T> requiredType, final ExtensionContext extensionContext) {
+        return getSpringContext(extensionContext)
+            .map(springContext->springContext.getBean(requiredType));
     }
 
     /**
@@ -44,21 +49,19 @@ class _Helper {
      */
     static Optional<InteractionContext> getCustomInteractionContext(final ExtensionContext extensionContext) {
         return extensionContext.getTestMethod()
-        .flatMap(testMethod->_Annotations.synthesizeConsideringClass(testMethod, InteractAs.class))
-        .map(InteractAsUtils::toInteractionContext);
+            .flatMap(testMethod->_Annotations.synthesizeConsideringClass(testMethod, InteractAs.class))
+            .map(InteractAsUtils::toInteractionContext);
     }
 
     // -- SHORTCUTS
 
     static Optional<InteractionService> getInteractionFactory(final ExtensionContext extensionContext) {
-        return getServiceRegistry(extensionContext)
-        .flatMap(serviceRegistry->serviceRegistry.lookupService(InteractionService.class));
+        return lookup(InteractionService.class, extensionContext);
     }
 
     static Optional<ExceptionRecognizerService> getExceptionRecognizerService(
             final ExtensionContext extensionContext) {
-        return getServiceRegistry(extensionContext)
-        .flatMap(serviceRegistry->serviceRegistry.lookupService(ExceptionRecognizerService.class));
+        return lookup(ExceptionRecognizerService.class, extensionContext);
     }
 
 }

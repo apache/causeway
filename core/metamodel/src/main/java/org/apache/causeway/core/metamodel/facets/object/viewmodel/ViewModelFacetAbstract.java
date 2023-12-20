@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
@@ -70,6 +71,11 @@ implements ViewModelFacet {
                 : createViewmodel(spec, bookmark);
 
         initialize(viewModel.getPojo());
+
+        viewModel.bookmark(); // trigger bookmark memoization, if not memoized already
+
+        _Assert.assertTrue(viewModel.isBookmarkMemoized(),
+                ()->"Framework Bug: Viewmodel should have its bookmark memoized once initialized.");
         return viewModel;
     }
 
@@ -90,6 +96,9 @@ implements ViewModelFacet {
 
     /**
      * Create viewmodel instance from a given valid {@link Bookmark}.
+     * <p>
+     * The resulting {@link ManagedObject} is not required to have its bookmark memoized.
+     * We trigger bookmark memoization later in {@link #instantiate(ObjectSpecification, Optional)}.
      */
     protected abstract ManagedObject createViewmodel(
             @NonNull ObjectSpecification spec,

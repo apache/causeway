@@ -38,7 +38,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -196,7 +195,7 @@ public final class _Refs {
             return value++;
         }
 
-        public int gatAndDec() {
+        public int getAndDec() {
             return value--;
         }
     }
@@ -240,6 +239,12 @@ public final class _Refs {
 
         public T update(final @NonNull UnaryOperator<T> operator) {
             return value = operator.apply(value);
+        }
+
+        public T computeIfAbsent(final @NonNull Supplier<T> factory) {
+            return value!=null
+                    ? value
+                    : set(factory.get());
         }
 
         public boolean isNull() {
@@ -302,123 +307,6 @@ public final class _Refs {
          */
         public boolean contains(final CharSequence s) {
             return value.contains(s);
-        }
-
-        /**
-         * At given {@code index} cuts the held {@link String} value into <i>left</i> and <i>right</i>
-         * parts, returns the <i>left</i> part and replaces the held string value with the <i>right</i>
-         * part.
-         * <ul>
-         * <li>Index underflow returns an empty string and leaves the held value unmodified.</li>
-         * <li>Index overflow returns the currently held value 'then' assigns the held value an empty string.</li>
-         * </ul>
-         * @param index - zero based cutting point
-         * @return left - cut off - part of held value (non-null)
-         */
-        public String cutAtIndex(final int index) {
-            if(index<=0) {
-                return "";
-            }
-            if(index>=value.length()) {
-                val left = value;
-                value = "";
-                return left;
-            }
-            val left = value.substring(0, index);
-            value = value.substring(index);
-            return left;
-        }
-
-        /**
-         * Shortcut to {@code cutAtIndex(value.indexOf(s))}.
-         * <p>
-         * At calculated {@code value.indexOf(s)} cuts the held {@link String} value into
-         * <i>left</i> and <i>right</i> parts, returns the <i>left</i> part and replaces the held
-         * string value with the <i>right</i> part.
-         * <p>
-         * When the substring is not found, returns an empty string and leaves the held value unmodified.
-         *
-         * @param   s   the substring to search for.
-         * @return  left - cut off - part of held value (non-null) at the index of the first
-         *          occurrence of the specified substring,
-         *          or an empty string if there is no such occurrence.
-         * @see #cutAtIndex(int)
-         * @see String#indexOf(String)
-         */
-        public String cutAtIndexOf(final String s) {
-            return cutAtIndex(value.indexOf(s));
-        }
-
-        /**
-         * Shortcut to {@code cutAtIndex(value.lastIndexOf(s))}.
-         * <p>
-         * At calculated {@code value.lastIndexOf(s)} cuts the held {@link String} value into
-         * <i>left</i> and <i>right</i> parts, returns the <i>left</i> part and replaces the held
-         * string value with the <i>right</i> part.
-         * <p>
-         * When the substring is not found, returns an empty string and leaves the held value unmodified.
-         *
-         * @param   s   the substring to search for.
-         * @return  left - cut off - part of held value (non-null) at the index of the last
-         *          occurrence of the specified substring,
-         *          or an empty string if there is no such occurrence.
-         * @see #cutAtIndex(int)
-         * @see String#lastIndexOf(String)
-         */
-        public String cutAtLastIndexOf(final String s) {
-            return cutAtIndex(value.lastIndexOf(s));
-        }
-
-        /**
-         * Variant of to {@link #cutAtIndexOf(String)}, that drops the specified substring {@code s}.
-         * <p>
-         * At calculated {@code value.indexOf(s)} cuts the held {@link String} value into
-         * <i>left</i>, <i>dropped</i> and <i>right</i> parts, returns the <i>left</i> part and
-         * replaces the held string value with the <i>right</i> part. Where the <i>dropped</i> part
-         * identifies as the matching part, that equals the specified substring {@code s}.
-         * <p>
-         * When the substring is not found, returns an empty string and leaves the held value unmodified.
-         *
-         * @param   s   the substring to search for.
-         * @return  left - cut off - part of held value (non-null) at the index of the first
-         *          occurrence of the specified substring,
-         *          or an empty string if there is no such occurrence.
-         * @see #cutAtIndex(int)
-         * @see String#indexOf(String)
-         */
-        public String cutAtIndexOfAndDrop(final String s) {
-            if(!value.contains(s)) {
-                return "";
-            }
-            val left = cutAtIndex(value.indexOf(s));
-            cutAtIndex(s.length());
-            return left;
-        }
-
-        /**
-         * Variant of to {@link #cutAtLastIndexOf(String)}, that drops the specified substring {@code s}.
-         * <p>
-         * At calculated {@code value.lastIndexOf(s)} cuts the held {@link String} value into
-         * <i>left</i>, <i>dropped</i> and <i>right</i> parts, returns the <i>left</i> part and
-         * replaces the held string value with the <i>right</i> part. Where the <i>dropped</i> part
-         * identifies as the matching part, that equals the specified substring {@code s}.
-         * <p>
-         * When the substring is not found, returns an empty string and leaves the held value unmodified.
-         *
-         * @param   s   the substring to search for.
-         * @return  left - cut off - part of held value (non-null) at the index of the last
-         *          occurrence of the specified substring,
-         *          or an empty string if there is no such occurrence.
-         * @see #cutAtIndex(int)
-         * @see String#lastIndexOf(String)
-         */
-        public String cutAtLastIndexOfAndDrop(final String s) {
-            if(!value.contains(s)) {
-                return "";
-            }
-            val left = cutAtIndex(value.lastIndexOf(s));
-            cutAtIndex(s.length());
-            return left;
         }
 
     }

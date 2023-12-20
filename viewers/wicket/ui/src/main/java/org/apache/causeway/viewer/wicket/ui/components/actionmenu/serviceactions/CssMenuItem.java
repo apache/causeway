@@ -16,8 +16,6 @@
  * under the License. */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
@@ -25,10 +23,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
@@ -37,40 +37,49 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 class CssMenuItem
-implements Serializable {
+implements Menuable {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_MENU_LINK = "menuLink";
     private static final String ID_MENU_LABEL = "menuLabel";
     private static final String ID_SUB_MENU_ITEMS = "subMenuItems";
 
-    public static CssMenuItem newMenuItem(final String name) {
-        return new CssMenuItem(name, MenuItemType.ACTION_OR_SUBMENU_CONTAINER);
+    public static CssMenuItem newMenuItemWithLink(final String name) {
+        return new CssMenuItem(name, Menuable.Kind.LINK);
+    }
+
+    public static CssMenuItem newMenuItemWithSubmenu(final String name) {
+        return new CssMenuItem(name, Menuable.Kind.SUBMENU);
+    }
+
+    //refactoring hint: perhaps use Menuable.SectionSeparator instead
+    public static CssMenuItem newSpacer() {
+        return new CssMenuItem("---", Menuable.Kind.SECTION_SEPARATOR);
+    }
+
+    //refactoring hint: perhaps use Menuable.SectionLabel instead
+    public static CssMenuItem newSectionLabel(final String named) {
+        return new CssMenuItem(named, Menuable.Kind.SECTION_LABEL);
     }
 
     @Getter private final String name;
 
     @Getter @Setter private LinkAndLabel linkAndLabel;
 
-    private CssMenuItem(final String name, final MenuItemType itemType) {
+    private CssMenuItem(final String name, final Menuable.Kind menuableKind) {
         this.name = name;
-        this.itemType = itemType;
+        this.menuableKind = menuableKind;
     }
-
-//    protected CssMenuItem newSubMenuItem(final String name, final MenuItemType itemType) {
-//        val subMenuItem = newMenuItem(name);
-//        subMenuItem.setParent(this);
-//        return subMenuItem;
-//    }
 
     private final List<CssMenuItem> subMenuItems = _Lists.newArrayList();
     protected void addSubMenuItem(final CssMenuItem cssMenuItem) {
         subMenuItems.add(cssMenuItem);
     }
-    public List<CssMenuItem> getSubMenuItems() {
-        return Collections.unmodifiableList(subMenuItems);
+    public Can<CssMenuItem> getSubMenuItems() {
+        return Can.ofCollection(subMenuItems);
     }
     /**
      * @param menuItems we assume these have the correct parent already set
@@ -125,8 +134,8 @@ implements Serializable {
 
             Wkt.cssAppend(actionLink, linkAndLabel.getFeatureIdentifier());
 
-            val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
-            WktDecorators.getIcon().decorate(label, fontAwesome);
+            val faLayers = getLinkAndLabel().lookupFontAwesomeLayers(true);
+            WktDecorators.getIcon().decorate(label, faLayers);
 
             linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 WktDecorators.getDisable().decorate(actionLink, disableUiModel);
@@ -179,29 +188,7 @@ implements Serializable {
         return parent != null;
     }
 
-    // -- SUPPORT FOR SPECIAL MENU ITEMS
-
-    public enum MenuItemType {
-        SPACER,
-        SECTION_LABEL,
-        ACTION_OR_SUBMENU_CONTAINER;
-
-        boolean isActionOrSubMenuContainer() {
-            return this == ACTION_OR_SUBMENU_CONTAINER;
-        }
-    }
-
-    @Getter
-    private final MenuItemType itemType;
-
-    public static CssMenuItem newSpacer() {
-        return new CssMenuItem("---", MenuItemType.SPACER);
-    }
-
-    public static CssMenuItem newSectionLabel(final String named) {
-        return new CssMenuItem(named, MenuItemType.SECTION_LABEL);
-    }
-
-
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private final Menuable.Kind menuableKind;
 
 }

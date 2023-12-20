@@ -249,7 +249,7 @@ public class OutboxRestClient_IntegTest  {
     @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
     @Inject InteractionService interactionService;
     @Inject RepositoryService repositoryService;
-    @Inject CounterRepository counterRepository;
+    @Inject CounterRepository<Counter> counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject TransactionService transactionService;
 

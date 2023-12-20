@@ -58,14 +58,12 @@ public class ObjectManagerDefault implements ObjectManager {
     @Getter(onMethod_ = {@Override}) private ObjectLoader objectLoader;
     @Getter(onMethod_ = {@Override}) private ObjectBulkLoader objectBulkLoader;
     @Getter(onMethod_ = {@Override}) private ObjectCreator objectCreator;
-    @Getter(onMethod_ = {@Override}) private ObjectBookmarker objectBookmarker;
 
     @PostConstruct
     public void init() {
         objectCreator = ObjectCreator.createDefault(metaModelContext);
         objectLoader = ObjectLoader.createDefault(metaModelContext);
         objectBulkLoader = ObjectBulkLoader.createDefault(metaModelContext);
-        objectBookmarker = ObjectBookmarker.createDefault();
     }
 
     @Override

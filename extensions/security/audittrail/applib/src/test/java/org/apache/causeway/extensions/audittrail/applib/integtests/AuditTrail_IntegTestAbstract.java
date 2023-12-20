@@ -119,7 +119,7 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
         // then
         var entries = auditTrailEntryRepository.findAll();
         var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-         assertThat(propertyIds).containsExactly("num");
+        assertThat(propertyIds).containsExactly("num");
 
         var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
         assertThat(entriesById.get("num"))

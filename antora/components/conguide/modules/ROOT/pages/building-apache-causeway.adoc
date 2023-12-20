@@ -234,15 +234,6 @@ where `module-xxx` and `module-yyy` correspond to profile names, as provided wit
 | module-antora
 | Official Project Documentation
 
-| module-examples-demo-javafx
-| Demo Application (JavaFx)
-
-| module-examples-demo-vaadin
-| Demo Application (Vaadin)
-
-| module-examples-demo-wicket
-| Demo Application (Wicket).
-
 Note that this also includes the Restful Objects and GraphQL viewers.
 
 | module-incubator-all
@@ -256,9 +247,6 @@ Note that this also includes the Restful Objects and GraphQL viewers.
 
 | module-incubator-kroviz
 | The Kroviz Client (standalone viewer, version 3+ only)
-
-| module-incubator-vaadin
-| The Vaadin Viewer (version 3+ only)
 
 | module-regressiontests
 | Regression Tests (for the CI pipelines)

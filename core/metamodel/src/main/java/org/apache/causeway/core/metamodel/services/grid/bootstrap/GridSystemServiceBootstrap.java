@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -56,6 +55,8 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -63,8 +64,10 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -75,9 +78,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
@@ -97,18 +98,35 @@ extends GridSystemServiceAbstract<BSGrid> {
     public static final String TNS = "https://causeway.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
+    /**
+     * SPI to customize layout fallback behavior on a per class basis.
+     */
+    public static interface FallbackLayoutDataSource {
+        /**
+         * Implementing beans may provide custom defaults (for specific types) if required.<br>
+         * Implementing beans may chose to be indifferent by returning an empty {@link Try}.
+         */
+        Try<String> tryLoadAsStringUtf8(Class<?> domainClass);
+    }
+
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support
     private GridMarshallerService<BSGrid> marshaller;
 
+    private final CausewayConfiguration config;
+    private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;
+
     @Inject
     public GridSystemServiceBootstrap(
-            final SpecificationLoader specificationLoader,
+            final MetaModelContext metaModelContext,
             final TranslationService translationService,
             final JaxbService jaxbService,
             final MessageService messageService,
-            final CausewaySystemEnvironment causewaySystemEnvironment) {
-        super(specificationLoader, translationService, jaxbService, messageService, causewaySystemEnvironment);
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
+        super(metaModelContext.getSpecificationLoader(), translationService, jaxbService, messageService, causewaySystemEnvironment);
+        this.config = metaModelContext.getConfiguration();
+        this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
     }
 
     @Override
@@ -126,13 +144,11 @@ extends GridSystemServiceAbstract<BSGrid> {
         return SCHEMA_LOCATION;
     }
 
-
     @Override
     public BSGrid defaultGrid(final Class<?> domainClass) {
-
+        final Try<String> content = loadFallbackLayoutAsStringUtf8(domainClass);
         try {
-            final String content = _Resources.loadAsStringUtf8(getClass(), "GridFallbackLayout.xml");
-            return Optional.ofNullable(content)
+            return content.getValue()
                     .map(xml -> marshaller.unmarshal(xml, CommonMimeType.XML).getValue().orElse(null))
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
@@ -142,6 +158,16 @@ extends GridSystemServiceAbstract<BSGrid> {
         } catch (final Exception e) {
             return fallback(domainClass);
         }
+    }
+
+    private Try<String> loadFallbackLayoutAsStringUtf8(final Class<?> domainClass) {
+        return fallbackLayoutDataSources.stream()
+            .map(ds->ds.tryLoadAsStringUtf8(domainClass))
+            .filter(tried->tried.getValue().isPresent())
+            .findFirst()
+            .orElseGet(()->{
+                return Try.call(()->_Resources.loadAsStringUtf8(GridSystemServiceBootstrap.class, "GridFallbackLayout.xml"));
+            });
     }
 
     //
@@ -311,9 +337,16 @@ extends GridSystemServiceAbstract<BSGrid> {
                 val fieldSet = gridModel.getFieldSetForUnreferencedPropertiesRef();
                 if(fieldSet != null) {
                     unboundPropertyIds.removeAll(unboundMetadataContributingIds);
+
+                    // add unbound properties respecting configured sequence policy
+                    val sortedUnboundPropertyIds = _UnreferencedSequenceUtil
+                            .sortProperties(config, unboundPropertyIds.stream()
+                                    .map(oneToOneAssociationById::get)
+                                    .filter(_NullSafe::isPresent));
+
                     addPropertiesTo(
                             fieldSet,
-                            unboundPropertyIds,
+                            sortedUnboundPropertyIds,
                             layoutDataFactory::createPropertyLayoutData,
                             propertyLayoutDataById::put);
                 }
@@ -331,13 +364,12 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
 
         if(!missingCollectionIds.isEmpty()) {
-            final List<OneToManyAssociation> sortedCollections =
-                    _Lists.map(missingCollectionIds, oneToManyAssociationById::get);
 
-            sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence(false));
-
-            final List<String> sortedMissingCollectionIds =
-                    _Lists.map(sortedCollections, ObjectAssociation::getId);
+            // add missing collections respecting configured sequence policy
+            val sortedMissingCollectionIds = _UnreferencedSequenceUtil
+                    .sortCollections(config, missingCollectionIds.stream()
+                            .map(oneToManyAssociationById::get)
+                            .filter(_NullSafe::isPresent));
 
             final BSTabGroup bsTabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
             if(bsTabGroup != null) {

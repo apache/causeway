@@ -21,9 +21,9 @@ package org.apache.causeway.core.metamodel.facets.properties.update;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.AccessorPrefix;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -52,9 +52,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
 
         val getterMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asJavaBaseName(getterMethod.getName());
+        final String capitalizedName = _Strings.baseName(getterMethod.getName());
         val methodNameCandidates = Can.ofSingleton(
-                AccessorPrefix.SET.prefix(capitalizedName));
+                AccessorSemantics.SET.prefix(capitalizedName));
 
         final Class<?>[] signature = new Class[] { getterMethod.getReturnType() };
 

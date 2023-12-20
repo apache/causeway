@@ -30,14 +30,14 @@ Add an entry for the _Execution Log_ module's own BOM:
             <artifactId>causeway-extensions-executionlog</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
 ----
 
 [#dependencies]
-=== Dependencies
+=== Dependencies / Imports
 
 In the webapp module of your application, add the following dependency:
 
@@ -51,13 +51,12 @@ In the webapp module of your application, add the following dependency:
     </dependency>
 </dependencies>
 ----
-<.> specify either `causeway-extensions-executionlog-persistence-jpa` or `causeway-extensions-executionlog-persistence-jdo`, as required
+<.> either:
+** `causeway-extensions-executionlog-persistence-jpa` (xref:pjpa::about.adoc[]), or
+** `causeway-extensions-executionlog-persistence-jdo` (xref:pjdo::about.adoc[])
 
-
-[[_update-appmanifest]]
-=== Update AppManifest
-
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the _ExecutionLog_ modules.
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the _ExecutionLog_ modules.
+The exact modules to use will depend upon the persistence mechanism in use:
 
 [source,java]
 .AppManifest.java
@@ -71,8 +70,9 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 public class AppManifest {
 }
 ----
-
-<.> specify either `CausewayModuleExtExecutionLogPersistenceJdo` or `CausewayModuleExtExecutionLogPersistenceJpa`, as required
+<.> either:
+** `CausewayModuleExtExecutionLogPersistenceJdo` (xref:pjpa::about.adoc[]), or
+** `CausewayModuleExtExecutionLogPersistenceJpa` (xref:pjdo::about.adoc[])
 
 If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
 
@@ -103,20 +103,20 @@ To get you started, the following fragment adds all of the actions to an "Activi
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:secondary>
+<mb:secondary>
     ...
-    <mb3:menu>
-        <mb3:named>Activity</mb3:named>
+    <mb:menu>
+        <mb:named>Activity</mb:named>
         ...
-        <mb3:section>
-            <mb3:named>Execution Log</mb3:named>
-            <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
-            <mb3:serviceAction id="findExecutions" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
-            <mb3:serviceAction id="findAll" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
-        </mb3:section>
+        <mb:section>
+            <mb:named>Execution Log</mb:named>
+            <mb:serviceAction id="findMostRecent" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+            <mb:serviceAction id="findExecutions" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+            <mb:serviceAction id="findAll" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+        </mb:section>
         ...
-    </mb3:menu>
-</mb3:secondary>
+    </mb:menu>
+</mb:secondary>
 ----
 
 
@@ -142,7 +142,7 @@ The extension also provides these mixins:
 +
 This contributes a `recentExecutions` collection to each and every domain object.
 +
-This can be explicit positioned through the domain class' own xref:userguide:fun:ui.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
+This can be explicit positioned through the domain class' own xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
 
 * xref:refguide:extensions:index/executionlog/applib/contributions/HasUsername_recentExecutionsByUser.adoc[]
 +

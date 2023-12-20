@@ -30,7 +30,7 @@ indicates that the domain object is an entity whose persistence is managed inter
 +
 indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
 +
-For further discussion on using mixins, see xref:userguide:fun:overview.adoc#mixins[mixins] in the user guide.
+For further discussion on using mixins, see xref:userguide:ROOT:overview.adoc[mixins] in the user guide.
 
 * `VIEW_MODEL`
 +
@@ -67,7 +67,7 @@ The benefit of `nature()` is that it allows the developer to properly characteri
 ====
 On the other hand, view models defined in this way do have some limitations; see xref:refguide:applib:index/annotation/DomainObject.adoc#view-models[View Models] for further discussion.
 
-These limitations do _not_ apply to xref:userguide:fun:view-models.adoc#jaxb[JAXB] view models.
+These limitations do _not_ apply to xref:userguide:ROOT:view-models.adoc#jaxb[JAXB] view models.
 If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.
 ====
 

@@ -1,0 +1,21 @@
+= Example Document
+
+Text of the first block.
+
+Text of the second block.
+
+== Section 1
+
+Text of the first block under section 1.
+
+== Section 2
+
+Text of the first block under section 2.
+
+=== Sub Section 2.1
+
+Text of the first block under section 2.1.
+
+== Section 3
+
+Text of the first block under section 3.

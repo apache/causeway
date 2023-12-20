@@ -20,14 +20,14 @@ Add a section for _Flyway_'s own BOM:
             <artifactId>causeway-extensions-flyway</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
 ----
 
 [#dependencies]
-=== Dependencies
+=== Dependencies / Imports
 
 In the webapp module of your application, add the following dependency:
 
@@ -42,10 +42,7 @@ In the webapp module of your application, add the following dependency:
 </dependencies>
 ----
 
-[[_update-appmanifest]]
-=== Update AppManifest
-
-Also add the following module to your `AppManifest`:
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the _Flyway_ module.
 
 [source,java]
 ----

@@ -128,7 +128,8 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
             if(isAutoUnlockIfDelegatedAndAuthenticated) {
                 principal = newPrincipal;
             } else {
-                _Assert.assertTrue(newPrincipal.isLocked(), "As configured in " + SECMAN_UNLOCK_DELEGATED_USERS + ", auto-created user accounts are initially locked!");
+                _Assert.assertTrue(newPrincipal.isLocked(),
+                        ()->"As configured in " + SECMAN_UNLOCK_DELEGATED_USERS + ", auto-created user accounts are initially locked!");
                 throw disabledAccountException(username); // default behavior after user auto-creation
             }
         }

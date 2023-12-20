@@ -20,6 +20,9 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Digits;
+
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -27,10 +30,9 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.TypedHolderAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Digits;
 import lombok.val;
 
 public class ValueSemanticsAnnotationFacetFactory
@@ -46,15 +48,15 @@ extends FacetFactoryAbstract {
         val valueSemanticsIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         ValueSemantics.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                            .addValidationFailure(processMethodContext.getFacetHolder(), ValueSemantics.class));
+                        () -> ValidationFailureUtils
+                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
 
         // support for @jakarta.validation.constraints.Digits
         val digitsIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         Digits.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                            .addValidationFailure(processMethodContext.getFacetHolder(), Digits.class));
+                        () -> ValidationFailureUtils
+                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Digits.class));
 
         processAll(processMethodContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
     }
@@ -118,9 +120,15 @@ extends FacetFactoryAbstract {
                         ));
 
         addFacetIfPresent(
-                MinFractionalDigitsFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
-
+                MinFractionalDigitsFacetAbstract.minimum(
+                        MinFractionalDigitsFacetFromValueSemanticsAnnotation
+                                .create(valueSemanticsIfAny, facetHolder),
+                        // support for @jakarta.validation.constraints.Digits (if supported)
+                        getConfiguration().getValueTypes().getBigDecimal().isUseScaleForMinFractionalFacet()
+                                ? MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
+                                            .create(digitsIfAny, facetHolder)
+                                : Optional.empty()
+                ));
     }
 
     private void processTemporalFormat(

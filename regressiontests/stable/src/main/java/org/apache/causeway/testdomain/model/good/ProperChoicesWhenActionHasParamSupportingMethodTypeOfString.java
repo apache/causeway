@@ -25,7 +25,6 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +33,7 @@ public class ProperChoicesWhenActionHasParamSupportingMethodTypeOfString {
 
     @Collection
     public List<String> getCandidates() {
-        return _Lists.of("a", "b", "c");
+        return List.of("a", "b", "c");
     }
 
     @Action

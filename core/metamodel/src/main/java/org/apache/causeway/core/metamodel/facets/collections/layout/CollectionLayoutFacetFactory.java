@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetForCollectionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -45,8 +45,8 @@ extends FacetFactoryAbstract {
         val collectionLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         CollectionLayout.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), CollectionLayout.class));
+                        () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), CollectionLayout.class));
 
         addFacetIfPresent(
                 CssClassFacetForCollectionLayoutAnnotation

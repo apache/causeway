@@ -1,0 +1,48 @@
+= Initialization
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Sometimes a domain service needs to perform initialization logic before it is ready to be used.
+
+In many cases, such initialization can be performed within the constructor.
+If the initialization has dependencies, then these can be injected using standard link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-spring-beans-and-dependency-injection[constructor injection].
+
+Alternatively, initialization can be moved into a `@PostConstruct` link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-postconstruct-and-predestroy-annotations[lifecycle callback].
+Shutdown is similar; the framework will call any method annotated with `javax.annotation.PreDestroy`.
+
+If a domain service needs to wait until the framework is fully initialized though, it should register for the `MetamodelEvent` that is emitted by the framework itself.
+One example is if the service is to seed some reference data:
+
+[source,java]
+.SimpleModule.java
+----
+import org.springframework.context.annotation.Configuration
+
+@Service
+@Priority(99)
+@RequiredConstructor
+public class SeedCountryRefData {
+
+    final InteractionService interactionService;
+    final TransactionService transactionService;
+    final FixtureScripts fixtureScripts;
+
+    @EventListener(MetamodelEvent.class)
+    public void init(MetamodelEvent ev) {                       // <.>
+        if (ev.isPostMetamodel()) {
+            interactionService.runAnonymous(() -> {
+                transactionService.runWithinCurrentTransactionElseCreateNew(
+                    () -> {
+                        fixtureScripts.runFixtureScript(
+                            new SeedCountryFixture(), null);    // <.>
+                });
+            });
+        }
+    }
+}
+----
+<.> subscribe to the framework-emitted `MetamodelEvent`
+<.> uses xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[] to seed the data using a fixture script.
+

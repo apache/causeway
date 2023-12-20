@@ -68,7 +68,7 @@ class OneToOneAssociationAbstractTest {
     @BeforeEach
     public void setup() {
         MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
-        facetedMethod = FacetedMethod.createForProperty(mmc, Customer.class, "firstName");
+        facetedMethod = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "firstName");
 
         objectAssociation = new OneToOneAssociationDefault(
                 facetedMethod.getFeatureIdentifier(),

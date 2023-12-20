@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.mixin;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -54,7 +53,7 @@ abstract class MixinIntendedAs {
 
     protected void newContext(
             final Class<?> cls,
-            final Method method,
+            final ResolvedMethod method,
             final int paramNum,
             final MethodRemover methodRemover) {
 
@@ -77,9 +76,9 @@ abstract class MixinIntendedAs {
         return facetHolder;
     }
 
-    protected FacetedMethodParameter runScalarParameterContextOn(final Method actionMethod, final int paramIndex) {
+    protected FacetedMethodParameter runScalarParameterContextOn(final ResolvedMethod actionMethod, final int paramIndex) {
 
-        val owningType = actionMethod.getDeclaringClass();
+        val owningType = actionMethod.method().getDeclaringClass();
 
         val facetedMethodParameter = new FacetedMethodParameter(
                 metaModelContext,

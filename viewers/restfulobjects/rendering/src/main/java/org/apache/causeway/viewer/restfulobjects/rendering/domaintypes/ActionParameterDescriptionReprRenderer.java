@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -43,10 +42,8 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
         final String domainType = objectSpecification.getLogicalTypeName();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
-        final String paramName = objectActionParameter
-                .getStaticFriendlyName()
-                .orElseThrow(_Exceptions::unexpectedCodeReach);;
-        final String url = String.format("domain-types/%s/actions/%s/params/%s", domainType, actionId, paramName);
+        final String paramId = objectActionParameter.getId();
+        final String url = String.format("domain-types/%s/actions/%s/params/%s", domainType, actionId, paramId);
         return LinkBuilder.newBuilder(resourceContext, rel.andParam("id", deriveId(objectActionParameter)), RepresentationType.ACTION_PARAMETER_DESCRIPTION, url);
     }
 
@@ -72,9 +69,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
     }
 
     private static String deriveId(final ObjectActionParameter objectActionParameter) {
-        val named = objectActionParameter
-                .getStaticFriendlyName()
-                .orElseThrow(_Exceptions::unexpectedCodeReach);
+        val named = objectActionParameter.getCanonicalFriendlyName();
         return objectActionParameter.getAction().getId() + "-" + named;
     }
 
@@ -96,13 +91,12 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
 
     @Override
     protected void addPropertiesSpecificToFeature() {
-        representation.mapPutString("name", getObjectFeature()
-                .getStaticFriendlyName()
-                .orElseThrow(_Exceptions::unexpectedCodeReach));
-        representation.mapPutInt("number", getObjectFeature().getParameterIndex());
-        representation.mapPutBoolean("optional", getObjectFeature().isOptional());
+        ObjectActionParameter objectActionParameter = getObjectFeature();
+        representation.mapPutString("name", objectActionParameter.getCanonicalFriendlyName());
+        representation.mapPutInt("number", objectActionParameter.getParameterIndex());
+        representation.mapPutBoolean("optional", objectActionParameter.isOptional());
 
-        Facets.maxLength(getObjectFeature())
+        Facets.maxLength(objectActionParameter)
             .ifPresent(maxLength->representation.mapPutInt("maxLength", maxLength));
     }
 

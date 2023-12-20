@@ -65,18 +65,18 @@ public class InteractionDemo_negotiate {
     // and let the picked set {a, b, c} only be valid if a+b+c==0
 
     @MemberSupport public int act(
-            NumberRange rangeA,
-            int a,
-            NumberRange rangeB,
-            int b,
-            NumberRange rangeC,
-            int c) {
+            final NumberRange rangeA,
+            final int a,
+            final NumberRange rangeB,
+            final int b,
+            final NumberRange rangeC,
+            final int c) {
 
         return a + b + c;
     }
 
     // constraint considering all parameters
-    @MemberSupport public String validate(Params p) {
+    @MemberSupport public String validate(final Params p) {
         final int sum = p.a + p.b + p.c;
         if(sum == 0) {
             return null;
@@ -86,43 +86,43 @@ public class InteractionDemo_negotiate {
 
     // -- defaults
 
-    @MemberSupport public NumberRange defaultRangeA(Params p) { return NumberRange.POSITITVE; }
-    @MemberSupport public NumberRange defaultRangeB(Params p) { return NumberRange.NEGATIVE; }
-    @MemberSupport public NumberRange defaultRangeC(Params p) { return NumberRange.ODD; }
+    @MemberSupport public NumberRange defaultRangeA(final Params p) { return NumberRange.POSITITVE; }
+    @MemberSupport public NumberRange defaultRangeB(final Params p) { return NumberRange.NEGATIVE; }
+    @MemberSupport public NumberRange defaultRangeC(final Params p) { return NumberRange.ODD; }
 
-    @MemberSupport public int defaultA(Params p) { return firstOf(p.rangeA()); }
-    @MemberSupport public int defaultB(Params p) { return firstOf(p.rangeB()); }
-    @MemberSupport public int defaultC(Params p) { return firstOf(p.rangeC()); }
+    @MemberSupport public int defaultA(final Params p) { return firstOf(p.rangeA()); }
+    @MemberSupport public int defaultB(final Params p) { return firstOf(p.rangeB()); }
+    @MemberSupport public int defaultC(final Params p) { return firstOf(p.rangeC()); }
 
     // -- choices
 
-    @MemberSupport public int[] choicesA(Params p) { return p.rangeA().numbers(); }
-    @MemberSupport public int[] choicesB(Params p) { return p.rangeB().numbers(); }
-    @MemberSupport public int[] autoCompleteC(Params p, String search) { return searchWithin(p.rangeC(), search); }
+    @MemberSupport public int[] choicesA(final Params p) { return p.rangeA().numbers(); }
+    @MemberSupport public int[] choicesB(final Params p) { return p.rangeB().numbers(); }
+    @MemberSupport public int[] autoCompleteC(final Params p, final String search) { return searchWithin(p.rangeC(), search); }
 
     // -- parameter specific validation
 
-    @MemberSupport public String validateA(Params p) { return verifyContains(p.a(), p.rangeA(), p); }
-    @MemberSupport public String validateB(Params p) { return verifyContains(p.b(), p.rangeB(), p); }
-    @MemberSupport public String validateC(Params p) { return verifyContains(p.c(), p.rangeC(), p); }
+    @MemberSupport public String validateA(final Params p) { return verifyContains(p.a(), p.rangeA(), p); }
+    @MemberSupport public String validateB(final Params p) { return verifyContains(p.b(), p.rangeB(), p); }
+    @MemberSupport public String validateC(final Params p) { return verifyContains(p.c(), p.rangeC(), p); }
 
     // -- HELPER
 
-    private int firstOf(NumberRange range) {
+    private int firstOf(final NumberRange range) {
         return range!=null
                 ? range.numbers()[0]
                 : -99;
     }
 
-    private String verifyContains(int x, NumberRange range, Params p) {
+    private String verifyContains(final int x, final NumberRange range, final Params p) {
         if(IntStream.of(range.numbers()).anyMatch(e->e==x)) {
             return null;
         }
-        val paramSet = _Lists.of(p.a, p.b, p.c);
+        val paramSet = _Lists.ofNullable(p.a, p.b, p.c);
         return String.format("invalid, element not contained in %s got %d, param set %s", range.name(), x, paramSet);
     }
 
-    private int[] searchWithin(NumberRange range, String search) {
+    private int[] searchWithin(final NumberRange range, final String search) {
         if(_Strings.isEmpty(search)) {
             return new int[0];
         }

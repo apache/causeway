@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.mixin;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -40,7 +39,38 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
  * the type recognized as a mix-in. These are {@link Action}, {@link Property} and
  * {@link Collection}.
  */
-public interface MixinFacet extends SingleValueFacet<String> {
+public interface MixinFacet extends Facet {
+
+    public enum Contributing {
+        /**
+         * Initial state early during introspection.
+         */
+        UNSPECIFIED,
+        /**
+         * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
+         * to act as contributer of a single <i>domain-action</i>.
+         */
+        AS_ACTION,
+        /**
+         * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
+         * to act as contributer of a single <i>domain-property</i>.
+         */
+        AS_PROPERTY,
+        /**
+         * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
+         * to act as contributer of a single <i>domain-collection</i>.
+         */
+        AS_COLLECTION;
+
+        public boolean isUnspecified() { return this==UNSPECIFIED; }
+    }
+
+    Contributing contributing();
+
+    /**
+     * The mixin's main method name.
+     */
+    String getMainMethodName();
 
     boolean isMixinFor(Class<?> candidateDomainType);
 
@@ -60,6 +90,6 @@ public interface MixinFacet extends SingleValueFacet<String> {
      * @param method
      * @return whether has expected name and same declaring class
      */
-    boolean isCandidateForMain(Method method);
+    boolean isCandidateForMain(ResolvedMethod method);
 
 }

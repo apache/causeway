@@ -88,6 +88,13 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-client</artifactId>
+            <exclusions>
+				<exclusion>
+					<!-- brought in by org.springframework.security:spring-security-oauth2-jose below -->
+					<groupId>com.nimbusds</groupId>
+  					<artifactId>nimbus-jose-jwt</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
 
         <dependency>

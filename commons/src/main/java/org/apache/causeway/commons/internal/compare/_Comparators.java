@@ -19,8 +19,11 @@
 package org.apache.causeway.commons.internal.compare;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import org.springframework.lang.Nullable;
+
+import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
@@ -34,19 +37,70 @@ import org.springframework.lang.Nullable;
  *
  * @since 2.0
  */
+@UtilityClass
 public final class _Comparators {
 
-    private _Comparators(){}
+    // -- NULLSAFE COMPARE
+
+    /**
+     * Compares two {@link Comparable} (and nulls-frist).
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with
+     * {@link Comparator#nullsFirst(Comparator)}.
+     * @implNote this utility method does not produce objects on the heap
+     * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
+     * @see Comparable#compareTo(Object)
+     */
+    public <T> int compareNullsFirst(final @Nullable Comparable<T> a, final @Nullable T b) {
+        if(Objects.equals(a, b)) {
+            return 0;
+        }
+        // at this point not both can be null, so which ever is null wins
+        if(a==null) {
+            return -1;
+        }
+        if(b==null) {
+            return 1;
+        }
+        // at this point neither can be null
+        return a.compareTo(b);
+    }
+
+    /**
+     * Compares two {@link Comparable}s (and nulls-last).
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with
+     * {@link Comparator#nullsFirst(Comparator)}.
+     * @implNote this utility method does not produce objects on the heap
+     * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
+     * @see Comparable#compareTo(Object)
+     */
+    public <T> int compareNullsLast(final @Nullable Comparable<T> a, final @Nullable T b) {
+        if(Objects.equals(a, b)) {
+            return 0;
+        }
+        // at this point not both can be null, so which ever is null wins
+        if(a==null) {
+            return 1;
+        }
+        if(b==null) {
+            return -1;
+        }
+        // at this point neither can be null
+        return a.compareTo(b);
+    }
+
+    // -- DEWEY ORDER
 
     private static final String DEWEY_SEPERATOR = ".";
 
-    public static int deweyOrderCompare(
+    public int deweyOrderCompare(
             final @Nullable String sequence1,
             final @Nullable String sequence2) {
         return _Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, DEWEY_SEPERATOR);
     }
 
-    public static final Comparator<String> deweyOrderComparator = _Comparators::deweyOrderCompare;
-
+    private static final Comparator<String> DEWEY_ORDER_COMPARATOR = _Comparators::deweyOrderCompare;
+    public Comparator<String> deweyOrderComparator() {
+        return DEWEY_ORDER_COMPARATOR;
+    }
 
 }

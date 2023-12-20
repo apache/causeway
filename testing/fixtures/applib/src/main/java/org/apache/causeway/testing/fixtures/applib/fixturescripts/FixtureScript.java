@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +32,7 @@ import jakarta.inject.Inject;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -45,7 +45,9 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -54,6 +56,7 @@ import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstrac
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
@@ -101,7 +104,7 @@ public abstract class FixtureScript {
     }
 
     protected String friendlyNameElseDerived(final String str) {
-        return str != null ? str : _Strings.asNaturalName2.apply(getClass().getSimpleName());
+        return str != null ? str : _Strings.asNaturalName.apply(getClass().getSimpleName());
     }
 
 
@@ -464,11 +467,16 @@ public abstract class FixtureScript {
             executeChildT(callingFixtureScript, childFixtureScript);
         }
 
+        /**
+         * @param personaWithBuilderScripts - if array contains {@code null}(s), those are ignored
+         */
         @Programmatic
         public void executeChildren(
-                final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<?,?>... personaWithBuilderScripts) {
+                final @NonNull FixtureScript callingFixtureScript,
+                final @Nullable PersonaWithBuilderScript<?,?>... personaWithBuilderScripts) {
+            if(personaWithBuilderScripts==null) return; // no-op
             for (PersonaWithBuilderScript<?,?> builder : personaWithBuilderScripts) {
+                if(builder==null) continue; // ignore
                 BuilderScriptAbstract<?> childFixtureScript = builder.builder();
                 executeChild(callingFixtureScript, childFixtureScript);
             }
@@ -476,32 +484,48 @@ public abstract class FixtureScript {
 
         @Programmatic
         public <T extends Enum<T> & PersonaWithBuilderScript<T,?>> void executeChildren(
-                final FixtureScript callingFixtureScript,
-                final Class<T> personaClass) {
+                final @NonNull FixtureScript callingFixtureScript,
+                final @Nullable Class<T> personaClass) {
+            if(personaClass==null) return; // no-op
             executeChildren(callingFixtureScript, personaClass.getEnumConstants());
         }
 
+        /**
+         * @param fixtureScripts - if array contains {@code null}(s), those are ignored
+         */
         @Programmatic
         public void executeChildren(
-                final FixtureScript callingFixtureScript,
+                final @NonNull FixtureScript callingFixtureScript,
                 final FixtureScript... fixtureScripts) {
-            executeChildren(callingFixtureScript, Arrays.asList(fixtureScripts));
+            if(fixtureScripts==null) return; // no-op
+            executeChildren(callingFixtureScript, Can.ofArray(fixtureScripts));
         }
 
+        /**
+         * @param fixtureScripts - if iterable contains {@code null}(s), those are ignored
+         */
         @Programmatic
         public void executeChildren(
-                final FixtureScript callingFixtureScript,
-                final List<FixtureScript> fixtureScripts) {
+                final @NonNull FixtureScript callingFixtureScript,
+                final @Nullable Iterable<FixtureScript> fixtureScripts) {
+            if(fixtureScripts==null) return; // no-op
             for (FixtureScript fixtureScript : fixtureScripts) {
+                if(fixtureScript==null) continue; // ignore
                 executeChild(callingFixtureScript, fixtureScript);
             }
         }
 
+        /**
+         * @param fixtureScripts - if stream contains {@code null}(s), those are ignored
+         */
         @Programmatic
         public void executeChildren(
-                final FixtureScript callingFixtureScript,
-                final Stream<FixtureScript> fixtureScripts) {
-            fixtureScripts.forEach(fixtureScript -> executeChild(callingFixtureScript, fixtureScript));
+                final @NonNull FixtureScript callingFixtureScript,
+                final @Nullable Stream<FixtureScript> fixtureScripts) {
+            if(fixtureScripts==null) return; // no-op
+            fixtureScripts
+                .filter(_NullSafe::isPresent)
+                .forEach(fixtureScript -> executeChild(callingFixtureScript, fixtureScript));
         }
 
         /**
@@ -605,7 +629,9 @@ public abstract class FixtureScript {
             if(childFixtureScript instanceof FixtureScriptWithExecutionStrategy) {
                 final FixtureScriptWithExecutionStrategy fixtureScriptWithExecutionStrategy =
                         (FixtureScriptWithExecutionStrategy) childFixtureScript;
-                executionStrategy = fixtureScriptWithExecutionStrategy.getMultipleExecutionStrategy();
+                executionStrategy = Optional.ofNullable(
+                        fixtureScriptWithExecutionStrategy.getMultipleExecutionStrategy())
+                        .orElseGet(fixtureScripts::getMultipleExecutionStrategy);
             } else {
                 executionStrategy = fixtureScripts.getMultipleExecutionStrategy();
             }

@@ -26,7 +26,6 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +34,7 @@ public class ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference {
 
     @Collection
     public List<ElementTypeAbstract> getCandidates() {
-        return _Lists.of();
+        return List.of();
     }
 
     // mixed in Action

@@ -22,7 +22,7 @@ public class TodoAppDashboard {
     public Blob exportToWordDoc() { /* ... */ }  // <.>
 }
 ----
-<.> associated using xref:userguide:fun:ui.adoc#object-layout[file-based layout] with the `notYetComplete` collection.
+<.> associated using xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[file-based layout] with the `notYetComplete` collection.
 
 The other two actions shown in the above screenshot -- `exportAsXml` and `downloadLayout` -- are actually contributed to the `TodoAppDashboard` through various domain services, as is the `downloadLayout` action.
 

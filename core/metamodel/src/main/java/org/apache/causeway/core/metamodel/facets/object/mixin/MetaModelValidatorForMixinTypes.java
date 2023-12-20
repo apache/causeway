@@ -24,7 +24,7 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.NonNull;
 import lombok.val;
@@ -38,7 +38,7 @@ public class MetaModelValidatorForMixinTypes {
     }
 
     public boolean ensureMixinType(
-            @NonNull FacetHolder facetHolder,
+            @NonNull final FacetHolder facetHolder,
             final Class<?> candidateMixinType) {
 
         val mixinContructors = _Reflect

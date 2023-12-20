@@ -24,8 +24,6 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import lombok.val;
-
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
  *
@@ -38,14 +36,13 @@ public class TertiaryActionsPanel extends MenuActionPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
+    public TertiaryActionsPanel(final String id, final List<CssMenuItem> menuItems) {
         super(id);
-        val subMenuItems = flatten(menuItems);
-        add(super.subMenuItemsView(subMenuItems));
+        add(super.subMenuItemsView(flatten(menuItems)));
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(new CssResourceReference(TertiaryActionsPanel.class, "TertiaryActionsPanel.css")));
     }

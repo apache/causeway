@@ -32,7 +32,6 @@ import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
@@ -42,14 +41,14 @@ import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.springframework.stereotype.Component;
 
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -162,6 +161,11 @@ implements
         return application;
     }
 
+    @Component
+    static class ServiceInjectorHolder {
+        @Inject ServiceInjector serviceInjector;
+    }
+
     /**
      * Initializes the application; in particular, bootstrapping the Causeway
      * backend, and initializing the {@link ComponentFactoryRegistry} to be used
@@ -174,8 +178,16 @@ implements
         // initialize Spring Dependency Injection for wicket
         val springInjector = new SpringComponentInjector(this);
         getComponentInstantiationListeners().add(springInjector);
-        // resolve injection-points on self
-        springInjector.inject(this);
+
+        // self managed dependency injection
+        {
+            // get the Apache Causeway ServiceInjector
+            val serviceInjectorHolder = new ServiceInjectorHolder();
+            springInjector.inject(serviceInjectorHolder);
+
+            // resolve injection-points on self
+            serviceInjectorHolder.serviceInjector.injectServicesInto(this);
+        }
 
         // gather configuration plugins into a list of named tasks
         val initializationTasks =
@@ -230,15 +242,6 @@ implements
         return new _PageFactory(this, super.newPageFactory());
     }
 
-    /*
-     * @since 2.0 ... overrides the default, to 'inject' the commonContext into new sessions
-     */
-    @Override
-    public Session newSession(final Request request, final Response response) {
-        val newSession = (AuthenticatedWebSessionForCauseway) super.newSession(request, response);
-        newSession.init(getMetaModelContext());
-        return newSession;
-    }
 
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.

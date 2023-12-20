@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
-import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -75,7 +74,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
             settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
             break;
         case OBJECT_AUTO_COMPLETE:
-            Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
+            Facets.autoCompleteMinLength(scalarModel.getElementType())
             .ifPresent(settings::setMinimumInputLength);
             break;
         case NO_CHOICES:
@@ -98,7 +97,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         val scalarModel = scalarModel();
         // cannot edit if in table or is view-mode
         return !scalarModel.getRenderingHint().isInTable()
-                && !scalarModel.isViewMode();
+                && !scalarModel.isViewingMode();
     }
 
     protected final boolean hasAnyChoices() {
@@ -134,40 +133,9 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
      * called from onUpdate callback
      */
     @Override
-    public final Repaint updateIfNecessary(
-            final @NonNull UiParameter paramModel,
-            final @NonNull Optional<AjaxRequestTarget> target) {
-
-        val repaint = super.updateIfNecessary(paramModel, target);
-        final boolean choicesUpdated = updateChoices(this.select2);
-
-        if (repaint == Repaint.NOTHING) {
-            if (choicesUpdated) {
-                return Repaint.PARAM_ONLY;
-            } else {
-                return Repaint.NOTHING;
-            }
-        } else {
-            return repaint;
-        }
-    }
-
-    private boolean updateChoices(final @Nullable Select2 select2) {
-        if (select2 == null) {
-            return false;
-        }
-        select2.rebuildChoiceProvider();
-        return true;
-    }
-
-    /**
-     * Repaints just the Select2 component
-     *
-     * @param target The Ajax request handler
-     */
-    @Override
-    public final void repaint(final AjaxRequestTarget target) {
-        target.add(this);
+    public final Repaint updateIfNecessary(final @NonNull UiParameter paramModel) {
+        return super.updateIfNecessary(paramModel)
+                .max(Repaint.required(this.select2!=null));
     }
 
 }

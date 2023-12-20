@@ -31,6 +31,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
@@ -72,14 +73,17 @@ public class LayoutServiceMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadLayouts.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Object Layouts (ZIP)",
-            sequence="500.400.1")
+            sequence="500.400.1"
+    )
     public class downloadLayouts{
 
         public class ActionDomainEvent extends LayoutServiceMenu.ActionDomainEvent<downloadLayouts> {}
@@ -100,14 +104,17 @@ public class LayoutServiceMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadMenuBarsLayout.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Menu Bars Layout",
-            sequence="500.400.2")
+            sequence="500.400.2"
+    )
     public class downloadMenuBarsLayout{
 
         public class ActionDomainEvent extends LayoutServiceMenu.ActionDomainEvent<downloadMenuBarsLayout> {}

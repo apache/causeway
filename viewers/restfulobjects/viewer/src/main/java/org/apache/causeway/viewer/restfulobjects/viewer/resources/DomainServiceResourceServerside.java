@@ -37,7 +37,7 @@ import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -268,8 +268,8 @@ implements DomainServiceResource {
             final @PathParam("actionId") String actionId,
             final @QueryParam("x-causeway-querystring") String xCausewayUrlEncodedQueryString) {
 
-        final String urlUnencodedQueryString = _UrlDecoderUtil
-                .urlDecodeNullSafe(xCausewayUrlEncodedQueryString != null
+        final String urlUnencodedQueryString = UrlUtils.urlDecodeUtf8(
+                xCausewayUrlEncodedQueryString != null
                     ? xCausewayUrlEncodedQueryString
                     : httpServletRequest.getQueryString());
         val resourceContext = createResourceContext(

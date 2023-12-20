@@ -59,5 +59,9 @@
 ** xref:090-integration-testing.adoc#exercise-9-1-testing-bookvisit-using-an-integtest[image:hand.png[] *9.1*: Testing bookVisit using an integtest]
 
 
-
-//* xref:i18n.adoc[i18n]
+// LATER: other sections could include
+//  * xref:further-business-logic-worked-examples.txt[]
+//  * xref:commands-and-auditing.txt[]
+//  * xref:restful-api.txt[]
+//  * xref:i18n.txt[i18n]
+//  * xref:architecture-rules.txt[]

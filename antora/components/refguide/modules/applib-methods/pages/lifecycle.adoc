@@ -50,10 +50,10 @@ equivalent
 
 Further discussion on using events and a subscriber (which will result in a more flexible/decoupled design) can be found xref:applib-classes:events.adoc#lifecycle-events[here].
 
-include::lifecycle/created.adoc[leveloffset=+1]
-include::lifecycle/loaded.adoc[leveloffset=+1]
-include::lifecycle/persisting.adoc[leveloffset=+1]
-include::lifecycle/persisted.adoc[leveloffset=+1]
-include::lifecycle/updating.adoc[leveloffset=+1]
-include::lifecycle/updated.adoc[leveloffset=+1]
-include::lifecycle/removing.adoc[leveloffset=+1]
+include::partial$lifecycle/created.adoc[leveloffset=+1]
+include::partial$lifecycle/loaded.adoc[leveloffset=+1]
+include::partial$lifecycle/persisting.adoc[leveloffset=+1]
+include::partial$lifecycle/persisted.adoc[leveloffset=+1]
+include::partial$lifecycle/updating.adoc[leveloffset=+1]
+include::partial$lifecycle/updated.adoc[leveloffset=+1]
+include::partial$lifecycle/removing.adoc[leveloffset=+1]

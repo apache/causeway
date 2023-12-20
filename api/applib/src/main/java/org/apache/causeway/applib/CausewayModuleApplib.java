@@ -38,6 +38,7 @@ import org.apache.causeway.applib.services.appfeatui.ApplicationTypeProperty;
 import org.apache.causeway.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.causeway.applib.services.bookmark.BookmarkHolder_object;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip;
 import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.causeway.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
@@ -108,6 +109,7 @@ import org.apache.causeway.schema.CausewayModuleSchema;
     // Mixins (prototyping)
     Dto_downloadXml.class,
     Dto_downloadXsd.class,
+    Object_downloadColumnOrderTxtFilesAsZip.class,
     Object_downloadLayout.class,
     Object_downloadMetamodelXml.class,
     Object_openRestApi.class,

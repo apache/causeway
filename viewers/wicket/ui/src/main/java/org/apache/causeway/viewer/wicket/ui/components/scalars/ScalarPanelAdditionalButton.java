@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.RenderScenario;
 
 /**
@@ -36,7 +36,7 @@ enum ScalarPanelAdditionalButton {
         boolean isVisible(
                 final ScalarModel scalarModel,
                 final RenderScenario renderScenario,
-                final FieldFragement fieldFragement) {
+                final FieldFragment fieldFragment) {
             return renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
                     && scalarModel.disabledReason()
                     .map(InteractionVeto::getVetoConsent)
@@ -50,8 +50,9 @@ enum ScalarPanelAdditionalButton {
         boolean isVisible(
                 final ScalarModel scalarModel,
                 final RenderScenario renderScenario,
-                final FieldFragement fieldFragement) {
+                final FieldFragment fieldFragment) {
             return scalarModel.getSystemEnvironment().isPrototyping()
+                    && scalarModel.getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled()
                     && renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
                     && scalarModel.disabledReason()
                     .map(InteractionVeto::getVetoConsent)
@@ -65,10 +66,10 @@ enum ScalarPanelAdditionalButton {
         boolean isVisible(
                 final ScalarModel scalarModel,
                 final RenderScenario renderScenario,
-                final FieldFragement fieldFragement) {
+                final FieldFragment fieldFragment) {
 
             // check some preconditions
-            switch (fieldFragement) {
+            switch (fieldFragment) {
             case LINK_TO_PROMT:
                 if(renderScenario==RenderScenario.CAN_EDIT_INLINE_VIA_ACTION) {
                     return false;
@@ -94,7 +95,7 @@ enum ScalarPanelAdditionalButton {
         boolean isVisible(
                 final ScalarModel scalarModel,
                 final RenderScenario renderScenario,
-                final FieldFragement fieldFragement) {
+                final FieldFragment fieldFragment) {
             //XXX Future extension
             return false;
         }
@@ -102,6 +103,6 @@ enum ScalarPanelAdditionalButton {
     ;
 
     abstract boolean isVisible(
-            ScalarModel scalarModel, RenderScenario renderScenario, FieldFragement fieldFragement);
+            ScalarModel scalarModel, RenderScenario renderScenario, FieldFragment fieldFragment);
 
 }

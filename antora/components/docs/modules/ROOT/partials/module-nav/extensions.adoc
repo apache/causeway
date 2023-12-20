@@ -7,11 +7,13 @@
 ** Core
 
 *** xref:userguide:commandlog:about.adoc[]
+*** xref:userguide:docgen:about.adoc[]
 *** xref:userguide:executionlog:about.adoc[]
 *** xref:userguide:executionoutbox:about.adoc[]
 *** xref:userguide:executionrepublisher:about.adoc[]
 *** xref:userguide:excel:about.adoc[]
 *** xref:userguide:flyway:about.adoc[]
+*** xref:userguide:layoutloaders:about.adoc[]
 
 
 ** Security
@@ -19,17 +21,16 @@
 *** xref:security:secman:about.adoc[]
 *** xref:security:audittrail:about.adoc[]
 *** xref:security:spring-oauth2:about.adoc[Spring OAuth2]
-*** xref:security:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro]
 *** xref:security:sessionlog:about.adoc[]
 
 
 
 ** _Web UI (Wicket viewer)_
 
-*** xref:vw:exceldownload:about.adoc[Excel Download]
 *** xref:vw:fullcalendar:about.adoc[Full Calendar]
 *** xref:vw:pdfjs:about.adoc[PDF.js]
 *** xref:vw:sse:about.adoc[Server Side Events]
+*** xref:vw:tabular:about.adoc[Tabular Download]
 
 
 ** _REST API (Restful Objects)_

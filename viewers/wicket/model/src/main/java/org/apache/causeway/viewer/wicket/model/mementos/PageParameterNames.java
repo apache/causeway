@@ -24,8 +24,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 
 public enum PageParameterNames {
 
@@ -82,35 +82,33 @@ public enum PageParameterNames {
     ACTION_ARGS;
 
     /**
-     * Returns the {@link #name()} formatted as
-     * {@link StringExtensions#asCamel(String) camel case}.
-     *
+     * Returns the {@link #name()} formatted as <i>Camel Case</i>.
      * <p>
      * For example, <tt>ACTION_TYPE</tt> becomes <tt>actionType</tt>.
      */
     @Override
     public String toString() {
-        return StringExtensions.toCamelCase(name());
+        return _Strings.asCamelCase.apply(_Strings.lower(name()));
     }
 
     public String getStringFrom(final PageParameters pageParameters) {
         return getStringFrom(pageParameters, null);
     }
 
-    public String getStringFrom(PageParameters pageParameters, String defaultValue) {
+    public String getStringFrom(final PageParameters pageParameters, final String defaultValue) {
         if(pageParameters == null) {
             return defaultValue;
         }
         return pageParameters.get(this.toString()).toString(defaultValue);
     }
 
-    public <T extends Enum<T>> T getEnumFrom(PageParameters pageParameters, Class<T> enumClass) {
+    public <T extends Enum<T>> T getEnumFrom(final PageParameters pageParameters, final Class<T> enumClass) {
         String value = getStringFrom(pageParameters);
         return value != null? Enum.valueOf(enumClass, value): null;
     }
 
-    public List<String> getListFrom(PageParameters pageParameters) {
-        return _Lists.map(pageParameters.getValues(this.toString()), (StringValue input)->input.toString());
+    public List<String> getListFrom(final PageParameters pageParameters) {
+        return _Lists.map(pageParameters.getValues(this.toString()), (final StringValue input)->input.toString());
     }
 
     public void addStringTo(final PageParameters pageParameters, final String value) {
@@ -124,7 +122,7 @@ public enum PageParameterNames {
     /**
      * @param pageParameters
      */
-    public void removeFrom(PageParameters pageParameters) {
+    public void removeFrom(final PageParameters pageParameters) {
         pageParameters.remove(this.toString());
     }
 

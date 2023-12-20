@@ -20,7 +20,11 @@ package org.apache.causeway.core.metamodel.layout;
 
 import java.util.Comparator;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -41,13 +45,12 @@ import org.apache.causeway.core.metamodel.facets.actions.position.ActionPosition
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
@@ -105,15 +108,15 @@ public class LayoutFacetUtil {
             final HasCssClassFa hasCssClassFa,
             final FacetHolder facetHolder) {
 
-        facetHolder.lookupNonFallbackFacet(CssClassFaFacet.class)
-        .map(CssClassFaFacet::getSpecialization)
+        facetHolder.lookupNonFallbackFacet(FaFacet.class)
+        .map(FaFacet::getSpecialization)
         .ifPresent(specialization->
             specialization.accept(
-                    hasStaticFaIcon->{
-                        final String cssClassFa = hasStaticFaIcon.asSpaceSeparated();
+                    faStaticFacet->{
+                        final String cssClassFa = faStaticFacet.getLayers().toQuickNotation();
                         if(!_Strings.isNullOrEmpty(cssClassFa)) {
                             hasCssClassFa.setCssClassFa(cssClassFa);
-                            hasCssClassFa.setCssClassFaPosition(hasStaticFaIcon.getPosition());
+                            hasCssClassFa.setCssClassFaPosition(faStaticFacet.getLayers().getPosition());
                         }
                     },
                     _Functions.noopConsumer())); // not supported for imperative fa-icons
@@ -137,7 +140,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         facetHolder.lookupNonFallbackFacet(ObjectNamedFacet.class)
-        .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
+        .filter(ObjectNamedFacet::isNounPresent)
         .map(ObjectNamedFacet::singularTranslated)
         .ifPresent(hasNamed::setNamed);
     }

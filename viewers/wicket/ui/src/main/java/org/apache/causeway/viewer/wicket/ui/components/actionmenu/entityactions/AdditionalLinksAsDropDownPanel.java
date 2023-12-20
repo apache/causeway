@@ -25,7 +25,7 @@ public class AdditionalLinksAsDropDownPanel extends AdditionalLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalLinksAsDropDownPanel(String id, Can<LinkAndLabel> links) {
-        super(id, links);
+    public AdditionalLinksAsDropDownPanel(final String id, final Can<LinkAndLabel> links) {
+        super(id, links, Style.DROPDOWN);
     }
 }

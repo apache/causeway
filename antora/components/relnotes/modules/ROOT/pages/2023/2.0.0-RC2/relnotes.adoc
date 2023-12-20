@@ -4,46 +4,169 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+This is mostly a bugfix release on the route towards a 2.0.0 release.
 
 
 == New Feature
 
-
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3508[CAUSEWAY-3508] - Support NonDurable entities, so can query against them.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3507[CAUSEWAY-3507] - `RepositoryService#allMatches` should support JDOQL that has a 'result'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3460[CAUSEWAY-3460] - allow the 'disable reason text icon tooltip' to be hidden by config param
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3397[CAUSEWAY-3397] - Allow `@InteractAs` to be specified at the class level as well as the test level.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3437[CAUSEWAY-3437] - Extend facet handling to infer optionality from JAXB `@XmlElement`.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3206[CAUSEWAY-3206] - [Metamodel] Allow to plug in custom Exporters
 
 
 == Improvement
 
-
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3523[CAUSEWAY-3523] - Don't require Apps to Override the default Prism Coy Appearance
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3503[CAUSEWAY-3503] - `validateNXxx()` should support two forms: specify all N params, or jut the single Nth param.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3501[CAUSEWAY-3501] - [Wicket Viewer] Remove Optimizations for DataTableModel
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3498[CAUSEWAY-3498] - Relax `ChoicesAndDefaultsPostProcessor` a little - no need to throw MM if action is always hidden
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3497[CAUSEWAY-3497] - [SecMan] Don't seed Roles for JDO when Profile is JPA and vice versa.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3494[CAUSEWAY-3494] - Refactor `TenantedAuthorizationPostProcessor` to access its list of evaluators azily, via a provider.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3475[CAUSEWAY-3475] - Property Change Publishing is implemented differently for JDO and JPA
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3468[CAUSEWAY-3468] - `recentAuditTrailEntries` mixin should be suppressed for view models.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3444[CAUSEWAY-3444] - [Validation] If a mixin does not define its correct method, should be a metamodel violation.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3412[CAUSEWAY-3412] - `runPersonas` should run all fixture scripts within a single `ExecutionContext`
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3410[CAUSEWAY-3410] - UI - add some space between property field and action below.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3298[CAUSEWAY-3298] - [Wicket Viewer] Not authorized page should at least populate the menu bar.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3239[CAUSEWAY-3239] - To avoid leaky abstractions, a mixin collection should only ever emit collection domain events; ditto for properties.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3075[CAUSEWAY-3075] - Throwing an IllegalArgumentException should display ErrorPage
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3051[CAUSEWAY-3051] - [Validation] Fail early, if Actions or Associations share same Member-id.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2968[CAUSEWAY-2968] - [Validation] Guard against Members that contribute vetoed Domain-Types
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-1883[CAUSEWAY-1883] - [Validation] Scalar ref params should have a choices or autoComplete.
 
 
 == Bug
 
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3499[CAUSEWAY-3499] - Hint to avoid full introspection doesn't work, due to our custom scope for entities.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3519[CAUSEWAY-3519] - [simpleapp] once impersonated, if cause exception, and click on header, then cannot stop impersonating
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3514[CAUSEWAY-3514] - JDO ... `persisted()` callback is called when an object is updated.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3504[CAUSEWAY-3504] - [Extensions] ExcelModuleIntegTest(s) broken Build
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3492[CAUSEWAY-3492] - Potential NPE after `JdoEntityFacet` Instantiation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3486[CAUSEWAY-3486] - Paged Table of ViewModels appearently fails to initialize those on Page 2 or higher (JDO)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3476[CAUSEWAY-3476] - [demo app] Action#executionPublished page only shows executions targeted at same page
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3474[CAUSEWAY-3474] - [demo apps] Parser for composite types is incomplete
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3472[CAUSEWAY-3472] - [demo app] `@DomainObject#lifecycleEvents` differ between JDO and JPA (JDO does not emit Persisted or Updated events)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3470[CAUSEWAY-3470] - Shouldn't contribute actions to mixin object s... cause new metamodel validation to fail
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3469[CAUSEWAY-3469] - `ApplicationUser_removeRoles` triggers validation exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3467[CAUSEWAY-3467] - `@DomainObject#autoCompleteRepository` has no effect
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3465[CAUSEWAY-3465] - legacy schemas should use http rather than https
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3464[CAUSEWAY-3464] - [demo app] `MessageService#raiseError` includes unexpected prefix "[client-side error]"
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3463[CAUSEWAY-3463] - [Wicket Viewer] parameter's visibility not re-evaluated correctly.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3462[CAUSEWAY-3462] - [demo app] exception with Nth arg trying to obtain previous args
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3459[CAUSEWAY-3459] - [Secman] AuthenticatorSecman allows disabled local Users to login
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3458[CAUSEWAY-3458] - [demo app] custom value type if mandatory does not show "Required" in error message
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3455[CAUSEWAY-3455] - Disable action param not honored
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3451[CAUSEWAY-3451] - @CollectionLayout#tableDecorator has no effect
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3443[CAUSEWAY-3443] - [demo app] Property name not picked up from .layout.xml file.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3442[CAUSEWAY-3442] - [Wicket Viewer] @Property#labelPosition to RIGHT is not honoured (label is to TOP)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3441[CAUSEWAY-3441] - [demo app] Property description not picked up from .layout.xml file.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3425[CAUSEWAY-3425] - [Wicket Viewer] Boolean Parameter Default-Parameter-Support not triggering Form Updates
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3423[CAUSEWAY-3423] - `@Action(typeOf=...)` does not seem to be picked up.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3418[CAUSEWAY-3418] - `@Action#choicesFrom` throws exception, see demo app.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3415[CAUSEWAY-3415] - [Wicket Viewer] table-decorator disappears if hide then reshow the table
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3414[CAUSEWAY-3414] - `@DomainObjectLayout(tableDecorator=Datables)` seems to be ignored for parented collections.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3413[CAUSEWAY-3413] - attempting to inspect facets of domain object (in "inspect metamodel") causes session timeout, redirect to home page.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3409[CAUSEWAY-3409] - The 'executing' and 'executed' domain events don't fire for mixin actions; see demo app.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3408[CAUSEWAY-3408] - [demo app] The 'created' lifecycle event is never emitted. See demo app.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3406[CAUSEWAY-3406] - FontAwesome icons are not displayed for objects in Bookmark list
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3402[CAUSEWAY-3402] - Error page shows a 'null' link and clicking on it (to create an email) also fails.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3401[CAUSEWAY-3401] - `@Property(editingDisabledReason=...)` is not shown anywhere.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3393[CAUSEWAY-3393] - [Wicket Viewer] Focus should be on first param of sidebar prompt
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3392[CAUSEWAY-3392] - [Value Types] - Temporal Formatting broken since JDK 20
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3391[CAUSEWAY-3391] - Default parameter seemingly requires a choices, else is a no-op.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3324[CAUSEWAY-3324] - Entity lifecycle callbacks should fire irrespective of the `entity-change-publishing` default.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3220[CAUSEWAY-3220] - Action with plural result type fails to properly resolve hiding advisory when element type is not visible to user.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3029[CAUSEWAY-3029] - Schema "isisextensionssecman" does not exists
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3008[CAUSEWAY-3008] - [Wicket Viewer] Pending Parameter Glitches - changing (n-1)th arc clears n-th arg.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2822[CAUSEWAY-2822] - Wrapper: async executions must run within their own exclusive transaction
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2646[CAUSEWAY-2646] - [Project Rename] Rename Schema Prefixes bs3->bs and mb3 -> mb
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2235[CAUSEWAY-2235] - Mixins declared using `@Property`, `@Collection` or `@Action` should emit domain events
 
 
+== Task
 
-== Tasks: Rename project
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3516[CAUSEWAY-3516] - Release tasks for 2.0.0-RC2
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3493[CAUSEWAY-3493] - Move 'Demo App' to its own Repo
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3440[CAUSEWAY-3440] - confirm links are correct on https://projects.apache.org/project.html?causeway
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3400[CAUSEWAY-3400] - Discontinue incubator projects viewer-vaadin and viewer-javafx in v2 but continue them in v3.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3370[CAUSEWAY-3370] - OpenJDK Quality Outreach
 
+
+== Docs and Website
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3456[CAUSEWAY-3456] - Missing documentation on writing custom value types, both composite and scalar.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3450[CAUSEWAY-3450] - non-jaxb view models can only hold simple scalars and references to entities.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3429[CAUSEWAY-3429] - add search box to home page
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3422[CAUSEWAY-3422] - Make the original isis schemas available under a "schema-v1" directory.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3399[CAUSEWAY-3399] - Add in docs for valuetypes/jodatime to site.yml
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3395[CAUSEWAY-3395] - Update website docs, remove all TODOs
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3238[CAUSEWAY-3238] - missing docs for valuetypes/joda
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3120[CAUSEWAY-3120] - [Demo] Setup Integration Testing (JDO/JPA)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2832[CAUSEWAY-2832] - Add Docs for @Property(entityChangePublishing=...)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2678[CAUSEWAY-2678] - Add missing documentation to explain the Parameters syntax for dependent (mixin) action args.
+
+
+== Fix Regressions
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3488[CAUSEWAY-3488] - [Regression] Vega datatype not rendering as a graphic?
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3446[CAUSEWAY-3446] - [Regression] Runtime Services are missing com.sun.mail.util.MailLogger
 
 
 == Deprecation/Removal of features
 
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3513[CAUSEWAY-3513] - Remove the causeway-extensions-shiro-realm-ldap extension.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3483[CAUSEWAY-3483] - Move Vaadin Viewer to the 'Attic'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3466[CAUSEWAY-3466] - [Testing] Remove Surefire Workaround for Wicket (wicket-graceful artifact)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3426[CAUSEWAY-3426] - [Programming Model] Remove Deprecations (those targeted for removal in RC2)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3424[CAUSEWAY-3424] - [Programming Model] Mark Action/Collection/Property#hidden deprecated for Removal
 
-
-== Docs and Website
 
 
 
 == Dependency Upgrades
 
-We use Githb Dependabot to automate dependency upgrades as a matter of routine.
+We use Github Dependabot to automate dependency upgrades as a matter of routine.
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3449[CAUSEWAY-3449] - Update Apache Wicket 9.12.0 -> 9.13.0
 
 
 == Demo and Starter Apps
 
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3453[CAUSEWAY-3453] - [Demo] Review existing pages, clean-up as required.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3435[CAUSEWAY-3435] - [Demo] PropertyLayout Annotation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3434[CAUSEWAY-3434] - [Demo] Property Annotation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3416[CAUSEWAY-3416] - Enable starter apps to build executable jar (for Windows)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3411[CAUSEWAY-3411] - [Demo] JUnit Test (abstract base), to spin up the demo domain for JUnit testing
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3314[CAUSEWAY-3314] - [Demo] Collection Annotation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3313[CAUSEWAY-3313] - [Demo] Action Annotation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3312[CAUSEWAY-3312] - [Demo] Object Annotation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3311[CAUSEWAY-3311] - [Demo] Collection Layout Annotation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3310[CAUSEWAY-3310] - [Demo] Action Layout Annotation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3309[CAUSEWAY-3309] - [Demo] Object Layout Annotation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2485[CAUSEWAY-2485] - Complete/clean up the demo app
+
 
 == Tooling
 
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3123[CAUSEWAY-3123] - [Tooling] Semiautomate Demo Showcase Creation
 
 
 == Won't Fix / Not a Problem / Duplicates
 
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3518[CAUSEWAY-3518] - [NOT A PROBLEM] [simpleapp], navigability facet - isn't suppressing actions; error first time clicked
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3515[CAUSEWAY-3515] - [Not a Problem] Should allow @Domain.Include to be specified for lifecycle callback methods.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3502[CAUSEWAY-3502] - [NOT A PROBLEM] MM validation is incorrect on autoComplete/choices
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3482[CAUSEWAY-3482] - [Duplicate] `@CollectionLayout#tableDecorator` has no effect.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3471[CAUSEWAY-3471] - [invalid] [demo app] @DomainObject#introspection, collection of 'encapsulated enabled' properties does not show them as columns.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3427[CAUSEWAY-3427] - [NOT AN ISSUE] [demo app] @ActionLayout#cssClass bootstrap styling does not apply for PANEL_DROPDOWN. See demo app.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3419[CAUSEWAY-3419] - [NOT A PROBLEM] No asciidoc styling of XML for CommandLogEntry or ExecutoinLogEntry.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3372[CAUSEWAY-3372] - [WONT DO] Void action return should always result in a (current) page reload.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3299[CAUSEWAY-3299] - [UNNECESSARY?] Infer domainEvent from `@Property`, `@Collection`, `@Action` when annotated at class level (for a mixin).
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3261[CAUSEWAY-3261] - [CAN'T REPRODUCE] [bug?] Even if an action fails, eg db violation, the commandPublisher still publishes.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3256[CAUSEWAY-3256] - [DUPLICATE] Update demo app, complete all the menu items so there's nothing greyed out
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3233[CAUSEWAY-3233] - [DUPLICATE] Suppress `recentAuditTrailEntries` mixin for view models
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2663[CAUSEWAY-2663] - [Not a Problem] Presence of a member support method interferes with 'named' attribute from layout.xml

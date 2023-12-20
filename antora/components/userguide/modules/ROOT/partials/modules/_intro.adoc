@@ -1,0 +1,32 @@
+[[introduction]]
+= Introduction
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Enabling and ensuring modularity is a xref:background-context-and-theory.adoc#modular[key principle] for the Apache Causeway framework.
+Modularity is the only way to ensure that a complex application domain does not over time degenerate into the infamous "big ball of mud", software that is difficult, dangerous and expensive to change.
+
+Modules chunk up the overall application into smaller pieces, usually a package with subpackages.
+The smaller pieces can be either:
+
+* horizontal tiers (presentation / application / domain / persistence) or
+* vertical functional slices (eg customer vs orders vs products vs invoice etc).
+
+Because Apache Causeway takes care of the presentation and persistence tiers, modules for us correspond to vertical functional slices.
+The framework is intended to support complex domains, which we tackle by breaking that domain down into smaller subdomains, in other words into modules.
+
+It could be argued that there is still an application tier (view models) and a domain tier (entities) to be considered, as well as mixins.
+We describe the structure of an xref:modules.adoc#an-archetypal-module[archetype module below], showing one way of organising the horizontal tiers within the vertical slices.
+
+Having broken the application down into smaller modules, these modules will then depend upon each other.
+The two main rule of thumbs for dependencies are:
+
+. there should be no cyclic dependencies (the module dependencies should form an acyclic graph), and
+. unstable modules should depend upon stable modules, rather than the other way around.
+
+By "unstable" we don't mean buggy, rather this relates to its likelihood to change its structure or behaviour over time: in other words its stability as a core set of concepts upon which other stuff can depend.
+Reference data (calendars, tax rates, lookups etc) are generally stable, as are "golden" concept such as counterparties / legal entities or financial accounts.
+Transactional concepts such as invoices or agreements is perhaps more likely to change.
+But this stuff is domain specific.

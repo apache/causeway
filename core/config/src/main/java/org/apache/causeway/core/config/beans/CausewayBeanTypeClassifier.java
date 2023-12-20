@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.core.config.beans;
 
-import java.util.ServiceLoader;
-import java.util.ServiceLoader.Provider;
-
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.context._Context;
@@ -63,10 +61,8 @@ public interface CausewayBeanTypeClassifier {
     // -- LOOKUP
 
     public static Can<CausewayBeanTypeClassifier> get() {
-        return Can.ofStream(ServiceLoader
-                .load(CausewayBeanTypeClassifier.class, _Context.getDefaultClassLoader())
-                .stream()
-                .map(Provider::get));
+        return Can.ofCollection(SpringFactoriesLoader
+                .loadFactories(CausewayBeanTypeClassifier.class, _Context.getDefaultClassLoader()));
     }
 
 }

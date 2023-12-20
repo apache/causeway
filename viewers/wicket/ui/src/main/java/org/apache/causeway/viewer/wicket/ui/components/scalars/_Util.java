@@ -45,11 +45,27 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class _Util {
 
-    boolean canPropertyEnterInlineEditDirectly(final ScalarModel scalarModel) {
-        return scalarModel.getPromptStyle().isInline()
-                && scalarModel.canEnterEditMode();
+    /**
+     * Whether to prevent tabbing into non-editable widgets.
+     */
+    boolean isPropertyWithEnterEditNotAvailable(final ScalarModel scalarModel) {
+        return scalarModel.isProperty()
+                && scalarModel.isViewingMode()
+                && (scalarModel.getPromptStyle().isDialogAny()
+                        || !canEnterEditMode(scalarModel));
     }
 
+    boolean canPropertyEnterInlineEditDirectly(final ScalarModel scalarModel) {
+        return scalarModel.getPromptStyle().isInline()
+                && scalarModel.isViewingMode()
+                && !scalarModel.disabledReason().isPresent();
+    }
+
+    /**
+     * Parameter disabled case should already be handled earlier.
+     * <p>
+     * @implNote {@code !scalarModel.disabledReason().isPresent()} is not checked nor asserted here
+     */
     boolean canParameterEnterNestedEdit(final ScalarModel scalarModel) {
         return scalarModel.isParameter()
                 && !scalarModel.hasChoices() // handled by select2 panels instead
@@ -80,21 +96,6 @@ class _Util {
                 .collect(Can.toCan());
     }
 
-    private Optional<LinkAndLabel> toLinkAndLabelNoRuleChecking(
-            final @Nullable ObjectAction action,
-            final ScalarModel scalarModel) {
-        return Optional.ofNullable(action)
-        .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel));
-    }
-
-    private Optional<LinkAndLabel> toLinkAndLabelWithRuleChecking(
-            final @Nullable ObjectAction action,
-            final ScalarModel scalarModel) {
-        return toLinkAndLabelNoRuleChecking(action, scalarModel)
-        .filter(LinkAndLabel::isVisible)
-        .filter(LinkAndLabel::isEnabled);
-    }
-
     IValidator<Object> createValidatorFor(final ScalarModel scalarModel) {
         return new IValidator<Object>() {
             private static final long serialVersionUID = 1L;
@@ -108,6 +109,28 @@ class _Util {
                 });
             }
         };
+    }
+
+    // -- HELPER
+
+    private boolean canEnterEditMode(final ScalarModel scalarModel) {
+        return scalarModel.isViewingMode()
+                && !scalarModel.disabledReason().isPresent();
+    }
+
+    private Optional<LinkAndLabel> toLinkAndLabelNoRuleChecking(
+            final @Nullable ObjectAction action,
+            final ScalarModel scalarModel) {
+        return Optional.ofNullable(action)
+        .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel));
+    }
+
+    private Optional<LinkAndLabel> toLinkAndLabelWithRuleChecking(
+            final @Nullable ObjectAction action,
+            final ScalarModel scalarModel) {
+        return toLinkAndLabelNoRuleChecking(action, scalarModel)
+        .filter(LinkAndLabel::isVisible)
+        .filter(LinkAndLabel::isEnabled);
     }
 
     private boolean guardAgainstInvalidCompositeMixinScenarios(final LinkAndLabel linkAndLabel) {
@@ -150,7 +173,7 @@ class _Util {
             .map(v->scalarModel
                     .getObjectManager().demementify((ObjectMemento)v))
             .collect(Can.toCan());
-            return Optional.of(ManagedObject.packed(scalarModel.getScalarTypeSpec(), unpackedValues));
+            return Optional.of(ManagedObject.packed(scalarModel.getElementType(), unpackedValues));
         }
 
         if(valueObject instanceof ObjectMemento) {
@@ -166,11 +189,8 @@ class _Util {
                         .adapt(valueObject));
     }
 
-
-    // -- HELPER
-
     private Optional<ObjectAction> lookupCompositeValueMixinForFeature(final ScalarModel scalarModel) {
-        val spec = scalarModel.getScalarTypeSpec();
+        val spec = scalarModel.getElementType();
         if(!spec.isValue()) {
             return Optional.empty();
         }

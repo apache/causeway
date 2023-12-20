@@ -43,8 +43,6 @@ import lombok.val;
  */
 public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public EntityIconAndTitlePanelFactory(
             final UiComponentType uiComponentType,
             final Class<?> componentClass) {
@@ -72,7 +70,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
         if (model instanceof ObjectAdapterModel) {
             spec = ((ObjectAdapterModel) model).getTypeOfSpecification();
         } else if (model instanceof ScalarModel) {
-            spec = ((ScalarModel) model).getScalarTypeSpec();
+            spec = ((ScalarModel) model).getElementType();
         } else {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }

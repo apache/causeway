@@ -248,11 +248,11 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         });
 
         // when
-        List<? extends ExecutionLogEntry> executionTarget1User1IfAny = executionLogEntryRepository.findMostRecent(1);
+        List<? extends ExecutionLogEntry> executionsForTarget1User1 = executionLogEntryRepository.findMostRecent(1);
 
         // then
-        assertThat(executionTarget1User1IfAny).hasSize(1);
-        var executionTarget1User1 = executionTarget1User1IfAny.get(0);
+        assertThat(executionsForTarget1User1).hasSize(1);
+        var executionTarget1User1 = executionsForTarget1User1.get(0);
         val executionTarget1User1Id = executionTarget1User1.getInteractionId();
 
         // given (different user, same target, same day)
@@ -265,11 +265,11 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         interactionService.nextInteraction();
 
         // when
-        List<? extends ExecutionLogEntry> executionTarget1User2IfAny = executionLogEntryRepository.findMostRecent(1);
+        List<? extends ExecutionLogEntry> executionsForTarget1User2 = executionLogEntryRepository.findMostRecent(1);
 
         // then
-        assertThat(executionTarget1User2IfAny).hasSize(1);
-        var executionTarget1User2 = executionTarget1User2IfAny.get(0);
+        assertThat(executionsForTarget1User2).hasSize(1);
+        var executionTarget1User2 = executionsForTarget1User2.get(0);
         val executionTarget1User2Id = executionTarget1User2.getInteractionId();
 
 

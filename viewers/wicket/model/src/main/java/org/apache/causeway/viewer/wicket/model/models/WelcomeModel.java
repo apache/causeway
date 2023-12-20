@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 
 /**
@@ -29,10 +28,6 @@ public class WelcomeModel
 extends ModelAbstract<CausewayConfiguration.Viewer.Wicket.Welcome> {
 
     private static final long serialVersionUID = 1L;
-
-    public WelcomeModel(final MetaModelContext commonContext) {
-        super(commonContext);
-    }
 
     @Override
     protected CausewayConfiguration.Viewer.Wicket.Welcome load() {

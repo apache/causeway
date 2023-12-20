@@ -18,8 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.described.method;
 
-import java.lang.reflect.Method;
-
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacetWithImperativeTextAbstract;
 
@@ -27,7 +26,7 @@ public class MemberDescribedFacetViaMethod
 extends MemberDescribedFacetWithImperativeTextAbstract {
 
     public MemberDescribedFacetViaMethod(
-            final Method describedMethod,
+            final ResolvedMethod describedMethod,
             final FacetHolder holder) {
         super(
                 describedMethod,

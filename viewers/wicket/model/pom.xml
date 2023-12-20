@@ -30,14 +30,15 @@
     <artifactId>causeway-viewer-wicket-model</artifactId>
     <name>Apache Causeway Viewer - Wicket (Model)</name>
 
-    <properties>
+	<properties>
         <jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.model</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/model</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
+		
         <dependency>
-            <groupId>com.github.apache-causeway-committers.wicket</groupId>
+            <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
             <exclusions>
                 <exclusion>
@@ -47,7 +48,7 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.apache-causeway-committers.wicket</groupId>
+            <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-extensions</artifactId>
             <exclusions>
                 <exclusion>
@@ -63,19 +64,15 @@
         </dependency>
         
         <dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-commons-applib</artifactId>
+        </dependency>
+        
+        <dependency>
 			<groupId>org.apache.causeway.viewer</groupId>
 			<artifactId>causeway-viewer-commons-model</artifactId>
 		</dependency>
-	
-		<!-- TESTING -->
-
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-internaltestsupport</artifactId>
-			<scope>test</scope>
-		</dependency>
 
     </dependencies>
-
 
 </project>

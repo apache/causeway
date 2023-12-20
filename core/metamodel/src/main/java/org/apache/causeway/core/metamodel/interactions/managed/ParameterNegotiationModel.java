@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
 import org.springframework.lang.Nullable;
@@ -33,7 +35,6 @@ import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
@@ -235,10 +236,43 @@ public class ParameterNegotiationModel {
         paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
     }
 
+    /**
+     * @param paramIndex - zero based parameter index
+     * @param updater - takes the current parameter argument value wrapped as {@link ManagedObject} as input
+     *      and returns the new parameter argument value also wrapped as {@link ManagedObject}
+     */
+    public void updateParamValue(final int paramIndex, final @NonNull UnaryOperator<ManagedObject> updater) {
+        val bindableParamValue = paramModels.getElseFail(paramIndex).getBindableParamValue();
+        val newParamValue = updater.apply(bindableParamValue.getValue());
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newParamValue)) {
+            clearParamValue(paramIndex);
+        } else {
+            bindableParamValue.setValue(newParamValue);
+        }
+    }
+
+    /**
+     * @param paramIndex - zero based parameter index
+     * @param pojoUpdater - takes the current parameter argument value wrapped as {@link ManagedObject} as input
+     *      and returns the new parameter argument value as pojo
+     */
+    public void updateParamValuePojo(
+            final int paramIndex, final @NonNull Function<ManagedObject, Object> pojoUpdater) {
+        updateParamValue(paramIndex, current->adaptParamValuePojo(paramIndex, pojoUpdater.apply(current)));
+    }
+
     @NonNull public ManagedObject adaptParamValuePojo(final int paramIndex,
             final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramIndex);
         return ManagedObject.adaptParameter(paramMeta, newParamValuePojo);
+    }
+
+    /**
+     * Returns whether the pending parameter changed during reassessment.
+     * @see ObjectActionParameter#reassessDefault(ParameterNegotiationModel)
+     */
+    public boolean reassessDefaults(final int paramIndexForReassessment) {
+        return getParamMetamodel(paramIndexForReassessment).reassessDefault(this);
     }
 
     /**
@@ -350,8 +384,8 @@ public class ParameterNegotiationModel {
 
         @Override
         public String getFriendlyName() {
-            return getMetaModel().getStaticFriendlyName()
-                    .orElseThrow(_Exceptions::unexpectedCodeReach);
+            ObjectActionParameter objectActionParameter = getMetaModel();
+            return objectActionParameter.getCanonicalFriendlyName();
         }
 
         @Override

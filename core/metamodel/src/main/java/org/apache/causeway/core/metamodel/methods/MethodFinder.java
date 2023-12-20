@@ -19,8 +19,8 @@
 package org.apache.causeway.core.metamodel.methods;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -30,10 +30,10 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ConflictingAnnotations;
@@ -52,9 +52,9 @@ public class MethodFinder {
             final @NonNull Class<?> correspondingClass,
             final @NonNull Can<String> methodNameCandidatesPossiblyDuplicated,
             final @NonNull EncapsulationPolicy encapsulationPolicy,
-            final @NonNull Predicate<Method> mustSatisfy) {
+            final @NonNull Predicate<ResolvedMethod> mustSatisfy) {
 
-        final Predicate<Method> isNotStatic = MethodUtil::isNotStatic;
+        final Predicate<ResolvedMethod> isNotStatic = MethodUtil::isNotStatic;
         val methodNameCandidates = methodNameCandidatesPossiblyDuplicated.distinct();
 
         return new MethodFinder(
@@ -63,7 +63,7 @@ public class MethodFinder {
                 methodNameCandidates.equals(ANY_NAME)
                         ? isNotStatic.and(mustSatisfy)
                         : isNotStatic
-                            .and(method->methodNameCandidates.contains(method.getName()))
+                            .and(method->methodNameCandidates.contains(method.name()))
                             .and(mustSatisfy),
                 methodNameCandidates);
     }
@@ -141,10 +141,10 @@ public class MethodFinder {
 
     @Getter private final @NonNull Class<?> correspondingClass;
     @Getter private final @NonNull EncapsulationPolicy encapsulationPolicy;
-    @Getter private final @NonNull Predicate<Method> mustSatisfy;
+    @Getter private final @NonNull Predicate<ResolvedMethod> mustSatisfy;
     private final @NonNull Can<String> methodNameCandidates;
 
-    public Stream<Method> streamMethodsMatchingSignature(
+    public Stream<ResolvedMethod> streamMethodsMatchingSignature(
             final @Nullable Class<?>[] paramTypes) {
 
         if(paramTypes==null) {
@@ -158,27 +158,27 @@ public class MethodFinder {
         if(methodNameCandidates.equals(ANY_NAME)) {
             //stream all
             return (isEncapsulationSupported
-                    ? classCache.streamPublicOrDeclaredMethods(type)
+                    ? classCache.streamResolvedMethods(type)
                     : classCache.streamPublicMethods(type))
-                        .filter(method->Arrays.equals(paramTypes, method.getParameterTypes()))
+                        .filter(method->Arrays.equals(paramTypes, method.paramTypes()))
                         .filter(mustSatisfy);
         }
 
         return methodNameCandidates.stream()
         .map(name->isEncapsulationSupported
-                ? classCache.lookupPublicOrDeclaredMethod(type, name, paramTypes)
+                ? classCache.lookupResolvedMethod(type, name, paramTypes)
                 : classCache.lookupPublicMethod(type, name, paramTypes))
-        .filter(_NullSafe::isPresent)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .filter(mustSatisfy);
-
     }
 
-    public Stream<Method> streamMethodsIgnoringSignature() {
+    public Stream<ResolvedMethod> streamMethodsIgnoringSignature() {
         val type = getCorrespondingClass();
         val classCache = _ClassCache.getInstance();
         val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
         return (isEncapsulationSupported
-                ? classCache.streamPublicOrDeclaredMethods(type)
+                ? classCache.streamResolvedMethods(type)
                 : classCache.streamPublicMethods(type))
                     .filter(mustSatisfy);
     }
@@ -189,7 +189,7 @@ public class MethodFinder {
         return new MethodFinder(
                 correspondingClass,
                 encapsulationPolicy,
-                mustSatisfy.and(_Reflect.Filter.hasReturnType(requiredReturnType)),
+                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeATypeOf(requiredReturnType)),
                 methodNameCandidates);
     }
 
@@ -197,7 +197,7 @@ public class MethodFinder {
         return new MethodFinder(
                 correspondingClass,
                 encapsulationPolicy,
-                mustSatisfy.and(_Reflect.Filter.hasReturnTypeAnyOf(anyOfReturnTypes)),
+                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeAnyTypeOf(anyOfReturnTypes)),
                 methodNameCandidates);
     }
 
@@ -235,7 +235,7 @@ public class MethodFinder {
         return finder;
     }
 
-    private static Predicate<Method> havingAnnotationIfEnforcedByPolicyOrAccessibility(
+    private static Predicate<ResolvedMethod> havingAnnotationIfEnforcedByPolicyOrAccessibility(
             final boolean annotationRequired,
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
@@ -246,11 +246,11 @@ public class MethodFinder {
     }
 
     private static boolean havingAnnotationOrPublic(
-            final Method method,
+            final ResolvedMethod method,
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        return _Reflect.isPublicNonSynthetic(method)
+        return _Reflect.isPublicNonSynthetic(method.method())
                 ? true
                 : havingAnnotation(method, annotationType, conflictingAnnotations);
     }
@@ -258,17 +258,17 @@ public class MethodFinder {
     //FIXME[CAUSEWAY-2774] if annotation appears on an abstract method that was inherited with given method,
     // its not detected here
     private static boolean havingAnnotation(
-            final Method method,
+            final ResolvedMethod method,
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        val isMarkerAnnotationPresent = _Annotations.synthesize(method, annotationType).isPresent();
+        val isMarkerAnnotationPresent = _Annotations.synthesize(method.method(), annotationType).isPresent();
         if(isMarkerAnnotationPresent) {
 
             val isConflictingAnnotationPresent = conflictingAnnotations
             .stream()
             .anyMatch(conflictingAnnotationType->
-                    _Annotations.synthesize(method, conflictingAnnotationType).isPresent());
+                    _Annotations.synthesize(method.method(), conflictingAnnotationType).isPresent());
 
             // do not pickup this method if conflicting - so meta-model validation will fail later on
             return !isConflictingAnnotationPresent;

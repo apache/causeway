@@ -22,7 +22,12 @@ package org.apache.causeway.extensions.executionrepublisher.applib.contributions
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
@@ -45,7 +50,9 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Action(
+        commandPublishing = Publishing.DISABLED,
         domainEvent = ExecutionLogEntry_copyToOutbox.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(

@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -49,6 +48,7 @@ import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.val;
 
@@ -134,6 +134,8 @@ public interface ObjectMember extends ObjectFeature {
      * If so, can be safely downcast to {@link ObjectAssociation}.
      */
     boolean isPropertyOrCollection();
+    default boolean isProperty() { return isOneToOneAssociation(); }
+    default boolean isCollection() { return isOneToManyAssociation(); }
 
     /**
      * Whether this member represents a {@link OneToManyAssociation}.
@@ -258,15 +260,12 @@ public interface ObjectMember extends ObjectFeature {
             .findFirst();
     }
 
+    /**
+     * Looks up any {@link TableDecoratorFacet} on the member itself, then on its element-type.
+     * First found wins.
+     */
     default Optional<TableDecorator> getTableDecorator() {
-        return FacetUtil.lookupFacetInButExcluding(TableDecoratorFacet.class, o -> o == TableDecorator.Default.class, getElementType())
-            .stream()
-            .map(SingleValueFacet::value)
-            .map(decoratorClass -> {
-                val decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass, _Constants.emptyObjects);
-                return injectServicesInto(decorator);
-            })
-            .findFirst();
+        return Facets.tableDecorator(this, getElementType());
     }
 
     // -- COLLECTION SORTING (COLL + NON-SCALAR ACTION RESULT)

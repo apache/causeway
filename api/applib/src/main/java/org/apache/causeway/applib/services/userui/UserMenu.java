@@ -26,6 +26,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
@@ -58,7 +59,9 @@ public class UserMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = me.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(

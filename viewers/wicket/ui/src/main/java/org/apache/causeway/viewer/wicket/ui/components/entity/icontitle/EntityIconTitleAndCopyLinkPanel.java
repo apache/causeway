@@ -23,8 +23,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 
-import lombok.val;
-
 /**
  * An extension of {@link org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel}
  * that additionally has a link allowing to copy the url to the shown entity
@@ -40,9 +38,7 @@ public class EntityIconTitleAndCopyLinkPanel extends EntityIconAndTitlePanel {
     }
 
     @Override
-    protected MarkupContainer addLinkWrapper() {
-        val linkWrapper = super.addLinkWrapper();
+    protected void onLinkWrapperCreated(final MarkupContainer linkWrapper) {
         linkWrapper.add(new ZeroClipboardPanel(ID_COPY_LINK, getModel()));
-        return linkWrapper;
     }
 }

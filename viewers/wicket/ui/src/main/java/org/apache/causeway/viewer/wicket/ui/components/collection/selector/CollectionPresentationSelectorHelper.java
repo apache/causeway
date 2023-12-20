@@ -19,9 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collection.selector;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -29,8 +27,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
@@ -38,6 +36,7 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
@@ -54,7 +53,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
     private final EntityCollectionModel collectionModel;
 
     @Getter
-    private final List<ComponentFactory> componentFactories;
+    private final Can<ComponentFactoryKey> componentFactories;
     private final ComponentHintKey componentHintKey;
 
     public CollectionPresentationSelectorHelper(
@@ -68,36 +67,24 @@ public class CollectionPresentationSelectorHelper implements Serializable {
             final ComponentFactoryRegistry componentFactoryRegistry,
             final ComponentHintKey componentHintKey) {
         this.collectionModel = collectionModel;
-        this.componentFactories = locateComponentFactories(componentFactoryRegistry);
+        this.componentFactories = gatherComponentFactories(componentFactoryRegistry);
         this.componentHintKey = componentHintKey != null
                 ? componentHintKey
                 : ComponentHintKey.noop();
     }
 
-    private List<ComponentFactory> locateComponentFactories(
+    private Can<ComponentFactoryKey> gatherComponentFactories(
             final ComponentFactoryRegistry componentFactoryRegistry) {
 
-        final List<ComponentFactory> ajaxFactoriesToEnd = _Lists.newArrayList();
-
-        final List<ComponentFactory> componentFactories = componentFactoryRegistry
+        return componentFactoryRegistry
         .streamComponentFactories(ImmutableEnumSet.of(
                 UiComponentType.COLLECTION_CONTENTS,
                 UiComponentType.COLLECTION_CONTENTS_EXPORT),
                 collectionModel)
         .filter(componentFactory ->
             componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
-        .filter(componentFactory -> {
-            if(componentFactory instanceof CollectionContentsAsAjaxTablePanelFactory) {
-                ajaxFactoriesToEnd.add(componentFactory);
-                return false;
-            }
-            return true;
-        })
-        .collect(Collectors.toList());
-
-        componentFactories.addAll(ajaxFactoriesToEnd);
-
-        return componentFactories;
+        .map(ComponentFactory::key)
+        .collect(Can.toCan());
     }
 
     public String honourViewHintElseDefault(final Component component) {
@@ -153,8 +140,8 @@ public class CollectionPresentationSelectorHelper implements Serializable {
             final String viewName = Facets.defaultViewName(collectionModel.getMetaModel())
                     .orElseThrow(); // null case guarded by if clause
 
-            for (ComponentFactory componentFactory : componentFactories) {
-                final String componentName = componentFactory.getName();
+            for (ComponentFactoryKey componentFactory : componentFactories) {
+                final String componentName = componentFactory.id();
                 if (componentName.equalsIgnoreCase(viewName)) {
                     return componentName;
                 }
@@ -187,8 +174,8 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         .orElse(false);
     }
 
-    public ComponentFactory find(final String selected) {
-        ComponentFactory componentFactory = doFind(selected);
+    public ComponentFactoryKey find(final String selected) {
+        ComponentFactoryKey componentFactory = doFind(selected);
         if (componentFactory != null) {
             return componentFactory;
         }
@@ -205,9 +192,9 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         return componentFactory;
     }
 
-    private ComponentFactory doFind(final String selected) {
-        for (ComponentFactory componentFactory : componentFactories) {
-            if(selected.equals(componentFactory.getName())) {
+    private ComponentFactoryKey doFind(final String selected) {
+        for (ComponentFactoryKey componentFactory : componentFactories) {
+            if(selected.equals(componentFactory.id())) {
                 return componentFactory;
             }
         }
@@ -216,8 +203,8 @@ public class CollectionPresentationSelectorHelper implements Serializable {
 
     public int lookup(final String view) {
         int i=0;
-        for (ComponentFactory componentFactory : componentFactories) {
-            if(view.equals(componentFactory.getName())) {
+        for (ComponentFactoryKey componentFactory : componentFactories) {
+            if(view.equals(componentFactory.id())) {
                 return i;
             }
             i++;

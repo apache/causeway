@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.icon;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,9 +27,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+
+import lombok.val;
 
 class IconFacetMethodTest {
 
@@ -50,7 +51,8 @@ class IconFacetMethodTest {
     public void setUp() throws Exception {
 
         pojo = new DomainObjectWithProblemInIconNameMethod();
-        final Method iconNameMethod = DomainObjectWithProblemInIconNameMethod.class.getMethod("iconName");
+        val iconNameMethod = _GenericResolver.testing
+                .resolveMethod(DomainObjectWithProblemInIconNameMethod.class, "iconName");
 
         facet = (IconFacetViaIconNameMethod) IconFacetViaIconNameMethod
                 .create(iconNameMethod, Mockito.mock(FacetHolder.class))

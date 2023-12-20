@@ -52,6 +52,7 @@ public final class AwaitableLatch {
     }
 
     /**
+     * Returns {@code false} if timeout was exceeded.
      * {@link AwaitableLatch#await(long, TimeUnit)}
      * @param timeout the maximum time to wait
      * @param unit the time unit of the {@code timeout} argument

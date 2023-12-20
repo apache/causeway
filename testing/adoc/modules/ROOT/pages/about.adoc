@@ -144,7 +144,6 @@ These let us decouple deployment (meaning shipping code into production) from re
 At its simplest, a feature toggle could be a global variable disabling the functionality until fully ready, or it might even just be implemented using security.
 More sophisticated implementations make access more dynamic, for example by granting access to "alpha" or canary users.
 
-WARNING: TODO: v2: intention is to bring in incode-platform's feature toggle library.
 
 
 

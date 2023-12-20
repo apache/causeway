@@ -5,5 +5,5 @@
 == Implementation
 
 The framework provides a default implementation of this service,
-`o.a.i.core.runtimeservices.command.CommandExecutorServiceDefault`
+`o.a.c.core.runtimeservices.command.CommandExecutorServiceDefault`
 

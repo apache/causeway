@@ -33,6 +33,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
 import lombok.val;
@@ -51,7 +53,6 @@ public interface ObjectManager extends HasMetaModelContext {
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
     ObjectBulkLoader getObjectBulkLoader();
-    ObjectBookmarker getObjectBookmarker();
 
     // -- OBJECT MEMENTOS
 
@@ -130,20 +131,6 @@ public interface ObjectManager extends HasMetaModelContext {
         return getObjectBulkLoader().loadObject(objectQuery);
     }
 
-    /**
-     * Returns an object identifier for the instance.
-     * @param managedObject
-     */
-    public default Optional<Bookmark> bookmarkObject(final ManagedObject managedObject) {
-        return getObjectBookmarker().bookmarkObject(managedObject);
-    }
-
-    public default Bookmark bookmarkObjectElseFail(final ManagedObject managedObject) {
-        return bookmarkObject(managedObject)
-                .orElseThrow(()->
-                    _Exceptions.unrecoverable("failed to bookmark %s", managedObject.getSpecification()));
-    }
-
     public default Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {
         if(pojo==null) {
             return Optional.empty();
@@ -159,17 +146,24 @@ public interface ObjectManager extends HasMetaModelContext {
     // -- ADAPTING POJOS
 
     /**
-     * Not suitable for adapting a non-scalar.
+     * Not suitable for adapting a plural.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
+     * <p>
+     * see also {@link #adapt(Object, Supplier)},
+     *      where the 2nd arg supplies the {@link ObjectSpecification} if known (eg for null args).
+     *
+     * @see ManagedObject#adaptSingular(ObjectSpecification, Object)
+     * @see ManagedObject#adaptParameter(ObjectActionParameter, Object)
+     * @see ManagedObject#adaptProperty(OneToOneAssociation, Object)
      */
     public default ManagedObject adapt(final @Nullable Object pojo) {
         return adapt(pojo, ()->specForType(Object.class).orElseThrow());
     }
 
     /**
-     * Suitable for adapting a non-scalar.
+     * Suitable for adapting a plural.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
@@ -178,6 +172,11 @@ public interface ObjectManager extends HasMetaModelContext {
             final @Nullable Object pojo,
             final @NonNull Supplier<ObjectSpecification> fallbackElementType) {
         if(pojo==null) {
+            ObjectSpecification objectSpecification = fallbackElementType.get();
+            if (objectSpecification.isSingular()) {
+                return ManagedObject.empty(objectSpecification);
+            }
+            // best we can do?
             return ManagedObject.unspecified();
         }
         if(pojo instanceof ManagedObject) {
@@ -187,6 +186,7 @@ public interface ObjectManager extends HasMetaModelContext {
         // could be any pojo, even of a type, that is vetoed for introspection (spec==null)
         val spec = specForType(pojo.getClass()).orElse(null);
         if(spec==null) {
+            // best we can do?
             return ManagedObject.unspecified();
         }
         return spec.isSingular()

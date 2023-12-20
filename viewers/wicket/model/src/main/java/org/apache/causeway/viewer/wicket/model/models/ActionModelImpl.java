@@ -28,7 +28,6 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -92,11 +91,6 @@ implements ActionModel {
     @Override
     public ActionInteraction getActionInteraction() {
         return delegate.actionInteraction();
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return delegate.getMetaModelContext();
     }
 
     // -- BOOKMARKABLE

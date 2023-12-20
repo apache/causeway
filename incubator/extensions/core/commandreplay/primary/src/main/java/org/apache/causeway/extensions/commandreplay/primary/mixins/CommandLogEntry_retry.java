@@ -30,9 +30,10 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-    domainEvent = CommandLogEntry_retry.ActionDomainEvent.class,
-    commandPublishing = Publishing.DISABLED
+        commandPublishing = Publishing.DISABLED,
+        domainEvent = CommandLogEntry_retry.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
+        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(associateWith = "executeIn", sequence = "1")
 @RequiredArgsConstructor

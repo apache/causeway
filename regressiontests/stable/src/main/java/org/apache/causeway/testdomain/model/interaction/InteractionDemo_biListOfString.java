@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,30 +34,30 @@ public class InteractionDemo_biListOfString {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
 
-    @MemberSupport public String act(List<String> a, List<String> b) {
+    @MemberSupport public String act(final List<String> a, final List<String> b) {
         return Stream.concat(a.stream(), b.stream())
                 .collect(Collectors.joining(","));
     }
 
     // -- PARAM A
 
-    @MemberSupport public List<String> defaultA(ParameterSamples.BiListOfString p) {
-        return _Lists.of("a1", "a2", "a3");
+    @MemberSupport public List<String> defaultA(final ParameterSamples.BiListOfString p) {
+        return List.of("a1", "a2", "a3");
     }
 
-    @MemberSupport public List<String> choicesA(ParameterSamples.BiListOfString p) {
-        return _Lists.of("a1", "a2", "a3", "a4");
+    @MemberSupport public List<String> choicesA(final ParameterSamples.BiListOfString p) {
+        return List.of("a1", "a2", "a3", "a4");
     }
 
 
     // -- PARAM B
 
-    @MemberSupport public List<String> defaultB(ParameterSamples.BiListOfString p) {
-        return _Lists.of("b1");
+    @MemberSupport public List<String> defaultB(final ParameterSamples.BiListOfString p) {
+        return List.of("b1");
     }
 
-    @MemberSupport public List<String> choicesB(ParameterSamples.BiListOfString p) {
-        return _Lists.of("b1", "b2", "b3", "b4");
+    @MemberSupport public List<String> choicesB(final ParameterSamples.BiListOfString p) {
+        return List.of("b1", "b2", "b3", "b4");
     }
 
 }

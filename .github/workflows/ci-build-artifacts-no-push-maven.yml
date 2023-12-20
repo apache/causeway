@@ -1,4 +1,4 @@
-name: Build, Test (JDK 18)
+name: Build, Test (JDK 21)
 
 on:
   push:
@@ -11,9 +11,9 @@ on:
       - spring6
 
 jobs:
-  # This is a matrix build {'java', 'javascript'}, 
+  # This is a matrix build {'java', 'javascript'},
   # where only the 'java' part triggers the Maven build,
-  # and only the 'javascript' part triggers the CodeQL autobuild. 
+  # and only the 'javascript' part triggers the CodeQL autobuild.
   # Those builds must run in between the "CodeQL: Initialize" and "CodeQL: Perform Analysis" steps!
   # CodeQL can be disabled via SKIP_CODE_QL: true
   build:
@@ -28,12 +28,12 @@ jobs:
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Use only 'java' to analyze code written in Java, Kotlin or both
         # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
-        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support  
+        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
         language: [ 'java', 'javascript' ]
     env:
       # to be shared among all steps of this job
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
-      BASELINE: 2.0.0-RC1
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      BASELINE: 2.0.0-RC3
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
 
@@ -45,21 +45,19 @@ jobs:
       # set this to 'deploy' when intent is to push the built packages to a repo
       # requires 'secrets' which we don't have yet
       MVN_STAGES: install
-      
+
       # options
       SKIP_CODE_QL: false
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Set up JDK 18
+    - name: Set up JDK 21
       if: matrix.language == 'java'
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        # tried 19 on 2023-02-05 casing org.codehaus.plexus.archiver.ArchiverException:
-        # Could not create modular JAR file. The JDK jar tool exited with 1
-        java-version: 18
+        java-version: 21
 
     - name: Print Maven Version
       if: matrix.language == 'java'
@@ -91,11 +89,11 @@ jobs:
         echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
         echo MVN_STAGES       \: $MVN_STAGES
         echo ======================================
-        
+
     # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
     - name: "CodeQL: Initialize"
-      if: env.SKIP_CODE_QL != 'true' 
-      uses: github/codeql-action/init@v2
+      if: env.SKIP_CODE_QL != 'true'
+      uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
 
@@ -105,30 +103,31 @@ jobs:
       run: bash $CI_SCRIPTS_PATH/build-artifacts.sh
       env:
         # -Dmodule-all ... build all modules (default if all is well)
-        # -Dmodule-all-except-incubator ... build all modules except 'incubator' (eg. when vaadin build fails)
+        # -Dmodule-all-except-incubator ... build all modules except 'incubator'
         # -Dmodule-all-except-kroviz ... build all modules except 'kroviz' (eg. when kroviz build fails)
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
+        # -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z see https://maven.apache.org/guides/mini/guide-reproducible-builds.html
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
           -Dmodule-all
-          -Dproject.build.outputTimestamp=1
-          -Dmaven.source.skip=true
           -Denforcer.failFast=true
+          -Dmaven.source.skip=true
+          -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z
           -e
-          
+
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually
-    - name: "CodeQL: Autobuild" 
+    - name: "CodeQL: Autobuild"
       if: env.SKIP_CODE_QL != 'true' && matrix.language == 'javascript'
-      uses: github/codeql-action/autobuild@v2
-          
+      uses: github/codeql-action/autobuild@v3
+
     - name: "CodeQL: Perform Analysis"
       if: env.SKIP_CODE_QL != 'true'
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
-               
+
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context

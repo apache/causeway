@@ -22,16 +22,17 @@ import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-/*${generated-file-notice}*/
 @Service
 public class /*${showcase-name}*/Seeding
 extends SeedServiceAbstract {
 
     @Inject
-    public /*${showcase-name}*/Seeding(ValueHolderRepository</*${showcase-type-boxed}*/, ? extends /*${showcase-name}*/Entity> entities) {
+    public /*${showcase-name}*/Seeding(ValueHolderRepository</*${showcase-simple-type-boxed}*/, ? extends /*${showcase-name}*/Entity> entities) {
         super(entities);
     }
 

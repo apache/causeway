@@ -24,6 +24,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -36,7 +37,6 @@ import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
@@ -52,7 +52,7 @@ implements OneToManyAssociation {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 facetedMethod.getMetaModelContext().getSpecificationLoader()
-                    .loadSpecification(facetedMethod.getType().getElementType()));
+                    .loadSpecification(facetedMethod.getType().elementType()));
     }
 
     protected OneToManyAssociationDefault(
@@ -65,8 +65,8 @@ implements OneToManyAssociation {
     // -- UNDERLYING TYPE
 
     @Getter(onMethod_={@Override}, lazy = true)
-    private final TypeOfAnyCardinality typeOfAnyCardinality = resolveTypeOfAnyCardinality();
-    private TypeOfAnyCardinality resolveTypeOfAnyCardinality() {
+    private final ResolvedType typeOfAnyCardinality = resolveTypeOfAnyCardinality();
+    private ResolvedType resolveTypeOfAnyCardinality() {
         return Facets.typeOfAnyCardinality(getFacetHolder())
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "framework bug: non-scalar feature must have a TypeOfFacet"));
@@ -109,7 +109,7 @@ implements OneToManyAssociation {
 
         super.getServiceInjector().injectServicesInto(collection);
 
-        return objectManager.adapt(collection);
+        return objectManager.adapt(collection, this::getElementType);
     }
 
     @Override

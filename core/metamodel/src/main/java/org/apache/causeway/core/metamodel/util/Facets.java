@@ -18,24 +18,35 @@
  */
 package org.apache.causeway.core.metamodel.util;
 
-import lombok.experimental.UtilityClass;
-import lombok.val;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
+
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.factory._InstanceUtil;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
@@ -50,6 +61,7 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
@@ -66,17 +78,12 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
 
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Facet utility.
@@ -215,30 +222,30 @@ public final class Facets {
         return objectSpec.containsFacet(IconFacet.class);
     }
 
-    public Optional<LabelPosition> labelAt(final ObjectFeature feature) {
+    /**
+     * Non-null, one of {LEFT, RIGHT, TOP or NONE}.
+     */
+    public LabelPosition labelAt(final ObjectFeature feature) {
         return feature.lookupFacet(LabelAtFacet.class)
-        .map(LabelAtFacet::label);
+                .map(LabelAtFacet::label)
+                .map(labelPos->{
+                    switch (labelPos) {
+                    case LEFT:
+                    case RIGHT:
+                    case NONE:
+                    case TOP:
+                        return labelPos;
+                    case DEFAULT:
+                    case NOT_SPECIFIED:
+                    default:
+                        return LabelPosition.LEFT;
+                    }
+                })
+                .orElse(LabelPosition.LEFT);
     }
 
     public String labelAtCss(final ObjectFeature feature) {
-        return Facets.labelAt(feature)
-        .map(labelPos->{
-            switch (labelPos) {
-            case LEFT:
-                return "label-left";
-            case RIGHT:
-                return "label-right";
-            case NONE:
-                return "label-none";
-            case TOP:
-                return "label-top";
-            case DEFAULT:
-            case NOT_SPECIFIED:
-            default:
-                return "label-left";
-            }
-        })
-        .orElse("label-left");
+        return "label-" + labelAt(feature).name().toLowerCase();
     }
 
     public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
@@ -329,7 +336,7 @@ public final class Facets {
         .map(TypeOfFacet::elementSpec);
     }
 
-    public Optional<TypeOfAnyCardinality> typeOfAnyCardinality(final FacetHolder facetHolder) {
+    public Optional<ResolvedType> typeOfAnyCardinality(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(TypeOfFacet.class)
         .map(TypeOfFacet::value);
     }
@@ -349,6 +356,19 @@ public final class Facets {
         return Optional.ofNullable(result)
                 .map(OptionalInt::of)
                 .orElseGet(OptionalInt::empty);
+    }
+
+    // -- TABLES
+
+    public Optional<TableDecorator> tableDecorator(final FacetHolder ... facetHolders) {
+        return FacetUtil.lookupFacetInButExcluding(TableDecoratorFacet.class, o -> o == TableDecorator.Default.class, facetHolders)
+                .stream()
+                .map(TableDecoratorFacet::value)
+                .map(decoratorClass -> {
+                    val decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass, _Constants.emptyObjects);
+                    return facetHolders[0].injectServicesInto(decorator);
+                })
+                .findFirst();
     }
 
     // -- VALUE FACET

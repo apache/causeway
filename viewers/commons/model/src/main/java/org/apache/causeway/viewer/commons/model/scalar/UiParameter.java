@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -32,7 +31,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.NonNull;
-import lombok.val;
 
 public interface UiParameter extends UiScalar {
 
@@ -56,10 +54,10 @@ public interface UiParameter extends UiScalar {
 
     @Override
     default Optional<InteractionVeto> disabledReason() {
-        val vetoConsent = getParameterNegotiationModel().getUsabilityConsent(getParameterIndex());
-        return vetoConsent.getReason()!=null
-                ? Optional.of(InteractionVeto.readonly(vetoConsent))
-                : Optional.empty();
+        var usabilityConsent = getParameterNegotiationModel().getUsabilityConsent(getParameterIndex());
+        return usabilityConsent.isAllowed()
+                ? Optional.empty()
+                : Optional.of(InteractionVeto.readonly(usabilityConsent));
     }
 
     @Override
@@ -113,13 +111,13 @@ public interface UiParameter extends UiScalar {
     }
 
     @Override
-    default ObjectSpecification getScalarTypeSpec() {
+    default ObjectSpecification getElementType() {
         return getMetaModel().getElementType();
     }
 
     @Override
     default boolean hasObjectAutoComplete() {
-        return Facets.autoCompleteIsPresent(getScalarTypeSpec());
+        return Facets.autoCompleteIsPresent(getElementType());
     }
 
     default int getParameterIndex() {
@@ -139,11 +137,5 @@ public interface UiParameter extends UiScalar {
     default ActionInteractionHead getPendingParamHead() {
         return getMetaModel().getAction().interactionHead(getOwner());
     }
-
-    @Override
-    default MetaModelContext getMetaModelContext() {
-        return getMetaModel().getMetaModelContext();
-    }
-
 
 }

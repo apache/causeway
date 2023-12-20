@@ -140,7 +140,7 @@ class ComparatorsTest {
     }
 
     private static void assertThatSorting(final Collection<String> input, final List<String> expected) {
-        final SortedSet<String> treeSet = new TreeSet<String>(_Comparators.deweyOrderComparator);
+        final SortedSet<String> treeSet = new TreeSet<String>(_Comparators.deweyOrderComparator());
         treeSet.addAll(input);
         assertEquals(expected, _Lists.newArrayList(treeSet));
     }

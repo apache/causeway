@@ -52,6 +52,7 @@ import lombok.val;
                 Configuration_usingJpa.class,
         },
         properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaNonGeneratedStringIdEntityLifecycleTest",
         })
 @Transactional
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
@@ -77,7 +78,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED_WITH_OID,
+                EntityState.TRANSIENT_OR_REMOVED,
                 MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
@@ -91,7 +92,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         repository.persist(entity.getPojo());
 
         assertEquals(
-                EntityState.PERSISTABLE_ATTACHED,
+                EntityState.ATTACHED,
                 MmEntityUtils.getEntityState(entity));
         assertEquals(1, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
 
@@ -102,7 +103,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED_WITH_OID,
+                EntityState.DETACHED,
                 MmEntityUtils.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityNonGeneratedStringId)getEntityRef().getPojo()).getName();
@@ -115,13 +116,15 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         // expected pre-condition (before removal)
         assertEquals(
-                EntityState.PERSISTABLE_ATTACHED,
+                EntityState.ATTACHED,
                 MmEntityUtils.getEntityState(entity));
 
         repository.remove(entity.getPojo());
 
         // expected post-condition (after removal)
-        assertTrue(MmEntityUtils.isDeleted(entity));
+        assertEquals(
+                EntityState.TRANSIENT_OR_REMOVED,
+                MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
     }
@@ -131,7 +134,9 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         val entity = getEntityRef();
 
-        assertTrue(MmEntityUtils.isDeleted(entity));
+        assertEquals(
+                EntityState.REMOVED,
+                MmEntityUtils.getEntityState(entity));
         assertEquals(0, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
 
     }

@@ -24,7 +24,7 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -40,8 +40,8 @@ import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFac
 import org.apache.causeway.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -63,7 +63,6 @@ extends FacetFactoryAbstract {
         processRestrictTo(processMethodContext, actionIfAny);
         processSemantics(processMethodContext, actionIfAny);
 
-
         // must come after processing semantics
         processCommandPublishing(processMethodContext, actionIfAny);
 
@@ -80,8 +79,8 @@ extends FacetFactoryAbstract {
         return processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         Action.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
+                        () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Action.class));
     }
 
     void processExplicit(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
@@ -102,14 +101,18 @@ extends FacetFactoryAbstract {
                 || actionIfAny.isPresent();
 
         try {
+
+            val typeSpec = getSpecificationLoader().loadSpecification(processMethodContext.getCls());
+            if(typeSpec==null) {
+                return;
+            }
+
             val returnType = actionMethod.getReturnType();
             val returnSpec = getSpecificationLoader().loadSpecification(returnType);
             if (returnSpec == null) {
                 return;
             }
 
-            val cls = processMethodContext.getCls();
-            val typeSpec = getSpecificationLoader().loadSpecification(cls);
             val holder = processMethodContext.getFacetHolder();
 
             //
@@ -198,27 +201,26 @@ extends FacetFactoryAbstract {
 
         // check for @Action(executionPublishing=...)
         addFacetIfPresent(
-                ExecutionPublishingActionFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), facetedMethod));        // check for @Action(executionPublishing=...)
+                ExecutionPublishingFacetForActionAnnotation
+                .create(actionIfAny, getConfiguration(), facetedMethod));
 
 
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        val cls = processMethodContext.getCls();
         val method = processMethodContext.getMethod();
         val facetedMethod = processMethodContext.getFacetHolder();
 
         val methodReturnType = method.getReturnType();
 
-        ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnType)
+        CollectionSemantics.valueOf(methodReturnType)
         .ifPresent(collectionType->{
             addFacetIfPresent(
                     TypeOfFacetForActionAnnotation.create(actionIfAny, collectionType, facetedMethod)
                     .or(
                         // else infer from generic type arg if any
-                        ()->TypeOfFacet.inferFromMethodReturnType(cls, method, facetedMethod)
+                        ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod)
                         ));
 
         });

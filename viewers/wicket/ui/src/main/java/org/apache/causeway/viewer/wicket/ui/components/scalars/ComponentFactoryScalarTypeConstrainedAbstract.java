@@ -26,8 +26,6 @@ import lombok.Getter;
 public abstract class ComponentFactoryScalarTypeConstrainedAbstract
 extends ComponentFactoryScalarAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     /**
      * Provides discrimination based on {@link ScalarModel#isScalarTypeAnyOf(Can)}.
      * <p>

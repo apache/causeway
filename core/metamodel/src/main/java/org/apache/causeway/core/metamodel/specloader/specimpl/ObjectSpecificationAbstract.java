@@ -18,20 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
@@ -47,6 +51,7 @@ import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -56,17 +61,17 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
@@ -151,7 +156,7 @@ implements ObjectSpecification {
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
 
     /** not API, used for validation */
-    @Getter private final Set<Method> potentialOrphans = _Sets.newHashSet();
+    @Getter private final Set<ResolvedMethod> potentialOrphans = _Sets.newHashSet();
 
     // defensive immutable lazy copy of objectActions
     private final _Lazy<Can<ObjectAction>> unmodifiableActions =
@@ -186,6 +191,7 @@ implements ObjectSpecification {
     private ValueFacet valueFacet;
     private EntityFacet entityFacet;
     private ViewModelFacet viewmodelFacet;
+    private MixinFacet mixinFacet;
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
     private NavigableParentFacet navigableParentFacet;
@@ -264,36 +270,32 @@ implements ObjectSpecification {
         switch (introspectionState) {
         case NOT_INTROSPECTED:
             if(isLessThan(upTo)) {
-                // set to avoid infinite loops
-                this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
-                introspectTypeHierarchy();
-                invalidateCachedFacets();
-                this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
+                introspectType();
             }
             if(isLessThan(upTo)) {
-                this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
-                introspectMembers();
-                this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
+                introspectFully();
                 revalidate = true;
             }
             // set to avoid infinite loops
             break;
+
         case TYPE_BEING_INTROSPECTED:
-            // nothing to do
+            // nothing to do (interim state during introspectType)
             break;
+
         case TYPE_INTROSPECTED:
             if(isLessThan(upTo)) {
-                // set to avoid infinite loops
-                this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
-                introspectMembers();
-                this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
+                introspectFully();
                 revalidate = true;
             }
             break;
+
         case MEMBERS_BEING_INTROSPECTED:
-            // nothing to do
+            // nothing to do (interim state during introspectully)
+            break;
+
         case FULLY_INTROSPECTED:
-            // nothing to do
+            // nothing to do ... all done
             break;
 
         default:
@@ -303,6 +305,26 @@ implements ObjectSpecification {
         if(revalidate) {
             getSpecificationLoader().validateLater(this);
         }
+    }
+
+    private void introspectType() {
+
+        // set to avoid infinite loops
+        this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
+        introspectTypeHierarchy();
+        invalidateCachedFacets();
+        this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
+    }
+
+    private void introspectFully() {
+
+        // set to avoid infinite loops
+        this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
+        introspectMembers();
+        this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
+
+        // make sure we've loaded the facets from layout.xml also.
+        Facets.gridPreload(this, null);
     }
 
     boolean isLessThan(final IntrospectionState upTo) {
@@ -353,8 +375,8 @@ implements ObjectSpecification {
         this.directSubclasses.addSubclass(subclass);
     }
 
-    protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
-        val orderedAssociations = MemberSortingUtils.sortAssociations(associations);
+    protected final void replaceAssociations(final Stream<ObjectAssociation> associations) {
+        val orderedAssociations = _MemberSortingUtils.sortAssociationsIntoList(associations);
         synchronized (unmodifiableAssociations) {
             this.associations.clear();
             this.associations.addAll(orderedAssociations);
@@ -362,8 +384,8 @@ implements ObjectSpecification {
         }
     }
 
-    protected void sortCacheAndUpdateActions(final List<ObjectAction> objectActions) {
-        val orderedActions = MemberSortingUtils.sortActions(objectActions);
+    protected final void replaceActions(final Stream<ObjectAction> objectActions) {
+        val orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
         synchronized (unmodifiableActions){
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);
@@ -373,7 +395,7 @@ implements ObjectSpecification {
             for (val actionType : ActionScope.values()) {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
-                objectActions.stream()
+                orderedActions.stream()
                 .filter(ObjectAction.Predicates.ofActionType(actionType))
                 .forEach(objectActionForType::add);
             }
@@ -397,6 +419,15 @@ implements ObjectSpecification {
     @Override
     public final Optional<ValueFacet> valueFacet() {
         return Optional.ofNullable(valueFacet);
+    }
+
+    @Override
+    public final Optional<MixinFacet> mixinFacet() {
+        // deliberately don't memoize lookup misses, because could be too early
+        if(mixinFacet==null) {
+            mixinFacet = getFacet(MixinFacet.class);
+        }
+        return Optional.ofNullable(mixinFacet);
     }
 
     @Override
@@ -462,19 +493,20 @@ implements ObjectSpecification {
     }
 
     @Override
+    public Optional<FontAwesomeLayers> getFaLayers(final ManagedObject reference){
+        return lookupFacet(FaFacet.class)
+                .map(FaFacet::getSpecialization)
+                .map(either->either.fold(
+                        faStaticFacet->(FaLayersProvider)faStaticFacet,
+                        faImperativeFacet->faImperativeFacet.getFaLayersProvider(reference)))
+                .map(FaLayersProvider::getLayers);
+    }
+
+    @Override
     public Can<LogicalType> getAliases() {
         return aliasedFacet != null
                 ? aliasedFacet.getAliases()
                 : Can.empty();
-    }
-
-    @Override
-    public Optional<CssClassFaFactory> getCssClassFaFactory() {
-        return lookupFacet(CssClassFaFacet.class)
-        .map(CssClassFaFacet::getSpecialization)
-        // assuming CssClassFaFacet on objects are always 'static' not 'imperative'
-        .flatMap(either->either.left())
-        .map(CssClassFaFactory.class::cast);
     }
 
     // -- HIERARCHICAL
@@ -505,7 +537,7 @@ implements ObjectSpecification {
     @Override
     public String getSingularName() {
         return lookupFacet(ObjectNamedFacet.class)
-            .flatMap(textFacet->textFacet.translated(NounForm.SINGULAR))
+            .flatMap(textFacet->textFacet.translated())
             // unexpected code reach, however keep for JUnit testing
             .orElseGet(()->String.format(
                     "(%s has neither title- nor object-named-facet)",
@@ -533,6 +565,11 @@ implements ObjectSpecification {
         return helpFacet == null ? null : helpFacet.value();
     }
 
+    @Override
+    public final Optional<Contributing> contributing() {
+        return mixinFacet()
+                .map(MixinFacet::contributing);
+    }
 
     // -- FACET HANDLING
 
@@ -665,7 +702,7 @@ implements ObjectSpecification {
         if(_Strings.isEmpty(memberId)) {
             return Optional.empty();
         }
-        
+
         val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
@@ -680,11 +717,11 @@ implements ObjectSpecification {
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
-        
+
         if(_Strings.isEmpty(id)) {
             return Optional.empty();
         }
-        
+
         return streamDeclaredAssociations(mixedIn)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
@@ -710,96 +747,82 @@ implements ObjectSpecification {
     }
 
     // -- mixin associations (properties and collections)
-
-    private void createMixedInAssociations(final Consumer<ObjectAssociation> onNewMixedInAssociation) {
+    /**
+     * Creates all mixed in properties and collections for this spec.
+     */
+    private Stream<ObjectAssociation> createMixedInAssociations() {
         if (isInjectable() || isValue()) {
-            return;
+            return Stream.empty();
         }
-        val mixinTypes = getCausewayBeanTypeRegistry().getMixinTypes();
-        if(_NullSafe.isEmpty(mixinTypes)) {
-            return;
-        }
-        for (val mixinType : mixinTypes.keySet()) {
-            forEachMixedInAssociation(mixinType, onNewMixedInAssociation);
-        }
+        return getCausewayBeanTypeRegistry().streamMixinTypes()
+                .flatMap(this::createMixedInAssociation);
     }
 
-    private void forEachMixedInAssociation(
-            final Class<?> mixinType,
-            final Consumer<ObjectAssociation> onNewMixedInAssociation) {
+    private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
 
-        val specification = getSpecificationLoader().loadSpecification(mixinType,
+        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
-        if (specification == this) {
-            return;
+        if (mixinSpec == null
+                || mixinSpec == this) {
+            return Stream.empty();
         }
-        val mixinFacet = specification.getFacet(MixinFacet.class);
+        val mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null) {
-            // this shouldn't happen; perhaps it would be more correct to throw an exception?
-            return;
+            // this shouldn't happen; to be covered by meta-model validation later
+            return Stream.empty();
         }
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
-            return;
+            return Stream.empty();
         }
-        val mixinMethodName = mixinFacet.value();
+        val mixinMethodName = mixinFacet.getMainMethodName();
 
-        specification.streamActions(ActionScope.ANY, MixedIn.INCLUDED)
+        return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
         .filter(_SpecPredicates::isMixedInAssociation)
         .map(ObjectActionDefault.class::cast)
         .map(_MixedInMemberFactory.mixedInAssociation(this, mixinType, mixinMethodName))
-        .peek(facetProcessor::processMemberOrder)
-        .forEach(onNewMixedInAssociation);
-
+        .peek(facetProcessor::processMemberOrder);
     }
-
 
     // -- mixin actions
     /**
      * Creates all mixed in actions for this spec.
      */
-    private void createMixedInActions(final Consumer<ObjectAction> onNewMixedInAction) {
-        val mixinTypes = getCausewayBeanTypeRegistry().getMixinTypes();
-        if(_NullSafe.isEmpty(mixinTypes)) {
-            return;
-        }
-        for (val mixinType : mixinTypes.keySet()) {
-            forEachMixedInAction(mixinType, onNewMixedInAction);
-        }
+    private Stream<ObjectActionMixedIn> createMixedInActions() {
+        return getCausewayBeanTypeRegistry().streamMixinTypes()
+            .flatMap(this::createMixedInAction);
     }
 
-    private void forEachMixedInAction(
-            final Class<?> mixinType,
-            final Consumer<ObjectAction> onNewMixedInAction) {
+    private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
         val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
-        if (mixinSpec == this) {
-            return;
+        if (mixinSpec == null
+                || mixinSpec == this) {
+            return Stream.empty();
         }
-        val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
+        val mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null) {
-            // this shouldn't happen; perhaps it would be more correct to throw an exception?
-            return;
+            // this shouldn't happen; to be covered by meta-model validation later
+            return Stream.empty();
         }
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
-            return;
+            return Stream.empty();
         }
         // don't mixin Object_ mixins to domain services
         if(getBeanSort().isManagedBeanContributing()
                 && mixinFacet.isMixinFor(java.lang.Object.class)) {
-            return;
+            return Stream.empty();
         }
 
-        val mixinMethodName = mixinFacet.value();
+        val mixinMethodName = mixinFacet.getMainMethodName();
 
-        mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
+        return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
         // value types only support constructor mixins
         .filter(this::whenIsValueThenIsAlsoConstructorMixin)
         .filter(_SpecPredicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
         .map(_MixedInMemberFactory.mixedInAction(this, mixinType, mixinMethodName))
-        .peek(facetProcessor::processMemberOrder)
-        .forEach(onNewMixedInAction);
+        .peek(facetProcessor::processMemberOrder);
     }
 
     /**
@@ -869,25 +892,50 @@ implements ObjectSpecification {
      * one-shot: must be no-op, if already created
      */
     private void createMixedInActionsAndResort() {
-        val newActions = _Lists.newArrayList(objectActions);
-        if (isEntityOrViewModelOrAbstract()
+        val include = isEntityOrViewModelOrAbstract()
                 || getBeanSort().isManagedBeanContributing()
                 // in support of composite value-type constructor mixins
-                || getBeanSort().isValue()) {
-            createMixedInActions(newActions::add);
+                || getBeanSort().isValue();
+        if(!include) {
+            return;
         }
-        sortCacheAndUpdateActions(newActions);
+        val mixedInActions = createMixedInActions()
+                .collect(Collectors.toList());
+        if(mixedInActions.isEmpty()) {
+           return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
+        }
+
+        val regularActions = _Lists.newArrayList(objectActions); // defensive copy
+
+        // note: we are doing this before any member sorting
+        _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions);
+
+        replaceActions(Stream.concat(
+                regularActions.stream(),
+                mixedInActions.stream()));
     }
 
     /**
      * one-shot: must be no-op, if already created
      */
     private void createMixedInAssociationsAndResort() {
-        val newAssociations = _Lists.newArrayList(associations);
-        if(isEntityOrViewModelOrAbstract()) {
-            createMixedInAssociations(newAssociations::add);
+        if(!isEntityOrViewModelOrAbstract()) {
+            return;
         }
-        sortAndUpdateAssociations(newAssociations);
+        val mixedInAssociations = createMixedInAssociations()
+                .collect(Collectors.toList());
+        if(mixedInAssociations.isEmpty()) {
+           return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
+        }
+
+        val regularAssociations = _Lists.newArrayList(associations); // defensive copy
+
+        // note: we are doing this before any member sorting
+        _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations);
+
+        replaceAssociations(Stream.concat(
+                regularAssociations.stream(),
+                mixedInAssociations.stream()));
     }
 
     @Getter(lazy = true)

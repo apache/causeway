@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.app.registry;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
@@ -104,5 +106,12 @@ public interface ComponentFactoryRegistry {
      * If none can be found, will fail fast.
      */
     Component createComponent(String id, UiComponentType uiComponentType, IModel<?> model);
+
+    <T extends ComponentFactory> Optional<T> lookupFactory(Class<T> factoryClass);
+    default <T extends ComponentFactory> T lookupFactoryElseFail(final Class<T> factoryClass) {
+        return lookupFactory(factoryClass)
+            .orElseThrow(()->
+                new NoSuchElementException("Could not locate component factory of type '" + factoryClass + "'"));
+    }
 
 }

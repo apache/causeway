@@ -61,13 +61,13 @@ implements ExceptionRecognizer {
     private final boolean disabled;
 
     @Inject
-    public ExceptionRecognizerForDataAccessException(CausewayConfiguration conf) {
+    public ExceptionRecognizerForDataAccessException(final CausewayConfiguration conf) {
         this.disabled = conf.getCore().getRuntimeServices()
               .getExceptionRecognizer().getDae().isDisable();
     }
 
     @Override
-    public Optional<Recognition> recognize(Throwable ex) {
+    public Optional<Recognition> recognize(final Throwable ex) {
         if(ex instanceof DataAccessException
                 && !isDisabled()) {
             return recognizeDae((DataAccessException)ex);
@@ -77,7 +77,7 @@ implements ExceptionRecognizer {
 
     // -- HELPER
 
-    private Optional<Recognition> recognizeDae(DataAccessException ex) {
+    private Optional<Recognition> recognizeDae(final DataAccessException ex) {
         if(ex instanceof ConcurrencyFailureException) {
             return recognitionOf(Category.CONCURRENCY, ex);
 
@@ -102,10 +102,10 @@ implements ExceptionRecognizer {
         return recognitionOf(Category.OTHER, ex);
     }
 
-    private Optional<Recognition> recognitionOf(Category category, DataAccessException ex) {
+    private Optional<Recognition> recognitionOf(final Category category, final DataAccessException ex) {
         val causeMessage = _Strings.nullToEmpty(ex.getMostSpecificCause().getMessage()).trim();
 
-        val exceptionFriendlyName = _Strings.asNaturalName2
+        val exceptionFriendlyName = _Strings.asNaturalName
                 .apply(ex.getClass().getSimpleName())
                 .toLowerCase();
 

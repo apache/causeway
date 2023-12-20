@@ -30,6 +30,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.exceptions.recoverable;
     exports org.apache.causeway.applib.exceptions.unrecoverable;
     exports org.apache.causeway.applib.exceptions;
+    exports org.apache.causeway.applib.fa;
     exports org.apache.causeway.applib.graph.tree;
     exports org.apache.causeway.applib.graph;
     exports org.apache.causeway.applib.id;
@@ -57,6 +58,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.bookmark;
     exports org.apache.causeway.applib.services.bookmarkui;
     exports org.apache.causeway.applib.services.clock;
+    exports org.apache.causeway.applib.services.columnorder;
     exports org.apache.causeway.applib.services.command;
     exports org.apache.causeway.applib.services.commanddto.conmap;
     exports org.apache.causeway.applib.services.commanddto.processor.spi;
@@ -85,6 +87,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.menu;
     exports org.apache.causeway.applib.services.message;
     exports org.apache.causeway.applib.services.metamodel;
+    exports org.apache.causeway.applib.services.metamodel.objgraph;
     exports org.apache.causeway.applib.services.metrics;
     exports org.apache.causeway.applib.services.placeholder;
     exports org.apache.causeway.applib.services.publishing.log;

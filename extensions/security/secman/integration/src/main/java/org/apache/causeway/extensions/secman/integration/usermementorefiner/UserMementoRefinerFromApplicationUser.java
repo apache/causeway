@@ -28,6 +28,7 @@ import org.apache.causeway.core.security.authentication.manager.UserMementoRefin
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service
 //@Log4j2
@@ -38,15 +39,22 @@ public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner
 
     @Override
     public UserMemento refine(final UserMemento userMemento) {
-        return applicationUserRepositoryProvider.get().findByUsername(userMemento.getName())
-                .map(applicationUser ->
-                    userMemento.asBuilder()
-                    .multiTenancyToken(applicationUser.getAtPath())
-                    .languageLocale(applicationUser.getLanguage())
-                    .numberFormatLocale(applicationUser.getNumberFormat())
-                    .timeFormatLocale(applicationUser.getTimeFormat())
-                    .build()
-                )
-                .orElse(userMemento);
+        val applicationUserIfAny = applicationUserRepositoryProvider.get().findByUsername(userMemento.getName());
+        if (applicationUserIfAny.isEmpty()) {
+            return userMemento;
+        }
+        val applicationUser = applicationUserIfAny.get();
+
+        UserMemento refinedUserMemento =
+                userMemento.withMultiTenancyToken(applicationUser.getAtPath())
+                           .withLanguageLocale(applicationUser.getLanguage())
+                           .withNumberFormatLocale(applicationUser.getNumberFormat())
+                           .withTimeFormatLocale(applicationUser.getTimeFormat());
+
+        for (val role : applicationUser.getRoles()) {
+            refinedUserMemento = refinedUserMemento.withRoleAdded(role.getName());
+        }
+
+        return refinedUserMemento;
     }
 }

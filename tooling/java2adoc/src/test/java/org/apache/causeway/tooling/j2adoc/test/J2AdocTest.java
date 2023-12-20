@@ -29,12 +29,12 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
-import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocWriter;
 
 import guru.nidi.codeassert.config.Language;
 import lombok.NonNull;
@@ -97,8 +97,8 @@ class J2AdocTest {
         names.forEach(System.out::println);
     }
 
-    private void parseAdoc(final @NonNull File file, Consumer<String> onName) {
-        val lines = _Text.readLinesFromFile(file, StandardCharsets.UTF_8);
+    private void parseAdoc(final @NonNull File file, final Consumer<String> onName) {
+        val lines = TextUtils.readLinesFromFile(file, StandardCharsets.UTF_8);
 
         ExampleReferenceFinder.find(
                 lines,

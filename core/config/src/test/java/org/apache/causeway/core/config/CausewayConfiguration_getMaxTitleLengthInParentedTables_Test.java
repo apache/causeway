@@ -28,7 +28,7 @@ class CausewayConfiguration_getMaxTitleLengthInParentedTables_Test {
 
     @BeforeEach
     void setUp() throws Exception {
-        configuration = new CausewayConfiguration(null);
+        configuration = CausewayConfiguration.builder().build();
     }
 
     @Test

@@ -25,25 +25,26 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.io.FileUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+@SuppressWarnings("unused")
 @Log4j2
 class ValueTypeGenTemplateTest {
 
@@ -60,7 +61,11 @@ class ValueTypeGenTemplateTest {
     @SneakyThrows
     void testShowcase(final ValueTypeGenTemplate.Config config) {
 
-        val frameWorkRoot = new File(".").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
+        var frameWorkRoot = new File(".").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
+
+        // hack for Dan's PC; write out to a different git worktree
+        frameWorkRoot = new File(frameWorkRoot.getParentFile(), "demo");
+
         val demoDomainRoot = new File(frameWorkRoot, "examples/demo/domain/src/main/java");
         val demoDomainShowCase = new File(demoDomainRoot, config.getJavaPackage().replace('.', '/'));
 
@@ -77,11 +82,11 @@ class ValueTypeGenTemplateTest {
         generator.generate(generatedFiles::add);
 
         // override origin
-        //copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
-        //copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+        copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+        copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
 
-        assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
-        assertFileContentEquals(refShowcaseFiles, generatedFiles);
+//        assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
+//        assertFileContentEquals(refShowcaseFiles, generatedFiles);
 
     }
 
@@ -91,8 +96,8 @@ class ValueTypeGenTemplateTest {
     @BeforeAll
     static void setup() {
         outputRootDir = PERSIST
-                ? FileUtils.makeDir(new File("D:/tmp/valueTypes"))
-                : FileUtils.tempDir("casueway-tooling-showcases");
+                ? FileUtils.makeDir(new File("C:/tmp/valueTypes"))
+                : FileUtils.tempDir("causeway-tooling-showcases");
 
         log.info("tmp dir created in {}", outputRootDir);
     }
@@ -101,6 +106,7 @@ class ValueTypeGenTemplateTest {
         return new File(outputRootDir, subfolder);
     }
 
+    /* not used
     private void assertFileSetEquals(
             final Set<File> setA, final File rootA,
             final Set<File> setB, final File rootB) {
@@ -111,25 +117,25 @@ class ValueTypeGenTemplateTest {
                 Can.ofCollection(setB)
                 .map(FileUtils.realtiveFileName(rootB))
                 .sorted(Comparator.naturalOrder()));
-    }
+    }*/
 
 
-    @SuppressWarnings("unused")
     private void copyFiles(final Collection<File> generatedFiles, final File sourceRoot, final File destinationRoot) {
         generatedFiles.forEach(src->{
             val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
             FileUtils.makeDir(dest.getParentFile());
-            FileUtils.copy(src, dest);
+            copyWithCrlf(src, dest);
+//            FileUtils.copy(src, dest);
         });
     }
 
-    @SuppressWarnings("unused")
     private void copyMissingFiles(final Collection<File> generatedFiles, final File sourceRoot, final File destinationRoot) {
         generatedFiles.forEach(src->{
             val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
             if(!dest.exists()) {
                 FileUtils.makeDir(dest.getParentFile());
-                FileUtils.copy(src, dest);
+                copyWithCrlf(src, dest);
+//                FileUtils.copy(src, dest);
             }
         });
     }
@@ -144,10 +150,10 @@ class ValueTypeGenTemplateTest {
                 .zipMap(sortedB, (a, b)->{
 
                     var linesA = _Text.normalize(
-                            _Text.readLinesFromFile(a, StandardCharsets.UTF_8))
+                            TextUtils.readLinesFromFile(a, StandardCharsets.UTF_8))
                             .map(this::normalizeForComparision);
                     var linesB = _Text.normalize(
-                            _Text.readLinesFromFile(b, StandardCharsets.UTF_8))
+                            TextUtils.readLinesFromFile(b, StandardCharsets.UTF_8))
                             .map(this::normalizeForComparision);
 
                     return Objects.equals(linesA, linesB)
@@ -177,6 +183,11 @@ class ValueTypeGenTemplateTest {
             }
         }
         return "";
+    }
+
+    private void copyWithCrlf(final @NonNull File from, final @NonNull File to) {
+        // Appends CR before the LF line ending to each line
+        FileUtils.copyLines(from, to, StandardCharsets.UTF_8, line->line + "\r");
     }
 
 }

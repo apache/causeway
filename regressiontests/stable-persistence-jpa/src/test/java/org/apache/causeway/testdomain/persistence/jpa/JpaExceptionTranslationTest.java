@@ -20,8 +20,6 @@ package org.apache.causeway.testdomain.persistence.jpa;
 
 import java.sql.SQLException;
 
-import jakarta.inject.Inject;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,9 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
-import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 
 import lombok.val;
@@ -44,15 +41,15 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-        })
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest",
+        }
+)
 @TestPropertySources({
     @TestPropertySource(CausewayPresets.UseLog4j2Test)
 })
-//@Transactional ... we manage transaction ourselves
-//@DirtiesContext
-class JpaExceptionTranslationTest extends RegressionTestAbstract {
-
-    @Inject private JpaTestFixtures testFixtures;
+class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -62,7 +59,6 @@ class JpaExceptionTranslationTest extends RegressionTestAbstract {
 
     @Test
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
-
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
@@ -104,7 +100,5 @@ class JpaExceptionTranslationTest extends RegressionTestAbstract {
             testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
         });
 
-
     }
-
 }

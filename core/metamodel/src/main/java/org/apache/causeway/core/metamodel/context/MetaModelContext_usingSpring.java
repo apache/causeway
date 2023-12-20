@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
@@ -57,11 +56,19 @@ import lombok.Getter;
 import lombok.val;
 
 
-class MetaModelContext_usingSpring implements MetaModelContext {
+class MetaModelContext_usingSpring extends MetaModelContext {
 
     private final _IocContainer iocContainer;
     public MetaModelContext_usingSpring(final _IocContainer iocContainer) {
         this.iocContainer = iocContainer;
+    }
+
+    /**
+     * Called by Spring as instructed by bean declaration
+     * {@link MetaModelContextFactory#metaModelContext(CausewaySystemEnvironment)}.
+     */
+    void onDestroy() {
+        MetaModelContext.clear();
     }
 
     @Getter(lazy=true)
@@ -99,10 +106,6 @@ class MetaModelContext_usingSpring implements MetaModelContext {
     @Getter(lazy=true)
     private final AuthenticationManager authenticationManager =
     getSingletonElseFail(AuthenticationManager.class);
-
-    @Getter(lazy=true)
-    private final InteractionProvider interactionProvider =
-    getSingletonElseFail(InteractionProvider.class);
 
     @Getter(lazy=true)
     private final ObjectIconService objectIconService =

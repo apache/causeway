@@ -18,19 +18,29 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.recreatable;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.lang.Nullable;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.ViewModel;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
 
 class RecreatableObjectFacetFactoryTest
 extends FacetFactoryTestAbstract {
@@ -47,10 +57,17 @@ extends FacetFactoryTestAbstract {
         facetFactory = null;
     }
 
-    static class Customer implements ViewModel {
+    // public, so org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface
+    // can reflectively access it for the roundtrip below
+    public static class Customer implements ViewModel {
+
+        public Customer(final String memento) { setName(memento);}
+
+        @Getter @Setter
+        private String name;
+
         @Override
-        public String viewModelMemento() { return null; }
-        public Customer(final String memento) { }
+        public String viewModelMemento() { return name; }
     }
 
     @Test
@@ -60,12 +77,32 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof ViewModelFacetForViewModelInterface);
+            final ViewModelFacet viewModelFacet = facetHolder.getFacet(ViewModelFacet.class);
+            assertNotNull(viewModelFacet);
+            assertTrue(viewModelFacet instanceof ViewModelFacetForViewModelInterface);
 
             assertNoMethodsRemoved();
+
+            // do a little roundtrip test
+            {
+                val customerPojo = new Customer("Hallo World!:/?|");
+                assertFalse(isUrlSafeChunk(customerPojo.viewModelMemento()));
+
+                val customer = facetFactory.getObjectManager().adapt(customerPojo);
+                val customerBookmark = viewModelFacet.serializeToBookmark(customer);
+
+                val customerRecreated = viewModelFacet.instantiate(
+                        customer.getSpecification(), Optional.of(customerBookmark));
+
+                assertEquals(customerPojo.getName(), ((Customer)(customerRecreated.getPojo())).getName());
+            }
+
         });
+    }
+
+    private static boolean isUrlSafeChunk(final @Nullable String urlChunck) {
+        if(_Strings.isEmpty(urlChunck)) return true;
+        return UrlUtils.urlEncodeUtf8(urlChunck).equals(urlChunck);
     }
 
 }

@@ -25,14 +25,16 @@ import java.util.Optional;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.apache.causeway.applib.annotation.CollectionLayout;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.val;
@@ -40,28 +42,52 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides a simple mechanism to order the columns of both parented and standalone collections by reading a flat
- * file containing the list of the properties in the desired order, one propertyId per line.
+ * file containing the list of the associations (usually properties, but collections are also supported), in the
+ * desired order, one associationId per line.
  *
  * <p>
- * The files are located relative to the class itself.  For parented collections, the file is named
- * <i>ParentClassName#collectionId.columnOrder.txt</i>, while for standalone collections, the file is named
- * <i>ClassName.columnOrder.txt</i>.
- * </p>
+ * The files are located relative to the class itself.  A number of conventions are supported:
+ *
+ * <ul>
+ *     <li>
+ *         for parented collections:
+ *         <ul>
+ *             <li> <code>ParentClassName#collectionId.columnOrder.txt</code> </li>
+ *             <li> <code>ParentClassName#collectionId.columnOrder.fallback.txt</code> </li>
+ *             <li> <code>ParentClassName#_.ElementTypeClassName.columnOrder.txt</code>
+ *             <p>
+ *                 (where '_' is a wildcard for any collection of the element type
+ *             </p>
+ *             </li>
+ *             <li> <code>ParentClassName#_.ElementTypeClassName.columnOrder.fallback.txt</code></li>
+ *             <li> <code>ElementTypeClassName.columnOrder.txt</code></li>
+ *             <li> <code>ElementTypeClassName.columnOrder.fallback.txt</code></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         for standalone collections:
+ *         <ul>
+ *             <li> <code>DomainTypeClassName.columnOrder.txt</code></li>
+ *             <li> <code>DomainTypeClassName.columnOrder.fallback.txt</code></li>
+ *         </ul>
+ *     </li>
+ * </ul>
  *
  * <p>
- * Any properties omitted from the file will not be shown as columns of the table.  The propertyId must also
+ * Any associations omitted from the file will not be shown as columns of the table.  The associationId must also
  * be an exact match, so can be ignored by commenting out, eg with &quot;#&quot;.
  * </p>
  *
  * <p>
- *     Also note that properties that have been explicitly hidden from tables using
- *     {@link PropertyLayout#hidden() @PropertyLayout#hidden} are never shown, irrespective of whether they are listed
- *     in the files.  You may therefore prefer to <i>not</i> hide properties with annotations, and then rely solely
- *     on these external <i>columnOrder.txt</i> files.  This has the further benefit that files can be modified at
- *     runtime and will be automatically picked up without requiring a restart of the application.
+ *     Also note that association that have been explicitly hidden from tables using
+ *     {@link PropertyLayout#hidden() @PropertyLayout#hidden} or {@link CollectionLayout#hidden()} are never shown,
+ *     irrespective of whether they are listed in the files.  You may therefore prefer to <i>not</i> hide properties
+ *     with annotations, and then rely solely on these external <i>columnOrder.txt</i> files.  This has the further
+ *     benefit that files can be modified at runtime and will be automatically picked up without requiring a restart
+ *     of the application.
  * </p>
  *
- * @since 1.x {@index}
+ * @since 2.x {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceUsingTxtFile")
@@ -71,35 +97,48 @@ import lombok.extern.log4j.Log4j2;
 public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderService {
 
     /**
-     * Reads propertyIds of the collection from a file named <i>ClassName#collectionId.columnOrder.txt</i>. relative
-     * to the class itself.
+     * Reads association Ids of the parented collection from a file.
      *
      * <p>
-     * Additional files can be provided by overriding {@link #addResourceNames(Class, String, List)}.
+     * The search algorithm is:
+     * <ul>
+     *     <li> <code>ParentClassName#collectionId.columnOrder.txt</code> </li>
+     *     <li> <code>ParentClassName#collectionId.columnOrder.fallback.txt</code> </li>
+     *     <li> <code>ParentClassName#_.ElementTypeClassName.columnOrder.txt</code>
+     *     <p>
+     *         (where '_' is a wildcard for any collection of the element type
+     *     </p>
+     *     </li>
+     *     <li> <code>ParentClassName#_.ElementTypeClassName.columnOrder.fallback.txt</code></li>
+     *     <li> <code>ElementTypeClassName.columnOrder.txt</code></li>
+     *     <li> <code>ElementTypeClassName.columnOrder.fallback.txt</code></li>
+     * </ul>
+     * </p>
+     *
+     * <p>
+         * Additional files can be provided by overriding {@link #addResourceNames(Class, String, Class, List)}
      * </p>
      */
     @Override
     public List<String> orderParented(
             final Object domainObject,
             final String collectionId,
-            final Class<?> collectionType,
-            final List<String> propertyIds) {
+            final Class<?> elementType,
+            final List<String> associationIds) {
 
         val domainClass = domainObject.getClass();
-        val resourceNames = buildResourceNames(domainClass, collectionId);
+        val resourceNames = buildResourceNames(domainClass, collectionId, elementType);
+        addResourceNames(elementType, resourceNames);   // fallback to reading the element type's own .txt file.
         val contentsIfAny = tryLoad(domainClass, resourceNames);
-        if(!contentsIfAny.isPresent()) {
-            return null;
-        }
-        val s = contentsIfAny.get();
-        return _Text.getLines(s)
-                .filter(propertyIds::contains)
-                .toList();
+        return contentsMatching(contentsIfAny, associationIds);
     }
 
-    private List<String> buildResourceNames(final Class<?> domainClass, final String collectionId) {
+    private List<String> buildResourceNames(
+            final Class<?> domainClass,
+            final String collectionId,
+            final Class<?> elementType) {
         val resourceNames = new ArrayList<String>();
-        addResourceNames(domainClass, collectionId, resourceNames);
+        addResourceNames(domainClass, collectionId, elementType, resourceNames);
         return resourceNames;
     }
 
@@ -117,8 +156,12 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     protected void addResourceNames(
             final Class<?> domainClass,
             final String collectionId,
+            final Class<?> elementType,
             final List<String> addTo) {
         addTo.add(String.format("%s#%s.columnOrder.txt", domainClass.getSimpleName(), collectionId));
+        addTo.add(String.format("%s#%s.columnOrder.fallback.txt", domainClass.getSimpleName(), collectionId));
+        addTo.add(String.format("%s#_.%s.columnOrder.txt", domainClass.getSimpleName(), elementType.getSimpleName()));
+        addTo.add(String.format("%s#_.%s.columnOrder.fallback.txt", domainClass.getSimpleName(), elementType.getSimpleName()));
     }
 
     private static Optional<String> tryLoad(final Class<?> domainClass, final List<String> resourceNames) {
@@ -140,8 +183,15 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     }
 
     /**
-     * Reads propertyIds of the standalone collection from a file named <i>ClassName.columnOrder.txt</i>, relative
-     * to the class itself.
+     * Reads associationIds of a standalone collection from a file.
+     *
+     * <p>
+     * The search algorithm is:
+     * <ul>
+     *     <li> <code>DomainTypeClassName.columnOrder.txt</code></li>
+     *     <li> <code>DomainTypeClassName.columnOrder.fallback.txt</code></li>
+     * </ul>
+     * </p>
      *
      * <p>
      * Additional files can be provided by overriding {@link #addResourceNames(Class, List)}.
@@ -149,17 +199,11 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
      */
     @Override
     public List<String> orderStandalone(
-            final Class<?> domainClass,
-            final List<String> propertyIds) {
-        val resourceNames = buildResourceNames(domainClass);
-        val contentsIfAny = tryLoad(domainClass, resourceNames);
-        if(!contentsIfAny.isPresent()) {
-            return null;
-        }
-        val s = contentsIfAny.get();
-        return _Text.getLines(s)
-                .filter(propertyIds::contains)
-                .toList();
+            final Class<?> domainType,
+            final List<String> associationIds) {
+        val resourceNames = buildResourceNames(domainType);
+        val contentsIfAny = tryLoad(domainType, resourceNames);
+        return contentsMatching(contentsIfAny, associationIds);
     }
 
     private List<String> buildResourceNames(final Class<?> domainClass) {
@@ -182,6 +226,16 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             final Class<?> domainClass,
             final List<String> addTo) {
         addTo.add(String.format("%s.columnOrder.txt", domainClass.getSimpleName()));
+        addTo.add(String.format("%s.columnOrder.fallback.txt", domainClass.getSimpleName()));
+    }
+
+    private static List<String> contentsMatching(
+            final Optional<String> contentsIfAny,
+            final List<String> associationIds) {
+        return contentsIfAny
+                .map(content -> TextUtils.readLines(content)
+                        .filter(associationIds::contains)
+                        .toList()).orElse(null);
     }
 
 }

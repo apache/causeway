@@ -23,13 +23,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Reduction;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
 
@@ -67,7 +67,7 @@ public final class ClassExtensions {
                             "Failed to call contructor for type %s trying, "
                                     + "args '%s' then trying no args.",
                                     extendee.getName(),
-                                    _Lists.of(constructorParamTypes).toString());
+                                    List.of(constructorParamTypes).toString());
                 }
             }
         } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {
@@ -86,12 +86,6 @@ public final class ClassExtensions {
 
     public static boolean isAbstract(final Class<?> extendee) {
         return Modifier.isAbstract(extendee.getModifiers());
-    }
-
-    public static boolean isJavaClass(final Class<?> extendee) {
-        final String className = extendee.getName();
-        return className.startsWith(ClassUtil.JAVA_CLASS_PREFIX) ||
-                extendee.getName().startsWith("sun.");
     }
 
     static Class<?> implementingClassOrNull(final Class<?> extendee, final Class<?> requiredClass, final Class<?> constructorParamType) {

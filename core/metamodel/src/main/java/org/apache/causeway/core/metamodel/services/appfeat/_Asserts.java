@@ -21,28 +21,31 @@ package org.apache.causeway.core.metamodel.services.appfeat;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 final class _Asserts {
 
-    public static void ensureNamespace(final ApplicationFeatureId feature) {
+    void assertIsNamespace(final ApplicationFeatureId feature) {
         if(feature.getSort() != ApplicationFeatureSort.NAMESPACE) {
             throw new IllegalStateException("Can only be called for a package; " + feature.toString());
         }
     }
 
-    public static void ensureNamespaceOrType(final ApplicationFeatureId applicationFeatureId) {
+    void assertIsNamespaceOrType(final ApplicationFeatureId applicationFeatureId) {
         if(applicationFeatureId.getSort() != ApplicationFeatureSort.NAMESPACE
                 && applicationFeatureId.getSort() != ApplicationFeatureSort.TYPE) {
             throw new IllegalStateException("Can only be called for a package or a class; " + applicationFeatureId.toString());
         }
     }
 
-    public static void ensureType(final ApplicationFeatureId feature) {
+    void assertIsType(final ApplicationFeatureId feature) {
         if(feature.getSort() != ApplicationFeatureSort.TYPE) {
             throw new IllegalStateException("Can only be called for a class; " + feature.toString());
         }
     }
 
-    public static void ensureMember(final ApplicationFeatureId feature) {
+    void assertIsMember(final ApplicationFeatureId feature) {
         if(feature.getSort() != ApplicationFeatureSort.MEMBER) {
             throw new IllegalStateException("Can only be called for a member; " + feature.toString());
         }

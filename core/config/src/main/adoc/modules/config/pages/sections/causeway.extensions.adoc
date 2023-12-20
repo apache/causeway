@@ -365,6 +365,17 @@ The exact set of permissions is hard-wired in the ``CausewayExtSecmanRegularUser
 
 
 |
+[[causeway.extensions.secman.seed.yaml-file]]
+causeway.extensions.secman.seed. +
+yaml-file
+
+| 
+| Path to local YAML file, if present, to use as an alternative seeding strategy.
+
+Eg. seed from a YAML file, that was previously exported by SecMan's ApplicationRoleManager_exportAsYaml mixin.
+
+
+|
 [[causeway.extensions.secman.user-menu-me-action-policy]]
 causeway.extensions.secman. +
 user-menu-me-action-policy

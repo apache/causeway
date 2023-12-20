@@ -173,7 +173,7 @@ public class PropertyNegotiationModel implements ManagedValue {
 
     // -- VISIBILITY
 
-    public boolean whetherHidden() {
+    public final boolean whetherHidden() {
         return managedProperty
                 .checkVisibility()
                 .isPresent();
@@ -181,7 +181,7 @@ public class PropertyNegotiationModel implements ManagedValue {
 
     // -- USABILITY
 
-    public Optional<InteractionVeto> disabledReason() {
+    public final Optional<InteractionVeto> disabledReason() {
         return managedProperty
                 .checkUsability();
     }

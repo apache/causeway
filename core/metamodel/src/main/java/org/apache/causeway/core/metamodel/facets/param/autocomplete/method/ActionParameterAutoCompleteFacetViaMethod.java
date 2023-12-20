@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.autocomplete.method;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -35,7 +36,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -46,14 +46,14 @@ extends ActionParameterAutoCompleteFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
-    private final TypeOfAnyCardinality paramSupportReturnType;
+    private final ResolvedType paramSupportReturnType;
     private final int minLength;
-    private final Optional<Constructor<?>> patConstructor;
+    private final Optional<ResolvedConstructor> patConstructor;
 
     public ActionParameterAutoCompleteFacetViaMethod(
-            final Method method,
-            final TypeOfAnyCardinality paramSupportReturnType,
-            final Optional<Constructor<?>> patConstructor,
+            final ResolvedMethod method,
+            final ResolvedType paramSupportReturnType,
+            final Optional<ResolvedConstructor> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
@@ -98,7 +98,7 @@ implements ImperativeFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("choicesType", paramSupportReturnType.getCollectionSemantics()
+        visitor.accept("choicesType", paramSupportReturnType.collectionSemantics()
                 .map(CollectionSemantics::name)
                 .orElse("NONE"));
         visitor.accept("minLength", minLength);

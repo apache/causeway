@@ -37,9 +37,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -82,7 +80,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
     private UUID interactionId;
 
-    public Command(UUID interactionId) {
+    public Command(final UUID interactionId) {
         this.interactionId = interactionId;
     }
 
@@ -295,19 +293,9 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
          * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
          * @param commandDto
          */
-        public void setCommandDto(final CommandDto commandDto) {
+        public void setCommandDtoAndIdentifier(final CommandDto commandDto) {
             Command.this.commandDto = commandDto;
-
-            // should be redundant, but we ensure commandInteractionId == dtoInteractionId
-            val commandInteractionId = Command.this.getInteractionId().toString();
-            val dtoInteractionId = commandDto.getInteractionId();
-
-            if(!commandInteractionId.equals(dtoInteractionId)) {
-                log.debug("setting CommandDto on a Command has side-effects if "
-                        + "their InteractionIds don't match; forcing CommandDto's Id to be same as Command's");
-                commandDto.setInteractionId(commandInteractionId);
-            }
-
+            Command.this.interactionId = UUID.fromString(commandDto.getInteractionId());
         }
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
@@ -358,13 +346,6 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
                 return; // don't ever change when phase is completed
             }
             Command.this.publishingPhase = publishingPhase;
-        }
-
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         */
-        public void setInteractionId(UUID interactionId) {
-            Command.this.interactionId = interactionId;
         }
     };
 

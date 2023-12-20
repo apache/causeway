@@ -23,7 +23,6 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
@@ -41,6 +40,7 @@ import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 
 import lombok.SneakyThrows;
 

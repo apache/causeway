@@ -28,6 +28,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -96,14 +97,30 @@ class CollectionInteractionTest extends InteractionTestAbstract {
 
     @Test
     void columns() {
+        testerFactory.getMetaModelContext().getConfiguration().getApplib().getAnnotation()
+            .getPropertyLayout().setSequencePolicyIfUnreferenced(
+                    AssociationLayoutConfigOptions.SequencePolicy.AS_PER_SEQUENCE);
 
         val tableTester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
                 .tableTester();
 
         tableTester.assertColumnNames(List.of("Name", "Date"));
-
     }
+
+    //@Test cannot figure out how to reload the grid after was loaded in previous test
+    void columns2() {
+        testerFactory.getMetaModelContext().getConfiguration().getApplib().getAnnotation()
+            .getPropertyLayout().setSequencePolicyIfUnreferenced(
+                    AssociationLayoutConfigOptions.SequencePolicy.ALPHABETICALLY);
+
+        val tableTester =
+                testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
+                .tableTester();
+
+        tableTester.assertColumnNames(List.of("Date", "Name"));
+    }
+
 
     @Test
     void choicesFromMultiselect() {

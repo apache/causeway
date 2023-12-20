@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.objectlifecycle;
 
+import java.util.function.Function;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -29,6 +31,10 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 /**
  * Responsible for collecting and then passing along changes (to the EntityChangeTracker, in persistence commons) so
  * that they can be published; and is responsible for calling the various persistence call-back facets.
+ *
+ * <p>
+ *     NOTE: this interface should really have been called ObjectLifecycleSubscriber...
+ * </p>
  *
  * @since 2.0 {index}
  */
@@ -92,9 +98,10 @@ public interface ObjectLifecyclePublisher {
      * </p>
      *
      * @param entity
-     * @param changeRecords - optional parameter to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.  JPA does this, JDO does not.
+     * @param propertyChangeRecordSupplier - optional parameter to provide the pre-computed
+     *      {@link PropertyChangeRecord}s from the ORM. JPA does this, JDO does not.
      */
-    void onPreUpdate(ManagedObject entity, @Nullable Can<PropertyChangeRecord> changeRecords);
+    void onPreUpdate(ManagedObject entity, @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier);
 
     /**
      * Called by both JPA and JDO, after an existing entity has been updated.
@@ -108,7 +115,7 @@ public interface ObjectLifecyclePublisher {
     void onPostUpdate(ManagedObject entity);
 
     /**
-     * Called by both JPA and JDO, just beforean entity is deleted from the database.
+     * Called by both JPA and JDO, just before an entity is deleted from the database.
      *
      * <p>
      *     Default implementation fires callbacks and enlists the entity within <code>EntityChangeTracker</code>

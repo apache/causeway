@@ -15,7 +15,8 @@
 * *xref:what-is-apache-causeway/causeway-in-pictures.adoc[Apache Causeway in pictures]*
 * xref:what-is-apache-causeway/common-use-cases.adoc[Common Use Cases]
 
-* xref:what-is-apache-causeway/screencasts.adoc[Screencasts]
+// LATER: update screencasts.
+// * xref:what-is-apache-causeway/screencasts.txt[Screencasts]
 
 |
 [discrete]
@@ -24,24 +25,23 @@
 _Starter Apps_
 
 * xref:docs:starters:helloworld.adoc[HelloWorld]
-(link:https://helloworld.jdo.causeway.incode.work[jdo],
-link:https://helloworld.jpa.causeway.incode.work[jpa])
+(link:https://github.com/apache/causeway-app-helloworld[github{nbsp}source])
 * *xref:docs:starters:simpleapp.adoc[SimpleApp]*
-(link:https://simpleapp.jdo.causeway.incode.work[jdo],
-link:https://simpleapp.jpa.causeway.incode.work[jpa])
+(link:https://github.com/apache/causeway-app-simpleapp[github{nbsp}source])
 
 _POMs_
 
-* xref:docs:parent-pom:about.adoc[Starter (Parent POM)]
-* xref:docs:mavendeps:about.adoc[Webapp (Aggregator POM)]
+* xref:docs:parent-pom:about.adoc[Starter (Parent{nbsp}POM)]
+* xref:docs:mavendeps:about.adoc[Webapp (Aggregator{nbsp}POM)]
 
 |
 [discrete]
-== Demos & Tutorials
+== Learning & Tutorials
 
-* xref:docs:demo:about.adoc[Demo App]
-(link:https://demo-wicket.jdo.causeway.incode.work[jdo], link:https://demo-wicket.jpa.causeway.incode.work[jpa])
+* xref:docs:referenceapp:about.adoc[Reference App]
+(link:https://github.com/apache/causeway-app-referenceapp[github{nbsp}source])
 * xref:tutorials:petclinic:about.adoc[Petclinic]
+(link:https://github.com/apache/causeway-app-petclinic[github{nbsp}source])
 
 [discrete]
 == Resources
@@ -83,7 +83,7 @@ _Security_
 _Viewers_
 
 * xref:vw:ROOT:about.adoc[Web UI (Wicket)]
-* xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
+* xref:vro:ROOT:about.adoc[REST API (Restful{nbsp}Objects)]
 
 _Persistence_
 
@@ -113,7 +113,7 @@ _Security_
 
 _Web UI (Wicket)_
 
-** *xref:vw:exceldownload:about.adoc[]*
+** *xref:vw:tabular:about.adoc[]*
 ** *xref:vw:pdfjs:about.adoc[]*
 
 

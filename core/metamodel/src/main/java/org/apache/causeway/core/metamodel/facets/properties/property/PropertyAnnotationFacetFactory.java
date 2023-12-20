@@ -29,11 +29,13 @@ import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
+import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
@@ -51,8 +53,7 @@ import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegEx
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -69,7 +70,11 @@ extends FacetFactoryAbstract {
 
         val propertyIfAny = propertyIfAny(processMethodContext);
 
-        inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
+        if(processMethodContext.isMixinMain()) {
+            propertyIfAny.ifPresent(property->{
+                inferMixinSort(property, processMethodContext.getFacetHolder());
+            });
+        }
 
         processDomainEvent(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
@@ -89,25 +94,15 @@ extends FacetFactoryAbstract {
         return processMethodContext
             .synthesizeOnMethodOrMixinType(
                     Property.class,
-                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
+                    () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Property.class));
     }
 
-    void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        if(!processMethodContext.isMixinMain() || !propertyIfAny.isPresent()) {
-            return; // no @Property found neither type nor method
-        }
-
-        //          XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
-        //          val isPropertyMethodLevel = processMethodContext.synthesizeOnMethod(Property.class).isPresent();
-        //          if(isPropertyMethodLevel) return;
-
-        //[1998] if @Property detected on method or type level infer:
-        //@Action(semantics=SAFE)
-        //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
-        val facetedMethod = processMethodContext.getFacetHolder();
+    void inferMixinSort(final Property property, final FacetedMethod facetedMethod) {
+        /* if @Property detected on method or type level infer:
+         * @Action(semantics=SAFE) */
         addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
+        addFacet(ContributingFacetAbstract.createAsProperty(facetedMethod));
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -182,6 +177,13 @@ extends FacetFactoryAbstract {
             final Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 
+        // skip if a facet is already installed
+        // (this is because - despite its name - this facet factory runs for both properties and actions;
+        //  if the holder represents an action then an ExecutionPublishingFacet will already have been installed).
+        if (facetHolder.containsNonFallbackFacet(CommandPublishingFacet.class)) {
+            return;
+        }
+
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
@@ -192,7 +194,7 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Property(commandPublishing=...)
-        addFacetIfPresent(
+        addFacet(
                 CommandPublishingFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector()));
     }
@@ -213,6 +215,13 @@ extends FacetFactoryAbstract {
 
         val holder = processMethodContext.getFacetHolder();
 
+        // skip if a facet is already installed
+        // (this is because - despite its name - this facet factory runs for both properties and actions;
+        //  if the holder represents an action then an ExecutionPublishingFacet will already have been installed).
+        if (holder.containsNonFallbackFacet(ExecutionPublishingFacet.class)) {
+            return;
+        }
+
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
@@ -224,8 +233,8 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Property(executionPublishing=...)
-        addFacetIfPresent(
-                ExecutionPublishingPropertyFacetForPropertyAnnotation
+        addFacet(
+                ExecutionPublishingFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder));
     }
 
@@ -278,22 +287,12 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnProperty
-                .create(hasNullable, method, holder))
-        .ifPresent(mandatoryFacet->
-                MetaModelValidatorForConflictingOptionality
-                .flagIfConflict(
-                        mandatoryFacet,
-                        "Conflicting @Nullable with other optionality annotation"));
+                .create(hasNullable, method, holder));
 
         // search for @Property(optional=...)
         addFacetIfPresent(
                 MandatoryFacetForPropertyAnnotation
-                .create(propertyIfAny, method, holder))
-        .ifPresent(mandatoryFacet->
-                MetaModelValidatorForConflictingOptionality
-                .flagIfConflict(
-                        mandatoryFacet,
-                        "Conflicting Property#optionality with other optionality annotation"));
+                .create(propertyIfAny, method, holder));
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {

@@ -23,6 +23,7 @@ import java.lang.reflect.Proxy;
 import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
@@ -36,15 +37,22 @@ public class ProxyCreator {
     @NonNull private final _ProxyFactoryService proxyFactoryService;
 
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
+        final T classToBeProxied = handler.getDelegate();
+        final Class<T> base = _Casts.uncheckedCast(classToBeProxied.getClass());
+        return instantiateProxy(base, handler);
+    }
 
-        final T toProxy = handler.getDelegate();
-
-        final Class<T> base = _Casts.uncheckedCast(toProxy.getClass());
-
+    /**
+     * Creates a proxy, using given {@code base} type as the proxy's base.
+     * @implNote introduced to circumvent access issues on cases,
+     *      where {@code handler.getDelegate().getClass()} is not visible
+     *      (eg. nested private type)
+     */
+    public <T> T instantiateProxy(final Class<T> base, final DelegatingInvocationHandler<? extends T> handler) {
         if (base.isInterface()) {
             return _Casts.uncheckedCast(
                     Proxy.newProxyInstance(
-                            base.getClassLoader(),
+                            _Context.getDefaultClassLoader(),
                             _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}),
                             handler));
         } else {

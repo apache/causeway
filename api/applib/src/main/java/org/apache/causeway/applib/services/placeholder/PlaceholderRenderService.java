@@ -18,6 +18,12 @@
  */
 package org.apache.causeway.applib.services.placeholder;
 
+import java.util.Map;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._StringInterpolation;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +39,9 @@ public interface PlaceholderRenderService {
     @RequiredArgsConstructor
     public static enum PlaceholderLiteral {
         NULL_REPRESENTATION("none"),
-        SUPPRESSED("suppressed");
+        SUPPRESSED("suppressed"),
+        HAS_MORE("has ${number} more");
+        ;
         private final String literal;
     }
 
@@ -41,20 +49,39 @@ public interface PlaceholderRenderService {
      * Textual representation of given {@link PlaceholderLiteral},
      * as used for eg. titles and choice drop-downs.
      */
-    String asText(@NonNull PlaceholderLiteral placeholderLiteral);
+    String asText(@NonNull PlaceholderLiteral placeholderLiteral, @Nullable Map<String, String> vars);
+    default String asText(@NonNull final PlaceholderLiteral placeholderLiteral) {
+        return asText(placeholderLiteral, null);
+    }
 
     /**
-     * Html representation of given {@link PlaceholderLiteral},
+     * HTML representation of given {@link PlaceholderLiteral},
      * as used for rendering with the UI (when appropriate).
      */
-    String asHtml(@NonNull PlaceholderLiteral placeholderLiteral);
+    String asHtml(@NonNull PlaceholderLiteral placeholderLiteral, @Nullable Map<String, String> vars);
+    default String asHtml(@NonNull final PlaceholderLiteral placeholderLiteral) {
+        return asHtml(placeholderLiteral, null);
+    }
+
+    static String interpolate(final String raw, @Nullable final Map<String, String> vars) {
+        return vars!=null
+                ? new _StringInterpolation(vars).applyTo(raw)
+                : raw;
+    }
 
     static PlaceholderRenderService fallback() {
         return new PlaceholderRenderService() {
-            @Override public String asText(@NonNull final PlaceholderLiteral placeholderLiteral) {
-                return "(" + placeholderLiteral.getLiteral() + ")"; }
-            @Override public String asHtml(@NonNull final PlaceholderLiteral placeholderLiteral) {
-                return asText(placeholderLiteral); }
+            @Override public String asText(
+                    @NonNull final PlaceholderLiteral placeholderLiteral,
+                    @Nullable final Map<String, String> vars) {
+                return PlaceholderRenderService.interpolate(placeholderLiteral.getLiteral(), vars);
+            }
+
+            @Override public String asHtml(
+                    @NonNull final PlaceholderLiteral placeholderLiteral,
+                    @Nullable final Map<String, String> vars) {
+                return asText(placeholderLiteral, vars);
+            }
         };
     }
 

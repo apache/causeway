@@ -25,6 +25,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -33,6 +34,7 @@ import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.memento.ActionParameterMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -67,23 +69,42 @@ extends ObjectFeature, CurrentHolder {
     }
 
     /**
-     * Returns the name of this parameter.
+     * Returns the friendly name of this parameter (possibly translated).
      *
      * <p>
-     * Because Java's reflection API does not allow us to access the code name
-     * of the parameter, we have to do figure out the name of the parameter
-     * ourselves:
+     * This is derived as follows:
      * <ul>
      * <li>If there is a {@link MemberNamedFacet} associated with this parameter then
-     * we infer a name from this, eg "First Name" becomes "firstName".
-     * <li>Otherwise we use the type, eg "string".
-     * <li>If there is more than one parameter of the same type, then we use a
-     * numeric suffix (eg "string1", "string2"). Wrappers and primitives are
-     * considered to be the same type.
+     * we infer a name from this, eg "First Name".
+     * <li>Otherwise we infer the type from the parameter, eg "firstName" becomes "First Name"
      * </ul>
+     *
+     * <p>
+     *     Note also that although this method's signature returns an {@link Optional} (because it is inherited from
+     *     {@link ObjectFeature}), it will in fact always return a non-empty value, in fact being
+     *     {@link #getCanonicalFriendlyName()}.
+     * </p>
+     *
+     * @see #getCanonicalFriendlyName()
      */
     @Override
     Optional<String> getStaticFriendlyName();
+
+    /**
+     * Returns the friendly name of this parameter (possibly translated).
+     *
+     * <p>
+     * This is derived as follows:
+     * <ul>
+     * <li>If there is a {@link MemberNamedFacet} associated with this parameter then
+     * we infer a name from this, eg "First Name".
+     * <li>Otherwise we infer the type from the parameter, eg "firstName" becomes "First Name"
+     * </ul>
+     *
+     * @see #getStaticFriendlyName()
+     */
+    @Override
+    String getCanonicalFriendlyName();
 
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(
@@ -140,13 +161,16 @@ extends ObjectFeature, CurrentHolder {
     @NonNull ManagedObject getDefault(ParameterNegotiationModel pendingArgs);
 
     /**
+     * Returns whether the pending parameter changed during reassessment.
+     * <p>
      * Reassesses the current parameter value, that is applying <i>defaults semantics</i>,
      * whenever a parameter this one depends on changes in the UI. Parameters
      * with higher index depend on those with lower index.
      * <p>
      * Reassessment can be switch off by means of {@link org.apache.causeway.applib.annotation.Parameter#dependentDefaultsPolicy()}.
      */
-    default void reassessDefault(final ParameterNegotiationModel pendingArgs) {
+    default boolean reassessDefault(final ParameterNegotiationModel pendingArgs) {
+        val changed = _Refs.booleanRef(false);
         val paramIndex = getParameterIndex();
         val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
         if(Facets.dependentDefaultsPolicy(this).isUpdateDependent()
@@ -154,9 +178,15 @@ extends ObjectFeature, CurrentHolder {
                 || ! bindableParamDirtyFlag.getValue().booleanValue() ) {
             // reassess defaults honoring defaults semantics
             val paramDefaultValue = this.getDefault(pendingArgs);
-            pendingArgs.setParamValue(paramIndex, paramDefaultValue);
-            bindableParamDirtyFlag.setValue(false); // clear dirty flag
+            pendingArgs.updateParamValue(paramIndex, paramOldValue->{
+                if(!ManagedObjects.pojoEquals(paramOldValue, paramDefaultValue)) {
+                    changed.setValue(true);
+                }
+                return paramDefaultValue;
+            });
+            bindableParamDirtyFlag.setValue(false); // clear dirty flag (signaling not edited by user in the UI)
         }
+        return changed.isTrue();
     }
 
     @NonNull default ManagedObject getEmpty() {
@@ -258,7 +288,4 @@ extends ObjectFeature, CurrentHolder {
     default ActionParameterMemento getMemento() {
         return ActionParameterMemento.forActionParameter(this);
     }
-
-
-
 }

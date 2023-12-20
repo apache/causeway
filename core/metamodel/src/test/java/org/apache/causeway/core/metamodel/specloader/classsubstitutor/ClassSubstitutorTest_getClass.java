@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.specloader.classsubstitutor;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -38,7 +39,7 @@ class ClassSubstitutorTest_getClass {
     @BeforeEach
     public void setUp() throws Exception {
         classSubstitutor = new ClassSubstitutorDefault();
-        classSubstitutorReg = new ClassSubstitutorRegistry(_Lists.of(classSubstitutor));
+        classSubstitutorReg = new ClassSubstitutorRegistry(List.of(classSubstitutor));
     }
 
     public static class SomeDomainObject {

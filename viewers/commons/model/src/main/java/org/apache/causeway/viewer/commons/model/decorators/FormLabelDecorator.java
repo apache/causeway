@@ -40,14 +40,19 @@ public interface FormLabelDecorator<T> {
         private static final long serialVersionUID = 1L;
 
         public static FormLabelDecorationModel mandatory(final boolean mandatory) {
-            return of(mandatory, ":");
+            /* used to be suffixed with ':' till 2.0.0-RC1;
+             * however, the question arises what to do in the label RIGHT position case;
+             * and so we concluded, that perhaps its better to remove the suffix colon
+             * all together */
+            return of(mandatory, "");
         }
 
-        public static FormLabelDecorationModel mandatorySuffixed(
+        /* not used
+        public static FormLabelDecorationModel mandatorySuffixed2(
                 final boolean mandatory,
                 final @Nullable String suffix) {
             return of(mandatory, suffix);
-        }
+        } */
 
         final boolean mandatoryMarker;
         final @Nullable String suffix;

@@ -19,7 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -42,7 +42,7 @@ implements HasUiProperty {
 
     public static ScalarPropertyModel wrap(
             final UiPropertyWkt uiProperty,
-            final ScalarRepresentation viewOrEdit,
+            final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
         return new ScalarPropertyModel(uiProperty, viewOrEdit, renderingHint);
     }
@@ -54,16 +54,16 @@ implements HasUiProperty {
      */
     private ScalarPropertyModel(
             final UiPropertyWkt uiProperty,
-            final ScalarRepresentation viewOrEdit,
+            final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
-        super(UiObjectWkt.ofAdapter(uiProperty.getMetaModelContext(), uiProperty.getOwner()),
+        super(UiObjectWkt.ofAdapter(uiProperty.getOwner()),
                 viewOrEdit, renderingHint);
         this.uiProperty = uiProperty;
     }
 
     /** @return new instance bound to the same delegate */
     public ScalarPropertyModel copyHaving(
-            final ScalarRepresentation viewOrEdit,
+            final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
         return wrap(uiProperty, viewOrEdit, renderingHint);
     }

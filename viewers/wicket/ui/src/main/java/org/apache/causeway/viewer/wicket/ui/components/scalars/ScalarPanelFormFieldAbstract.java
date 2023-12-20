@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
@@ -33,7 +32,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -72,31 +71,31 @@ extends ScalarPanelAbstract2 {
      */
     protected MarkupContainer createFieldFrame() {
         val renderScenario = getRenderScenario();
-        final FieldFragement fieldFragement;
+        final FieldFragment fieldFragment;
         switch (renderScenario) {
         case READONLY:
             // setup as output-format (no links)
-            fieldFragement = FieldFragement.NO_LINK_VIEWING;
+            fieldFragment = FieldFragment.NO_LINK_VIEWING;
             break;
         case CAN_EDIT:
         case CAN_EDIT_INLINE:
         case CAN_EDIT_INLINE_VIA_ACTION:
         case EDITING_WITH_LINK_TO_NESTED:
             // setup as output-format (with links to edit)
-            fieldFragement = FieldFragement.LINK_TO_PROMT;
+            fieldFragment = FieldFragment.LINK_TO_PROMT;
             break;
         case EDITING:
             // setup as input-format
-            fieldFragement = scalarModel().isEditMode()
-                ? FieldFragement.NO_LINK_EDITING // supports additional buttons (clear, ...)
-                : FieldFragement.NO_LINK_VIEWING;
+            fieldFragment = scalarModel().isEditingMode()
+                ? FieldFragment.NO_LINK_EDITING // supports additional buttons (clear, ...)
+                : FieldFragment.NO_LINK_VIEWING;
             break;
 
         default:
             throw _Exceptions.unmatchedCase(renderScenario);
         }
-        return Wkt.fragment(fieldFragement.getContainerId(),
-                fieldFragement.getFragmentId(),
+        return Wkt.fragment(fieldFragment.getContainerId(),
+                fieldFragment.getFragmentId(),
                 this);
     }
 
@@ -129,12 +128,12 @@ extends ScalarPanelAbstract2 {
         formGroup.add(fieldFrame = createFieldFrame());
 
         formComponent.setRequired(scalarModel.isRequired());
-        if(scalarModel.isRequired()
-                && scalarModel.isEnabled()) {
+
+        if(scalarModel.isShowMandatoryIndicator()) {
             Wkt.cssAppend(formGroup, "mandatory");
         }
 
-        formGroup.add(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
+        scalarNameLabelAddTo(formGroup, friendlyNameModel);
 
         formComponent.add(_Util.createValidatorFor(scalarModel));
 
@@ -155,7 +154,7 @@ extends ScalarPanelAbstract2 {
             xrayDetails.put("scalarModel.identifier", ""+scalarModel().getIdentifier());
             xrayDetails.put("scalarModel.choices (count)", ""+scalarModel().getChoices().size());
             xrayDetails.put("scalarModel.metaModel.featureIdentifier", ""+scalarModel().getMetaModel().getFeatureIdentifier());
-            xrayDetails.put("scalarModel.scalarTypeSpec", ""+scalarModel().getScalarTypeSpec().toString());
+            xrayDetails.put("scalarModel.scalarTypeSpec", ""+scalarModel().getElementType().toString());
             xrayDetails.put("scalarModel.proposedValue", ""+scalarModel().proposedValue().getValue().getValue());
 //                    getSpecialization()
 //                    .fold(
@@ -234,17 +233,17 @@ extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+    protected void onMakeNotEditable(final String disableReason) {
+        super.onMakeNotEditable(disableReason);
         formComponentEnable(false);
         setTooltip(disableReason);
-        target.ifPresent(this::formComponentAddTo);
     }
 
     @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+    protected void onMakeEditable() {
+        super.onMakeEditable();
         formComponentEnable(true);
         clearTooltip();
-        target.ifPresent(this::formComponentAddTo);
     }
 
     // -- XRAY
@@ -267,15 +266,6 @@ extends ScalarPanelAbstract2 {
         }
     }
 
-    private void formComponentAddTo(final AjaxRequestTarget ajax) {
-        if(getFormComponent()!=null) {
-            ajax.add(getFormComponent());
-        }
-        if(inlinePromptLink!=null) {
-            ajax.add(inlinePromptLink);
-        }
-    }
-
     private void setTooltip(final String tooltip) {
         WktTooltips.addTooltip(getFormComponent(), tooltip);
         WktTooltips.addTooltip(inlinePromptLink, tooltip);
@@ -285,7 +275,4 @@ extends ScalarPanelAbstract2 {
         WktTooltips.clearTooltip(getFormComponent());
         WktTooltips.clearTooltip(inlinePromptLink);
     }
-
-
-
 }

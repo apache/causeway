@@ -20,9 +20,13 @@ package org.apache.causeway.viewer.wicket.ui.util;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
+import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -66,12 +70,18 @@ import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.file.Files;
+import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -81,18 +91,25 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.text.TextAreaWithConverter;
+import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput.FileUploadFieldWithNestingFix;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
@@ -451,22 +468,43 @@ public class Wkt {
             @Override protected void onUpdate(final AjaxRequestTarget target) {
                 onUpdate.accept(target); }
             /**
-             * XXX[CAUSEWAY-3005] Any action dialog submission on the same page will
-             * result in a new {@link DataTableModel}, where any previously rendered check-boxes
+             * [CAUSEWAY-3005] Any action dialog submission on the same page will
+             * result in a new {@link DataTableInteractive}, where any previously rendered check-boxes
              * run out of sync with their DataRowToggle model.
              * Hence we intercept such events and reset check-boxes to un-checked.
              */
             @Override public void onEvent(final IEvent<?> event) {
+                if(event==null) return; // just in case
                 _Casts.castTo(CausewayEnvelopeEvent.class, event.getPayload())
                 .ifPresent(envelopeEvent->{
                     if(envelopeEvent.getLetter() instanceof CausewayActionCompletedEvent) {
-                        if(Boolean.TRUE.equals(this.getModelObject())) {
+                        var model = this.getModel();
+                        if(hasMemoizedDataRow(model)
+                                && Boolean.TRUE.equals(model.getObject())) {
                             this.setModelObject(false);
                             envelopeEvent.getTarget().add(this);
-                        }
+                       }
                     }
                 });
                 super.onEvent(event);
+            }
+            /**
+             * Whether it is safe (free of side-effects) to load/access given model's object.
+             * <p>
+             * As of [CAUSEWAY-3658], don't call
+             * {@link org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt#getObject()},
+             * when the model's object is not transiently already loaded, because otherwise it would
+             * enforce a page-reload as side-effect.
+             */
+            private boolean hasMemoizedDataRow(final IModel<Boolean> model) {
+                if(model instanceof DataRowToggleWkt) {
+                    var chainedModel = ((DataRowToggleWkt)model).getChainedModel();
+                    if(chainedModel instanceof DataRowWkt) {
+                        final DataRowWkt dataRowWkt = (DataRowWkt)chainedModel;
+                        return dataRowWkt.hasMemoizedDataRow();
+                    }
+                }
+                return false;
             }
         };
     }
@@ -569,6 +607,42 @@ public class Wkt {
         return new ResourceLinkVolatile(id, resourceModel);
     }
 
+    // -- FILE DOWNLOAD
+
+    /**
+     * Schedules a file download within the context of the current {@link RequestCycle}.
+     * @param model - provides a (temporary) file located at the host, which is deleted after consumption
+     */
+    public void fileDownloadClickHandler(final IModel<File> model, final CommonMimeType mime, final String fileName) {
+        final File file = model.getObject();
+        if (file == null) {
+            throw _Exceptions.illegalState("Failed to retrieve a File object from model %s", model.getClass().getName());
+        }
+        RequestCycle.get().scheduleRequestHandlerAfterCurrent(
+                Wkt.fileResourceStreamRequestHandler(file, mime)
+                .setFileName(fileName)
+                .setContentDisposition(ContentDisposition.ATTACHMENT));
+    }
+
+    private ResourceStreamRequestHandler fileResourceStreamRequestHandler(final File file, final CommonMimeType mime) {
+        return new ResourceStreamRequestHandler(Wkt.fileResourceStream(file, mime)){
+            @Override public void respond(final IRequestCycle requestCycle) {
+                super.respond(requestCycle);
+                Files.remove(file);
+            }
+        };
+    }
+
+    private FileResourceStream fileResourceStream(final File file, final CommonMimeType mime) {
+        return new FileResourceStream(
+                new org.apache.wicket.util.file.File(file)) {
+            private static final long serialVersionUID = 1L;
+            @Override public String getContentType() {
+                return mime.getBaseType();
+            }
+        };
+    }
+
     // -- FILE UPLOAD
 
     public FileUploadField fileUploadField(
@@ -591,6 +665,17 @@ public class Wkt {
 
     public String faIcon(final String faClasses) {
         return String.format("<i class=\"%s\"></i>", faClasses);
+    }
+
+    public MarkupComponent faIconLayers(
+            final String id,
+            final FontAwesomeLayers fontAwesomeLayers) {
+        return markup(id, fontAwesomeLayers.toHtml());
+    }
+
+    public MarkupComponent faIconLayersAdd(final MarkupContainer container, final String id,
+            final FontAwesomeLayers faLayers) {
+        return add(container, faIconLayers(id, faLayers));
     }
 
     // -- FRAGMENT
@@ -801,7 +886,7 @@ public class Wkt {
     public <T> ListView<T> listView(
             final String id,
             final IModel<? extends List<T>> listModel,
-                    final SerializableConsumer<ListItem<T>> itemPopulator) {
+            final SerializableConsumer<ListItem<T>> itemPopulator) {
         return new ListView<T>(id, listModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void populateItem(final ListItem<T> item) {
@@ -854,6 +939,21 @@ public class Wkt {
         return add(container, repeatingView(id));
     }
 
+    public <T> RepeatingView repeatingViewAdd(
+            final MarkupContainer container,
+            final String id,
+            final Stream<T> elementStream,
+            final BiConsumer<WebMarkupContainer, T> itemPopulator) {
+        val repeatingView = add(container, repeatingView(id));
+        elementStream
+        .forEach(t->{
+            val innerContainer = Wkt.container(repeatingView.newChildId());
+            repeatingView.add(innerContainer);
+            itemPopulator.accept(innerContainer, t);
+        });
+        return repeatingView;
+    }
+
     // -- TABLES
 
     public <T> Item<T> oddEvenItem(
@@ -893,63 +993,36 @@ public class Wkt {
 //    }
 
     /**
-     * @param converter - if {@code null} returns {@link TextArea} using Wicket's default converters.
+     * @param converter - if {@code Optional.empty()} returns {@link TextArea} using Wicket's default converters.
      */
     public <T> TextArea<T> textAreaWithConverter(
-            final String id, final IModel<T> model, final Class<T> type,
-            final @Nullable IConverter<T> converter) {
-        return converter!=null
-            ? new TextArea<T>(id, model) {
-                    private static final long serialVersionUID = 1L;
-                    {setType(type);}
-                    @SuppressWarnings("unchecked")
-                    @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
-                        return cType == type
-                                ? (IConverter<C>) converter
-                                : super.getConverter(cType);}
-                    @Override public void error(final IValidationError error) {
-                        errorMessageIgnoringResourceBundles(this, error);
-                    }
-                }
-            : new TextArea<T>(id, model);
+            final @NonNull String id,
+            final @NonNull IModel<T> model,
+            final @NonNull Class<T> type,
+            final @NonNull Optional<IConverter<T>> converter) {
+        return new TextAreaWithConverter<T>(id, model, type, converter);
     }
 
     // -- TEXT FIELD
 
     /**
-     * @param converter - if {@code null} returns {@link TextField} using Wicket's default converters.
+     * @param converter - if {@code Optional.empty()} returns {@link TextField} using Wicket's default converters.
      */
     public <T> TextField<T> textFieldWithConverter(
-            final String id, final IModel<T> model, final Class<T> type,
-            final @Nullable IConverter<T> converter) {
-        return converter!=null
-            ? new TextField<T>(id, model, type) {
-                    private static final long serialVersionUID = 1L;
-                    @SuppressWarnings("unchecked")
-                    @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
-                        return cType == type
-                                ? (IConverter<C>) converter
-                                : super.getConverter(cType);}
-                    @Override public void error(final IValidationError error) {
-                        errorMessageIgnoringResourceBundles(this, error);
-                    }
-                }
-            : new TextField<>(id, model, type);
+            final @NonNull String id,
+            final @NonNull IModel<T> model,
+            final @NonNull Class<T> type,
+            final @NonNull Optional<IConverter<T>> converter) {
+        return new TextFieldWithConverter<T>(id, model, type, converter);
     }
 
     public <T> TextField<T> passwordFieldWithConverter(
-            final String id, final IModel<T> model, final Class<T> type,
-            final @NonNull IConverter<T> converter) {
-        return new TextField<T>(id, model, type) {
-            private static final long serialVersionUID = 1L;
-            @SuppressWarnings("unchecked")
-            @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
-                return cType == type
-                        ? (IConverter<C>) converter
-                        : super.getConverter(cType);}
-            @Override public void error(final IValidationError error) {
-                errorMessageIgnoringResourceBundles(this, error);
-            }
+            final @NonNull String id,
+            final @NonNull IModel<T> model,
+            final @NonNull Class<T> type,
+            final @NonNull Optional<IConverter<T>> converter) {
+        return new TextFieldWithConverter<T>(id, model, type, converter) {
+            private static final long serialVersionUID = 2L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 Attributes.set(tag, "type", "password");
                 super.onComponentTag(tag);
@@ -1022,25 +1095,24 @@ public class Wkt {
     /**
      * Reports a validation error against given form component.
      * Uses plain error message from ConversionException, circumventing resource bundles.
+     * @return whether handled
      */
-    private void errorMessageIgnoringResourceBundles(
+    public boolean errorMessageIgnoringResourceBundles(
             final @Nullable FormComponent<?> formComponent,
             final @Nullable IValidationError error) {
         if(formComponent==null
                 || error==null) {
-            return;
+            return true;
         }
         if(error instanceof ValidationError) {
             val message = ((ValidationError)error).getMessage();
             // use plain error message from ConversionException, circumventing resource bundles.
             if(_Strings.isNotEmpty(message)) {
                 formComponent.error(message);
-            } else {
-                formComponent.error("Unspecified error (no message associated).");
+                return true; // handled
             }
-        } else {
-            formComponent.error(error);
         }
+        return false; // not-handled
     }
 
     // -- FORM COMPONENT ATTRIBUTE UTILITY
@@ -1102,7 +1174,6 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
-
 
 
 }

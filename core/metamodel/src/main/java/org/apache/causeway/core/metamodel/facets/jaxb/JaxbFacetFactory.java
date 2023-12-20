@@ -50,8 +50,8 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.isPublic;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.isPublic;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -152,7 +152,7 @@ implements MetaModelRefiner {
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
         final List<AssociationValidator> associationValidators = getAssociationValidators(getConfiguration());
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
 
             final boolean viewModel = objectSpec.isViewModel();
             if(!viewModel) {
@@ -288,7 +288,7 @@ implements MetaModelRefiner {
                         "JAXB view model '%s' %s '%s' is of type '%s', "
                         + "but is not annotated with @XmlJavaTypeAdapter. "
                         + "The field/method must be annotated with "
-                        + "@XmlJavaTypeAdapter(org.apache.causeway.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) "
+                        + "@XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.XxxJaxbAdapters.XxxToStringAdapter.class) "
                         + "or equivalent, "
                         + "or be ignored by being annotated with @XmlTransient.",
                         objectSpec.getFullIdentifier(),

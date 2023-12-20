@@ -20,6 +20,10 @@ package org.apache.causeway.core.metamodel;
 
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.services.columnorder.ColumnOrderTxtFileServiceDefault;
+
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -31,11 +35,11 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
-import org.apache.causeway.core.metamodel.context.MetaModelContexts;
+import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
-import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelInspection;
+import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelMixins;
 import org.apache.causeway.core.metamodel.inspect.model.ActionNode;
 import org.apache.causeway.core.metamodel.inspect.model.CollectionNode;
 import org.apache.causeway.core.metamodel.inspect.model.FacetAttrNode;
@@ -120,8 +124,8 @@ import lombok.NonNull;
         CausewayModuleCoreSecurity.class,
 
         // @Configuration's
-        MetaModelContexts.class,
-        CausewayModuleCoreMetamodelInspection.class,
+        MetaModelContextFactory.class,
+        CausewayModuleCoreMetamodelMixins.class,
 
         // @Component's
         ProgrammingModelInitFilterDefault.class,
@@ -176,29 +180,31 @@ import lombok.NonNull;
         IdStringifierForSerializable.class,
 
         // @Service's
-        IdStringifierLookupService.class,
-        ObjectManagerDefault.class,
-        ServiceInjectorDefault.class,
-        MetamodelEventService.class,
+        ColumnOrderTxtFileServiceDefault.class,
         ExceptionRecognizerForRecoverableException.class,
         GridLoaderServiceDefault.class,
         GridMarshallerServiceBootstrap.class,
         GridServiceDefault.class,
         GridSystemServiceBootstrap.class,
+        IdStringifierLookupService.class,
+        LayoutResourceLoaderDefault.class,
         LayoutServiceDefault.class,
+        MetamodelEventService.class,
         MetaModelServiceDefault.class,
+        ObjectManagerDefault.class,
         ProgrammingModelServiceDefault.class,
+        ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
+        SpecificationLoaderDefault.class,
         TableColumnOrderServiceDefault.class,
         TableColumnOrderServiceUsingTxtFile.class,
         TitleServiceDefault.class,
-        SpecificationLoaderDefault.class,
 
         // @Repository's
         ApplicationFeatureRepositoryDefault.class,
 
+        // standalone validators
         LogicalTypeMalformedValidator.class,
-
 })
 public class CausewayModuleCoreMetamodel {
 

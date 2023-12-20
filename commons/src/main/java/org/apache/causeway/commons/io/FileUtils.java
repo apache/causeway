@@ -18,22 +18,28 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.NotDirectoryException;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.function.ThrowingConsumer;
@@ -303,6 +309,39 @@ public class FileUtils {
     @SneakyThrows
     public void copy(final @NonNull File from, final @NonNull File to) {
         Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /**
+     * Copy all lines {@code from} file {@code to} file, using given {@link Charset}
+     * and processing each line before writing using {@code lineProcessor}.
+     *
+     * @param from - the file to read lines from
+     * @param to - the file to write the processed lines to
+     * @param openOptions - If no options are present then this method works as if the {@link
+     * StandardOpenOption#CREATE CREATE}, {@link
+     * StandardOpenOption#TRUNCATE_EXISTING TRUNCATE_EXISTING}, and {@link
+     * StandardOpenOption#WRITE WRITE} options are present. In other words, it
+     * opens the file for writing, creating the file if it doesn't exist, or
+     * initially truncating an existing regular-file to
+     * a size of {@code 0} if it exists.
+     */
+    @SneakyThrows
+    public void copyLines(
+            final @NonNull File from,
+            final @NonNull File to,
+            final @NonNull Charset charset,
+            final @NonNull UnaryOperator<String> lineProcessor,
+            final @NonNull OpenOption... openOptions) {
+
+        try (final BufferedReader reader = Files.newBufferedReader(from.toPath(), charset);
+             final BufferedWriter writer = Files.newBufferedWriter(to.toPath(), charset, openOptions)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.write(lineProcessor.apply(line));
+                writer.write("\n");
+            }
+        }
     }
 
 }

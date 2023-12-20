@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.autocomplete.method;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -45,7 +45,7 @@ implements ImperativeFacet {
     private final int minLength;
 
     public PropertyAutoCompleteFacetMethod(
-            final Method method,
+            final ResolvedMethod method,
             final Class<?> choicesClass,
             final FacetHolder holder) {
         super(holder);
@@ -71,7 +71,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object collectionOrArray = MmInvokeUtils.invoke(method, owningAdapter, searchArg);
+        final Object collectionOrArray = MmInvokeUtils.invokeWithSingleArgPojo(method.method(), owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;
         }

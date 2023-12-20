@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.accessor;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -44,7 +44,7 @@ implements ImperativeFacet {
 
     public CollectionAccessorFacetViaAccessor(
             final ObjectSpecification declaringType,
-            final Method method,
+            final ResolvedMethod method,
             final FacetHolder holder) {
         super(declaringType, holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
@@ -61,7 +61,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object collectionOrArray = MmInvokeUtils.invoke(method, owningAdapter);
+        final Object collectionOrArray = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
         if(collectionOrArray == null) {
             return null;
         }
@@ -72,7 +72,7 @@ implements ImperativeFacet {
         if(filterForVisibility) {
 
             val autofittedObjectContainer = MmVisibilityUtils
-                    .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.getReturnType());
+                    .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.returnType());
 
             if (autofittedObjectContainer != null) {
                 return autofittedObjectContainer;

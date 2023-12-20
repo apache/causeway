@@ -25,14 +25,12 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
 import lombok.Synchronized;
 import lombok.val;
 
@@ -46,16 +44,13 @@ extends ModelAbstract<ManagedObject> {
 
     private ObjectMemento memento;
 
-    protected ManagedObjectModel(
-            @NonNull final MetaModelContext commonContext) {
-        this(commonContext, null);
+    protected ManagedObjectModel() {
+        this(null);
     }
 
     protected ManagedObjectModel(
-            @NonNull final MetaModelContext commonContext,
             @Nullable final ObjectMemento initialMemento) {
-
-        super(commonContext);
+        super();
         this.memento = initialMemento;
     }
 

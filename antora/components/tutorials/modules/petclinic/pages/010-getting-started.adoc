@@ -45,7 +45,7 @@ We start the tutorial simply with a copy of xref:docs:starters:simpleapp.adoc[Si
 +
 [source,bash]
 ----
-git clone https://github.com/apache/causeway-app-demo
+git clone https://github.com/apache/causeway-app-petclinic
 ----
 
 * (optional) Load the git repo into a GUI tool such as SourceTree or GitKraken
@@ -207,10 +207,10 @@ This is modelled upon bootstrap and so supports arbitrary rows and columns as we
 ** for example, with IntelliJ use menu:Run[Debugging Actions > Reload Changed Classes].
 
 
-You can learn more about file-based layouts in the fundamentals guide describing at xref:userguide:fun:ui.adoc#object-layout[Object Layout]s.
+You can learn more about file-based layouts in the fundamentals guide describing at xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[Object Layout]s.
 
 It's also possible to change the order of columns at runtime, using the `SimpleObject.columnOrder.txt` file.
-For more on this topic, see the section of the fundamentals guide describing xref:userguide:fun:ui.adoc#table-columns[Table Columns].
+For more on this topic, see the section of the fundamentals guide describing xref:userguide:ROOT:ui-layout-and-hints.adoc#table-columns[Table Columns].
 
 
 
@@ -227,5 +227,5 @@ In a similar fashion, the actions of the various domain services are grouped int
 ** for example, with IntelliJ use menu:Run[Debugging Actions > Reload Changed Classes]/
 
 
-To learn more, see the section of the fundamentals guide describing xref:userguide:fun:ui.adoc#file-based-menus[file-based] menu bar layout.
+To learn more, see the section of the fundamentals guide describing xref:userguide:ROOT:ui-layout-and-hints.adoc#file-based-menus[file-based] menu bar layout.
 

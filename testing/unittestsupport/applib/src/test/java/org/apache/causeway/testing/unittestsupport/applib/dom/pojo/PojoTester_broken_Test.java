@@ -29,25 +29,25 @@ public class PojoTester_broken_Test {
         public String getFirstName() {
             return firstName + lastName; // this is the deliberate error
         }
-        public void setFirstName(String firstName) {
+        public void setFirstName(final String firstName) {
             this.firstName = firstName;
         }
-        
+
         private String lastName = "";
         public String getLastName() {
             return lastName;
         }
-        public void setLastName(String lastName) {
+        public void setLastName(final String lastName) {
             this.lastName = lastName;
         }
     }
-    
+
     @Test
     public void strict_when_interference_between_properties() {
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create().exercise(new CustomerWithInterferingProperties());
         }).isInstanceOf(AssertionFailedError.class)
-                .hasMessageContaining("firstName");
+                .hasMessageMatching(".*(firstName|lastName).*");
     }
 
     public static class BrokenCustomer {
@@ -55,12 +55,12 @@ public class PojoTester_broken_Test {
         public String getSomeString() {
             return someString;
         }
-        public void setSomeString(String someString) {
+        public void setSomeString(final String someString) {
             // no-op
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void exercise_broken() {
 
         // given

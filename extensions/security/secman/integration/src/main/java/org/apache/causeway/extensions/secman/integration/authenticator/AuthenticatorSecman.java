@@ -33,25 +33,28 @@ import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * {@link Authenticator} implementation that authenticates the
- * {@link ApplicationUser}, first that the user exists and secondly that the
- * provided password matches the
- * {@link ApplicationUser#getEncryptedPassword() encrypted password} of the user.
- *
+ * {@link Authenticator} implementation that authenticates the {@link ApplicationUser}.
  * <p>
- *     This Authenticator is a fallback and is only used if there is no other
- *     implementation available.
- * </p>
+ * Verifies that
+ * <ul>
+ * <li>the user exists</li>
+ * <li>the user is UNLOCKED</li>
+ * <li>the user has a persisted {@link ApplicationUser#getEncryptedPassword() encrypted password}</li>
+ * <li>the provided raw-password, when encrypted, matches the persisted one</li>
+ * </ul>
+ * <p>
+ * This Authenticator is a fallback and is only used if there is no other
+ * implementation available.
  *
  * @since 2.0 {@index}
  */
 @Log4j2
-//@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class AuthenticatorSecman implements Authenticator {
 
     private final ApplicationUserRepository applicationUserRepository;
@@ -81,6 +84,10 @@ public class AuthenticatorSecman implements Authenticator {
         }
 
         return applicationUserRepository.findByUsername(username)
+                // if user is LOCKED, then veto
+                .filter(appUser -> ApplicationUserStatus.isUnlocked(appUser.getStatus()))
+                // if user has no encrypted password persisted, then veto
+                .filter(appUser -> appUser.isHasPassword())
                 .filter(appUser -> passwordEncoder.matches(rawPassword, appUser.getEncryptedPassword()))
                 .map(appUser -> {
                     val roleNames = Stream.concat(
@@ -94,7 +101,7 @@ public class AuthenticatorSecman implements Authenticator {
     }
 
     @Override
-    public void logout(final InteractionContext context) {
+    public void logout() {
         // nothing needs to be done.  On logout the top-level AuthenticationManager
         // will invalidate the validation code held in the Authentication
         // object; this will cause the next http request made by the user to

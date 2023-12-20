@@ -1,0 +1,120 @@
+[[programming-model]]
+= Programming Model
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Mixins are implemented as classes that have a single argument constructor and, depending on the behaviour they contribute, are annotated using either xref:refguide:applib:index/annotation/Action.adoc[@Action], a xref:refguide:applib:index/annotation/Collection.adoc[@Collection] or a xref:refguide:applib:index/annotation/Property.adoc[@Property].footnote:[Mixin classes are also required to be annotated with  xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject]xref:refguide:applib:index/annotation/Nature.adoc#MIXIN[(nature=MIXIN)].
+The `@Action`, `@Collection` and `@Property` are in fact meta-annotations that satisfy this requirement for us.]
+
+
+These classes have a single method which implements the behaviour; the name of this method is determined by whether it is an action, collection or property.
+
+In addition, mixin classes also must define a `public` single-arg constructor.
+It is this argument's parameter type which determines the domain class being contributed to.
+
+
+
+The sections below provide complete examples of collection, property or action mixins, with contributions through a `DocumentHolder` interface.
+
+
+[#contributed-action]
+== Contributed Action
+
+A mixin that contributes an action is defined as a class annotated xref:refguide:applib:index/annotation/Action.adoc[@Action], with the action's behaviour implemented in a method called "act".
+
+For example, the following contributes an "addDocument" action to classes that implement/extend `DocumentHolder`:
+
+[source,java]
+----
+@Action                                             // <.>
+@RequiredArgsConstructor                            // <.>
+public class DocumentHolder_addDocument {           // <.>
+
+    private final DocumentHolder holder;            // <.>
+
+    public <Document> act(Document doc) {           // <.>
+        /// ...
+    }
+    public boolean hideAct() { /* ... */ }          // <.>
+}
+----
+<.> indicates this class is an action mixin
+<.> It's common to use Lombok to automatically create the constructor.
+<.> The action Id is "addDocument", ie everything after the "\_".
+By convention, the prefix before the "_" is the mixee's type name.
+<.> Mixee is injected into the mixin as a field through the constructor.
+Most mixins will interact with their mixee in some way.
+<.> method must be called "act"
+<.> xref:business-rules.adoc[supporting methods] follow the usual naming conventions.
+However, mixins also support xref:mixins.adoc#action-parameters[alternative conventions] that you may prefer.
+
+Contributed actions can accept parameters, and have any semantics.
+(This is not true for contributed collections, or properties; see below).
+
+
+== Contributed Collection
+
+A mixin that contributes a collection is defined as a class annotated xref:refguide:applib:index/annotation/Collection.adoc[@Collection], with the collection implemented in a method called "coll".
+
+For example, the following contributes a "documents" collection to classes that implement/extend `DocumentHolder`:
+
+[source,java]
+----
+@Collection                                     // <.>
+@RequiredArgsConstructor
+public class DocumentHolder_documents {
+
+    private final DocumentHolder holder;
+
+    public List<Document> coll() { /* ... */ }  // <.>
+        ...
+    }
+    public boolean hideColl() { /* ... */ }     // <.>
+}
+----
+<.> indicates that this class is a collection mixin
+<.> method (which must be called "coll") must accept no arguments, and return a collection
+<.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions
+(Because the collection is derived/read-only, the only supporting method that is relevant is `hideColl()`).
+
+
+Contributed collections are derived, which means:
+
+* the "coll" method must take no-arguments.
+* the method should have no side-effects; otherwise the very act of rendering the domain object would change state.
+* it should (of course) return a `java.util.Collection` (or `List`, or `Set`, or `SortedSet`); however ``java.util.Map``s are _not supported.
+
+
+== Contributed Property
+
+A mixin that contributes a property is defined as a class annotated xref:refguide:applib:index/annotation/Property.adoc[@Property], with the property implemented in a method called "prop".
+
+For example, the following contributes a "mostRecentDocument" collection to classes that implement/extend `DocumentHolder`:
+
+[source,java]
+----
+@Property                                           // <.>
+@RequiredArgsConstructor
+public class DocumentHolder_mostRecentDocument {
+
+    private final DocumentHolder holder;
+
+    public Document prop() {                        // <.>
+        ...
+    }
+    public boolean hideProp() { /* ... */ }         // <.>
+}
+----
+<.> indicates this is a property mixin
+<.> method (which must be called "prop") must accept no arguments, be query-only, and return a scalar value
+<.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions
+(Because the property is derived/read-only, the only supporting method that is relevant is `hideProp()`).
+
+Like collections, contributed properties are derived, which means:
+
+* the "prop" method must take no-arguments.
+* the method should have no side-effects; otherwise the very act of rendering the domain object would change state.
+* it should return a scalar value.
+

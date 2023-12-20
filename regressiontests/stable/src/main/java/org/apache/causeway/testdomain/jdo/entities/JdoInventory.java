@@ -23,6 +23,8 @@ import java.util.Set;
 import jakarta.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.Element;
+import javax.jdo.annotations.ForeignKeyAction;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -30,6 +32,7 @@ import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -59,7 +62,13 @@ public class JdoInventory {
     @Getter @Setter @Column(allowsNull = "true")
     private String name;
 
-    @Property
-    @Getter @Setter @Column(allowsNull = "true")
+    // unidirectional 1:n relation, using foreign key
+    // see https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#one_many_fk_uni
+    @Collection
+    @Element(column="INVENTORY_ID_EID",
+        deleteAction = ForeignKeyAction.CASCADE,
+        updateAction = ForeignKeyAction.CASCADE)
+    @ToString.Exclude
+    @Getter @Setter
     private Set<JdoProduct> products;
 }

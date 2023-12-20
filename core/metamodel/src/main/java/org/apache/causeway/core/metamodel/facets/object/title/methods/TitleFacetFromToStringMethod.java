@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.title.methods;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.core.metamodel.commons.ClassExtensions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
@@ -42,11 +42,11 @@ implements HasImperativeAspect {
     @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
 
     public static Optional<TitleFacet> create(
-            final @Nullable Method methodIfAny,
+            final @Nullable ResolvedMethod methodIfAny,
             final FacetHolder holder) {
 
         return Optional.ofNullable(methodIfAny)
-        .filter(method->!ClassExtensions.isJavaClass(method.getDeclaringClass()))
+        .filter(method->!_Reflect.isJavaApiClass(method.method().getDeclaringClass()))
         .map(method->
             new TitleFacetFromToStringMethod(
                     ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),

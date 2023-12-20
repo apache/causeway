@@ -31,8 +31,9 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -46,7 +47,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
-import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.OidsDto;
@@ -68,6 +68,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     @Inject private SchemaValueMarshaller valueMarshaller;
     @Inject private ClockService clockService;
     @Inject private UserService userService;
+    @Inject private CausewayConfiguration causewayConfiguration;
 
     @Override
     public CommandDto asCommandDto(
@@ -120,12 +121,11 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             val argAdapter = argAdapters.getElseFail(paramNum);
 
-            // in case of non-scalar params returns the element type
-            val elementType = actionParameter.getElementType();
-
-            final ParamDto paramDto = new ParamDto();
-            paramDto.setName(actionParameter.getStaticFriendlyName()
-                    .orElseThrow(_Exceptions::unexpectedCodeReach));
+            val paramDto = CommonDtoUtils.paramDto(
+                                            isParamIdentifierStrategySetToUseId()
+                                                ? actionParameter.getId()
+                                                : actionParameter.getCanonicalFriendlyName()
+                                             );
 
             actionParameter.getFeatureIdentifier();
 
@@ -134,7 +134,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
                 valueMarshaller.recordParamScalar(paramDto, actionParameter, argAdapter);
             } else {
                 //non-scalar
-                val values = ManagedObjects.unpack(elementType, argAdapter);
+                val values = ManagedObjects.unpack(argAdapter);
                 valueMarshaller.recordParamNonScalar(paramDto, actionParameter, values);
             }
 
@@ -174,6 +174,10 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         targetOids.getOid().add(bookmark.toOidDto());
 
         return dto;
+    }
+
+    private boolean isParamIdentifierStrategySetToUseId() {
+        return causewayConfiguration.getSchema().getCommand().getParamIdentifierStrategy() == CausewayConfiguration.Schema.Command.ParamIdentifierStrategy.BY_ID;
     }
 
 

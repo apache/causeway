@@ -23,6 +23,8 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 /**
  * @since 2.0 {@index}
@@ -31,20 +33,32 @@ public class CausewayInteractionHandler implements BeforeEachCallback, AfterEach
 
     @Override
     public void beforeEach(final ExtensionContext extensionContext) throws Exception {
-        _Helper.getInteractionFactory(extensionContext)
-        .ifPresent(interactionService->
-            _Helper
-                .getCustomInteractionContext(extensionContext)
-                .ifPresentOrElse(
+
+        //[CAUSEWAY-3647] set MMC singleton reference explicitly on each test run
+        _Helper
+            .getSpringContext(extensionContext)
+            .ifPresent(springContext->{
+                var mmc = springContext.getBean(MetaModelContext.class);
+                _Assert.assertNotNull(mmc, ()->
+                        "MetaModelContext not found on Spring's test context.");
+                MetaModelContext.setOrReplace(mmc);
+            });
+
+        _Helper
+            .getInteractionFactory(extensionContext)
+            .ifPresent(interactionService->
+                _Helper
+                    .getCustomInteractionContext(extensionContext)
+                    .ifPresentOrElse(
                         interactionService::openInteraction,
                         interactionService::openInteraction));
     }
 
     @Override
     public void afterEach(final ExtensionContext extensionContext) throws Exception {
-        _Helper.getInteractionFactory(extensionContext)
-        .ifPresent(InteractionService::closeInteractionLayers);
+        _Helper
+            .getInteractionFactory(extensionContext)
+            .ifPresent(InteractionService::closeInteractionLayers);
     }
-
 
 }

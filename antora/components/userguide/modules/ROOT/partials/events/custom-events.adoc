@@ -1,0 +1,87 @@
+[#custom-events]
+= Custom Events
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The built-in events provided by the framework (domain, UI, lifecycle) are each emitted at well-defined points when the domain object is interacted with through the framework.
+Sometimes though there is a need to emit events programmatically.
+This can be done using the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService].
+
+== Define the Event Class
+
+First define the event class.
+
+* It's common to define a base class in fact, for example:
++
+[source,java]
+.StateTransitionEvent.java
+----
+public abstract class StateTransitionEvent<
+        DO,
+        S extends State<S>
+        > extends java.util.EventObject {
+
+    private final DO domainObject;
+
+    public StateTransitionEvent(
+            final DO domainObject) {
+        super(domainObject);
+        this.domainObject = domainObject;
+    }
+
+    @Override
+    public DO getSource() {
+        return (DO) super.getSource();
+    }
+}
+----
++
+As the example shows, you might wish to inherit from `java.util.EventObject`, but there's no strict requirement to do so.
+
+* if we have a base class, then we need a concrete subclass:
++
+[source,java,indent=0]
+.InvoiceApprovalTransitionEvent.java
+----
+public static class InvoiceApprovalTransitionEvent
+        extends StateTransitionEvent<
+        IncomingInvoice,
+        IncomingInvoiceApprovalState> {
+    public InvoiceApprovalTransitionEvent( final IncomingInvoice domainObject) {
+        super(domainObject, stateTransitionIfAny, transitionType);
+    }
+}
+----
+
+
+== Post the event
+
+With the event class fully defined, we simply instantiate and post:
+
+[source,java]
+----
+val event = new InvoiceApprovalTransitionEvent(
+                invoice, IncomingInvoiceApprovalState.APPROVED);
+
+eventBusService.post(event);
+----
+
+== Subscribe to the event
+
+The subscribers of custom events are defined much the same way as subscribers of the framework's built-in events.
+For example:
+
+[source,java]
+.IncomingInvoiceSubscriber.java
+----
+@Service
+public class IncomingInvoiceSubscriber {
+
+    @EventListener(InvoiceApprovalTransitionEvent.class)
+    public void on(InvoiceApprovalTransitionEvent ev) {
+        // ...
+    }
+}
+----

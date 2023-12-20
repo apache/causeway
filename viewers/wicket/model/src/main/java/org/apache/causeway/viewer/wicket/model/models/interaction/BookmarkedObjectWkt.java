@@ -22,7 +22,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
 
@@ -38,31 +37,24 @@ extends ModelAbstract<ManagedObject> {
 
     /** overwrites any current cache entry, only safe when no other views/models reference the same ManagedObject */
     public static BookmarkedObjectWkt ofAdapter(
-            final @NonNull MetaModelContext commonContext,
-            final @Nullable ManagedObject domainObject) {
-        val bookmark = commonContext.getObjectManager()
-                .bookmarkObjectElseFail(domainObject);
-        return new BookmarkedObjectWkt(commonContext, bookmark, domainObject);
+            final @NonNull ManagedObject domainObject) {
+        val bookmark = domainObject.getBookmarkElseFail();
+        return new BookmarkedObjectWkt(bookmark, domainObject);
     }
 
-    public static BookmarkedObjectWkt ofBookmark(
-            final @NonNull MetaModelContext commonContext,
-            final @Nullable Bookmark bookmark) {
-        return new BookmarkedObjectWkt(commonContext, bookmark);
+    public static BookmarkedObjectWkt ofBookmark(final @Nullable Bookmark bookmark) {
+        return new BookmarkedObjectWkt(bookmark);
     }
 
-    private BookmarkedObjectWkt(
-            final @NonNull MetaModelContext commonContext,
-            final @NonNull Bookmark bookmark) {
-        super(commonContext);
+    private BookmarkedObjectWkt(final @NonNull Bookmark bookmark) {
+        super();
         this.bookmark = bookmark;
     }
 
     private BookmarkedObjectWkt(
-            final @NonNull MetaModelContext commonContext,
             final @NonNull Bookmark bookmark,
             final @Nullable ManagedObject domainObject) {
-        super(commonContext, domainObject);
+        super(domainObject);
         this.bookmark = bookmark;
     }
 
@@ -73,7 +65,7 @@ extends ModelAbstract<ManagedObject> {
 
     @Override
     public final void setObject(final ManagedObject object) {
-        throw _Exceptions.unsupportedOperation("MangedObjectWkt is immuatable");
+        throw _Exceptions.unsupportedOperation("ManagedObjectWkt is immuatable");
     }
 
     @Override

@@ -8,7 +8,15 @@ The quickest way to start learning about Apache Causeway is to use the `hellowor
 There are two variations of the application (and so two branches in the git repo).
 One variation uses JDO as the ORM, the other uses JPA, so you can focus on whichever ORM you prefer.
 
-The application is also deployed online for you to try out,  link:https://helloworld.jdo.causeway.incode.work[here (jdo)] and link:https://helloworld.jpa.causeway.incode.work[here (jpa)].
+The application is also built nightly as a docker image, so you can quickly try it out:
+
+[source,bash]
+----
+docker run -d -p 8080:8080 apache/causeway-app-helloworld:jpa-SNAPSHOT
+----
+
+Replace "jpa" with "jdo" if using the JDO ORM.
+
 
 Using the instructions <<Downloading & Running,below>>, you can download a minimal Apache Causeway app, consisting of a single domain entity (`HelloWorldObject`) with supporting domain services.
 Both the business logic and supporting bootstrapping classes are in a single Maven module.
@@ -357,7 +365,7 @@ public class AppManifest {
 There are several security implementations, precisely one must be selected
 
 <.> Enables JDO/DataNucleus for persistence.
-Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
+Optional (though if omitted then only xref:userguide:ROOT:view-models.adoc[view models] may be used, with hand-rolled persistence).
 
 <.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] (ie REST API).
 
@@ -521,7 +529,7 @@ image::helloworld/helloworld-before-launch.png[width="600px"]
 == Experimenting with the App
 
 Once you are familiar with the app, try modifying it.
-There is plenty more guidance on this site; start with the xref:userguide:fun:about.adoc[User Guide Fundamentals] and then look at the other guides linked to from the top-level menu or from the main xref:docs:ROOT:about.adoc[table of contents].
+There is plenty more guidance on this site; start with the xref:userguide:ROOT:about.adoc[User Guide Fundamentals] and then look at the other guides linked to from the top-level menu or from the main xref:docs:ROOT:about.adoc[table of contents].
 
 
 If you run into issues, please don't hesitate to ask for help on the users mailing list or the Slack channel, as per the xref:docs:support:about.adoc[support page].

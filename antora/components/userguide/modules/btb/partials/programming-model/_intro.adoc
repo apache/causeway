@@ -1,0 +1,69 @@
+[[introduction]]
+= Introduction
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Apache Causeway works by building a xref:ROOT:background-context-and-theory.adoc#metamodel[metamodel] of the domain objects: entities, domain services, view models and mixins.
+Dependent on the xref:ROOT:overview.adoc#type-of-domain-objects[sort of domain object], the class methods represent both state -- (single-valued) xref:ROOT:properties-collections-actions.adoc#properties[properties] and (multi-valued) xref:ROOT:properties-collections-actions.adoc#collections[collections] -- and behaviour -- xref:ROOT:properties-collections-actions.adoc#actions[actions].
+
+More specifically, both xref:ROOT:domain-entities.adoc[entities] and xref:ROOT:view-models.adoc[view models] can have properties, collections and actions, while xref:ROOT:domain-services.adoc[domain services] have just actions.
+xref:ROOT:mixins.adoc[Mixins] also define only actions, though depending on their semantics they may be rendered as derived properties or collections on the domain object to which they contribute.
+
+In the automatically generated UI a property is rendered as a field.
+This can be either of a value type (a string, number, date, boolean etc) or can be a reference to another entity.
+A collection is generally rendered as a table.
+
+Additional xref:ROOT:business-rules.adoc[business rules] semantics are inferred both imperatively from _supporting methods_ (such as `disableXxx()`) and declaratively from xref:refguide:applib-ant:about.adoc[annotations].
+
+Taken together this set of conventions are what we call the _**Apache Causeway Programming Model**_.
+In essence, these conventions are just an extension of the pojo / JavaBean standard of yesteryear: properties and collections are getters/setters, while actions are simply any remaining `public` methods.
+
+
+[TIP]
+====
+In fact, the Apache Causeway programming model is extensible; you can teach Apache Causeway new programming conventions and you can remove existing ones; ultimately they amount to syntax.
+The only real fundamental that can't be changed is the notion that objects consist of properties, collections and actions.
+
+You can learn more about extending Apache Causeway programming model xref:userguide:btb:programming-model.adoc[here].
+====
+
+
+[[oid]]
+== OIDs
+
+As well as defining a xref:userguide:ROOT:background-context-and-theory.adoc#metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Causeway also manages the runtime instances of said domain objects.
+
+When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an object identifier.
+Fundamentally this is a combination of its type (domain class), along with an identifier.
+You can think of it as its "primary key", except across all domain entity types.
+
+For portability and resilience, though, the object type is generally an alias for the actual domain class: thus "customers.CUS", say, rather than "com.mycompany.myapp.customers.Customer".
+This is derived from an annotation.
+The identifier meanwhile is always converted to a string.
+
+Although simple, the OID is an enormously powerful concept: it represents a URI to any domain object managed by a given Apache Causeway application.
+With it, we have the ability to lookup any arbitrary domain objects.
+
+Some examples:
+
+* an OID allows sharing of information between users, eg as a deep link to be pasted into an email.
+
+* the information within an OID could be converted into a barcode, and stamped onto a PDF form.
+When the PDF is scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
+
+* as a handle to any object in an audit record, as used by xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber];
+
+* similarly within implementations of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] to persist xref:refguide:applib:index/services/command/Command.adoc[Command] objects
+
+* similarly within implementations of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] to persist published action invocations
+
+* and of course both the xref:vro:ROOT:about.adoc[RestfulObjects viewer] and xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] use the oid tuple to look up, render and allow the user to interact with domain objects.
+
+Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
+These are represented as ``Bookmark``s, obtained from the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService].
+Deep links meanwhile can be obtained from the xref:refguide:applib:index/services/linking/DeepLinkService.adoc[DeepLinkService].
+
+OIDs can also be converted into XML format, useful for integration scenarios.
+The xref:refguide:schema:common.adoc[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
+

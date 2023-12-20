@@ -1,0 +1,52 @@
+[[non-jaxb]]
+= Non-JAXB View Models
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Instead of using JAXB to specify a view model, it is also possible to simply rely on the fact that the view model is annotated with xref:refguide:applib:index/annotation/DomainObject.adoc#nature[@DomainObject]xref:refguide:applib:index/annotation/Nature.adoc#VIEW_MODEL[(nature=VIEW_MODEL)].
+
+With this approach the state of properties -- but not collections -- is serialized.
+So this approach is not as powerful as using the JAXB-style of view models, on the other hand it takes little effort.
+
+For example:
+
+[source,java]
+.CompareCustomers.java, using @DomainObject(nature = VIEW_MODEL)
+----
+@DomainObject(nature = Nature.VIEW_MODEL)           // <.>
+public class CompareCustomers {
+
+    @Property                                       // <.>
+    @Getter @Setter
+    Customer customer1;
+
+    @Property                                       // <2>
+    @Getter @Setter
+    Customer customer2;
+
+    public String getCustomer1Name() {
+        return getCustomer1().getName();
+    }
+
+    public String getCustomer2Name() {
+        return getCustomer2().getName();
+    }
+
+    ...
+}
+----
+
+<.> declares the domain object as a view model
+<.> fields must be annotated with `@Property` so that they are part of the metamodel.
++
+Note that they do _not_ need to be visible, however.
+
+Of all the alternative ways to implement a view model, this is probably the simplest.
+However, it also has the most limitations.
+As noted above, it can only capture the values of properties, not collections.
+Moreover, those property types must be built-in value types or to entities.
+It is *_not_* possible though to reference another view model instance.
+
+

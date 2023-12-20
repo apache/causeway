@@ -16,7 +16,7 @@ In addition, the library provides fixture support, allowing test data to be spec
 
 === Dependency Management
 
-Add a section for _Excel_ module's own  BOM:
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
 
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -28,20 +28,22 @@ Add a section for _Excel_ module's own  BOM:
             <artifactId>causeway-extensions-excel</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
 ----
 
 [#dependencies]
-=== Dependencies
+=== Dependencies / Imports
 
-In the modules of your application that will use the _Excel_ extension, add the following dependency/ies:
+In the modules of your application that will use the _Excel_ extension, add dependency/ies to `pom.xml`, and update the `@Import` of the corresponding xref:userguide::modules.adoc[module]:
 
-* for xref:export-and-import[export/import], add:
+For xref:export-and-import[export/import]:
+
+* add this dependency:
 +
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
@@ -52,9 +54,25 @@ In the modules of your application that will use the _Excel_ extension, add the 
 </dependencies>
 ----
 
-* for xref:fixture-support[fixture support], add:
+* and `@Import` this module:
 +
-[source,xml]
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtExcelApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+
+For xref:fixture-support[fixture support]:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
@@ -65,17 +83,111 @@ In the modules of your application that will use the _Excel_ extension, add the 
 </dependencies>
 ----
 
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtExcelTesting.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
 
 
 [#export-and-import]
-== Export and Import
+== Usage: Export and Import
 
-TODO - v2
+Define a view model to act as a DTO.
+For example:
+
+[source,java]
+----
+@Named("transaction.TransactionDto")
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class TransactionDto {
+    @Getter @Setter private String customerRef;
+    @Getter @Setter private LocalDate date;
+    @Getter @Setter private BigDecimal amount;
+}
+----
+
+
+
+It's common to define a "Manager" view model to control the process:
+
+[source,java]
+.TransactionImportExportManager.java
+----
+@Named("transaction.TransactionImportExportManager")
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class TransactionImportExportManager {
+
+    List<TransactionDto> getTransactions() { ... }  // <.>
+
+    // ...
+}
+----
+<.> the transactions to be exported, typically mapped from an entity into the DTO
+
+The action to export this list of transactions would be something like:
+
+[source,java]
+.TransactionImportExportManager.java
+----
+@Action(semantics = SemanticsOf.SAFE)
+public Blob exportToExcel(){
+    return  excelService.toExcel(
+            getTransactionDtos(),
+            TransactionDto.class,
+            "Sheet1",
+            "Transactions.xlsx"
+    );
+}
+----
+
+And conversely, to obtain DTOs from the spreadsheet:
+
+[source,java]
+.TransactionImportExportManager.java
+----
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@CollectionLayout(paged = -1)
+public TransactionImportExportManager importFromExcel(
+        @Parameter(fileAccept = ".xlsx")
+        final Blob spreadsheet) {
+    List<TransactionDto> transactionDtos =
+        excelService.fromExcel(spreadsheet, TransactionDto.class, "Sheet1");
+    ...
+    return this;
+}
+----
+
+
 
 [#fixture-support]
-== Fixture Support
+== Usage: Fixture Support
 
-TODO - v2
+The fixture support is provided through `ExcelFixture`, an implementation of `FixtureScript` that is initialized with a spreadsheet and a set of handler classes, one for each sheet.
+These handler classes implement `ExcelFixtureRowHandler`
+
+[source,java]
+----
+public interface ExcelFixtureRowHandler {
+    List<Object> handleRow(
+            final FixtureScript.ExecutionContext executionContext,
+            final ExcelFixture excelFixture,
+            final Object previousRow);
+}
+----
+
+The `handleRow` method is called for each row in the spreadsheet (of the appropriate sheet), and it is being responsible for handling the row of data from the spreadsheet.
+A simple implementation would just use an injected repository to create a new entity.
+A more sophisticated implementation would use the values in the spreadsheet to call other fixtures (using executionContext` and `excelFixture`).
+
 
 == See also
 

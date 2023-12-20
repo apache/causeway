@@ -64,7 +64,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
+        programmingModel.addValidatorSkipManagedBeans(spec->{
 
             if(!spec.containsFacet(DomainServiceFacet.class)) {
                 return;

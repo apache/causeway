@@ -1,0 +1,175 @@
+[[programming-model]]
+= @DomainService vs @Service/@Repository
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+== Declaring a Domain Service
+
+Domain services that are visible in the UI or REST API are annotated with xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService()], while services that are _programmatic_ in nature should be simply annotated using Spring's link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] or one of its specializations, eg
+link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Service.html[@Service]
+or link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository].
+
+Once declared, domain services can be injected into other domain objects (*including* entities and view models) using `@javax.inject.Inject`.
+There's more on this topic xref:domain-services.adoc#injecting-services[below].
+
+=== Nature of Service
+
+Apache Causeway uses Spring Boot to instantiate and manage the dependency injection of domain services.
+Accordingly, all domain services are annotated or meta-annotated using Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] annotation.
+
+For domain services to be visible in the Apache Causeway UI, they must be annotated with xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
+Its xref:refguide:applib:index/annotation/DomainService.adoc#nature[#nature()] attribute is either:
+
+* `VIEW` (the default if not specified)
++
+which indicates that the actions should appear on the menu of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], and as top-level actions for the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
+
+* `REST`
++
+which indicates that the actions should appear in the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], but not rendered by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
+
+It's also possible to define a "programmatic" domain service, meaning one that is instantiated and injected by Spring Boot, but is not visible in the UI or REST API.
+Such programmatic services are usually annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Service.html[@Service] annotation or link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository].
+
+
+== Framework-defined services
+
+As well as custom-defined services, the framework provides many further services that you can use within your apps.
+The xref:refguide:applib-svc:about.adoc[Reference Guide] provides full details.
+
+Two important such services are the repository/factory uses an injected xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] (to persist or retrieve domain entities) and the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService] (to instantiate new domain objects).
+
+It's common to write your own domain service that wrap these framework-defined services, eg `CustomerRepository` or `CustomerFactory`.
+Generally these services are not visible in UI, and so would be link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Service.html[@Service].
+You could if you wish also use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository] for your `XxxRepository` service, as a more descriptive alternative.
+
+
+== Example
+
+The class diagram shows how you might implement a UI menu and REST API for a "customer" module:
+
+image::domain-services/example.png[width=800px]
+
+The menu service:
+
+Menu services provide actions to be rendered on the menu.
+
+For the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], each service's actions appear as a collection of menu items of a named menu, and this menu is on one of the three menu bars provided by the Wicket viewer.
+Although these can be organised using annotations, it's usually easier to use a xref:userguide:ROOT:ui-layout-and-hints.adoc#file-based-menus[file-based layout file] (`menubars.layout.xml`).
+
+For the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], all menu services are shown in the services representation.
+
+[source,java]
+----
+import lombok.RequiredArgsConstructor;
+
+@DomainService(nature = NatureOfService.VIEW)           // <.>
+@RequiredArgsConstructor(onConstructor_ = {@Inject} )   // <.>
+public class Customers {
+
+    final CustomerRepository customerRepository;        // <2>
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<Customer> findByName(                   // <.>
+            final String name ) {
+        return customerRepository.findByName(name);     // <.>
+    }
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public Customer newCustomer(...) {
+        return customerRepository.newCustomer(...);
+    }
+
+    @Action( semantics = SemanticsOf.SAFE,
+             restrictTo = RestrictTo.PROTOTYPING )      // <.>
+    public List<Customer> listAll() {
+        return customerRepository.listAll();
+    }
+}
+----
+<.> Identify the class as a domain service, to render in the menu.
+<.> The `CustomerRepository` is injected through the constructor (Lombok creates the constructor for us).
+<.> Rendered in the UI as a "Find By Name" menu item underneath the "Customers" menu.
+<.> the action implementation delegates to the injected repository.
+<.> xref:refguide:applib:index/annotation/Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
+A "list all" action such as this can be useful when exploring the domain with a small dataset.
+
+
+The REST API would be similar to the above `CustomerMenu`, but annotated with a `@DomainService(nature=NatureOfService.REST)`.
+
+The `CustomerRepository` would look something like:
+[source,java]
+----
+import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
+
+@Repository                                                     // <.>
+@RequiredArgsConstructor(onConstructor_ = {@Inject} )
+public CustomerRepository {
+
+    final RepositoryService repositoryService;
+
+    public List<Customer> findByName(String name) {
+        return repositoryService.allMatches(                    // <.>
+                Query.named(Customer.class, "findByName")
+                    .withParameter("name", name));
+    }
+
+    public List<Customer> allCustomers() {                      // <.>
+        return repositoryService.allInstances(Customer.class);
+    }
+
+    // ...
+}
+----
+<.> Register as a service using Spring Boot's `@Repsitory` annotation
+<.> uses injected `RepositoryService` to query
+<.> Returns all instances (useful for prototyping, probably not for production).
+
+
+The `CustomerFactory` would look something like:
+
+[source,java]
+----
+import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
+
+@Service                                                        // <.>
+@RequiredArgsConstructor(onConstructor_ = {@Inject} )
+public CustomerFactory {
+
+    final FactoryService factoryService;
+    final RepostiryoService factoryService;
+
+    public Customer newCustomerNotPersisted(...) {
+        Customer Customer =
+            repositoryService.detachedEntity(Customer.class);   // <.>
+        ...
+        return repositoryService.persistAndFlush(Customer);     // <.>
+    }
+
+    // ...
+}
+----
+<.> Register as a service using Spring Boot's `@Service` annotation
+<.> uses injected `RepositoryService` to instantiate a not-yet-persisted domain entity ...
+<.> \... and then save into the database a new `Customer` instance.
+
+
+The `CustomerMenu` is part of the Causeway metamodel and its methods will be exposed as actions.
+The `CustomerRepository` and `CustomerFactory` are _not_ part of the metamodel; there is no need to mark their methods as `@Programmatic`.
+
+[sidebar]
+.Separate services, or combined?
+****
+Whether you separate out menu services from repository services is to some extent a matter of style.
+
+One perspective is that these two closely related domain services nevertheless have different responsibilities, and so could be kept separate.
+
+An alternative perspective is that the duplication is just unnecessary boilerplate, and conflicts with the naked objects philosophy.
+****
+
+
+

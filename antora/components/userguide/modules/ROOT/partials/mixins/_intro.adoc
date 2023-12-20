@@ -1,0 +1,66 @@
+[[introduction]]
+= Introduction
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+A mixin acts like a trait or extension method, allowing one module to contribute behaviour or derived state to another object.
+The mixin class is an implementation of behaviour - an action, a property or a collection - that and is contributed to another class, either a domain entity or view model.
+
+Or rather, the domain object _appears_ in the UI to have the behaviour, but the underlying domain class being contributed to does not "know" this is happening.
+In this way what the end-user sees is the domain object's actual behaviour along with all of its contributions from other modules.
+This makes for a very powerful feature in terms of decoupling, but at the same time is easy to implement for the developer.
+
+In fact, the mixin class is bound to the contributee (or mixee) through a Java type, which could be a concrete class, an abstract class, an interface or even `java.lang.Object`.
+This is therefore a key technique to allow the app to stay decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
+There's a lot more discussion on this topic in xref:mixins.adoc#modularity[modularity] section below and also on the xref:modules.adoc[modules] page.
+
+Mixins are also a convenient mechanism for grouping functionality even for a concrete type, helping to rationalize about the dependency between the data and the behaviour.
+Each mixin is in effect a single behavioural "responsibility" of the domain object.
+
+== Inside-out vs outside-in
+
+We find mixins nicely balance inside-out vs outside-in ways of thinking about a system:
+
+* inside-out tends to focus on the structure, the nouns that make up the domain.
++
+For Apache Causeway, these would typically be entities.
+
+* outside-in tends to focus on the behaviour, that is the functionality that the system provides to automate the business processes; the verbs, in other words.
++
+For Apache Causeway, these would typically be actions.
+
+So-called "behaviourally complete" objects have actions implemented by the entities ... in other words, good ole-fashioned object-orientation, as your Mother taught you.
+That's suitable in lots of cases, though the contract between the behaviour in the action vs the data structure is not explicit ... the method has access to all the object's state through the `this` keyword.
+
+With mixins, though, make the contract between the behaviour and the structure explicit by moving the behaviour into its own class.
+If you do this for all of the behaviour, then the entity might be simply a data container, immutable in and of itself.
+In practice, you might not do this completely, but rather have a set of methods on the entity (not actions) that enforce some basic integrity rules (eg ensure that a `startDate` \<= `endDate`, but don't do much more than that).
+The mixin for its part exposes behaviour to the end-user as an action, and then manipulates the state of the mixee only by way of the interface exposed to it.
+
+We've also found that mixins fit nicely with an agile development methodology.
+Often when there's a new user story/feature to be implemented, then that new feature may correspond to a new mixin to be implemented.
+
+
+== DCI Architecture
+
+DCI stands for Data-Context-Interaction and is presented as an evolution of object-oriented programming, but one where behaviour is bound to objects dynamically rather than statically in some context or other.
+
+The idea  was described in the link:http://www.artima.com/articles/dci_vision.html[DCI architecture], as formulated and described by link:https://en.wikipedia.org/wiki/Trygve_Reenskaug[Trygve Reenskaug] and link:https://en.wikipedia.org/wiki/Jim_Coplien[Jim Coplien].
+Reenskaug is credited as the inventor of the widely-known MVC pattern (he was also the external examiner for Richard Pawson's link:https://causeway.apache.org/docs/2.0.0-RC1/_attachments/Pawson-Naked-Objects-thesis.pdf[PhD thesis] on Naked Objects), while Coplien has a long history in object-orientation, C++ and patterns.
+
+The mixin pattern is Apache Causeway' take on the same basic concept.
+The contributee's type defines an internal API between the mixin behaviour and the internal _data_ structure, while the contributee's behaviour enables the _interaction_ by the end-user.
+The simplification is that the _context_ isn't dynamic, instead the mixin and its contributee are associated statically by way of the contributee type.
+
+
+== Leveraging hot reloading
+
+There are also practical reasons for moving behaviour out of entities even within the same module, because structuring your application this way helps support hot-reloading of Java classes (so that you can modify and recompile your application without having to restart it).
+This can provide substantial productivity gains.
+
+The Hotspot JVM has limited support for hot reloading; generally you can change method implementations but you cannot introduce new methods.
+However, the link:https://dcevm.github.io/[DCEVM] open source project will patch the JVM to support much more complete hot reloading support.
+There are also commercial products such as JRebel.
+
+

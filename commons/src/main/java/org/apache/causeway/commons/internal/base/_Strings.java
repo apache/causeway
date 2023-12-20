@@ -48,6 +48,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Bytes.BytesOperator;
 import org.apache.causeway.commons.internal.functions._Predicates;
 
@@ -409,6 +410,15 @@ public final class _Strings {
             return input;
         }
         return input + suffix;
+    }
+
+    public static @Nullable String removePrefix(final @Nullable String input, final @NonNull String prefix) {
+        if(input==null) {
+            return null;
+        }
+        return input.startsWith(prefix)
+                ? input.substring(prefix.length())
+                : input;
     }
 
     // -- REDUCTION (BINARY OPERATIOR)
@@ -797,73 +807,92 @@ public final class _Strings {
     // -- UNARY OPERATOR COMPOSITION
 
     /**
-     * Monadic StringOperator that allows composition of unary string operators.
+     * Helper for composing of {@code UnaryOperator<String>}.
      */
-    public static final class StringOperator {
-
-        private final UnaryOperator<String> operator;
-
-        private StringOperator(final @NonNull UnaryOperator<String> operator) {
-            this.operator = operator;
+    @FunctionalInterface
+    public static interface StringOperator extends UnaryOperator<String> {
+        default StringOperator compose(final UnaryOperator<String> andThen) {
+            return str->this.andThen(andThen).apply(str);
         }
-
-        public String apply(final String input) {
-            return operator.apply(input);
+        /**
+         * Returns a unary operator that always returns its input argument.
+         */
+        static StringOperator identity() {
+            return s -> s;
         }
-
-        public StringOperator andThen(final UnaryOperator<String> andThen) {
-            return new StringOperator(s->andThen.apply(operator.apply(s)));
-        }
-
-    }
-
-    /**
-     * Returns a StringOperator that allows composition of unary string operators
-     */
-    public static StringOperator operator() {
-        return new StringOperator(UnaryOperator.identity());
     }
 
     // -- SPECIAL COMPOSITES
 
     // using naming convention asXxx...
 
-    public static final StringOperator asLowerDashed = operator()
-            .andThen(_Strings::lower)
-            .andThen(s->_Strings.condenseWhitespaces(s, "-"));
+    public static final StringOperator asLowerCase = _Strings::lower;
 
-    public static final StringOperator asNormalized = operator()
-            .andThen(s->_Strings.condenseWhitespaces(s, " "));
+    public static final StringOperator asLowerDashed = asLowerCase
+            .compose(s->_Strings.condenseWhitespaces(s, "-"));
 
-    public static final StringOperator asNaturalName2 = operator()
-            .andThen(s->_Strings_NaturalNames.naturalName2(s, true));
+    public static final StringOperator asNormalized =
+            s->_Strings.condenseWhitespaces(s, " ");
 
+    /**
+     * Returns a word spaced version of the specified name, so there are spaces
+     * between the words, where each word starts with a capital letter. E.g.,
+     * "NextAvailableDate" is returned as "Next Available Date".
+     */
+    public static final StringOperator asNaturalName =
+            s->_Strings_NaturalName.naturalName(s, true);
+
+    /**
+     * Camel case is the practice of writing phrases without spaces or punctuation and with capitalized words.
+     * The format indicates the first word starting with EITHER case,
+     * then the following words having an initial uppercase letter.
+     */
+    public static final StringOperator asCamelCase =
+            s->_Strings_CamelCase.camelCase(s, firstToken->firstToken);
+
+    public static final StringOperator asCamelCaseDecapitalized =
+            s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.decapitalize(firstToken));
+
+    public static final StringOperator asCamelCaseCapitalized =
+            s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.capitalize(firstToken));
+    public static final StringOperator asPascalCase = asCamelCaseCapitalized; // synonym
 
     public static final String asFileNameWithExtension(final @NonNull String fileName, final @NonNull String fileExtension) {
         return suffix(fileName, prefix(fileExtension, "."));
     }
 
     /**
-     * A prefix is defined
+     * Returns the name of a Java entity without any prefix. A prefix is defined
      * as the first set of lower-case letters and the name is characters from,
      * and including, the first upper case letter. If no upper case letter is
      * found then an empty string is returned.
+     *
      * <p>
      * Calling this method with the following Java names will produce these
      * results:
+     *
      * <pre>
-     * getCarRegistration  -&gt; CarRegistration
-     * CityMayor           -&gt; CityMayor
-     * isReady             -&gt; Ready
+     * getCarRegistration -&gt; CarRegistration
+     * CityMayor          -&gt; CityMayor
+     * isReady            -&gt; Ready
      * </pre>
+     *
      */
-    public static final String asPrefixDropped(final @Nullable CharSequence chars) {
-        return isNotEmpty(chars)
+    public static String baseName(final @NonNull String methodName) {
+        val asPrefixDropped = isNotEmpty(methodName)
                 ? ofCodePoints(
-                        chars.codePoints()
+                        methodName.codePoints()
                             .dropWhile(c->c != '_' && Character.isLowerCase(c)))
-                : chars!=null ? "" : null;
+                : "";
+        val baseName = asPrefixDropped.isEmpty()
+                ? methodName
+                : asPrefixDropped;
+        val javaBaseName = _Strings.capitalize(baseName.trim());
+        _Assert.assertNotEmpty(javaBaseName,
+                ()->String.format("framework bug: could not create a base name from '%s'", methodName));
+        return javaBaseName;
     }
+
 
     /**
      * Within given string, converts any special UTF-8 variants of the space ' ' character to the regular one.

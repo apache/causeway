@@ -75,21 +75,21 @@ public class HomePageViewModel {
 .HomePageViewModel.layout.xml
 ----
 <!-- ... -->
-    <bs3:row>
-        <bs3:col span="12" unreferencedCollections="true">
-            <bs3:row>
-                <bs3:col span="4">
+    <bs:row>
+        <bs:col span="12" unreferencedCollections="true">
+            <bs:row>
+                <bs:col span="4">
                     <collection id="petOwners" defaultView="table"/>
-                </bs3:col>
-                <bs3:col span="4">
+                </bs:col>
+                <bs:col span="4">
                     <collection id="pets" defaultView="table"/>
-                </bs3:col>
-                <bs3:col span="4">
+                </bs:col>
+                <bs:col span="4">
                     <collection id="visits" defaultView="table"/>
-                </bs3:col>
-            </bs3:row>
-        </bs3:col>
-    </bs3:row>
+                </bs:col>
+            </bs:row>
+        </bs:col>
+    </bs:row>
 <!-- ... -->
 ----
 
@@ -170,13 +170,13 @@ If additional business rules were added to that delegate, then the mistake would
 .HomePageViewModel.layout.xml
 ----
 <!-- ... -->
-    <bs3:row>
-        <bs3:col span="12" unreferencedActions="true">
+    <bs:row>
+        <bs:col span="12" unreferencedActions="true">
             <domainObject/>
             <action id="bookVisit"/>
             <!-- ... -->
-        </bs3:col>
-    </bs3:row>
+        </bs:col>
+    </bs:row>
 <!-- ... -->
 ----
 

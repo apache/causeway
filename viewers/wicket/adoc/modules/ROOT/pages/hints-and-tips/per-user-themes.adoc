@@ -3,7 +3,6 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO: out of date...
 
 From link:http://causeway.markmail.org/thread/kb4442niwwbnghey[this thread] on the Apache Causeway users mailing list:
 
@@ -11,67 +10,24 @@ From link:http://causeway.markmail.org/thread/kb4442niwwbnghey[this thread] on t
 Would this also be possible for the login page, possibly depending on the used host name?_
 
 
-Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`:
+Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`.
+
 
 [source,java]
-.IActiveThemeProvider implementation
+.ActiveThemeProvider implementation
 ----
-public class UserSettingsThemeProvider implements ActiveThemeProvider {
-    ...
+public class MyThemeProvider implements ActiveThemeProvider {
+    // ...
     @Override
-    public ITheme getActiveTheme() {
-        if(CausewayContext.getSpecificationLoader().isInitialized()) {
-            final String themeName = CausewayContext.doInSession(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    final UserSettingsService userSettingsService =
-                        lookupService(UserSettingsService.class);
-                    final UserSetting activeTheme = userSettingsService.find(
-                            CausewayContext.getAuthenticationSession().getUserName(),
-                            ACTIVE_THEME);
-                    return activeTheme != null ? activeTheme.valueAsString() : null;
-                }
-            });
-            return themeFor(themeName);
-        }
-        return new SessionThemeProvider().getActiveTheme();
-    }
+    public ITheme getActiveTheme() { ... }                      // <.>
     @Override
-    public void setActiveTheme(final String themeName) {
-        CausewayContext.doInSession(new Runnable() {
-            @Override
-            public void run() {
-                final String currentUsrName =
-                    CausewayContext.getAuthenticationSession().getUserName();
-                final UserSettingsServiceRW userSettingsService =
-                        lookupService(UserSettingsServiceRW.class);
-                final UserSettingJdo activeTheme =
-                        (UserSettingJdo) userSettingsService.find(
-                                                currentUsrName, ACTIVE_THEME);
-                if(activeTheme != null) {
-                    activeTheme.updateAsString(themeName);
-                } else {
-                    userSettingsService.newString(
-                        currentUsrName, ACTIVE_THEME, "Active Bootstrap theme for user", themeName);
-                }
-            }
-        });
-    }
-    private ITheme themeFor(final String themeName) {
-        final ThemeProvider themeProvider = settings.getThemeProvider();
-        if(themeName != null) {
-            for (final ITheme theme : themeProvider.available()) {
-                if (themeName.equals(theme.name()))
-                    return theme;
-            }
-        }
-        return themeProvider.defaultTheme();
-    }
-    ...
+    public void setActiveTheme(final String themeName) { ... }  // <1>
 }
 ----
+<.> these methods won't necessarily be called within a regular Causeway "interaction", so you may need to use the xref:userguide:btb:headless-access.adoc[headless access] pattern if - for example - persisting to Causeway-managed entities.
 
-and
+
+To egister
 
 [source,java]
 .Using the ActiveThemeProvider
@@ -83,6 +39,6 @@ protected void init() {
     final IBootstrapSettings settings = Bootstrap.getSettings();
     settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Flatly));
 
-    settings.setActiveThemeProvider(new UserSettingsThemeProvider(settings));
+    settings.setActiveThemeProvider(new MyThemeProvider(settings));
 }
 ----

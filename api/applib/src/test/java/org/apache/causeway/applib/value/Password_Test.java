@@ -25,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+
 import lombok.val;
 
 class Password_Test {
@@ -73,10 +75,10 @@ class Password_Test {
         @Test
         void obscures_password() {
             Password password = new Password("secret");
-            assertEquals("(suppressed)", password.toString());
+            assertEquals(PlaceholderLiteral.SUPPRESSED.getLiteral(), password.toString());
 
             password = new Password("a very very very long password");
-            assertEquals("(suppressed)", password.toString());
+            assertEquals(PlaceholderLiteral.SUPPRESSED.getLiteral(), password.toString());
         }
     }
 

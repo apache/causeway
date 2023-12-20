@@ -24,8 +24,8 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -88,19 +88,16 @@ class CommonDtoUtils_Test {
 
         val json = CommonDtoUtils.getCompositeValueAsJson(compositeDto);
 
-        //XXX there is no guarantee, that the ordering of keys is exactly as follows - should do for now
         val expectedJson = "{\"elements\":["
                 + "{\"long\":123456,\"type\":\"long\",\"name\":\"epochMillis\"},"
                 + "{\"string\":\"sample\",\"type\":\"string\",\"name\":\"calendarName\"}],"
                 + "\"type\":\"org.apache.causeway.applib.util.schema.CommonDtoUtils_Test$CompositeSample\","
                 + "\"cardinality\":2}";
-
-        assertEquals(expectedJson, json);
+        _DocumentTester.assertJsonEqualsIgnoreOrder(expectedJson, json);
 
         val compositeAfterRoundtrip = CommonDtoUtils.getCompositeValueFromJson(json);
-
-        assertEquals(expectedJson, CommonDtoUtils.getCompositeValueAsJson(compositeAfterRoundtrip));
-
+        val jsonAfterRoundtrip = CommonDtoUtils.getCompositeValueAsJson(compositeAfterRoundtrip);
+        _DocumentTester.assertJsonEqualsIgnoreOrder(expectedJson, jsonAfterRoundtrip);
     }
 
 }

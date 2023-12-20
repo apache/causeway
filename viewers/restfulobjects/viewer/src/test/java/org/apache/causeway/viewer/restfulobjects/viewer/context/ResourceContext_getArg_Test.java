@@ -31,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -97,7 +97,7 @@ class ResourceContext_getArg_Test {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
 
         resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
-                RequestParams.ofQueryString(_UrlDecoderUtil.urlDecodeNullSafe(queryString)),
+                RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null) {
             @Override
@@ -114,7 +114,7 @@ class ResourceContext_getArg_Test {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
 
         resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
-                RequestParams.ofQueryString(_UrlDecoderUtil.urlDecodeNullSafe(queryString)),
+                RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null) {
             @Override

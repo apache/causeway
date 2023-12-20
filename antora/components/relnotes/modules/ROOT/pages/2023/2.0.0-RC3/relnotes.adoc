@@ -1,0 +1,137 @@
+[[r2.0.0-RC3]]
+= 2.0.0-RC3
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+This release is primarily a stabilization and bug fix release, but there are a small number of new features, mostly improving the Wicket UI.
+There are also some new support classes for Oauth2 (using Spring security), as well as improved support for background commands.
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3619[CAUSEWAY-3619] - SPI for the `GridSystemServiceBootstrap` to provide custom layouts.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3616[CAUSEWAY-3616] - Allow background command job to be paused
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3614[CAUSEWAY-3614] - Allow default min scale to be optionally defined for `BigDecimalValueSemantics`.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3607[CAUSEWAY-3607] - `ParamDto` id's in commands and executions should use "internalId" rather than "Friendly Name"
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3599[CAUSEWAY-3599] - Extend `TableColumnOrderService` so that parented collections also fallback to use `Xxx.columnOrder.txt`
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3598[CAUSEWAY-3598] - Allow logical type name to optionally be one of a class's aliases.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3597[CAUSEWAY-3597] - Mixins to download `.columnOrder.txt` files
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3595[CAUSEWAY-3595] - Date picker should optionally automatically popup when focus
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3592[CAUSEWAY-3592] - Allow `@Column#scale` and `@Digits#fraction` to derive the min fractional digits (as well as the max)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3574[CAUSEWAY-3574] - Wicket date picker display format.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3571[CAUSEWAY-3571] - Support for generic type bounded methods that are not overwritten using explicit types.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3566[CAUSEWAY-3566] - [Wicket Viewer] Allow HTML in Tooltips, if enabled via Config.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3557[CAUSEWAY-3557] - `FakeScheduler` for integ tests.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3556[CAUSEWAY-3556] - [Metamodel] Support for action methods that override generic type bounded ones
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3547[CAUSEWAY-3547] - [SecMan] Support for Seeding from YAML file.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3545[CAUSEWAY-3545] - Better support for Oauth2 (including JWT classes); add retry logic to `RestfulClient`, make more configurable
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3524[CAUSEWAY-3524] - Allow secman permission evaluator to support v1 strategy (package names rather than logical type names)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3521[CAUSEWAY-3521] - Allow `TableColumnOrderService` to also read from a `.columnOrder.fallback.txt` file.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3517[CAUSEWAY-3517] - Secman should ALWAYS allow logout action (as a special case).
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3618[CAUSEWAY-3618] - Secman should copy the user's roles into the `UserMemento` (as obtained via `UserService`).
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3613[CAUSEWAY-3613] - package for exceldownload inconsistent with other wicket viewer extensions
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3608[CAUSEWAY-3608] - Improve `ConfigurationViewModel` to show all properties, not just those for selected config roots..
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3605[CAUSEWAY-3605] - `_Exceptions` utility method should never itself throw an exception when attempting to format its error message.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3602[CAUSEWAY-3602] - Run background commands job with one interaction/transaction per command.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3601[CAUSEWAY-3601] - [Extensions] Autosize Columns for Excel Exports/Downloads
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3596[CAUSEWAY-3596] - Don't allow tabbing to the 'T' or ban buttons.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3594[CAUSEWAY-3594] - [Wicket Viewer] Time-Taken message (when prototyping) is nowhere near actual response time
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3593[CAUSEWAY-3593] - Validators missing for JPA handling of `@Column`.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3591[CAUSEWAY-3591] - jpa integration classes misplaced?
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3590[CAUSEWAY-3590] - [Wicket Viewer] cosmetic: less confusing selected collection presentation indicator in dropdown
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3589[CAUSEWAY-3589] - All framework defined mixins should declare their command and execution publishing.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3587[CAUSEWAY-3587] - [cosmetic] fa icons and bootstrap colours - extend and clean up default config.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3586[CAUSEWAY-3586] - Allow for `ViewModel.viewModelMemento()` to return non-url-safe Strings
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3585[CAUSEWAY-3585] - [Metamodel] Allow for Types that subclass an Entity Type to actually be a `Viewmodel`.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3582[CAUSEWAY-3582] - [Wicket Viewer] cosmetic: menu items in dropdowns misaligned, if some don't have fa-icon
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3580[CAUSEWAY-3580] - [cosmetic] checkbox label misaligned, too high
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3578[CAUSEWAY-3578] - [Wicket Viewer] Honor @CollectionLayout(hidden=...) when not hidden in Tables
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3575[CAUSEWAY-3575] - [Layout] Allow for slot-in order of unreferenced associations to be configured either sequence-based or alphabetical.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3573[CAUSEWAY-3573] - Not possible to copy a URL link from the icon (this could be done in v1).
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3570[CAUSEWAY-3570] - positioning of the "T" hint varies by scalar type.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3565[CAUSEWAY-3565] - [DocGen] Make ObjectGraph a first Class Citizen to allow for easy Customizations.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3564[CAUSEWAY-3564] - [Valuetypes/Tooling] Replace causeway-tooling-model4adoc with causeway-valuetypes-asciidoc-builder
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3563[CAUSEWAY-3563] - [SecMan] Autoseed Regular User Perms for ExtDocgen when Module is present
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3554[CAUSEWAY-3554] - Framework should throw a more meaningful exception, when `validateXxx` support method returns an empty string.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3553[CAUSEWAY-3553] - Make `JaxbServiceDefault` use backward compatible XML serialization
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3552[CAUSEWAY-3552] - Allow setting of properties on a transient entity (eg when import Excel spreadsheet).
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3551[CAUSEWAY-3551] - [Wicket Viewer] Cosmetic: disabled buttons appear smaller
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3550[CAUSEWAY-3550] - `YamlUtils`: Global tag expression is discouraged
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3543[CAUSEWAY-3543] - `AuthenticatedWebSessionForCauseway` lookup MetaModelContext rather than injected.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3536[CAUSEWAY-3536] - [Wicket Viewer] Cosmetic: if Table has no Column at least render Titles
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3534[CAUSEWAY-3534] - [Wicket Viewer] Cosmetic: Button Label w/o Icon is not centered
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3533[CAUSEWAY-3533] - Remove code marked as deprecated for removal since RC2
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3510[CAUSEWAY-3510] - Ugly warning message on login page if clear cookies.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3500[CAUSEWAY-3500] - [Persistence] Cleanup ambiguous EntityState Terminology
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3481[CAUSEWAY-3481] - [invalid] Remove `sequence` attribute from `.layout.xml` - it doesn't really accomplish much.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3432[CAUSEWAY-3432] - [Wicket Viewer] Focus for `@ActionLayout#promptStyle` of inline or inline-as-if-edit is not on the field.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3430[CAUSEWAY-3430] - Remove `<action namedEscaped=...>` attribute from `layout.xml`
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3048[CAUSEWAY-3048] - Suggested UI improvements (after review demo app)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3035[CAUSEWAY-3035] - Log Stacktrace alongside ERROR to Console
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3615[CAUSEWAY-3615] - Swagger UI authorize button doesn't seem to work.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3617[CAUSEWAY-3617] - `isis.applib.annotation.action.command-publishing` is set to 'ignore_safe', and yet these are being logged.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3611[CAUSEWAY-3611] - Restful Objects viewer domain-types uses paramName instead of paramId
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3610[CAUSEWAY-3610] - `AuditTrailEntry` instances not correlated back to command if executed via `CommandExecutorService` (ie background commands)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3609[CAUSEWAY-3609] - `EntityPropertyChangePublisherDefault` fails to add audit records if hits hollowed object.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3606[CAUSEWAY-3606] - `DnStateManagerForHollow` calls `_Exceptions.unrecoverable` with side effects
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3604[CAUSEWAY-3604] - Can't view background command that has siblings.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3603[CAUSEWAY-3603] - [Commons] Lazy type does not handle evaluation exceptions well.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3588[CAUSEWAY-3588] - actions annotated with command or execution publishing disabled are nevertheless being published.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3583[CAUSEWAY-3583] - [cosmetic] properties hidden when `REFERENCES_PARENT` aren't being hidden.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3577[CAUSEWAY-3577] - `Object_identifier` is picked up as an action rather than a property.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3576[CAUSEWAY-3576] - ``Calendarable``'s method should be marked as `@Programmatic`.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3572[CAUSEWAY-3572] - for narrow screens, the secondary menu does not wrap while the primary does.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3562[CAUSEWAY-3562] - [Wicket Viewer] rendering an empty 'home-page' will throw
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3561[CAUSEWAY-3561] - [Wicket Viewer] rendering an empty tree will throw class-cast exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3560[CAUSEWAY-3560] - [Wicket Viewer] Cosmetic: Header panels prim vs sec/tert have different text color
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3559[CAUSEWAY-3559] - [Wicket Viewer] `AuthenticatedWebSessionForCauseway` fails to log when session exipres
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3555[CAUSEWAY-3555] - Fix serialization of null args via `BackgroundService`, to `CommandDto` and back out for executoin.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3549[CAUSEWAY-3549] - `ImpersonateMenuAdvisorForSecman.allUserNames` should comply with contract
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3546[CAUSEWAY-3546] - In testing, saw `OutboxRestApi#pending` action itself in the outbox, suggests `executionPublishing=DISABLED` isn't being honoured?
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3538[CAUSEWAY-3538] - [Regression] Wicket Viewer: Non-serializable object causes errors when list all, and elsewhere.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3532[CAUSEWAY-3532] - [Regression] Loading an `EntityPage` when Object-Not-Found results in HTTP 500 (JDO+JPA)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3531[CAUSEWAY-3531] - [Metamodel] Corner Case: Mixedin Action picked up as Association
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3530[CAUSEWAY-3530] - Managed Object for Entity: On object refetch, Object-Not-Found should be silently ignored
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3525[CAUSEWAY-3525] - [SecMan] 'Name Formatted' shows up in the UI, should be programmatic
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3522[CAUSEWAY-3522] - [Wicket Viewer] Potential Issues when Expanding Tree Nodes
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3479[CAUSEWAY-3479] - [Wicket Viewer] spacing of error when edit a property directly.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3015[CAUSEWAY-3015] - [Wicket Viewer] Property Edit via `FormExecutorDefault`, will not display Recoverable Exception
+
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3528[CAUSEWAY-3528] - Release activities for 2.0.0-RC3
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3156[CAUSEWAY-3156] - Change name in Board Report Schedule
+
+
+== Previously Implemented
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-1031[CAUSEWAY-1031] - [Wish] Make it possible to filter on tables
+
+
+== Duplicates
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3581[CAUSEWAY-3581] - [duplicate] cosmetic - numbers not showing right aligned in tables; losing .00 for bigdecimals
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3558[CAUSEWAY-3558] - [DUPLICATE] `CommandExecutorService` should handle 'take over' and handle publishing phase of its calling thread.
+
+
+== Not a problem / Invalid / Can't Reproduce
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3600[CAUSEWAY-3600] - [INVALID] Contributed properties and collections should not be published as executions
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3568[CAUSEWAY-3568] - [NOT A PROBLEM] Incorrectly requiring supporting choices/autoComplete for actions with list params
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3539[CAUSEWAY-3539] - [CAN'T REPRODUCE] Inspect metamodel is rendered incorrectly
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3520[CAUSEWAY-3520] - Framework fails to build with Eclipse M2E 2.4.0.20230704-1545
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3389[CAUSEWAY-3389] - {not a problem] Impersonate menu is missing from simpleapp, though not helloworld ? Also metamodel actions?
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3079[CAUSEWAY-3079] - [not a problem] Secman should provide a convenience role to allow fixture scripts to be run.

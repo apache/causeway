@@ -26,7 +26,6 @@ import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -106,8 +105,8 @@ extends InteractionTestAbstract {
             public List<Task.Outcome> choices0Act() { return Task.Outcome.failures(); }
         }
 
-        // an abstract mixin class
-        abstract class MixinAbstract {
+        // an abstract (inner) mixin class (required public if introspection policy does not process private methods)
+        public abstract class MixinAbstract {
             public Task act(final Task.Outcome outcome) {
                 Task.this.outcome = outcome;
                 return Task.this;
@@ -120,11 +119,14 @@ extends InteractionTestAbstract {
     @Test
     void mixinMemberNamedFacet_whenSharingSameAbstractMixin() {
 
-        val objectSpec1 = specificationLoader.specForType(Task.Succeeded.class).get();
-        val objectSpec2 = specificationLoader.specForType(Task.Failed.class).get();
+        val mixinSpec1 = specificationLoader.specForType(Task.Succeeded.class).get();
+        val mixinSpec2 = specificationLoader.specForType(Task.Failed.class).get();
 
-        assertTrue(objectSpec1.isMixin());
-        assertTrue(objectSpec2.isMixin());
+        assertTrue(mixinSpec1.isMixin());
+        assertTrue(mixinSpec2.isMixin());
+
+        assertTrue(mixinSpec1.mixinFacetElseFail().isMixinFor(Task.class));
+        assertTrue(mixinSpec2.mixinFacetElseFail().isMixinFor(Task.class));
 
         val objectSpec = specificationLoader.specForType(Task.class).get();
 
@@ -133,7 +135,6 @@ extends InteractionTestAbstract {
                 objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .filter(ObjectAction::isMixedIn)
                 .peek(act->{
-                    //System.out.println("act: " + act);
                     val memberNamedFacet = act.getFacet(MemberNamedFacet.class);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
@@ -141,8 +142,6 @@ extends InteractionTestAbstract {
                 .count());
     }
 
-  //FIXME[CAUSEWAY-3207]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void mixinActionValidation() {
 

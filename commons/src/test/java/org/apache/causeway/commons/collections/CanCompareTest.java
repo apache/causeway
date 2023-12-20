@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 class CanCompareTest {
 
     // in natural order
-    private List<Can<String>> samples = _Lists.of(
+    private List<Can<String>> samples = _Lists.ofNullable(
             null,
             Can.empty(),
             Can.<String>of("hi"),

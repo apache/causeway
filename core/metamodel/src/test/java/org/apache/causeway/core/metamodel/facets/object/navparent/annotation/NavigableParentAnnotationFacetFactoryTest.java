@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.navparent.annotation;
 
-import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,7 +58,7 @@ extends FacetFactoryTestAbstract {
             final @Nullable String expectedValidationMessage) throws Exception {
 
         val facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext());
-        final Method parentMethod = domainObject.getClass().getMethod(parentMethodName);
+        val parentMethod = findMethodExactOrFail(domainObject.getClass(), parentMethodName);
 
         objectScenario(domainObject.getClass(), (processClassContext, facetHolder) -> {
             //when
@@ -71,7 +70,7 @@ extends FacetFactoryTestAbstract {
                 assertTrue(navigableParentFacet instanceof NavigableParentFacetViaMethod);
                 assertEquals(
                         navigableParentFacet.navigableParent(domainObject),
-                        Try.call(()->parentMethod.invoke(domainObject, _Constants.emptyObjects))
+                        Try.call(()->parentMethod.method().invoke(domainObject, _Constants.emptyObjects))
                             .valueAsNullableElseFail());
             } else {
                 assertNull(facetHolder.getFacet(NavigableParentFacet.class));

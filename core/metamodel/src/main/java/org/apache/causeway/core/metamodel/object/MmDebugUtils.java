@@ -20,9 +20,12 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.stream.Collectors;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 
 import lombok.Builder;
 import lombok.Value;
@@ -32,30 +35,25 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class MmDebugUtils {
 
+    // -- PARAM
+
     @Value @Builder
     public static class ParamUpdateData {
-        final String action;
+        final String action; // feature-id
         final int index;
         final String name;
-        final ManagedObject pendingValue;
         final Can<? extends ManagedParameter> allParams;
         public String formatted() {
-            return String.format("%s[%d](%s->%s)\n%s",
-                    action, index, name, formatted(pendingValue),
+            return String.format("[actionId=%s,paramIndex=%d,paramName=%s]\n%s",
+                    action, index, name,
                     allParams.stream().map(this::formatted)
                     .collect(Collectors.joining("\n")));
         }
         String formatted(final ManagedParameter managedParam) {
-            return String.format("- param[%d] %s->%s",
+            return String.format("- param[index=%d,name=%s]: %s",
                     managedParam.getParamNr(),
                     managedParam.getFriendlyName(),
-                    formatted(managedParam.getValue().getValue()));
-        }
-        String formatted(final ManagedObject managedObject) {
-            return String.format("(%s, cls=%s, pojo=%s)",
-                    managedObject.getSpecialization().name(),
-                    managedObject.getCorrespondingClass().getName(),
-                    ""+managedObject.getPojo());
+                    formatPendingValue(managedParam.getValue().getValue()));
         }
     }
 
@@ -64,12 +62,43 @@ public final class MmDebugUtils {
             final ParameterNegotiationModel parameterNegotiationModel) {
         val param = parameterNegotiationModel.getParamModels().getElseFail(parameterIndex);
         return ParamUpdateData.builder()
+                .index(parameterIndex)
                 .action(parameterNegotiationModel.getHead().getMetaModel().getId())
                 .name(param.getFriendlyName())
-                .pendingValue(param.getValue().getValue())
                 .allParams(parameterNegotiationModel.getParamModels())
                 .build();
     }
 
+    // -- PROP
+
+    @Value @Builder
+    public static class PropUpdateData {
+        final String property;  // feature-id
+        final String name;
+        final ManagedObject pendingValue;
+        public String formatted() {
+            return String.format("[propertyId=%s,propertyName=%s] -> %s)",
+                    property, name, formatPendingValue(pendingValue));
+        }
+    }
+
+    public static PropUpdateData propUpdateDataFor(final PropertyNegotiationModel propertyNegotiationModel) {
+        var prop = propertyNegotiationModel.getManagedProperty();
+        return PropUpdateData.builder()
+                .property(prop.getIdentifier().toString())
+                .name(prop.getFriendlyName())
+                .build();
+    }
+
+    // -- HELPER
+
+    private String formatPendingValue(final @Nullable ManagedObject managedObject) {
+        return ManagedObjects.isSpecified(managedObject)
+                ? String.format("(%s,cls=%s) pojo=%s",
+                    managedObject.getSpecialization().name(),
+                    managedObject.getCorrespondingClass().getName(),
+                    ""+managedObject.getPojo())
+                : "(unspecified) pojo=null";
+    }
 
 }

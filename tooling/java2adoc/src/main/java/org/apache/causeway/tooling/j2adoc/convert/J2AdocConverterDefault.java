@@ -43,8 +43,8 @@ import org.apache.causeway.tooling.javamodel.ast.EnumConstantDeclarations;
 import org.apache.causeway.tooling.javamodel.ast.FieldDeclarations;
 import org.apache.causeway.tooling.javamodel.ast.Javadocs;
 import org.apache.causeway.tooling.javamodel.ast.MethodDeclarations;
-import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
-import org.apache.causeway.tooling.model4adoc.ast.SimpleBlock;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
+import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleBlock;
 
 import lombok.NonNull;
 import lombok.val;

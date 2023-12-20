@@ -4,17 +4,103 @@
 
 
 The xref:security:audittrail:about.adoc[] module provides an implementation of the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], which provides a fine-grained persistent audit trail: each and every change to a entity property is persisted as an individual `AuditTrailEntry` instance.
+This entity has a xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interaction id] which makes it easy to identify all the changes made within a single xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
+If the xref:userguide:commandlog:about.adoc[] extension is enabled, then it also means that the audit entries can be correlated back to the command (action invocation or property edit) that gave rise to them.
 
-
-The xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interaction id] identifies all the changes made within a single xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
-
-The xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[]
+The xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[] provides a set of actions that can be used to query the resultant audit trail.
+See xref:#menubar-layout-xml[menu bar layout] below for the configuration of these.
 
 == Setup
 
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-audittrail</artifactId>
+             <scope>import</scope>
+            <type>pom</type>
+           <version>{page-causewayprev}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+Your application may or may not need to interact with the audit trail directly.
+If it does, then add a dependency/import to the applib module wherever required:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-audittrail-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtAuditTrailApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the implementation modules of this extension.
+The exact modules to use will depend upon the persistence mechanism in use:
+
+* add this dependency to your webapp's `pom.xml`:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-audittrail-persistence-xxx</artifactId> <!--.-->
+    </dependency>
+</dependencies>
+----
+<.> either:
+** `causeway-extensions-audittrail-persistence-jpa` (xref:pjpa::about.adoc[]) or
+** `causeway-extensions-audittrail-persistence-jdo` (xref:pjdo::about.adoc[])
+
+* and `@Import` this module to your app manifest:
++
+[source,java]
+.MyAppManifest.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtAuditTrailPersistenceXxx.class,    // <.>
+    // ...
+})
+public class MyAppManifest { ... }
+----
+<.> either
++
+** `CausewayModuleExtAuditTrailPersistenceJpa` (xref:pjpa::about.adoc[]) or
+** `CausewayModuleExtAuditTrailPersistenceJdo` (xref:pjdo::about.adoc[])
 
 
-
+[#menubar-layout-xml]
 == menubar.layout.xml
 
 Once configured, the extension provides a number of menu actions.
@@ -24,19 +110,19 @@ To get you started, the following fragment adds all of the actions to an "Activi
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:secondary>
+<mb:secondary>
     ...
-    <mb3:menu>
-        <mb3:named>Activity</mb3:named>
+    <mb:menu>
+        <mb:named>Activity</mb:named>
         ...
-        <mb3:section>
-            <mb3:named>Audit Trail</mb3:named>
-            <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
-            <mb3:serviceAction id="findAuditEntries" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
-            <mb3:serviceAction id="findAll" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
-        </mb3:section>
+        <mb:section>
+            <mb:named>Audit Trail</mb:named>
+            <mb:serviceAction id="findMostRecent" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+            <mb:serviceAction id="findAuditEntries" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+            <mb:serviceAction id="findAll" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+        </mb:section>
         ...
-    </mb3:menu>
-</mb3:secondary>
+    </mb:menu>
+</mb:secondary>
 ----
 

@@ -85,6 +85,7 @@ public class ModulesArchTests {
         final List<String> local;
         final List<String> referencing;
 
+        @Override
         public String getName() {
             return name();
         }
@@ -99,10 +100,12 @@ public class ModulesArchTests {
             return referencing;
         }
 
+        /* not used
         private static String[] asArray(List<String> list) {
             return list != null ?
                     list.toArray(new String[] {}) : null;
-        }
+        } */
+
     }
 
 }

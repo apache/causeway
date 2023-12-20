@@ -84,7 +84,7 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.jpa</artifactId>
-			<version>4.0.1</version>
+			<version>4.0.2</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.ow2.asm</groupId>
@@ -98,6 +98,11 @@
 		    <artifactId>jakarta.el-api</artifactId>
 		    <version>5.0.1</version>
 		</dependency>
+		<!-- provides EL Impl -->        
+        <dependency>
+          <groupId>org.apache.tomcat.embed</groupId>
+          <artifactId>tomcat-embed-el</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

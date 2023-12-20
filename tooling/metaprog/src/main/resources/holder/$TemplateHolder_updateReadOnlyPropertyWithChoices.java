@@ -29,10 +29,12 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.RequiredArgsConstructor;
 
-/*${generated-file-notice}*/
+import demoapp.dom.types.Samples;
+
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT
@@ -47,22 +49,22 @@ public class /*${showcase-name}*/Holder_updateReadOnlyPropertyWithChoices {
 
     private final /*${showcase-name}*/Holder holder;
 
-    @MemberSupport public /*${showcase-name}*/Holder act(final /*${showcase-type}*/ newValue) {
+    @MemberSupport public /*${showcase-name}*/Holder act(final /*${showcase-simple-type}*/ newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public /*${showcase-type}*/ default0Act() {
-        return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
+    @MemberSupport public /*${showcase-simple-type}*/ default0Act() {
+        return holder./*${showcase-simple-type-getter-prefix}*/ReadOnlyProperty();
     }
 
-    @MemberSupport public List</*${showcase-type-boxed}*/> choices0Act() {
+    @MemberSupport public List</*${showcase-simple-type-boxed}*/> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples</*${showcase-type-boxed}*/> samples;
+    Samples</*${showcase-simple-type-boxed}*/> samples;
 
 }
 //end::class[]

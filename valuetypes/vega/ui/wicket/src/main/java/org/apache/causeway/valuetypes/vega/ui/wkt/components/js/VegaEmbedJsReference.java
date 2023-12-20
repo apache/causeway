@@ -26,9 +26,11 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * Provides a local copy of {@linkplain https://cdn.jsdelivr.net/npm/vega-embed@6.21.3}
+ * Provides a local copy of {@linkplain "https://cdn.jsdelivr.net/npm/vega-embed@6.22.1"}
  * <p>
  * LICENSE <a href="https://vega.github.io/vega/vega/blob/main/LICENSE">BSD-3-Clause license</a>
+ *
+ * @see "https://vega.github.io/vega-lite/usage/embed.html"
  * @since 2.0
  */
 public class VegaEmbedJsReference
@@ -44,6 +46,6 @@ extends JavaScriptResourceReference {
     }
 
     private VegaEmbedJsReference() {
-        super(VegaEmbedJsReference.class, "vega-embed@6.21.3.js");
+        super(VegaEmbedJsReference.class, "vega-embed@6.22.1.js");
     }
 }

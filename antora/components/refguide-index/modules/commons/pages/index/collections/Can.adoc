@@ -7,7 +7,7 @@ Java's _Optional_ , can be seen as a holder of element(s), that is restricted to
 
 Same idiomatic convention applies: References to xref:refguide:commons:index/collections/Can.adoc[Can] should never be initialized to _null_ .
 
-A xref:refguide:commons:index/collections/Can.adoc[Can] must not contain elements equal to _null_ .
+ *IMPORTANT:* A xref:refguide:commons:index/collections/Can.adoc[Can] must not contain _null_ elements. If you need to use store null, then use a different data structure, for example a regular _java.util.List java.util.List_ .
 
 == API
 
@@ -38,6 +38,7 @@ interface Can<T> {
   Can<T> filter(Predicate<? super T> predicate)     // <.>
   Can<R> map(Function<? super T, R> mapper)     // <.>
   Can<R> flatMap(Function<? super T, ? extends Can<? extends R>> mapper)
+  Can<T> reduce(BinaryOperator<T> accumulator)     // <.>
   Can<T> concat(Can<T> can, T element)     // <.>
   Iterator<T> iterator(int skip, int limit)     // <.>
   Iterator<T> reverseIterator()
@@ -125,27 +126,27 @@ Var-arg version of _Can#ofArray(Object[])_ .
 <.> xref:#ofArray_T[ofArray(T)]
 +
 --
-Returns either a _Can_ with all the elements from given _array_ or an empty _Can_ if the _array_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _array_ or an empty _Can_ if the _array_ is _null_ .
 --
 <.> xref:#ofCollection_Collection[ofCollection(Collection)]
 +
 --
-Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ .
 --
 <.> xref:#ofIterable_Iterable[ofIterable(Iterable)]
 +
 --
-Returns either a _Can_ with all the elements from given _iterable_ or an empty _Can_ if the _iterable_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _iterable_ or an empty _Can_ if the _iterable_ is _null_ .
 --
 <.> xref:#ofEnumeration_Enumeration[ofEnumeration(Enumeration)]
 +
 --
-Returns either a _Can_ with all the elements from given _enumeration_ or an empty _Can_ if the _enumeration_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _enumeration_ or an empty _Can_ if the _enumeration_ is _null_ .
 --
 <.> xref:#ofStream_Stream[ofStream(Stream)]
 +
 --
-Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ .
 --
 <.> xref:#sorted_Comparator[sorted(Comparator)]
 +
@@ -175,7 +176,12 @@ Returns a _Can_ with all the elements from this _Can_ , that are accepted by the
 <.> xref:#map_Function[map(Function)]
 +
 --
-Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given _mapper_ function. Any resulting elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given _mapper_ function.
+--
+<.> xref:#reduce_BinaryOperator[reduce(BinaryOperator)]
++
+--
+Performs a reduction on all elements, returning a xref:refguide:commons:index/collections/Can.adoc[Can] containing either a singleton reduction result or an empty xref:refguide:commons:index/collections/Can.adoc[Can] .
 --
 <.> xref:#concat_Can_T[concat(Can, T)]
 +
@@ -316,34 +322,46 @@ Returns either a _Can_ with the given _element_ or throws if the _element_ is _n
 
 Var-arg version of _Can#ofArray(Object[])_ .
 
+ *NOTE:* Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+
 [#ofArray_T]
 === ofArray(T)
 
-Returns either a _Can_ with all the elements from given _array_ or an empty _Can_ if the _array_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _array_ or an empty _Can_ if the _array_ is _null_ .
+
+ *NOTE:* Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
 [#ofCollection_Collection]
 === ofCollection(Collection)
 
-Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ .
+
+ *NOTE:* Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
 [#ofIterable_Iterable]
 === ofIterable(Iterable)
 
-Returns either a _Can_ with all the elements from given _iterable_ or an empty _Can_ if the _iterable_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _iterable_ or an empty _Can_ if the _iterable_ is _null_ .
+
+ *NOTE:* Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
 [#ofEnumeration_Enumeration]
 === ofEnumeration(Enumeration)
 
-Returns either a _Can_ with all the elements from given _enumeration_ or an empty _Can_ if the _enumeration_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _enumeration_ or an empty _Can_ if the _enumeration_ is _null_ .
 
-As side-effect, consumes given _enumeration_ .
+ *NOTE:* Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+
+ *NOTE:* As side-effect, consumes given _enumeration_ .
 
 [#ofStream_Stream]
 === ofStream(Stream)
 
-Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ .
 
-As side-effect, consumes given _stream_ .
+ *NOTE:* Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+
+ *NOTE:* As side-effect, consumes given _stream_ .
 
 [#sorted_Comparator]
 === sorted(Comparator)
@@ -373,7 +391,14 @@ Returns a _Can_ with all the elements from this _Can_ , that are accepted by the
 [#map_Function]
 === map(Function)
 
-Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given _mapper_ function. Any resulting elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given _mapper_ function.
+
+ *NOTE:* Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+
+[#reduce_BinaryOperator]
+=== reduce(BinaryOperator)
+
+Performs a reduction on all elements, returning a xref:refguide:commons:index/collections/Can.adoc[Can] containing either a singleton reduction result or an empty xref:refguide:commons:index/collections/Can.adoc[Can] .
 
 [#concat_Can_T]
 === concat(Can, T)

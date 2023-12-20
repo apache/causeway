@@ -47,7 +47,6 @@ import lombok.RequiredArgsConstructor;
  *
  * @see UserService
  * @see ImpersonateMenuAdvisor
- * @see ImpersonatedUserHolder
  *
  * @since 2.0 {@index}
  */
@@ -73,11 +72,11 @@ public class ImpersonateStopMenu {
 
 
     @Action(
-            domainEvent = stopImpersonating.ActionDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
+            domainEvent = stopImpersonating.ActionDomainEvent.class,
             executionPublishing = Publishing.DISABLED,
-            restrictTo = RestrictTo.PROTOTYPING
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(sequence = "100.3", redirectPolicy = Redirect.EVEN_IF_SAME)
     public class stopImpersonating{

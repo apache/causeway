@@ -37,7 +37,6 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import /*${showcase-java-package}*/.holder./*${showcase-name}*/Holder2;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
@@ -50,21 +49,21 @@ public class /*${showcase-name}*/Vm
         implements HasAsciiDocDescription, /*${showcase-name}*/Holder2 {
 
 //end::class[]
-    public /*${showcase-name}*/Vm(final /*${showcase-type}*/ initialValue) {
+    public /*${showcase-name}*/Vm(final /*${showcase-simple-type}*/ initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "/*${showcase-type}*/ (primitive) view model: ")
+    @Title(prepend = "/*${showcase-simple-type}*/ (primitive) view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Getter @Setter
-    private /*${showcase-type}*/ readOnlyProperty;                              // <.>
+    private /*${showcase-simple-type}*/ readOnlyProperty;                              // <.>
 
-    @Property(editing = Editing.ENABLED)                                        
+    @Property(editing = Editing.ENABLED)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
-    private /*${showcase-type}*/ readWriteProperty;
+    private /*${showcase-simple-type}*/ readWriteProperty;
 
 }
 //end::class[]

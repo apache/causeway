@@ -3,18 +3,38 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-This page will be added to as development progresses.
 
 == Programming Model
 
 === Removed
 * `ActionLayout#bookmarking` ... had conflicting semantics with `DomainObjectLayout#bookmarking`,
-that is, if the latter was present on an Action's return type, hence removed
+that is, if the latter was present on an Action's return type, hence removed.
++
+(Also, originally the intent was for action prompts to be bookmarked, but this was never implemented).
+
+* The `causeway-extensions-shiro-realm-ldap` extension has been removed.
++
+This extension extended Shiro's own `DefaultLdapRealm` realm to provide support for authorisation (statically defined in the `shiro.ini` file).
+Instead, use Shiro's own `DefaultLdapRealm` but configure with some other authorisation mechanism, eg Secman.
 
 === Marked Deprecated for Removal
 * `Action#hidden` ... use `ActionLayout#hidden` instead
 * `Collection#hidden` ... use `CollectionLayout#hidden` instead
 * `Property#hidden` ... use `PropertyLayout#hidden` instead
+
+Parameter support method `validateNXxx(...)` is now supported to only have a single argument,
+namely the parameter, that is subject to validation.
+
+[WARNING]
+====
+This may potentially change behavior
+for cases when the action's first and the n-th parameter
+are the same type and
+given a single argument parameter support method with same type also,
+then previously it interpreted the support to be associated with
+the first parameter, while now it will interpret the support to be
+associated with the n-th parameter. (using _n_ as 1-based here)
+====
 
 == Maven Artifacts
 
@@ -28,7 +48,7 @@ The v1 versions of the schemas for `common`, `chg`, `cmd` and `ixn` have been ma
 
 === causeway-mavendeps-webapp
 
-Dependencies
+The following dependencies:
 
 [source,xml]
 .pom.xml
@@ -41,6 +61,11 @@ Dependencies
 <dependency>
     <groupId>org.apache.causeway.viewer</groupId>
     <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.causeway.security</groupId>
+    <artifactId>causeway-security-bypass</artifactId>
 </dependency>
 ----
 
@@ -55,11 +80,4 @@ were removed from
     <type>pom</type>
 </dependency>
 ----
-
-[NOTE]
-====
-Other viewers are in incubation phase.
-This change allows for fine grained control on which viewers to add,
-while providing a minimal _Spring_ web stack.
-====
 

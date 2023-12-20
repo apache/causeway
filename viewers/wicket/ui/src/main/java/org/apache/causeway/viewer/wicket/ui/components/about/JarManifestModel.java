@@ -36,7 +36,6 @@ import jakarta.inject.Provider;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {
@@ -49,15 +48,10 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
     private final List<JarManifestAttributes> manifests = _Lists.newArrayList();
 
     /**
-     * @param commonContext
      * @param metaInfManifestProvider provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
      */
-    public JarManifestModel(
-            final MetaModelContext commonContext,
-            final Provider<InputStream> metaInfManifestProvider) {
-
-        super(commonContext);
-
+    public JarManifestModel(final Provider<InputStream> metaInfManifestProvider) {
+        super();
         Manifest manifest;
         try(var metaInfManifestIs = metaInfManifestProvider.get()) {
             manifest = new Manifest(metaInfManifestIs);

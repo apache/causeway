@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+         http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
 -->
 <!--
 This pom is the top-level parent, responsible for deploying to
@@ -34,7 +34,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.6</version>
+        <version>3.2.0</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -57,16 +57,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
         <gpg.useagent>true</gpg.useagent>
-        <minimalMavenBuildVersion>3.8.0</minimalMavenBuildVersion> <!-- enforces https repos -->
-        <minimalJavaBuildVersion>17</minimalJavaBuildVersion>
-        <maven.compiler.release>17</maven.compiler.release>
+        <minimalMavenBuildVersion>3.8.8</minimalMavenBuildVersion> <!-- latest from github actions/setup-java@v3 -->
+        <minimalJavaBuildVersion>21</minimalJavaBuildVersion>
+        <maven.compiler.release>21</maven.compiler.release>
         
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
         <causeway.skipTests>false</causeway.skipTests>
 		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2023-03-18T17:53:08Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2023-07-04T21:19:08Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -78,54 +78,50 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
 
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-release-plugin.version>3.0.0</maven-release-plugin.version>
-		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-		<maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
-		<maven-surefire-report-plugin.version>3.0.0</maven-surefire-report-plugin.version>
+        <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+		<maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
+		<maven-surefire-report-plugin.version>3.2.3</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
-        <maven.plugin.tools.version>3.8.2</maven.plugin.tools.version>
+        <maven.plugin.tools.version>3.10.2</maven.plugin.tools.version>
 
         <!-- LIBRARY DEPENDENCIES -->
 
-        <archunit.version>1.0.1</archunit.version>
-        <asciidoctorj.version>2.5.8</asciidoctorj.version>
-        <asm.version>9.5</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-        <approvaltests.version>18.6.0</approvaltests.version>
+        <archunit.version>1.2.1</archunit.version>
+        <asciidoctorj.version>2.5.10</asciidoctorj.version>
+        <asm.version>9.6</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
+        <approvaltests.version>22.3.3</approvaltests.version>
 
         <assertj-guava.version>3.24.2</assertj-guava.version>
 
-        <camel.version>3.14.7</camel.version>
-
         <commons-email.version>1.5</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
-        <commons-io.version>2.11.0</commons-io.version>
+        <commons-io.version>2.15.1</commons-io.version>
 
-        <cucumber.version>7.11.2</cucumber.version>
-
-        <cxf-rt-rs-client.version>4.0.0</cxf-rt-rs-client.version>
+        <cucumber.version>7.15.0</cucumber.version>
 
         <datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
-        <datanucleus-core.version>6.0.4</datanucleus-core.version>
+        <datanucleus-core.version>6.0.6</datanucleus-core.version>
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
-        <datanucleus-rdbms.version>6.0.4</datanucleus-rdbms.version>
+        <datanucleus-rdbms.version>6.0.6</datanucleus-rdbms.version>
 
-        <datatables.version>1.13.2</datatables.version> <!-- keep in sync with DatatablesDotNet -->
+        <datatables.version>1.13.5</datatables.version> <!-- keep in sync with DatatablesDotNet -->
 
         <docx4j.version>11.3.2</docx4j.version>
 
-        <easymock.version>5.1.0</easymock.version>
-        <error_prone_annotations.version>2.18.0</error_prone_annotations.version>
+        <easymock.version>5.2.0</easymock.version>
+        <error_prone_annotations.version>2.23.0</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>33.0.0-jre</guava.version>
 
         <htmlparser.version>2.1</htmlparser.version>
         
         <javafaker.version>1.0.2</javafaker.version>
-        <javassist.version>3.29.2-GA</javassist.version>
+        <javassist.version>3.30.1-GA</javassist.version>
         
         <jaxb-impl.version>4.0.1</jaxb-impl.version>
         <jaxws-ri.version>4.0.0</jaxws-ri.version>
@@ -149,59 +145,42 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <jquery-ui.version>1.13.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
         <jsr305.version>3.0.2</jsr305.version>
-        <jsoup.version>1.15.4</jsoup.version>
-        <junit-jupiter.version>5.9.2</junit-jupiter.version> <!-- overrides spring -->
-        <junit-platform.version>1.9.2</junit-platform.version>
+        <jsoup.version>1.17.1</jsoup.version>
+        <junit-jupiter.version>5.10.1</junit-jupiter.version> <!-- overrides spring -->
+        <junit-platform.version>1.10.1</junit-platform.version>
 
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <lombok.version>edge-SNAPSHOT</lombok.version> <!-- overriding Spring -->
+        <lombok.version>1.18.30</lombok.version> <!-- overriding Spring -->
 
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
-        <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
-		<node.version>v18.12.0</node.version>
-		<npm.version>8.19.2</npm.version>
-
-        <objenesis.version>3.3</objenesis.version>
-        <ognl.version>3.3.4</ognl.version>
+        <ognl.version>3.4.2</ognl.version>
 
         <picocontainer.version>2.15</picocontainer.version>
-        <poi.version>5.2.3</poi.version>
+        <poi.version>5.2.5</poi.version>
 
         <quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
         <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
-        <resteasy-spring.version>3.0.2.Final</resteasy-spring.version>
-        <resteasy.version>6.2.3.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
+        <resteasy-spring.version>3.1.0.Final</resteasy-spring.version>
+        <resteasy.version>6.2.6.Final</resteasy.version> <!-- be awre of potential clashes with https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-spring-boot-starter -->
         <resteasy-jaxb-provider.version>6.2.2.Final</resteasy-jaxb-provider.version>
-        
 
         <select2.version>4.0.13</select2.version>
-        <shiro.version>2.0.0-alpha-1</shiro.version> <!-- latest release was 1.10.0, however we need jakarta namespace support -->
+        <shiro.version>2.0.0-alpha-4</shiro.version> <!-- latest release was 1.10.0, however we need jakarta namespace support -->
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
-        <slf4j-api.version>2.0.7</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
+        <slf4j-api.version>2.0.9</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.0.6</spring-boot.version>
-        <summernote.version>0.8.20</summernote.version>
+        <spring-boot.version>3.2.0</spring-boot.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
-        <swagger-core.version>2.2.9</swagger-core.version>
+        <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
+        <swagger-core.version>2.2.20</swagger-core.version>
 
-        <togglz.version>3.3.3</togglz.version>
-
-        <vaadin.version>24.0.5</vaadin.version>
-
-		<!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
-		<!--  <wicket.version>936167650a</wicket.version> 28 Nov '22 build -->
-        <!--  <wicket.version>spring6-4e058bde3a-1</wicket.version> 5 Mar '23 build -->
-        <wicket.version>c61acb79a9</wicket.version> <!-- 4 Apr '23 build -->
-        
-        
-        
-        <wicket-bootstrap.version>6.0.2</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
-        <wicket-webjars.version>3.0.6</wicket-webjars.version>
-        <wicket-viewer-jquery.version>3.6.4</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
-
-        <wicketstuff.version>9.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+        <wicket.version>10.0.0-M2</wicket.version>
+        <wicket-bootstrap.version>7.0.1</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+        <wicket-webjars.version>4.0.1</wicket-webjars.version> <!-- de.agilecoders.wicket.webjars:wicket-webjars -->
+        <wicket-viewer-jquery.version>3.7.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
+        <wicketstuff.version>10.0.0-M2</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 
 		<!-- OTHER -->
 
@@ -235,7 +214,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			[6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
     </properties>
     <dependencyManagement>
-
 
 		<dependencies>
 
@@ -577,13 +555,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-wicket-graceful</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-model</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
@@ -801,6 +772,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-docgen</artifactId>
+				<version>3.0.0-SNAPSHOT</version><type>pom</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-docgen-help</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
@@ -949,7 +926,23 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- org.apache.causeway.extensions (audittrail) -->
+            <!-- org.apache.causeway.extensions (layoutgithub) -->
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-layoutloaders</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-layoutloaders-github</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- org.apache.causeway.extensions (audittrail) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail</artifactId>
@@ -1095,22 +1088,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- org.apache.causeway.extensions (shiro) -->
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-shiro-realm-ldap</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-shiro-realm-ldap-impl</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
-
 			<!-- org.apache.causeway.extensions (spring security) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
@@ -1138,15 +1115,22 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
 			<!-- org.apache.causeway.extensions (wicket viewer) -->
 			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-exceldownload</artifactId>
+			    <groupId>org.apache.causeway.extensions</groupId>
+			    <artifactId>causeway-extensions-tabular</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>
+			    <groupId>org.apache.causeway.extensions</groupId>
+			    <artifactId>causeway-extensions-tabular-applib</artifactId>
+				<version>3.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.causeway.extensions</groupId>
+			    <artifactId>causeway-extensions-tabular-excel</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
@@ -1298,6 +1282,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
+				<version>3.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
@@ -1472,38 +1463,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <version>${maven.plugin.tools.version}</version>
             </dependency>
 
-
-            <!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used
-				by causeway-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
 				<artifactId>woodstox-core</artifactId>
 				<version>6.5.1</version>
 			</dependency>
-			<dependency>
+            <dependency>
 				<groupId>org.codehaus.woodstox</groupId>
 				<artifactId>stax2-api</artifactId>
-				<version>4.2.1</version>
+				<version>4.2.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.moxy</artifactId>
-				<version>4.0.1</version>
+				<version>4.0.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
-				<version>4.0.1</version>
+				<version>4.0.2</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.eclipse.persistence</groupId>
 			    <artifactId>org.eclipse.persistence.asm</artifactId>
-			    <version>9.5.0</version>
+			    <version>9.6.0</version>
 			</dependency>
 			<dependency>
 	            <groupId>com.sun.xml.bind</groupId>
 	            <artifactId>jaxb-impl</artifactId>
-	            <version>4.0.2</version>
+	            <version>4.0.4</version>
 	        </dependency>
 
 			<dependency>
@@ -1527,7 +1515,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${asm.version}</version>
 			</dependency>
 
-			<dependency>
+            <dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>${hibernate-validator.version}</version>
@@ -1699,64 +1687,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				</exclusions>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-core</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-spring</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-jms</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-stream</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-ognl</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-jaxb</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-jackson</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-spring-javaconfig</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-cxf</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-test</artifactId>
-				<version>${camel.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-test-spring</artifactId>
-				<version>${camel.version}</version>
-				<scope>test</scope>
-			</dependency>
-
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -1773,12 +1703,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<artifactId>activation</artifactId>
 					</exclusion>
 				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-rs-client</artifactId>
-				<version>${cxf-rt-rs-client.version}</version>
 			</dependency>
 
 			<dependency>
@@ -1811,42 +1735,25 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-bom</artifactId>
-				<version>${vaadin.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-			    <groupId>com.vaadin</groupId>
-			    <artifactId>vaadin-maven-plugin</artifactId>
-			    <version>${vaadin.version}</version>
-			</dependency>
-
-			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket</artifactId>
 				<version>${wicket.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-core</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-devutils</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-request</artifactId>
 				<version>${wicket.version}</version>
 				<exclusions>
@@ -1859,8 +1766,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-util</artifactId>
 				<version>${wicket.version}</version>
 				<exclusions>
@@ -1872,16 +1778,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-datetime</artifactId>
 				<version>${wicket.version}</version>
 				<exclusions>
@@ -1893,15 +1797,18 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-auth-roles</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-tester</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 
@@ -2037,12 +1944,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<groupId>org.objenesis</groupId>
-				<artifactId>objenesis</artifactId>
-				<version>${objenesis.version}</version>
-			</dependency>
-
-			<dependency>
 			    <groupId>org.osgi</groupId>
 			    <artifactId>osgi.core</artifactId>
 			    <version>${osgi.version}</version>
@@ -2073,28 +1974,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-core</artifactId>
-				<version>${togglz.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-junit</artifactId>
-				<version>${togglz.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-servlet</artifactId>
-				<version>${togglz.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-console</artifactId>
-				<version>${togglz.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.webjars</groupId>
 				<artifactId>datatables</artifactId>
 				<version>${datatables.version}</version>
@@ -2116,18 +1995,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<groupId>org.webjars</groupId>
 				<artifactId>select2</artifactId>
 				<version>${select2.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.webjars.npm</groupId>
-				<artifactId>summernote</artifactId>
-				<version>${summernote.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-gmap3</artifactId>
-				<version>${wicketstuff-gmap3.version}</version>
 			</dependency>
 
 			<dependency>
@@ -2179,43 +2046,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</snapshots>
 		</repository>
 		<repository>
-			<!-- in support of java 20 - temporary till release of lombok 1.18.28 -->
-			<id>projectlombok.org</id>
-			<url>https://projectlombok.org/edge-releases</url>
-		</repository>
-        <repository>
-			<!-- temporary till release of cxf 4.0.0, shiro 2.0.0 and wicket 10.0.0 -->
-            <id>apache.snapshots</id>
-            <url>https://repository.apache.org/content/groups/snapshots/</url>
-            <snapshots><enabled>true</enabled></snapshots>
-        </repository>
-		<repository>
-			<!-- used for wicket 10.0.0-M1-SNAPSHOT fork at 
-				https://jitpack.io/#apache-causeway-committers/wicket
-				temporary till release of wicket 10.0.0 -->
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-        <repository>
-			<!-- temporary till release of wicket-stuff 10.0.0 -->
-			<id>sonatype-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>		
-		</repository>
-		<repository>
 			<!-- required for RestEasy -->
 			<id>JBoss Public Release</id>
 			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
-		<repository>
-			<!-- temporary till release of vaadin 24.x with jakarta namespaces -->
-            <id>vaadin.prereleases</id>
-			<url>https://maven.vaadin.com/vaadin-prereleases/</url>
 		</repository>
     </repositories>
     <pluginRepositories>
@@ -2251,12 +2087,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.5.0</version>    <!--bumped-->
+                    <version>3.6.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2274,7 +2110,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<plugin>
 					<groupId>org.jvnet.jaxb2.maven2</groupId>
 					<artifactId>maven-jaxb2-plugin</artifactId>
-					<version>0.15.2</version>
+					<version>0.15.3</version>
 					<configuration>
 						<removeOldOutput>true</removeOldOutput>
 						<episode>true</episode>
@@ -2283,7 +2119,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2298,7 +2134,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.4.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2308,7 +2144,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.1.0</version>
                     <configuration>
                         <gpgArguments>
                             <arg>--digest-algo=SHA512</arg>
@@ -2328,7 +2164,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-invoker-plugin</artifactId>
-                    <version>3.5.1</version>
+                    <version>3.6.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2359,7 +2195,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.3</version>
                     <configuration>
                         <notimestamp>true</notimestamp>
                         <!--  avoid noise for svn/gitpubsub  -->
@@ -2373,7 +2209,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.4.3</version>    <!--bumped-->
+                    <version>3.5.0</version>    <!--bumped-->
                     <configuration>
                         <pluginManagementExcludes>
                             <exclude>org.eclipse.m2e:lifecycle-mapping</exclude>
@@ -2406,7 +2242,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
-                    <version>3.0.0</version>    <!--bumped-->
+                    <version>3.1.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2416,7 +2252,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-plugin</artifactId>
-                    <version>2.0.0</version>
+                    <version>2.0.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2439,16 +2275,19 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
 					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
 						but doesn't seem to so bound explicitly -->
+					<!-- failing since maven-source-plugin 3.3.0 (as duplicated runs 
+					 		are no longer alloed; there is a clash with built-in goal 'jar-no-fork')
 					<executions>
 						<execution>
 							<id>package-jars</id>
-							<phase>package</phase>
+							<phase>package</phase> 
 							<goals>
 								<goal>jar</goal>
 								<goal>test-jar</goal>
 							</goals>
 						</execution>
 					</executions>
+					-->
 				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2486,7 +2325,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.4.1</version>
+                    <version>3.5.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.rat</groupId>
@@ -2513,7 +2352,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
                             <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
 
-                            <exclude>**/causeway/tooling/model4adoc/src/test/resources/org/apache/causeway/tooling/adocmodel/test/**</exclude>
+                            <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
 
                             <exclude>**/*.iml</exclude>
                             <exclude>**/webpack.config.js</exclude>
@@ -2700,7 +2539,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-docck-plugin</artifactId>
-                    <version>1.1</version>
+                    <version>1.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -2803,10 +2642,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <configuration>
                     <rules>
                         <requireMavenVersion>
-                            <version>[3.6,)</version>
+                            <version>[3.8.8,)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
-                            <version>[17,)</version>
+                            <version>[21,)</version>
                         </requireJavaVersion>
                         <!-- seemingly not compatible with use of 3.0.0-SNAPSHOT placeholders
                             <requirePluginVersions> <message>All plugin versions must be defined!</message>
@@ -3033,12 +2872,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
-                                <configuration>
-                                    <gpgArguments>
-                                        <arg>--pinentry-mode</arg>
-                                        <arg>loopback</arg>
-                                    </gpgArguments>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -3258,7 +3091,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         <version>3.1.1</version>
                         <configuration>
                             <altDeploymentRepository>
-                                nightly-localfs-repo::default::file://${MVN_SNAPSHOTS_PATH}
+                                nightly-localfs-repo::file://${MVN_SNAPSHOTS_PATH}
                             </altDeploymentRepository>
                         </configuration>
                     </plugin>
@@ -3283,7 +3116,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.10</version>
+                        <version>0.8.11</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -3418,6 +3251,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <name>Joerg Rade</name>
             <email>joergrade@apache.org</email>
             <roles>
+                <role>pmc chair</role>
                 <role>pmc</role>
                 <role>committer</role>
             </roles>
@@ -3428,7 +3262,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <name>Kevin Meyer</name>
             <email>kevin@apache.org</email>
             <roles>
-                <role>pmc chair</role>
                 <role>pmc</role>
                 <role>committer</role>
             </roles>
@@ -3463,6 +3296,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <role>mentor while incubating</role>
             </roles>
             <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>mhesse</id>
+            <name>Martin Hesse</name>
+            <email>mhesse@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+9</timezone>
         </developer>
         <developer>
             <id>oscarbou</id>

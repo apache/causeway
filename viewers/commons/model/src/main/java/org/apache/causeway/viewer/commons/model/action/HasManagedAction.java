@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
@@ -31,7 +32,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
-import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import lombok.val;
 
@@ -92,11 +92,21 @@ public interface HasManagedAction {
 
     // -- UI SPECIFICS
 
-    default Optional<FontAwesomeDecorationModel> getFontAwesomeUiModel() {
+    /**
+     * @param forceAlignmentOnIconAbsence enforced in drop-dows,
+     *      but not in horizontal action panels,
+     *      where e.g. LinkAndLabel correspond to a UI button.
+     */
+    default Optional<FontAwesomeLayers> lookupFontAwesomeLayers(final boolean forceAlignmentOnIconAbsence) {
         val managedAction = getManagedAction();
-        return FontAwesomeDecorationModel.of(ObjectAction.Util.cssClassFaFactoryFor(
-                managedAction.getAction(),
-                managedAction.getOwner()));
+        return ObjectAction.Util.cssClassFaFactoryFor(
+                    managedAction.getAction(),
+                    managedAction.getOwner())
+                .map(cssClassFaFactory->
+                    forceAlignmentOnIconAbsence
+                        ? cssClassFaFactory.getLayers().emptyToBlank()
+                        : cssClassFaFactory.getLayers()
+                    );
     }
 
     default Optional<String> getAdditionalCssClass() {

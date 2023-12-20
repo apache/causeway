@@ -26,7 +26,7 @@ import jakarta.xml.bind.annotation.XmlType;
  * Represents the location in the user interface where a class member is to be rendered.
  *
  * <p>
- * Used to control visibility (eg using the {@link Property#hidden()} annotation) and
+ * Used to control visibility (eg using the {@link PropertyLayout#hidden()} annotation) and
  * enablement (eg using the {@link Property#editing()} annotation) in different regions
  * of the user interface.
  *
@@ -58,7 +58,7 @@ public enum Where {
     EVERYWHERE {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return true;
         }
 
@@ -74,7 +74,7 @@ public enum Where {
     ANYWHERE {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return true;
         }
 
@@ -92,6 +92,10 @@ public enum Where {
     /**
      * The (property) member should be hidden when displayed as a column of a table
      * within parent object's collection, and when it references that parent.
+     *
+     * <p>
+     * This has no meaning for collections; if set on a collection then it will just be ignored.
+     * </p>
      */
     REFERENCES_PARENT,
 
@@ -137,7 +141,7 @@ public enum Where {
     ALL_TABLES {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return context == this || context == PARENTED_TABLES || context == STANDALONE_TABLES;
         }
 
@@ -153,7 +157,7 @@ public enum Where {
     ALL_EXCEPT_STANDALONE_TABLES {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return context != STANDALONE_TABLES;
         }
 
@@ -170,7 +174,7 @@ public enum Where {
     NOWHERE {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return false;
         }
 
@@ -183,7 +187,7 @@ public enum Where {
     NOT_SPECIFIED {
 
         @Override
-        public boolean includes(Where context) {
+        public boolean includes(final Where context) {
             return false;
         }
 
@@ -215,7 +219,7 @@ public enum Where {
      * <p>
      * For example, {@link #ALL_TABLES} includes {@link #STANDALONE_TABLES}; {@link #ANYWHERE} includes all others.
      */
-    public boolean includes(Where context) {
+    public boolean includes(final Where context) {
         return context == this
                 || (this.isAlways()
                     && context.isAlways());

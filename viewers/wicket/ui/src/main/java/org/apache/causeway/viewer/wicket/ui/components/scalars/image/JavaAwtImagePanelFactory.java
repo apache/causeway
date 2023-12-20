@@ -30,8 +30,6 @@ import lombok.val;
 public class JavaAwtImagePanelFactory
 extends ComponentFactoryScalarAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public JavaAwtImagePanelFactory() {
         super(JavaAwtImagePanel.class);
     }
@@ -43,7 +41,7 @@ extends ComponentFactoryScalarAbstract {
 
     @Override
     protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
-        val typeSpec = scalarModel.getScalarTypeSpec();
+        val typeSpec = scalarModel.getElementType();
         return appliesIf(typeSpec != null
                 && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));
     }

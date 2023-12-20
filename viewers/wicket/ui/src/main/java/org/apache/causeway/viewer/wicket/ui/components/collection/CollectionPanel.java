@@ -23,14 +23,14 @@ import java.util.Optional;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -44,7 +44,7 @@ import lombok.val;
  * of) {@link ScalarPanelAbstract}.
  */
 public class CollectionPanel
-extends PanelAbstract<DataTableModel, EntityCollectionModelParented>
+extends PanelAbstract<DataTableInteractive, EntityCollectionModelParented>
 implements
     CollectionPresentationSelectorProvider,
     MultiselectToggleProvider {
@@ -87,15 +87,15 @@ implements
 
     // -- MULTI SELECTION SUPPORT
 
-    private transient Optional<GenericToggleboxColumn> toggleboxColumn;
+    private transient Optional<ToggleboxColumn> toggleboxColumn;
 
     @Override
-    public GenericToggleboxColumn getToggleboxColumn() {
+    public ToggleboxColumn getToggleboxColumn() {
         if(toggleboxColumn == null) {
             val collModel = getModel();
             val collMetaModel = collModel.getMetaModel();
             toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
-                    ? Optional.of(new GenericToggleboxColumn(super.getMetaModelContext(), collModel.delegate()))
+                    ? Optional.of(new ToggleboxColumn(collModel.delegate()))
                     : Optional.empty();
         }
         return toggleboxColumn.orElse(null);

@@ -31,8 +31,8 @@ import org.asciidoctor.ast.Document;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.resource.ResourceCoordinates;
 import org.apache.causeway.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
+import org.apache.causeway.tooling.j2adoc.util.ResourceCoordinates;
 import org.apache.causeway.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.causeway.tooling.javamodel.ast.CompilationUnits;
 import org.apache.causeway.tooling.javamodel.ast.PackageDeclarations;

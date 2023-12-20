@@ -33,8 +33,6 @@ extends ComponentFactoryAbstract
 implements
     CollectionContentsAsFactory {
 
-    private static final long serialVersionUID = 1L;
-
     private static final String NAME = "calendar";
 
     private Class<T> type;
@@ -74,5 +72,10 @@ implements
     @Override
     public IModel<String> getCssClass() {
         return Model.of("fa fa-calendar");
+    }
+
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 1600;
     }
 }

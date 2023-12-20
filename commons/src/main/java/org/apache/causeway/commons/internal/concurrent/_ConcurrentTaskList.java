@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 
@@ -59,7 +60,7 @@ public class _ConcurrentTaskList {
 
     // -- ASSEMBLING
 
-    public _ConcurrentTaskList addTask(_ConcurrentTask<?> task) {
+    public _ConcurrentTaskList addTask(final _ConcurrentTask<?> task) {
         synchronized (tasks) {
             if(wasStarted.get()) {
                 val msg = "Tasks already started execution, can no longer modify collection of tasks!";
@@ -70,7 +71,7 @@ public class _ConcurrentTaskList {
         return this;
     }
 
-    public _ConcurrentTaskList addTasks(Collection<? extends _ConcurrentTask<?>> tasks) {
+    public _ConcurrentTaskList addTasks(final Collection<? extends _ConcurrentTask<?>> tasks) {
         synchronized (this.tasks) {
             if(wasStarted.get()) {
                 val msg = "Tasks already started execution, can no longer modify collection of tasks!";
@@ -83,7 +84,7 @@ public class _ConcurrentTaskList {
 
     // -- EXECUTION
 
-    public _ConcurrentTaskList submit(_ConcurrentContext context) {
+    public _ConcurrentTaskList submit(final _ConcurrentContext context) {
 
         synchronized (tasks) {
             if(wasStarted.get()) {
@@ -156,6 +157,11 @@ public class _ConcurrentTaskList {
         latch().await();
     }
 
+    /** @return {@code false} if timeout was exceeded. */
+    public boolean await(final long timeout, final TimeUnit unit) {
+        return latch().await(timeout, unit);
+    }
+
     // -- FIELDS/GETTERS
 
     public Duration getExecutionTime() {
@@ -164,7 +170,7 @@ public class _ConcurrentTaskList {
 
     // -- EXECUTION LOGGING
 
-    private void onFinished(_ConcurrentContext context) {
+    private void onFinished(final _ConcurrentContext context) {
 
         for(val task: tasks) {
             if(task.getFailedWith()!=null) {
@@ -191,11 +197,11 @@ public class _ConcurrentTaskList {
 
     // -- SHORTCUTS
 
-    public _ConcurrentTaskList addRunnable(String name, Runnable runnable) {
+    public _ConcurrentTaskList addRunnable(final String name, final Runnable runnable) {
         return addTask(_ConcurrentTask.of(runnable).withName(name));
     }
 
-    public _ConcurrentTaskList submit(_ConcurrentContext._ConcurrentContextBuilder contextBuilder) {
+    public _ConcurrentTaskList submit(final _ConcurrentContext._ConcurrentContextBuilder contextBuilder) {
         return submit(contextBuilder.build());
     }
 

@@ -30,7 +30,6 @@ import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
@@ -216,9 +215,7 @@ implements FormExecutor, HasCommonContext {
             final @Nullable Form<?> feedbackFormIfAny,
             final @NonNull  Recognition recognition) {
 
-        //[CAUSEWAY-2419] for a consistent user experience with action dialog validation messages,
-        //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
-        val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
+        val errorMsg = recognition.getCategory().isSuppressCategoryInUI()
                 ? recognition.toMessageNoCategory(getTranslationService())
                 : recognition.toMessage(getTranslationService());
 
@@ -231,13 +228,6 @@ implements FormExecutor, HasCommonContext {
     }
 
     // -- DEPENDENCIES
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return actionOrPropertyModel
-                .fold(  act->act.getMetaModelContext(),
-                        prop->prop.getMetaModelContext());
-    }
 
     private ExceptionRecognizerService getExceptionRecognizerService() {
         return getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);

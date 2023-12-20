@@ -22,8 +22,14 @@ class CommonDtoUtils {
   ValueDecomposition fundamentalTypeAsDecomposition(ValueType vType, T value)
   TypedTupleBuilder<T> typedTupleBuilder(T value)
   Map<String, Object> typedTupleAsMap(TypedTupleDto dto)
-  ParamDto paramDto(String paramName)
+  ParamDto paramDto(String paramIdOrName)     // <.>
   void copy(ValueWithTypeDto src, ValueWithTypeDto dst)
 }
 ----
 
+<.> xref:#paramDto_String[paramDto(String)]
+
+== Members
+
+[#paramDto_String]
+=== paramDto(String)

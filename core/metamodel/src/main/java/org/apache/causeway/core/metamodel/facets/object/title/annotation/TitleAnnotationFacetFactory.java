@@ -68,7 +68,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
+        programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
 
             val titleFacetTopRank =
                 objectSpec

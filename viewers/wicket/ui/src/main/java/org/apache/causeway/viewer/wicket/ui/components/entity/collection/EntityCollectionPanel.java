@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.entity.collection;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -37,7 +36,6 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
@@ -120,8 +118,7 @@ implements HasDynamicallyVisibleContent {
     // -- HELPER
 
     private void buildGui() {
-
-        val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
+        val collectionModel = entityCollectionModelParented();
         div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
         val collectionMetaModel = collectionModel.getMetaModel();
@@ -138,12 +135,10 @@ implements HasDynamicallyVisibleContent {
             visible = true;
 
             Facets.cssClass(collectionMetaModel, objectAdapter)
-            .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
+                .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            this.tableDecorator = collectionMetaModel.getTableDecorator();
-            tableDecorator.ifPresent(tableDecorator->{
-                    Wkt.cssAppend(div, tableDecorator.cssClass());
-                });
+            tableDecorator().ifPresent(tableDecorator->
+                Wkt.cssAppend(div, tableDecorator.cssClass()));
 
             val collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
@@ -154,7 +149,7 @@ implements HasDynamicallyVisibleContent {
             div.add(labelComponent);
 
             collectionMetaModel.getDescription(collectionModel::getParentObject)
-            .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
+                .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
 
             final Can<LinkAndLabel> links = collectionModel.getLinks();
             AdditionalLinksPanel.addAdditionalLinks(
@@ -166,13 +161,22 @@ implements HasDynamicallyVisibleContent {
         }
     }
 
+    // EntityCollectionModelParented caching
+    private transient EntityCollectionModelParented entityCollectionModelParented;
+    private EntityCollectionModelParented entityCollectionModelParented() {
+        if(entityCollectionModelParented == null) {
+            this.entityCollectionModelParented = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
+        }
+        return entityCollectionModelParented;
+    }
+
     // TableDecorator caching
     private transient Optional<TableDecorator> tableDecorator;
     private Optional<TableDecorator> tableDecorator() {
         if(tableDecorator == null) {
-            val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
-            val collectionMetaModel = collectionModel.getMetaModel();
-            this.tableDecorator = collectionMetaModel.getTableDecorator();
+            this.tableDecorator = entityCollectionModelParented()
+                    .getMetaModel()
+                    .getTableDecorator();
         }
         return tableDecorator;
     }
@@ -183,14 +187,12 @@ implements HasDynamicallyVisibleContent {
                 new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry(),
                         selectedItemHintKey);
 
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-
-        if (componentFactories.size() <= 1) {
-            WktComponents.permanentlyHide(div, ID_SELECTOR_DROPDOWN);
-        } else {
+        if (selectorHelper.getComponentFactories().isCardinalityMultiple()) {
             selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
                     collectionModel, selectedItemHintKey);
             div.addOrReplace(selectorDropdownPanel);
+        } else {
+            WktComponents.permanentlyHide(div, ID_SELECTOR_DROPDOWN);
         }
     }
 

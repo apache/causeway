@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 
 /**
@@ -29,10 +28,6 @@ public final class AboutModel
 extends ModelAbstract<CausewayConfiguration.Viewer.Common.Application> {
 
     private static final long serialVersionUID = 1L;
-
-    public AboutModel(final MetaModelContext commonContext) {
-        super(commonContext);
-    }
 
     @Override
     protected CausewayConfiguration.Viewer.Common.Application load() {

@@ -20,22 +20,23 @@ package /*${java-package}*/;
 
 import jakarta.inject.Named;
 
-/*${generated-file-notice}*/
+import /*${showcase-fully-qualified-type}*/;
+
 @Named("demo./*${showcase-name}*/Holder")
 //tag::class[]
 public interface /*${showcase-name}*/Holder {
 
-    /*${showcase-type}*/ getReadOnlyProperty();
-    void setReadOnlyProperty(/*${showcase-type}*/ c);
+    /*${showcase-simple-type}*/ getReadOnlyProperty();
+    void setReadOnlyProperty(/*${showcase-simple-type}*/ c);
 
-    /*${showcase-type}*/ getReadWriteProperty();
-    void setReadWriteProperty(/*${showcase-type}*/ c);
+    /*${showcase-simple-type}*/ getReadWriteProperty();
+    void setReadWriteProperty(/*${showcase-simple-type}*/ c);
 
-    /*${showcase-type}*/ getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(/*${showcase-type}*/ c);
+    /*${showcase-simple-type}*/ getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(/*${showcase-simple-type}*/ c);
 
-    /*${showcase-type}*/ getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(/*${showcase-type}*/ c);
+    /*${showcase-simple-type}*/ getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(/*${showcase-simple-type}*/ c);
 
 }
 //end::class[]

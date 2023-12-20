@@ -5,6 +5,84 @@
 The PDF.js module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer], rendering a `Blob` property containing a PDF using the link:https://mozilla.github.io/pdf.js/[PDF.js] library.
 
 
+== Setup
+
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-pdfjs</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayprev}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+In those modules where there are domain objects with xref:refguide:applib:index/value/Blob.adoc[Blob] properties containing PDF data, add a dependency/import to the applib module:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-pdfjs-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtPdfjsApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In addition, in the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
+</dependency>
+----
+
+And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the extension's implementation module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        CausewayModuleExtPdfjsWicketUi.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
 == Usage
 
 To use the extension, annotate an xref:refguide:applib:index/value/Blob.adoc[Blob] property with the xref:refguide:extensions:index/pdfjs/applib/annotations/PdfJsViewer.adoc[@PdfJsViewer] annotation.
@@ -26,46 +104,4 @@ NOTE: The `Blob` is expected also to have a mime type of `application/pdf`.
 Optionally, you can also provide an implementation of the xref:refguide:extensions:index/pdfjs/applib/spi/PdfJsViewerAdvisor.adoc[] SPI, which advises on the size of the viewer (and has callbacks to keep track of which page of the PDF is being viewed).
 The framework provides a fallback implementation that sets the height to 800px, and scaled to 75% normal size.
 
-
-== Configuration
-
-Make the following changes:
-
-* In your domain module (containing the domain class that has a `Blob` PDF type), add in the following dependency:
-+
-[source,xml]
-.pom.xml
-----
-<dependency>
-    <groupId>org.apache.causeway.extensions</groupId>
-    <artifactId>causeway-extensions-pdfjs-applib</artifactId>
-</dependency>
-----
-+
-This will provide access to the xref:refguide:extensions:index/pdfjs/applib/annotations/PdfJsViewer.adoc[@PdfJsViewer] annotation.
-
-* And, in the webapp module, add the following dependency:
-+
-[source,xml]
-.pom.xml
-----
-<dependency>
-    <groupId>org.apache.causeway.extensions</groupId>
-    <artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
-</dependency>
-----
-
-* In your `AppManifest`:
-+
-[source,java]
-.AppManifest.java
-----
-@Configuration
-@Import({
-        CausewayModuleExtPdfjsWicketUi.class,  // <.>
-        ...
-})
-public class AppManifest {
-}
-----
 

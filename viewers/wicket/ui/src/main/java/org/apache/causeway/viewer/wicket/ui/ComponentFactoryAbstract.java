@@ -38,8 +38,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
-    private static final long serialVersionUID = 1L;
-
     @ToString.Exclude
     @Getter @Setter private transient MetaModelContext metaModelContext;
 

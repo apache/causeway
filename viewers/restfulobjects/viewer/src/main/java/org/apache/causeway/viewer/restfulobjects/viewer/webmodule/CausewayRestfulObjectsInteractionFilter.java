@@ -34,15 +34,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.causeway.core.webapp.modules.templresources.TemplateResourceCachingFilter;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategy;
-import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyDefault;
+import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyUsingSession;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -85,7 +84,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
     /**
      * Default value for {@link #AUTHENTICATION_SESSION_STRATEGY_KEY} if not specified.
      */
-    public static final String AUTHENTICATION_SESSION_STRATEGY_DEFAULT = AuthenticationStrategyDefault.class.getName();
+    public static final String AUTHENTICATION_SESSION_STRATEGY_DEFAULT = AuthenticationStrategyUsingSession.class.getName();
 
     /**
      * Init parameter key for backward compatibility; if logonPage set then
@@ -161,7 +160,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
     private List<String> passThruList = Collections.emptyList();
 
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
-        httpResponse.sendRedirect(StringExtensions.combinePath(httpRequest.getContextPath(), redirectTo));
+        httpResponse.sendRedirect(_Resources.combinePath(httpRequest.getContextPath(), redirectTo));
     }
 
     public enum WhenNoSession {
@@ -281,7 +280,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
             } else {
                 // default whenNotAuthenticated and allow access through to the logonPage
                 whenNotAuthenticated = WhenNoSession.RESTRICTED;
-                this.restrictedPaths = _Lists.of(logonPage);
+                this.restrictedPaths = List.of(logonPage);
                 return;
             }
         }
@@ -413,7 +412,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
     private static void ensureMetamodelIsValid(final SpecificationLoader specificationLoader) {
         // using side-effect free access to MM validation result
         val validationResult = specificationLoader.getValidationResult()
-        .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
+        .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
         if(validationResult.hasFailures()) {
             throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
         }

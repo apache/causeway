@@ -36,8 +36,6 @@ public class CollectionContentsAsAjaxTablePanelFactory
 extends ComponentFactoryAbstract
 implements CollectionContentsAsFactory {
 
-    private static final long serialVersionUID = 1L;
-
     public static final String NAME = "table";
 
     public CollectionContentsAsAjaxTablePanelFactory() {
@@ -63,5 +61,15 @@ implements CollectionContentsAsFactory {
     @Override
     public IModel<String> getCssClass() {
         return Model.of("fa fa-fw fa-table");
+    }
+
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 1200;
+    }
+
+    @Override
+    public boolean isPageReloadRequiredOnTableViewActivation() {
+        return true;
     }
 }

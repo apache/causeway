@@ -54,6 +54,7 @@ import lombok.extern.log4j.Log4j2;
 public class DomainModelValidator {
 
     private final ValidationFailures validationFailures;
+    private final SpecificationLoader specificationLoader;
 
     @Inject
     public DomainModelValidator(final ServiceRegistry registry) {
@@ -77,6 +78,7 @@ public class DomainModelValidator {
             }
         }
 
+        this.specificationLoader = specificationLoader;
         this.validationFailures = specificationLoader.getOrAssessValidationResult();
     }
 
@@ -161,7 +163,31 @@ public class DomainModelValidator {
                     .collect(Collectors.joining("\n")));
             throw new AssertionFailedError(msg);
         }
+    }
 
+    /**
+     * JUnit support
+     */
+    public void assertAnyFailuresContaining(
+            final @NonNull Class<?> domainType,
+            final @NonNull String messageSnippet) {
+
+        val logicalType = specificationLoader.specForTypeElseFail(domainType)
+            .getLogicalType();
+        final Predicate<Identifier> filterByLogicalType = id->id.getLogicalType().equals(logicalType);
+
+        boolean matchFound = streamFailures(filterByLogicalType)
+                .anyMatch(failure->
+                    failure.getMessage().contains(messageSnippet));
+
+        if(!matchFound) {
+            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+                    messageSnippet,
+                    streamFailures(filterByLogicalType)
+                    .map(ValidationFailure::getMessage)
+                    .collect(Collectors.joining("\n")));
+            throw new AssertionFailedError(msg);
+        }
     }
 
     /**

@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.testing;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
 class Utils {
@@ -35,24 +35,19 @@ class Utils {
         return false;
     }
 
-    protected static boolean contains(ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
+    protected static boolean contains(final ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
         if(featureTypes==null || featureType==null) {
             return false;
         }
         return featureTypes.contains(featureType);
     }
 
-    protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
-        try {
-            return type.getMethod(methodName, methodTypes);
-        } catch (final SecurityException e) {
-            return null;
-        } catch (final NoSuchMethodException e) {
-            return null;
-        }
+    protected static ResolvedMethod findMethod(final Class<?> type, final String methodName, final Class<?>[] paramTypes) {
+        return _GenericResolver.testing
+                .resolveMethod(type, methodName, paramTypes);
     }
 
-    protected static Method findMethod(final Class<?> type, final String methodName) {
+    protected static ResolvedMethod findMethod(final Class<?> type, final String methodName) {
         return findMethod(type, methodName, _Constants.emptyClasses);
     }
 

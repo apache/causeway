@@ -48,6 +48,18 @@ implements HiddenTypeFacet {
             return null;
         }
 
+        /*[CAUSEWAY-3657] Don't hide members based on their element type having no visible actions,
+         * properties or collections in case the element type is an interface.
+         *
+         * I encountered a case, where an interface type was visible during PROTOTYPING, but hidden in production.
+         * This is because the check for visibility also considers mixed in members,
+         * and it is the case that any interface when PROTOTYPING has some Object_ actions mixed in,
+         * but not necessarily in production.
+         */
+        if(spec.getCorrespondingClass().isInterface()) {
+            return null;
+        }
+
         val hasVisibleProperty = spec.streamProperties(MixedIn.INCLUDED)
                 .anyMatch(prop -> !AuthorizationFacet.hidesProperty(prop, vc));
 

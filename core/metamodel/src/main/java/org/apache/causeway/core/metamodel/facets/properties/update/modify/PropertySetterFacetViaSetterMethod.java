@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.update.modify;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -40,7 +40,7 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
-    public PropertySetterFacetViaSetterMethod(final Method method, final FacetHolder holder) {
+    public PropertySetterFacetViaSetterMethod(final ResolvedMethod method, final FacetHolder holder) {
         super(holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
     }
@@ -58,7 +58,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        MmInvokeUtils.invoke(method, targetAdapter, valueAdapter);
+        MmInvokeUtils.invokeWithSingleArg(method.method(), targetAdapter, valueAdapter);
         return targetAdapter;
     }
 

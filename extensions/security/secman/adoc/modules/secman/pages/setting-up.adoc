@@ -25,7 +25,7 @@ In addition, add an entry for _SecMan_'s own BOM:
             <artifactId>causeway-extensions-secman</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -34,7 +34,8 @@ In addition, add an entry for _SecMan_'s own BOM:
 [#dependencies]
 == Dependencies
 
-In the webapp module of your application, add the following dependency:
+In the webapp module of your application, add the implementation modules of the extension.
+The exact modules to use will depend upon the persistence mechanism in use:
 
 [source,xml]
 .pom.xml
@@ -50,15 +51,14 @@ In the webapp module of your application, add the following dependency:
     </dependency>
 </dependencies>
 ----
-<.> specify either `causeway-extensions-secman-persistence-jpa` or `causeway-extensions-secman-persistence-jdo`, as required
+<.> either:
+** `causeway-extensions-secman-persistence-jpa` (xref:pjpa::about.adoc[]) or
+** `causeway-extensions-secman-persistence-jdo` (xref:pjdo::about.adoc[])
 <.> provides an implementation of `PasswordEncoder`, so that passwords are only persisted in encrypted form.
 
 
-[[_update-appmanifest]]
-== Update AppManifest
-
-
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the SecMan modules.
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the corresponding _SecMan_ modules.
+Again, the exact modules to use will depend upon the persistence mechanism in use.
 You will also need to import the fixture module; SecMan uses fixture scripts to seed its entities:
 
 [source,java]
@@ -76,8 +76,9 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
 public class AppManifest {
 }
 ----
-
-<.> specify either `CausewayModuleExtSecmanPersistenceJdo` or `CausewayModuleExtSecmanPersistenceJpa`, as required
+<.> either
+** `CausewayModuleExtSecmanPersistenceJpa` (xref:pjpa::about.adoc[]) or
+** `CausewayModuleExtSecmanPersistenceJdo` (xref:pjdo::about.adoc[])
 <.> use Jbcrypt to encrypt passwords
 <.> fixture script support
 
@@ -153,34 +154,34 @@ To get you started, the following fragment adds all of the actions to a "Securit
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:secondary>
+<mb:secondary>
     ...
-    <mb3:menu>
-        <mb3:named>Security</mb3:named>
-        <mb3:section>
-            <mb3:named>Users</mb3:named>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="userManager"/>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="findUsers"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>Roles</mb3:named>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="findRoles"/>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="newRole"/>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="allRoles"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>Permissions</mb3:named>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="allPermissions"/>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>Tenancies</mb3:named>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="newTenancy"/>
-            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="allTenancies"/>
-        </mb3:section>
-    </mb3:menu>
-</mb3:secondary>
+    <mb:menu>
+        <mb:named>Security</mb:named>
+        <mb:section>
+            <mb:named>Users</mb:named>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="userManager"/>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="findUsers"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>Roles</mb:named>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="findRoles"/>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="newRole"/>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="allRoles"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>Permissions</mb:named>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="allPermissions"/>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>Tenancies</mb:named>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="newTenancy"/>
+            <mb:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="allTenancies"/>
+        </mb:section>
+    </mb:menu>
+</mb:secondary>
 ----
 
 We also recommend adding the non-production "me" action to the tertiary menu, eg just above the "logout" action:
@@ -188,15 +189,15 @@ We also recommend adding the non-production "me" action to the tertiary menu, eg
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:tertiary>
-    <mb3:menu>
+<mb:tertiary>
+    <mb:menu>
         ...
-        <mb3:section>
-            <mb3:serviceAction objectType="causeway.ext.secman.MeService" id="me"/>
-            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
-        </mb3:section>
-    </mb3:menu>
-</mb3:tertiary>
+        <mb:section>
+            <mb:serviceAction objectType="causeway.ext.secman.MeService" id="me"/>
+            <mb:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
+        </mb:section>
+    </mb:menu>
+</mb:tertiary>
 ----
 
 
@@ -371,8 +372,6 @@ public class UserToRole__bob_allRoles extends AbstractUserAndRolesFixtureScript 
         , CausewayConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
         , CausewayAppFeatureRoleAndPermissions.ROLE_NAME                              // <.>
         , CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME                 // <7>
-        , CausewayExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME                 // <7>
-        , CausewayExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME               // <7>
         , CausewayExtH2ConsoleRoleAndPermissions.ROLE_NAME                            // <7>
         , CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME             // <7>
         , CausewaySudoImpersonateRoleAndPermissions.ROLE_NAME                         // <7>

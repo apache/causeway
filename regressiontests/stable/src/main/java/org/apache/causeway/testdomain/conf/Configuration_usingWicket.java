@@ -37,8 +37,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.junit.jupiter.api.function.ThrowingConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -109,6 +107,31 @@ public class Configuration_usingWicket {
         public static final String OPEN_SAMPLE_ACTION_TITLE = OPEN_SAMPLE_ACTION
                 + ":additionalLinkTitle";
 
+        // -- BOOK PAGE
+
+        /** strange asymmetry with JPA, to investigate another day */
+        public static final String BOOK_DELETE_ACTION_JDO = "theme:entityPageContainer:entity:rows:2"
+                + ":rowContents:1"
+                + ":col:rows:1:rowContents:1:col:tabGroups:1"
+                + ":panel:tabPanel"
+                + ":rows:1:rowContents:1"
+                + ":col:fieldSets:1:memberGroup"
+                + ":panelHeading:associatedActionLinksPanel"
+                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+
+        /** strange asymmetry with JDO, to investigate another day */
+        public static final String BOOK_DELETE_ACTION_JPA = "theme:entityPageContainer:entity:rows:2"
+                + ":rowContents:1"
+                + ":col:rows:1:rowContents:1:col:tabGroups:1:1:rowContents:1"
+                + ":col:fieldSets:1:memberGroup"
+                + ":panelHeading:associatedActionLinksPanel"
+                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+
+        // -- GENERIC STANDALONE COLLECTION
+
+        public static final String STANDALONE_COLLECTION = "theme:standaloneCollection:standaloneCollection";
+        public static final String STANDALONE_COLLECTION_LABEL = STANDALONE_COLLECTION
+                + ":actionName";
 
         // -- INVENTORY JAXB VM
 
@@ -119,7 +142,7 @@ public class Configuration_usingWicket {
                 + ":property:scalarTypeContainer:scalarIfRegular";
 
         public static final String FAVORITE_BOOK_SCALAR_NAME = FAVORITE_BOOK_SCALAR
-                + ":scalarName";
+                + ":scalarNameBeforeValue";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK = FAVORITE_BOOK_SCALAR
                 + ":container-fieldFrame:scalarValueInlinePromptLink:container-scalarValue:entityLink"
@@ -215,7 +238,7 @@ public class Configuration_usingWicket {
         }
 
         public void assertFavoriteBookIs(final BookDto bookDto) {
-            assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book:");
+            assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
             assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
 
             val expectedLinkTitle = bookFactory.apply(bookDto).title();
@@ -229,29 +252,26 @@ public class Configuration_usingWicket {
         }
 
         public void dumpComponentTree(final Predicate<Component> filter) {
-            getLastRenderedPage().visitChildren(new IVisitor<Component, Object>() {
-                @Override
-                public void component(final Component component, final IVisit<Object> visit) {
-                    if(filter.test(component)) {
+            getLastRenderedPage().visitChildren((component, visit) -> {
+                if(filter.test(component)) {
 
-                        val inversePath = new ArrayList<String>();
-                        var comp = component;
+                    val inversePath = new ArrayList<String>();
+                    var comp = component;
 
-                        while(comp!=null) {
-                            inversePath.add(comp.getId());
-                            comp = comp.getParent();
-                        }
-
-                        val path = Can.ofCollection(inversePath)
-                        .reverse()
-                        .stream()
-                        .skip(1L)
-                        .collect(Collectors.joining(":"));
-
-                        System.err.printf("comp[%s]: %s -> %s: %s%n",
-                                path, component, component.getClass().getSimpleName(),
-                                component.getDefaultModelObjectAsString());
+                    while(comp!=null) {
+                        inversePath.add(comp.getId());
+                        comp = comp.getParent();
                     }
+
+                    val path = Can.ofCollection(inversePath)
+                    .reverse()
+                    .stream()
+                    .skip(1L)
+                    .collect(Collectors.joining(":"));
+
+                    System.err.printf("comp[%s]: %s -> %s: %s%n",
+                            path, component, component.getClass().getSimpleName(),
+                            component.getDefaultModelObjectAsString());
                 }
             });
         }
@@ -261,7 +281,7 @@ public class Configuration_usingWicket {
          * @see #startPage(IPageProvider)
          */
         public EntityPage startEntityPage(final PageParameters pageParameters) {
-            val entityPage = EntityPage.forPageParameters(getMetaModelContext(), pageParameters);
+            val entityPage = EntityPage.forPageParameters(pageParameters);
             val startedPage = startPage(entityPage);
             assertRenderedPage(EntityPage.class);
             return startedPage;
@@ -301,7 +321,7 @@ public class Configuration_usingWicket {
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
             if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(EntityPage.forPageParameters(holder.getMetaModelContext(), parameters));
+                return _Casts.uncheckedCast(EntityPage.forPageParameters(parameters));
             }
             return delegate.newPage(pageClass, parameters);
         }

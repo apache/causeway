@@ -25,17 +25,23 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbbreviationOptions;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericPropertyColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.PluralColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.PluralColumn.RenderOptions;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.SingularColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
@@ -45,7 +51,7 @@ import lombok.val;
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public class CollectionContentsAsAjaxTablePanel
-extends PanelAbstract<DataTableModel, EntityCollectionModel>
+extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
@@ -83,25 +89,25 @@ implements CollectionCountProvider {
 
         // multi select check boxes
         final MultiselectToggleProvider multiselectToggleProvider = getMultiselectToggleProvider();
-
-        GenericToggleboxColumn toggleboxColumn = null;
-        if(multiselectToggleProvider != null) {
-
-            toggleboxColumn = multiselectToggleProvider.getToggleboxColumn();
-            if(toggleboxColumn != null) {
-                columns.add(toggleboxColumn);
-            }
-
-        }
+        final ToggleboxColumn toggleboxColumn = multiselectToggleProvider != null
+            ? multiselectToggleProvider.getToggleboxColumn()
+            : null;
 
         val collectionModel = entityCollectionModel();
-        addTitleColumn(
+
+        // first create property columns, so we know how many columns there are
+        addPropertyColumnsIfRequired(columns);
+        // prepend title column, which may have distinct rendering hints,
+        // based on whether there are any property columns or not
+        prependTitleColumn(
                 columns,
                 collectionModel.getVariant(),
-                getWicketViewerSettings().getMaxTitleLengthInParentedTables(),
-                getWicketViewerSettings().getMaxTitleLengthInStandaloneTables());
+                getWicketViewerSettings());
 
-        addPropertyColumnsIfRequired(columns);
+        // prepend togglebox column (left most), if enabled
+        if(toggleboxColumn != null) {
+            columns.add(0, toggleboxColumn);
+        }
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
         val dataTable = new CausewayAjaxDataTable(
@@ -120,18 +126,25 @@ implements CollectionCountProvider {
         return null;
     }
 
-    private void addTitleColumn(
+    private void prependTitleColumn(
             final List<GenericColumn> columns,
             final Variant variant,
-            final int maxTitleParented,
-            final int maxTitleStandalone) {
+            final Wicket wktConfig) {
 
         val contextBookmark = entityCollectionModel().getParentObject().getBookmark()
                 .orElse(null);
 
-        final int maxTitleLength = getModel().getVariant().isParented()? maxTitleParented: maxTitleStandalone;
-        columns.add(new GenericTitleColumn(
-                super.getMetaModelContext(), variant, contextBookmark, maxTitleLength));
+        final int maxColumnTitleLength = getModel().getVariant().isParented()
+                    ? wktConfig.getMaxTitleLengthInParentedTables()
+                    : wktConfig.getMaxTitleLengthInStandaloneTables();
+
+        val opts = ColumnAbbreviationOptions.builder()
+            .maxElementTitleLength(columns.size()==0
+                            ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
+                            : -1 /* don't override */)
+            .build();
+
+        columns.add(0, new TitleColumn(variant, contextBookmark, maxColumnTitleLength, opts));
     }
 
     private void addPropertyColumnsIfRequired(final List<GenericColumn> columns) {
@@ -146,28 +159,40 @@ implements CollectionCountProvider {
         val memberIdentifier = collectionModel.getIdentifier();
 
         // add all ordered columns to the table
-        elementTypeSpec.streamPropertiesForColumnRendering(memberIdentifier, parentObject)
-        .map(this::createObjectAdapterPropertyColumn)
+        elementTypeSpec.streamAssociationsForColumnRendering(memberIdentifier, parentObject)
+        .map(ObjectAssociation::getSpecialization)
+        .map(spez->spez.fold(
+                this::createSingularColumn,
+                this::createPluralColumn))
         .forEach(columns::add);
-
     }
 
-    private GenericPropertyColumn createObjectAdapterPropertyColumn(final OneToOneAssociation property) {
-
+    private SingularColumn createSingularColumn(final OneToOneAssociation property) {
         val collectionModel = getModel();
-
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
 
-        val commonContext = super.getMetaModelContext();
-
-        return new GenericPropertyColumn(
-                commonContext,
+        return new SingularColumn(
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),
                 property.getId(),
                 property.getId(),
                 parentTypeName,
                 property.getCanonicalDescription());
+    }
+
+    private PluralColumn createPluralColumn(final OneToManyAssociation collection) {
+        val collectionModel = getModel();
+        final String parentTypeName = collection.getDeclaringType().getLogicalTypeName();
+
+        return new PluralColumn(
+                collectionModel.getVariant(),
+                Model.of(collection.getCanonicalFriendlyName()),
+                collection.getId(),
+                collection.getId(),
+                parentTypeName,
+                collection.getCanonicalDescription(),
+                // future work: can hook up with global config
+                RenderOptions.builder().build());
     }
 
 }

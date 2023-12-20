@@ -187,7 +187,7 @@ implements ApplicationUserRepository {
 
     @Override
     public void enable(final ApplicationUser user) {
-        if(user.getStatus() != ApplicationUserStatus.UNLOCKED) {
+        if(ApplicationUserStatus.canUnlock(user.getStatus())) {
              factoryService.mixin(ApplicationUser_unlock.class, user)
              .act();
         }
@@ -195,7 +195,7 @@ implements ApplicationUserRepository {
 
     @Override
     public void disable(final ApplicationUser user) {
-        if(user.getStatus() != ApplicationUserStatus.LOCKED) {
+        if(ApplicationUserStatus.canLock(user.getStatus())) {
             factoryService.mixin(ApplicationUser_lock.class, user)
             .act();
         }

@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.specloader.specimpl;
 import java.util.Objects;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -32,42 +32,45 @@ class _MixedInMemberNamingStrategy {
      * @param mixinActionAsRegular - first pass MM introspection produces regular ObjectAction instances
      *              for mixin main methods
      */
-    String determineNameFrom(final ObjectActionDefault mixinActionAsRegular) {
-        return _Strings.capitalize(suffix(mixinActionAsRegular));
+    String mixinFriendlyName(final @NonNull ObjectActionDefault mixinActionAsRegular) {
+        return mixinFriendlyName(mixinClassSimpleName(mixinActionAsRegular));
+    }
+
+    String mixinFriendlyName(final @NonNull String mixinClassSimpleName) {
+        return _Strings.asCamelCase.andThen(_Strings.asNaturalName).apply(lastWord(mixinClassSimpleName));
     }
 
     /**
      * @param mixinActionAsRegular - first pass MM introspection produces regular ObjectAction instances
      *              for mixin main methods
      */
-    String determineIdFrom(final ObjectActionDefault mixinActionAsRegular) {
-        return StringExtensions.asCamelLowerFirst(compress(suffix(mixinActionAsRegular)));
+    String mixinMemberId(final @NonNull ObjectActionDefault mixinActionAsRegular) {
+        return mixinMemberId(mixinClassSimpleName(mixinActionAsRegular));
+    }
+
+    String mixinMemberId(final @NonNull String mixinClassSimpleName) {
+        return _Strings.decapitalize(lastWord(mixinClassSimpleName));
     }
 
     // -- HELPER
 
-    private static String compress(final String suffix) {
-        return suffix.replaceAll(" ", "");
+    private String mixinClassSimpleName(final ObjectActionDefault mixinActionAsRegular) {
+        return mixinActionAsRegular.getFeatureIdentifier().getLogicalType().getCorrespondingClass().getSimpleName();
     }
 
-    private static String suffix(final ObjectActionDefault mixinActionAsRegular) {
-        return deriveMemberNameFrom(mixinActionAsRegular.getFeatureIdentifier().getClassNaturalName());
-    }
-
-    // subject of JUnit testing
-    String deriveMemberNameFrom(final String mixinClassName) {
-        final String deriveFromUnderscore = derive(mixinClassName, "_");
-        if(!Objects.equals(mixinClassName, deriveFromUnderscore)) {
+    private String lastWord(final String mixinClassSimpleName) {
+        final String deriveFromUnderscore = lastToken(mixinClassSimpleName, "_");
+        if(!Objects.equals(mixinClassSimpleName, deriveFromUnderscore)) {
             return deriveFromUnderscore;
         }
-        final String deriveFromDollar = derive(mixinClassName, "$");
-        if(!Objects.equals(mixinClassName, deriveFromDollar)) {
+        final String deriveFromDollar = lastToken(mixinClassSimpleName, "$");
+        if(!Objects.equals(mixinClassSimpleName, deriveFromDollar)) {
             return deriveFromDollar;
         }
-        return mixinClassName;
+        return mixinClassSimpleName;
     }
 
-    private String derive(final String singularName, final String separator) {
+    private String lastToken(final String singularName, final String separator) {
         final int indexOfSeparator = singularName.lastIndexOf(separator);
         return occursNotAtEnd(singularName, indexOfSeparator)
                 ? singularName.substring(indexOfSeparator + 1)

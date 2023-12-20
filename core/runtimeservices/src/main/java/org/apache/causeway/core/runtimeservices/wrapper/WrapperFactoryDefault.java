@@ -28,15 +28,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
-import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -77,13 +78,13 @@ import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent
 import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -96,6 +97,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
@@ -138,8 +140,12 @@ implements WrapperFactory, HasMetaModelContext {
         dispatchersByEventClass = new HashMap<>();
     private ProxyContextHandler proxyContextHandler;
 
+    private ExecutorService commonExecutorService;
+
     @PostConstruct
     public void init() {
+
+        this.commonExecutorService = newCommonExecutorService();
 
         val proxyCreator = new ProxyCreator(proxyFactoryService);
         proxyContextHandler = new ProxyContextHandler(proxyCreator);
@@ -161,6 +167,11 @@ implements WrapperFactory, HasMetaModelContext {
         putDispatcher(ActionInvocationEvent.class, InteractionListener::actionInvoked);
         putDispatcher(ObjectValidityEvent.class, InteractionListener::objectPersisted);
         putDispatcher(CollectionMethodEvent.class, InteractionListener::collectionMethodInvoked);
+    }
+
+    @PreDestroy
+    public void close() {
+        commonExecutorService.shutdown();
     }
 
     // -- WRAPPING
@@ -281,6 +292,9 @@ implements WrapperFactory, HasMetaModelContext {
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
+            val resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
+                    .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
+
             if (isInheritedFromJavaLangObject(method)) {
                 return method.invoke(domainObject, args);
             }
@@ -295,7 +309,7 @@ implements WrapperFactory, HasMetaModelContext {
                 doih.invoke(null, method, args);
             }
 
-            val memberAndTarget = memberAndTargetForRegular(method, targetAdapter);
+            val memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
             if( ! memberAndTarget.isMemberFound()) {
                 return method.invoke(domainObject, args);
             }
@@ -329,6 +343,9 @@ implements WrapperFactory, HasMetaModelContext {
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
+            val resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
+                    .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
+
             final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
             if (inheritedFromObject) {
                 return method.invoke(mixin, args);
@@ -344,7 +361,7 @@ implements WrapperFactory, HasMetaModelContext {
                 doih.invoke(null, method, args);
             }
 
-            val actionAndTarget = memberAndTargetForMixin(method, mixee, mixinAdapter);
+            val actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, mixinAdapter);
             if (! actionAndTarget.isMemberFound()) {
                 return method.invoke(mixin, args);
             }
@@ -372,7 +389,6 @@ implements WrapperFactory, HasMetaModelContext {
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
 
-        val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
         val head = InteractionHead.regular(targetAdapter);
 
         val childInteractionId = interactionIdGenerator.interactionId();
@@ -380,13 +396,15 @@ implements WrapperFactory, HasMetaModelContext {
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
+                val argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.ofArray(args));
                 childCommandDto = commandDtoFactory
                         .asCommandDto(childInteractionId, head, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
+                val propertyValueAdapter = ManagedObject.adaptProperty(property, args[0]);
                 childCommandDto = commandDtoFactory
-                        .asCommandDto(childInteractionId, head, property, argAdapters.getElseFail(0));
+                        .asCommandDto(childInteractionId, head, property, propertyValueAdapter);
                 break;
             default:
                 // shouldn't happen, already catered for this case previously
@@ -397,7 +415,8 @@ implements WrapperFactory, HasMetaModelContext {
         asyncControl.setMethod(method);
         asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
 
-        val executorService = asyncControl.getExecutorService();
+        val executorService = Optional.ofNullable(asyncControl.getExecutorService())
+                .orElse(commonExecutorService);
         val asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
             asyncInteractionContext,
             Propagation.REQUIRES_NEW,
@@ -412,7 +431,7 @@ implements WrapperFactory, HasMetaModelContext {
     }
 
     private MemberAndTarget memberAndTargetForRegular(
-            final Method method,
+            final ResolvedMethod method,
             final ManagedObject targetAdapter) {
 
         val objectMember = targetAdapter.getSpecification().getMember(method).orElse(null);
@@ -421,19 +440,19 @@ implements WrapperFactory, HasMetaModelContext {
         }
 
         if (objectMember instanceof OneToOneAssociation) {
-            return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method);
+            return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method.method());
         }
         if (objectMember instanceof ObjectAction) {
-            return MemberAndTarget.foundAction((ObjectAction) objectMember, targetAdapter, method);
+            return MemberAndTarget.foundAction((ObjectAction) objectMember, targetAdapter, method.method());
         }
 
         throw new UnsupportedOperationException(
                 "Only properties and actions can be executed in the background "
-                        + "(method " + method.getName() + " represents a " + objectMember.getFeatureType().name() + "')");
+                        + "(method " + method.name() + " represents a " + objectMember.getFeatureType().name() + "')");
     }
 
     private <T> MemberAndTarget memberAndTargetForMixin(
-            final Method method,
+            final ResolvedMethod method,
             final T mixee,
             final ManagedObject mixinAdapter) {
 
@@ -456,7 +475,7 @@ implements WrapperFactory, HasMetaModelContext {
                 "Could not locate objectAction delegating to mixinAction id='%s' on mixee class '%s'",
                 mixinMember.getId(), mixeeClass.getName())));
 
-        return MemberAndTarget.foundAction(targetAction, getObjectManager().adapt(mixee), method);
+        return MemberAndTarget.foundAction(targetAction, getObjectManager().adapt(mixee), method.method());
     }
 
     private static <R> InteractionContext interactionContextFrom(
@@ -503,12 +522,6 @@ implements WrapperFactory, HasMetaModelContext {
         private final OneToOneAssociation property;
         private final ManagedObject target;
         private final Method method;
-    }
-
-    private ManagedObject[] adaptersFor(final Object[] args) {
-        return _NullSafe.stream(args)
-                .map(getObjectManager()::adapt)
-                .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));
     }
 
     // -- LISTENERS
@@ -577,6 +590,8 @@ implements WrapperFactory, HasMetaModelContext {
 
     @RequiredArgsConstructor
     private static class AsyncTask<R> implements AsyncCallable<R> {
+
+        private static final long serialVersionUID = 1L;
 
         @Getter private final InteractionContext interactionContext;
         @Getter private final Propagation propagation;
@@ -664,6 +679,17 @@ implements WrapperFactory, HasMetaModelContext {
                         }
                         return domainObject;
                     }).orElse(null));
+    }
+
+    private final static int MIN_POOL_SIZE = 2; // at least 2
+    private final static int MAX_POOL_SIZE = 4; // max 4
+    private ExecutorService newCommonExecutorService() {
+        final int poolSize = Math.min(
+                MAX_POOL_SIZE,
+                Math.max(
+                        MIN_POOL_SIZE,
+                        Runtime.getRuntime().availableProcessors()));
+        return Executors.newFixedThreadPool(poolSize);
     }
 
 }

@@ -13,9 +13,10 @@ enum Category {
   NOT_FOUND     // <.>
   CONCURRENCY     // <.>
   RETRYABLE     // <.>
-  CLIENT_ERROR     // <.>
+  RECOVERABLE     // <.>
   SERVER_ERROR     // <.>
   OTHER     // <.>
+  boolean isSuppressCategoryInUI()     // <.>
 }
 ----
 
@@ -39,10 +40,10 @@ A concurrency exception, in other words some other user has changed this object.
 --
 A previously failed operation might be able to succeed when the operation is retried. (eg. a query timeout or a temporary failure)
 --
-<.> xref:#CLIENT_ERROR[CLIENT_ERROR]
+<.> xref:#RECOVERABLE[RECOVERABLE]
 +
 --
-Recognized, but for some other reason... 40x error
+Corresponds to xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException] .
 --
 <.> xref:#SERVER_ERROR[SERVER_ERROR]
 +
@@ -53,6 +54,11 @@ Recognized, but for some other reason... 40x error
 +
 --
 Recognized, but uncategorized (typically: a recognizer of the original ExceptionRecognizer API).
+--
+<.> xref:#isSuppressCategoryInUI_[isSuppressCategoryInUI()]
++
+--
+[CAUSEWAY-2419] for a consistent user experience with action dialog validation messages, be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
 --
 
 == Members
@@ -77,10 +83,10 @@ A concurrency exception, in other words some other user has changed this object.
 
 A previously failed operation might be able to succeed when the operation is retried. (eg. a query timeout or a temporary failure)
 
-[#CLIENT_ERROR]
-=== CLIENT_ERROR
+[#RECOVERABLE]
+=== RECOVERABLE
 
-Recognized, but for some other reason... 40x error
+Corresponds to xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException] .
 
 [#SERVER_ERROR]
 === SERVER_ERROR
@@ -91,3 +97,8 @@ Recognized, but for some other reason... 40x error
 === OTHER
 
 Recognized, but uncategorized (typically: a recognizer of the original ExceptionRecognizer API).
+
+[#isSuppressCategoryInUI_]
+=== isSuppressCategoryInUI()
+
+[CAUSEWAY-2419] for a consistent user experience with action dialog validation messages, be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.

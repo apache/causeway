@@ -131,16 +131,19 @@ public interface Try<T> {
     // -- MAPPING
 
     /**
-     * Maps this {@link Try} to another if this is a {@link Success},
-     * passing the {@code value} wrapped in an {@link Optional}.
-     * Otherwise if this is a {@link Failure} acts as identity operator.
+     * If this is a {@link Success}, maps this {@link Try} to another,
+     * by calling the successMapper with the {@code value} wrapped by an {@link Optional}.
+     * Otherwise if this is a {@link Failure}, acts as identity operator,
+     * though implementations may return a new instance.
      * <p>
      * If given successMapper throws an exception, a failed {@link Try} is returned.
      */
     <R> Try<R> mapSuccess(@NonNull ThrowingFunction<Optional<T>, R> successMapper);
     /**
-     * Maps this {@link Try} to another if this is a {@link Success}.
-     * Otherwise if this is a {@link Failure} acts as identity operator.
+     * If this is a {@link Success}, maps this {@link Try} to another,
+     * by calling the successMapper with the {@code value} (which may be null).
+     * Otherwise if this is a {@link Failure}, acts as identity operator,
+     * though implementations may return a new instance.
      * <p>
      * If given successMapper throws an exception, a failed {@link Try} is returned.
      * @apiNote If preceded with a call to {@link #mapEmptyToFailure()},
@@ -148,23 +151,37 @@ public interface Try<T> {
      */
     <R> Try<R> mapSuccessAsNullable(@NonNull ThrowingFunction<T, R> successMapper);
     /**
-     * Maps this {@link Try} to another if this is a {@link Failure}.
-     * Otherwise if this is a {@link Success} acts as identity operator.
+     * If this {@link Try} holds a non-null {@code value} (and hence is also a {@link Success}),
+     * maps this {@link Try} to another,
+     * by calling the successMapper with the {@code value} (which is non-null).
+     * Otherwise acts as identity operator, that is,
+     * either stay an empty {@link Success} or stay a {@link Failure},
+     * though implementations may return a new instance.
+     * <p>
+     * If given successMapper throws an exception, a failed {@link Try} is returned.
+     */
+    <R> Try<R> mapSuccessWhenPresent(@NonNull ThrowingFunction<T, R> successMapper);
+    /**
+     * If this is a {@link Failure}, maps this {@link Try} to another.
+     * Otherwise if this is a {@link Success} acts as identity operator,
+     * though implementations may return a new instance.
      * <p>
      * If given failureMapper throws an exception, a failed {@link Try} is returned
      * (hiding the original failure).
      */
     Try<T> mapFailure(@NonNull ThrowingFunction<Throwable, Throwable> failureMapper);
     /**
-     * Recovers from a failed {@link Try} if its a {@link Failure}.
-     * Otherwise if this is a {@link Success} acts as identity operator.
+     * If this is a {@link Failure}, recovers to a {@link Success}.
+     * Otherwise if this is a {@link Success} acts as identity operator,
+     * though implementations may return a new instance.
      * <p>
      * If given recoveryMapper throws an exception, a failed {@link Try} is returned.
      */
     Try<T> mapFailureToSuccess(@NonNull ThrowingFunction<Throwable, T> recoveryMapper);
     /**
      * Maps this {@link Try} to {@link Failure} if this is a {@link Success} with an empty {@code value}.
-     * Otherwise acts as identity operator.
+     * Otherwise acts as identity operator,
+     * though implementations may return a new instance.
      */
     Try<T> mapEmptyToFailure();
     /**
@@ -177,6 +194,29 @@ public interface Try<T> {
     <L, R> Either<L, R> mapToEither(
             final @NonNull ThrowingFunction<Throwable, L> failureMapper,
             final @NonNull ThrowingFunction<Optional<T>, R> successMapper);
+
+    // -- FLAT MAPPING / FUNCTION COMPOSITION
+
+    /**
+     * Variant of {@link #mapSuccess(ThrowingFunction)},
+     * utilizing a different successMapper, one that returns a {@link Try}.
+     * @see #mapSuccess(ThrowingFunction)
+     */
+    <R> Try<R> flatMapSuccess(@NonNull ThrowingFunction<Optional<T>, Try<R>> successMapper);
+
+    /**
+     * Variant of {@link #mapSuccessAsNullable(ThrowingFunction)},
+     * utilizing a different successMapper, one that returns a {@link Try}.
+     * @see #mapSuccessAsNullable(ThrowingFunction)
+     */
+    <R> Try<R> flatMapSuccessAsNullable(@NonNull ThrowingFunction<T, Try<R>> successMapper);
+
+    /**
+     * Variant of {@link #mapSuccessWhenPresent(ThrowingFunction)},
+     * utilizing a different successMapper, one that returns a {@link Try}.
+     * @see #mapSuccessWhenPresent(ThrowingFunction)
+     */
+    <R> Try<R> flatMapSuccessWhenPresent(@NonNull ThrowingFunction<T, Try<R>> successMapper);
 
     // -- ACCEPT
 
@@ -308,6 +348,38 @@ public interface Try<T> {
         public <R> Try<R> mapSuccessAsNullable(final @NonNull ThrowingFunction<T, R> successMapper) {
             return Try.call(()->successMapper.apply(getValue().orElse(null)));
         }
+        @Override
+        public <R> Try<R> mapSuccessWhenPresent(final @NonNull ThrowingFunction<T, R> successMapper) {
+            return getValue()
+                    .map(value->Try.call(()->successMapper.apply(value)))
+                    .orElseGet(Try::empty);
+        }
+        @Override
+        public <R> Try<R> flatMapSuccess(final @NonNull ThrowingFunction<Optional<T>, Try<R>> successMapper) {
+            try {
+                return successMapper.apply(getValue());
+            } catch (Throwable ex) {
+                return Try.failure(ex);
+            }
+        }
+        @Override
+        public <R> Try<R> flatMapSuccessAsNullable(final @NonNull ThrowingFunction<T, Try<R>> successMapper) {
+            try {
+                return successMapper.apply(getValue().orElse(null));
+            } catch (Throwable ex) {
+                return Try.failure(ex);
+            }
+        }
+        @Override
+        public <R> Try<R> flatMapSuccessWhenPresent(final @NonNull ThrowingFunction<T, Try<R>> successMapper) {
+            var value = getValue().orElse(null);
+            if(value==null) return Try.empty();
+            try {
+                return successMapper.apply(value);
+            } catch (Throwable ex) {
+                return Try.failure(ex);
+            }
+        }
 
         @Override
         public Success<T> mapFailure(final @NonNull ThrowingFunction<Throwable, Throwable> failureMapper){
@@ -423,11 +495,27 @@ public interface Try<T> {
 
         @Override
         public <R> Failure<R> mapSuccess(final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
-            return new Failure<>(throwable);
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
         }
         @Override
         public <R> Failure<R> mapSuccessAsNullable(final @NonNull ThrowingFunction<T, R> successMapper) {
-            return new Failure<>(throwable);
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
+        }
+        @Override
+        public <R> Failure<R> mapSuccessWhenPresent(final @NonNull ThrowingFunction<T, R> successMapper) {
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
+        }
+        @Override
+        public <R> Failure<R> flatMapSuccess(final @NonNull ThrowingFunction<Optional<T>, Try<R>> successMapper) {
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
+        }
+        @Override
+        public <R> Failure<R> flatMapSuccessAsNullable(final @NonNull ThrowingFunction<T, Try<R>> successMapper) {
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
+        }
+        @Override
+        public <R> Failure<R> flatMapSuccessWhenPresent(final @NonNull ThrowingFunction<T, Try<R>> successMapper) {
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
         }
 
         @Override
@@ -445,22 +533,22 @@ public interface Try<T> {
 
         @Override
         public Try<T> mapEmptyToFailure() {
-            return this;
+            return this; // identity operation
         }
 
         @Override
         public <R> Failure<R> thenCall(final @NonNull Callable<R> callable) {
-            return new Failure<>(throwable);
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
         }
 
         @Override
         public Try<Void> thenRun(final @NonNull ThrowingRunnable runnable) {
-            return new Failure<>(throwable);
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
         }
 
         @Override
         public <R> Try<R> then(final @NonNull Callable<? extends Try<R>> next) {
-            return new Failure<>(throwable);
+            return new Failure<>(throwable); // railway pattern:  once failed, stays failed
         }
 
         @Override

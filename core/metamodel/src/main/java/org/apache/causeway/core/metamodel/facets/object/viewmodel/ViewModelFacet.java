@@ -40,8 +40,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
  *
  * <p>
  * Note: this facet is called &quot;ViewModelFacet&quot; for historical reasons; a better name would be
- * &quot;RecreatableObjectFacet&quot;.  The old name has been retained only to avoid unnecessarily breaking
- * some add-ons (eg Causeway Addons Excel Module) that use this facet.
+ * &quot;RecreatableObjectFacet&quot;.
  */
 public interface ViewModelFacet extends Facet {
 

@@ -19,12 +19,13 @@
 module org.apache.causeway.commons {
     exports org.apache.causeway.commons.binding;
     exports org.apache.causeway.commons.collections;
+    exports org.apache.causeway.commons.semantics;
     exports org.apache.causeway.commons.concurrent;
     exports org.apache.causeway.commons.functional;
     exports org.apache.causeway.commons.handler;
     exports org.apache.causeway.commons.having;
-    exports org.apache.causeway.commons.resource;
     exports org.apache.causeway.commons.io;
+    // internals exported as well
     exports org.apache.causeway.commons.internal;
     exports org.apache.causeway.commons.internal.assertions;
     exports org.apache.causeway.commons.internal.base;

@@ -15,6 +15,7 @@ class DomainModelValidator {
   Stream<ValidationFailure> streamFailures(Predicate<Identifier> filter)
   Stream<ValidationFailure> streamFailuresMatchingOriginatingIdentifier(Identifier identifier)
   void assertAnyFailuresContaining(Identifier identifier, String messageSnippet)     // <.>
+  void assertAnyFailuresContaining(Class<?> domainType, String messageSnippet)     // <.>
   void assertAnyOfContainingAnyFailures(Can<Identifier> classIdentifiers, String messageSnippet)     // <.>
 }
 ----
@@ -30,6 +31,11 @@ Typical usage in integration tests.
 Alternative way of checking
 --
 <.> xref:#assertAnyFailuresContaining_Identifier_String[assertAnyFailuresContaining(Identifier, String)]
++
+--
+JUnit support
+--
+<.> xref:#assertAnyFailuresContaining_Class_String[assertAnyFailuresContaining(Class, String)]
 +
 --
 JUnit support
@@ -54,6 +60,11 @@ Alternative way of checking
 
 [#assertAnyFailuresContaining_Identifier_String]
 === assertAnyFailuresContaining(Identifier, String)
+
+JUnit support
+
+[#assertAnyFailuresContaining_Class_String]
+=== assertAnyFailuresContaining(Class, String)
 
 JUnit support
 

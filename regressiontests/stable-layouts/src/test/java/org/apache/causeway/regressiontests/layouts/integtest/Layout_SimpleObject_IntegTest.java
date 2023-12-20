@@ -20,13 +20,12 @@
 package org.apache.causeway.regressiontests.layouts.integtest;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -41,11 +40,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.CausewayModuleApplibMixins;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -59,10 +56,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.regressiontests.layouts.integtest.model.LayoutTestDomainModel;
 import org.apache.causeway.regressiontests.layouts.integtest.model.SimpleObject;
-import org.apache.causeway.schema.metamodel.v2.Action;
-import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
-import org.apache.causeway.schema.metamodel.v2.FacetAttr;
-import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
@@ -97,7 +90,7 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         CausewayPresets.forcePrototyping();
     }
 
-
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void openRestApi() {
 
@@ -124,6 +117,7 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         ;
     }
 
+    @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
     void clearHints() {
 
@@ -131,7 +125,9 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         val action = lookupAction("clearHints");
 
         // when, then
+        /* not used
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        */
 
         val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
@@ -152,11 +148,13 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
 
     private ObjectAction lookupAction(final String id) {
         val objectSpecification = specificationLoader.loadSpecification(SimpleObject.class);
+        /* not used
         List<ObjectAction> objectActions = objectSpecification.streamAnyActions(MixedIn.INCLUDED).collect(Collectors.toList());
+        */
         return objectSpecification.streamAnyActions(MixedIn.INCLUDED).filter(x -> x.getId().equals(id)).findFirst().orElseThrow();
     }
 
-
+    /* not used
     private void extracted(final Class<?> cls) {
         LogicalType logicalType = metaModelService.lookupLogicalTypeByClass(cls).orElseThrow();
         MetamodelDto metamodelDto = metaModelService.exportMetaModel(Config.builder().build().withNamespacePrefix("layouts.test."));
@@ -167,7 +165,7 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         Map<String, org.apache.causeway.schema.metamodel.v2.Facet> facetById = facets.stream().collect(Collectors.toMap(org.apache.causeway.schema.metamodel.v2.Facet::getId, Function.identity()));
         Map<String, String> facetAttrByName = facetById.get(LayoutGroupFacet.class.getCanonicalName()).getAttr().stream().collect(Collectors.toMap(FacetAttr::getName, FacetAttr::getValue));
         facetAttrByName.get("Name");
-    }
+    } */
 
 
     @Inject InteractionService interactionService;

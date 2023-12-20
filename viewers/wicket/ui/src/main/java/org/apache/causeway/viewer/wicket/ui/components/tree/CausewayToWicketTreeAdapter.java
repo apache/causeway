@@ -28,16 +28,15 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 
 import lombok.val;
@@ -47,27 +46,27 @@ class CausewayToWicketTreeAdapter {
     /**
      * @param valueModel - holder of {@link TreeNode}
      */
-    public static Component adapt(final String id, final ValueModel valueModel) {
+    public static MarkupContainer adapt(final String id, final ValueModel valueModel) {
         return valueModel==null
-                || valueModel.getObject()==null
+                || ManagedObjects.isNullOrUnspecifiedOrEmpty(valueModel.getObject())
             ? emptyTreeComponent(id)
-            : EntityTree.of(id, valueModel.getObject(), valueModel.getMetaModelContext());
+            : DomainObjectTree.of(id, valueModel.getObject());
     }
 
     /**
      * @param scalarModel - holder of {@link TreeNode}
      */
-    public static Component adapt(final String id, final ScalarModel scalarModel) {
+    public static MarkupContainer adapt(final String id, final ScalarModel scalarModel) {
         return scalarModel==null
-                || scalarModel.getObject()==null
+                || ManagedObjects.isNullOrUnspecifiedOrEmpty(scalarModel.getObject())
             ? emptyTreeComponent(id)
-            : EntityTree.of(id, scalarModel.getObject(), scalarModel.getMetaModelContext());
+            : DomainObjectTree.of(id, scalarModel.getObject());
     }
 
     // -- FALLBACK
 
-    private static Component emptyTreeComponent(final String id) {
-        return new Label(id);
+    private static MarkupContainer emptyTreeComponent(final String id) {
+        return new WebMarkupContainer(id);
     }
 
     // -- RENDERING
@@ -75,43 +74,36 @@ class CausewayToWicketTreeAdapter {
     /**
      * Wicket's Tree Component implemented for Causeway
      */
-    private static class EntityTree extends NestedTree<_TreeNodeMemento>
+    private static class DomainObjectTree extends NestedTree<_TreeNodeMemento>
     implements HasMetaModelContext {
 
         private static final long serialVersionUID = 1L;
 
-        private transient MetaModelContext metaModelContext;
-
-        public static EntityTree of(
-                final String id, final ManagedObject treeNodeObject, final MetaModelContext mmc) {
+        public static DomainObjectTree of(
+                final String id, final ManagedObject treeNodeObject) {
 
             val treeNode = (TreeNode<?>) treeNodeObject.getPojo();
             val treeAdapterClass = treeNode.getTreeAdapterClass();
 
-            val wrappingTreeAdapter = new _TreeModelTreeAdapter(mmc, treeAdapterClass);
+            val wrappingTreeAdapter = new _TreeModelTreeAdapter(treeAdapterClass);
 
             val treeModelTreeProvider = new _TreeModelTreeProvider(
-                    wrappingTreeAdapter.wrap(treeNode.getValue(), treeNode.getPositionAsPath()),
+                    wrappingTreeAdapter.mementify(treeNode.getValue(), treeNode.getPositionAsPath()),
                     wrappingTreeAdapter);
 
             val treeExpansionModel = _TreeExpansionModel.of(
                     treeNode.getTreeState().getExpandedNodePaths());
 
-            return new EntityTree(id,
+            return new DomainObjectTree(id,
                     treeModelTreeProvider,
                     treeExpansionModel);
         }
 
-        private EntityTree(
+        private DomainObjectTree(
                 final String id,
                 final ITreeProvider<_TreeNodeMemento> provider,
                 final _TreeExpansionModel collapseExpandState) {
             super(id, provider, collapseExpandState);
-        }
-
-        @Override
-        public MetaModelContext getMetaModelContext() {
-            return this.metaModelContext = WktContext.computeIfAbsent(metaModelContext);
         }
 
         /**
@@ -121,7 +113,7 @@ class CausewayToWicketTreeAdapter {
         protected Component newContentComponent(final String id, final IModel<_TreeNodeMemento> node) {
             final _TreeNodeMemento treeModel = node.getObject();
             final Component entityIconAndTitle = new EntityIconAndTitlePanel(
-                    id, treeModel.asObjectAdapterModel(getMetaModelContext()));
+                    id, treeModel.asObjectAdapterModel());
             return entityIconAndTitle;
         }
 
@@ -136,7 +128,7 @@ class CausewayToWicketTreeAdapter {
 
                 @Override
                 protected Component createContent(final String id, final IModel<_TreeNodeMemento> model) {
-                    return EntityTree.this.newContentComponent(id, model);
+                    return DomainObjectTree.this.newContentComponent(id, model);
                 }
 
                 @Override
@@ -155,7 +147,7 @@ class CausewayToWicketTreeAdapter {
 
                         @Override
                         public boolean isEnabled() {
-                            return EntityTree.this.getProvider().hasChildren(node.getModelObject());
+                            return DomainObjectTree.this.getProvider().hasChildren(node.getModelObject());
                         }
 
                         @Override

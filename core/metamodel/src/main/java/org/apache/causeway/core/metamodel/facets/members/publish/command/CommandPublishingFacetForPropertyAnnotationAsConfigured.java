@@ -21,12 +21,32 @@ package org.apache.causeway.core.metamodel.facets.members.publish.command;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class CommandPublishingFacetForPropertyAnnotationAsConfigured extends CommandPublishingFacetForPropertyAnnotation {
+public abstract class CommandPublishingFacetForPropertyAnnotationAsConfigured extends CommandPublishingFacetForPropertyAnnotation {
+
+    static class All extends CommandPublishingFacetForPropertyAnnotationAsConfigured {
+        All(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
+    static class None extends CommandPublishingFacetForPropertyAnnotationAsConfigured {
+        None(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
 
     CommandPublishingFacetForPropertyAnnotationAsConfigured(
             final FacetHolder holder, final ServiceInjector servicesInjector) {
-        super(holder, null, servicesInjector);
+        super(null, holder, servicesInjector);
     }
-
-
 }

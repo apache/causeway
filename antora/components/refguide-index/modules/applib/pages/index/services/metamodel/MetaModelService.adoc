@@ -17,18 +17,19 @@ interface MetaModelService {
   BeanSort sortOf(Bookmark bookmark, Mode mode)     // <.>
   CommandDtoProcessor commandDtoProcessorFor(String logicalMemberIdentifier)     // <.>
   MetamodelDto exportMetaModel(Config config)     // <.>
+  ObjectGraph exportObjectGraph(BiPredicate<BeanSort, LogicalType> filter)     // <.>
 }
 ----
 
 <.> xref:#lookupLogicalTypeByName_String[lookupLogicalTypeByName(String)]
 +
 --
-Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Causeway' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
+Provides a lookup by logicalTypeName of a domain class' object type, corresponding to _Named#value()_ or _DomainService#aliased()_ or _DomainObject#aliased()_ . Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 --
 <.> xref:#lookupLogicalTypeByClass_Class[lookupLogicalTypeByClass(Class)]
 +
 --
-Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Causeway' `ObjectTypeFacet` ).
+Provides a lookup by class of a domain class' object type,corresponding to _Named#value()_ or _DomainService#aliased()_ or _DomainObject#aliased()_ .
 --
 <.> xref:#rebuild_Class[rebuild(Class)]
 +
@@ -60,18 +61,23 @@ Obtains the implementation of xref:refguide:applib:index/services/commanddto/pro
 --
 Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 --
+<.> xref:#exportObjectGraph_BiPredicate[exportObjectGraph(BiPredicate)]
++
+--
+Can be used to create object relation diagrams (e.g. Plantuml).
+--
 
 == Members
 
 [#lookupLogicalTypeByName_String]
 === lookupLogicalTypeByName(String)
 
-Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Causeway' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
+Provides a lookup by logicalTypeName of a domain class' object type, corresponding to _Named#value()_ or _DomainService#aliased()_ or _DomainObject#aliased()_ . Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 
 [#lookupLogicalTypeByClass_Class]
 === lookupLogicalTypeByClass(Class)
 
-Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Causeway' `ObjectTypeFacet` ).
+Provides a lookup by class of a domain class' object type,corresponding to _Named#value()_ or _DomainService#aliased()_ or _DomainObject#aliased()_ .
 
 [#rebuild_Class]
 === rebuild(Class)
@@ -110,6 +116,11 @@ This is used by framework-provided implementations of _org.apache.causeway.appli
 Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 
 The xref:refguide:applib:index/services/metamodel/Config.adoc[Config] parameter can be used to restrict/filter the export to some subset of the metamodel; in particular to specific _Config#getNamespacePrefixes() namespace prefixes_ .
+
+[#exportObjectGraph_BiPredicate]
+=== exportObjectGraph(BiPredicate)
+
+Can be used to create object relation diagrams (e.g. Plantuml).
 
 include::hooks/MetaModelService_010-implementation.adoc[]
 

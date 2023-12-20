@@ -23,9 +23,9 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -47,7 +47,7 @@ import lombok.experimental.UtilityClass;
 public class IdentifierUtil {
 
     public String targetClassNameFor(final ObjectSpecification spec) {
-        return StringExtensions.asNaturalName2(spec.getSingularName());
+        return _Strings.asNaturalName.apply(spec.getSingularName());
     }
 
     /**
@@ -59,9 +59,13 @@ public class IdentifierUtil {
             final @NonNull Identifier.Type identifierType,
             final @NonNull String logicalMemberIdentifier) {
 
-        val ref = _Refs.stringRef(logicalMemberIdentifier);
-        val logicalTypeName = ref.cutAtIndexOfAndDrop("#");
-        val memberId = ref.getValue();
+        val stringCutter = TextUtils.cutter(logicalMemberIdentifier);
+        val logicalTypeName = stringCutter
+                .keepBefore("#")
+                .getValue();
+        val memberId = stringCutter
+                .keepAfter("#")
+                .getValue();
         val typeSpec = specLoader.specForLogicalTypeNameElseFail(logicalTypeName);
         val logicalType = LogicalType.eager(typeSpec.getCorrespondingClass(), logicalTypeName);
 

@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.validate.method;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -45,7 +45,7 @@ implements ImperativeFacet {
     private final TranslationContext translationContext;
 
     public ActionParameterValidationFacetViaMethod(
-            final Method method,
+            final ResolvedMethod method,
             final TranslationService translationService,
     		final TranslationContext translationContext,
     		final FacetHolder holder) {
@@ -63,7 +63,7 @@ implements ImperativeFacet {
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedArgumentAdapter) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object returnValue = MmInvokeUtils.invoke(method, owningAdapter, proposedArgumentAdapter);
+        final Object returnValue = MmInvokeUtils.invokeWithSingleArg(method.method(), owningAdapter, proposedArgumentAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

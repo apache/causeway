@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
@@ -78,13 +79,13 @@ implements MetaModelRefiner {
         val isValidateFromClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isFromClause();
         if (isValidateFromClause) {
-            programmingModel.addValidator(new MetaModelVisitingValidatorForFromClause(programmingModel.getMetaModelContext()));
+            programmingModel.addValidator(new MetaModelValidatorForJdoqlFromClause(getMetaModelContext()), Marker.JDO);
         }
 
         val isValidateVariablesClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isVariablesClause();
         if (isValidateVariablesClause) {
-            programmingModel.addValidator(new MetaModelVisitingValidatorForVariablesClause(programmingModel.getMetaModelContext()));
+            programmingModel.addValidator(new MetaModelValidatorForJdoqlVariablesClause(getMetaModelContext()), Marker.JDO);
         }
     }
 

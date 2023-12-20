@@ -2,9 +2,38 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-[CAUTION]
-====
-TODO - v2, to document... the stuff in the `tooling` mvn module.
-====
+The `tooling` modules provides a set of utilities and generators that are used to reduce the maintenance cost of documentation and the link:https://github.com/apache/causeway-app-referenceapp[reference app].
+None of these modules are formally released as part of the framework.
+
+Broadly speaking there are two main sets of tools:
+
+* the `causeway-tooling-cli` module (in `tooling/cli`) creates a CLI jar file (`causeway-tooling-cli.jar`) that is used to generate two different sets of documentation for the website:
+
+** under `antora/components/refguide-index`
++
+are the index pages.
+Typically API classes are included in the index, and this is done by simply including:
++
+[source]
+----
+@since {@index}
+----
++
+within their javadoc.
+Learn more about how to reference these generated pages in our internal xref:core::about.adoc#generated-index[design docs].
+
+** under `core/adoc`
++
+is an overview of all of the modules that make up the framework.
+This can be found at xref:core:_overview:about.adoc[].
+
++
+For more on the CLI, see xref:tooling:tooling-cli:about.adoc[tooling CLI] docs.
+You could also inspect the `preview.sh` script (and the various scripts it calls in turn) to see how we use the CLI in practice.
+
+* the `causeway-toolikng-metaprog` module (in tooling/metaprog`) contains a set of test classes that are used to generate classes and files for the various datatypes showcased in the link:https://github.com/apache/causeway-app-referenceapp[reference app].
++
+To use, locate the `ValueTypeGenTemplateTest` class.
+
 
 

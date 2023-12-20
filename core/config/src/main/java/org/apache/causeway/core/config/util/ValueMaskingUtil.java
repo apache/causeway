@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.experimental.UtilityClass;
 
@@ -31,7 +30,7 @@ import lombok.experimental.UtilityClass;
 public class ValueMaskingUtil {
 
     private static final List<String> PROTECTED_KEYS =
-            _Lists.of("password", "apiKey", "authToken");
+            List.of("password", "passkey", "apiKey", "authToken", "secret");
 
     public static Map<String, String> maskIfProtected(
             final Map<String, String> inMap,

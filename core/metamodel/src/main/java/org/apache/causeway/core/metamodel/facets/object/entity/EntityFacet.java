@@ -162,6 +162,11 @@ public interface EntityFacet extends Facet {
 
     PersistenceStack getPersistenceStack();
 
+    /**
+     * Provides associated table and column names.
+     */
+    EntityOrmMetadata getOrmMetadata();
+
     // -- JUNIT SUPPORT
 
     static EntityFacet forTesting(

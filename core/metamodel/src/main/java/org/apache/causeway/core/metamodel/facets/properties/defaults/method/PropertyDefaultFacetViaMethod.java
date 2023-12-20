@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.defaults.method;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.UnknownTypeException;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -41,7 +41,7 @@ implements ImperativeFacet {
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
     public PropertyDefaultFacetViaMethod(
-            final Method method,
+            final ResolvedMethod method,
             final FacetHolder holder) {
         super(holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
@@ -55,11 +55,11 @@ implements ImperativeFacet {
     @Override
     public ManagedObject getDefault(final ManagedObject owningAdapter) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object result = MmInvokeUtils.invoke(method, owningAdapter);
+        final Object result = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
         if (result == null) {
             return null;
         }
-        return createAdapter(method.getReturnType(), result);
+        return createAdapter(method.returnType(), result);
     }
 
     private ManagedObject createAdapter(final Class<?> type, final Object object) {

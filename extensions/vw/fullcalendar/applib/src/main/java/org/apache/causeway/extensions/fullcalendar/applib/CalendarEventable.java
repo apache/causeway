@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.fullcalendar.applib;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 /**
@@ -36,6 +37,7 @@ public interface CalendarEventable {
      */
     String getCalendarName();
 
+    @Programmatic
     CalendarEvent toCalendarEvent();
 
 }

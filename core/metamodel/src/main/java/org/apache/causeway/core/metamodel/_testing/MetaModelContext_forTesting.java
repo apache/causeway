@@ -57,7 +57,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
@@ -91,6 +90,7 @@ import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
@@ -112,7 +112,18 @@ import lombok.val;
 
 @Builder @Getter
 public final class MetaModelContext_forTesting
-implements MetaModelContext {
+extends MetaModelContext {
+
+    public static MetaModelContext_forTestingBuilder builder() {
+        return new MetaModelContext_forTestingBuilder() {
+            @Override
+            public MetaModelContext_forTesting build() {
+                var mmc = super.build();
+                MetaModelContext.setOrReplace(mmc);
+                return mmc;
+            }
+        };
+    }
 
     public static MetaModelContext buildDefault() {
         return MetaModelContext_forTesting.builder()
@@ -270,12 +281,12 @@ implements MetaModelContext {
 
     private static CausewayConfiguration newCausewayConfiguration() {
         val properties = _Maps.<String, String>newHashMap();
-        val config = new CausewayConfiguration(new AbstractEnvironment() {
+        val config = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
             @Override
             public String getProperty(final String key) {
                 return properties.get(key);
             }
-        });
+        }).build();
         return config;
     }
 
@@ -413,12 +424,12 @@ implements MetaModelContext {
         val currentConfigBackup = this.configuration;
         try {
 
-            this.configuration = new CausewayConfiguration(new AbstractEnvironment() {
+            this.configuration = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
                 @Override
                 public String getProperty(final String key) {
                     return properties.get(key);
                 }
-            });
+            }).build();
 
             runnable.run();
         } finally {
@@ -453,7 +464,7 @@ implements MetaModelContext {
     private final GridLoaderService gridLoaderService = createGridLoaderService();
     //XXX lombok issue: won't compile if inlined
     private final GridLoaderService createGridLoaderService() {
-        return new GridLoaderServiceDefault(getMessageService(), /*support reloading*/true);
+        return new GridLoaderServiceDefault(getMessageService(), Can.of(new LayoutResourceLoaderDefault()), /*support reloading*/true);
     }
 
     @Getter(lazy = true)
@@ -463,13 +474,14 @@ implements MetaModelContext {
         return new GridServiceDefault(
             getGridLoaderService(),
             getGridMarshallerService(),
-            _Lists.of(
+            List.of(
                     new GridSystemServiceBootstrap(
-                            getSpecificationLoader(),
+                            this,
                             getTranslationService(),
                             getJaxbService(),
                             getMessageService(),
-                            getSystemEnvironment())
+                            getSystemEnvironment(),
+                            List.of())
                             .setMarshaller(getGridMarshallerService())
                     )); // support reloading
     }
@@ -495,8 +507,8 @@ implements MetaModelContext {
 
     @lombok.Value(staticConstructor = "of")
     static class ServiceInstance {
-        final ObjectSpecification specification;
-        final Object pojo;
+        ObjectSpecification specification;
+        Object pojo;
     }
 
     @Builder.Default
@@ -535,7 +547,7 @@ implements MetaModelContext {
         return map;
     }
 
-    private final Optional<ServiceInstance> toServiceInstance(final _ManagedBeanAdapter managedBeanAdapter) {
+    private Optional<ServiceInstance> toServiceInstance(final _ManagedBeanAdapter managedBeanAdapter) {
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot get service instance of type '%s'",

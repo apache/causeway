@@ -26,11 +26,13 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelAbstract;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
@@ -44,15 +46,22 @@ extends SortableDataProvider<DataRow, String> {
 
     private static final long serialVersionUID = 1L;
 
-    private final IModel<DataTableModel> dataTableModelHolder;
+    private final IModel<DataTableInteractive> dataTableModelHolder;
 
-    public CollectionContentsSortableDataProvider(final IModel<DataTableModel> dataTableModelHolder) {
+    public CollectionContentsSortableDataProvider(final IModel<DataTableInteractive> dataTableModelHolder) {
         this.dataTableModelHolder = dataTableModelHolder instanceof EntityCollectionModelAbstract
                 ? ((EntityCollectionModelAbstract)dataTableModelHolder).delegate()
                 : dataTableModelHolder;
     }
 
-    public DataTableModel getDataTableModel() {
+    public boolean isDecoratedWithDataTablesNet() {
+        return getDataTableModel().getMetaModel().getFacetHolder().lookupFacet(TableDecoratorFacet.class)
+        .map(TableDecoratorFacet::value)
+        .map(TableDecorator.DatatablesNet.class::equals)
+        .orElse(false);
+    }
+
+    public DataTableInteractive getDataTableModel() {
         return dataTableModelHolder.getObject();
     }
 

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -50,7 +51,9 @@ implements HasUiParameter {
      */
     private ScalarParameterModel(
             final UiParameterWkt uiParameter) {
-        super(UiObjectWkt.ofAdapter(uiParameter.getMetaModelContext(), uiParameter.getOwner()));
+        super(
+                UiObjectWkt.ofAdapter(uiParameter.getOwner()),
+                ViewOrEditMode.EDITING); // always init params in editing mode, decide usability later dynamically
         this.uiParameter = uiParameter;
     }
 
@@ -66,7 +69,7 @@ implements HasUiParameter {
 
     @Override
     protected Can<ObjectAction> calcAssociatedActions() {
-        return getScalarTypeSpec().streamActions(ActionScope.ANY, MixedIn.INCLUDED)
+        return getElementType().streamActions(ActionScope.ANY, MixedIn.INCLUDED)
                 .collect(Can.toCan());
     }
 

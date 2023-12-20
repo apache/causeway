@@ -27,6 +27,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -34,9 +35,9 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -78,9 +79,7 @@ public class EntityPage extends PageAbstract {
      * @param pageParameters The page parameters with the OID
      * @return An EntityModel for the requested OID
      */
-    public static EntityPage forPageParameters(
-            final MetaModelContext commonContext,
-            final PageParameters pageParameters) {
+    public static EntityPage forPageParameters(final PageParameters pageParameters) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
             _Debug.log("new EntityPage from PageParameters %s", pageParameters);
@@ -93,14 +92,13 @@ public class EntityPage extends PageAbstract {
 
         return new EntityPage(
                 pageParameters,
-                UiObjectWkt.ofPageParameters(commonContext, pageParameters));
+                UiObjectWkt.ofPageParameters(pageParameters));
     }
 
     /**
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
     public static EntityPage forAdapter(
-            final MetaModelContext commonContext,
             final ManagedObject adapter) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
@@ -109,7 +107,7 @@ public class EntityPage extends PageAbstract {
 
         return new EntityPage(
                 PageParameterUtils.createPageParametersForObject(adapter),
-                UiObjectWkt.ofAdapter(commonContext, adapter));
+                UiObjectWkt.ofAdapter(adapter));
     }
 
     // -- CONSTRUCTOR
@@ -175,13 +173,20 @@ public class EntityPage extends PageAbstract {
 
         addWhereAmIIfShown(entityPageContainer, WhereAmIHelper.of(model));
 
-        addChildComponents(entityPageContainer, model);
-
         // bookmarks and breadcrumbs
         bookmarkPageIfShown(model);
         addBreadcrumbIfShown(model);
 
         addBookmarkedPages(entityPageContainer);
+
+        // CAUSEWAY[3626] do this last, could throw ObjectNotFoundException:
+        Try.run(()->addChildComponents(entityPageContainer, model))
+        .ifFailure(__->{
+            // For the non happy case, ensure we have the model populated for Wicket,
+            // such that we don't provoke an ErrorPage simply because the model is missing parts.
+            Wkt.add(entityPageContainer, new EmptyPanel("entity"));
+        })
+        .ifFailureFail(); // simply re-throw
     }
 
     protected void addWhereAmIIfShown(

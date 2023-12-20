@@ -50,7 +50,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
         // PRODUCTION
 
-        val configuration = new CausewayConfiguration(null);
+        val configuration = CausewayConfiguration.builder().build();
         configuration.getSecurity().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
 
         authenticator = new AuthenticatorShiro(configuration);

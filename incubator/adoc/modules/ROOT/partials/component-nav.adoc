@@ -1,7 +1,4 @@
 include::incubator:ROOT:partial$module-nav.adoc[]
-//include::incubator:javafx:partial$module-nav.adoc[]
 include::incubator:graphql:partial$module-nav.adoc[GraphQL Viewer]
-include::incubator:kroviz:partial$module-nav.adoc[Kroviz Viewer]
-include::incubator:vaadin:partial$module-nav.adoc[Vaadin Viewer]
-include::incubator:commandreplay:partial$module-nav.adoc[Command Replay]
+// include::incubator:commandreplay:partial$module-nav.adoc[Command Replay]
 

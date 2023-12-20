@@ -11,6 +11,8 @@ Utilities to zip and unzip data.
 class ZipUtils {
   Stream<ZipEntryDataSource> streamZipEntries(DataSource zippedSource, ZipOptions zipOptions)     // <.>
   Stream<ZipEntryDataSource> streamZipEntries(DataSource zippedSource)     // <.>
+  Optional<ZipEntryDataSource> firstZipEntry(DataSource zippedSource, ZipOptions zipOptions)     // <.>
+  Optional<ZipEntryDataSource> firstZipEntry(DataSource zippedSource)     // <.>
   byte[] zipToBytes(Stream<ZipEntryDataSource> entryStream)
   void writeTo(Stream<ZipEntryDataSource> entryStream, DataSink dataSink)
   EntryBuilder zipEntryBuilder()     // <.>
@@ -26,6 +28,16 @@ Returns a _Stream_ of _ZipEntryDataSource_ , buffered in memory, which allows co
 +
 --
 Shortcut for _streamZipEntries(zippedSource, ZipOptions.builder().build())_
+--
+<.> xref:#firstZipEntry_DataSource_ZipOptions[firstZipEntry(DataSource, ZipOptions)]
++
+--
+Optionally the first zip-entry as _ZipEntryDataSource_ , based on whether an entry exists.
+--
+<.> xref:#firstZipEntry_DataSource[firstZipEntry(DataSource)]
++
+--
+Shortcut for _firstZipEntry(zippedSource, ZipOptions.builder().build())_
 --
 <.> xref:#zipEntryBuilder_[zipEntryBuilder()]
 +
@@ -44,6 +56,16 @@ Returns a _Stream_ of _ZipEntryDataSource_ , buffered in memory, which allows co
 === streamZipEntries(DataSource)
 
 Shortcut for _streamZipEntries(zippedSource, ZipOptions.builder().build())_
+
+[#firstZipEntry_DataSource_ZipOptions]
+=== firstZipEntry(DataSource, ZipOptions)
+
+Optionally the first zip-entry as _ZipEntryDataSource_ , based on whether an entry exists.
+
+[#firstZipEntry_DataSource]
+=== firstZipEntry(DataSource)
+
+Shortcut for _firstZipEntry(zippedSource, ZipOptions.builder().build())_
 
 [#zipEntryBuilder_]
 === zipEntryBuilder()

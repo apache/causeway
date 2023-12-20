@@ -18,23 +18,41 @@
  */
 package org.apache.causeway.viewer.commons.prism;
 
+import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Prism {
-    DEFAULT(""),
-    COY("-coy"),
-    DARK("-dark"),
-    FUNKY("-funky"),
-    OKAIDIA("-okaidia"),
-    SOLARIZEDLIGHT("-solarizedlight"),
-    TOMORROW("-tomorrow"),
-    TWILIGHT("-twilight"),
+    DEFAULT("", false),
+    COY("-coy", true),
+    DARK("-dark", false),
+    FUNKY("-funky", false),
+    OKAIDIA("-okaidia", false),
+    SOLARIZEDLIGHT("-solarizedlight", false),
+    TOMORROW("-tomorrow", false),
+    TWILIGHT("-twilight", false),
     ;
     final String themeSuffix;
-    public String cssFile() {
+    final boolean override;
+
+    public String cssPrimaryFile() {
         return "prism/themes/prism" + themeSuffix + ".min.css";
     }
+
+    public Optional<String> cssOverrideFile() {
+        return override
+                ? Optional.of("prismoverride/prism" + themeSuffix + ".css")
+                : Optional.empty();
+    }
+
+    public List<String> cssFiles() {
+        return cssOverrideFile()
+                .map(cssOverride->List.of(cssPrimaryFile(), cssOverride))
+                .orElse(List.of(cssPrimaryFile()));
+    }
+
     public String jsFile() {
         return "prism/prism" + ".js";
     }

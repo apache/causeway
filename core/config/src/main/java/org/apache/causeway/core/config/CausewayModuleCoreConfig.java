@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.core.config;
 
-import java.util.Collections;
-import java.util.Map;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -37,12 +33,10 @@ import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
-import lombok.Data;
-
 @Configuration
 @Import({
 
-    // @Component's
+    // @Component
     PatternsConverter.class,
     CausewayBeanFactoryPostProcessorForSpring.class,
     CausewayLocaleInitializer.class,
@@ -50,12 +44,11 @@ import lombok.Data;
     PatternOptionalStringConstraintValidator.class,
     RestfulPathProvider.class,
 
-    // @Service's
+    // @Service
     DataSourceIntrospectionService.class,
     CausewayBeanTypeRegistryDefault.class,
     CausewaySystemEnvironment.class,
     WebAppContextPath.class,
-
 })
 @EnableConfigurationProperties({
         CausewayConfiguration.class,
@@ -66,19 +59,9 @@ import lombok.Data;
         EclipselinkConfiguration.Jdbc.BatchWriting.class,
         EclipselinkConfiguration.Jdbc.CacheStatements.class,
         RestEasyConfiguration.class,
-        CausewayModuleCoreConfig.ConfigProps.class,
 })
 public class CausewayModuleCoreConfig {
 
     public static final String NAMESPACE = "causeway.config";
-
-    @ConfigurationProperties(prefix = "", ignoreUnknownFields = true)
-    @Data
-    public static class ConfigProps {
-        private Map<String, String> causeway = Collections.emptyMap();
-        private Map<String, String> resteasy = Collections.emptyMap();
-        private Map<String, String> datanucleus = Collections.emptyMap();
-        private Map<String, String> eclipselink = Collections.emptyMap();
-    }
 
 }

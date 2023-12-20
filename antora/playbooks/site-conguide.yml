@@ -16,7 +16,7 @@
 #  under the License.
 
 site:
-  title: Apache Causeway
+  title: causeway
   url: https://causeway.apache.org/
   start_page: docs:ROOT:about.adoc
 
@@ -30,10 +30,8 @@ content:
     - url: .
       start_path: antora/components/conguide # conguide
       branches: HEAD
+
 # examples
-    - url: .
-      start_path: examples/demo/domain/src/main/adoc # docs
-      branches: HEAD
 
 # mavendeps
     - url: .
@@ -50,16 +48,16 @@ content:
 
 ui:
   bundle:
-    url: ../causeway-antora/build/ui-bundle.zip
+    url: ../../causeway-antora/build/ui-bundle.zip
 #    url: https://github.com/apache/causeway-antora/blob/master/build/ui-bundle.zip?raw=true
-    #url: ./antora/theme/ui-bundle.zip
+
     snapshot: true
   supplemental_files: antora/supplemental-ui
 
 asciidoc:
+  # npm i @antora/cli@^3.1.1 @antora/site-generator-default@^3.1.1 asciidoctor-kroki
   extensions:
-    - asciidoctor-kroki # requires: npm i ... @asciidoctor/core@2.2.0 asciidoctor-kroki
-#    - asciidoctor-plantuml # requires: npm i ... asciidoctor-plantuml@1.5.0
+    - asciidoctor-kroki
     - ./antora/lib/lorem
     - ./antora/lib/jira-issue
   attributes:
@@ -72,8 +70,8 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
-    page-causewayprev: "2.0.0-M9"
-    page-causewayrel: "2.0.0-RC1"
+    page-causewayprev: "2.0.0-RC3"
+    page-causewayrel: "2.0.0-RC4"
 
 output:
   dir: antora/target/site

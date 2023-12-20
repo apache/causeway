@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -34,11 +33,6 @@ import org.apache.causeway.viewer.commons.model.UiModel;
 public interface UiScalar extends UiModel, HasMetaModelContext {
 
     ObjectFeature getMetaModel();
-
-    @Override
-    default MetaModelContext getMetaModelContext() {
-        return getMetaModel().getMetaModelContext();
-    }
 
     /** action's or property's owner */
     ManagedObject getOwner();
@@ -91,7 +85,7 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
         return !getMetaModel().isOptional();
     }
 
-    default ObjectSpecification getScalarTypeSpec() {
+    default ObjectSpecification getElementType() {
         return getMetaModel().getElementType();
     }
 
@@ -100,7 +94,7 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
     boolean hasChoices();
     boolean hasAutoComplete();
     default boolean hasObjectAutoComplete() {
-        return Facets.autoCompleteIsPresent(getScalarTypeSpec());
+        return Facets.autoCompleteIsPresent(getElementType());
     }
 
     Can<ManagedObject> getChoices();

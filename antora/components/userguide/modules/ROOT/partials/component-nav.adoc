@@ -1,4 +1,4 @@
-include::userguide:fun:partial$module-nav.adoc[]
+include::userguide:ROOT:partial$module-nav.adoc[]
 include::userguide:btb:partial$module-nav.adoc[]
 
 * Extensions

@@ -34,11 +34,13 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DependentDefaultsPolicy;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
@@ -49,7 +51,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
@@ -133,7 +135,7 @@ implements
         });
     }
 
-    private final Can<String> htmlTemplate = _Text.readLinesFromResource(this.getClass(),
+    private final Can<String> htmlTemplate = TextUtils.readLinesFromResource(this.getClass(),
             "CalendarEvent.html", StandardCharsets.UTF_8)
             .stream()
             .skip(20)
@@ -234,7 +236,11 @@ implements
 
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE
+    )
     @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
     @RequiredArgsConstructor
     public static class CalendarEvent_default {
@@ -243,10 +249,20 @@ implements
 
         @MemberSupport
         public CalendarEvent act(
+                @Parameter
                 final LocalDateTime dateTime,
+
+                @Parameter(
+                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
                 final String calendarName,
+
+                @Parameter(
+                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
                 final String title,
-                @Parameter(optionality = Optionality.OPTIONAL)
+
+                @Parameter(
+                        optionality = Optionality.OPTIONAL,
+                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
                 @ParameterLayout(multiLine = 4)
                 final String notes) {
 

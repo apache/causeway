@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.validate.method;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -43,11 +43,11 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final TranslationContext translationContext;
-    private final Optional<Constructor<?>> patConstructor;
+    private final Optional<ResolvedConstructor> patConstructor;
 
     public ActionParameterValidationFacetViaMethod(
-            final Method method,
-            final Optional<Constructor<?>> patConstructor,
+            final ResolvedMethod method,
+            final Optional<ResolvedConstructor> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
@@ -61,11 +61,12 @@ implements ImperativeFacet {
         return Intent.CHECK_IF_VALID;
     }
 
+    //@Override
     @Override
     public String invalidReason(
             final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs,
-            final ManagedObject proposedArgument) {
+            final int paramIndex) {
 
         val method = methods.getFirstElseFail();
         final Object returnValue = patConstructor.isPresent()
@@ -74,11 +75,17 @@ implements ImperativeFacet {
                         patConstructor.get(),
                         method.asMethodForIntrospection(),
                         owningAdapter, pendingArgs)
-                 // provides only a single pending arg (for validation)
-                : MmInvokeUtils.invoke(
-                        method.asMethodElseFail(),
-                        owningAdapter,
-                        proposedArgument);
+                : method.asMethodElseFail().isSingleArg()
+                         // provides the a single arg, namely the param under validation
+                        ? MmInvokeUtils.invokeWithSingleArg(
+                                method.asMethodElseFail().method(),
+                                owningAdapter,
+                                pendingArgs.getElseFail(paramIndex))
+                        // provides pending args up to paramIndex (for validation)
+                        : MmInvokeUtils.invokeWithArgs(
+                            method.asMethodElseFail().method(),
+                            owningAdapter,
+                            pendingArgs.subCan(0, paramIndex + 1));
 
         if(returnValue instanceof String) {
             return (String) returnValue;

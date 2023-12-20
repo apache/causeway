@@ -49,9 +49,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFromValue;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFrom;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFromValue;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -137,8 +137,7 @@ public class DomainEventHelper {
                     val parameters = objectAction.getParameters();
 
                     val parameterNames = parameters.stream()
-                            .map(ObjectActionParameter::getStaticFriendlyName)
-                            .map(optional->optional.orElseThrow(_Exceptions::unexpectedCodeReach))
+                            .map(ObjectActionParameter::getCanonicalFriendlyName)
                             .collect(_Lists.toUnmodifiable());
 
                     final List<Class<?>> parameterTypes = parameters.stream()

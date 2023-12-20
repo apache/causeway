@@ -19,17 +19,20 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import org.springframework.core.MethodParameter;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -76,10 +79,11 @@ public interface FacetFactory {
 
         /**
          * The class being introspected.
+         *
          * <p>
          *     In the context of method introspection, this isn't necessarily the same as the
          *     {@link java.lang.reflect.Method#getDeclaringClass() declaring class}
-         *     of the {@link #getMethod() method}; the method might have been inherited.
+         *     of the method being introspected; that method might have been inherited.
          * </p>
          */
         @Getter private final @NonNull Class<?> cls;
@@ -124,17 +128,17 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethod(final Method method) {
+        public void removeMethod(final ResolvedMethod method) {
             methodRemover.removeMethod(method);
         }
 
         @Override
-        public void removeMethods(final Predicate<Method> filter, final Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
             methodRemover.removeMethods(filter, onRemoval);
         }
 
         @Override
-        public Can<Method> snapshotMethodsRemaining() {
+        public Can<ResolvedMethod> snapshotMethodsRemaining() {
             return methodRemover.snapshotMethodsRemaining();
         }
 
@@ -177,17 +181,17 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethod(final @Nullable Method method) {
+        public void removeMethod(final @Nullable ResolvedMethod method) {
             methodRemover.removeMethod(method);
         }
 
         @Override
-        public void removeMethods(final Predicate<Method> filter, final Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
             methodRemover.removeMethods(filter, onRemoval);
         }
 
         @Override
-        public Can<Method> snapshotMethodsRemaining() {
+        public Can<ResolvedMethod> snapshotMethodsRemaining() {
             return methodRemover.snapshotMethodsRemaining();
         }
 
@@ -347,7 +351,7 @@ public interface FacetFactory {
         public static ProcessMethodContext forTesting(
                 final Class<?> cls,
                 final FeatureType featureType,
-                final Method method,
+                final ResolvedMethod method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
             return new ProcessMethodContext(
@@ -393,10 +397,20 @@ public interface FacetFactory {
             return super.method.synthesizeOnParameter(annotationType, paramNum);
         }
 
+        public Stream<Annotation> streamParameterAnnotations() {
+            val parameterAnnotations = MethodParameter
+                    .forExecutable(
+                            this.getMethod().asExecutable(),
+                            this.getParamNum())
+                    .getParameterAnnotations();
+            return _NullSafe.stream(parameterAnnotations);
+        }
+
         //JUnit
         public static ProcessParameterContext forTesting(
                 final Class<?> type, final IntrospectionPolicy annotationOptional,
-                final Method method, final MethodRemover methodRemover, final FacetedMethodParameter facetedMethodParameter) {
+                final ResolvedMethod method, final MethodRemover methodRemover,
+                final FacetedMethodParameter facetedMethodParameter) {
             return new ProcessParameterContext(type, annotationOptional,
                     _MethodFacades.regular(method), methodRemover, facetedMethodParameter);
         }

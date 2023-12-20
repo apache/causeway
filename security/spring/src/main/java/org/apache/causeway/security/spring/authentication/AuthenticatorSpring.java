@@ -56,7 +56,7 @@ public class AuthenticatorSpring implements Authenticator {
     }
 
     @Override
-    public void logout(final InteractionContext session) {
+    public void logout() {
     }
 
 }

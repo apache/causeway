@@ -21,9 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 /**
  * Provides all the system dependencies for sub-classes.
@@ -32,6 +30,7 @@ import org.apache.causeway.viewer.wicket.model.util.WktContext;
 public abstract class WebComponentBase
 extends WebComponent
 implements HasCommonContext {
+    private static final long serialVersionUID = 1L;
 
     public WebComponentBase(final String id) {
         super(id);
@@ -40,13 +39,4 @@ implements HasCommonContext {
     public WebComponentBase(final String id, final IModel<?> model) {
         super(id, model);
     }
-
-    private static final long serialVersionUID = 1L;
-
-    private transient MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
-
 }

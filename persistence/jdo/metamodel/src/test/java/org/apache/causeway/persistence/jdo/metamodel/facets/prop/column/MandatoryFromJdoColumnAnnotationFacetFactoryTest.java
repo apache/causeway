@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
-import java.lang.reflect.Method;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -36,14 +34,14 @@ import lombok.val;
 class MandatoryFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private MandatoryFromColumnAnnotationFacetFactory facetFactory;
+    private MandatoryFromJdoColumnAnnotationFacetFactory facetFactory;
     private Class<?> cls;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new MandatoryFromColumnAnnotationFacetFactory(metaModelContext, jdoFacetContext);
+        facetFactory = new MandatoryFromJdoColumnAnnotationFacetFactory(metaModelContext, jdoFacetContext);
         cls = SimpleObjectWithColumnAllowsNullAnnotations.class;
     }
 
@@ -63,90 +61,90 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithNoAnnotation_isMandatory() throws Exception {
-        final Method method = cls.getMethod("getPrimitiveWithNoAnnotation");
+        val method = findMethod(cls, "getPrimitiveWithNoAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
     public void testPrimitiveWithNoAllowsNull_isMandatory() throws Exception {
-        final Method method = cls.getMethod("getPrimitiveWithNoAllowsNull");
+        val method = findMethod(cls, "getPrimitiveWithNoAllowsNull");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
     public void testPrimitiveWithAllowsNullFalse() throws Exception {
-        final Method method = cls.getMethod("getPrimitiveWithAllowsNullFalse");
+        val method = findMethod(cls, "getPrimitiveWithAllowsNullFalse");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
     public void testPrimitiveWithAllowsNullTrue() throws Exception {
-        final Method method = cls.getMethod("getPrimitiveWithAllowsNullTrue");
+        val method = findMethod(cls, "getPrimitiveWithAllowsNullTrue");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 
     public void testReferenceWithNoAnnotation_isOptional() throws Exception {
-        final Method method = cls.getMethod("getReferenceWithNoAnnotation");
+        val method = findMethod(cls, "getReferenceWithNoAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 
     public void testReferenceWithNoAllowsNull_isOptional() throws Exception {
-        final Method method = cls.getMethod("getReferenceWithNoAllowsNull");
+        val method = findMethod(cls, "getReferenceWithNoAllowsNull");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 
     public void testReferenceWithAllowsNullFalse() throws Exception {
-        final Method method = cls.getMethod("getReferenceWithAllowsNullFalse");
+        val method = findMethod(cls, "getReferenceWithAllowsNullFalse");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
     public void testReferenceWithAllowsNullTrue() throws Exception {
-        final Method method = cls.getMethod("getReferenceWithAllowsNullTrue");
+        val method = findMethod(cls, "getReferenceWithAllowsNullTrue");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 

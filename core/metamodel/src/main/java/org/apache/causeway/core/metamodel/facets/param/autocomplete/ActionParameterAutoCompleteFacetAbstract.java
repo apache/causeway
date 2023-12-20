@@ -30,8 +30,12 @@ implements ActionParameterAutoCompleteFacet {
         return ActionParameterAutoCompleteFacet.class;
     }
 
-    public ActionParameterAutoCompleteFacetAbstract(final FacetHolder holder) {
+    protected ActionParameterAutoCompleteFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
+    }
+
+    protected ActionParameterAutoCompleteFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
     @Override

@@ -36,7 +36,7 @@ extends MemberNamedFacetWithStaticTextAbstract {
 
         return Optional.ofNullable(propertyLayoutData)
         .map(PropertyLayoutData::getNamed)
-        .filter(_Strings::isEmpty)
+        .filter(_Strings::isNotEmpty)
         .map(named->new MemberNamedFacetForPropertyLayoutXml(
                 named, holder, precedence));
     }

@@ -62,7 +62,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
+        programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
 
             // as an optimization only checking 'declared' members (skipping inherited ones)
             // otherwise inherited would be checked more than once

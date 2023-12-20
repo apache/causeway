@@ -71,9 +71,9 @@ public class ConfigurationExample3 {
 
     @Bean @Named("myPmfProxy")
     public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(
-            final MetaModelContext metaModelContext,
+            final MetaModelContext metaModelContext, // no longer used, but perhaps keep to enforce a dependency relation
             final PersistenceManagerFactory myPmf) {
-        val myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy(metaModelContext);
+        val myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
         myPmfProxy.setAllowCreate(false); // enforce active transactions
         return myPmfProxy;

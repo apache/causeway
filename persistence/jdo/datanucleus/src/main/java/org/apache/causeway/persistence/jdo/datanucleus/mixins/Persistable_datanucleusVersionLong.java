@@ -46,6 +46,7 @@ import lombok.RequiredArgsConstructor;
 @Property(
         domainEvent = Persistable_datanucleusVersionLong.PropertyDomainEvent.class)
 @PropertyLayout(
+        describedAs = "This value is incremented each time the entity is updated in the database, and is used to detect conflicting concurrent changes",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         hidden = Where.ALL_TABLES,
         named = "Version",

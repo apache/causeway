@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
-import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
+import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -28,10 +28,13 @@ import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasInteractionId_commandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasUsername_recentCommandsByUser;
 import org.apache.causeway.extensions.commandlog.applib.contributions.Object_recentCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_childCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
+import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
+import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 
 @Configuration
@@ -54,8 +57,12 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
 
+        BackgroundCommandsJobControl.class,
+
         BackgroundService.class,
         BackgroundService.PersistCommandExecutorService.class,
+
+        FakeScheduler.class,
 })
 public class CausewayModuleExtCommandLogApplib {
 

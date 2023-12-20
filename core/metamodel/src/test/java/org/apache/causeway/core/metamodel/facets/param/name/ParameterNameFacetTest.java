@@ -54,7 +54,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     public void verifyProgrammingModelNumberOfFactories() {
-        assertEquals(62, programmingModel.streamFactories().count());
+        assertEquals(63, programmingModel.streamFactories().count());
     }
 
     @Test //verify we have the javac -parameter flag set when compiling this class

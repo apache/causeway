@@ -20,7 +20,6 @@ package org.apache.causeway.core.runtimeservices;
 
 import jakarta.inject.Singleton;
 
-import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -62,14 +61,13 @@ import org.apache.causeway.core.runtimeservices.repository.RepositoryServiceDefa
 import org.apache.causeway.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
 import org.apache.causeway.core.runtimeservices.serializing.SerializingAdapterDefault;
-import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
+import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.sitemap.SitemapServiceDefault;
 import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.causeway.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
-import org.apache.causeway.core.runtimeservices.user.ImpersonatedUserHolderDefault;
 import org.apache.causeway.core.runtimeservices.user.UserCurrentSessionTimeZoneHolderDefault;
 import org.apache.causeway.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.causeway.core.runtimeservices.wrapper.WrapperFactoryDefault;
@@ -97,7 +95,6 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
         ImpersonateMenuAdvisorDefault.class,
-        ImpersonatedUserHolderDefault.class,
         InteractionDtoFactoryDefault.class,
         InteractionIdGeneratorDefault.class,
         InteractionServiceDefault.class,

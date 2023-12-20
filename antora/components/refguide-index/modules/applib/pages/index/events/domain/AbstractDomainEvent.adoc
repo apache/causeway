@@ -17,7 +17,7 @@ class AbstractDomainEvent<S> {
   AbstractDomainEvent(S source)     // <.>
   AbstractDomainEvent(S source, Identifier identifier)
   S getSource()     // <.>
-  void setMixedIn(Object mixedIn)     // <.>
+  void setMixee(Object mixee)     // <.>
   T getSubject()     // <.>
   void setEventPhase(Phase phase)     // <.>
   void setIdentifier(Identifier identifier)     // <.>
@@ -57,7 +57,7 @@ If used then the framework will set the remaining state via (non-API) setters.
 --
 The domain object raising this event.
 --
-<.> xref:#setMixedIn_Object[setMixedIn(Object)]
+<.> xref:#setMixee_Object[setMixee(Object)]
 +
 --
 Not API - set by the framework.
@@ -65,7 +65,7 @@ Not API - set by the framework.
 <.> xref:#getSubject_[getSubject()]
 +
 --
-The subject of the event, which will be either the _#getSource() source_ for a regular action, or the _#getMixedIn() mixed-in_ domain object for a mixin.
+The subject of the event, which will be either the _#getSource() source_ for a regular action, or the _#getMixee() mixed-in_ domain object for a mixin.
 --
 <.> xref:#setEventPhase_Phase[setEventPhase(Phase)]
 +
@@ -178,15 +178,15 @@ For a "regular" action, property or collection then this will be the target doma
 
 But for a "mixin" action, this will be an instance of the mixin itself.
 
-[#setMixedIn_Object]
-=== setMixedIn(Object)
+[#setMixee_Object]
+=== setMixee(Object)
 
 Not API - set by the framework.
 
 [#getSubject_]
 === getSubject()
 
-The subject of the event, which will be either the _#getSource() source_ for a regular action, or the _#getMixedIn() mixed-in_ domain object for a mixin.
+The subject of the event, which will be either the _#getSource() source_ for a regular action, or the _#getMixee() mixed-in_ domain object for a mixin.
 
 [#setEventPhase_Phase]
 === setEventPhase(Phase)

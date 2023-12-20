@@ -19,6 +19,7 @@ interface ManagedObject {
   String getTitle()     // <.>
   String getIconName()     // <.>
   ObjectIcon getIcon()
+  Either<ObjectIcon, CssClassFaFactory> eitherIconOrFaClass()     // <.>
   Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark()
   ManagedObject unspecified()     // <.>
   ManagedObject empty(ObjectSpecification spec)     // <.>
@@ -33,9 +34,11 @@ interface ManagedObject {
   PackedManagedObject packed(ObjectSpecification elementSpec, Can<ManagedObject> nonScalar)     // <.>
   ManagedObject adaptSingular(SpecificationLoader specLoader, Object pojo)     // <.>
   ManagedObject adaptSingular(ObjectSpecification guess, Object pojo)
+  ManagedObject adaptProperty(OneToOneAssociation oneToOneAssociation, Object pojo)
+  ManagedObject adaptParameter(ObjectActionParameter param, Object paramValue)
+  Can<ManagedObject> adaptParameters(Can<ObjectActionParameter> objectActionParameters, List<Object> args)
   ManagedObject bookmarked(ObjectSpecification spec, Object pojo, Bookmark bookmark)     // <.>
   ManagedObject adaptSingularInternal(ObjectSpecification guess, Object pojo, Optional<Bookmark> bookmarkIfAny)     // <.>
-  ManagedObject adaptParameter(ObjectActionParameter param, Object paramValue)
 }
 ----
 
@@ -67,7 +70,12 @@ The (untranslated) title of the wrapped pojo.
 <.> xref:#getIconName_[getIconName()]
 +
 --
-Returns the name of an icon to use if this object is to be displayed graphically.
+Returns the name of an icon to use for this object.
+--
+<.> xref:#eitherIconOrFaClass_[eitherIconOrFaClass()]
++
+--
+Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
 --
 <.> xref:#unspecified_[unspecified()]
 +
@@ -160,9 +168,14 @@ The (untranslated) title of the wrapped pojo.
 [#getIconName_]
 === getIconName()
 
-Returns the name of an icon to use if this object is to be displayed graphically.
+Returns the name of an icon to use for this object.
 
 May return `null` if no icon is specified.
+
+[#eitherIconOrFaClass_]
+=== eitherIconOrFaClass()
+
+Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
 
 [#unspecified_]
 === unspecified()

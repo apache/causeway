@@ -19,17 +19,14 @@
 package org.apache.causeway.core.metamodel.facets.members.publish.command;
 
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.services.command.Command.CommandPublishingPhase;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
-import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Indicates that details of the action invocation or property edit,
@@ -44,9 +41,12 @@ import lombok.NonNull;
  */
 public interface CommandPublishingFacet extends Facet {
 
-    public CommandDtoProcessor getProcessor();
+    CommandDtoProcessor getProcessor();
 
     public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
-        return facetHolder.containsFacet(CommandPublishingFacet.class);
+        val facet = facetHolder.getFacet(CommandPublishingFacet.class);
+        return facet != null && facet.isEnabled();
     }
+
+    boolean isEnabled();
 }

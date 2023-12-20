@@ -38,11 +38,11 @@ import lombok.RequiredArgsConstructor;
  * @since 1.x {@index}
  */
 @Action(
-        domainEvent = Object_rebuildMetamodel.ActionDomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Object_rebuildMetamodel.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         cssClassFa = "fa-sync",

@@ -24,11 +24,13 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 
-import demoapp.dom.types.Samples;
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-/*${generated-file-notice}*/
+import demoapp.dom.types.Samples;
+
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
@@ -36,15 +38,15 @@ public class /*${showcase-name}*/Holder_actionReturningArray {
 
     private final /*${showcase-name}*/Holder holder;
 
-    public /*${showcase-type}*/[] act() {
-        val array = new /*${showcase-type}*/[(int)samples.stream().count()];
+    public /*${showcase-simple-type}*/[] act() {
+        val array = new /*${showcase-simple-type}*/[(int)samples.stream().count()];
         samples.stream()
             .forEach(IndexedConsumer.zeroBased((index, value)->array[index] = value));
         return array;
     }
 
     @Inject
-    Samples</*${showcase-type-boxed}*/> samples;
+    Samples</*${showcase-simple-type-boxed}*/> samples;
 
 }
 //end::class[]

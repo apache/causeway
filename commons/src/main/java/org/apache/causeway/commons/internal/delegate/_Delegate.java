@@ -91,9 +91,9 @@ public class _Delegate {
             // Invoke method with same signature on delegate ()
             try {
                 val delegateMethod =
-                        classCache.lookupPublicOrDeclaredMethod(delegate.getClass(),
+                        classCache.lookupResolvedMethodElseFail(delegate.getClass(),
                                 method.getName(), method.getParameterTypes());
-                return delegateMethod.invoke(delegate, args);
+                return delegateMethod.method().invoke(delegate, args);
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             }

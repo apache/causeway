@@ -41,11 +41,11 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Action(
-        domainEvent = Object_openRestApi.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Object_openRestApi.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
         cssClassFa = "fa-external-link-alt",
@@ -54,7 +54,6 @@ import lombok.val;
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "750.1"
 )
-//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_openRestApi {
 

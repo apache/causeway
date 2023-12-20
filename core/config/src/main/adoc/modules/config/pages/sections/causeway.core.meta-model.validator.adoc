@@ -35,6 +35,17 @@ Note that this settings has no effect if the programming model has been configur
 
 
 |
+[[causeway.core.meta-model.validator.allow-logical-type-name-as-alias]]
+causeway.core.meta-model.validator. +
+allow-logical-type-name-as-alias
+
+| 
+| Allows logical type name in ``Named`` also be included in the list of ``DomainObject#aliased()`` or ``DomainService#aliased()``.
+
+It is _highly advisable_ to leave this disabled. This option is meant as a practical way to enable to transition from old names to new logical type names. Especially when you have a large number of files that have to migrated and you want to do the migration in incremental steps.
+
+
+|
 [[causeway.core.meta-model.validator.explicit-logical-type-names]]
 causeway.core.meta-model.validator. +
 explicit-logical-type-names

@@ -13,7 +13,32 @@ enum ApplicationUserStatus {
   LOCKED
   ApplicationUserStatus parse(Boolean unlocked)
   String toString()
-  boolean isUnlocked()
+  boolean isUnlocked(ApplicationUserStatus status)
+  boolean isLockedOrUnspecified(ApplicationUserStatus status)
+  boolean canLock(ApplicationUserStatus status)     // <.>
+  boolean canUnlock(ApplicationUserStatus status)     // <.>
 }
 ----
 
+<.> xref:#canLock_ApplicationUserStatus[canLock(ApplicationUserStatus)]
++
+--
+Whether can transition to state LOCKED. That is, YES if not already at that state.
+--
+<.> xref:#canUnlock_ApplicationUserStatus[canUnlock(ApplicationUserStatus)]
++
+--
+Whether can transition to state UNLOCKED. That is, YES if not already at that state.
+--
+
+== Members
+
+[#canLock_ApplicationUserStatus]
+=== canLock(ApplicationUserStatus)
+
+Whether can transition to state LOCKED. That is, YES if not already at that state.
+
+[#canUnlock_ApplicationUserStatus]
+=== canUnlock(ApplicationUserStatus)
+
+Whether can transition to state UNLOCKED. That is, YES if not already at that state.

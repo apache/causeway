@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryS
 public class ValueFallbackPanelFactory
 extends ComponentFactoryScalarAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public ValueFallbackPanelFactory() {
         // not asking the super-type to validate types, so no value types need be provided.
         super(ValueFallbackPanel.class);
@@ -45,7 +43,7 @@ extends ComponentFactoryScalarAbstract {
 
     @Override
     protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
-        if(!scalarModel.getScalarTypeSpec().isValue()) {
+        if(!scalarModel.getElementType().isValue()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 

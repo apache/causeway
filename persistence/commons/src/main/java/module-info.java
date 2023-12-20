@@ -17,8 +17,9 @@
  *  under the License.
  */
 module org.apache.causeway.persistence.commons {
-    exports org.apache.causeway.persistence.jpa.integration.changetracking;
     exports org.apache.causeway.persistence.commons;
+    exports org.apache.causeway.persistence.commons.metamodel.facets.prop.column;
+    exports org.apache.causeway.persistence.commons.integration.changetracking;
 
     requires jakarta.annotation;
     requires java.desktop;
@@ -38,4 +39,5 @@ module org.apache.causeway.persistence.commons {
     requires spring.beans;
     requires spring.context;
     requires spring.core;
+    requires spring.tx;
 }

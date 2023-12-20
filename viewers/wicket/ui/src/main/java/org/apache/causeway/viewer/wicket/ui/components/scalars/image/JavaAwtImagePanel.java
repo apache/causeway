@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.image;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
@@ -71,10 +70,8 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
     @Override
     public String getVariation() {
-        val scalarModel = scalarModel();
-        return Facets.labelAt(scalarModel.getMetaModel())
-            .map(LabelPosition::name)
-            .orElse(LabelPosition.LEFT.name());
+        return Facets.labelAt(scalarModel().getMetaModel())
+                .name();
     }
 
     /** see also {@link ScalarPanelAbstract} */
@@ -85,8 +82,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
         WktDecorators.getFormLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
-                    .mandatory(scalarModel.isRequired()
-                            && scalarModel.isEnabled()));
+                    .mandatory(scalarModel.isShowMandatoryIndicator()));
 
         scalarModel.getDescribedAs()
             .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));

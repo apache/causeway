@@ -18,26 +18,22 @@
  */
 package org.apache.causeway.extensions.secman.integration.facets;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.user.UserService;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -50,7 +46,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import lombok.val;
 
 public class TenantedAuthorizationPostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Component
     public static class Register implements MetaModelRefiner {
@@ -62,12 +58,10 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
     }
 
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject UserService userService;
-    @Inject @Lazy ApplicationUserRepository userRepository;
+    @Inject Provider<UserService> userServiceProvider;
+    @Inject Provider<ApplicationUserRepository> userRepositoryProvider;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
-
-    @Autowired(required=false) List<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
+    @Inject ObjectProvider<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
 
     @Inject
     public TenantedAuthorizationPostProcessor(final MetaModelContext metaModelContext) {
@@ -100,21 +94,19 @@ extends ObjectSpecificationPostProcessorAbstract {
         FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
-
-
     private Optional<TenantedAuthorizationFacetDefault> createFacet(
             final Class<?> cls,
             final FacetHolder holder) {
 
-        val evaluators = _NullSafe.stream(applicationTenancyEvaluators)
+        val evaluators = applicationTenancyEvaluators.orderedStream()
                 .filter(evaluator -> evaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
         return evaluators.isEmpty()
                 ? Optional.empty()
                 : Optional.of(new TenantedAuthorizationFacetDefault(
-                        evaluators, userRepository,
-                        queryResultsCacheProvider, userService,
+                        evaluators, userRepositoryProvider.get(),
+                        queryResultsCacheProvider, userServiceProvider.get(),
                         holder));
     }
 

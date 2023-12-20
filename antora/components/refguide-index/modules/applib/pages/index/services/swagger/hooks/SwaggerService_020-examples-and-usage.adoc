@@ -22,7 +22,7 @@ part of the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], this pr
 +
 can be used to generate a Swagger spec, for example within a test suite or larger build pipeline.
 +
-An example of its use can be found in the demo app:
+An example of its use can be found in the xref:docs:referenceapp:about.adoc[reference app]:
 +
 [source,java]
 .SwaggerExport_IntegTest.java

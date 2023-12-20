@@ -47,6 +47,6 @@ implements ActionParameterValidationFacet {
         return invalidReason(
                 actionArgValidityContext.getTarget(),
                 actionArgValidityContext.getArgs(),
-                actionArgValidityContext.getProposed());
+                actionArgValidityContext.getPosition());
     }
 }

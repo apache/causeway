@@ -46,7 +46,7 @@ extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected MarkupContainer createCompactFrame() {
+    protected Component createCompactFrame() {
         return FrameFragment.COMPACT
                 .createComponent(this::createTreeComponent);
     }
@@ -65,7 +65,7 @@ extends ScalarPanelAbstract2 {
         container.add(tree);
         // adds the tree-theme behavior to the tree's parent
         container.add(getTreeThemeProvider().treeThemeFor(scalarModel));
-        return (MarkupContainer) tree;
+        return tree;
     }
 
 

@@ -38,7 +38,6 @@ import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.commons.InputStreamExtensions;
 import org.apache.causeway.core.metamodel.commons.ResourceUtil;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 
 import static org.apache.causeway.commons.internal.base._Strings.pair;
 
@@ -79,7 +78,7 @@ public class TemplateResourceServlet extends HttpServlet {
     // -- HELPER
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response) {
-        final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
+        final String servletPath = _Strings.removePrefix(request.getServletPath(), "/");
         log.debug("request: {}", servletPath);
 
         val resourceInputStream = Optional

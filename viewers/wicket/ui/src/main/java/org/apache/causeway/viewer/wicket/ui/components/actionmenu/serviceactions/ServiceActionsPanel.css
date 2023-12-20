@@ -329,11 +329,13 @@
     padding-left: 0;
 }
 
-.dropdown-menu > li > span.fa {
+.dropdown-menu > li > span.fa,
+.dropdown-menu > li > span.fa-stack {
     padding-left: 3px;
 }
 
-.dropdown-menu .fontAwesomeIcon {
+.dropdown-menu .fa,
+.dropdown-menu .fa-stack {
     margin-left: 10px;
     margin-right: 4px;
     min-width: 20px;

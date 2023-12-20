@@ -44,6 +44,10 @@ public interface TransactionalProcessor {
     /**
      * Runs given {@code callable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link TransactionDefinition} {@code def}.
+     *
+     * @param def - transaction definition, in particular whether to use existing or start new transaction.  Requires only a single {@link org.springframework.transaction.PlatformTransactionManager} to be configured (unless a {@link org.springframework.transaction.support.TransactionTemplate} is provided which wraps a specific {@link org.springframework.transaction.PlatformTransactionManager}.
+     * @param callable - the work to be performed within the transaction.
+     * @return {@link Try} of calling given {@code callable}
      * @return {@link Try} of calling given {@code callable}
      */
     <T> Try<T> callTransactional(TransactionDefinition def, Callable<T> callable);
@@ -51,6 +55,10 @@ public interface TransactionalProcessor {
     /**
      * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link TransactionDefinition} {@code def}.
+     *
+     * @param def - transaction definition, in particular whether to use existing or start new transaction.  Requires only a single {@link org.springframework.transaction.PlatformTransactionManager} to be configured (unless a {@link org.springframework.transaction.support.TransactionTemplate} is provided which wraps a specific {@link org.springframework.transaction.PlatformTransactionManager}.
+     * @param runnable - the work to be performed within the transaction.
+     * @return {@link Try} of calling given {@code callable}
      */
     default Try<Void> runTransactional(final TransactionDefinition def, final ThrowingRunnable runnable) {
         return callTransactional(def, ThrowingRunnable.toCallable(runnable));
@@ -61,8 +69,9 @@ public interface TransactionalProcessor {
     /**
      * Runs given {@code callable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link Propagation} {@code propagation}.
-     * <p>
-     * More fine grained control is given via {@link #callTransactional(TransactionDefinition, Callable)}
+     *
+     * @param propagation - transaction propagation, ie whether to use existing or start new transaction.  Requires only a single {@link org.springframework.transaction.PlatformTransactionManager} to be configured.  For more control, use {@link #callTransactional(TransactionDefinition, Callable)} and pass in a {@link org.springframework.transaction.support.TransactionTemplate} is provided which wraps a specific {@link org.springframework.transaction.PlatformTransactionManager}.
+     * @param callable - the work to be performed within the transaction.
      * @return {@link Try} of calling given {@code callable}
      */
     default <T> Try<T> callTransactional(final Propagation propagation, final Callable<T> callable) {
@@ -77,6 +86,10 @@ public interface TransactionalProcessor {
      * <p>
      * More fine grained control is given via
      * {@link #runTransactional(TransactionDefinition, ThrowingRunnable)}
+     *
+     * @param propagation - transaction propagation, ie whether to use existing or start new transaction.  Requires only a single {@link org.springframework.transaction.PlatformTransactionManager} to be configured.  For more control, use {@link #callTransactional(TransactionDefinition, Callable)} and pass in a {@link org.springframework.transaction.support.TransactionTemplate} is provided which wraps a specific {@link org.springframework.transaction.PlatformTransactionManager}.
+     * @param runnable - the work to be performed within the transaction.
+     * @return {@link Try} of calling given {@code callable}
      */
     default Try<Void> runTransactional(final Propagation propagation, final ThrowingRunnable runnable) {
         return callTransactional(propagation, ThrowingRunnable.toCallable(runnable));

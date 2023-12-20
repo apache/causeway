@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices.email;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -25,8 +27,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.causeway.commons.internal.collections._Lists;
 
 class EmailServiceDefaultTest_actually {
 
@@ -42,7 +42,7 @@ class EmailServiceDefaultTest_actually {
     @Test
     void when_not_null_but_no_override() throws Exception {
 
-        final String[] actually = EmailServiceDefault.originalUnlessOverridden(_Lists.of("joey@tribiani.com", "rachel@green.com"), null);
+        final String[] actually = EmailServiceDefault.originalUnlessOverridden(List.of("joey@tribiani.com", "rachel@green.com"), null);
 
         assertThat(actually, is(not(nullValue())));
         assertThat(actually.length, is(2));
@@ -51,7 +51,7 @@ class EmailServiceDefaultTest_actually {
     @Test
     void when_not_null_but_with_override() throws Exception {
 
-        final String[] actually = EmailServiceDefault.originalUnlessOverridden(_Lists.of("joey@tribiani.com", "rachel@green.com"), "ross@geller.com");
+        final String[] actually = EmailServiceDefault.originalUnlessOverridden(List.of("joey@tribiani.com", "rachel@green.com"), "ross@geller.com");
 
         assertThat(actually, is(not(nullValue())));
         assertThat(actually.length, is(1));

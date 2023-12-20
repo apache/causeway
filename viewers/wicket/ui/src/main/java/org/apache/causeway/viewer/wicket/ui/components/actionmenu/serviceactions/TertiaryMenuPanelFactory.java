@@ -35,8 +35,6 @@ import lombok.val;
  */
 public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public TertiaryMenuPanelFactory() {
         super(UiComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);
     }
@@ -61,8 +59,7 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         val navBarSection = ((ServiceActionsModel) model).getObject();
 
         val menuItems = _Lists.<CssMenuItem>newArrayList();
-        ServiceActionUtil.buildMenu(
-                super.getMetaModelContext(), navBarSection, menuItems::add);
+        ServiceActionUtil.buildMenu(navBarSection, menuItems::add);
 
         return new TertiaryActionsPanel(id, menuItems);
     }

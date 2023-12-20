@@ -38,6 +38,7 @@ import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSem
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
+import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
@@ -56,7 +57,7 @@ import lombok.val;
     Configuration_usingJdo.class,
     CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
 })
-class RestServiceTest {
+class RestServiceTest extends RegressionTestWithJdoFixtures {
 
     @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;

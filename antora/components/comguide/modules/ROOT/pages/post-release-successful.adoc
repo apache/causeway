@@ -204,12 +204,13 @@ Next, add the new release into the appropriate directory.
 The `upd.sh` script can be used to automate this:
 
 [source,bash]
+.upd.sh
 ----
 new_ver=$1
 
 if [ $# -lt 1 ]; then
-        echo "usage: $(basename $0) version" 2>&1
-        exit 1
+  echo "usage: $(basename $0) version" 2>&1
+  exit 1
 fi
 
 # constants
@@ -225,9 +226,9 @@ sha512="$zip.sha512"
 
 for suffix in $zip $asc $md5 $sha1 $sha512
 do
-        echo curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
-        curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
-        svn add $fullname-$new_ver-$suffix
+  echo curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
+  curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
+  svn add $fullname-$new_ver-$suffix
 done
 ----
 
@@ -292,13 +293,17 @@ We are now ready to xref:#generate-website[generate the website].
 [#generate-website]
 == Generate website
 
-We use Antora to generate the site, not only the version being release but also any previous versions listed in `site.yml`.
+We use Antora to generate the site, not only the version being released but also any previous versions listed in `site.yml`; each of these are tags.
 This is done using the `content.sources.url[].branches` properties.
 We use branches for all cases - note that the branch name appears in the generated UI.
 If there are patches to the documentation, we move the branches.
 
 We therefore temporarily modify all of the `antora.yml` files (and update `index.html`) file and create a branch for this change; then we update `site.yml` with a reference to that new branch.
 All of this is changed afterwards.
+
+We also use the link:https://docs.antora.org/antora/latest/playbook/urls-latest-version-segment/[latest version] support of Antora 3.x so that the most recent version is made available as "latest".
+This has two benefits: first, the top-level `index.html` (in `supplemental-ui`) does not need to be updated, and secondly, this improves search engine results as there will always be a `latest` version.
+
 
 [#create-doc-branch]
 === Create doc branch
@@ -332,16 +337,8 @@ git branch {page-causewayrel}
 git push origin {page-causewayrel}
 ----
 
-Revert the last commit (backing out changes to `antora.yml` files):
-
-[source,bash,subs="attributes+"]
-----
-git revert HEAD
-----
-
-=== Update the doc branch
-
-Now we make sure that the docs in the new doc branch are actually up to date:
+Now we make sure that the docs in the new doc branch are actually up-to-date.
+(There is no need to update `site.yml`, because at this stage it continues to refer to the `HEAD` branch):
 
 * checkout the branch:
 +
@@ -354,11 +351,10 @@ git checkout {page-causewayrel}
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout $CAUSEWAYBRANCH
 pushd bom
-mvn clean install -DskipTests -Dreleased
+mvnd clean install -T1C -DskipTests -Dgithub
 popd
-mvn -D module-tooling -D skip.essential install -DskipTests
+mvnd -D module-tooling -D skip.essential install -DskipTests
 ----
 
 * generate the website:
@@ -368,6 +364,15 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 sh preview.sh
 ----
 
+* if any files have changed, then commit:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: updates docs on new release branch"
+----
+
+
 * push the updated doc branch:
 +
 [source,bash,subs="attributes+"]
@@ -375,47 +380,95 @@ sh preview.sh
 git push origin {page-causewayrel}
 ----
 
-* finally switch back to the release branch:
+
+[#generate-the-site]
+=== Generate the site
+
+
+To build the site (referencing the current release and all previous releases), we need to update the `site.yml`.
+This is done in the release branch (`$CAUSEWAYBRANCH`), _not_ in the documentation branch for the current release ({page-causewayrel}).
+
+* Switch to the release branch:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout $CAUSEWAYBRANCH
+git checkout $CAUSEWAYBRANCH            #<.>
+----
+<.> will be before the documentation branch of the current release
+
+* Update with the documentation branch for the current release ({page-causewayrel})
++
+[source,bash,subs="attributes+"]
+----
+git merge {page-causewayrel} --ff-only  #<.>
+----
+<.> move forward to incorporate any changes made thus far on the documentation branch
+
+
+* Now, revert the commit that changed the `antora.yml` files in the documentation branch
++
+If there were no doc changes, then you can simply use:
++
+[source,bash,subs="attributes+"]
+----
+git revert HEAD
+----
++
+Otherwise, locate the `shaId` of the commit that applied the change and revert appropriately.
+
+
+
+Now, update `site.yml` using `site.NEXT.yml`:
+
+* move `site.yml` to one side, and replace with `site.NEXT.yml`:
++
+[source,bash,subs="attributes+"]
+----
+pushd antora/playbooks
+mv site.yml      site.ORIG.yml
+mv site.NEXT.yml site.yml
+popd
 ----
 
-[#update-index-html-site-yml-generate]
-=== Update `index.html` & `site.yml` & generate
-
-Lastly, we update `index.html` and then `site.yml`
-
-* With the home page of the website, `antora/supplemental-ui/index.html`, update any mention of `latest` -> `{page-causewayrel}`
+* update the new `site.yml`, eg:
 +
-This should be in hyperlinks, `<a href="docs/...">`
-+
-NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[previous section]) because the supplemental files are _not_ versioned as a doc component:
+[source,yaml,subs="attributes+"]
+.site.yml
+----
+content:
+  sources:
+    - url: .
+      start_path: antora/components/docs # docs
+      branches: [2.0.0-M5, ...  2.0.0-RC3]
+      # ...
+    - url: .
+      start_path: viewers/wicket/adoc # vw
+      branches: [2.0.0-M5, ... 2.0.0-RC3]
+----
 
-* Now update `site.yml`
+* check that the attributes are correct.
 +
-This will reference the new branch, and any previous branches.
-Every content source needs to be updated:
-+
-** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
-+
-[WARNING]
-====
-Actually though not every component is available from `2.0.0-M5`, which means that some manual adjustment is required, otherwise Antora will fail.
+[source,yaml,subs="attributes+"]
+.site.yml
+----
+asciidoc:
+  attributes:
+    page-causewayprev: "..."    #<.>
+    page-causewayrel: "..."     #<.>
+----
+<.> needs to be (the current) `{page-causewayrel}`
+<.> needs to be set to the _next_ likely release version.
 
-Easiest thing to do is to use the `site.yml` git history to compare with its state when previous releases were made.
-====
-
-* commit this change, too (there's no need to push):
+* commit the changes
 +
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$CAUSEWAYJIRA: updates references to version in index.html and site.yml"
+git commit -m "$CAUSEWAYJIRA: updates site.yml in readiness for website generation"
 ----
 
-We are now in a position to actually generate the Antora website.
+
+We are ready to actually generate the Antora website.
 
 * generate the website:
 +
@@ -426,11 +479,27 @@ sh preview.sh -AS
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
-Finally, revert the last commit (backing out changes to `site.yml`):
 
+=== Revert site.yml
+
+Finally, restore the original `site.yml` file:
+
+* move the edited `site.yml` to `site.NEXT.yml` (in readiness for the _next_ release), and restore:
++
 [source,bash,subs="attributes+"]
 ----
-git revert HEAD
+pushd antora/playbooks
+mv site.yml      site.NEXT.yml
+mv site.ORIG.yml site.yml
+popd
+----
+
+* commit
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: reverts site.yml"
 ----
 
 
@@ -450,82 +519,117 @@ RC=RC1                                                <.>
 git checkout master
 git pull
 git merge release-{page-causewayrel}-$RC
-git push origin --delete release-{page-causewayrel}-$RC
+git push origin master
 git branch -d release-{page-causewayrel}-$RC
+git push origin release-{page-causewayrel}-$RC --delete
 ----
 <.> adjust RC number as required
 
-== Bump \{page-causewayrel} in `site.yml`
-
-In `site.yml` file, bump the version of `\{page-causewayrel}` and also `\{page-causewayprev}`, and commit.
-
 == Bump baselines for nightly/weekly builds
 
-=== Nightly build repo
+=== Main repo (weekly builds)
 
-And, in the `apache-causeway-committers/causeway-nightly` repo, similarly update:
+In the main repo, in `.github/workflows`, update the `BASELINE` variable in all scripts:
 
+* for example, in `ci-build-artifacts-no-push-maven.yml`:
++
 [source,yml,subs="attributes+"]
-.apache-causeway-ci-nightly.yml
+..github/workflows/ci-build-artifacts-no-push-maven.yml
 ----
 jobs:
   build:
-    name: build, site, build/push demo app
+
+    env:
+      BASELINE: {page-causewayrel}
+----
+
+* in `ci-build-site-no-push.yml`:
++
+[source,yml,subs="attributes+"]
+..github/workflows/ci-build-site-no-push.yml
+----
+jobs:
+  build:
+
+    env:
+      BASELINE: {page-causewayrel}
+----
+
+* commit and push:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
+----
+
+
+=== Nightly build repo
+
+In the `apache-causeway-committers/causeway-nightly` repo, similarly bump the versions of the `BASELINE_MAIN` variable.
+
+* first update your local repo:
++
+[source,bash,subs="attributes+"]
+----
+git fetch
+git reset --hard origin/master
+----
+
+* update the `apache-causeway-ci-nightly.yml` file:
++
+[source,yml,subs="attributes+"]
+..github/workflows/apache-causeway-ci-nightly.yml
+----
+jobs:
+  build:
+    name: build, site, build/push reference app
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
       BASELINE_MAIN: {page-causewayrel}
       BASELINE_EDGE: 3.0.0-M1
 ----
++
+NOTE: We leave `BASELINE_EDGE` unchanged for the moment; we will update these release notes when we switch to the v3 release branch.
 
+* update any other CI scripts that might exist there.
 
-=== Main repo (weekly builds)
-
-In the main repo, in `.github/workflows`, update the `BASELINE` variable:
-
-[source,yml,subs="attributes+"]
-.ci-build-artifacts-no-push-maven.yml
+* commit and push:
++
+[source,bash,subs="attributes+"]
 ----
-jobs:
-  build:
-
-    env:
-      BASELINE: {page-causewayrel}
+git add .
+git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
 ----
-
-and
-
-[source,yml,subs="attributes+"]
-.ci-build-site-no-push.yml
-----
-jobs:
-  build:
-
-    env:
-      BASELINE: {page-causewayrel}
-----
-
 
 == Update starter projects
 
 As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain four branches:
 
-* `jdo` and `jpa`
+* `jpa` and `jdo`
 +
 These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
 These are the branches referenced from the home page and getting started pages of the website.
 
-* `jdo-SNAPSHOT` and `jpa-SNAPSHOT`
+* `jpa-SNAPSHOT` and `jdo-SNAPSHOT`
 +
 These reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and similarly moves `jpa` up to `jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+The general idea is that a release will fast-forward `jpa` to `jpa-SNAPSHOT` and similarly moves `jdo` up to `jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jdo` and `$CAUSEWAYBRANCH-jpa`.
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
-IMPORTANT: The `jdo` and `jpa` branches should always work against the most recent release, whereas the `jdo-SNAPSHOT` and `jpa-SNAPSHOT` can reference more recently nightly builds if necessary.
+IMPORTANT: The `jpa` and `jdo` branches should always work against the most recent release, whereas the `jpa-SNAPSHOT` and `jdo-SNAPSHOT` can reference more recently nightly builds if necessary.
+
+
+== Update the reference app
+
+The link:https://github.com/apache/causeway-app-referenceapp[reference app] has a configuration property `causeway.viewer.common.application.version` (in link:https://github.com/apache/causeway-app-referenceapp/blob/master/domain/src/main/resources/application.yml#L91[application.yml]); this should be updated.
+
+
 
 
 == Update the ASF Reporter website
@@ -562,9 +666,9 @@ Enjoy!
 
 --The Apache Causeway team
 
-[1] https://causeway.apache.org/relnotes/{page-causewayrel}/about.html
+[1] https://causeway.apache.org/relnotes/latest/about.html
 [2] https://search.maven.org
-[3] https://causeway.apache.org/docs/{page-causewayrel}/downloads/how-to.html
+[3] https://causeway.apache.org/docs/latest/downloads/how-to.html
 ----
 
 == Blog post

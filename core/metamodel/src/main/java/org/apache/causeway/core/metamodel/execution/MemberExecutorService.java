@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.execution.PropertyModifier.ModificationVariant;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -115,10 +114,11 @@ public interface MemberExecutorService {
             final @NonNull PropertySetterFacet setterFacet,
             final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
 
-        val propertyExecutor = new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
-                ModificationVariant.SET, interactionInitiatedBy, head,
-                owningProperty, newValueAdapter, getterFacet, setterFacet, null,
+        val propertyExecutor = PropertyModifier.forPropertySet(facetHolder,
+                interactionInitiatedBy, head, newValueAdapter,
+                owningProperty, getterFacet, setterFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
+
         return setOrClearProperty(propertyExecutor);
     }
 

@@ -1,0 +1,51 @@
+[[mixins-as-nested-classes]]
+= As Nested Classes
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+While mixins primary use case is as a means of allowing contributions from one module to the types of another module, they are also a convenient mechanism for grouping functionality/behaviour against a concrete type.
+All the methods and xref:business-rules.adoc[supporting methods] end up in a single construct, and the dependency between that functionality and the rest of the object is made more explicit.
+
+We might therefore want to use a mixin within the same module as the mixee; indeed even within the same package or class as the mixee.
+In other words, we could define the mixin as nested static class of the mixee it contributes to.
+
+In the previous examples the "_" is used as a separator between the mixin type and mixin name.
+However, to support mixins as nested classes, the character "$" is also recognized as a separator.
+
+For example, the following refactors the "updateName" action -- of the `SimpleObject` class in xref:docs:starters:simpleapp.adoc[SimpleApp] start app -- into a nested mixin:
+
+[source,java]
+----
+public class SimpleObject /* ... */ {
+
+    @Action(semantics = IDEMPOTENT,
+            commandPublishing = Publishing.ENABLED,
+            executionPublishing = Publishing.ENABLED,
+            associateWith = "name",
+            domainEvent = updateName.DomainEvent.class)                 // <2>
+    public class updateName {                                           // <.>
+
+        public class DomainEvent extends
+            SimpleModule.ActionDomainEvent<SimpleObject.updateName> {}  // <.>
+
+        public SimpleObject act(@Name final String name) {
+            setName(name);                                              // <.>
+            return SimpleObject.this;
+        }
+        public String defaultName() {                                   // <.>
+            return getName();
+        }
+    }
+    // ...
+}
+----
+<.> Mixin class is not `static`, so that the containing object is implicitly available.
+<.> Domain event can be declared within the mixin, again, not `static`.
++
+Note that it is genericised on the mixin, not on the mixee
+<.> Acts on the owning instance.
+<.> Uses the xref:mixins.adoc#using-the-parameter-name[alternate programming model] matching the parameter by its name, not number
+
+The mixin class name can be either "camelCase" or "PascalCase", as you prefer.

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
-import java.lang.reflect.Method;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -40,14 +38,14 @@ import lombok.val;
 class BigDecimalFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private BigDecimalFromColumnAnnotationFacetFactory facetFactory;
+    private BigDecimalFromJdoColumnAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         val mmc = MetaModelContext_forTesting.buildDefault();
-        facetFactory = new BigDecimalFromColumnAnnotationFacetFactory(mmc);
+        facetFactory = new BigDecimalFromJdoColumnAnnotationFacetFactory(mmc);
     }
 
     @Override
@@ -67,7 +65,7 @@ extends AbstractFacetFactoryTest {
 
     public void testAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotation");
+        val method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -76,7 +74,7 @@ extends AbstractFacetFactoryTest {
 
     public void testAnnotationDefaultsLengthIfMissing() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotationMissingLength");
+        val method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotationMissingLength");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -85,7 +83,7 @@ extends AbstractFacetFactoryTest {
 
     public void testAnnotationDefaultsScaleIfMissing() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotationMissingScale");
+        val method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotationMissingScale");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -93,9 +91,8 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testNoFacetIfPropertyTypeIsNotBigDecimal() throws Exception {
-
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        final Method method = cls.getMethod("getStringPropertyWithColumnAnnotation");
+        val method = findMethod(cls, "getStringPropertyWithColumnAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -118,7 +115,7 @@ extends AbstractFacetFactoryTest {
         if(maxFractionalDigits>=0) {
             final MaxFractionalDigitsFacet facet = facetedMethod.getFacet(MaxFractionalDigitsFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof MaxFractionalDigitsFacetFromJdoColumn);
+            assertTrue(facet instanceof MaxFractionalDigitsFacetFromJdoColumnAnnotation);
             assertThat(facet.getMaxFractionalDigits(), is(maxFractionalDigits));
         } else {
             assertNull(facetedMethod.getFacet(MaxFractionalDigitsFacet.class));

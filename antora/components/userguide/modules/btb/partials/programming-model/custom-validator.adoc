@@ -1,0 +1,128 @@
+[[custom-validator]]
+= Custom validator
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Apache Causeway' programming model includes a validator component that detects and prevents (by failing fast) a number of situations where the domain model is logically inconsistent.
+
+For example, the validator will detect any orphaned supporting methods (eg `hideXxx()`) if the corresponding property or action has been renamed or deleted but the supporting method was not also updated.
+Another example is that a class cannot have a title specified both using `title()` method and also using `@Title` annotation.
+
+You can also impose your own application-specific rules by installing your own metamodel validator.
+To give just one example, you could impose naming standards such as ensuring that a domain-specific abbreviation such as "ISBN" is always consistently capitalized wherever it appears in a class member.
+
+
+== API and Implementation
+
+There are several ways to go about implementing a validator.
+
+=== `MetaModelValidator`
+
+Any custom validator must implement Apache Causeway' internal `MetaModelValidator` interface, so the simplest option is just to implement `MetaModelValidator` directly:
+
+[source,java]
+----
+package org.apache.causeway.core.metamodel.specloader.validator;
+
+public interface MetaModelValidator {
+
+    default void onFailure(
+            @NonNull FacetHolder facetHolder,                       // <.>
+            @NonNull Identifier deficiencyOrigin,                   // <.>
+            @NonNull String deficiencyMessageFormat,
+            Object ...args) {
+
+        val deficiencyMessage =
+            String.format(deficiencyMessageFormat, args);
+
+        DeficiencyFacet.appendTo(                                   // <.>
+                facetHolder, deficiencyOrigin, deficiencyMessage);
+    }
+}
+----
+<.> represents an element of the metamodel, either an `ObjectSpecification` (domain class or mixin), or an `ObjectMember` (property, collection or action), or an `ObjectActionParameter`.
+<.> identifier of the element
+<.> appends the message into the `DeficiencyFacet` associated with the element.
+
+If the `onFailure` is called, then a message explaining the deficiency is stored.
+
+The framework also provides a `MetaModelValidatorAbstract` that implements this interface.
+However, it is the responsibility of the validator itself to figure out how to iterate over the entire model.
+
+Since this is a common use case, the framework provides a more convenient and fine-grained "Visitor" API, discussed next.
+
+=== `Visitor`
+
+More often than not, you'll want to visit every element in the metamodel, and so for this you can instead subclass from `MetaModelValidatorVisiting.Visitor`:
+
+[source,java]
+----
+package org.apache.causeway.core.metamodel.specloader.validator;
+
+public final class MetaModelValidatorVisiting
+                        extends MetaModelValidatorAbstract {
+
+    public interface Visitor {
+        public boolean visit(                       // <.>
+            ObjectSpecification objectSpec,         // <.>
+            ValidationFailures validationFailures); // <.>
+    }
+
+    // ...
+}
+----
+<.> return `true` continue visiting specs.
+<.> `ObjectSpecification` is the internal API representing a class
+<.> add any metamodel violations to the `ValidationFailures` parameter
+
+If you have more than one rule then each can live in its own visitor.
+
+=== `SummarizingVisitor`
+
+As a slight refinement, you can also subclass from `MetaModelValidatorVisiting.SummarizingVisitor`:
+
+[source,java]
+----
+package org.apache.causeway.core.metamodel.specloader.validator;
+
+public final class MetaModelValidatorVisiting
+                        extends MetaModelValidatorAbstract {
+
+    public interface SummarizingVisitor extends Visitor {
+        public void summarize(ValidationFailures validationFailures);
+    }
+
+    // ...
+}
+----
+
+A `SummarizingVisitor` will be called once after every element in the metamodel has been visited.
+This is great for performing checks on the metamodel as a whole.
+
+== Configuration
+
+Once you have implemented your validator, you must register it with the framework.
+This is most easily done by implementing service that implements  `MetaModelRefiner` service.
+
+For example, some folk advocate that pattern names such as "Repository" or "Factory" should not appear in class names because they are not part of the xref:userguide:ROOT:background-context-and-theory.adoc#ubiquitous-language[ubiquitous language].
+Such a rule could be verified using this implementation:
+
+[source,java]
+----
+@Service
+public static class NoRepositorySuffixRefiner implements MetaModelRefiner {
+    @Override
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
+            @Override
+            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
+                if(objectSpec.getSingularName().endsWith("Repository")) {
+                    validator.onFailure(objectSpec, objectSpec.getIdentifier(), "Domain services may not have the suffix 'Repository'");
+                }
+                return true;
+            }
+        });
+    }
+}
+----

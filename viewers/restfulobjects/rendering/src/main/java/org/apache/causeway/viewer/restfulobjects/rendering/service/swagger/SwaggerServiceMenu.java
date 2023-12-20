@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
@@ -80,9 +81,11 @@ public class SwaggerServiceMenu {
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }
 
     @Action(
-            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
             domainEvent = openSwaggerUi.ActionDomainEvent.class,
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
             cssClassFa = "fa-external-link-alt",
@@ -102,13 +105,16 @@ public class SwaggerServiceMenu {
 
 
     @Action(
-            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
             domainEvent = openRestApi.ActionDomainEvent.class,
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
             cssClassFa = "fa-external-link-alt",
-            sequence="500.600.2")
+            sequence="500.600.2"
+    )
     public class openRestApi {
 
         public class ActionDomainEvent extends SwaggerServiceMenu.ActionDomainEvent<openRestApi> { }
@@ -124,14 +130,16 @@ public class SwaggerServiceMenu {
 
 
     @Action(
-            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadSwaggerSchemaDefinition.ActionDomainEvent.class,
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            sequence="500.600.3")
-
+            sequence="500.600.3"
+    )
     public class downloadSwaggerSchemaDefinition {
 
         public class ActionDomainEvent extends SwaggerServiceMenu.ActionDomainEvent<downloadSwaggerSchemaDefinition> { }

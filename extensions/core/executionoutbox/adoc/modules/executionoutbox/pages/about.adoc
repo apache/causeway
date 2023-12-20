@@ -28,14 +28,14 @@ Add a section for _Execution Outbox_'s own BOM:
             <artifactId>causeway-extensions-executionoutbox</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
 ----
 
 [#dependencies]
-=== Dependencies
+=== Dependencies / Imports
 
 In the webapp module of your application, add the following dependency:
 
@@ -49,12 +49,13 @@ In the webapp module of your application, add the following dependency:
     </dependency>
 </dependencies>
 ----
-<.> specify either `causeway-extensions-executionoutbox-persistence-jpa` or `causeway-extensions-executionoutbox-persistence-jdo`, as required
+<.> either:
+** `causeway-extensions-executionoutbox-persistence-jpa` (xref:pjpa::about.adoc[]), or
+** `causeway-extensions-executionoutbox-persistence-jdo` (xref:pjdo::about.adoc[])
 
-[[_update-appmanifest]]
-=== Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the _ExecutionOutbox_ modules.
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the _ExecutionOutbox_ modules.
+The exact modules to use will depend upon the persistence mechanism in use:
 
 
 [source,java]
@@ -69,8 +70,9 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 public class AppManifest {
 }
 ----
-
-<.> specify either `CausewayModuleExtExecutionOutboxPersistenceJdo` or `CausewayModuleExtExecutionOutboxPersistenceJpa`, as required
+<.> either:
+** `CausewayModuleExtExecutionOutboxPersistenceJdo` (xref:pjpa::about.adoc[]), or
+** `CausewayModuleExtExecutionOutboxPersistenceJpa` (xref:pjdo::about.adoc[])
 
 If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
 
@@ -176,19 +178,19 @@ To get you started, the following fragment adds all of the actions to an "Activi
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:secondary>
+<mb:secondary>
     ...
-    <mb3:menu>
-        <mb3:named>Activity</mb3:named>
+    <mb:menu>
+        <mb:named>Activity</mb:named>
         ...
-        <mb3:section>
-            <mb3:named>Execution Outbox</mb3:named>
-            <mb3:serviceAction id="findOldest" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
-            <mb3:serviceAction id="findAll" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
-        </mb3:section>
+        <mb:section>
+            <mb:named>Execution Outbox</mb:named>
+            <mb:serviceAction id="findOldest" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
+            <mb:serviceAction id="findAll" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
+        </mb:section>
         ...
-    </mb3:menu>
-</mb3:secondary>
+    </mb:menu>
+</mb:secondary>
 ----
 
 [#secman-security-roles]
@@ -220,7 +222,7 @@ To setup the message processor:
 
 * in `dependencyManagement` section, add an entry for _Execution Outbox_'s own BOM:
 +
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencyManagement>
@@ -230,7 +232,7 @@ To setup the message processor:
             <artifactId>causeway-extensions-executionoutbox</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayrel}</version>
+            <version>{page-causewayprev}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>

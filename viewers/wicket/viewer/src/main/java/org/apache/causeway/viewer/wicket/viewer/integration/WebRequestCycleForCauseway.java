@@ -52,15 +52,14 @@ import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.error.ErrorPage;
@@ -136,20 +135,42 @@ implements
             return;
         }
 
-        val authenticatedWebSessionForCauseway = AuthenticatedWebSessionForCauseway.get();
 
-        authenticatedWebSessionForCauseway.syncExternalAuthenticationIfAvailable();
+        // participate if an InteractionContext was already provided through some other mechanism,
+        // but fail early if the current user is impersonating
+        // (seeing this if going back the browser history into a page, that was previously impersonated)
+        val interactionService = getInteractionService();
+        val authenticatedWebSession = AuthenticatedWebSessionForCauseway.get();
 
-        val interactionContext = authenticatedWebSessionForCauseway.getAuthentication();
-        if (interactionContext == null) {
+        /*XXX for debugging delegated user ...
+        interactionService.openInteraction(InteractionContext
+                .ofUserWithSystemDefaults(
+                        UserMemento.ofName("delegated")
+                        .withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
+                        .withAuthenticationSource(AuthenticationSource.EXTERNAL)));*/
+
+        val currentInteractionContext = interactionService.currentInteractionContext();
+        if(currentInteractionContext.isPresent()) {
+            if(currentInteractionContext.get().getUser().isImpersonating()) {
+                throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
+            }
+            authenticatedWebSession.setPrimedInteractionContext(currentInteractionContext.get());
+        }
+
+        val interactionContext0 = authenticatedWebSession.getInteractionContext();
+        if (interactionContext0 == null) {
             log.warn("onBeginRequest out - session was not opened (because no authentication)");
             return;
         }
 
-        val commonContext = getMetaModelContext();
-        val interactionService = commonContext.lookupServiceElseFail(InteractionService.class);
+        // impersonation support
+        val interactionContext1 = lookupServiceElseFail(UserService.class)
+                .lookupImpersonatedUser()
+                .map(sudoUser -> interactionContext0.withUser(sudoUser))
+                .orElse(interactionContext0);
+
         // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
-        interactionService.openInteraction(interactionContext);
+        interactionService.openInteraction(interactionContext1);
 
         log.debug("onBeginRequest out - session was opened");
     }
@@ -173,7 +194,7 @@ implements
 
             // using side-effect free access to MM validation result
             val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
-            .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
+            .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
 
             if(validationResult.hasFailures()) {
                 RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
@@ -449,12 +470,6 @@ implements
     }
 
     // -- DEPENDENCIES
-
-    private MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
 
     private ExceptionRecognizerService getExceptionRecognizerService() {
         return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);

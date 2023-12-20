@@ -31,16 +31,17 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToo
 import org.apache.wicket.markup.repeater.IItemFactory;
 import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -52,7 +53,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
     static final String UIHINT_PAGE_NUMBER = "pageNumber";
 
     private final CollectionContentsSortableDataProvider dataProvider;
-    private final GenericToggleboxColumn toggleboxColumn;
+    private final ToggleboxColumn toggleboxColumn;
 
     private CausewayAjaxHeadersToolbar headersToolbar;
     private CausewayAjaxNavigationToolbar navigationToolbar;
@@ -62,7 +63,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             final List<? extends IColumn<DataRow, String>> columns,
             final CollectionContentsSortableDataProvider dataProvider,
             final int rowsPerPage,
-            final GenericToggleboxColumn toggleboxColumn) {
+            final ToggleboxColumn toggleboxColumn) {
 
         super(id, columns, dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
@@ -107,11 +108,20 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
 
         navigationToolbar = new CausewayAjaxNavigationToolbar(this, this.toggleboxColumn);
 
-        // implementation note: toolbars do decide for themselves, whether they are visible
-        addBottomToolbar(navigationToolbar);
-        addBottomToolbar(new NoRecordsToolbar(this));
-        addBottomToolbar(new CausewayTotalRecordsToolbar(this));
+        if (!isDecoratedWithDataTablesNet()) {
+            // implementation note: toolbars do decide for themselves, whether they are visible
+            addBottomToolbar(navigationToolbar);
+            addBottomToolbar(new NoRecordsToolbar(this));
+            addBottomToolbar(new CausewayTotalRecordsToolbar(this));
+        }
     }
+
+    public boolean isDecoratedWithDataTablesNet() {
+        IDataProvider<?> dataProvider = getDataProvider();
+        return dataProvider instanceof CollectionContentsSortableDataProvider &&
+                ((CollectionContentsSortableDataProvider) dataProvider).isDecoratedWithDataTablesNet();
+    }
+
 
     @Override
     protected void onConfigure() {

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.runtimeservices.session;
 
 import java.io.File;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
@@ -31,24 +30,22 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
-import org.apache.causeway.applib.services.command.Command;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
@@ -60,15 +57,14 @@ import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
 import lombok.NonNull;
@@ -91,42 +87,41 @@ implements
     InteractionService,
     InteractionLayerTracker {
 
+    // TODO: reading the javadoc for TransactionSynchronizationManager and looking at the implementations
+    //  of TransactionSynchronization (in particular SpringSessionSynchronization), I suspect that this
+    //  ThreadLocal would be considered bad practice and instead should be managed using the TransactionSynchronization mechanism.
     final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
 
     final MetamodelEventService runtimeEventService;
     final SpecificationLoader specificationLoader;
     final ServiceInjector serviceInjector;
 
-    final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     final ClockService clockService;
     final Provider<CommandPublisher> commandPublisherProvider;
-    final Provider<TransactionService> transactionServiceProvider;
     final ConfigurableBeanFactory beanFactory;
 
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
+    final TransactionServiceSpring transactionServiceSpring;
+
     final InteractionIdGenerator interactionIdGenerator;
 
-    // to allow implementations to have dependencies back on this service.
-    @Inject @Lazy List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
 
     @Inject
     public InteractionServiceDefault(
             final MetamodelEventService runtimeEventService,
             final SpecificationLoader specificationLoader,
             final ServiceInjector serviceInjector,
-            final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
+            final TransactionServiceSpring transactionServiceSpring,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
-            final Provider<TransactionService> transactionServiceProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
         this.runtimeEventService = runtimeEventService;
         this.specificationLoader = specificationLoader;
         this.serviceInjector = serviceInjector;
-        this.txBoundaryHandler = txBoundaryHandler;
+        this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
-        this.transactionServiceProvider = transactionServiceProvider;
         this.beanFactory = beanFactory;
         this.interactionIdGenerator = interactionIdGenerator;
 
@@ -188,7 +183,7 @@ implements
 
         val causewayInteraction = getOrCreateCausewayInteraction();
 
-        // check whether we should reuse any current authenticationLayer,
+        // check whether we should reuse any current interactionLayer,
         // that is, if current authentication and authToUse are equal
 
         val reuseCurrentLayer = currentInteractionContext()
@@ -205,12 +200,13 @@ implements
         interactionLayerStack.get().push(interactionLayer);
 
         if(isAtTopLevel()) {
-        	postInteractionOpened(causewayInteraction);
+            transactionServiceSpring.onOpen(causewayInteraction);
+            interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
         }
 
         if(log.isDebugEnabled()) {
-            log.debug("new interaction layer created (conversation-id={}, total-layers-on-stack={}, {})",
-                    interactionId.get(),
+            log.debug("new interaction layer created (interactionId={}, total-layers-on-stack={}, {})",
+                    currentInteraction().map(Interaction::getInteractionId).orElse(null),
                     interactionLayerStack.get().size(),
                     _Probe.currentThreadId());
         }
@@ -234,8 +230,8 @@ implements
 
     @Override
     public void closeInteractionLayers() {
-        log.debug("about to close the interaction stack (conversation-id={}, total-layers-on-stack={}, {})",
-                interactionId.get(),
+        log.debug("about to close the interaction stack (interactionId={}, total-layers-on-stack={}, {})",
+                currentInteraction().map(Interaction::getInteractionId).orElse(null),
                 interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
@@ -312,13 +308,11 @@ implements
         run(InteractionContextFactory.anonymous(), runnable);
     }
 
-    // -- CONVERSATION ID
-
-    private final ThreadLocal<UUID> interactionId = ThreadLocal.withInitial(()->null);
+    // -- INTERACTION ID
 
     @Override
     public Optional<UUID> getInteractionId() {
-        return Optional.ofNullable(interactionId.get());
+        return currentInteraction().map(Interaction::getInteractionId);
     }
 
     // -- HELPER
@@ -357,38 +351,31 @@ implements
             return;
         }
         val interaction = _Casts.<CausewayInteraction>uncheckedCast(stack.get(0).getInteraction());
-        txBoundaryHandler.requestRollback(interaction);
+        transactionServiceSpring.requestRollback(interaction);
     }
 
     private boolean isAtTopLevel() {
     	return interactionLayerStack.get().size()==1;
     }
 
-    private void postInteractionOpened(final CausewayInteraction interaction) {
-        interactionId.set(interaction.getInteractionId());
-        transactionBoundaryAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
-        txBoundaryHandler.onOpen(interaction);
-        val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        transactionBoundaryAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(interaction, isSynchronizationActive));
-        interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
-    }
-
+    @SneakyThrows
     private void preInteractionClosed(final CausewayInteraction interaction) {
 
-        completeAndPublishCurrentCommand();
-
-        RuntimeException flushException = null;
+        Throwable flushException = null;
         try {
-            transactionServiceProvider.get().flushTransaction();
-        } catch (RuntimeException e) {
+            val mustAbort = transactionServiceSpring.currentTransactionState().mustAbort();
+            if(!mustAbort) {
+                transactionServiceSpring.flushTransaction();
+                // publish only when flush was successful
+                completeAndPublishCurrentCommand();
+            }
+        } catch (Throwable e) {
             //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
             flushException = e;
         }
 
-        val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
-        txBoundaryHandler.onClose(interaction);
-        transactionBoundaryAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(interaction));
+        transactionServiceSpring.onClose(interaction);
+
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
         interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)
         interaction.close(); // do this last
@@ -398,11 +385,14 @@ implements
         }
     }
 
+
+
+
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
 
-        log.debug("about to close authenication stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
+        log.debug("about to close interaction stack down to size {} (interactionId={}, total-layers-on-stack={}, {})",
                 downToStackSize,
-                interactionId.get(),
+                currentInteraction().map(Interaction::getInteractionId).orElse(null),
                 interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
@@ -418,7 +408,6 @@ implements
         if(downToStackSize == 0) {
             // cleanup thread-local
             interactionLayerStack.remove();
-            interactionId.remove();
         }
     }
 
@@ -433,7 +422,11 @@ implements
 
     // -- HELPER - COMMAND COMPLETION
 
-    private void completeAndPublishCurrentCommand() {
+    /**
+     * called by {@link TransactionServiceSpring}, but to be moved.
+     */
+    @Programmatic
+    public void completeAndPublishCurrentCommand() {
 
         val interaction = getInternalInteractionElseFail();
         val command = interaction.getCommand();

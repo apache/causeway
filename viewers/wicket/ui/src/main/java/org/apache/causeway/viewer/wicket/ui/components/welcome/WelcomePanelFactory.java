@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
  */
 public class WelcomePanelFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-
     public WelcomePanelFactory() {
         super(UiComponentType.WELCOME, WelcomePanel.class);
     }
@@ -44,7 +42,7 @@ public class WelcomePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new WelcomePanel(id, new WelcomeModel(getMetaModelContext()));
+        return new WelcomePanel(id, new WelcomeModel());
     }
 
 }

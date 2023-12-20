@@ -5,9 +5,6 @@
 :page-partial:
 
 
-This chapter explains the main APIs to extend or alter the programming conventions that Apache Causeway understands to
-build up its metamodel.
-
-
-include::programming-model/custom-validator.adoc[leveloffset=+1]
-include::programming-model/finetuning.adoc[leveloffset=+1]
+include::partial$programming-model/_intro.adoc[leveloffset=+1]
+include::partial$programming-model/custom-validator.adoc[leveloffset=+1]
+include::partial$programming-model/finetuning.adoc[leveloffset=+1]

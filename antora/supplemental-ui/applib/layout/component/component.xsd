@@ -44,7 +44,6 @@
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="cssClassFa" type="xs:string"/>
     <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
-    <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="tableDecoration" type="tns:tableDecoration"/>
   </xs:complexType>
 
@@ -61,7 +60,6 @@
     <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
     <xs:attribute name="hidden" type="tns:where"/>
     <xs:attribute name="id" type="xs:string" use="required"/>
-    <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="position" type="tns:position"/>
     <xs:attribute name="promptStyle" type="tns:promptStyle"/>
     <xs:attribute name="redirect" type="tns:redirect"/>
@@ -76,7 +74,6 @@
     </xs:sequence>
     <xs:attribute name="objectType" type="xs:string" use="required"/>
     <xs:attribute name="id" type="xs:string" use="required"/>
-    <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="cssClassFa" type="xs:string"/>
@@ -107,7 +104,6 @@
     <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="labelPosition" type="tns:labelPosition"/>
     <xs:attribute name="multiLine" type="xs:int"/>
-    <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="promptStyle" type="tns:promptStyle"/>
     <xs:attribute name="renderedAsDayBefore" type="xs:boolean"/>
     <xs:attribute name="typicalLength" type="xs:int"/>
@@ -127,7 +123,6 @@
     <xs:attribute name="defaultView" type="xs:string"/>
     <xs:attribute name="hidden" type="tns:where"/>
     <xs:attribute name="id" type="xs:string" use="required"/>
-    <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="paged" type="xs:int"/>
     <xs:attribute name="tableDecoration" type="tns:tableDecoration"/>
   </xs:complexType>

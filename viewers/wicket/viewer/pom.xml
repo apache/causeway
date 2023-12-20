@@ -64,7 +64,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.apache-causeway-committers.wicket</groupId>
+            <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-spring</artifactId>
             <exclusions>
             	<exclusion>
@@ -87,7 +87,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.apache-causeway-committers.wicket</groupId>
+            <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-auth-roles</artifactId>
             <exclusions>
                 <exclusion>

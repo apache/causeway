@@ -8,7 +8,7 @@ This section describes how to install and setup JetBrains' IntelliJ IDEA, then h
 == Installing and Importing
 
 This section covers installation and setup.
-These notes/screenshots were prepared using IntelliJ IDEA Community Edition 2019.3, but is believed to be compatible with more recent versions/other editions of the IDE.
+These notes/screenshots were prepared using IntelliJ IDEA Community Edition 2023.1.2, but is believed to be compatible with more recent versions/other editions of the IDE.
 
 === Download and Install
 
@@ -21,25 +21,27 @@ In IntelliJ a project can contain multiple modules; these need not be physically
 
 Download either the xref:docs:starters:helloworld.adoc[HelloWorld] or xref:docs:starters:simpleapp.adoc[SimpleApp] starter app to your filesystem.
 
-From the welcome screen, select "import project":
+From the welcome screen, select "open project":
 
-image::015-import-project/010-welcome.png[width="400px"]
+image::015-import-project/010-welcome.png[width="700px"]
 
 Navigate to the top-level pom.xml of the starter app:
 
-image::015-import-project/020-import-pom.png[width="300px"]
+image::015-import-project/020-import-pom.png[width="500px"]
 
-Project imported:
+Acknowledge that the containing directory can be trusted:
 
-image::015-import-project/030-imported.png[width="800px"]
-Start off by creating a new project:
+image::015-import-project/025-trust-directory.png[width=500]
+
+Project opened:
+
+image::015-import-project/030-imported.png[width="1000px"]
 
 
 Use menu:File[Project Structure] to confirm that JDK 11 is configured:
 
-image::015-import-project/040-project-structure.png[width="600px"]
+image::015-import-project/040-project-structure.png[width="800px"]
 
-*TODO*: this screenshot is out of date; JDK 11 is now the minimum version required.
 
 == Configuring
 
@@ -52,48 +54,36 @@ image::015-import-project/040-project-structure.png[width="600px"]
 There are a number of compiler settings that influence the compiler.
 We highly recommend you set these.
 
-On the *Compiler* Settings page, ensure that `build automatically` is enabled (and optionally `compile independent modules in parallel`):
+On the *Compiler* Settings page, ensure that `build automatically` is enabled, and optionally `compile independent modules in parallel`.
+You might also want to increase the heap size, eg to 2048.
 
 .IntelliJ Compiler Settings
-image::040-other-settings-compiler/010-build-automatically.png[width="700px"]
+image::040-other-settings-compiler/010-build-automatically.png[width="1000px"]
 
 
-On the *Annotation Processors* page, confirm that these are enabled for all of the `packaging=jar` modules (in other words, those that contain Java and have a `src/main/java` directory):
+On the *Annotation Processors* page, confirm that these are enabled for all modules with the `... sources directory` correctly defined.
+(In most recent editions of IntelliJ, this is detected automatically; no changes are required).
 
 .IntelliJ Annotation Processor Settings
-image::040-other-settings-compiler/020-annotation-processor.png[width="700px"]
+image::040-other-settings-compiler/020-annotation-processor.png[width="1000px"]
 
+[TIP]
+====
 If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this setting enables the generation of the `Q*` classes for DataNucleus type-safe queries.
 
 It is also required for frameworks such as link:https://projectlombok.org[Lombok].
+====
 
 
-=== Maven Settings
 
-There are also some other settings for Maven that we recommend you adjust (though these are less critical):
-
-On the Maven settings page:
-
-.IntelliJ Maven Settings - Installation
-image::042-other-settings-maven/010-maven-installation.png[width="700px"]
-
-Still on the Maven settings page, configure as follows:
-
-.IntelliJ Maven Settings - Configuration
-image::042-other-settings-maven/020-maven-configuration.png[width="700px"]
 
 === Editor Settings
 
 On the *Auto Import* settings page, check the `optimize imports on the fly` and `add unambiguous imports on the fly`
 
 .IntelliJ Auto Import Setting
-image::044-other-settings-misc/010-auto-import.png[width="700px"]
+image::044-other-settings-misc/010-auto-import.png[width="1000px"]
 
-You might also want to exclude certain packages or classes from auto-import, for example:
-
-* `java.awt.*`
-* `javax.swing.*`
-* `lombok.experimental.*`
 
 == Plugins
 
@@ -102,7 +92,7 @@ You can do this using `File > Settings > Plugins` (or equivalently `File > Other
 
 Highly recommended are:
 
-* Lombok plugin (bundled with the IDE)
+* Lombok plugin (bundled with the IDE, and pre-enabled)
 +
 If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boilerplate.
 
@@ -112,6 +102,9 @@ If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boil
 +
 Extremely useful if you are doing any authoring of documents (plugin's git repo is link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[here])
 
+* link:https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration[diagrams.net] plugin
+*
+Allows diagrams to be authored within the IDE; works well with the AsciiDoctor plugin.
 
 
 
@@ -129,14 +122,19 @@ If the app uses xref:pjdo:ROOT:about.adoc[JDO], then Datanucleus enhancer should
 
 === Running the App (JPA)
 
+The screenshot below shows a run configuration for JPA:
+
+image::110-running-the-app/012-run-configuration-jpa.png[width=1000]
+
+
 With JPA, the classes need to be "weaved" in order to support lazy loading and (more performant) dirty object tracking.
 This is typically done dynamically at runtime, using a Java agent.
-The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate this, bundling the `spring-instrument-5.3.5.jar` file.
+The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate this, bundling the `spring-instrument.jar` file.
 To run, use:
 
 [source,bash]
 ----
--javaagent:lib/spring-instrument-5.3.5.jar
+-javaagent:lib/spring-instrument.jar
 ----
 
 as a JVM argument (where the system properties also are located.)
@@ -154,18 +152,28 @@ First, set up the run configuration to do the enhance:
 .Run Configuration to enhance the entities
 image::110-running-the-app/005-datanucleus-enhance-run-configuration.png[width="700px"]
 
-TIP: Check "work offline" (on the General tab) to speed this up slightly.
+TIP: Check "work offline" (in Maven Options) to speed this up slightly.
 
 [WARNING]
 ====
-If on Windows you encounter a "The command line is too long" error, then set '-Dfork=false' as a VM option (on the Runner tab).
+If on Windows you encounter "The command line is too long", then set '-Dfork=false' as a VM option, in Java options:
+
+image::110-running-the-app/006-datanucleus-enhance-run-configuration-fork-false.png[width="400px"]
 ====
 
-Then, set up the run configuration for the app.
-Note how it runs the "enhance" configuration first:
+Then, set up the run configuration for the app:
 
 .Run Configuration to run the app
 image::110-running-the-app/010-run-configuration.png[width="700px"]
+
+Note how it runs the "enhance" configuration first, specified using "Modify options".
+
+Because we are using Maven to enhance the app, build the app at least once from the Maven command line:
+
+[source,bash]
+----
+mvn install -DskipTests -T1C
+----
 
 You should now be able to run the app using `Run > Run Configuration`.
 The same configuration can also be used to debug the app if you so need.
@@ -176,7 +184,7 @@ The same configuration can also be used to debug the app if you so need.
 ****
 Rather than statically enhancing the classes, an alternative -- at least in theory -- is to enhance the classes dynamically, at runtime.
 
-This plugin (not tested) purports to support this: link:https://plugins.jetbrains.com/plugin/11119-datanucleus-runtime-enhancement[].
+There is an link:https://plugins.jetbrains.com/plugin/11119-datanucleus-runtime-enhancement[IntelliJ plugin] (not tested) that purports to support this, but (at time of writing) is out of date and only supports older versions of IntelliJ.
 ****
 
 
@@ -186,14 +194,9 @@ The easiest way to run the unit tests is just to right click on the relevant pac
 Hopefully your tests will pass (!).
 
 .Running Unit Tests from Project Explorer
-image::110-running-the-app/030-running-unit-tests.png[width="300px"]
+image::110-running-the-app/030-running-unit-tests.png[width="500px"]
 
-As a side-effect, this will create a run configuration, very similar to the one we manually created for the main app:
-
-.Unit Tests Run Configuration
-image::110-running-the-app/040-running-unit-tests-run-configuration.png[width="700px"]
-
-Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
+As a side-effect, this will create a run configuration, very similar to the one we manually created for the main app.
 
 === Running the Integration Tests
 
@@ -202,17 +205,19 @@ Integration tests can be run in the same way as unit tests.
 One approach is to initially run the tests use the right click on the `integtests` module:
 
 .Running Integ Tests from Project Explorer
-image::110-running-the-app/045-running-integ-tests.png[width="400px"]
+image::110-running-the-app/045-running-integ-tests.png[width="800px"]
 
+There are also tests in the `webapp-tests` module:
+
+image::110-running-the-app/046-running-integ-tests-webapp-tests.png[width=800]
 
 If the app uses JDO, then the tests might fail because the entities won't have been enhanced.
-However, we can then easily update the run configuration to run the datanucleus enhancer goal (same as when running the application):
+However, we can then easily update the automatically-created run configuration to run the datanucleus enhancer goal (same as when running the application):
 
 .Integration Tests Run Configuration
 image::110-running-the-app/050-running-integration-tests-run-configuration.png[width="700px"]
 
-
-CAUTION: Make sure that the `search for tests` radio button is set to `In single module`.
-If this radio button is set to one of the other options then you may obtain class loading issues.
+// CAUTION: Make sure that the `search for tests` radio button is set to `In single module`.
+// If this radio button is set to one of the other options then you may obtain class loading issues.
 
 

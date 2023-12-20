@@ -59,13 +59,13 @@ public class HomePage extends PageAbstract {
 
         val homePageAdapter = super.getMetaModelContext().getHomePageAdapter();
 
-        if(ManagedObjects.isSpecified(homePageAdapter)) {
-            val requestCycle = RequestCycle.get();
-            val page = EntityPage.forAdapter(getMetaModelContext(), homePageAdapter);
-            requestCycle.setResponsePage(page);
-        } else {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(homePageAdapter)) {
             WktComponents.permanentlyHide(themeDiv, UiComponentType.ACTION_PROMPT);
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, UiComponentType.WELCOME, null);
+        } else {
+            val requestCycle = RequestCycle.get();
+            val page = EntityPage.forAdapter(homePageAdapter);
+            requestCycle.setResponsePage(page);
         }
 
         val breadcrumbModelProvider = (BreadcrumbModelProvider) getSession();

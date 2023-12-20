@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.internal.assertions;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -29,6 +30,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Longs;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
@@ -49,20 +51,19 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class _Assert {
 
-
     // -- TRUE
 
-    public static void assertTrue(final boolean condition) {
+    public void assertTrue(final boolean condition) {
         assertTrue(condition, (String) null);
     }
 
-    public static void assertTrue(final boolean condition, final String message) {
+    public void assertTrue(final boolean condition, final String message) {
         if (!condition) {
             fail(message, true, false);
         }
     }
 
-    public static void assertTrue(final boolean condition, final Supplier<String> lazyMessage) {
+    public void assertTrue(final boolean condition, final Supplier<String> lazyMessage) {
         if (!condition) {
             fail(lazyMessage.get(), true, false);
         }
@@ -70,17 +71,17 @@ public final class _Assert {
 
     // -- FALSE
 
-    public static void assertFalse(final boolean condition) {
+    public void assertFalse(final boolean condition) {
         assertFalse(condition, (String) null);
     }
 
-    public static void assertFalse(final boolean condition, final String message) {
+    public void assertFalse(final boolean condition, final String message) {
         if (condition) {
             fail(message, false, true);
         }
     }
 
-    public static void assertFalse(final boolean condition, final Supplier<String> lazyMessage) {
+    public void assertFalse(final boolean condition, final Supplier<String> lazyMessage) {
         if (condition) {
             fail(lazyMessage.get(), true, false);
         }
@@ -88,17 +89,17 @@ public final class _Assert {
 
     // -- NULL
 
-    public static void assertNull(final Object object) {
+    public void assertNull(final Object object) {
         assertNull(object, (String) null);
     }
 
-    public static void assertNull(final Object object, final String message) {
+    public void assertNull(final Object object, final String message) {
         if (object!=null) {
             fail(message, "null", "not null");
         }
     }
 
-    public static void assertNull(final Object object, final Supplier<String> lazyMessage) {
+    public void assertNull(final Object object, final Supplier<String> lazyMessage) {
         if (object!=null) {
             fail(lazyMessage.get(), "null", "not null");
         }
@@ -106,17 +107,17 @@ public final class _Assert {
 
     // -- NOT NULL
 
-    public static void assertNotNull(final Object object) {
+    public void assertNotNull(final Object object) {
         assertNotNull(object, (String) null);
     }
 
-    public static void assertNotNull(final Object object, final String message) {
+    public void assertNotNull(final Object object, final String message) {
         if (object==null) {
             fail(message, "not null", "null");
         }
     }
 
-    public static void assertNotNull(final Object object, final Supplier<String> lazyMessage) {
+    public void assertNotNull(final Object object, final Supplier<String> lazyMessage) {
         if (object==null) {
             fail(lazyMessage.get(), "not null", "null");
         }
@@ -128,7 +129,7 @@ public final class _Assert {
      * <em>Assert</em> that {@code left} == {@code right}.
      * @return {@code left} if assertion holds
      */
-    public static <T> T assertSameObject(final T left, final Object right) {
+    public <T> T assertSameObject(final T left, final Object right) {
         assertTrue(left == right);
         return left;
     }
@@ -137,7 +138,7 @@ public final class _Assert {
      * <em>Assert</em> that {@code left} == {@code right}.
      * @return {@code left} if assertion holds
      */
-    public static <T> T assertSameObject(final T left, final Object right, final String msg) {
+    public <T> T assertSameObject(final T left, final Object right, final String msg) {
         assertTrue(left == right, msg);
         return left;
     }
@@ -146,7 +147,7 @@ public final class _Assert {
      * <em>Assert</em> that {@code left} == {@code right}.
      * @return {@code left} if assertion holds
      */
-    public static <T> T assertSameObject(final T left, final Object right, final Supplier<String> lazyMessage) {
+    public <T> T assertSameObject(final T left, final Object right, final Supplier<String> lazyMessage) {
         assertTrue(left == right, lazyMessage);
         return left;
     }
@@ -159,7 +160,7 @@ public final class _Assert {
      *
      * @see Object#equals(Object)
      */
-    public static void assertEquals(final Object left, final Object right) {
+    public void assertEquals(final Object left, final Object right) {
         assertEquals(left, right, (String) null);
     }
 
@@ -170,13 +171,13 @@ public final class _Assert {
      *
      * @see Object#equals(Object)
      */
-    public static void assertEquals(final Object left, final Object right, final String message) {
+    public void assertEquals(final Object left, final Object right, final String message) {
         if (!Objects.equals(left, right)) {
             fail(message, left, right);
         }
     }
 
-    public static void assertEquals(final Object left, final Object right, final Supplier<String> lazyMessage) {
+    public void assertEquals(final Object left, final Object right, final Supplier<String> lazyMessage) {
         if (!Objects.equals(left, right)) {
             fail(lazyMessage.get(), left, right);
         }
@@ -184,25 +185,25 @@ public final class _Assert {
 
     // -- RANGE CHECKS
 
-    public static void assertRangeContains(final _Ints.Range range, final int value, final String message) {
+    public void assertRangeContains(final _Ints.Range range, final int value, final String message) {
         if(!range.contains(value)) {
             fail(message, range.toString(), value);
         }
     }
 
-    public static void assertRangeContains(final _Ints.Range range, final int value, final Supplier<String> lazyMessage) {
+    public void assertRangeContains(final _Ints.Range range, final int value, final Supplier<String> lazyMessage) {
         if(!range.contains(value)) {
             fail(lazyMessage.get(), range.toString(), value);
         }
     }
 
-    public static void assertRangeContains(final _Longs.Range range, final long value, final String message) {
+    public void assertRangeContains(final _Longs.Range range, final long value, final String message) {
         if(!range.contains(value)) {
             fail(message, range.toString(), value);
         }
     }
 
-    public static void assertRangeContains(final _Longs.Range range, final long value, final Supplier<String> lazyMessage) {
+    public void assertRangeContains(final _Longs.Range range, final long value, final Supplier<String> lazyMessage) {
         if(!range.contains(value)) {
             fail(lazyMessage.get(), range.toString(), value);
         }
@@ -210,17 +211,17 @@ public final class _Assert {
 
     // -- STRING CHECKS
 
-    public static void assertNotEmpty(final String s) {
+    public void assertNotEmpty(final String s) {
         assertNotEmpty(s, (String) null);
     }
 
-    public static void assertNotEmpty(final String s, final String message) {
+    public void assertNotEmpty(final String s, final String message) {
         if(_NullSafe.isEmpty(s)) {
             fail(message, "not empty", "empty");
         }
     }
 
-    public static void assertNotEmpty(final String s, final Supplier<String> lazyMessage) {
+    public void assertNotEmpty(final String s, final Supplier<String> lazyMessage) {
         if(_NullSafe.isEmpty(s)) {
             fail(lazyMessage.get(), "not empty", "empty");
         }
@@ -228,44 +229,98 @@ public final class _Assert {
 
     // -- TYPE INSTANCE OF
 
-    public static void assertTypeIsInstanceOf(final Class<?> type, final Class<?> requiredType) {
+    /**
+     * Asserts, that given {@code type} is an instance of {@code requiredType}.
+     */
+    public void assertTypeIsInstanceOf(final @NonNull Class<?> type, final @NonNull Class<?> requiredType) {
         if(!requiredType.isAssignableFrom(type)) {
-            throw _Exceptions.assertionError(String.format(
-                    "unexpected type: <%s> is not an instance of <%s> ", ""+type, ""+requiredType));
+            throw _Exceptions.assertionError(
+                    "unexpected type: '%s' is not an instance of '%s' ", ""+type, ""+requiredType);
         }
     }
 
-    // -- OPEN/CLOSE STATE
+    /**
+     * Asserts, that given null-able {@code pojo} is an instance of {@code requiredType}.
+     * <p>
+     * If {@code pojo} is {@code null}, the assertion is always satisfied.
+     */
+    public void assertNullableObjectIsInstanceOf(final @Nullable Object pojo, final @NonNull Class<?> requiredType) {
+        if(pojo==null) return; // skip check
+        assertTypeIsInstanceOf(pojo.getClass(), requiredType);
+    }
 
-    public enum OpenCloseState {
+    // -- NUMBERS
 
-        NOT_INITIALIZED,
-        OPEN,
-        CLOSED
-        ;
+    /**
+     * BigDecimal equality by value.
+     */
+    public void assertNumberEquals(final @Nullable BigDecimal a, final @Nullable BigDecimal b) {
+        assertNumberEquals(a, b, ()->"");
+    }
 
-        public boolean isNotInitialized() { return this == NOT_INITIALIZED; }
-        public boolean isOpen() { return this == OPEN; }
-        public boolean isClosed() { return this == CLOSED; }
-
-        /**
-         * @param expected - nullable
-         * @throws IllegalArgumentException if {@code this} not equal to {@code expected}
-         */
-        public void assertEquals(
-                final @Nullable OpenCloseState expected) {
-            if (expected != this) {
-                throw new IllegalStateException("State is: " + this + "; should be: " + expected);
-            }
+    /**
+     * BigDecimal equality by value.
+     */
+    public void assertNumberEquals(final @Nullable BigDecimal a, final @Nullable BigDecimal b,
+            final Supplier<String> lazyMessage) {
+        if(a==null || b==null) {
+            assertEquals(a, b, lazyMessage);
+            return;
         }
+        val maxScale = Math.max(a.scale(), b.scale());
+        assertEquals(
+                a.setScale(maxScale),
+                b.setScale(maxScale),
+                lazyMessage);
+    }
 
+    /**
+     * double equality by value relaxed by delta
+     */
+    public void assertNumberEquals(final double a, final double b, final double delta) {
+        assertNumberEquals(a, b, delta, ()->"");
+    }
+
+    /**
+     * double equality by value relaxed by delta
+     */
+    public void assertNumberEquals(final double a, final double b, final double delta,
+            final Supplier<String> lazyMessage) {
+        if (Double.isNaN(delta) || delta < 0.0) {
+            throw _Exceptions.assertionError(
+                    "%sinvalid delta: '%s'",
+                    _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
+                    String.valueOf(delta));
+        }
+        if((Double.doubleToLongBits(a) != Double.doubleToLongBits(b))
+                || Math.abs(a - b) <= delta) {
+            throw _Exceptions.assertionError(
+                    "%snumbers %s and %s are not equal within delta %s",
+                    _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
+                    String.valueOf(a), String.valueOf(b), String.valueOf(delta));
+        }
+    }
+
+    /**
+     * Generic number equality check, use with caution!
+     */
+    public void assertNumberEqualsUnsafe(final @Nullable Number a, final @Nullable Number b, final double delta) {
+        assertNumberEqualsUnsafe(a, b, delta, ()->"");
+    }
+
+    /**
+     * Generic number equality check, use with caution!
+     */
+    public void assertNumberEqualsUnsafe(final @Nullable Number a, final @Nullable Number b, final double delta,
+            final Supplier<String> lazyMessage) {
+        if(a==null || b==null) {
+            assertEquals(a, b, lazyMessage);
+            return;
+        }
+        assertNumberEquals(a.doubleValue(), b.doubleValue(), delta, lazyMessage);
     }
 
     // -- HELPER
-
-    static String buildPrefix(final String message) {
-        return _Strings.isNotEmpty(message) ? message + " ==> " : "";
-    }
 
     private static void fail(final String message, final Object expected, final Object actual) {
         val error = _Exceptions.assertionError(
@@ -274,6 +329,8 @@ public final class _Assert {
         log.error(error); // in case exceptions get swallowed, make sure errors at least get logged
         throw error;
     }
-
+    private static String buildPrefix(final String message) {
+        return _Strings.isNotEmpty(message) ? message + " ==> " : "";
+    }
 
 }

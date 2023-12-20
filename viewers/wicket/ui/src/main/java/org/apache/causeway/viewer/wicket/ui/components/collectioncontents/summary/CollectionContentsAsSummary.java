@@ -31,14 +31,14 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -53,7 +53,7 @@ import lombok.val;
  * chart alongside.
  */
 public class CollectionContentsAsSummary
-extends PanelAbstract<DataTableModel, EntityCollectionModel>
+extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final String ID_MAX = "max";

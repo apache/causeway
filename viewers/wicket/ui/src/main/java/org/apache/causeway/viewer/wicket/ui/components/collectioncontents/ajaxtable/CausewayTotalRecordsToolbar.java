@@ -27,9 +27,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
@@ -41,7 +39,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  */
 public class CausewayTotalRecordsToolbar extends AbstractToolbar
 implements HasCommonContext {
-
     private static final long serialVersionUID = 1L;
     private static final String navigatorContainerId = "navigatorContainer";
 
@@ -77,8 +74,8 @@ implements HasCommonContext {
             String.valueOf(table.getColumns().size()).intern())));
 
         Wkt.labelAdd(container, "navigatorLabel", messageModel);
-        Wkt.labelAdd(container, "prototypingLabel", new PrototypingMessageProvider(getMetaModelContext())
-                .getTookTimingMessageModel());
+        Wkt.labelAdd(container, "prototypingLabel",
+                TimeTakenModel.createForPrototypingElseBlank(getMetaModelContext()));
     }
 
     /**
@@ -97,11 +94,4 @@ implements HasCommonContext {
 
         setVisible(getTable().getPageCount() == 1);
     }
-
-    private transient MetaModelContext mmc;
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
-    }
-
 }

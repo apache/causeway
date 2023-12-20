@@ -1,0 +1,109 @@
+[#introduction]
+= Introduction
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+xref:domain-entities.adoc[Domain entities] and xref:view-models.adoc[view models] hold state in terms of *properties* and *collections*; both of these and also xref:domain-services.adoc[domain services] define behaviour in terms of *actions*.
+
+[#properties-and-collections]
+== Properties and Collections
+
+Both properties and collections are defined by getters, the difference being that the return type for properties is a scalar while for collections it is a collection of elements.
+Additionally, the scalar property can be a value object (such as int, date or String), or could be a reference to another entity or perhaps view model, whereas for a collection the element types may only be reference types, not value types.
+
+Regarding mutability: if a property is modifiable then there will also be a setter; collections however are always immutable and so there should be no setter.
+
+So for example:
+
+[source,java]
+----
+public class Customer {
+
+    @Property                                           <.>
+    @PropertyLayout                                     <.>
+    @Getter @Setter                                     <.>
+    private String lastName;
+
+    @Collection                                         <.>
+    @CollectionLayout                                   <.>
+    @Getter                                             <.>
+    private SortedSet<Order> orders = new TreeSet<>;    <.>
+    ...
+}
+----
+<.> Depending on configuration settings, the xref:refguide:applib:index/annotation/Property.adoc[@Property] annotation may or may not be required; its role is to define additional domain-layer semantics
+<.> The xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui-layout-and-hints.adoc#object-layout[layout.xml] file.
+<.> It's commonplace to use link:https://projectlombok.org/features/GetterSetter[Project Lombok] to remove boilerplate.
+As there is a `@Setter`, this property may also editable (though this does also depend on configuration settings).
+<.> Depending on configuration settings, the xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation may or may not be required; its role is to define additional domain-layer semantics
+<.> The xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui-layout-and-hints.adoc#object-layout[layout.xml] file.
+<.> Collections are immutable, so no setter is required.
+<.> Typically entities implement `Comparable`, so `SortedSet` is typical.
+(For entities, the actual implementation will be replaced by the ORM).
+
+From this the framework infers the `Customer` domain entity, which in turn has a `lastName` string _property_ and an `orders` _collection_.
+
+
+== Actions
+
+While xref:userguide:ROOT:properties-collections-actions.adoc#properties[properties] and xref:userguide:ROOT:properties-collections-actions.adoc#collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
+
+An application that consists only of domain entities with just "know-what" responsibilities is pretty dumb: it requires that the end-user know the business rules and doesn't modify the state of the domain objects such that they are invalid (for example, an "end date" being before a "start date").
+Such applications are often called CRUD applications (create/read/update/delete).
+
+In more complex domains, it's not realistic/feasible to expect the end-user to have to remember all the different business rules that govern the valid states for each domain object.
+Actions allow those business rules to be encoded programmatically.
+Those actions can either be defined in the domain class itself, or can be contributed by way of a xref:mixins.adoc[mixin].
+
+The general philosophy for an Apache Causeway (naked objects) application is _not_ to constrain the end-user in how they interact with the UI: it doesn't attempt to define a rigid business process.
+However, it _does_ aim to ensure that business rule invariants are maintained, that is that domain objects aren't allowed to enter into an invalid state.
+
+For simple domain applications, you may want to start prototyping only with properties, and only later introduce actions (representing the most common business operations).
+But an alternative approach, recommended for more complex applications, is actually to start the application with all properties non-editable.
+Then, as the end-user requires the ability to modify some state, there is a context in which to ask the question "why does this state need to change?" and "are their any side-effects?" (ie, other state that changes at the same time, or other behaviour that should occur).
+If the state change is simple, for example just being able to correct an invalid address, or adding a note or comment, then that can probably be modelled as a simple editable property.
+But if the state change is more complex, then most likely an action should be used instead.
+
+Broadly speaking, actions are those `public` methods that do not represent properties or collections.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    @Action                       // <.>
+    @ActionLayout                 // <.>
+    public Customer placeOrder(
+        @Parameter                // <.>
+        @ParameterLayout          // <.>
+        Product p,
+        @Parameter
+        @ParameterLayout
+        int quantity) {
+        /* ... */
+    }
+
+    // ...
+}
+----
+<.> Depending on configuration settings, the xref:refguide:applib:index/annotation/Action.adoc[@Action] annotation may or may not be required; its role is to define additional domain-layer semantics
+<.> The xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui-layout-and-hints.adoc#object-layout[layout.xml] file.
+<.> The xref:refguide:applib:index/annotation/Parameter.adoc[@Parameter] annotation defines additional domain-layer semantics.
+This is optional though often required.
+<.> The xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout] annotation defines additional presentation-layer hints
+
+
+From this the framework infers a the `placeOrder` _action_ for object.
+
+[TIP]
+.Using meta-annotations
+====
+Often the action parameters correspond to properties of the domain object.
+For example, an action to change a customer's `lastName` property would likely define a `newLastName` parameter whose type and semantics would correspond to that of the property.
+
+Defining a `@LastName` xref:meta-annotations.adoc[meta-annotation] can be one way to place both the `@Property`/`@Parameter` and `@PropertyLayout`/@ParameterLayout` side-by-side; both the `lastName` property and `newLastName` parameter would then be annotated with `@LastName`.
+====
+

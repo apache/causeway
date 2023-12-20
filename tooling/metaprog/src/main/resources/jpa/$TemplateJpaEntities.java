@@ -21,20 +21,21 @@ package /*${java-package}*/;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-/*${generated-file-notice}*/
 @Profile("demo-jpa")
 @Service
 public class /*${showcase-name}*/JpaEntities
-extends ValueHolderRepository</*${showcase-type-boxed}*/, /*${showcase-name}*/Jpa> {
+extends ValueHolderRepository</*${showcase-simple-type-boxed}*/, /*${showcase-name}*/Jpa> {
 
     protected /*${showcase-name}*/JpaEntities() {
         super(/*${showcase-name}*/Jpa.class);
     }
 
     @Override
-    protected /*${showcase-name}*/Jpa newDetachedEntity(/*${showcase-type-boxed}*/ value) {
+    protected /*${showcase-name}*/Jpa newDetachedEntity(/*${showcase-simple-type-boxed}*/ value) {
         return new /*${showcase-name}*/Jpa(value);
     }
 

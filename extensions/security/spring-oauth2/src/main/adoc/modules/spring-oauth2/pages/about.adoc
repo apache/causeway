@@ -5,52 +5,28 @@
 
 
 This guide describes the integration of Spring security's OAuth2 client.
-Authentication is done via OAuth2 and authorization via Shiro.
+Authentication is done via OAuth2 and authorization via either Shiro or Secman.
 
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
 
 
-== Dependency
+== Setup
+
+=== Dependency / Imports
 
 In the webapp module of your application, add the following dependency:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-spring-security-oauth2</artifactId>
+        <version>{page-causewayprev}</version>
     </dependency>
 </dependencies>
 ----
-
-[[_update-appmanifest]]
-== Update AppManifest
-
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import `CausewayModuleSecuritySpring` and `CausewayModuleExtSpringSecurityOAuth2` modules.
-
-Neither of these modules provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[] SPI, so we must also configure one.
-For the purpose of this walkthrough, we'll use the implementation provided by xref:security:shiro:about.adoc[Shiro], namely `AuthorizorShiro`.
-
-[source,java]
-.AppManifest.java
-----
-@Configuration
-@Import({
-        ...
-        CausewayModuleExtSpringSecurityOAuth2.class, // <.>
-        AuthorizorShiro.class,
-        ...
-})
-public class AppManifest {
-}
-----
-<.> The `CausewayModuleExtSpringSecurityOAuth2` module brings in a transitive dependency on `CausewayModuleSecuritySpring`.
-+
-Make sure though that no other `CausewayModuleSecurityXxx` module is imported.
-
-It is also possible to use with other `Authorizor` implementations; for example, using xref:security:secman:setting-up-with-spring-oauth2.adoc[SecMan].
 
 
 == Design
@@ -61,11 +37,52 @@ Using this, it provides an implementation of the xref:security:spring:about.adoc
 
 
 [#walk-through-oauth2]
-== Walk-through
+== Walk-through (Oauth with Github and Shiro authorizor)
 
 Using Spring Security we can configure your app with various authentication providers.
 In this section we describe how to modify the xref:docs:starters:helloworld.adoc[HelloWorld] starter app to use link:https://github.com[github] as an OAuth2 provider.
 The steps here are based on link:https://spring.io/guides/tutorials/spring-boot-oauth2/[this Spring tutorial].
+
+
+=== AppManifest
+
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import `CausewayModuleExtSpringSecurityOAuth2` module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtSpringSecurityOAuth2.class,    // <.>
+        AuthorizorShiro.class,                          // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+<.> The `CausewayModuleExtSpringSecurityOAuth2` module brings in a transitive dependency on `CausewayModuleSecuritySpring`.
+<.> An implementation of `Authorizor` is also required.
+For the purpose of this walkthrough, we'll use the implementation provided by xref:security:shiro:about.adoc[Shiro], namely `AuthorizorShiro`.
+
+[IMPORTANT]
+====
+Make sure that no other `CausewayModuleSecurityXxx` module is imported, either directly or indirectly.
+====
+
+To use the Shiro authorizor, also add in the corresponding dependency:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.security</groupId>
+        <artifactId>causeway-security-shiro</artifactId>
+        <version>{page-causewayprev}</version>
+    </dependency>
+</dependencies>
+----
 
 
 === Code Changes
@@ -114,8 +131,6 @@ Next, add in `LoginController` to the `AppManifest`.
 [source,java]
 .AppManifest.java
 ----
-public class AppManifest {
-}
 @Configuration
 @Import({
         ...
@@ -164,6 +179,7 @@ Lastly (and optionally), the swagger/REST API is not configured for oauth2, so w
 </body>
 </html>
 ----
+
 
 === Configuration
 
@@ -217,3 +233,188 @@ Finally, if you log out then Spring will show a page to allow you to trigger the
 
 image::github-sign-in-again.png[width=600px]
 
+
+
+[#walk-through-oauth2-azure]
+== Walk-through (Oauth with Azure and Secman authorizor)
+
+Using Spring Security we can configure your app with various authentication providers.
+In this section we briefly discuss configuring an app to use Microsoft Azure for both:
+
+* server-side login flow
++
+in other words for end-users accessing the xref:vw::about.adoc[Wicket viewer]), and
+
+* client-side login flow with JWT
++
+in other words for REST programmatic clients accessing the xref:vro::about.adoc[Restful Objects viewer].
+
+The server-side login flow is (as you might expect) quite similar to that required by Github.
+
+=== AppManifest
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtSpringSecurityOAuth2.class,
+        CausewayModuleExtSecmanDelegatedSpringOauth2.class,         // <.>
+})
+@EnableWebSecurity                                                  // <.>
+@ComponentScan(basePackageClasses = AppManifest.class)
+public class AppManifest {
+
+    // ...
+}
+----
+<.> Using secman for permissions (rather than Shiro, as was described in the xref:#walk-through-oauth2[github walkthrough] above)
+<.> We'll use Spring APIs to configure the authentication flows
+
+For the purpose of this walkthrough, we'll use the implementation provided by xref:security:secman:setting-up-with-spring-oauth2.adoc[SecMan].
+
+To use the Secman authorizor, also add in the corresponding dependency:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-integration</artifactId>
+        <version>{page-causewayprev}</version>
+    </dependency>
+</dependencies>
+----
+
+You'll need to ensure that the users have access to the appropriate roles that grant them permissions; see the Secman docs.
+
+In addition, we use Spring's APIs to configure the two authentication flows:
+
+[source,java]
+.AppManifest.java
+----
+// ,...
+@EnableWebSecurity                                                              // <.>
+public class AppManifest {
+
+    @Bean
+    @Order(2)
+    SecurityFilterChain webSecurity(HttpSecurity http) throws Exception {       // <.>
+        http
+            .cors()
+                .and()
+            .authorizeHttpRequests()
+                .antMatchers("/**")                 // <.>
+                    .authenticated()
+                .anyRequest()
+                    .authenticated()
+                .and()
+            .oauth2Login()
+                .and()
+            .logout()
+                .permitAll()
+        ;
+        return http.build();
+    }
+
+    @Bean
+    @Order(1)
+    SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {       // <.>
+        http
+            .requestMatcher(new RequestHeaderRequestMatcher("Authorization"))
+            .cors()
+                .and()
+            .authorizeHttpRequests()
+                .antMatchers("/**")                 // <4>
+                    .authenticated()
+                .and()
+            .oauth2ResourceServer()
+                .jwt()
+                    .and()
+                .and()
+            .sessionManagement()
+                .disable()
+        ;
+        return http.build();
+    }
+}
+----
+<.> as noted above, we use Spring APIs to configure the authentication flows
+<.> configures the server-side flow
+<.> configures the client-side flow
+<.> uses link:https://ant.apache.org[Apache Ant] style matching syntax
+
+
+=== Azure AD Config
+
+Login to the Azure Portal:
+
+* open the _Azure Active Directory_ blade
+* _App Registrations_
+* New registration
++
+Enter any name; leave the other fields empty for now:
++
+image::azure-register-new-app.png[width=1200px]
+
+* Create new client secret (link to do so is top right)
++
+image::azure-create-client-secret.png[width=800px]
++
+Copy this value immediately; it is not accessible later.
+
+* Add redirect URI, specifying the "Web" platform first.
++
+For example:
++
+image::azure-redirect-uri.png[800px]
++
+In the above, `https://mywebapp.com` is the server to which the deployed, the `/local/oauth2/code/` is fixed, while the suffix "myapp" is the name of your app.
+This app name is used in the configuration of the app, see xref:#configuration-properties[below]
+
+* Add API permissions:
++
+image::azure-api-permissions.png[]
+
+
+[#configuration-properties]
+=== Configuration Properties
+
+Finally need to configure the app to use Oauth:
+
+[source,properties]
+.application.properties
+----
+o365.tenantId=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX  // <.>
+
+spring.security.oauth2.client.registration.myapp.provider=o365
+spring.security.oauth2.client.registration.myapp.client-name=MyApp                                              // <.>
+spring.security.oauth2.client.registration.myapp.client-id=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX                 // <.>
+spring.security.oauth2.client.registration.myapp.client-secret=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX         // <.>
+spring.security.oauth2.client.registration.myapp.redirect-uri=http://mywebapp.com:8080/login/oauth2/code/myapp  // <.>
+spring.security.oauth2.client.registration.myapp.scope=openid, profile, email, user.read                        // <.>
+spring.security.oauth2.client.registration.myapp.authorization-grant-type=authorization_code
+
+spring.security.oauth2.client.provider.o365.token-uri=https://login.microsoftonline.com/${o365.tenantId}/oauth2/v2.0/token
+spring.security.oauth2.client.provider.o365.jwk-set-uri=https://login.microsoftonline.com//${o365.tenantId}/discovery/v2.0/keys
+spring.security.oauth2.client.provider.o365.authorization-uri=https://login.microsoftonline.com//${o365.tenantId}/oauth2/v2.0/authorize
+spring.security.oauth2.client.provider.o365.user-name-attribute=email
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://login.microsoftonline.com/${o365.tenantId}/discovery/v2.0/keys
+----
+<.> Azure tenant Id
+<.> Application (or client) name, recommend that this corresponds to the app name when the client was registered in Azure
+<.> Azure client Id, obtained from the application registration page
+<.> Azure client secret, as setup in the Azure portal
+<.> Redirect URI; must exactly match the redirect URI specified in the Azure portal
+<.> Scope matches the API permissions set up in the Azure portal.
+
+And, to enable JWT (REST client access), also add in:
+
+[source,properties]
+.application.properties
+----
+causeway.viewer.restfulobjects.authentication.strategy-class-name=\
+    org.apache.causeway.extensions.spring.security.oauth2.restful.AuthenticationStrategyJwt
+----

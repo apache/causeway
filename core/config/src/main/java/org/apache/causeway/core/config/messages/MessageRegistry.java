@@ -20,8 +20,6 @@ package org.apache.causeway.core.config.messages;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 public class MessageRegistry {
 
     public static final String MSG_ARE_YOU_SURE = "Are you sure?";
@@ -31,7 +29,7 @@ public class MessageRegistry {
     public MessageRegistry(){}
 
     public List<String> listMessages() {
-        return _Lists.of(
+        return List.of(
                 MSG_ARE_YOU_SURE,
                 MSG_CONFIRM,
                 MSG_CANCEL);

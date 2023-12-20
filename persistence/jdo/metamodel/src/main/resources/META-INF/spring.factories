@@ -1,0 +1,1 @@
+org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier=org.apache.causeway.persistence.jdo.metamodel.beans.JdoBeanTypeClassifier

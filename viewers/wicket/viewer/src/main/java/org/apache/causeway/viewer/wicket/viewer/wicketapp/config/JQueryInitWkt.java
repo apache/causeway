@@ -43,7 +43,7 @@ public class JQueryInitWkt implements WicketApplicationInitializer {
     public void init(final WebApplication webApplication) {
         val settings = webApplication.getJavaScriptLibrarySettings();
         // settings.setJQueryReference(JQueryResourceReference.getV3());
-        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.6.4/jquery.js"));
+        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.7.1/jquery.js"));
     }
 
 }

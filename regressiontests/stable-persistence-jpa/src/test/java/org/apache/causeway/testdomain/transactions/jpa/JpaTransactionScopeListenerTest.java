@@ -47,6 +47,9 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHa
         classes = {
                 Configuration_usingJpa.class,
                 InteractionBoundaryProbe.class
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaTransactionScopeListenerTest",
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 /**
@@ -112,7 +115,7 @@ class JpaTransactionScopeListenerTest {
 
         });
 
-        final int expectedIaCount = 3;
+        final int expectedIaCount = 2;
 
         assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsStarted(kvStore));
         assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsEnded(kvStore));

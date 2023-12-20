@@ -29,8 +29,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -93,7 +93,7 @@ public class _OsUtil {
     public void thereCanBeOnlyOne(final File pidFile) {
 
         if(pidFile.exists()) {
-            _Text.readLinesFromFile(pidFile, StandardCharsets.UTF_8)
+            TextUtils.readLinesFromFile(pidFile, StandardCharsets.UTF_8)
             .filter(_Strings::isNotEmpty)
             .getFirst()
             .ifPresent(pid->terminateProcessByPid(pid));

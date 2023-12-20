@@ -32,7 +32,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -88,7 +88,7 @@ public class WktHeaderItems {
     private String readJsResource(
             final @NonNull Class<?> resourceLocation,
             final @NonNull String resourceName) {
-        return _Text.readLinesFromResource(
+        return TextUtils.readLinesFromResource(
                 resourceLocation, resourceName, StandardCharsets.UTF_8)
                 .filter(_Strings::isNotEmpty)
                 .filter(line->!line.trim().startsWith("//"))

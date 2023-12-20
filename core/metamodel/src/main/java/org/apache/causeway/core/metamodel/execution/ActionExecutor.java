@@ -129,12 +129,18 @@ implements
     public Object execute(final ActionInvocation currentExecution) {
 
         // update the current execution with the DTO (memento)
-        val invocationDto = getInteractionDtoServiceInternal()
-        .asActionInvocationDto(owningAction, head, arguments);
+        //
+        // but ... no point in attempting this if no bookmark is yet available.
+        // this logic is for symmetric with PropertyModifier, which has a scenario where this might occur.
+        //
+        val ownerAdapter = head.getOwner();
+        val ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
+        if (ownerHasBookmark) {
+            val invocationDto =
+                    getInteractionDtoServiceInternal().asActionInvocationDto(owningAction, head, arguments);
+            currentExecution.setDto(invocationDto);
+        }
 
-        currentExecution.setDto(invocationDto);
-
-        //XXX not sure if the call to currentExecution.setDto(propertyEditDto) above is even required if not post-able
         if(!isPostable()) {
             // don't emit domain events
             return executeWithoutEvents(arguments);
@@ -196,7 +202,9 @@ implements
                     throws IllegalAccessException, InvocationTargetException {
 
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(arguments);
-        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
+        final Object targetPojo = Objects.requireNonNull(
+                MmUnwrapUtils.single(head.getTarget()),
+                ()->"Could not extract pojo, that this invocation is targeted at.");
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();

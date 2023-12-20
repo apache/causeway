@@ -38,7 +38,6 @@ public class TreePanelFactories {
     // -- PARENTED
 
     static class Parented extends ComponentFactoryScalarAbstract {
-        private static final long serialVersionUID = 1L;
 
         public Parented() {
             super(ParentedTreePanel.class);
@@ -61,7 +60,6 @@ public class TreePanelFactories {
     // -- STANDALONE
 
     static class Standalone extends ComponentFactoryAbstract {
-        private static final long serialVersionUID = 1L;
 
         public Standalone() {
             super(UiComponentType.VALUE, StandaloneTreePanel.class);

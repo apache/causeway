@@ -37,6 +37,10 @@ body {
     margin-bottom: 0px;
 }
 
+body > nav > div > a > img {
+    height: 32px;
+}
+
 .navbar-nav.primary ul.dropdown-menu,
 .navbar-nav.secondary ul.dropdown-menu,
 .navbar-nav.tertiary ul.dropdown-menu {
@@ -64,6 +68,17 @@ td .badge span,
   padding: 0;
 }
 
+
+/* fullcalendar pointer */
+td.fc-day a.fc-daygrid-event {
+    cursor: pointer;
+}
+
+
+/* fixes badge text color, when background is light - seems broken upstream https://bootswatch.com/default/ */
+.badge.bg-light {
+	color: var(--bs-body-color);
+}
 
 .card {
 	margin-bottom: 21px;
@@ -120,6 +135,7 @@ td .badge span,
 a, .btn-link {
 	color: var(--link-color);
 }
+
 a:focus, a:hover,
 .btn-link:focus, .btn-link:hover {
     color: var(--link-color-hover);
@@ -153,10 +169,6 @@ footer > .navbar {
 
 .pagination {
     margin: 0;
-}
-
-.fontAwesomeIcon {
-	margin-right: 4px;
 }
 
 /* from ActionPromptHeaderPanel */
@@ -276,6 +288,10 @@ footer > .navbar {
     width: 3%;
 }
 
+.collectionContentsAsAjaxTablePanel table.contents tbody .title-suppressed {
+    font-size: 1.25em;
+}
+
 .collectionContentsAsAjaxTablePanel table.contents a:hover {
     text-decoration:underline;
 }
@@ -300,7 +316,7 @@ footer > .navbar {
     padding:0 0;
 }
 
-/* bootstrap seems to set to 'pointer' 
+/* bootstrap seems to set to 'pointer'
 .collectionContentsAsAjaxTablePanel label:hover {
     cursor: default;
 }
@@ -470,12 +486,10 @@ div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
 }
 
 .entityHeaderPanel .entityTitle {
-    font-size: 1.52em;
     font-weight:normal;
     text-decoration:none;
     padding-right: 30px;
 }
-
 
 /* from BreadcrumbPanel.css */
 
@@ -625,7 +639,6 @@ div.additionalLinkList {
     cursor: not-allowed!important;
     opacity: 0.5;
     box-shadow: none;
-    border-style: none;
 	text-decoration-line: line-through;
 }
 
@@ -703,6 +716,14 @@ div.label-left label.col-form-label {
     text-align: left;
 }
 
+div.label-right label.col-form-label {
+    width: var(--form-label-width);
+    float: right;
+    padding-top: 2px;
+    padding-left: 2px;
+    text-align: right;
+}
+
 .propertyEditForm .label-left label.col-form-label,
 .actionParametersForm .label-left label.col-form-label {
     padding-left: 10px;
@@ -714,6 +735,10 @@ div.label-none label.col-form-label {
 
 div.label-left .scalarValueWrapper {
     width: var(--form-field-width);
+    float: left;
+}
+div.label-right .scalarValueWrapper {
+	width: var(--form-field-width);
     float: left;
 }
 
@@ -757,10 +782,6 @@ div.label-left .choicesPlaceholder {
     width: 100%;
     vertical-align: -webkit-baseline-middle;
     vertical-align: middle;
-}
-
-div.label-right .scalarValueWrapper {
-    padding-left: var(--form-label-width);
 }
 
 div.label-right .scalarValueWrapper .col-form-label{
@@ -912,16 +933,6 @@ div.referencePanel.scalarNameAndValueComponentType {
     color: silver;
 }
 
-tr.headers th form input {
-    margin-left: -8px;
-}
-/*
-tbody td.togglebox-column form {
-    margin-left: 6px;
-}
-*/
-
-
 footer .footer-image {
     height: 24px;
 }
@@ -1071,6 +1082,7 @@ li.select2-results__option {
 
 .scalarName {
 	opacity: 0.8;
+	line-height: 1.3;
 }
 
 .scalarNameAndValueComponentType .inlinePromptForm {
@@ -1294,6 +1306,21 @@ div.dataTables_wrapper ul.pagination {
     font-size: small;
 }
 
+/* TOASTS */
+
+.toast.alert-info {
+  --bs-toast-bg: rgba(var(--bs-info-rgb), 0.85);
+  --bs-toast-color: var(--bs-dark);
+}
+.toast.alert-warning {
+  --bs-toast-bg: rgba(var(--bs-warning-rgb), 0.85);
+  --bs-toast-color: var(--bs-dark);
+}
+.toast.alert-danger {
+  --bs-toast-bg: rgba(var(--bs-danger-rgb), 0.85);
+  --bs-toast-color: var(--bs-light);
+}
+
 /* TOOLTIPS */
 
 .tooltip {
@@ -1312,5 +1339,48 @@ strong.wkt-component-with-tooltip  {
 
 .ui-helper-hidden-accessible { display:none; }
 
+span.entityIconAndTitlePanel > a {
+    text-decoration: none;
+}
+
+
+/* alignment of certain data types within collections */
+.collectionContentsAsAjaxTablePanel table.contents .scalarPanelTextFieldNumeric {
+    text-align: right;
+    text-align: -moz-right;
+    text-align: -webkit-right;
+}
+.collectionContentsAsAjaxTablePanel table.contents .scalarPanelTextFieldWithTemporalPicker {
+    text-align: center;
+    text-align: -moz-center;
+    text-align: -webkit-center;
+}
+
+
+/* vertical alignment of certain data types within object forms */
+div.booleanPanel span.scalarValueInput label.fragment-prompt-checkboxNo {
+    margin-top: -5px;
+}
+div.scalarPanelTextFieldWithTemporalPicker span.scalarValueInput.fragment-fieldFrame-withLink {
+    margin-top: -2px;
+}
+
+
+/* datatables.net styling of header, consistent with Wicket's original */
+div.dataTables_wrapper th strong {
+    color: var(--link-color);
+    font-weight: 700;
+}
+div.dataTables_wrapper table.dataTable>thead>tr>th {
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+}
+
 /* --- */
 
+li.additionalLinkItem.list-inline-item.hidden {
+    padding-left: 0;
+    display: none;
+}

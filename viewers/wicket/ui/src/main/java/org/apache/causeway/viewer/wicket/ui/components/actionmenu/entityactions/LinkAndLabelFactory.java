@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions
 import java.util.function.Function;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -46,9 +45,8 @@ public interface LinkAndLabelFactory
 extends Function<ObjectAction, LinkAndLabel> {
 
     public static LinkAndLabel linkAndLabelForMenu(
-            @NonNull final MetaModelContext commonContext,
             @NonNull final MenuAction menuAction) {
-        val serviceModel = UiObjectWkt.ofBookmark(commonContext, menuAction.serviceBookmark());
+        val serviceModel = UiObjectWkt.ofBookmark(menuAction.serviceBookmark());
         return LinkAndLabel.of(
                 ActionModelImpl.forEntity(
                         serviceModel,

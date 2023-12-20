@@ -12,12 +12,14 @@ Collects together all the domain semantics for the property of a domain object.
   Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;     // <.>
   Publishing commandPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Class<? extends PropertyDomainEvent<?, ?>> domainEvent() default PropertyDomainEvent.Default.class;     // <.>
-  Editing editing() default Editing.NOT_SPECIFIED;     // <.>
-  String editingDisabledReason() default "";     // <.>
-  Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  @AliasFor(annotation = DomainObject.class, attribute = "editing")
+Editing editing() default Editing.NOT_SPECIFIED;     // <.>
+  @AliasFor(annotation = DomainObject.class, attribute = "editingDisabledReason")
+String editingDisabledReason() default "";     // <.>
+  @AliasFor(annotation = DomainObject.class, attribute = "entityChangePublishing")
+Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   String fileAccept() default "";     // <.>
-  Where hidden() default Where.NOT_SPECIFIED;     // <.>
   int maxLength() default -1;     // <.>
   Snapshot snapshot() default Snapshot.NOT_SPECIFIED;     // <.>
   Class<? extends Specification>[] mustSatisfy() default {};     // <.>
@@ -68,11 +70,6 @@ Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (t
 +
 --
 For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
---
-<.> xref:#hidden[hidden]
-+
---
-Indicates where the property is not visible to the user.
 --
 <.> xref:#maxLength[maxLength]
 +
@@ -160,6 +157,8 @@ Note that non-editable objects can nevertheless have actions invoked upon them.
 
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
 
+If left empty (default), no reason is given.
+
 [#entityChangePublishing]
 === entityChangePublishing
 
@@ -180,11 +179,6 @@ For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 
 Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
-
-[#hidden]
-=== hidden
-
-Indicates where the property is not visible to the user.
 
 [#maxLength]
 === maxLength

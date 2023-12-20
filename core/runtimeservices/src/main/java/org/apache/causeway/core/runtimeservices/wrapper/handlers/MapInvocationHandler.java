@@ -21,31 +21,24 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.util.Map;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 class MapInvocationHandler<T, M extends Map<?,?>>
-extends NonScalarInvocationHandlerAbstract<T, M> {
+extends PluralInvocationHandlerAbstract<T, M> {
 
     public MapInvocationHandler(
-            final M mapToProxy,
+            final M mapToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(mapToProxy, handler, otma);
+        super(mapToBeProxied, handler, otma,
+                CollectionSemantics.MAP);
 
-        _Assert.assertTrue(mapToProxy.getClass().isAssignableFrom(Map.class),
+        _Assert.assertTrue(Map.class.isAssignableFrom(mapToBeProxied.getClass()),
                 ()->String.format("Cannot use %s for type %s, these are not compatible.",
                         this.getClass().getName(),
-                        mapToProxy.getClass()));
-
-        ProgrammingModelConstants.WrapperFactoryProxy.MAP
-        .getIntercepted()
-        .forEach(this::intercept);
-
-        ProgrammingModelConstants.WrapperFactoryProxy.MAP
-        .getVetoed()
-        .forEach(this::veto);
+                        mapToBeProxied.getClass()));
     }
 
 }

@@ -52,7 +52,7 @@ implements HasLogicalType {
             final ChoiceProviderAbstract choiceProvider) {
         super(id, model, choiceProvider);
 
-        logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
+        logicalType = scalarModel.getElementType().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
         getSettings().setWidth("auto");

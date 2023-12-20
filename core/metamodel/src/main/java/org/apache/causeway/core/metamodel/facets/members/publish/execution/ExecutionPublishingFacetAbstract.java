@@ -26,11 +26,17 @@ public abstract class ExecutionPublishingFacetAbstract
 extends FacetAbstract
 implements ExecutionPublishingFacet {
 
-    private static final Class<? extends Facet> type() {
+    private static Class<? extends Facet> type() {
         return ExecutionPublishingFacet.class;
     }
 
     public ExecutionPublishingFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
+    }
+
+    public ExecutionPublishingFacetAbstract(
+            final FacetHolder facetHolder,
+            final Precedence precedence) {
+        super(type(), facetHolder, precedence);
     }
 }

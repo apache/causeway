@@ -24,15 +24,15 @@ import java.util.OptionalInt;
 
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.convert.IConverter;
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -41,8 +41,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.links.LinksProvider;
+import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -66,7 +65,7 @@ import lombok.val;
 //@Log4j2
 public abstract class ScalarModel
 extends ChainingModel<ManagedObject>
-implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
+implements HasRenderingHints, UiScalar, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,7 +73,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     @Getter(onMethod_={@Override})
     @Setter(onMethod_={@Override})
-    private ScalarRepresentation mode;
+    private ViewOrEditMode viewOrEditMode;
 
     @Getter(onMethod_={@Override})
     private RenderingHint renderingHint;
@@ -85,8 +84,9 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      * value (if any) of that action parameter.
      */
     protected ScalarModel(
-            final UiObjectWkt parentUiObject) {
-        this(parentUiObject, ScalarRepresentation.EDITING, RenderingHint.REGULAR);
+            final UiObjectWkt parentUiObject,
+            final ViewOrEditMode viewOrEdit) {
+        this(parentUiObject, viewOrEdit, RenderingHint.REGULAR);
     }
 
     /**
@@ -96,13 +96,12 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      */
     protected ScalarModel(
             final @NonNull UiObjectWkt parentEntityModel,
-            final @NonNull ScalarRepresentation viewOrEdit,
+            final @NonNull ViewOrEditMode viewOrEdit,
             final @NonNull RenderingHint renderingHint) {
-
         super(parentEntityModel); // the so called target model, we are chaining us to
         this.parentEntityModel = parentEntityModel;
-        this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
+        this.viewOrEditMode = viewOrEdit;
     }
 
     /**
@@ -133,18 +132,19 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     /**
      * Sets given ManagedObject as new proposed value.
      * (override, so we don't return the target model, we are chained to)
+     * <p>
+     * This happens during Wicket's {@code formComponent.updateModel()},
+     * which updates the models first, before later calling {@code onUpdate(target)}
+     * to repaint those components, that have a changed/dirty model.
+     * <p>
+     * in other words: changed components get a chance to participate in the partial page update
+     * based on whether their models have changed
      */
     @Override
     public final void setObject(final ManagedObject newValue) {
-
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[PENDING MODEL] about to set new value: %s", newValue==null?"null":newValue.getPojo());
-        });
-
-        proposedValue().getValue().setValue(newValue);
-
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[PENDING MODEL] new value set to property");
+        proposedValue().update(oldValue->{
+            _Xray.onSclarModelUpdate(this, oldValue, newValue);
+            return newValue;
         });
     }
 
@@ -158,14 +158,14 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     }
 
     public final boolean isScalarTypeAnyOf(final Can<Class<?>> requiredClasses) {
-        final String fullName = getScalarTypeSpec().getFullIdentifier();
+        final String fullName = getElementType().getFullIdentifier();
         return requiredClasses.stream()
                 .map(Class::getName)
                 .anyMatch(fullName::equals);
     }
 
     public final boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
-        final Class<?> scalarType = getScalarTypeSpec().getCorrespondingClass();
+        final Class<?> scalarType = getElementType().getCorrespondingClass();
         return _NullSafe.streamNullable(requiredClass)
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
@@ -174,31 +174,43 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     public abstract String validate(ManagedObject proposedAdapter);
 
-    /**
-     * Additional links to render (if any)
-     */
-    private List<LinkAndLabel> linkAndLabels = _Lists.newArrayList();
-
-    @Override
-    public Can<LinkAndLabel> getLinks() {
-        return Can.ofCollection(linkAndLabels);
-    }
-
     @Override
     public final PromptStyle getPromptStyle() {
         return Facets.promptStyleOrElse(getMetaModel(), PromptStyle.INLINE);
     }
 
-    public boolean canEnterEditMode() {
-        return isEnabled()
-                && isViewMode();
+    // -- CONVERSION
+
+    public final <T> Optional<IConverter<T>> getConverter(final Class<T> requiredType) {
+
+        _Assert.assertTypeIsInstanceOf(
+                ClassUtils.resolvePrimitiveIfNecessary(getMetaModel().getElementType().getCorrespondingClass()),
+                requiredType);
+
+        return Optional.of(
+                new ConverterBasedOnValueSemantics<>(getMetaModel(), getViewOrEditMode()));
     }
 
-    public boolean isEnabled() {
-        return !disabledReason().isPresent();
+    // -- PREDICATES
+
+    @Override
+    public final boolean isInlinePrompt() {
+        return hasAssociatedActionWithInlineAsIfEdit()
+                || (getPromptStyle().isInline()
+                        && isViewingMode()
+                        && !disabledReason().isPresent());
     }
 
-    // //////////////////////////////////////
+    /**
+     * Whether or not to display some indication that a form field is mandatory.
+     * Eg. a star in the UI.
+     */
+    public final boolean isShowMandatoryIndicator() {
+        return isRequired()
+                && !disabledReason().isPresent();
+    }
+
+    // -- INLINE PROMPT
 
     private InlinePromptContext inlinePromptContext;
 
@@ -217,6 +229,19 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
             return;
         }
         this.inlinePromptContext = inlinePromptContext;
+    }
+
+    // -- ASSOCIATED ACTIONS
+
+    public final AssociatedActions getAssociatedActions() {
+        if (associatedActions == null) {
+            associatedActions = new AssociatedActions(calcAssociatedActions());
+        }
+        return associatedActions;
+    }
+
+    public final boolean hasAssociatedActionWithInlineAsIfEdit() {
+        return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
     }
 
     protected transient AssociatedActions associatedActions;
@@ -240,30 +265,23 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
         }
     }
 
+    protected abstract Can<ObjectAction> calcAssociatedActions();
 
-    /**
-     * Whether this model should be surfaced in the UI using a widget rendered such that it is either already in
-     * edit mode (eg for a parameter), or can be switched into edit mode, eg for an editable property or an
-     * associated action of a property with 'inline_as_if_edit'
-     *
-     * @return <tt>true</tt> if the widget for this model must be editable.
-     */
-    public boolean mustBeEditable() {
-        return getMode() == ScalarRepresentation.EDITING
-                || isParameter()
-                || hasAssociatedActionWithInlineAsIfEdit();
+    // --
+
+    public final OptionalInt multilineNumberOfLines() {
+        return Facets.multilineNumberOfLines(getMetaModel());
     }
 
-    /**
-     * Similar to {@link #mustBeEditable()}, though not called from the same locations.
-     *
-     * My suspicion is that it amounts to more or less the same set of conditions.
-     */
-    @Override
-    public boolean isInlinePrompt() {
-        return (getPromptStyle().isInline() && canEnterEditMode())
-                || hasAssociatedActionWithInlineAsIfEdit();
+    public final OptionalInt maxLength() {
+        return Facets.maxLength(getElementType());
     }
+
+    public final OptionalInt typicalLength() {
+        return Facets.typicalLength(getElementType(), maxLength());
+    }
+
+    // -- TO STRING
 
     @Override
     public String toString() {
@@ -271,30 +289,5 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     }
 
     protected abstract String toStringOf();
-
-    public final AssociatedActions getAssociatedActions() {
-        if (associatedActions == null) {
-            associatedActions = new AssociatedActions(calcAssociatedActions());
-        }
-        return associatedActions;
-    }
-
-    protected abstract Can<ObjectAction> calcAssociatedActions();
-
-    public final boolean hasAssociatedActionWithInlineAsIfEdit() {
-        return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
-    }
-
-    public final OptionalInt multilineNumberOfLines() {
-        return Facets.multilineNumberOfLines(getMetaModel());
-    }
-
-    public final OptionalInt maxLength() {
-        return Facets.maxLength(getScalarTypeSpec());
-    }
-
-    public final OptionalInt typicalLength() {
-        return Facets.typicalLength(getScalarTypeSpec(), maxLength());
-    }
 
 }

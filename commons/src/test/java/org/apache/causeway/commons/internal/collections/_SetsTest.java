@@ -20,6 +20,7 @@ package org.apache.causeway.commons.internal.collections;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,8 +56,8 @@ class _SetsTest {
     @AfterEach
     void tearDown() throws Exception {
     }
-    
-    void assertUnmodifiable(Set<Integer> set) {
+
+    void assertUnmodifiable(final Set<Integer> set) {
         if(set.size()>0) {
             assertThrows(Exception.class, ()->set.clear());
             val iterator = set.iterator();
@@ -68,7 +69,7 @@ class _SetsTest {
         }
         assertThrows(Exception.class, ()->set.add(2));
     }
-    
+
     /**
      * Test method for {@link org.apache.causeway.commons.internal.collections._Sets#singleton(java.lang.Object)}.
      */
@@ -97,7 +98,7 @@ class _SetsTest {
      */
     @Test
     void testOf() {
-        assertArrayEquals(new Integer[] {}, _Arrays.toArray(_Sets.of(), Integer.class)); 
+        assertArrayEquals(new Integer[] {}, _Arrays.toArray(_Sets.of(), Integer.class));
         assertArrayEquals(new Integer[] {0, 1, -1, 3}, _Arrays.toArray(_Sets.of(0, 1, -1, 3), Integer.class));
     }
 
@@ -108,7 +109,7 @@ class _SetsTest {
     void testUnmodifiable() {
         val set = _Sets.unmodifiable(Samples.iterable(3, 1, 2));
         assertUnmodifiable(set);
-        Samples.assertListEquals(_Lists.of(3, 1, 2), set);
+        Samples.assertListEquals(List.of(3, 1, 2), set);
     }
 
     /**
@@ -136,7 +137,7 @@ class _SetsTest {
     void testNewTreeSetIterableOfT() {
         val set = _Sets.newTreeSet(Samples.iterable(3, 1, 2));
         assertEquals(TreeSet.class, set.getClass());
-        Samples.assertListEquals(_Lists.of(1, 2, 3), set);
+        Samples.assertListEquals(List.of(1, 2, 3), set);
     }
 
     /**
@@ -146,7 +147,7 @@ class _SetsTest {
     void testNewTreeSetIterableOfTComparatorOfT() {
         val set = _Sets.newTreeSet(Samples.iterable(3, 1, 2), (a, b)->Integer.compare(b, a));
         assertEquals(TreeSet.class, set.getClass());
-        Samples.assertListEquals(_Lists.of(3, 2, 1), set);
+        Samples.assertListEquals(List.of(3, 2, 1), set);
     }
 
     /**
@@ -164,7 +165,7 @@ class _SetsTest {
     @Test
     void testNewHashSetCollectionOfT() {
         assertEquals(HashSet.class, _Sets.newHashSet(null).getClass());
-        val set = _Sets.newHashSet(_Lists.of(3, 1, 2, 3, 3));
+        val set = _Sets.newHashSet(List.of(3, 1, 2, 3, 3));
         assertEquals(HashSet.class, set.getClass());
         Samples.assertSetEquals(_Sets.of(1, 2, 3), set);
     }
@@ -194,9 +195,9 @@ class _SetsTest {
     @Test
     void testNewLinkedHashSetCollectionOfT() {
         assertEquals(LinkedHashSet.class, _Sets.newLinkedHashSet(null).getClass());
-        val set = _Sets.newLinkedHashSet(_Lists.of(3, 1, 2, 3, 3));
+        val set = _Sets.newLinkedHashSet(List.of(3, 1, 2, 3, 3));
         assertEquals(LinkedHashSet.class, set.getClass());
-        Samples.assertListEquals(_Lists.of(3, 1, 2), set);
+        Samples.assertListEquals(List.of(3, 1, 2), set);
     }
 
     /**
@@ -206,7 +207,7 @@ class _SetsTest {
     void testNewLinkedHashSetIterableOfT() {
         val set = _Sets.newLinkedHashSet(Samples.iterable(3, 1, 2, 3, 3));
         assertEquals(LinkedHashSet.class, set.getClass());
-        Samples.assertListEquals(_Lists.of(3, 1, 2), set);
+        Samples.assertListEquals(List.of(3, 1, 2), set);
     }
 
     /**
@@ -233,7 +234,7 @@ class _SetsTest {
      */
     @Test
     void testNewConcurrentHashSetIterableOfT() {
-        val set = _Sets.newConcurrentHashSet(_Lists.of(3, 1, 2, 3, 3));
+        val set = _Sets.newConcurrentHashSet(List.of(3, 1, 2, 3, 3));
         assertEquals(ConcurrentHashMap.KeySetView.class, set.getClass());
         Samples.assertSetEquals(_Sets.of(1, 2, 3), set);
     }
@@ -253,9 +254,9 @@ class _SetsTest {
     @Test
     void testNewCopyOnWriteArraySetCollectionOfT() {
         assertEquals(CopyOnWriteArraySet.class, _Sets.newCopyOnWriteArraySet(null).getClass());
-        val set = _Sets.newCopyOnWriteArraySet(_Lists.of(3, 1, 2, 3, 3));
+        val set = _Sets.newCopyOnWriteArraySet(List.of(3, 1, 2, 3, 3));
         assertEquals(CopyOnWriteArraySet.class, set.getClass());
-        Samples.assertListEquals(_Lists.of(3, 1, 2), set);
+        Samples.assertListEquals(List.of(3, 1, 2), set);
     }
 
     /**
@@ -265,7 +266,7 @@ class _SetsTest {
     void testNewCopyOnWriteArraySetIterableOfT() {
         val set = _Sets.newCopyOnWriteArraySet(Samples.iterable(3, 1, 2, 3, 3));
         assertEquals(CopyOnWriteArraySet.class, set.getClass());
-        Samples.assertListEquals(_Lists.of(3, 1, 2), set);
+        Samples.assertListEquals(List.of(3, 1, 2), set);
     }
 
     /**
@@ -286,12 +287,12 @@ class _SetsTest {
      */
     @Test
     void testIntersectSorted() {
-        Samples.assertListEquals(_Lists.of(), _Sets.intersectSorted(null, null));
-        Samples.assertListEquals(_Lists.of(), _Sets.intersectSorted(null, _Sets.newTreeSet(_Sets.of())));
-        Samples.assertListEquals(_Lists.of(), _Sets.intersectSorted(_Sets.newTreeSet(), null));
-        Samples.assertListEquals(_Lists.of(), _Sets.intersectSorted(_Sets.newTreeSet(), _Sets.newTreeSet()));
-        Samples.assertListEquals(_Lists.of(), _Sets.intersectSorted(_Sets.newTreeSet(_Sets.of(1, 0)), _Sets.newTreeSet(_Sets.of(3, 2))));
-        Samples.assertListEquals(_Lists.of(1, 2), _Sets.intersectSorted(_Sets.newTreeSet(_Sets.of(2, 0, 1)), _Sets.newTreeSet((_Sets.of(3, 1, 2)))));
+        Samples.assertListEquals(List.of(), _Sets.intersectSorted(null, null));
+        Samples.assertListEquals(List.of(), _Sets.intersectSorted(null, _Sets.newTreeSet(_Sets.of())));
+        Samples.assertListEquals(List.of(), _Sets.intersectSorted(_Sets.newTreeSet(), null));
+        Samples.assertListEquals(List.of(), _Sets.intersectSorted(_Sets.newTreeSet(), _Sets.newTreeSet()));
+        Samples.assertListEquals(List.of(), _Sets.intersectSorted(_Sets.newTreeSet(_Sets.of(1, 0)), _Sets.newTreeSet(_Sets.of(3, 2))));
+        Samples.assertListEquals(List.of(1, 2), _Sets.intersectSorted(_Sets.newTreeSet(_Sets.of(2, 0, 1)), _Sets.newTreeSet((_Sets.of(3, 1, 2)))));
     }
 
     /**
@@ -313,12 +314,12 @@ class _SetsTest {
      */
     @Test
     void testMinusSortedSortedSetOfTSortedSetOfT() {
-        Samples.assertListEquals(_Lists.of(), _Sets.minusSorted(null, null));
-        Samples.assertListEquals(_Lists.of(), _Sets.minusSorted(null, _Sets.newTreeSet(_Sets.of())));
-        Samples.assertListEquals(_Lists.of(), _Sets.minusSorted(_Sets.newTreeSet(), null));
-        Samples.assertListEquals(_Lists.of(), _Sets.minusSorted(_Sets.newTreeSet(), _Sets.newTreeSet()));
-        Samples.assertListEquals(_Lists.of(0, 1), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(1, 0)), _Sets.newTreeSet(_Sets.of(3, 2))));
-        Samples.assertListEquals(_Lists.of(0), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(2, 0, 1)), _Sets.newTreeSet((_Sets.of(3, 1, 2)))));
+        Samples.assertListEquals(List.of(), _Sets.minusSorted(null, null));
+        Samples.assertListEquals(List.of(), _Sets.minusSorted(null, _Sets.newTreeSet(_Sets.of())));
+        Samples.assertListEquals(List.of(), _Sets.minusSorted(_Sets.newTreeSet(), null));
+        Samples.assertListEquals(List.of(), _Sets.minusSorted(_Sets.newTreeSet(), _Sets.newTreeSet()));
+        Samples.assertListEquals(List.of(0, 1), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(1, 0)), _Sets.newTreeSet(_Sets.of(3, 2))));
+        Samples.assertListEquals(List.of(0), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(2, 0, 1)), _Sets.newTreeSet((_Sets.of(3, 1, 2)))));
     }
 
     /**
@@ -338,7 +339,7 @@ class _SetsTest {
     void testMinusSortedSortedSetOfTSortedSetOfTSupplierOfSortedSetOfT() {
         val set = _Sets.<Integer>minusSorted(null, null, TreeSet::new);
         assertUnmodifiable(set);
-        Samples.assertListEquals(_Lists.of(1), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(1)), null, TreeSet::new));
+        Samples.assertListEquals(List.of(1), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(1)), null, TreeSet::new));
     }
 
     /**
@@ -350,17 +351,17 @@ class _SetsTest {
         .collect(_Sets.toUnmodifiable(HashSet::new));
         assertUnmodifiable(set);
         Samples.assertSetEquals(_Sets.of(1, 2, 3), set);
-        
+
         val sortedSet = Stream.of(3,1,2)
         .collect(_Sets.toUnmodifiable(TreeSet::new));
         assertUnmodifiable(sortedSet);
-        Samples.assertListEquals(_Lists.of(1, 2, 3), sortedSet);
-        
+        Samples.assertListEquals(List.of(1, 2, 3), sortedSet);
+
         val orderedSet = Stream.of(3,1,2)
         .collect(_Sets.toUnmodifiable(LinkedHashSet::new));
         assertUnmodifiable(orderedSet);
-        Samples.assertListEquals(_Lists.of(3, 1, 2), orderedSet);
-        
+        Samples.assertListEquals(List.of(3, 1, 2), orderedSet);
+
     }
 
     /**
@@ -382,7 +383,7 @@ class _SetsTest {
         val orderedSet = Stream.of(3,1,2)
         .collect(_Sets.toUnmodifiablePreservingOrder());
         assertUnmodifiable(orderedSet);
-        Samples.assertListEquals(_Lists.of(3, 1, 2), orderedSet);
+        Samples.assertListEquals(List.of(3, 1, 2), orderedSet);
     }
 
     /**
@@ -393,7 +394,7 @@ class _SetsTest {
         val sortedSet = Stream.of(3,1,2)
         .collect(_Sets.toUnmodifiableSorted(TreeSet::new));
         assertUnmodifiable(sortedSet);
-        Samples.assertListEquals(_Lists.of(1, 2, 3), sortedSet);
+        Samples.assertListEquals(List.of(1, 2, 3), sortedSet);
     }
 
     /**
@@ -404,7 +405,7 @@ class _SetsTest {
         val sortedSet = Stream.of(3,1,2)
         .collect(_Sets.toUnmodifiableSorted());
         assertUnmodifiable(sortedSet);
-        Samples.assertListEquals(_Lists.of(1, 2, 3), sortedSet);
+        Samples.assertListEquals(List.of(1, 2, 3), sortedSet);
     }
 
 }

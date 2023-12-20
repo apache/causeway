@@ -26,9 +26,13 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -43,8 +47,11 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _MethodFacades {
 
-    public static MethodFacade paramsAsTuple(final @NonNull Method method, final @NonNull Constructor<?> patConstructor) {
-        return new ParamsAsTupleMethod(patConstructor, regularMethodForSyntheticElseFail(method));
+    public MethodFacade paramsAsTuple(
+            final @NonNull ResolvedMethod method,
+            final @NonNull ResolvedConstructor patConstructor) {
+        _Reflect.guardAgainstSynthetic(method.method());
+        return new ParamsAsTupleMethod(patConstructor, method);
     }
 
     /**
@@ -56,8 +63,22 @@ public class _MethodFacades {
      * <li>JUnit testing</li>
      * </ul>
      */
-    public static MethodFacade regular(final Method method) {
-        return new RegularMethod(regularMethodForSyntheticElseFail(method));
+    public MethodFacade regular(
+            final @NonNull ResolvedMethod method) {
+        _Reflect.guardAgainstSynthetic(method.method());
+        return new RegularMethod(method);
+    }
+
+    /**
+     * JUnit
+     */
+    @UtilityClass
+    public static class testing {
+        public MethodFacade regular(
+                final @NonNull Method method) {
+            return _MethodFacades.regular(_GenericResolver.resolveMethod(method, method.getDeclaringClass())
+                    .orElseThrow());
+        }
     }
 
     public static interface MethodFacade {
@@ -69,7 +90,8 @@ public class _MethodFacades {
         String getName();
         String getParameterName(int paramNum);
         Class<?> getDeclaringClass();
-        Optional<Method> asMethod();
+        Optional<ResolvedMethod> asMethod();
+        Optional<ResolvedConstructor> asConstructor();
 
         /**
          * exposes the underlying method, use with care:
@@ -80,7 +102,7 @@ public class _MethodFacades {
          * <li>for invocation</li>
          * </ul>
          */
-        Method asMethodForIntrospection();
+        ResolvedMethod asMethodForIntrospection();
 
         /**
          * This is a convenience method for scenarios where a Method or Constructor reference is treated in a generic fashion.
@@ -93,12 +115,32 @@ public class _MethodFacades {
         <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType);
         <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType, int paramNum);
 
-        default Method asMethodElseFail() {
+        default ResolvedMethod asMethodElseFail() {
             return asMethod().orElseThrow(()->
                 _Exceptions.unrecoverable("Framework Bug: unexpeced method-facade, "
                         + "regular variant expected: %s", asMethodForIntrospection()));
         }
+        default ResolvedConstructor asConstructorElseFail() {
+            return asConstructor().orElseThrow(()->
+                _Exceptions.unrecoverable("Framework Bug: unexpeced method-facade, "
+                        + "wrapper of constructor expected: %s", asMethodForIntrospection()));
+        }
         boolean isAnnotatedAsNullable();
+
+        default ResolvedType resolveMethodReturn() {
+            return _GenericResolver.forMethodReturn(this.asMethodForIntrospection());
+        }
+
+        default ResolvedType resolveParameter(final int paramIndex) {
+            val executable = this.asExecutable();
+            if(executable instanceof Method) {
+                return _GenericResolver.forMethodParameter(this.asMethodForIntrospection(), paramIndex);
+            }
+            if(executable instanceof Constructor) {
+                return _GenericResolver.forConstructorParameter(this.asConstructorElseFail(), paramIndex);
+            }
+            throw _Exceptions.unexpectedCodeReach();
+        }
     }
 
     /**
@@ -107,121 +149,123 @@ public class _MethodFacades {
     @lombok.Value
     private final static class RegularMethod implements MethodFacade {
 
-        private final Method method;
+        private final ResolvedMethod method;
 
         @Override public Class<?> getDeclaringClass() {
-            return method.getDeclaringClass();
+            return method.method().getDeclaringClass();
         }
         @Override public int getParameterCount() {
-            return method.getParameterCount();
+            return method.paramCount();
         }
         @Override public Class<?>[] getParameterTypes() {
-            return method.getParameterTypes();
+            return method.paramTypes();
         }
         @Override public Class<?> getParameterType(final int paramNum) {
-            return method.getParameterTypes()[paramNum];
+            return method.paramType(paramNum);
         }
         @Override public String getName() {
-            return method.getName();
+            return method.name();
         }
         @Override public Class<?> getReturnType() {
-            return method.getReturnType();
+            return method.returnType();
         }
-        @Override public Optional<Method> asMethod() {
+        @Override public Optional<ResolvedMethod> asMethod() {
             return Optional.of(method);
         }
+        @Override public Optional<ResolvedConstructor> asConstructor() {
+            return Optional.empty();
+        }
         @Override public Executable asExecutable() {
-            return method;
+            return method.method();
         }
         @Override public <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType) {
-            return _Annotations.synthesize(method, annotationType);
+            return _Annotations.synthesize(method.method(), annotationType);
         }
-        @Override public Method asMethodForIntrospection() {
+        @Override public ResolvedMethod asMethodForIntrospection() {
             return method;
         }
         @Override public String getParameterName(final int paramNum) {
-            return method.getParameters()[paramNum].getName();
+            // don't replace with ... method.paramType(paramNum).getName();
+            return method.method().getParameters()[paramNum].getName();
         }
-        @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType, final int paramNum) {
-            return _Annotations.synthesize(method.getParameters()[paramNum], annotationType);
+        @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(
+                final Class<A> annotationType, final int paramNum) {
+            return _Annotations.synthesize(method.method().getParameters()[paramNum], annotationType);
         }
         @Override public Object[] getArguments(final Object[] executionParameters) {
             return executionParameters;
         }
         @Override public boolean isAnnotatedAsNullable() {
-            return _NullSafe.stream(method.getAnnotations())
+            return _NullSafe.stream(method.method().getAnnotations())
                     .map(annot->annot.annotationType().getSimpleName())
                     .anyMatch(name->name.equals("Nullable"));
         }
         @Override public String toString() {
-            return method.toString();
+            return method.method().toString();
         }
     }
+
 
     @lombok.Value
     private final static class ParamsAsTupleMethod implements MethodFacade {
 
-        private final Constructor<?> patConstructor;
-        private final Method method;
+        private final ResolvedConstructor patConstructor;
+        private final ResolvedMethod method;
 
         @Override public Class<?>[] getParameterTypes() {
-            return patConstructor.getParameterTypes();
+            return patConstructor.paramTypes();
         }
         @Override public Class<?> getParameterType(final int paramNum) {
-            return patConstructor.getParameterTypes()[paramNum];
+            return patConstructor.paramType(paramNum);
         }
         @Override public int getParameterCount() {
-            return patConstructor.getParameterCount();
+            return patConstructor.paramCount();
         }
         @Override public Class<?> getReturnType() {
-            return method.getReturnType();
+            return method.returnType();
         }
         @Override public String getName() {
-            return method.getName();
+            return method.name();
         }
         @Override public String getParameterName(final int paramNum) {
-            return patConstructor.getParameters()[paramNum].getName();
+            // don't replace with ... patConstructor.paramType(paramNum).getName();
+            return patConstructor.constructor().getParameters()[paramNum].getName();
         }
         @Override public Class<?> getDeclaringClass() {
-            return method.getDeclaringClass();
+            return method.method().getDeclaringClass();
         }
-        @Override public Optional<Method> asMethod() {
+        @Override public Optional<ResolvedMethod> asMethod() {
             // only allowed for regular methods
             return Optional.empty();
         }
-        @Override public Method asMethodForIntrospection() {
+        @Override public Optional<ResolvedConstructor> asConstructor() {
+            return Optional.of(patConstructor);
+        }
+        @Override public ResolvedMethod asMethodForIntrospection() {
             return method;
         }
         @Override public Executable asExecutable() {
-            return patConstructor;
+            return patConstructor.constructor();
         }
         @Override @SneakyThrows
         public Object[] getArguments(final Object[] executionParameters) {
             // converts input args into a single arg tuple type (PAT semantics)
-            return new Object[] {patConstructor.newInstance(executionParameters)};
+            return new Object[] {patConstructor.constructor().newInstance(executionParameters)};
         }
         @Override public <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType) {
-            return _Annotations.synthesize(method, annotationType);
+            return _Annotations.synthesize(method.method(), annotationType);
         }
         @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType, final int paramNum) {
-            return _Annotations.synthesize(patConstructor.getParameters()[paramNum], annotationType);
+            return _Annotations.synthesize(patConstructor.constructor().getParameters()[paramNum], annotationType);
         }
         @Override public boolean isAnnotatedAsNullable() {
-            return _NullSafe.stream(method.getAnnotations())
+            return _NullSafe.stream(method.method().getAnnotations())
                     .map(annot->annot.annotationType().getSimpleName())
                     .anyMatch(name->name.equals("Nullable"));
         }
         @Override public String toString() {
-            return method.toString();
+            return method.method().toString();
         }
-    }
-
-    // -- HELPER
-
-    private Method regularMethodForSyntheticElseFail(final Method method) {
-        return _Reflect
-            .lookupRegularMethodForSynthetic(method)
-            .orElseThrow(()->_Exceptions.illegalArgument("cannot resolve syntetic method %s to a regular one", method));
     }
 
 }

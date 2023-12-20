@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
@@ -29,11 +26,14 @@ import java.util.function.IntFunction;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -54,7 +54,7 @@ public final class ParameterSupport {
 
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
         @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders;
-        @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
+        @NonNull Can<SearchAlgorithm> searchAlgorithms;
         @NonNull ReturnTypePattern returnTypePattern;
 
         @Builder.Default
@@ -74,9 +74,9 @@ public final class ParameterSupport {
     public static class ParamSupportingMethodSearchResult {
         int paramIndex;
         Class<?> paramType;
-        Method supportingMethod;
-        Optional<Constructor<?>> patConstructor;
-        TypeOfAnyCardinality paramSupportReturnType;
+        ResolvedMethod supportingMethod;
+        Optional<ResolvedConstructor> patConstructor;
+        ResolvedType paramSupportReturnType;
     }
 
     @FunctionalInterface
@@ -155,8 +155,8 @@ public final class ParameterSupport {
                 .of(paramIndex, paramType,
                     supportingMethodAndPatConstructor.getSupportingMethod(),
                     Optional.of(supportingMethodAndPatConstructor.getPatConstructor()),
-                    TypeOfAnyCardinality.forMethodReturn(
-                            declaringClass, supportingMethodAndPatConstructor.getSupportingMethod()));
+                    _GenericResolver.forMethodReturn(
+                            supportingMethodAndPatConstructor.getSupportingMethod()));
     }
 
     private static void singleArgBeingParamType(
@@ -175,7 +175,7 @@ public final class ParameterSupport {
         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
         .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
         .streamMethodsMatchingSignature(signature)
-        .map(supportingMethod->toSearchResult(type, paramIndex, paramType, supportingMethod))
+        .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
         .forEach(onMethodFound);
     }
 
@@ -205,23 +205,21 @@ public final class ParameterSupport {
                     .findFirst()
                     .orElse(null);
             if(supportingMethod != null) {
-                onMethodFound.accept(toSearchResult(type, paramIndex, paramType, supportingMethod));
+                onMethodFound.accept(toSearchResult(paramIndex, paramType, supportingMethod));
                 return;
             }
         }
     }
 
     private static ParamSupportingMethodSearchResult toSearchResult(
-            final Class<?> declaringClass,
             final int paramIndex,
             final Class<?> paramType,
-            final Method supportingMethod) {
+            final ResolvedMethod supportingMethod) {
         return ParamSupportingMethodSearchResult
                 .of(paramIndex, paramType,
                     supportingMethod,
                     Optional.empty(),
-                    TypeOfAnyCardinality.forMethodReturn(
-                            declaringClass, supportingMethod));
+                    _GenericResolver.forMethodReturn(supportingMethod));
     }
 
     /**

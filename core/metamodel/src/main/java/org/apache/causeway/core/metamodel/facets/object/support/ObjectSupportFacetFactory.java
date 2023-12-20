@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.support;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -26,6 +25,7 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -40,6 +40,7 @@ import org.apache.causeway.core.metamodel.facets.object.disabled.method.Disabled
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
+import org.apache.causeway.core.metamodel.facets.object.iconfa.method.FaFacetViaIconFaLayersMethod;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
@@ -87,6 +88,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         processObjectSupport(processClassContext, ObjectSupportMethod.TITLE, TitleFacetViaTitleMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.LAYOUT, LayoutFacetViaLayoutMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.ICON_NAME, IconFacetViaIconNameMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.ICON_FA_LAYERS, FaFacetViaIconFaLayersMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.CSS_CLASS, CssClassFacetViaCssClassMethod::create);
     }
 
@@ -122,14 +124,12 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             addFacetIfPresent(TitleFacetFromToStringMethod
                     .create(method, processClassContext.getFacetHolder()));
         });
-
     }
 
     private void processObjectSupport(
             final ProcessClassContext processClassContext,
             final ObjectSupportMethod objectSupportMethodEnum,
-            final BiFunction<Method, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
-
+            final BiFunction<ResolvedMethod, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
 
         MethodFinder
         .objectSupport(

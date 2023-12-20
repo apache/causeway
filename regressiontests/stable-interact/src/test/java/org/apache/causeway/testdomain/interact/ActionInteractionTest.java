@@ -340,11 +340,11 @@ class ActionInteractionTest extends InteractionTestAbstract {
         uiParamA.simulateMultiChoiceSelect(0, 2); // select first and 3rd choice
 
         val expectedParamsAfter = Can.<List<String>>of(
-                _Lists.of(
+                _Lists.ofNullable(
                         mixin.defaultA(null).get(0),
                         mixin.defaultA(null).get(2)
                         ),
-                _Lists.of(
+                _Lists.ofNullable(
                         mixin.defaultB(null).get(0)
                         ));
 

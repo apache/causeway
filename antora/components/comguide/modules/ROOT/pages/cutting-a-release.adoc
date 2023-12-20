@@ -40,7 +40,7 @@ Before releasing the framework, ensure there is consensus on the xref:docs:suppo
 The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released.
-This should be in line with our xref:comguide:ROOT:policies/versioning-policy.adoc#semantic-versioning[semantic versioning policy].
+This should be in line with our xref:policies.adoc#semantic-versioning[semantic versioning policy].
 
 Make sure you have a JIRA ticket open against which to perform all commits.
 In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.
@@ -70,8 +70,8 @@ To run the RAT tool, use:
 .find unapproved/missing licenses
 ----
 pushd bom
-mvn -Dapache-release clean
-mvn -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000     # <.>
+mvnd -Dapache-release clean
+mvnd -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000     # <.>
 popd
 
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
@@ -106,8 +106,8 @@ This is stored in the `src/main/appended-resources/supplemental-models.xml` file
 [source,bash,subs="attributes+"]
 ----
 pushd bom
-mvn -Dgithub clean install -T1C -DskipTests # <.>
-mvn -Dgithub license:download-licenses      # <.>
+mvnd -Dgithub clean install -T1C -DskipTests # <.>
+mvnd -Dgithub license:download-licenses      # <.>
 popd
 groovy scripts/checkmissinglicenses.groovy  # <.>
 ----
@@ -161,7 +161,7 @@ The next step is to generate the website, ensuring that the config, examples, pr
 +
 [source,bash,subs="attributes+"]
 ----
-mvn -D module-tooling -D skip.essential install -DskipTests -T1C
+mvnd -D module-tooling -D skip.essential install -DskipTests -T1C
 ----
 
 * Then, generate the website:
@@ -171,7 +171,7 @@ mvn -D module-tooling -D skip.essential install -DskipTests -T1C
 sh preview.sh
 ----
 +
-NOTE: this now runs `mvn clean install -pl core/config` automatically.
+NOTE: this now runs `mvnd clean install -pl core/config` automatically.
 
 Check for any Asciidoc errors, and fix.
 Also double-check that the config property files are correctly formatted.
@@ -220,32 +220,22 @@ git commit -m "$CAUSEWAYJIRA: updates to pom.xml etc for release"
 
 
 
-=== Create a release branch and worktree
+=== Create a release branch
 
 The release is performed on a branch; if we are successful, this branch will be merged back into master.
+We also recommend creating a separate git worktree to capture any documentation fixes that you might notice along the way.
 
-We also recommend performing this work in a separate git worktree.
-The original worktree can stay with the `master` branch and be used for documentation fixes, etc.
-
-* create (but don't checkout) a release branch for the version number being released; eg:
+* create and checkout a release branch for the version number being released; eg:
 +
 [source,bash,subs="attributes+"]
 ----
-git branch $CAUSEWAYBRANCH
+git branch -b $CAUSEWAYBRANCH
 ----
 
-* Create a worktree for this branch:
+* Push the branch:
 +
 [source,bash,subs="attributes+"]
 ----
-git worktree add ../causeway-release $CAUSEWAYBRANCH
-----
-
-* Switch to the new worktree and push the branch:
-+
-[source,bash,subs="attributes+"]
-----
-cd ../causeway-release
 git push origin $CAUSEWAYBRANCH -u
 ----
 
@@ -262,7 +252,7 @@ cd bom
 
 === Bump projects to `$CAUSEWAYREL`
 
-We use `mvn versions:set` to manually bump the release version.
+We use `mvnd versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).
 
 (Still in the `bom` directory), the steps are:
@@ -271,14 +261,14 @@ We use `mvn versions:set` to manually bump the release version.
 +
 [source,bash,subs="attributes+"]
 ----
-mvn versions:set -DnewVersion=$CAUSEWAYREL
+mvnd versions:set -DnewVersion=$CAUSEWAYREL
 ----
 
 * next we build the framework so that these versioned `pom.xml` files are available for the next step:
 +
 [source,bash,subs="attributes+"]
 ----
-mvn install -o -DskipTests -T1C -Dgithub
+mvnd install -o -DskipTests -T1C -Dgithub
 ----
 +
 The `-Dgithub` property activates the "github" profile that references all modules to be released.
@@ -288,8 +278,8 @@ The `-Dgithub` property activates the "github" profile that references all modul
 [source,bash,subs="attributes+"]
 ----
 pushd ../starters
-mvn versions:set -DnewVersion=$CAUSEWAYREL
-mvn install -DskipTests -o
+mvnd versions:set -DnewVersion=$CAUSEWAYREL
+mvnd install -DskipTests -o
 popd
 ----
 
@@ -313,29 +303,24 @@ Still in the `bom` directory:
 [source,bash,subs="attributes+"]
 ----
 rm -rf ~/.m2/repository/org/apache/causeway
-mvn clean install -o -T1C -Dgithub
+mvnd clean install -o -T1C -Dgithub
 git clean -dfx ..
 ----
 
 
 === Deploy
 
-Since the `<version>` has already been updated, we just use `mvn deploy` to upload the artifacts.
+Since the `<version>` has already been updated, we just use `mvnd deploy` to upload the artifacts.
 We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
 
 ==== Prerequisites
 
-[WARNING]
-====
-Make sure that the version of `gpg` on the `$PATH` is correct, because the configuration in the `pom.xml` assumes `gpg` v2.0, rather than v2.1+.
 
-The older version of `gpg` picks up the secret keys from `pubring.gpg` and `secring.gpg` (and does not use an agent); the newer version uses `pubring.pbx`.
+The release signs the artifacts, but is configured to use `gpg` v2.0, rather than v2.1+.
+This older version of `gpg` picks up the secret keys from `pubring.gpg` and `secring.gpg`, and does not use an agent.
+(The newer version -- that we don't use -- uses `pubring.pbx`, and _does_ use an agent).
 
-On Windows, be careful using git-bash as this will pick up git's version of `gpg` in `/usr/bin`, which is `gpg` v2.1.
-Instead, consider building in a Powershell console, described below.
-====
-
-If on Windows, we recommend you build under Powershell rather than git-bash, which means there are some prerequisites.
+To setup the gpg certificates on Windows, we require the particular version of gnupg:
 
 * install the correct version of choco:
 +
@@ -404,6 +389,21 @@ uid                  Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
 ...
 ----
 
+* If on Windows and you intend to perform the release using git-bash rather than powershell, then make sure that the version of `gpg` on the `$PATH` is correct.
++
+On Windows, you need to be careful using git-bash as this will pick up git's version of `gpg` in `/usr/bin`, which is `gpg` v2.1.
++
+One easy way to do this is just rename `/usr/bin/gpg` to `/usr/bin/MOVED-gpg`, restart the shell, and then confirm that `gpg` is now Windows' gnupg installation:
++
+[source,bash]
+----
+dan@halxps15-2022 MINGW64 /c/gitlab/hal-dsp/deliverables (master)
+$ gpg --version
+gpg (GnuPG) 2.0.30 (Gpg4win 2.3.4)
+...
+----
+
+
 * in `~/m2/settings.xml`, ensure that the `gpg.passphrase` server is set:
 +
 [source,xml]
@@ -420,6 +420,7 @@ uid                  Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
   </servers>
 </settings>
 ----
+
 
 
 ==== Perform the deploy
@@ -502,12 +503,12 @@ Therefore, still in the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
-mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
-mvn install -DskipTests -o -T1C -Dgithub
+mvnd versions:set -DnewVersion=2.0.0-SNAPSHOT
+mvnd install -DskipTests -o -T1C -Dgithub
 
 pushd ../starters
-mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
-mvn install -DskipTests -o
+mvnd versions:set -DnewVersion=2.0.0-SNAPSHOT
+mvnd install -DskipTests -o
 popd
 
 git add ..
@@ -569,8 +570,8 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly # <.>
-mvn versions:set -DnewVersion=$CAUSEWAYREL
+mvnd versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly # <.>
+mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
@@ -582,8 +583,8 @@ git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install
-mvn spring-boot:run
+mvnd clean install
+mvnd spring-boot:run
 ----
 
 ** Make any additional changes that might be required (eg update to `menubars.layout.xml`) commit and retest
@@ -606,8 +607,8 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly
-mvn versions:set -DnewVersion=$CAUSEWAYREL
+mvnd versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly
+mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
@@ -617,8 +618,8 @@ git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install
-mvn spring-boot:run
+mvnd clean install
+mvnd spring-boot:run
 ----
 
 ** Make any additional changes that might be required, and re-test.
@@ -662,8 +663,8 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly  # <.>
-mvn versions:set -DnewVersion=$CAUSEWAYREL
+mvnd versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly  # <.>
+mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
@@ -674,8 +675,8 @@ git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install
-mvn -pl webapp spring-boot:run
+mvnd clean install
+mvnd -pl webapp spring-boot:run
 ----
 
 ** Make any additional changes that might be required (eg update to `menubars.layout.xml`) commit and retest
@@ -699,8 +700,8 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly
-mvn versions:set -DnewVersion=$CAUSEWAYREL
+mvnd versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly
+mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
@@ -710,8 +711,8 @@ git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install
-mvn -pl webapp spring-boot:run
+mvnd clean install
+mvnd -pl webapp spring-boot:run
 ----
 
 ** Make any additional changes that might be required, and re-test.
@@ -776,33 +777,14 @@ done
 popd
 ----
 
-* Back in the `causeway` repo's `release` worktree, generate the Antora site (from the top-level directory).
+* Back in the `causeway` repo, generate the Antora site (from the top-level directory).
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../causeway-release
+cd ../causeway
 
 sh preview.sh -AB
 ----
-+
-[WARNING]
-====
-This procedure doesn't yet work; Antora does not yet support worktrees.
-
-So instead it's currently necessary to perform the preview in the main `../causeway` directory, switching branches.
-You'll also need to rebuild all and then regenerate config files and tooling:
-
-[source,bash,subs="attributes+"]
-----
-git checkout $CAUSEWAYBRANCH
-pushd bom
-mvn clean install -DskipTests -T1C -Dgithub
-popd
-mvn -D module-tooling -D skip.essential install -DskipTests
-----
-
-====
-
 
 * Copy the generated Antora site to `causeway-site` repo's `contents` directory:
 +

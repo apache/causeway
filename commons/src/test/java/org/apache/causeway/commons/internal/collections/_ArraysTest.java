@@ -49,20 +49,20 @@ import lombok.val;
 class _ArraysTest {
 
     private List<Integer[]> inputSamples;
-    
+
     /**
      * @throws java.lang.Exception
      */
     @BeforeEach
     void setUp() throws Exception {
-        
-        inputSamples = _Lists.of(
+
+        inputSamples = _Lists.ofNullable(
                 null,
                 new Integer[] {},
                 new Integer[] {0, 1, 2, 3},
                 new Integer[] {1, 2, 3, 4}
-        ); 
-        
+        );
+
     }
 
     /**
@@ -72,19 +72,19 @@ class _ArraysTest {
     void tearDown() throws Exception {
     }
 
-    
+
     /**
      * Test method for {@link org.apache.causeway.commons.internal.collections._Arrays#testAnyMatch(T[], T[], java.util.function.BiPredicate)}.
      */
     @Test
     void testTestAnyMatch() {
-        
+
         FiniteSpace2.visit(inputSamples, inputSamples, (i, j, a, b)->{
             if(_NullSafe.size(a) != _NullSafe.size(b)) {
-                
-                assertThrows(IllegalArgumentException.class, 
+
+                assertThrows(IllegalArgumentException.class,
                         ()->_Arrays.testAnyMatch(a, b, Objects::equals));
-                
+
             } else if(_NullSafe.size(a) * _NullSafe.size(b) == 0
                     || i!=j) {
                 assertFalse(_Arrays.testAnyMatch(a, b, Objects::equals));
@@ -94,18 +94,18 @@ class _ArraysTest {
                 assertTrue(_Arrays.testAnyMatch(a, b, Objects::equals));
             }
         });
-        
+
         assertTrue(_Arrays.testAnyMatch(
-                new Integer[] {0, 1, 2, 9}, 
-                new Integer[] {1, 2, 3, 9}, 
+                new Integer[] {0, 1, 2, 9},
+                new Integer[] {1, 2, 3, 9},
                 Objects::equals));
-        
+
         assertFalse(_Arrays.testAnyMatch(
-                new Integer[] {0, 1, 2, 3}, 
-                new Integer[] {1, 2, 3, 4}, 
+                new Integer[] {0, 1, 2, 3},
+                new Integer[] {1, 2, 3, 4},
                 Objects::equals));
-        
-        
+
+
     }
 
     /**
@@ -113,13 +113,13 @@ class _ArraysTest {
      */
     @Test
     void testTestAllMatch() {
-        
+
         FiniteSpace2.visit(inputSamples, inputSamples, (i, j, a, b)->{
             if(_NullSafe.size(a) != _NullSafe.size(b)) {
-                
-                assertThrows(IllegalArgumentException.class, 
+
+                assertThrows(IllegalArgumentException.class,
                         ()->_Arrays.testAllMatch(a, b, Objects::equals));
-                
+
             } else if(_NullSafe.size(a) * _NullSafe.size(b) == 0) {
                 assertTrue(_Arrays.testAllMatch(a, b, Objects::equals));
             } else if(i!=j) {
@@ -130,15 +130,15 @@ class _ArraysTest {
                 assertTrue(_Arrays.testAllMatch(a, b, Objects::equals));
             }
         });
-        
+
         assertFalse(_Arrays.testAllMatch(
-                new Integer[] {0, 1, 2, 9}, 
-                new Integer[] {1, 2, 3, 9}, 
+                new Integer[] {0, 1, 2, 9},
+                new Integer[] {1, 2, 3, 9},
                 Objects::equals));
-        
+
         assertFalse(_Arrays.testAllMatch(
-                new Integer[] {0, 1, 2, 3}, 
-                new Integer[] {1, 2, 3, 4}, 
+                new Integer[] {0, 1, 2, 3},
+                new Integer[] {1, 2, 3, 4},
                 Objects::equals));
     }
 
@@ -153,11 +153,11 @@ class _ArraysTest {
         assertFalse(_Arrays.isArrayType(Collection.class));
         assertFalse(_Arrays.isArrayType(List.class));
         assertFalse(_Arrays.isArrayType(Set.class));
-        
+
         assertTrue(_Arrays.isArrayType(int[].class));
         assertTrue(_Arrays.isArrayType(int[][].class));
         assertTrue(_Arrays.isArrayType(Object[][].class));
-        
+
         IntStream.of(1,2,3)
         .mapToObj(inputSamples::get)
         .map(Object::getClass)
@@ -172,14 +172,14 @@ class _ArraysTest {
         assertFalse(_Arrays.isCollectionOrArrayType(null));
         assertFalse(_Arrays.isCollectionOrArrayType(Integer.class));
         assertFalse(_Arrays.isCollectionOrArrayType(Enum.class));
-        
+
         assertTrue(_Arrays.isCollectionOrArrayType(Collection.class));
         assertTrue(_Arrays.isCollectionOrArrayType(List.class));
         assertTrue(_Arrays.isCollectionOrArrayType(Set.class));
         assertTrue(_Arrays.isCollectionOrArrayType(int[].class));
         assertTrue(_Arrays.isCollectionOrArrayType(int[][].class));
         assertTrue(_Arrays.isCollectionOrArrayType(Object[][].class));
-        
+
         IntStream.of(1,2,3)
         .mapToObj(inputSamples::get)
         .map(Object::getClass)
@@ -191,19 +191,19 @@ class _ArraysTest {
      */
     @Test
     void testToArrayClassOfTInt() {
-        
+
         assertArrayEquals( new Integer[] {1, 2, 3},
                 Stream.of(1,2,3)
                 .collect(_Arrays.toArray(Integer.class, 3)));
-        
+
         assertArrayEquals( new Integer[] {1, 2, 3, null},
                 Stream.of(1,2,3)
                 .collect(_Arrays.toArray(Integer.class, 4)));
-        
+
         assertThrows(Exception.class, ()->
             Stream.of(1,2,3)
                 .collect(_Arrays.toArray(Integer.class, 2)));
-        
+
     }
 
     /**
@@ -215,7 +215,7 @@ class _ArraysTest {
         assertArrayEquals( new Integer[] {1, 2, 3},
                 Stream.of(1,2,3)
                 .collect(_Arrays.toArray(Integer.class)));
-        
+
     }
 
     /**
@@ -223,12 +223,12 @@ class _ArraysTest {
      */
     @Test
     void testCombineTTArray() {
-        
+
         assertArrayEquals(new Integer[]{1}, _Arrays.combine(1));
         assertArrayEquals(new Integer[]{1, 2}, _Arrays.combine(1, 2));
         assertArrayEquals(new Integer[]{1, 2, 3}, _Arrays.combine(1, 2, 3));
         assertArrayEquals(new Integer[]{1, 2, 3, 4}, _Arrays.combine(1, 2, 3, 4));
-        
+
     }
 
     /**
@@ -244,7 +244,7 @@ class _ArraysTest {
      */
     @Test
     void testCombineTArrayTArray() {
-        
+
         assertArrayEquals(new Integer[]{}, _Arrays.combine(new Integer[]{}));
         assertArrayEquals(new Integer[]{1, 2}, _Arrays.combine(new Integer[]{1, 2}));
         assertArrayEquals(new Integer[]{1, 2, 3}, _Arrays.combine(new Integer[]{1, 2}, 3));
@@ -257,7 +257,7 @@ class _ArraysTest {
      */
     @Test
     void testToArrayCollectionOfQextendsTClassOfT() {
-        
+
         assertArrayEquals( new Integer[] {1, 2, 3},
                 _Arrays.toArray(Arrays.asList(1,2,3), Integer.class) );
 
@@ -268,7 +268,7 @@ class _ArraysTest {
      */
     @Test
     void testToArrayIterableOfQextendsTClassOfT() {
-        
+
         assertArrayEquals( new Integer[] {1, 2, 3},
                 _Arrays.toArray(Samples.iterable(1, 2, 3), Integer.class) );
     }
@@ -289,32 +289,32 @@ class _ArraysTest {
         val output = _Arrays.removeByIndex(input, 1);
         assertArrayEquals(new Integer[] {0, 2, 3}, output);
     }
-    
+
     @Test
     void removeByIndex_tail() {
         val input = new Integer[] {0, 1, 2, 3};
         val output = _Arrays.removeByIndex(input, 3);
         assertArrayEquals(new Integer[] {0, 1, 2}, output);
     }
-    
+
     @Test
     void removeByIndex_outOfBounds() {
         val input = new Integer[] {0, 1, 2, 3};
-        assertThrows(IllegalArgumentException.class, 
+        assertThrows(IllegalArgumentException.class,
                 ()->_Arrays.removeByIndex(input, 4));
     }
-    
+
     @Test
     void removeByIndex_empty() {
         val input = new Integer[] {};
-        assertThrows(IllegalArgumentException.class, 
+        assertThrows(IllegalArgumentException.class,
                 ()->_Arrays.removeByIndex(input, 0));
     }
-    
+
     @Test
     void removeByIndex_null() {
         val input = (Integer[])null;
-        assertThrows(IllegalArgumentException.class, 
+        assertThrows(IllegalArgumentException.class,
                 ()->_Arrays.removeByIndex(input, 0));
     }
 
@@ -343,10 +343,10 @@ class _ArraysTest {
      */
     @Test
     void testGet() {
-        
+
         assertEquals(Optional.empty(), _Arrays.get(null, 99));
         assertEquals(Optional.empty(), _Arrays.get(new Integer[] {}, 0));
-        
+
         assertEquals(Optional.empty(), _Arrays.get(new Integer[] {1}, 99));
         assertEquals(Optional.of(1), _Arrays.get(new Integer[] {1}, 0));
     }

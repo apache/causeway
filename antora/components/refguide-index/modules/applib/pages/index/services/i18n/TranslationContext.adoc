@@ -9,7 +9,7 @@
 class TranslationContext {
   TranslationContext forClassName(Class<?> contextClass)
   TranslationContext forMethod(Class<?> contextClass, String contextMethodName)
-  TranslationContext forMethod(Method method)
+  TranslationContext forMethod(ResolvedMethod method)
   TranslationContext forEnum(Enum<?> objectAsEnum)
   TranslationContext empty()
 }

@@ -113,13 +113,14 @@ $(function() {
 
                 let elNodeName = $(el).prop('nodeName')
                 if (elNodeName) {
-                    let x = elNodeName.toLowerCase()
-                    if(x === 'input'
-                    	|| x === 'textarea'
-                    	|| x === 'div') {
+                    let elNodeNameLower = elNodeName.toLowerCase()
+                    if(elNodeNameLower === 'input'
+                    	|| elNodeNameLower === 'textarea'
+                    	|| elNodeNameLower === 'div') {
                         el.focus();
                     } else {
-                        el.select2('open').select2('close');
+                        //el.select2('open').select2('close');
+                        el.focus();
                     }
                 } else {
                     // fallback
@@ -274,6 +275,18 @@ $(function() {
 		});
 	});
 
+    // https://stackoverflow.com/a/67691578
+    $(document).on('select2:open', (e) => {
+        const selectId = e.target.id
+
+        $(".select2-search__field[aria-controls='select2-" + selectId + "-results']").each(function (
+                key,
+                value,
+        ){
+            value.focus();
+        })
+    })
+
 });
 
 
@@ -290,3 +303,4 @@ $(function() {
         }
     })
 });
+

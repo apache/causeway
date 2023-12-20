@@ -9,8 +9,8 @@ Used as a identity fallback.
 .TableColumnOrderServiceDefault.java
 ----
 class TableColumnOrderServiceDefault {
-  List<String> orderParented(Object parent, String collectionId, Class<?> collectionType, List<String> propertyIds)     // <.>
-  List<String> orderStandalone(Class<?> collectionType, List<String> propertyIds)     // <.>
+  List<String> orderParented(Object parent, String collectionId, Class<?> elementType, List<String> associationIds)     // <.>
+  List<String> orderStandalone(Class<?> domainType, List<String> associationIds)     // <.>
 }
 ----
 

@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actions;
 
-import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,10 +27,9 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
@@ -133,56 +132,38 @@ extends PromptFormAbstract<ActionModel> {
         val actionModel = actionModel();
         val updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();
         val paramNegotiationModel = updatedParamModel.getParameterNegotiationModel();
+        val pendingParamModels = actionModel.streamPendingParamUiModels().collect(Can.toCan());
 
-        final int paramNumberUpdated = updatedParamModel.getParameterIndex();
-        _Xray.beforeParamFormUpdate(paramNumberUpdated, paramNegotiationModel);
+        final int paramIndexOfUpdated = updatedParamModel.getParameterIndex();
+        _Xray.beforeParamFormUpdate(paramIndexOfUpdated, paramNegotiationModel);
 
-        // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
-        final int skipCount = paramNumberUpdated + 1; // eg. if paramNumberUpdated=0 then skipCount=1
+        // only updates subsequent parameter panels starting from (paramIndexOfUpdated + 1)
+        IntStream.range(paramIndexOfUpdated + 1, paramNegotiationModel.getParamCount())
+        .forEach(paramIndexForReassessment->{
+            var paramRepaint =
+                    // potentially updates the paramNegotiationModel
+                    Repaint.required(paramNegotiationModel.reassessDefaults(paramIndexForReassessment));
+            _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
 
-        val paramCount = updatedParamModel.getMetaModel().getAction().getParameterCount();
-        val maxCapacity = paramCount - skipCount; // just an optimization, not strictly required
-        val paramOnlyUpdateRequestsHavingParamIndex = _Lists.<Integer>newArrayList(maxCapacity);
+            val paramPanel = paramPanels.get(paramIndexForReassessment);
+            val paramModel = pendingParamModels.getElseFail(paramIndexForReassessment);
+            /* repaint is required, either because of a changed value during reassessment above
+             * or because visibility or usability have changed */
+            paramRepaint = paramRepaint.max(
+                    paramPanel.updateIfNecessary(paramModel));
 
-        val formRepaint = actionModel.streamPendingParamUiModels()
-            .skip(skipCount)
-            .map(paramModel->{
+            switch (paramRepaint) {
+            case REQUIRED:
+                target.add(paramPanel);
+                break;
+            case REQUIRED_ON_PARENT:
+                target.add(paramPanel.getParent());
+                break;
+            default:
+            }
+        });
 
-                val paramIndexForReassessment = paramModel.getParameterIndex();
-                val paramPanel = paramPanels.get(paramIndexForReassessment);
-                val actionParameter = paramModel.getMetaModel();
-
-                // updates the paramNegotiationModel
-                actionParameter.reassessDefault(paramNegotiationModel);
-                _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
-
-                // repaint is calculated based on changes to the
-                val paramRepaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
-                if(paramRepaint.isParamOnly()) {
-                    paramOnlyUpdateRequestsHavingParamIndex.add(paramIndexForReassessment);
-                }
-
-                return paramRepaint;
-            })
-            .reduce(Repaint.NOTHING, (a, b)->a.ordinal()>b.ordinal() ? a : b);
-
-        switch (formRepaint) {
-        case ENTIRE_FORM:
-            target.add(this);
-            break;
-        case PARAM_ONLY:
-            paramOnlyUpdateRequestsHavingParamIndex.forEach(paramIndex->{
-                val paramPanel = paramPanels.get(paramIndex);
-                paramPanel.repaint(target);
-            });
-            break;
-        case NOTHING:
-            break;
-        default:
-            throw _Exceptions.unmatchedCase(formRepaint);
-        }
-
-        _Xray.afterParamFormUpdate(paramNumberUpdated, paramNegotiationModel);
+        _Xray.afterParamFormUpdate(paramIndexOfUpdated, paramNegotiationModel);
 
         // previously this method was also doing:
         // target.add(this);

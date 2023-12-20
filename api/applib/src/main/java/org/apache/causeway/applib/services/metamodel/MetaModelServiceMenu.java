@@ -39,6 +39,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
@@ -125,14 +126,17 @@ public class MetaModelServiceMenu {
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadMetaModel.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Meta Model",
-            sequence="500.500.2")
+            sequence="500.500.1"
+    )
     public class downloadMetaModel {
 
         public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModel> { }
@@ -185,14 +189,17 @@ public class MetaModelServiceMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadMetaModelDiff.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Generate Meta Model Diff",
-            sequence="500.500.2")
+            sequence="500.500.2"
+    )
     public class downloadMetaModelDiff {
 
         public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModelDiff> { }

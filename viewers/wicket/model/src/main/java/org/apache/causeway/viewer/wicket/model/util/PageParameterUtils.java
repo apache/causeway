@@ -41,7 +41,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.NonNull;
@@ -72,7 +71,7 @@ public class PageParameterUtils {
      *
      * @return a new PageParameters instance
      */
-    public static PageParameters newPageParameters() {
+    public PageParameters newPageParameters() {
         val newPageParameters = new PageParameters();
         val requestCycle = RequestCycle.get();
 
@@ -95,7 +94,7 @@ public class PageParameterUtils {
         return newPageParameters;
     }
 
-    public static Stream<NamedPair> streamCurrentRequestParameters() {
+    public Stream<NamedPair> streamCurrentRequestParameters() {
         return Optional.ofNullable(RequestCycle.get()).stream()
         .map(RequestCycle::getRequest)
         .map(Request::getRequestParameters)
@@ -107,7 +106,7 @@ public class PageParameterUtils {
 
     // -- FACTORY METHODS FOR PAGE PARAMETERS
 
-    public static PageParameters createPageParametersForBookmark(final Bookmark bookmark) {
+    public PageParameters createPageParametersForBookmark(final Bookmark bookmark) {
         val pageParameters = PageParameterUtils.newPageParameters();
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, bookmark.stringify());
         return pageParameters;
@@ -117,7 +116,7 @@ public class PageParameterUtils {
      * Factory method for creating {@link PageParameters} to represent an
      * object.
      */
-    public static PageParameters createPageParametersForObject(final ManagedObject adapter) {
+    public PageParameters createPageParametersForObject(final ManagedObject adapter) {
 
         val pageParameters = PageParameterUtils.newPageParameters();
         val isEntity = ManagedObjects.isIdentifiable(adapter);
@@ -133,21 +132,19 @@ public class PageParameterUtils {
         return pageParameters;
     }
 
-    public static PageParameters createPageParametersForBookmarkablePageLink(
-            final @NonNull ObjectAdapterModel callingEntityModel,
+    public PageParameters createPageParametersForBookmarkablePageLink(
             final ManagedObject adapter) {
 
         return
                 ManagedObjects.isIdentifiable(adapter)
                     && !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? UiObjectWkt.ofAdapter(
-                    callingEntityModel.getMetaModelContext(),
                     Facets.projected(adapter))
                     .getPageParametersWithoutUiHints()
-                : callingEntityModel.getPageParametersWithoutUiHints();
+                : PageParameterUtils.createPageParametersForObject(null);
     }
 
-    public static PageParameters createPageParametersForAction(
+    public PageParameters createPageParametersForAction(
             final ManagedObject adapter,
             final ObjectAction objectAction,
             final Can<ManagedObject> paramValues) {
@@ -163,7 +160,7 @@ public class PageParameterUtils {
         return pageParameters;
     }
 
-    public static Optional<Bookmark> toBookmark(final PageParameters pageParameters) {
+    public Optional<Bookmark> toBookmark(final PageParameters pageParameters) {
         val oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         return _Strings.isEmpty(oidStr)
                 ? Optional.empty()
@@ -229,7 +226,5 @@ public class PageParameterUtils {
             return null;
         }
     }
-
-
 
 }

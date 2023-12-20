@@ -25,6 +25,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.apache.causeway.applib.events.metamodel.MetamodelListener;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -42,12 +44,19 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MessageServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class MessageServiceDefault implements MessageService {
+public class MessageServiceDefault implements MessageService, MetamodelListener {
 
     @Inject private TranslationService translationService;
 
     @Autowired(required = false)
     private Provider<MessageBroker> sessionScopedMessageBroker;
+
+    private boolean metaModelLoaded = false;
+
+    @Override
+    public void onMetamodelLoaded() {
+        metaModelLoaded = true;
+    }
 
     @Override
     public void informUser(final String message) {
@@ -130,6 +139,9 @@ public class MessageServiceDefault implements MessageService {
     }
 
     private Optional<MessageBroker> currentMessageBroker() {
+        if (!metaModelLoaded) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(sessionScopedMessageBroker) // only available with web contexts (Spring)
         .map(Provider::get);
     }

@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 
 class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstract<InvoiceItem3> {
@@ -41,7 +40,7 @@ class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstr
 
     @Override
     protected List<InvoiceItem3> getObjectsWithSameValue() {
-        return _Lists.of(
+        return List.of(
                 InvoiceItem3.newInvoiceItem(inv123, "A", Integer.valueOf(1)),
                 InvoiceItem3.newInvoiceItem(inv123, "A", Integer.valueOf(1))
                 );
@@ -49,7 +48,7 @@ class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstr
 
     @Override
     protected List<InvoiceItem3> getObjectsWithDifferentValue() {
-        return _Lists.of(
+        return List.of(
                 InvoiceItem3.newInvoiceItem(null, "A", Integer.valueOf(2)),
                 InvoiceItem3.newInvoiceItem(inv456, "A", Integer.valueOf(2)),
                 InvoiceItem3.newInvoiceItem(inv123, null, Integer.valueOf(1)),

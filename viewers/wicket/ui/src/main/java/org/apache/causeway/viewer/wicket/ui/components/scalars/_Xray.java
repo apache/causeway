@@ -29,27 +29,25 @@ import lombok.val;
 
 class _Xray {
 
-    static void onUserParamOrPropertyEdit(final ScalarPanelAbstract scalarPanel) {
-        if(!XrayUi.isXrayEnabled()) {
-            return;
-        }
+    static void onParamOrPropertyEdited(final ScalarPanelAbstract scalarPanel) {
+        if(!XrayUi.isXrayEnabled()) return;
 
         scalarPanel.scalarModel().getSpecialization()
         .accept(
             param->{
                 val data = MmDebugUtils
                         .paramUpdateDataFor(param.getParameterIndex(), param.getParameterNegotiationModel());
-                _XrayEvent.user("User action param update %s", data.formatted());
+                _XrayEvent.event("Form Component (Parameter) update %s", data.formatted());
             },
             prop->{
-                _XrayEvent.user("User property update: %s", prop.getObject());
+                val data = MmDebugUtils
+                        .propUpdateDataFor(prop.getPendingPropertyModel());
+                _XrayEvent.event("Form Component (Property) update: %s", data.formatted());
             });
     }
 
     public static void debugRequestParams() {
-        if(!XrayUi.isXrayEnabled()) {
-            return;
-        }
+        if(!XrayUi.isXrayEnabled()) return;
 
         val requestArgs = PageParameterUtils.streamCurrentRequestParameters()
                 .map(pair->String.format("%s->%s", pair.getKey(), pair.getValue()))

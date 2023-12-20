@@ -7,56 +7,17 @@
 .OutboxClient.java
 ----
 class OutboxClient {
-  OutboxClient()
-  OutboxClient(String base, String username, String password)     // <.>
-  OutboxClient withConnectTimeoutInSecs(int connectTimeoutInSecs)     // <.>
-  OutboxClient withReadTimeoutInSecs(int readTimeoutInSecs)     // <.>
-  void init()     // <.>
+  OutboxClient(String restfulBaseUrl, String username, String password)
+  OutboxClient(String restfulBaseUrl, String tenantId, String clientId, String clientSecret)
+  OutboxClient(RestfulClientConfig restfulClientConfig)
+  OutboxClient(RestfulClientConfig restfulClientConfig, OutboxClientConfig outboxClientConfig)
+  OutboxClient(RestfulClientConfig restfulClientConfig, AuthorizationHeaderFactory authorizationHeaderFactory)
+  OutboxClient(RestfulClientConfig restfulClientConfig, AuthorizationHeaderFactory authorizationHeaderFactory, OutboxClientConfig outboxClientConfig)
+  OutboxClient withConnectTimeoutInSecs(int connectTimeoutInSecs)
+  OutboxClient withReadTimeoutInSecs(int readTimeoutInSecs)
   List<InteractionDto> pending()
   void delete(String interactionId, int sequence)
   void deleteMany(List<InteractionDto> interactionDtos)
 }
 ----
 
-<.> xref:#OutboxClient_String_String_String[OutboxClient(String, String, String)]
-+
---
-Will automatically call _#init()_ since all properties already supplied.
---
-<.> xref:#withConnectTimeoutInSecs_int[withConnectTimeoutInSecs(int)]
-+
---
-for debugging
---
-<.> xref:#withReadTimeoutInSecs_int[withReadTimeoutInSecs(int)]
-+
---
-for debugging
---
-<.> xref:#init_[init()]
-+
---
-Should be called once all properties have been injected.
---
-
-== Members
-
-[#OutboxClient_String_String_String]
-=== OutboxClient(String, String, String)
-
-Will automatically call _#init()_ since all properties already supplied.
-
-[#withConnectTimeoutInSecs_int]
-=== withConnectTimeoutInSecs(int)
-
-for debugging
-
-[#withReadTimeoutInSecs_int]
-=== withReadTimeoutInSecs(int)
-
-for debugging
-
-[#init_]
-=== init()
-
-Should be called once all properties have been injected.

@@ -18,19 +18,9 @@
  */
 package org.apache.causeway.viewer.commons.model.decorators;
 
-import java.io.Serializable;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 
 /**
  * @param <T> UI component type to decorate
@@ -43,34 +33,8 @@ public interface IconDecorator<T, R> {
      * corresponds to the webjars path as provided by the maven artifact
      * {@code org.webjars:font-awesome}
      */
-    public static final String FONTAWESOME_RESOURCE = "font-awesome/6.4.0/css/all.min.css";
+    public static final String FONTAWESOME_RESOURCE = "font-awesome/6.5.1/css/all.min.css";
 
-    R decorate(T uiComponent, Optional<FontAwesomeDecorationModel> decorationModel);
-
-    // -- DECORATION MODEL
-
-    @Getter
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public class FontAwesomeDecorationModel implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        @NonNull private final String cssClassesSpaceSeparated;
-        @NonNull private final CssClassFaPosition position;
-
-        public static Optional<FontAwesomeDecorationModel> of(final Optional<CssClassFaFactory> cssClassFaFactoryIfAny) {
-
-            return cssClassFaFactoryIfAny
-            .map(cssClassFaFactory->new FontAwesomeDecorationModel(
-                    cssClassFaFactory.streamCssClasses().collect(Collectors.joining(" ")),
-                    Optional.ofNullable(cssClassFaFactory.getPosition()).orElse(CssClassFaPosition.LEFT)));
-
-        }
-
-        public Stream<String> streamCssClasses() {
-            return _Strings.splitThenStream(getCssClassesSpaceSeparated(), " ");
-        }
-
-    }
+    R decorate(T uiComponent, Optional<FontAwesomeLayers> faLayers);
 
 }

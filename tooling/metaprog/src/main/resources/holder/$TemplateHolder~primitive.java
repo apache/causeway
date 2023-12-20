@@ -20,16 +20,15 @@ package /*${java-package}*/;
 
 import jakarta.inject.Named;
 
-/*${generated-file-notice}*/
 @Named("demo./*${showcase-name}*/Holder")
 //tag::class[]
 public interface /*${showcase-name}*/Holder {
 
-    /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
-    void setReadOnlyProperty(/*${showcase-type}*/ c);
+    /*${showcase-simple-type}*/ /*${showcase-simple-type-getter-prefix}*/ReadOnlyProperty();
+    void setReadOnlyProperty(/*${showcase-simple-type}*/ c);
 
-    /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadWriteProperty();
-    void setReadWriteProperty(/*${showcase-type}*/ c);
+    /*${showcase-simple-type}*/ /*${showcase-simple-type-getter-prefix}*/ReadWriteProperty();
+    void setReadWriteProperty(/*${showcase-simple-type}*/ c);
 
 }
 //end::class[]

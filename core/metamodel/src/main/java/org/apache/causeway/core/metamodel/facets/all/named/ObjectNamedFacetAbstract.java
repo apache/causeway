@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.all.named;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.HasNounFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
+import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 
 /**
  * The base for the {@link ObjectNamedFacet}.
@@ -35,21 +35,21 @@ implements ObjectNamedFacet {
     }
 
     protected ObjectNamedFacetAbstract(
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder) {
         this(
-                nounForms,
+                noun,
                 holder,
                 Precedence.DEFAULT);
     }
 
     protected ObjectNamedFacetAbstract(
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder,
             final Precedence precedence) {
         super(type(),
                 holder.getTranslationContext(),
-                nounForms,
+                noun,
                 holder,
                 precedence);
     }

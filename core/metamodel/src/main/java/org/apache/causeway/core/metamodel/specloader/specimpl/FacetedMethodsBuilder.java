@@ -18,17 +18,18 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -40,6 +41,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
@@ -67,16 +69,15 @@ implements HasMetaModelContext {
     /* thread-safety ... make sure every methodsRemaining access is synchronized! */
     private static final class ConcurrentMethodRemover implements MethodRemover {
 
-        private final Set<Method> methodsRemaining;
+        private final Set<ResolvedMethod> methodsRemaining;
 
-        private ConcurrentMethodRemover(final Class<?> introspectedClass, final Stream<Method> methodStream) {
+        private ConcurrentMethodRemover(final Class<?> introspectedClass, final Stream<ResolvedMethod> methodStream) {
             this.methodsRemaining = methodStream
-                    .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
         }
 
         @Override
-        public void removeMethods(final Predicate<Method> removeIf, final Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<ResolvedMethod> removeIf, final Consumer<ResolvedMethod> onRemoval) {
             methodsRemaining.removeIf(method -> {
                 val doRemove = removeIf.test(method);
                 if(doRemove) {
@@ -87,19 +88,19 @@ implements HasMetaModelContext {
         }
 
         @Override
-        public void removeMethod(final Method method) {
+        public void removeMethod(final ResolvedMethod method) {
             if(method==null) {
                 return;
             }
             methodsRemaining.remove(method);
         }
 
-        Stream<Method> streamRemaining() {
+        Stream<ResolvedMethod> streamRemaining() {
             return methodsRemaining.stream();
         }
 
         @Override
-        public Can<Method> snapshotMethodsRemaining() {
+        public Can<ResolvedMethod> snapshotMethodsRemaining() {
             return Can.ofCollection(methodsRemaining);
         }
 
@@ -107,7 +108,7 @@ implements HasMetaModelContext {
 
     private final ObjectSpecificationAbstract inspectedTypeSpec;
 
-    private final Class<?> introspectedClass;
+    @Getter private final Class<?> introspectedClass;
 
     private List<FacetedMethod> associationFacetMethods;
     private List<FacetedMethod> actionFacetedMethods;
@@ -136,15 +137,9 @@ implements HasMetaModelContext {
 
         val classCache = _ClassCache.getInstance();
         val methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
-                ? classCache.streamPublicOrDeclaredMethods(introspectedClass)
+                ? classCache.streamResolvedMethods(introspectedClass)
                 : classCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
-
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return inspectedTypeSpec.getMetaModelContext();
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -193,7 +188,7 @@ implements HasMetaModelContext {
 
         val specLoader = getSpecificationLoader();
 
-        val associationCandidateMethods = new HashSet<Method>();
+        val associationCandidateMethods = new HashSet<ResolvedMethod>();
 
         getFacetProcessor()
         .findAssociationCandidateGetters(
@@ -218,7 +213,7 @@ implements HasMetaModelContext {
 
     private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(
             final Consumer<FacetedMethod> onNewAssociationPeer) {
-        val collectionAccessors = _Lists.<Method>newArrayList();
+        val collectionAccessors = _Lists.<ResolvedMethod>newArrayList();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
         createCollectionFacetedMethodsFromAccessors(
                 getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
@@ -229,7 +224,7 @@ implements HasMetaModelContext {
      * this will pick up the remaining reference properties.
      */
     private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(final Consumer<FacetedMethod> onNewField) {
-        val propertyAccessors = _Lists.<Method>newArrayList();
+        val propertyAccessors = _Lists.<ResolvedMethod>newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
         methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), propertyAccessors::add);
@@ -240,10 +235,10 @@ implements HasMetaModelContext {
 
     private void createCollectionFacetedMethodsFromAccessors(
             final MetaModelContext mmc,
-            final List<Method> accessorMethods,
+            final List<ResolvedMethod> accessorMethods,
             final Consumer<FacetedMethod> onNewFacetMethod) {
 
-        for (final Method accessorMethod : accessorMethods) {
+        for (final ResolvedMethod accessorMethod : accessorMethods) {
             if (log.isDebugEnabled()) {
                 log.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
@@ -264,7 +259,7 @@ implements HasMetaModelContext {
 
             // figure out what the type is
             final Class<?> elementType = facetedMethod.lookupFacet(TypeOfFacet.class)
-                    .<Class<?>>map(typeOfFacet->typeOfFacet.value().getElementType())
+                    .<Class<?>>map(typeOfFacet->typeOfFacet.value().elementType())
                     .orElse(Object.class);
 
             // skip if class substitutor says so.
@@ -277,13 +272,13 @@ implements HasMetaModelContext {
     }
 
     private void createPropertyFacetedMethodsFromAccessors(
-            final List<Method> accessorMethods,
+            final List<ResolvedMethod> accessorMethods,
             final Consumer<FacetedMethod> onNewFacetedMethod) throws MetaModelException {
 
-        for (final Method accessorMethod : accessorMethods) {
+        for (final ResolvedMethod accessorMethod : accessorMethods) {
             log.debug("  identified accessor method representing property: {}", accessorMethod);
 
-            final Class<?> returnType = accessorMethod.getReturnType();
+            final Class<?> returnType = accessorMethod.returnType();
 
             // skip if class strategy says so.
             if (classSubstitutorRegistry.getSubstitution(returnType).isNeverIntrospect()) {
@@ -327,7 +322,6 @@ implements HasMetaModelContext {
     }
 
     private List<FacetedMethod> findActionFacetedMethods() {
-
         if (log.isDebugEnabled()) {
             log.debug("introspecting(policy={}) {}: actions", introspectionPolicy(), getClassName());
         }
@@ -357,16 +351,15 @@ implements HasMetaModelContext {
     }
 
     private FacetedMethod findActionFacetedMethod(
-            final Method actionMethod) {
+            final ResolvedMethod actionMethod) {
 
         if (!representsAction(actionMethod)) {
             return null;
         }
 
-        // build action (first convert any synthetic method to a regular one)
+        // build action
 
-        return _Reflect
-            .lookupRegularMethodForSynthetic(actionMethod)
+        return Optional.of(actionMethod)
             .map(this::createActionFacetedMethod)
             .filter(_NullSafe::isPresent)
             .orElse(null);
@@ -374,7 +367,7 @@ implements HasMetaModelContext {
 
     @Nullable
     private FacetedMethod createActionFacetedMethod(
-            final Method actionMethod) {
+            final ResolvedMethod actionMethod) {
 
         val actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, inspectedTypeSpec);
 
@@ -416,14 +409,10 @@ implements HasMetaModelContext {
         return true;
     }
 
-    private boolean representsAction(final Method actionMethod) {
+    private boolean representsAction(final ResolvedMethod actionMethod) {
 
-        if (MethodUtil.isStatic(actionMethod)) {
-            return false;
-        }
-
-        val hasActionAnnotation = _Annotations
-                .isPresent(actionMethod, Action.class);
+        //[CAUSEWAY-3556] if this throws, we have a framework bug (synthetic methods should no longer appear here)
+        _Reflect.guardAgainstSynthetic(actionMethod.method());
 
         // ensure we can load returned element type; otherwise ignore method
         val anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
@@ -440,6 +429,8 @@ implements HasMetaModelContext {
             return true;
         }
 
+        val hasActionAnnotation = _Annotations
+                .isPresent(actionMethod.method(), Action.class);
         if(hasActionAnnotation) {
             log.debug("  identified action {}", actionMethod);
             return true;
@@ -477,7 +468,7 @@ implements HasMetaModelContext {
      *
      * @param method
      */
-    private boolean isMixinMain(final Method method) {
+    private boolean isMixinMain(final ResolvedMethod method) {
         val mixinFacet = inspectedTypeSpec.lookupNonFallbackFacet(MixinFacet.class)
                 .orElse(null);
         if(mixinFacet==null) {
@@ -515,7 +506,7 @@ implements HasMetaModelContext {
     /**
      * exposed for debugging purposes
      */
-    public Can<Method> snapshotMethodsRemaining() {
+    public Can<ResolvedMethod> snapshotMethodsRemaining() {
         return methodRemover.snapshotMethodsRemaining();
     }
 

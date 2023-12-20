@@ -25,6 +25,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.viewer.web.TextMode;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
@@ -113,7 +115,7 @@ public class WktTooltips {
             final @Nullable String body) {
         return addTooltip(target, _Strings.isEmpty(body)
                 ? null
-                : TooltipDecorationModel.ofBody(uiPlacementDirection, body));
+                : TooltipDecorationModel.ofBody(uiPlacementDirection, preprocess(body)));
     }
 
     public <T extends Component> T addTooltip(
@@ -121,7 +123,7 @@ public class WktTooltips {
             final @Nullable T target,
             final @Nullable String title,
             final @Nullable String body) {
-        return addTooltip(target, TooltipDecorationModel.ofTitleAndBody(uiPlacementDirection, title, body));
+        return addTooltip(target, TooltipDecorationModel.ofTitleAndBody(uiPlacementDirection, title, preprocess(body)));
     }
 
     // -- HELPER
@@ -158,17 +160,16 @@ public class WktTooltips {
                         + "})",
                         markupId,
                         config.toJsonString());
-// alternative jQuery syntax ...
-//                return String.format("$('#%s').each((i,elem)=>{"
-//                        + "new bootstrap.Popover(elem, %s);"
-//                        + "})",
-//                        markupId,
-//                        config.toJsonString());
             }
         };
     }
 
-    private PopoverConfig getTooltipConfig(final UiPlacementDirection uiPlacementDirection) {
+    /**
+     * @param uiPlacementDirection top, right, bottom or left
+     * @param htmlEnabled - whether to allow HTML for tooltip content
+     */
+    private PopoverConfig getTooltipConfig(
+            final UiPlacementDirection uiPlacementDirection) {
         switch(uiPlacementDirection) {
         case TOP:
             return createPopoverConfigDefault()
@@ -187,21 +188,38 @@ public class WktTooltips {
         }
     }
 
-//    @Getter(lazy=true)
-//    private final PopoverConfig tooltipConfigTop =
-//            createPopoverConfigDefault()
-//            .withPlacement(Placement.top);
-//
-//    @Getter(lazy=true)
-//    private final PopoverConfig tooltipConfigBottom =
-//            createPopoverConfigDefault()
-//                .withPlacement(Placement.bottom);
-
     private PopoverConfig createPopoverConfigDefault() {
+        final TextMode textMode = getTooltipTextMode();
         return new ExtendedPopoverConfig()
                 .withBoundary(PopoverBoundary.viewport)
                 .withTrigger(OpenTrigger.hover)
                 .withDelay(Duration.ZERO)
-                .withAnimation(true);
+                .withAnimation(true)
+                .withHtml(textMode.isHtml())
+                .withSanitizer(!textMode.isHtml());
     }
+
+    /**
+     * Lookup in config, else returns default.
+     */
+    private static TextMode getTooltipTextMode() {
+        val textMode = MetaModelContext.instance()
+                .map(MetaModelContext::getConfiguration)
+                .map(cfg->cfg.getViewer().getWicket().getTooltipTextMode())
+                .orElseGet(TextMode::defaults);
+        return textMode;
+    }
+
+    private static String preprocess(@Nullable final String string) {
+        return _Strings.nonEmpty(string)
+            .map(s->getTooltipTextMode().isHtml()
+                    ? replaceNewlineWithHtmlBR(s)
+                    : s)
+            .orElse(string);
+    }
+    private static String replaceNewlineWithHtmlBR(final @NonNull String s) {
+        return s.replace("\r", "")
+                .replace("\n", "<br/>");
+    }
+
 }

@@ -5,6 +5,6 @@
 
 == Implementation
 
-The framework provides a default implementation of this service, namely `o.a.i.core.runtimeservices.menu.MenuBarsServiceDefault`.
+The framework provides a default implementation of this service, namely `o.a.c.core.runtimeservices.menu.MenuBarsServiceDefault`.
 
 This uses the xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService] to load a serialized form of `MenuBars` instance, called `menubars.layout.xml`, from the classpath.

@@ -21,13 +21,56 @@ package org.apache.causeway.core.metamodel.facets.members.publish.command;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class CommandPublishingFacetForActionAnnotationAsConfigured extends CommandPublishingFacetForActionAnnotation {
+public abstract class CommandPublishingFacetForActionAnnotationAsConfigured extends CommandPublishingFacetForActionAnnotation {
+
+    static class All extends CommandPublishingFacetForActionAnnotationAsConfigured {
+        All(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
+    static class None extends CommandPublishingFacetForActionAnnotationAsConfigured {
+        None(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
+
+    static class IgnoreSafe extends CommandPublishingFacetForActionAnnotationAsConfigured {
+        IgnoreSafe(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    }
+
+    static class IgnoreSafeYetNot extends CommandPublishingFacetForActionAnnotationAsConfigured {
+        IgnoreSafeYetNot(FacetHolder holder, ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
 
     CommandPublishingFacetForActionAnnotationAsConfigured(
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
         super(null, holder, servicesInjector);
     }
-
 
 }

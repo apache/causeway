@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -35,6 +34,7 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
@@ -220,9 +220,9 @@ implements HasMetaModelContext {
         val declaringClass = scenario.declaringClass();
         val memberId = scenario.actionName();
         val actionMethod = _Utils.findMethodByNameOrFail(declaringClass, memberId);
-        val paramTypes = actionMethod.getParameterTypes();
+        val paramTypes = actionMethod.paramTypes();
         val facetHolder = actionFacetHolder(declaringClass, memberId, paramTypes);
-        val facetedMethod = FacetedMethod.createForAction(getMetaModelContext(), declaringClass, memberId, paramTypes);
+        val facetedMethod = FacetedMethod.testing.createForAction(getMetaModelContext(), declaringClass, memberId, paramTypes);
         val processMethodContext = ProcessMethodContext
                 .forTesting(declaringClass, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod);
 
@@ -283,11 +283,11 @@ implements HasMetaModelContext {
         val declaringClass = scenario.declaringClass();
         val memberId = scenario.actionName();
         val actionMethod = _Utils.findMethodByNameOrFail(declaringClass, memberId);
-        val paramTypes = actionMethod.getParameterTypes();
+        val paramTypes = actionMethod.paramTypes();
         val facetHolder = actionFacetHolder(declaringClass, memberId, paramTypes);
-        val facetedMethod = FacetedMethod.createForAction(getMetaModelContext(), declaringClass, memberId, paramTypes);
+        val facetedMethod = FacetedMethod.testing.createForAction(getMetaModelContext(), declaringClass, memberId, paramTypes);
         val facetedMethodParameter =
-                actionMethod.getParameterCount()==0
+                actionMethod.isNoArg()
                 ? (FacetedMethodParameter)null
                 : new FacetedMethodParameter(getMetaModelContext(),
                     FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.getOwningType(),
@@ -433,15 +433,15 @@ implements HasMetaModelContext {
 
     // -- UTILITY
 
-    protected static Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+    protected static ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
         return _Utils.findMethodExactOrFail(type, methodName, methodTypes);
     }
 
-    protected static Method findMethodExactOrFail(final Class<?> type, final String methodName) {
+    protected static ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName) {
         return _Utils.findMethodExactOrFail(type, methodName);
     }
 
-    protected static Optional<Method> findMethodExact(final Class<?> type, final String methodName) {
+    protected static Optional<ResolvedMethod> findMethodExact(final Class<?> type, final String methodName) {
         return _Utils.findMethodExact(type, methodName);
     }
 
@@ -467,7 +467,7 @@ implements HasMetaModelContext {
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
 
-    protected final void assertMethodWasRemoved(final Method method) {
+    protected final void assertMethodWasRemoved(final ResolvedMethod method) {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method),
                 ()->String.format("method was not removed in test scenario: %s", method));
     }
@@ -477,7 +477,7 @@ implements HasMetaModelContext {
     }
 
     protected final void assertMethodEqualsFirstIn(
-            final @NonNull Method method,
+            final @NonNull ResolvedMethod method,
             final @NonNull ImperativeFacet imperativeFacet) {
         _Utils.assertMethodEquals(method, imperativeFacet.getMethods().getFirstElseFail().asMethodElseFail());
     }

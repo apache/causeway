@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.bool;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -106,17 +105,16 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+    protected void onMakeNotEditable(final String disableReason) {
+        super.onMakeNotEditable(disableReason);
         if(checkBox==null) return;
         checkBox.setEnabled(false);
         Wkt.attributeReplace(checkBox, "title", disableReason);
-        target.ifPresent(ajax->{
-            ajax.add(checkBox);
-        });
     }
 
     @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+    protected void onMakeEditable() {
+        super.onMakeEditable();
         if(checkBox==null) return;
         checkBox.setEnabled(true);
     }

@@ -41,8 +41,8 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -217,12 +217,27 @@ public interface ObjectAction extends ObjectMember {
     Can<ObjectActionParameter> getParameters(Predicate<ObjectActionParameter> predicate);
 
     /**
+     * Returns the parameter with provided zero-based index.
+     */
+    default ObjectActionParameter getParameterByIndex(final int paramIndex) {
+        return getParameters().getElseFail(paramIndex);
+    }
+
+    /**
      * Returns the parameter with provided id.
+     *
+     * @param paramId parameter Id as per {@link ObjectActionParameter#getId()}
+     *
+     * @see ObjectActionParameter#getId()
      */
     ObjectActionParameter getParameterById(String paramId);
 
     /**
-     * Returns the parameter with provided name.
+     * Returns the parameter with provided (friendly) name.
+     *
+     * @param paramName parameter name as per {@link ObjectActionParameter#getCanonicalFriendlyName()}
+     *
+     * @see ObjectActionParameter#get(ManagedObject, InteractionInitiatedBy)
      */
     ObjectActionParameter getParameterByName(String paramName);
 
@@ -343,20 +358,20 @@ public interface ObjectAction extends ObjectMember {
                         : ActionLayout.Position.PANEL);
         }
 
-        public static Optional<CssClassFaFactory> cssClassFaFactoryFor(
+        public static Optional<FaLayersProvider> cssClassFaFactoryFor(
                 final ObjectAction action,
                 final ManagedObject domainObject) {
 
-            return Optional.ofNullable(action.getFacet(CssClassFaFacet.class))
-            .map(CssClassFaFacet::getSpecialization)
-            .map(specialization->specialization
-                    .fold(
-                            hasStaticFaIcon->hasStaticFaIcon, // identity operator
-                            hasImperativeFaIcon->
-                                ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
-                                    ? null
-                                    : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asSupplier())))
-            .filter(_NullSafe::isPresent);
+            return Optional.ofNullable(action.getFacet(FaFacet.class))
+                .map(FaFacet::getSpecialization)
+                .map(specialization->specialization
+                        .fold(
+                                hasStaticFaIcon->hasStaticFaIcon, // identity operator
+                                hasImperativeFaIcon->
+                                    ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
+                                        ? null
+                                        : hasImperativeFaIcon.getFaLayersProvider(domainObject)))
+                .filter(_NullSafe::isPresent);
         }
 
         /**

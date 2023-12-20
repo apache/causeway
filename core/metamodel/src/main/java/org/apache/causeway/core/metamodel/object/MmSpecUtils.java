@@ -36,6 +36,24 @@ import lombok.experimental.UtilityClass;
 public final class MmSpecUtils {
 
     /**
+     * Re-adapts given domain object if its {@link ObjectSpecification}
+     * does not exactly correspond to the actual type of given domain object's pojo.
+     */
+    public ManagedObject enforceMostSpecificSpecOn(final @NonNull ManagedObject obj) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(obj)
+                || ManagedObjects.isPacked(obj)) {
+            return obj;
+        }
+        val pojo = ManagedObjects.peekAtPojoOf(obj);
+        val requiredType = pojo.getClass();
+        val currentSpec = obj.getSpecification();
+        if(currentSpec.getCorrespondingClass().equals(requiredType)) {
+            return obj;
+        }
+        return ManagedObject.adaptSingular(currentSpec.getSpecificationLoader(), pojo);
+    }
+
+    /**
      * optimized for the case when a specification that probably matches is known in advance
      * the result must be an instance of guess
      * @throws AssertionError if guess is not assignable from actual type

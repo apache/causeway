@@ -40,15 +40,15 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 public abstract class RegressionTestAbstract {
 
     protected void run(final ThrowingRunnable runnable) {
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->
-            interactionService.runAnonymous(runnable))
-        .ifFailureFail();
+        interactionService.runAnonymous(() ->
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, runnable).ifFailureFail()
+        );
     }
 
     protected <T> T call(final Callable<T> callable) {
-        return transactionService.callTransactional(Propagation.REQUIRES_NEW, ()->
-            interactionService.callAnonymous(callable))
-        .getValue().orElseThrow(); //XXX assuming return value of callable is not nullable
+        return interactionService.callAnonymous(() ->
+                transactionService.callTransactional(Propagation.REQUIRES_NEW, callable))
+            .valueAsNonNullElseFail();
     }
 
     // -- ASSERTIONS
@@ -62,6 +62,5 @@ public abstract class RegressionTestAbstract {
     @Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionService interactionService;
     @Inject protected ObjectManager objectManager;
-
 
 }

@@ -6,9 +6,9 @@
 * xref:pjdo:ROOT:db-schemas.adoc[DB Schemas]
 
 * xref:pjdo:ROOT:mapping-guide.adoc[Mapping Guide]
-** xref:pjdo:ROOT:mapping-guide/one-to-m-bidirectional-relationships.adoc[leveloffset=+1]
-** xref:pjdo:ROOT:mapping-guide/mandatory-properties-in-subtypes.adoc[leveloffset=+1]
-** xref:pjdo:ROOT:mapping-guide/mapping-to-a-view.adoc[leveloffset=+1]
+** xref:pjdo:ROOT:mapping-guide.adoc#one-to-m-bidirectional-relationships[leveloffset=+1]
+** xref:pjdo:ROOT:mapping-guide.adoc#mandatory-properties-in-subtypes[leveloffset=+1]
+** xref:pjdo:ROOT:mapping-guide.adoc#mapping-to-a-view[leveloffset=+1]
 
 * xref:pjdo:ROOT:dependency-injection.adoc[Dependency Injection]
 * xref:pjdo:ROOT:hints-and-tips.adoc[Hints-n-Tips]

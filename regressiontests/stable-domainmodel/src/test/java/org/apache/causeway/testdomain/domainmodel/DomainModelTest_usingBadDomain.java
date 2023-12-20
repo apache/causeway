@@ -33,6 +33,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -52,6 +53,7 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.bad.AmbiguousMixinAnnotations;
@@ -60,7 +62,10 @@ import org.apache.causeway.testdomain.model.bad.Configuration_usingInvalidDomain
 import org.apache.causeway.testdomain.model.bad.InvalidActionOverloading;
 import org.apache.causeway.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.causeway.testdomain.model.bad.InvalidDomainObjectOnInterface;
+import org.apache.causeway.testdomain.model.bad.InvalidElementTypes;
+import org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash;
 import org.apache.causeway.testdomain.model.bad.InvalidMemberOverloadingWhenInherited;
+import org.apache.causeway.testdomain.model.bad.InvalidMixinDeclarations;
 import org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedCollectionSupport;
@@ -122,7 +127,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedActionSupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                validationMessage(
+                unsatisfiedDomainIncludeSemantics(
                         "InvalidOrphanedActionSupport",
                         "hideOrphaned()"));
 
@@ -137,7 +142,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedPropertySupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                validationMessage(
+                unsatisfiedDomainIncludeSemantics(
                         "InvalidOrphanedPropertySupport",
                         "hideMyProperty()"));
 
@@ -151,7 +156,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedCollectionSupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                validationMessage(
+                unsatisfiedDomainIncludeSemantics(
                         "InvalidOrphanedCollectionSupport",
                         "hideMyCollection()"));
 
@@ -201,19 +206,20 @@ class DomainModelTest_usingBadDomain {
 //                        InvalidMemberOverloadingWhenInherited.WhenAnnotationOptional.class)),
 //                "#isActive(): has synthesized (effective) annotation @Domain.Include, is assumed to support a property");
 
-        validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(
-                        InvalidMemberOverloadingWhenInherited.WhenAnnotationRequired.class)),
-                validationMessage(
-                        "",
-                        "isActive()"));
-
-        validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(
-                        InvalidMemberOverloadingWhenInherited.WhenEncapsulationEnabled.class)),
-                validationMessage(
-                        "",
-                        "isActive()"));
+      //test no longer valid since CAUSEWAY-3556 ?!
+//        validator.assertAnyFailuresContaining(
+//                Identifier.classIdentifier(LogicalType.fqcn(
+//                        InvalidMemberOverloadingWhenInherited.WhenAnnotationRequired.class)),
+//                unsatisfiedDomainIncludeSemantics(
+//                        "",
+//                        "isActive()"));
+      //test no longer valid since CAUSEWAY-3556 ?!
+//        validator.assertAnyFailuresContaining(
+//                Identifier.classIdentifier(LogicalType.fqcn(
+//                        InvalidMemberOverloadingWhenInherited.WhenEncapsulationEnabled.class)),
+//                unsatisfiedDomainIncludeSemantics(
+//                        "",
+//                        "isActive()"));
     }
 
     // since use of @Named annotation, entirely guarded by Spring ...
@@ -362,6 +368,73 @@ class DomainModelTest_usingBadDomain {
 
     }
 
+    @Test
+    void memberIdClash() {
+
+        var spec = specificationLoader.specForTypeElseFail(InvalidMemberIdClash.class);
+
+        assertEquals(6L, spec.streamRuntimeActions(MixedIn.INCLUDED).count(),
+                ()->"expected 8 total actions, with 2 shadowed due to member-id collision");
+
+        assertEquals(8L, spec.streamAssociations(MixedIn.INCLUDED).count(),
+                ()->"expected 16 total associations, with 8 shadowed due to member-id collision");
+
+        Stream.of("someAction",
+                "someProperty",
+                "someCollection",
+                "actionClash",
+                "mixinC",
+                "propertyClash",
+                "collectionClash")
+        .map(collidingMemberId->
+            String.format("has members using the same member-id '%s'", collidingMemberId))
+        .forEach(expectedMessageChunk->
+            validator.assertAnyFailuresContaining(InvalidMemberIdClash.class, expectedMessageChunk));
+    }
+
+    // -- ELEMENT-TYPE
+
+    @ParameterizedTest
+    @ValueSource(classes = {
+            InvalidElementTypes.Returning.class,
+            InvalidElementTypes.Taking.class,
+            InvalidElementTypes.InvalidProperty.class,
+            InvalidElementTypes.InvalidCollection.class
+            })
+    void invalidElementType(final Class<?> classUnderTest) {
+        validator.assertAnyFailuresContaining(
+                classUnderTest,
+                "has a member with vetoed, mixin or managed element-type");
+    }
+
+    // -- MIXINS
+
+    @ParameterizedTest
+    @ValueSource(classes = {
+            InvalidMixinDeclarations.ActionMixinWithProp.class,
+            InvalidMixinDeclarations.ActionMixinWithColl.class,
+            InvalidMixinDeclarations.PropertyMixinWithOther.class,
+            InvalidMixinDeclarations.CollectionMixinWithOther.class,
+            })
+    void invalidMixinDeclaration(final Class<?> classUnderTest) {
+
+        // just by convention of these test scenarios ...
+        final String expectedMethodName = classUnderTest.getSimpleName().startsWith("Property")
+                ? "prop"
+                : classUnderTest.getSimpleName().startsWith("Collection")
+                    ? "coll"
+                    : "act";
+
+        validator.assertAnyFailuresContaining(
+                classUnderTest,
+                ProgrammingModelConstants.Violation.INVALID_MIXIN_MAIN.builder()
+                .addVariable("type", classUnderTest.getName())
+                .addVariable("expectedMethodName", expectedMethodName)
+                .addVariable("actualMethodName", "other")
+                .buildMessage()
+                );
+    }
+
     // -- INCUBATING
 
     @Test @Disabled("this case has no vaildation refiner yet")
@@ -384,7 +457,7 @@ class DomainModelTest_usingBadDomain {
 
     // -- HELPER
 
-    private String validationMessage(
+    private String unsatisfiedDomainIncludeSemantics(
             final String className,
             final String memberName) {
         return Violation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS

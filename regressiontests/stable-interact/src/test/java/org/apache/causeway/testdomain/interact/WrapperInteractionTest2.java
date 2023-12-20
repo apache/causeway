@@ -71,7 +71,7 @@ extends InteractionTestAbstract {
         extends MixinAbstract<String> {
 
             @Override
-            public String act(String startTime, String endTime) {
+            public String act(final String startTime, final String endTime) {
                 return "acted";
             }
         }
@@ -81,7 +81,7 @@ extends InteractionTestAbstract {
         extends MixinAbstract<String> {
 
             @Override
-            public String act(String startTime, String endTime) {
+            public String act(final String startTime, final String endTime) {
                 return "acted2";
             }
         }
@@ -90,7 +90,7 @@ extends InteractionTestAbstract {
 
     // an abstract mixin class
     static abstract class MixinAbstract<T extends Object> {
-        public T act(String startTime, String endTime) {
+        public T act(final String startTime, final String endTime) {
             return null;
         }
     }

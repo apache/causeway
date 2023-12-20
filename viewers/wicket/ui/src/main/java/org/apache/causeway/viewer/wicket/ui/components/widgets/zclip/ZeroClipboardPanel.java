@@ -24,9 +24,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -60,9 +58,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         ObjectAdapterModel model = getModel();
         addSimpleClipboardModalWindow();
 
-        RenderingHint renderingHint = model.getRenderingHint();
-        ScalarRepresentation mode = model.getMode();
-        setVisible(renderingHint == RenderingHint.REGULAR && mode == ScalarRepresentation.VIEWING);
+        setVisible(model.getRenderingHint().isNotInTable()
+                && model.isViewingMode());
 
         // disable, since currently not honoured if used as a URL (think that session hints are taking precedence).
         // (see CAUSEWAY-1660 to resurrect)

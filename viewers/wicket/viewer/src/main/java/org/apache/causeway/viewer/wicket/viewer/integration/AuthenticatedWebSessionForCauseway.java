@@ -27,16 +27,18 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
-import org.apache.causeway.applib.services.user.ImpersonatedUserHolder;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
@@ -47,7 +49,9 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.Bread
 import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -55,6 +59,7 @@ import lombok.val;
  * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
+@Log4j2
 public class AuthenticatedWebSessionForCauseway
 extends AuthenticatedWebSession
 implements
@@ -69,17 +74,56 @@ implements
         return (AuthenticatedWebSessionForCauseway) Session.get();
     }
 
-    @Getter protected transient MetaModelContext metaModelContext;
-
-    @Getter
+    /**
+     * lazily populated in {@link #getBreadcrumbModel()}
+     */
     private BreadcrumbModel breadcrumbModel;
-    @Getter
+    @Override
+    public BreadcrumbModel getBreadcrumbModel() {
+        return breadcrumbModel != null
+                ? breadcrumbModel
+                : (breadcrumbModel = new BreadcrumbModel());
+    }
+
+
+    /**
+     * lazily populated in {@link #getBookmarkedPagesModel()}
+     */
     private BookmarkedPagesModel bookmarkedPagesModel;
+    @Override
+    public BookmarkedPagesModel getBookmarkedPagesModel() {
+        return bookmarkedPagesModel != null
+                ? bookmarkedPagesModel
+                : (bookmarkedPagesModel = new BookmarkedPagesModel());
+    }
 
     /**
      * As populated in {@link #signIn(String, String)}.
      */
-    private InteractionContext authentication;
+    private InteractionContext interactionContext;
+    private void setInteractionContext(final @Nullable InteractionContext interactionContext) {
+        _Assert.assertFalse(
+                interactionContext !=null
+                 && interactionContext.getUser().isImpersonating(), ()->
+                "framework bug: cannot signin with an impersonated user");
+        this.interactionContext = interactionContext;
+    }
+
+    /**
+     * If there is an {@link InteractionContext} already (primed)
+     * (as some authentication mechanisms setup in filters,
+     * eg SpringSecurityFilter), then just use it.
+     * <p>
+     * However, for authorization, the authentication still must pass
+     * {@link AuthenticationManager} checks,
+     * as done in {@link #getInteractionContext()},
+     * which on success also sets the signIn flag.
+     * <p>
+     * Called by {@link WebRequestCycleForCauseway}.
+     */
+    public void setPrimedInteractionContext(final @NonNull InteractionContext authentication) {
+        this.interactionContext = authentication;
+    }
 
     @Getter
     private UUID sessionGuid;
@@ -101,12 +145,6 @@ implements
 
     public AuthenticatedWebSessionForCauseway(final Request request) {
         super(request);
-    }
-
-    public void init(final MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
-        bookmarkedPagesModel = new BookmarkedPagesModel(metaModelContext);
-        breadcrumbModel = new BreadcrumbModel(metaModelContext);
         sessionGuid = UUID.randomUUID();
     }
 
@@ -114,8 +152,9 @@ implements
     public synchronized boolean authenticate(final String username, final String password) {
         val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
-        this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
-        if (this.authentication != null) {
+        InteractionContext interactionContext = getAuthenticationManager().authenticate(authenticationRequest);
+        setInteractionContext(interactionContext);
+        if (interactionContext != null) {
             log(SessionSubscriber.Type.LOGIN, username, null);
             return true;
         } else {
@@ -134,7 +173,10 @@ implements
         // principals for it to logout
         //
 
-        getAuthenticationManager().closeSession(getAuthentication());
+        getAuthenticationManager().closeSession(
+                Optional.ofNullable(interactionContext)
+                .map(InteractionContext::getUser)
+                .orElse(null));
 
         super.invalidateNow();
 
@@ -144,7 +186,7 @@ implements
     public synchronized void onInvalidate() {
 
         String userName = null;
-        val authentication = getAuthentication();
+        val authentication = getInteractionContext();
         if (authentication != null) {
             userName = authentication.getUser().getName();
         }
@@ -158,60 +200,51 @@ implements
         log(SessionSubscriber.Type.LOGOUT, userName, causedBy);
     }
 
-    /**
-     * If there is an {@link InteractionContext} already
-     * (as some authentication mechanisms setup in filters, eg
-     * SpringSecurityFilter), then just use it.
-     *
-     * <p>
-     *     This method is called early on by {@link WebRequestCycleForCauseway}.
-     * </p>
-     */
-    public void syncExternalAuthenticationIfAvailable() {
-        getInteractionService()
-            .currentInteractionContext()
-            .ifPresent(interactionContext -> this.authentication = interactionContext);
-    }
-
     @Override
     public void amendInteractionContext(final UnaryOperator<InteractionContext> updater) {
-        authentication = updater.apply(authentication);
+        setInteractionContext(updater.apply(interactionContext));
     }
 
     /**
      * Returns an {@link InteractionContext} either as authenticated (and then cached on the session subsequently),
-     * or taking into account {@link ImpersonatedUserHolder impersonation}.
-     *
+     * or taking into account {@link UserService impersonation}.
      * <p>
-     *     The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
-     *     note that this will always be true for externally authenticated users.
-     * </p>
+     * The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
+     * note that this will always be true for externally authenticated users.
      */
-    public synchronized InteractionContext getAuthentication() {
+     synchronized InteractionContext getInteractionContext() {
 
-        if(this.authentication == null) {
+        if(interactionContext == null) {
             return null;
         }
-        if(!getAuthenticationManager().isSessionValid(this.authentication)) {
+        if (Optional.ofNullable(getMetaModelContext())
+                .map(HasMetaModelContext::getAuthenticationManager)
+                .filter(x -> x.isSessionValid(interactionContext))
+                .isEmpty()) {
             return null;
         }
         signIn(true);
 
-        val impersonatedUserHolder = lookupServiceElseFail(ImpersonatedUserHolder.class);
-        return impersonatedUserHolder.getUserMemento()
-                .map(x -> this.authentication.withUser(x))
-                .orElse(this.authentication);
+        return interactionContext;
+    }
+
+    @Override
+    public AuthenticationManager getAuthenticationManager() {
+        return Optional.ofNullable(getMetaModelContext())
+                .map(HasMetaModelContext::getAuthenticationManager)
+                .orElse(null);
     }
 
     /**
-     * This is a no-op if the {@link #getAuthentication() authentication session}'s
+     * This is a no-op if the {@link #getInteractionContext() authentication session}'s
      * {@link UserMemento#getAuthenticationSource() source} is
      * {@link AuthenticationSource#EXTERNAL external}
      * (eg as managed by keycloak).
      */
     @Override
     public void invalidate() {
-        if(this.authentication.getUser().getAuthenticationSource().isExternal()) {
+        if(interactionContext !=null
+                && interactionContext.getUser().getAuthenticationSource().isExternal()) {
             return;
         }
         // otherwise
@@ -223,7 +256,8 @@ implements
         if (!isSignedIn()) {
             return null;
         }
-        return Optional.ofNullable(getAuthentication())
+        return getInteractionService()
+            .currentInteractionContext()
             .map(InteractionContext::getUser)
             .map(user->{
                 val roles = new Roles();
@@ -236,8 +270,19 @@ implements
 
     @Override
     public synchronized void detach() {
-        breadcrumbModel.detach();
+        if(breadcrumbModel!=null) {
+            breadcrumbModel.detach();
+        }
+        if(bookmarkedPagesModel!=null) {
+            bookmarkedPagesModel.detach();
+        }
         super.detach();
+    }
+
+    @Override
+    public void replaceSession() {
+        // do nothing here because this will lead to problems with Shiro
+        // see https://issues.apache.org/jira/browse/CAUSEWAY-1018
     }
 
     private void log(
@@ -245,6 +290,11 @@ implements
             final String username,
             final SessionSubscriber.CausedBy causedBy) {
 
+        if(getMetaModelContext()==null) {
+            log.warn("Failed to callback SessionLoggingServices due to unavailable MetaModelContext.\n"
+                    + "\tEvent Data: type={}, username={}, causedBy={}", type, username, causedBy);
+            return;
+        }
 
         val interactionService = getInteractionService();
         val sessionLoggingServices = getSessionLoggingServices();
@@ -285,13 +335,5 @@ implements
     private VirtualClock nowFallback() {
         return VirtualClock.system();
     }
-
-    @Override
-    public void replaceSession() {
-        // do nothing here because this will lead to problems with Shiro
-        // see https://issues.apache.org/jira/browse/CAUSEWAY-1018
-    }
-
-
 
 }

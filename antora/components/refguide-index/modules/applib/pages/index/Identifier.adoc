@@ -12,9 +12,9 @@ For xref:refguide:applib:index/Identifier.adoc[Identifier] (s) of type _Identifi
 ----
 class Identifier {
   Identifier classIdentifier(LogicalType typeIdentifier)
-  Identifier propertyIdentifier(LogicalType typeIdentifier, String propertyOrCollectionName)
-  Identifier collectionIdentifier(LogicalType typeIdentifier, String propertyOrCollectionName)
-  Identifier methodIdentifier(LogicalType typeIdentifier, Method method)     // <.>
+  Identifier propertyIdentifier(LogicalType typeIdentifier, String propertyName)
+  Identifier collectionIdentifier(LogicalType typeIdentifier, String collectionName)
+  Identifier methodIdentifier(LogicalType typeIdentifier, ResolvedMethod method)     // <.>
   Identifier actionIdentifier(LogicalType typeIdentifier, String actionName, Class<?>... parameterClasses)
   Identifier actionIdentifier(LogicalType typeIdentifier, String actionName, Can<String> parameterClassNames)
   Identifier withParameterIndex(int parameterIndex)
@@ -30,7 +30,7 @@ class Identifier {
 }
 ----
 
-<.> xref:#methodIdentifier_LogicalType_Method[methodIdentifier(LogicalType, Method)]
+<.> xref:#methodIdentifier_LogicalType_ResolvedMethod[methodIdentifier(LogicalType, ResolvedMethod)]
 +
 --
 for reporting orphaned methods
@@ -38,7 +38,7 @@ for reporting orphaned methods
 
 == Members
 
-[#methodIdentifier_LogicalType_Method]
-=== methodIdentifier(LogicalType, Method)
+[#methodIdentifier_LogicalType_ResolvedMethod]
+=== methodIdentifier(LogicalType, ResolvedMethod)
 
 for reporting orphaned methods

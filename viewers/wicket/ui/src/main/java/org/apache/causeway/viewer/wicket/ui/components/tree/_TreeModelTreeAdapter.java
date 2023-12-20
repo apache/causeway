@@ -30,9 +30,7 @@ import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 import lombok.NonNull;
 import lombok.val;
@@ -52,18 +50,10 @@ implements
     private final Class<? extends TreeAdapter> treeAdapterClass;
 
     private transient TreeAdapter wrappedTreeAdapter;
-    private transient MetaModelContext metaModelContext;
 
     _TreeModelTreeAdapter(
-            final MetaModelContext mmc,
             final Class<? extends TreeAdapter> treeAdapterClass) {
-        this.metaModelContext = mmc;
         this.treeAdapterClass = treeAdapterClass;
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return this.metaModelContext = WktContext.computeIfAbsent(metaModelContext);
     }
 
     @Override
@@ -71,12 +61,12 @@ implements
         if(treeModel==null) {
             return Optional.empty();
         }
-        val pojoNode = unwrap(treeModel);
+        val pojoNode = demementify(treeModel);
         if(pojoNode==null) {
             return Optional.empty();
         }
         return wrappedTreeAdapter().parentOf(pojoNode)
-                .map(pojo->wrap(pojo, treeModel.getTreePath().getParentIfAny()));
+                .map(pojo->mementify(pojo, treeModel.getTreePath().getParentIfAny()));
     }
 
     @Override
@@ -84,7 +74,7 @@ implements
         if(treeModel==null) {
             return 0;
         }
-        val pojoNode = unwrap(treeModel);
+        val pojoNode = demementify(treeModel);
         if(pojoNode==null) {
             return 0;
         }
@@ -96,7 +86,7 @@ implements
         if(treeModel==null) {
             return Stream.empty();
         }
-        val pojoNode = unwrap(treeModel);
+        val pojoNode = demementify(treeModel);
         if(pojoNode==null) {
             return Stream.empty();
         }
@@ -104,19 +94,19 @@ implements
                 .map(newPojoToTreeModelMapper(treeModel));
     }
 
-    _TreeNodeMemento wrap(final @NonNull Object pojo, final TreePath treePath) {
+    _TreeNodeMemento mementify(final @NonNull Object pojo, final TreePath treePath) {
         return new _TreeNodeMemento(
                 ManagedObject.adaptSingular(getSpecificationLoader(), pojo).getBookmark().orElseThrow(),
                 treePath);
     }
-    private @Nullable Object unwrap(final _TreeNodeMemento model) {
+    private @Nullable Object demementify(final _TreeNodeMemento model) {
         Objects.requireNonNull(model);
-        return model.getPojo(getMetaModelContext());
+        return model.getPojo();
     }
 
     private Function<Object, _TreeNodeMemento> newPojoToTreeModelMapper(final _TreeNodeMemento parent) {
         return IndexedFunction.zeroBased((indexWithinSiblings, pojo)->
-        wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
+        mementify(pojo, parent.getTreePath().append(indexWithinSiblings)));
     }
 
     private TreeAdapter wrappedTreeAdapter() {

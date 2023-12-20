@@ -27,12 +27,18 @@ import jakarta.persistence.JoinColumn;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil;
 
 import lombok.val;
 
 public class MandatoryFromJpaColumnAnnotationFacetFactory
-extends FacetFactoryAbstract {
+extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     @Inject
     public MandatoryFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
@@ -41,8 +47,6 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
-        //val cls = processMethodContext.getCls();
 
         final Optional<Boolean> nullable1 = processMethodContext.synthesizeOnMethod(JoinColumn.class)
                 .map(JoinColumn::nullable);
@@ -56,12 +60,22 @@ extends FacetFactoryAbstract {
         }
 
         val nullable = nullable1.orElseGet(nullable2::get);
+        val semantics = Semantics.required(!nullable);
 
         val facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new MandatoryFacetFromJpaColumnAnnotation(
-                facetHolder,
-                !nullable));
+        FacetUtil.addFacet(
+                new MandatoryFacetFromJpaColumnAnnotation(semantics, facetHolder));
     }
 
+    @Override
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
+
+            objectSpec
+                    .streamProperties(MixedIn.EXCLUDED)
+                    .forEach(MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil::validateMandatoryFacet);
+
+        });
+    }
 
 }

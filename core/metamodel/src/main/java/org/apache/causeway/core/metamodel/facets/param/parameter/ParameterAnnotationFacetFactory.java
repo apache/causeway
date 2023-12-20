@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import org.springframework.core.MethodParameter;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
 
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -33,10 +33,7 @@ import org.apache.causeway.core.metamodel.facets.param.parameter.maxlen.MaxLengt
 import org.apache.causeway.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Pattern;
 import lombok.val;
 
 public class ParameterAnnotationFacetFactory
@@ -111,29 +108,18 @@ extends FacetFactoryAbstract {
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        val parameterAnnotations = MethodParameter
-                .forExecutable(processParameterContext.getMethod().asExecutable(), processParameterContext.getParamNum())
-                .getParameterAnnotations();
-        val parameterType = processParameterContext.getParameterType();
+        val hasNullable = processParameterContext.streamParameterAnnotations()
+            .anyMatch(annot->annot.annotationType().getSimpleName().equals("Nullable"));
 
-        val hasNullable =
-                _NullSafe.stream(parameterAnnotations)
-                    .map(annot->annot.annotationType().getSimpleName())
-                    .anyMatch(name->name.equals("Nullable"));
+        val parameterType = processParameterContext.getParameterType();
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnParameter
-                .create(hasNullable, parameterType, holder))
-        .ifPresent(mandatoryFacet->
-            MetaModelValidatorForConflictingOptionality.flagIfConflict(
-                    mandatoryFacet, "Conflicting @Nullable with other optionality annotation"));
+                .create(hasNullable, parameterType, holder));
 
         addFacetIfPresent(
                 MandatoryFacetForParameterAnnotation
-                .create(parameterIfAny, parameterType, holder))
-        .ifPresent(mandatoryFacet->
-            MetaModelValidatorForConflictingOptionality.flagIfConflict(
-                    mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation"));
+                .create(parameterIfAny, parameterType, holder));
     }
 
     void processParamsFileAccept(final ProcessParameterContext processParameterContext) {

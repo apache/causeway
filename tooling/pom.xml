@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
-	license agreements. See the NOTICE file distributed with this work for additional
-	information regarding copyright ownership. The ASF licenses this file to
-	you under the Apache License, Version 2.0 (the "License"); you may not use
-	this file except in compliance with the License. You may obtain a copy of
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
-	by applicable law or agreed to in writing, software distributed under the
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
-	OF ANY KIND, either express or implied. See the License for the specific
-	language governing permissions and limitations under the License. -->
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -28,23 +36,20 @@
 	<description>
         Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
         eg. code mining, automated documentation.
-        (Targeted for JVM 17+)
+        (Targeted for JVM 21+)
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-
-		<maven.compiler.release>17</maven.compiler.release>
-
 		<jar-plugin.automaticModuleName>org.apache.causeway.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/tooling</git-plugin.propertiesDir>
 		<gradle-tooling.version>7.3-20210825160000+0000</gradle-tooling.version>
-		<maven-model-builder.version>3.9.1</maven-model-builder.version>
-		<picocli.version>4.7.3</picocli.version>
+		<maven-model-builder.version>3.9.6</maven-model-builder.version>
+		<picocli.version>4.7.5</picocli.version>
 		
 		<!-- brings in structurizr-core as a transitive dependency -->
-		<structurizr-export.version>1.14.0</structurizr-export.version>
+		<structurizr-export.version>1.18.0</structurizr-export.version>
 		
 		<!-- override surefire defaults from bom, as this is not a Java module yet -->
 		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
@@ -146,7 +151,7 @@
 		</plugins>
 
 	</build>
-
+	
 	<dependencyManagement>
 		<dependencies>
 
@@ -161,12 +166,6 @@
 			<dependency>
 				<groupId>org.apache.causeway.tooling</groupId>
 				<artifactId>causeway-tooling-c4modeling</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.tooling</groupId>
-				<artifactId>causeway-tooling-model4adoc</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
@@ -189,12 +188,6 @@
 			</dependency>
 
 			<!-- EXTERNAL -->
-
-			<dependency>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctorj</artifactId>
-				<version>${asciidoctorj.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.gradle</groupId>
@@ -256,7 +249,7 @@
         <dependency>
 		    <groupId>org.checkerframework</groupId>
 		    <artifactId>checker-qual</artifactId>
-		    <version>3.33.0</version>
+		    <version>3.42.0</version>
 		</dependency>
 
 		<!-- LOGGING -->
@@ -292,7 +285,6 @@
 
 	<modules>
 		<module>c4modeling</module>
-		<module>model4adoc</module>
 		<module>javamodel</module>
 		<module>projectmodel</module>
 		<module>java2adoc</module>

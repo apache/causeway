@@ -11,5 +11,5 @@
 This chapter pulls together various policy documents relating to the development of Apache Causeway'.
 
 
-include::policies/versioning-policy.adoc[leveloffset=+1]
-include::policies/git-policy.adoc[leveloffset=+1]
+include::partial$policies/versioning-policy.adoc[leveloffset=+1]
+include::partial$policies/git-policy.adoc[leveloffset=+1]

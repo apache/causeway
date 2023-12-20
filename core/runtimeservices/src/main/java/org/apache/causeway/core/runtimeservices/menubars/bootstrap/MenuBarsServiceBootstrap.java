@@ -54,7 +54,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFaFacetForMenuBarXml;
+import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
@@ -206,7 +206,7 @@ implements MenuBarsService {
                         CssClassFacetForMenuBarXml.create(layoutData, objectAction));
 
                 FacetUtil.updateFacetIfPresent(
-                        CssClassFaFacetForMenuBarXml.create(layoutData, objectAction));
+                        FaFacetForMenuBarXml.create(layoutData, objectAction));
 
             });
 

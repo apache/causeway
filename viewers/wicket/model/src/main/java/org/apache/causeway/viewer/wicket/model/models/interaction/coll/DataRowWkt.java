@@ -24,9 +24,9 @@ import java.util.UUID;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -37,7 +37,7 @@ extends ChainingModel<DataRow> {
     private static final long serialVersionUID = 1L;
 
     public static DataRowWkt chain(
-            final IModel<DataTableModel> dataTableModelHolder,
+            final IModel<DataTableInteractive> dataTableModelHolder,
             final DataRow dataRow) {
         return new DataRowWkt(dataTableModelHolder, dataRow);
     }
@@ -48,7 +48,7 @@ extends ChainingModel<DataRow> {
     private transient DataRow dataRow;
 
     private DataRowWkt(
-            final IModel<DataTableModel> dataTableModelHolder,
+            final IModel<DataTableInteractive> dataTableModelHolder,
             final DataRow dataRow) {
         super(dataTableModelHolder);
         this.dataRow = dataRow;
@@ -62,8 +62,8 @@ extends ChainingModel<DataRow> {
             dataRow = getDataTableModel().lookupDataRow(uuid)
                     .orElse(null);
             if(dataRow==null) {
-                // XXX[CAUSEWAY-3005] UI out of sync with model: reload page
-                WktContext.pageReload();
+                // [CAUSEWAY-3005] UI out of sync with model: reload page
+                PageUtils.pageReload();
             }
         }
         return dataRow;
@@ -73,9 +73,14 @@ extends ChainingModel<DataRow> {
         return Optional.ofNullable(getObject());
     }
 
+    public boolean hasMemoizedDataRow() {
+        return dataRow!=null
+                || getDataTableModel().lookupDataRow(uuid).isPresent();
+    }
+
     // -- HELPER
 
-    private DataTableModel getDataTableModel() {
+    private DataTableInteractive getDataTableModel() {
         return ((DataTableModelWkt) super.getTarget()).getObject();
     }
 

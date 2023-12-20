@@ -16,8 +16,6 @@ Layout hints for domain objects.
   String describedAs() default "";     // <.>
   String named() default "";     // <.>
   int paged() default -1;     // <.>
-  @Deprecated(forRemoval = true)
-String plural() default "";     // <.>
   Class<? extends TableDecorator> tableDecorator() default TableDecorator.Default.class;     // <.>
   Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Default.class;     // <.>
   Class<? extends IconUiEvent<?>> iconUiEvent() default IconUiEvent.Default.class;     // <.>
@@ -60,18 +58,6 @@ Name of this class (overriding the name derived from its name in code).
 +
 --
 The page size for instances of this class when rendered within a table.
---
-<.> xref:#plural[plural]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-CAUSEWAY-3321: for standalone tables (action result), parented tables (collections) or plural action parameters, the framework should (and will) use the name of the originating action, collection or action parameter instead.
-====
-
-The plural name of the class.
 --
 <.> xref:#tableDecorator[tableDecorator]
 +
@@ -143,18 +129,6 @@ The page size for instances of this class when rendered within a table.
 If annotated on a collection, then the page size refers to parented collections (eg `Order#lineItems` ).
 
 If annotated on a type, then the page size refers to standalone collections (eg as returned from a repository query).
-
-[#plural]
-=== plural
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-CAUSEWAY-3321: for standalone tables (action result), parented tables (collections) or plural action parameters, the framework should (and will) use the name of the originating action, collection or action parameter instead.
-====
-
-The plural name of the class.
 
 [#tableDecorator]
 === tableDecorator

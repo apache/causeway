@@ -22,7 +22,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
-import org.apache.causeway.persistence.jpa.integration.changetracking.EntityChangeTrackerDefault;
+import org.apache.causeway.persistence.commons.integration.changetracking.EntityChangeTrackerDefault;
+import org.apache.causeway.persistence.commons.integration.changetracking.PreAndPostValueEvaluatorServiceDefault;
 
 @Configuration
 @Import({
@@ -31,8 +32,7 @@ import org.apache.causeway.persistence.jpa.integration.changetracking.EntityChan
 
         // @Service's
         EntityChangeTrackerDefault.class,
-        EntityChangeTrackerDefault.TransactionSubscriber.class,
-
+        PreAndPostValueEvaluatorServiceDefault.class,
 })
 public class CausewayModulePersistenceCommons {
 

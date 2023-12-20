@@ -23,8 +23,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
+import jakarta.activation.MimeType;
+import jakarta.activation.MimeTypeParseException;
 
 import org.apache.causeway.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.applib.value.Blob;
@@ -37,10 +37,10 @@ import lombok.Getter;
 
 public class PdfJsDemoObjectWithBlob_createUpTo5_fakeData extends FixtureScript {
 
-    @javax.inject.Inject
+    @import jakarta.inject.Inject
     PdfJsDemoObjectWithBlobMenu demoObjectMenu;
 
-    @javax.inject.Inject
+    @import jakarta.inject.Inject
     FakeDataService fakeDataService;
 
     @Getter

@@ -27,6 +27,7 @@ module org.apache.causeway.viewer.commons.services {
 
     requires jakarta.annotation;
     requires jakarta.inject;
+    requires jakarta.servlet;
 
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;

@@ -31,7 +31,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -124,7 +124,7 @@ public class DatanucleusSettings {
         }
 
         props.computeIfAbsent(PropertyNames.PROPERTY_STATE_MANAGER_CLASS_NAME,
-                key->DnObjectProviderForCauseway.class.getName());
+                key->DnStateManagerForCauseway.class.getName());
 
         // we debated whether to default 'create' mode, ie eagerly create the database tables ... however while this is
         // fine for integration testing, it doesn't make much sense for production usage.  So instead we'll just make

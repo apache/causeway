@@ -19,6 +19,8 @@
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.lang.reflect.Constructor;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,8 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -37,9 +41,12 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * Corresponds to {@link ViewModel} interface.
@@ -55,7 +62,7 @@ extends ViewModelFacetAbstract {
             return Optional.empty();
         }
 
-        Constructor<?> pickedConstructor = null; // not used for abstract types
+        ResolvedConstructor pickedConstructor = null; // not used for abstract types
 
         if(!cls.isInterface()
                 && !ClassExtensions.isAbstract(cls)) {
@@ -80,6 +87,7 @@ extends ViewModelFacetAbstract {
                             .addVariable("type", cls.getName())
                             .addVariable("found", explicitInjectConstructors.getCardinality().isMultiple()
                                     ? "{" + explicitInjectConstructors.stream()
+                                            .map(ResolvedConstructor::constructor)
                                             .map(Constructor::toString)
                                             .collect(Collectors.joining(", ")) + "}"
                                     : "none")
@@ -100,11 +108,11 @@ extends ViewModelFacetAbstract {
         return Optional.of(new ViewModelFacetForViewModelInterface(holder, pickedConstructor));
     }
 
-    private Constructor<?> constructorAnyArgs;
+    private ResolvedConstructor constructorAnyArgs;
 
     protected ViewModelFacetForViewModelInterface(
             final FacetHolder holder,
-            final @Nullable Constructor<?> constructorAnyArgs) {
+            final @Nullable ResolvedConstructor constructorAnyArgs) {
         super(holder, Precedence.HIGH);
         this.constructorAnyArgs = constructorAnyArgs;
     }
@@ -132,37 +140,73 @@ extends ViewModelFacetAbstract {
     @Override
     public String serialize(final ManagedObject viewModel) {
         final ViewModel viewModelPojo = (ViewModel) viewModel.getPojo();
-        return viewModelPojo.viewModelMemento();
+        return SpecialMemento.encode(viewModelPojo.viewModelMemento());
     }
 
     // -- HELPER
 
+    /**
+     * In support of (stateless) {@link ViewModel}s that don't use a memento,
+     * or if an empty memento String is actually considered a valid use-case.
+     * (e.g. a Viewmodel that simply holds a String value for a search say)
+     * @apiNote introduced so we can create valid bookmarks,
+     *      that must have a non-empty identifier part
+     * @implNote the pipe character '|' is regarded unsafe,
+     *      hence gets processed by {@link URLEncoder} and {@link URLDecoder},
+     *      which makes it safe for us to use with special meaning
+     */
+    @Getter @Accessors(fluent=true)
+    @RequiredArgsConstructor
+    enum SpecialMemento {
+        EMPTY("||"),
+        NULL("|");
+        static String encode(final @Nullable String memento) {
+            return memento==null
+                    ? NULL.representationInUrl()
+                    : memento.isEmpty()
+                            ? EMPTY.representationInUrl()
+                            : UrlUtils.urlEncodeUtf8(memento);
+        }
+        static String decode(final @Nullable String memento) {
+            return NULL.matches(memento)
+                    ? null
+                    : EMPTY.matches(memento)
+                            ? ""
+                            : UrlUtils.urlDecodeUtf8(memento);
+        }
+        final String representationInUrl;
+        boolean matches(final String other) {
+            return representationInUrl.equals(other);
+        }
+    }
+
     @SneakyThrows
     private Object deserialize(
             @NonNull final ObjectSpecification viewmodelSpec,
-            @Nullable final String memento) {
+            @Nullable final String mementoEncoded) {
 
         _Assert.assertNotNull(constructorAnyArgs, ()->"framework bug: required non-null, "
                 + "this can only happen, if we try to deserialize an abstract type");
 
+        val memento = SpecialMemento.decode(mementoEncoded);
         val resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
-        val viewmodelPojo = constructorAnyArgs.newInstance(resolvedArgs);
+        val viewmodelPojo = constructorAnyArgs.constructor().newInstance(resolvedArgs);
         return viewmodelPojo;
     }
 
     private static Object[] resolveArgsForConstructor(
-            final Constructor<?> constructor,
+            final ResolvedConstructor constructor,
             final ServiceRegistry serviceRegistry,
             final String memento) {
 
-        val params = Can.ofArray(constructor.getParameters());
-        val args = new Object[params.size()];
-        params.forEach(IndexedConsumer.zeroBased((i, param)->{
-            if(param.getType().equals(String.class)) {
+        val paramTypes = Can.ofArray(constructor.paramTypes());
+        val args = new Object[constructor.paramCount()];
+        paramTypes.forEach(IndexedConsumer.zeroBased((final int i, final Class<?> paramType)->{
+            if(paramType.equals(String.class)) {
                 args[i] = memento; // its ok to do this never, once, or more than once per constructor, see ViewModel java-doc
                 return;
             }
-            args[i] = serviceRegistry.lookupServiceElseFail(param.getType());
+            args[i] = serviceRegistry.lookupServiceElseFail(paramType);
         }));
         return args;
     }

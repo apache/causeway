@@ -29,47 +29,44 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.NonNull;
 import lombok.val;
 
 public class ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator
-extends MetaModelVisitingValidatorAbstract {
+extends MetaModelValidatorAbstract {
 
     @Inject
     public ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, spec->spec.getBeanSort() == BeanSort.UNKNOWN
+                && !spec.isAbstract());
     }
 
     @Override
-    public void validate(final @NonNull ObjectSpecification spec) {
-        if(spec.getBeanSort()==BeanSort.UNKNOWN
-                && !spec.isAbstract()) {
+    public void validateObjectEnter(final ObjectSpecification spec) {
 
-            val actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
+        val actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
 
-            final int numActions = actions.size();
-            if (numActions > 0) {
+        final int numActions = actions.size();
+        if (numActions > 0) {
 
-                val actionIds = actions.stream()
-                .map(ObjectAction::getFeatureIdentifier)
-                .map(Identifier::toString)
-                .collect(Collectors.joining(", "));
+            val actionIds = actions.stream()
+            .map(ObjectAction::getFeatureIdentifier)
+            .map(Identifier::toString)
+            .collect(Collectors.joining(", "));
 
-                ValidationFailure.raiseFormatted(
-                        spec,
-                        ProgrammingModelConstants.Violation.UNKNONW_SORT_WITH_ACTION
-                            .builder()
-                            .addVariable("type", spec.getCorrespondingClass().getName())
-                            .addVariable("actions", actionIds)
-                            .addVariable("actionCount", numActions)
-                            .buildMessage());
-
-            }
+            ValidationFailure.raiseFormatted(
+                    spec,
+                    ProgrammingModelConstants.Violation.UNKNONW_SORT_WITH_ACTION
+                        .builder()
+                        .addVariable("type", spec.getCorrespondingClass().getName())
+                        .addVariable("actions", actionIds)
+                        .addVariable("actionCount", numActions)
+                        .buildMessage());
 
         }
+
     }
 
 }

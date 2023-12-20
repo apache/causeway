@@ -55,6 +55,9 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaBootstrappingTest",
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -111,7 +114,7 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
         // given - expected pre condition: no inventories
 
-        testFixtures.reinstall(()->
+        testFixtures.resetTo3Books(()->
             assertEquals(0, repositoryService.allInstances(JpaInventory.class).size()));
 
         // then - expected post condition: ONE inventory

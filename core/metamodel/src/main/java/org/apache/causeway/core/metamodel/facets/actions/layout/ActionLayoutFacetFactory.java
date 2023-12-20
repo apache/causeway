@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facets.actions.position.ActionPosition
 import org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacetFallback;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -47,8 +47,8 @@ extends FacetFactoryAbstract {
         val actionLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         ActionLayout.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), ActionLayout.class));
+                        () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ActionLayout.class));
 
         // cssClass
         addFacetIfPresent(
@@ -57,7 +57,7 @@ extends FacetFactoryAbstract {
 
         // cssClassFa
         addFacetIfPresent(
-                CssClassFaFacetForActionLayoutAnnotation
+                FaFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder));
 
         // describedAs

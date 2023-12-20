@@ -1,0 +1,107 @@
+= Overview
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+In this section we run through the main building blocks that make up an Apache Causeway application.
+
+The "big idea" of Apache Causeway is that you write only the domain logic, while the application takes care of the user interface.
+There's a bit more to it than that, of course, and lots of interesting consequences, but that's the main gist.
+
+
+[#type-of-domain-objects]
+== Type of Domain Objects
+
+From the end-user's perspective the UI displays a single domain object instance that has state.
+These will be either a xref:domain-entities.adoc[domain entity] (persisted state) or a xref:view-models.adoc[view model] (user-specific temporary state).
+To access them, a menu xref:domain-services.adoc[domain service] will be used to find from the database (a repository service) or occasionally to create a new instance (a factory service).
+
+The state managed by entities and view models is expressed in terms of xref:properties-collections-actions.adoc[properties and collections], with properties whose value either refers to other domain objects (reference types) or alternatively holds a value directly (xref:value-types.adoc[value types]).
+Apache Causeway supports a wide variety of xref:value-types.adoc[value types], including JDK types (primitives, strings or dates) Causeway-specific (eg Asciidoc, Vega) and 3rd party (eg Jodatime).
+Moreover it is possible to define your own custom types, and you can teach the framework about other 3rd party libraries you might wish to use, eg https://jscience.org[JScience].
+
+Actions allow the end-user to invoke business logic.
+These are either defined as a regular method on a domain object (entity, view model or service), or can be "contributed" as a xref:mixins.adoc[mixin]: an important capability to help keep large applications decoupled.
+
+
+== Annotations
+
+Domain classes are generally recognized using annotations.
+Apache Causeway defines its own set of annotations, and
+you can generally recognize an Apache Causeway domain class because it will be probably be annotated using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] and xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
+There are though configuration options that allow you to control to what extent (some) annotations can be inferred implicitly rather than  specified explicitly.
+
+The framework also recognises some annotations from the ORM layer (ie xref:pjpa::about.adoc[JPA/EclipseLink] or xref:pjdo::about.adoc[JDO/DataNucleus]) and infers domain semantics from these annotations.
+Similarly, JAXB annotations are often used for xref:view-models.adoc[view models].
+
+The framework also defines supplementary annotations, notably xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] and xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout].
+These provide hints relating to the layout of the domain object in the user interface.
+Alternatively, these UI hints might be defined in a supplementary xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[.layout.xml] file.
+
+
+
+[[title-and-icon-and-css-class]]
+== Title and Icon
+
+To allow the end-user to distinguish one domain object from another, it is rendered with a xref:ui-layout-and-hints.adoc#object-title[title] and an xref:ui-layout-and-hints.adoc#object-icon[icon].
+The icon informally identifies the type of the domain object, while the title identifies the instance.
+
+It's also possible to customise other aspects of the domain object's presentation within the xref:ui-layout-and-hints.adoc[user interface].
+
+
+
+== Properties, Collections and Actions (and Mixins)
+
+Every domain object in Apache Causeway consists of three types of members:
+
+* properties, such as a ``Customer``'s `firstName`
+* collections, such as a ``Customer``'s `orders` collection of ``Order``s
+* actions, such as a ``Customer'``s `placeOrder(...)` method.
+
+In small or simple applications these are implemented as `public` methods on the domain object itself.
+In larger or more complicated applications, xref:mixins.adoc[mixins] provide an alternative way to implement actions (ie behaviour) and derived (read-only) properties or collections, with the implementation "contributed to" the underlying domain object.
+
+
+
+
+== Business Rules
+
+When a domain object is rendered in the UI or the end-user interacts with the domain object through the UI, the framework applies a series of precondition business rules to each object member (property, collection or action).
+
+When the object is being rendered, the framework checks:
+
+* is the object member visible? - Members that are not visible are simply omitted from the page.
+* if the object member is visible, is the object member enabled (or is it not editable/greyed out)?
+* for enabled object members, are the supplied arguments valid?
+
+One way to remember this is: *"see it, use it, do it"*.
+
+The framework provides a multitude of ways to implement these business rules.
+The simplest approach is to just implement the business rules imperatively in the domain object, using a supporting method.
+
+
+== Events
+
+When the framework renders a domain object, and as the end-user interacts with the domain object, the framework it emits multiple events using the intra-process xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus].
+These events enable other domain services (possibly in other modules) to influence how the domain object is rendered, or to perform side-effects or even veto an action invocation.
+
+The framework has several categories of events: domain events, UI events and lifecycle events.
+Learn more about these in xref:events.adoc[events] page.
+
+To receive the events, the domain service should subscribe to the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and implement an appropriately annotated method to receive the events.
+
+
+
+== Modularity
+
+Enabling and ensuring modularity is a xref:background-context-and-theory.adoc#modular[key principle] for the Apache Causeway framework.
+Modularity is the only way to ensure that a complex application domain does not over time degenerate into the infamous "big ball of mud", software that is difficult, dangerous and expensive to change.
+
+xref:modules.adoc[Modules] chunk up the overall application into smaller pieces, usually a pacakge and subpackages.
+The smaller pieces can be either "horizontal" tiers (presentation / domain / persistence) or "vertial" functional slices (eg customer vs orders vs products vs invoice etc).
+
+Because the framework takes care in large part of the presentation and persistence tiers, modules in an Apache Causeway application are oriented around vertical slices, and determining the dependencies between those modules.
+These modules will form a directed acyclic graph (DAG)
+
+Both xref:mixins.adoc[mixins] and xref:events.adoc[events] are important to enabling modularity.
+Mixins allow one module to seemingly "contribute" behaviour to a domain object in another module, while events allow modules to interact in a decoupled fashion, either reacting to or vetoing actions originating in some other module.
+

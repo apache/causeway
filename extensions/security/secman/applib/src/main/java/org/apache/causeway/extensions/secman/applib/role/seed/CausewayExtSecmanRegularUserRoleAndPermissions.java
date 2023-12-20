@@ -18,10 +18,13 @@
  */
 package org.apache.causeway.extensions.secman.applib.role.seed;
 
+import jakarta.inject.Inject;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authentication.logout.LogoutMenu;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -66,6 +69,8 @@ import lombok.val;
  */
 public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
+    @Inject private CausewaySystemEnvironment env;
+
     public CausewayExtSecmanRegularUserRoleAndPermissions(final Secman config) {
         super(config.getSeed().getRegularUser().getRoleName(), "Regular user of the security module");
     }
@@ -93,8 +98,17 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
                 ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updatePassword"),
                 ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updateEmailAddress"),
                 ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updatePhoneNumber"),
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updateFaxNumber")
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updateFaxNumber"),
 
+                // optionally allow access to documentation menu and pages, based on module presence
+                env.getIocContainer().containsBean("org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp")
+                    ? ApplicationFeatureId.newNamespace(CausewayExtDocgenRoleAndPermissions.NAMESPACE)
+                    : null,
+
+                // optionally allow access to layout menu and pages, based on module presence
+                env.getIocContainer().containsBean("org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub")
+                    ? ApplicationFeatureId.newNamespace(CausewayExtLayoutLoadersRoleAndPermissions.NAMESPACE)
+                    : null
         );
 
         val allowViewing = Can.of(

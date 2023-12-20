@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.commons.internal.codec;
 
+import java.io.ByteArrayInputStream;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,7 +30,11 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 
 import org.jdom2.input.SAXBuilder;
+import org.springframework.lang.Nullable;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -90,7 +96,17 @@ public class _DocumentFactories {
         return builder;
     }
 
-
-
+    @Nullable
+    @SneakyThrows
+    public Document parseDocument(final @Nullable String xml) {
+        if(xml==null) return null;
+        var dbf = _DocumentFactories.documentBuilderFactory();
+        dbf.setNamespaceAware(true);
+        var documentBuilder = dbf.newDocumentBuilder();
+        try(var bis = new ByteArrayInputStream(xml.getBytes("utf-8"))) {
+            var doc = documentBuilder.parse(new InputSource(bis));
+            return doc;
+        }
+    }
 
 }

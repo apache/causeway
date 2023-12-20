@@ -35,10 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
+import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -101,9 +100,7 @@ implements HasMetaModelContext {
             final ResourceDescriptor resourceDescriptor,
             final RequestParams requestParams) {
 
-        _Assert.assertNotNull(metaModelContext, ()->"injection points not resolved for " + this.getClass());
-
-        if (!metaModelContext.getInteractionService().isInInteraction()) {
+        if (!getInteractionService().isInInteraction()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
@@ -117,9 +114,9 @@ implements HasMetaModelContext {
         // eg. http://localhost:8080/
         val serverAbsoluteBase =
                 _Strings
-                .suffix(_Refs
-                        .stringRef(restfulAbsoluteBase)
-                        .cutAtLastIndexOfAndDrop(restfulRelativeBase),
+                .suffix(TextUtils.cutter(restfulAbsoluteBase)
+                        .keepAfterLast(restfulRelativeBase)
+                        .getValue(),
                 "/");
 
         // eg. http://localhost:8080/ctx/
@@ -163,7 +160,7 @@ implements HasMetaModelContext {
 
     private String getUrlDecodedQueryStringIfAny() {
         final String queryStringIfAny = httpServletRequest.getQueryString();
-        return _UrlDecoderUtil.urlDecodeNullSafe(queryStringIfAny);
+        return UrlUtils.urlDecodeUtf8(queryStringIfAny);
     }
 
     private ResourceContext resourceContext(

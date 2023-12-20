@@ -36,7 +36,7 @@ public class Customer {
 }
 ----
 
-will propagate an instance of the default `o.a.i.applib.services.eventbus.ActionDomainEvent.Default` class, which can then be subscribed to:
+will propagate an instance of the default `o.a.c.applib.services.eventbus.ActionDomainEvent.Default` class, which can then be subscribed to:
 
 [source,java]
 ----
@@ -71,7 +71,7 @@ public class LibraryMember {
     ...
 }
 ----
-<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.The topic of subclassing is discussed in more detail xref:refguide:applib:index/services/eventbus/EventBusService.adoc#event-hierarchy[below].
+<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.c.applib.eventbus.ActionDomainEvent`.The topic of subclassing is discussed in more detail xref:refguide:applib:index/services/eventbus/EventBusService.adoc#event-hierarchy[below].
 
 Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it.
 For example:
@@ -105,7 +105,7 @@ By creating domain event subtypes we can be more semantically precise and in tur
 
 We recommend that you define event classes at (up to) four scopes:
 
-* at the top "global" scope is the Apache Causeway-defined `o.a.i.applib.event.ActionDomainEvent`
+* at the top "global" scope is the Apache Causeway-defined `o.a.c.applib.event.ActionDomainEvent`
 * for the "module" scope, create a static class to represent the module itself, and creating nested classes within
 * for each "class" scope, create a nested static event class in the domain object's class for all of the domain object's actions
 * for each "action" scope, create a nested static event class for that action, inheriting from the "domain object" class.
@@ -207,7 +207,7 @@ public class LibraryMember {
     ...
 }
 ----
-<.> `LibraryMember.LeaveEvent` could be _any_ class, not just a subclass of `o.a.i.applib.event.ActionDomainEvent`.
+<.> `LibraryMember.LeaveEvent` could be _any_ class, not just a subclass of `o.a.c.applib.event.ActionDomainEvent`.
 
 In practice we suspect there will be few cases where the programmatic approach is required rather than the declarative approach afforded by xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent()] et al.
 

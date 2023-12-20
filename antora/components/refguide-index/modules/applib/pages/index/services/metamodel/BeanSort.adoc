@@ -58,7 +58,7 @@ Injectable object, associated with a lifecycle context (application-scoped, requ
 <.> xref:#MIXIN[MIXIN]
 +
 --
-Object associated with an 'entity' or 'bean' to act as contributer of domain actions or properties. Might also be stateful similar to VIEW_MODEL.
+Object associated with an _entity_ , _viewmodel_ or _domain-service_ to act as contributer of a single _domain-action_ or _domain-property_ or _domain-collection_ .
 --
 <.> xref:#VALUE[VALUE]
 +
@@ -78,7 +78,7 @@ A non concrete type, that is a placeholder for a its concrete implementer.
 <.> xref:#VETOED[VETOED]
 +
 --
-Type must not be added to the meta-model, eg. by means of _Domain#Exclude_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]
+Type must not be added to the meta-model, eg. by means of _org.apache.causeway.applib.annotation.Domain.Exclude_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]
 --
 
 == Members
@@ -118,7 +118,7 @@ to be introspected: NO
 [#MIXIN]
 === MIXIN
 
-Object associated with an 'entity' or 'bean' to act as contributer of domain actions or properties. Might also be stateful similar to VIEW_MODEL.
+Object associated with an _entity_ , _viewmodel_ or _domain-service_ to act as contributer of a single _domain-action_ or _domain-property_ or _domain-collection_ .
 
 [#VALUE]
 === VALUE
@@ -138,4 +138,4 @@ A non concrete type, that is a placeholder for a its concrete implementer.
 [#VETOED]
 === VETOED
 
-Type must not be added to the meta-model, eg. by means of _Domain#Exclude_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]
+Type must not be added to the meta-model, eg. by means of _org.apache.causeway.applib.annotation.Domain.Exclude_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]

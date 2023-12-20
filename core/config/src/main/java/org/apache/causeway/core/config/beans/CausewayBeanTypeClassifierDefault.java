@@ -34,7 +34,7 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
 import lombok.AccessLevel;
@@ -65,7 +65,7 @@ implements CausewayBeanTypeClassifier {
             return CausewayBeanMetaData.notManaged(BeanSort.VALUE, type);
         }
 
-        if(ProgrammingModelConstants.CollectionSemantics.valueOf(type).isPresent()) {
+        if(CollectionSemantics.valueOf(type).isPresent()) {
             return CausewayBeanMetaData.causewayManaged(BeanSort.COLLECTION, type);
         }
 
@@ -111,16 +111,17 @@ implements CausewayBeanTypeClassifier {
                         .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
 
+        //[CAUSEWAY-3585] when implements ViewModel, then don't consider alternatives, yield VIEW_MODEL
+        if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
+            return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, type);
+        }
+
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types
         for(val classifier : classifierPlugins) {
             val classification = classifier.classify(type);
             if(classification!=null) {
                 return classification;
             }
-        }
-
-        if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
-            return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, type);
         }
 
         val entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);

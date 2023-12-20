@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -44,9 +45,11 @@ import org.apache.causeway.core.config.beans.aoppatch.TransactionInterceptorFact
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
+import org.apache.causeway.persistence.jdo.datanucleus.changetracking.PreAndPostValueEvaluatorServiceJdo;
 import org.apache.causeway.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.causeway.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
+import org.apache.causeway.persistence.jdo.datanucleus.exrecog.JdoObjectNotFoundRecognizer;
 import org.apache.causeway.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnByteIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnCharIdValueSemantics;
@@ -55,6 +58,7 @@ import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnDatastoreUni
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnIntIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnLongIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnObjectIdValueSemantics;
+import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnScoidValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnShortIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnStringIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics;
@@ -104,14 +108,19 @@ import lombok.extern.log4j.Log4j2;
     DnCharIdValueSemantics.class,
     DnStringIdValueSemantics.class,
     DnObjectIdValueSemantics.class,
+    DnScoidValueSemantics.class, // in support of @PersistenceCapable(identityType=IdentityType.NONDURABLE)
 
     // @Service's
     JdoSupportServiceDefault.class,
+    JdoObjectNotFoundRecognizer.class,
+    PreAndPostValueEvaluatorServiceJdo.class,
 
 })
 @EnableConfigurationProperties(DatanucleusSettings.class)
 @Log4j2
 public class CausewayModulePersistenceJdoDatanucleus {
+
+    public static final String NAMESPACE = "causeway.persistence.jdo";
 
     /**
      * Conveniently registers this dialect as a {@link PersistenceExceptionTranslator} with <i>Spring</i>.
@@ -162,7 +171,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
     @Qualifier("transaction-aware-pmf-proxy")
     @Bean @Primary
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
-            final MetaModelContext metaModelContext,
+            final MetaModelContext metaModelContext, // no longer used, but perhaps keep to enforce a dependency relation
             final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean,
             final CausewayBeanTypeRegistry beanTypeRegistry,
             final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
@@ -172,7 +181,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
 
         notifyJdoEntityDiscoveryListeners(pmf, beanTypeRegistry, jdoEntityDiscoveryListeners, dnSettings);
 
-        val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy(metaModelContext);
+        val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);
         tapmfProxy.setAllowCreate(false);
         return tapmfProxy;

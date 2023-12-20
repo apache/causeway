@@ -22,13 +22,19 @@ import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 class ClassCacheTest {
@@ -46,12 +52,30 @@ class ClassCacheTest {
         void specificAction(){}
     }
 
+    static class Sample {
+        String echoAction(final String x) {return x;}
+    }
+
     private _ClassCache classCache;
 
     @BeforeEach
     void setup() {
         _ClassCache.invalidate();
         classCache = _ClassCache.getInstance();
+    }
+
+    @Test
+    void weakMethodLookup() {
+        assertNotNull(classCache.lookupResolvedMethodElseFail(Sample.class, "echoAction", new Class<?>[]{Object.class}));
+    }
+    @Test
+    void exactMethodLookup() {
+        assertNotNull(classCache.lookupResolvedMethodElseFail(Sample.class, "echoAction", new Class<?>[]{String.class}));
+    }
+    @Test
+    void invalidMethodLookup() {
+        assertThrows(NoSuchMethodException.class,
+                ()->classCache.lookupResolvedMethodElseFail(Sample.class, "echoAction", new Class<?>[]{Integer.class}));
     }
 
     @Test
@@ -65,20 +89,60 @@ class ClassCacheTest {
     @Test
     void inhertitedMethod() {
         val declaredMethods = Can.ofStream(
-                classCache.streamPublicOrDeclaredMethods(Concrete.class));
-        assertContainsMethod(declaredMethods, "commonAction");
-        assertContainsMethod(declaredMethods, "specificAction");
+                classCache.streamResolvedMethods(Concrete.class));
+        assertContainsResolvedMethod(declaredMethods, "commonAction");
+        assertContainsResolvedMethod(declaredMethods, "specificAction");
     }
 
     @Test
     void inhertitedMethodWhenOverride() {
         val declaredMethods = Can.ofStream(
-                classCache.streamPublicOrDeclaredMethods(ConcreteOverride.class));
-        assertContainsMethod(declaredMethods, "commonAction");
-        assertContainsMethod(declaredMethods, "specificAction");
+                classCache.streamResolvedMethods(ConcreteOverride.class));
+        assertContainsResolvedMethod(declaredMethods, "commonAction");
+        assertContainsResolvedMethod(declaredMethods, "specificAction");
+    }
+
+    @ParameterizedTest(name = "{index}: {0}")
+    @ValueSource(classes = {
+            _Abstract.class,
+            _AbstractImpl.class,
+            _Interface.class,
+            _InterfaceImpl.class,
+            _GenericAbstract.class,
+            _GenericAbstractImpl.class,
+            _GenericInterface.class,
+            _GenericInterfaceImpl.class,
+            _Mixins.Task1.Mixin.class,
+            _Mixins.Task2.Mixin.class,
+    })
+    void methodEnumeration(final Class<?> classUnderTest) {
+        val declaredMethods = Can.ofStream(
+                classCache.streamResolvedMethods(classUnderTest));
+
+        val expectations = extractExpectations(classUnderTest);
+        expectations.assertAll(declaredMethods);
+    }
+
+    @Test
+    void javaLangObjectPublicMethodsAreIgnored() {
+        val javaLangObjectPublicMethods = classCache.streamPublicMethods(Object.class)
+                .collect(Can.toCan());
+        assertEquals(Can.empty(), javaLangObjectPublicMethods);
     }
 
     // -- HELPER
+
+    @SneakyThrows
+    private _Expectations extractExpectations(final Class<?> classUnderTest) {
+        final Class<?> classThatProvidesExpectations = classUnderTest.getSimpleName().equals("Mixin")
+                ? classUnderTest.getEnclosingClass()
+                : classUnderTest;
+        return (_Expectations) classThatProvidesExpectations.getDeclaredMethod("expectations").invoke(null);
+    }
+
+    private void assertContainsResolvedMethod(final Can<ResolvedMethod> declaredMethods, final String methodName) {
+        assertContainsMethod(declaredMethods.map(ResolvedMethod::method), methodName);
+    }
 
     private void assertContainsMethod(final Can<Method> declaredMethods, final String methodName) {
 

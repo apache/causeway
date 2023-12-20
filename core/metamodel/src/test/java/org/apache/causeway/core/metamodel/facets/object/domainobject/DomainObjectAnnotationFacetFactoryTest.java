@@ -22,6 +22,15 @@ import java.util.UUID;
 
 import jakarta.inject.Named;
 
+import lombok.val;
+
+import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.metamodel.facets.AbstractTestWithMetaModelContext;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
+import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -657,5 +667,90 @@ extends FacetFactoryTestAbstract {
 
     }
 
+    public static class Alias extends AbstractTestWithMetaModelContext {
+        DomainObjectAnnotationFacetFactory facetFactory;
 
+        @Named("object.name")
+        @DomainObject(aliased = {"object.name", "object.alias"})
+        class DomainObjectWithAliases {
+        }
+
+        @Named("service.name")
+        @DomainService(aliased = {"service.name", "service.alias"})
+        class DomainServiceWithAliases {
+        }
+
+        @Test
+        public void testValidationDomainObjectWithAliasesConfigured() {
+            metaModelContext = MetaModelContext_forTesting.builder()
+                    .programmingModelFactory(mmc -> {
+                        val progModel = new ProgrammingModelFacetsJava11(mmc);
+                        facetFactory.refineProgrammingModel(progModel);
+                        progModel.init(new ProgrammingModelInitFilterDefault());
+                        return progModel;
+                    })
+                    .build();
+            getConfiguration().getCore().getMetaModel().getValidator().setAllowLogicalTypeNameAsAlias(true);
+            facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
+            ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
+
+            getMetaModelContext().getSpecificationLoader().loadSpecification(DomainObjectWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
+            ValidationFailures validationFailures = getMetaModelContext().getSpecificationLoader().getOrAssessValidationResult();
+            assertFalse(validationFailures.hasFailures());
+        }
+
+        @Test
+        public void testValidationDomainServiceWithAliasesConfigured() {
+            metaModelContext = MetaModelContext_forTesting.builder()
+                    .programmingModelFactory(mmc -> {
+                        val progModel = new ProgrammingModelFacetsJava11(mmc);
+                        facetFactory.refineProgrammingModel(progModel);
+                        progModel.init(new ProgrammingModelInitFilterDefault());
+                        return progModel;
+                    })
+                    .build();
+            getConfiguration().getCore().getMetaModel().getValidator().setAllowLogicalTypeNameAsAlias(true);
+            facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
+            ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
+
+            getMetaModelContext().getSpecificationLoader().loadSpecification(DomainServiceWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
+            ValidationFailures validationFailures = getMetaModelContext().getSpecificationLoader().getOrAssessValidationResult();
+            assertFalse(validationFailures.hasFailures());
+        }
+        @Test
+        public void testValidationDomainObjectWithAliasesDefault() {
+            metaModelContext = MetaModelContext_forTesting.builder()
+                    .programmingModelFactory(mmc -> {
+                        val progModel = new ProgrammingModelFacetsJava11(mmc);
+                        facetFactory.refineProgrammingModel(progModel);
+                        progModel.init(new ProgrammingModelInitFilterDefault());
+                        return progModel;
+                    })
+                    .build();
+            facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
+            ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
+
+            getMetaModelContext().getSpecificationLoader().loadSpecification(DomainObjectWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
+            ValidationFailures validationFailures = getMetaModelContext().getSpecificationLoader().getOrAssessValidationResult();
+            assertTrue(validationFailures.hasFailures());
+        }
+
+        @Test
+        public void testValidationDomainServiceWithAliasesDefault() {
+            metaModelContext = MetaModelContext_forTesting.builder()
+                    .programmingModelFactory(mmc -> {
+                        val progModel = new ProgrammingModelFacetsJava11(mmc);
+                        facetFactory.refineProgrammingModel(progModel);
+                        progModel.init(new ProgrammingModelInitFilterDefault());
+                        return progModel;
+                    })
+                    .build();
+            facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
+            ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
+
+            getMetaModelContext().getSpecificationLoader().loadSpecification(DomainServiceWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
+            ValidationFailures validationFailures = getMetaModelContext().getSpecificationLoader().getOrAssessValidationResult();
+            assertTrue(validationFailures.hasFailures());
+        }
+    }
 }

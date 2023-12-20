@@ -23,10 +23,10 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.core.config.messages.MessageRegistry;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -42,11 +42,11 @@ extends MetaModelValidatorAbstract {
 
     @Inject
     public TitlesAndTranslationsValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, MetaModelValidator.NONE);
     }
 
     @Override
-    public void validate() {
+    public void validateEnter() {
         validateServiceTitles();
         validateEnumTitles();
         validateRegisteredMessageTranslation();
@@ -54,10 +54,9 @@ extends MetaModelValidatorAbstract {
 
     private void validateServiceTitles() {
 
-        val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
-        val specificationLoader = super.getMetaModelContext().getSpecificationLoader();
-        val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
-
+        val serviceRegistry = getServiceRegistry();
+        val specificationLoader = getSpecificationLoader();
+        val titleService = getTitleService();
 
         serviceRegistry.streamRegisteredBeans()
         .forEach(managedBeanAdapter->{
@@ -109,9 +108,8 @@ extends MetaModelValidatorAbstract {
 
     private void validateEnumTitles() {
 
-        val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
-        val specificationLoader = super.getMetaModelContext().getSpecificationLoader();
-        val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
+        val specificationLoader = getSpecificationLoader();
+        val titleService = getTitleService();
 
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
@@ -147,11 +145,8 @@ extends MetaModelValidatorAbstract {
 
     private void validateRegisteredMessageTranslation() {
 
-        val specificationLoader = super.getMetaModelContext().getSpecificationLoader();
-        val translationService = super.getMetaModelContext().getTranslationService();
-
-        // as used by the Wicket UI?
-        // final TranslationContext context = "org.apache.causeway...InteractionService";
+        val specificationLoader = getSpecificationLoader();
+        val translationService = getTranslationService();
 
         // see @ConfirmUiModel#translate()
         val translationContext = TranslationContext.forClassName(MessageRegistry.class);

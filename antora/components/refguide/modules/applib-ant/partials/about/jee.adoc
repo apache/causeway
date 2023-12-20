@@ -1,0 +1,41 @@
+= Java EE Annotations
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+While Apache Causeway does define many of its own annotations, the policy is to reuse standard Java/JEE annotations wherever they exist or are added to the Java platform.
+
+The table below lists the JEE annotations currently recognized.
+
+
+.Java EE Annotations
+[cols="2,4a,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+
+|xref:refguide:applib-ant:Digits.adoc[`@javax.validation.` +
+`constraints.` +
+`Digits`]
+|Precision/scale for BigDecimal values.
+|Domain
+
+|xref:refguide:applib-ant:Pattern.adoc[`@javax.validation.` +
+`constraints.` +
+`Pattern`]
+|Regular expressions for strings
+|Domain
+
+
+|xref:refguide:applib-ant:Digits.adoc[`@javax.annotation.` +
+`Nullable`]
+|Specify that a property/parameter is optional.
+|Domain
+
+
+|===
+
+
+

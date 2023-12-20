@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testdomain.conf;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
@@ -26,29 +25,23 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @Import({
     CausewayModuleCoreRuntimeServices.class,
     CausewayModuleSecurityBypass.class,
-    Configuration_headless.HeadlessCommandSupport.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
     DomainObjectTesterFactory.class // Helper for JUnit Tests
 })
@@ -57,53 +50,29 @@ import lombok.RequiredArgsConstructor;
 })
 public class Configuration_headless {
 
-    @Service
-    @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-    @RequiredArgsConstructor(onConstructor_ = {@Inject})
-    public static class HeadlessCommandSupport
-    implements TransactionBoundaryAware {
-
-        @Override
-        public void beforeEnteringTransactionalBoundary(final Interaction interaction) {
-//            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
-            setupCommandCreateIfMissing();
-        }
-
-        @Override
-        public void afterLeavingTransactionalBoundary(final Interaction interaction) {
-//            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interaction.getInteractionId());
-        }
-
-        public void setupCommandCreateIfMissing() {
-
-//            val interactionProvider = interactionProviderProvider.get();
-//            @SuppressWarnings("unused")
-//            final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
-//                    .orElseGet(()->{
-//                        val newCommand = new Command();
-//                        val newInteraction = new Interaction(newCommand);
-//                        interactionProvider.setInteraction(newInteraction);
-//                        return newInteraction;
-//                    });
-        }
-
-    }
 
     @Bean @Singleton
     public PlatformTransactionManager platformTransactionManager() {
-        return new PlatformTransactionManager() {
+        return new AbstractPlatformTransactionManager() {
 
             @Override
-            public void rollback(final TransactionStatus status) throws TransactionException {
-            }
-
-            @Override
-            public TransactionStatus getTransaction(final TransactionDefinition definition) throws TransactionException {
+            protected Object doGetTransaction() throws TransactionException {
                 return null;
             }
 
             @Override
-            public void commit(final TransactionStatus status) throws TransactionException {
+            protected void doBegin(final Object transaction, final TransactionDefinition definition) throws TransactionException {
+
+            }
+
+            @Override
+            protected void doCommit(final DefaultTransactionStatus status) throws TransactionException {
+
+            }
+
+            @Override
+            protected void doRollback(final DefaultTransactionStatus status) throws TransactionException {
+
             }
         };
     }

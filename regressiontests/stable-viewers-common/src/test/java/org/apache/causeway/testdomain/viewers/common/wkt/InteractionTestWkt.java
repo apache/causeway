@@ -23,10 +23,13 @@ import jakarta.inject.Inject;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,13 +38,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
+import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
@@ -73,6 +78,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
+@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD, classMode = ClassMode.BEFORE_CLASS)
 class InteractionTestWkt extends InteractionTestAbstract {
 
     @Inject private MetaModelContext commonContext;
@@ -82,22 +88,28 @@ class InteractionTestWkt extends InteractionTestAbstract {
     private ManagedObject domainObject;
     private PageParameters pageParameters;
 
+    // optimization: reuse Wicket application across tests
+    private static _Refs.ObjectReference<EntityPageTester> wktTesterHolder =
+            _Refs.objectRef(null);
+
     @BeforeEach
     void setUp() {
-        wktTester = wicketTesterFactory.createTester(dto->null);
+        wktTester = wktTesterHolder.computeIfAbsent(()->
+                wicketTesterFactory.createTester(dto->null));
         domainObject = newViewmodel(InteractionDemo.class);
         pageParameters = PageParameterUtils.createPageParametersForObject(domainObject);
     }
 
-    @AfterEach
-    void cleanUp() {
-        wktTester.destroy();
+    @AfterAll
+    static void cleanUp() {
+        wktTesterHolder.getValue()
+            .ifPresent(EntityPageTester::destroy);
     }
 
     @Test
     void shouldHaveARequestCycle() {
 
-        val entityPage = EntityPage.forPageParameters(commonContext, pageParameters);
+        val entityPage = EntityPage.forPageParameters(pageParameters);
         wktTester.startPage(entityPage);
 
         assertNotNull(RequestCycle.get());
@@ -112,7 +124,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
         val objectSpec = domainObject.getSpecification();
-        val entityModel = UiObjectWkt.ofAdapter(commonContext, domainObject);
+        val entityModel = UiObjectWkt.ofAdapter(domainObject);
 
         assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());
         assertEquals(domainObject.getTitle(), entityModel.getTitle());
@@ -127,7 +139,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
             final ScalarPropertyModel scalarModel = (ScalarPropertyModel) entityModel
                     .getPropertyModel(
                             prop,
-                            ScalarRepresentation.VIEWING,
+                            ViewOrEditMode.VIEWING,
                             RenderingHint.PARENTED_PROPERTY_COLUMN);
 
 
@@ -159,7 +171,6 @@ class InteractionTestWkt extends InteractionTestAbstract {
             assertEquals(
                     propBackendValue,
                     propUIValue);
-
 
             return true; // continue
 

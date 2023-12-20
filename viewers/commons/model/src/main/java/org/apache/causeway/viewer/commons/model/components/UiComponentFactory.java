@@ -25,22 +25,18 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
-import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedFeature;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 public interface UiComponentFactory<B, C> {
 
@@ -126,19 +122,7 @@ public interface UiComponentFactory<B, C> {
             return ((ManagedProperty)managedFeature).checkUsability().isPresent();
         }
 
-        @Deprecated // used by Vaadin Viewer - however, we have bindable models to use instead
-        public <T> Optional<T> getFeatureValue(final @Nullable Class<T> type) {
-            val managedProperty = (ManagedProperty)managedFeature;
-            //TODO do a type check before the cast, so we can throw a more detailed exception
-            // that is, given type must be assignable from the actual pojo type
-            return Optional.ofNullable(managedProperty.getPropertyValue())
-                    .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
-                    .map(ManagedObject::getPojo)
-                    .map(type::cast);
-        }
-
     }
-
 
     // -- HANDLER
 
@@ -148,8 +132,5 @@ public interface UiComponentFactory<B, C> {
     static interface Handler<T>
     extends ChainOfResponsibility.Handler<UiComponentFactory.ComponentRequest, T> {
     }
-
-
-
 
 }

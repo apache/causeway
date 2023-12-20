@@ -31,10 +31,12 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.RequiredArgsConstructor;
 
-/*${generated-file-notice}*/
+import demoapp.dom.types.Samples;
+
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT
@@ -51,21 +53,21 @@ public class /*${showcase-name}*/Holder_updateReadOnlyOptionalPropertyWithChoice
 
     @MemberSupport public /*${showcase-name}*/Holder act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            final /*${showcase-type}*/ newValue) {
+            final /*${showcase-simple-type}*/ newValue) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public /*${showcase-type}*/ default0Act() {
+    @MemberSupport public /*${showcase-simple-type}*/ default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 
-    @MemberSupport public List</*${showcase-type-boxed}*/> choices0Act() {
+    @MemberSupport public List</*${showcase-simple-type-boxed}*/> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples</*${showcase-type-boxed}*/> samples;
+    Samples</*${showcase-simple-type-boxed}*/> samples;
 }
 //end::class[]

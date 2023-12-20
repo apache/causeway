@@ -56,7 +56,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             final @NonNull MetaModelContext metaModelContext,
             final @NonNull T delegate,
             final SyncControl syncControl) {
-
         this.delegate = delegate;
         this.objectManager = metaModelContext.getObjectManager();
         this.wrapperFactory = metaModelContext.getWrapperFactory();
@@ -92,8 +91,8 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         resolveIfRequired(objectManager.adapt(domainObject));
     }
 
-    protected Object delegate(final Method method, final Object[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-
+    protected Object delegate(final Method method, final Object[] args)
+            throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         return method.invoke(getDelegate(), args);
     }
 

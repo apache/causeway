@@ -52,7 +52,6 @@ import lombok.val;
  *
  * @see UserService
  * @see ImpersonateMenuAdvisor
- * @see ImpersonatedUserHolder
  *
  * @since 2.0 {@index}
  */
@@ -80,11 +79,11 @@ public class ImpersonateMenu {
 
 
     @Action(
-            domainEvent = impersonate.ActionDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
+            domainEvent = impersonate.ActionDomainEvent.class,
             executionPublishing = Publishing.DISABLED,
-            restrictTo = RestrictTo.PROTOTYPING
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(sequence = "100.1", cssClassFa = "fa-mask")
     public class impersonate {
@@ -116,11 +115,11 @@ public class ImpersonateMenu {
 
 
     @Action(
-            domainEvent = impersonateWithRoles.ActionDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
+            domainEvent = impersonateWithRoles.ActionDomainEvent.class,
             executionPublishing = Publishing.DISABLED,
-            restrictTo = RestrictTo.PROTOTYPING
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(sequence = "100.2", cssClassFa = "fa-mask")
     public class impersonateWithRoles {

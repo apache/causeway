@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel._testing;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -27,6 +26,7 @@ import java.util.function.Predicate;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.CanBeVoid;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 
@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Value;
 
-public class MethodRemover_forTesting 
+public class MethodRemover_forTesting
 implements MethodRemover {
 
     @Value
@@ -53,16 +53,16 @@ implements MethodRemover {
     }
 
     @Getter
-    private final List<Method> removedMethodMethodCalls = new ArrayList<Method>();
+    private final List<ResolvedMethod> removedMethodMethodCalls = new ArrayList<ResolvedMethod>();
 
     @Override
-    public void removeMethod(final @Nullable Method method) {
+    public void removeMethod(final @Nullable ResolvedMethod method) {
         if(method==null) return;
         removedMethodMethodCalls.add(method);
     }
 
     @Setter
-    private List<Method> removeMethodsReturn;
+    private List<ResolvedMethod> removeMethodsReturn;
 
     @Value
     static class RemoveMethodsArgs {
@@ -73,12 +73,12 @@ implements MethodRemover {
     }
 
     @Override
-    public void removeMethods(final Predicate<Method> filter, final Consumer<Method> onRemoval) {
+    public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
         removeMethodArgsCalls.add(new RemoveMethodArgs("", void.class, new Class[0]));
     }
 
     @Override
-    public Can<Method> snapshotMethodsRemaining() {
+    public Can<ResolvedMethod> snapshotMethodsRemaining() {
         // creates a defensive copy, but as far as I know is not thread-safe
         return Can.ofStream(removedMethodMethodCalls.stream());
     }

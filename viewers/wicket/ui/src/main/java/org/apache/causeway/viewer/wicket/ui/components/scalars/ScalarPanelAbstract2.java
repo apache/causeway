@@ -26,31 +26,28 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.IModel;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.model.value.OptionsBasedOnValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent.Options;
 import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  *  Adds inline prompt logic.
@@ -93,10 +90,10 @@ extends ScalarPanelAbstract {
                         getFormFrame()));
 
 
-        FieldFragement.matching(fieldFrame)
-        .ifPresent(fieldFragement->{
+        FieldFragment.matching(fieldFrame)
+        .ifPresent(fieldFragment ->{
 
-            switch (fieldFragement) {
+            switch (fieldFragment) {
             case LINK_TO_PROMT: {
 
                 fieldFrame
@@ -105,15 +102,15 @@ extends ScalarPanelAbstract {
                 // needs InlinePromptContext to properly initialize
                 addOnClickBehaviorTo(inlinePromptLink);
 
-                val additionalButtonContainer = fieldFragement.createButtonContainer(inlinePromptLink);
-                addAdditionalButtonsTo(additionalButtonContainer, fieldFragement);
+                val additionalButtonContainer = fieldFragment.createButtonContainer(inlinePromptLink);
+                addAdditionalButtonsTo(additionalButtonContainer, fieldFragment);
                 return;
             }
             case NO_LINK_VIEWING:
             case NO_LINK_EDITING: {
 
-                val additionalButtonContainer = fieldFragement.createButtonContainer(fieldFrame);
-                addAdditionalButtonsTo(additionalButtonContainer, fieldFragement);
+                val additionalButtonContainer = fieldFragment.createButtonContainer(fieldFrame);
+                addAdditionalButtonsTo(additionalButtonContainer, fieldFragment);
 
                 return;
             }
@@ -158,19 +155,6 @@ extends ScalarPanelAbstract {
 
 
     // -- SEMANTICS
-
-    private OptionsBasedOnValueSemantics getSemantics(final ScalarModel scalarModel) {
-        return new OptionsBasedOnValueSemantics(scalarModel.getMetaModel(), scalarModel.isEditMode()
-                ? ScalarRepresentation.EDITING
-                : ScalarRepresentation.VIEWING);
-    }
-
-    private MarkupComponent markupComponent(final String id, final IModel<String> model) {
-        return new MarkupComponent(id, model,
-                Options.builder()
-                .syntaxHighlighter(getSemantics(scalarModel()).getSyntaxHighlighter())
-                .build());
-    }
 
     private boolean isUsingTextarea() {
         if(getRenderScenario().isCompact()
@@ -223,6 +207,16 @@ extends ScalarPanelAbstract {
         return "form-control form-control-sm";
     }
 
+    @Override
+    protected void onMakeNotEditable(final String disableReason) {
+        this.setupInlinePrompt(); // recreate additional buttons
+    }
+
+    @Override
+    protected void onMakeEditable() {
+        this.setupInlinePrompt(); // recreate additional buttons
+    }
+
     // -- HELPER
 
     private void addOnClickBehaviorTo(
@@ -253,10 +247,10 @@ extends ScalarPanelAbstract {
     }
 
     private void addAdditionalButtonsTo(
-            final @NonNull RepeatingView buttonContainer, final FieldFragement fieldFragement) {
+            final @NonNull RepeatingView buttonContainer, final FieldFragment fieldFragment) {
 
         for(var additionalButton : ScalarPanelAdditionalButton.values()) {
-            if(additionalButton.isVisible(scalarModel(), getRenderScenario(), fieldFragement)) {
+            if(additionalButton.isVisible(scalarModel(), getRenderScenario(), fieldFragment)) {
                 switch (additionalButton) {
                 case COPY_TO_CLIPBOARD:
                     //XXX Future extension
@@ -290,6 +284,7 @@ extends ScalarPanelAbstract {
                 .orElse("framework bug: should provide a reason");
 
         WktTooltips.addTooltip(disableReasonButton, translate(disabledReason) + translate(reasonSuffix));
+        Wkt.noTabbing(disableReasonButton);
 
         if(scalarModel().isParameter()) {
             // allow the client-side popover cleaner to kick in
@@ -326,14 +321,16 @@ extends ScalarPanelAbstract {
     }
 
     private void onPropertyInlineEditClick(final AjaxRequestTarget target) {
-        scalarModel().toEditMode();
+        scalarModel().toEditingMode();
 
         switchRegularFrameToFormFrame();
         onSwitchFormForInlinePrompt(getFormFrame(), target);
 
         target.add(getScalarFrameContainer());
 
-        Wkt.focusOnMarkerAttribute(getFormFrame(), target);
+        Wkt.focusOnMarkerAttribute(getFormFrame(), target); // not sure this works...
+        Wkt.javaScriptAdd(target, Wkt.EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());  // .. javascript equivalent.
+
     }
 
     private void onClearFieldButtonClick(final AjaxRequestTarget target) {

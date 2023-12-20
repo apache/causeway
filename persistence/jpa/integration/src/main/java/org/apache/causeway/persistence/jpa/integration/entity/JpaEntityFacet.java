@@ -23,11 +23,8 @@ import java.util.Optional;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceException;
 import jakarta.persistence.PersistenceUnitUtil;
-import jakarta.persistence.metamodel.EntityType;
 
-import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.lang.Nullable;
 
@@ -39,15 +36,16 @@ import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -117,7 +115,7 @@ public class JpaEntityFacet
     }
 
     private Class<?> getPrimaryKeyType() {
-        return getJpaEntityType().getIdType().getJavaType();
+        return getOrmMetadata().primaryKeyClass();
     }
 
     @Override
@@ -131,9 +129,7 @@ public class JpaEntityFacet
             val queryEntityType = queryFindAllInstances.getResultType();
 
             // guard against misuse
-            if (!entityClass.isAssignableFrom(queryEntityType)) {
-                throw _Exceptions.unexpectedCodeReach();
-            }
+            _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
 
             val entityManager = getEntityManager();
 
@@ -197,9 +193,7 @@ public class JpaEntityFacet
         }
 
         // guard against misuse
-        if (!entityClass.isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         val entityManager = getEntityManager();
 
@@ -215,9 +209,7 @@ public class JpaEntityFacet
         }
 
         // guard against misuse
-        if (!entityClass.isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         val entityManager = getEntityManager();
         entityManager.refresh(pojo);
@@ -225,15 +217,12 @@ public class JpaEntityFacet
 
     @Override
     public void delete(final Object pojo) {
-
         if (pojo == null) {
             return; // nothing to do
         }
 
         // guard against misuse
-        if (!entityClass.isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         val entityManager = getEntityManager();
         entityManager.remove(pojo);
@@ -242,55 +231,15 @@ public class JpaEntityFacet
     @Override
     public EntityState getEntityState(final Object pojo) {
 
-        if (pojo == null) {
-            return EntityState.NOT_PERSISTABLE;
-        }
-
-        // guard against misuse
-        if (!entityClass.isAssignableFrom(pojo.getClass())) {
-            //throw _Exceptions.unexpectedCodeReach();
+        if (pojo == null
+                || !entityClass.isAssignableFrom(pojo.getClass())) {
             return EntityState.NOT_PERSISTABLE;
         }
 
         val entityManager = getEntityManager();
         val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
 
-        if (entityManager.contains(pojo)) {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.PERSISTABLE_ATTACHED_NO_OID;
-            }
-            return EntityState.PERSISTABLE_ATTACHED;
-        }
-
-        try {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.PERSISTABLE_DETACHED;
-            } else {
-                // detect shallow primary key
-                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
-                return primaryKeyType.isValid(primaryKey)
-                    ? EntityState.PERSISTABLE_DETACHED_WITH_OID
-                    : EntityState.PERSISTABLE_DETACHED;
-            }
-        } catch (PersistenceException ex) {
-            /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
-                (this was without any weaving) */
-            Throwable cause = ex.getCause();
-            if (cause instanceof DescriptorException) {
-                DescriptorException descriptorException = (DescriptorException) cause;
-                Throwable internalException = descriptorException.getInternalException();
-                if (internalException instanceof NullPointerException) {
-                    return EntityState.PERSISTABLE_DETACHED;
-                }
-            }
-            if (cause instanceof NullPointerException) {
-                // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
-                return EntityState.PERSISTABLE_DETACHED;
-            }
-            throw ex;
-        }
+        return _JpaEntityStateUtil.getEntityState(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
     }
 
     @Override
@@ -306,26 +255,10 @@ public class JpaEntityFacet
 
     // -- JPA METAMODEL
 
-    private final _Lazy<Optional<EntityType<?>>> jpaEntityTypeRef = _Lazy.threadSafe(this::queryJpaMetamodel);
-
-    /**
-     * get the JPA meta-model associated with this (corresponding) entity
-     */
-    private EntityType<?> getJpaEntityType() {
-        return jpaEntityTypeRef.get().orElseThrow(_Exceptions::noSuchElement);
-    }
-
-    /**
-     * find the JPA meta-model associated with this (corresponding) entity
-     */
-    private Optional<EntityType<?>> queryJpaMetamodel() {
-        return getEntityManager().getMetamodel().getEntities()
-                .stream()
-                .filter(type -> type.getJavaType().equals(entityClass))
-                .findFirst();
-    }
-
-
+    // lazily looks up the ORM metadata (needs an EntityManager)
+    @Getter(lazy=true)
+    private final EntityOrmMetadata ormMetadata =
+            _MetadataUtil.ormMetadataFor(getEntityManager(), entityClass);
 
     // -- DEPENDENCIES
 

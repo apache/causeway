@@ -57,6 +57,10 @@ public class KVStoreForTesting {
         keyValueMap.clear();
     }
 
+    public void clearValues() {
+        keyValueMap.clear();
+    }
+
     public void put(final Object caller, final String keyStr, final Object value) {
         val key = Key.of(caller.getClass(), keyStr);
         log.debug("writing {} -> {}", key, value);

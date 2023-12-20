@@ -25,13 +25,18 @@ import jakarta.persistence.Column;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil;
 
 import lombok.val;
 
 public class BigDecimalFromJpaColumnAnnotationFacetFactory
-extends FacetFactoryAbstract {
+extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     @Inject
     public BigDecimalFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
@@ -50,13 +55,27 @@ extends FacetFactoryAbstract {
         val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
-                MaxTotalDigitsFacetFromJpaColumnAnnotation
-                .create(jpaColumnIfAny, holder));
+                MaxTotalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetFromJpaColumnAnnotation
-                .create(jpaColumnIfAny, holder));
+                MaxFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));
 
+        if (getConfiguration().getValueTypes().getBigDecimal().isUseScaleForMinFractionalFacet()) {
+            addFacetIfPresent(
+                    MinFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));
+        }
+
+    }
+
+    @Override
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
+
+            objectSpec
+                    .streamProperties(MixedIn.EXCLUDED)
+                    .forEach(BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil::validateBigDecimalValueFacet);
+
+        });
     }
 
 }

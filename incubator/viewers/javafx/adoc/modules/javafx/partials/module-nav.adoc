@@ -1,3 +1,0 @@
-
-* xref:incubator:javafx:about.adoc[JavaFX]
-

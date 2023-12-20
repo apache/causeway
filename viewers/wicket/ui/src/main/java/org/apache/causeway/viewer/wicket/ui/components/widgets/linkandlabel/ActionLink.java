@@ -29,6 +29,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -37,7 +38,6 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel;
@@ -75,7 +75,8 @@ import lombok.val;
  *  </pre>
  */
 public final class ActionLink
-extends IndicatingAjaxLink<ManagedObject> {
+extends IndicatingAjaxLink<ManagedObject>
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -198,9 +199,7 @@ extends IndicatingAjaxLink<ManagedObject> {
             // an error page, but is probably 'good enough').
             val targetAdapter = actionModel.getParentObject();
 
-            targetAdapter.invalidateBookmark();
-
-            val bookmark = targetAdapter.getBookmark().orElseThrow();
+            val bookmark = targetAdapter.refreshBookmark().orElseThrow();
             getMetaModelContext().getTransactionService().flushTransaction();
 
             // "redirect-after-post"
@@ -248,14 +247,12 @@ extends IndicatingAjaxLink<ManagedObject> {
 
         inlinePromptContext.onPrompt();
 
+        Wkt.javaScriptAdd(target, Wkt.EventTopic.FOCUS_FIRST_PARAMETER, scalarTypeContainer.getMarkupId());
+
         target.add(scalarTypeContainer);
     }
 
     // -- DEPENDENCIES
-
-    public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
-    }
 
     private ComponentFactoryRegistry getComponentFactoryRegistry() {
         return ((HasComponentFactoryRegistry) Application.get()).getComponentFactoryRegistry();

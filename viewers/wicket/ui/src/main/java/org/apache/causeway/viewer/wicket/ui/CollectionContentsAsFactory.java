@@ -20,32 +20,45 @@ package org.apache.causeway.viewer.wicket.ui;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
- * <p>
- * An interface for all {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory component factories}
- * (e.g. CollectionContentAsXyzFactory-ies) which want to provide specific title and CSS class(es)
- * for their representation in {@link org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanel}.
- * </p>
+ * An interface for {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory component factories}
+ * (e.g. CollectionContentAsXyzFactory which provides specific title and CSS class)
+ * for their representation in
+ * {@link org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanel}.
  * <p>
  * If the {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory} doesn't implement this interface or the implementation
- * of any of its methods return {@code null} then {@link ComponentFactory#getName()} will be used as title and its
- * {@link StringExtensions#asLowerDashed(java.lang.String) dashed representation}
- * as CSS class for the optional image.
- * </p>
+ * of any of its methods return {@code null} then {@link ComponentFactory#getName()} will be used as title
+ * and its {@link _Strings#asLowerDashed dashed representation} as CSS class for the optional image.
  */
 public interface CollectionContentsAsFactory {
 
     /**
-     * @return A model that will be used as a label for the "View as" dropdown for "collection contents as"
+     * @return label for the "View as" dropdown for "collection contents as"
      * component factories
      */
     IModel<String> getTitleLabel();
 
     /**
-     * @return A model that will be used as a CSS class for the icon/image next to "View as" dropdown
+     * @return CSS class for the icon/image next to "View as" dropdown
      * for "collection contents as" component factories
      */
     IModel<String> getCssClass();
+
+    /**
+     * An ordinal, that governs the order of appearance in the UI dropdown.
+     * <ul>
+     * <li>{@literal 1000..1999} reserved for different table presentations</li>
+     * <li>{@literal 2000..2999} reserved for different table exports</li>
+     * </ul>
+     * <p>
+     * Lowest comes first.
+     */
+    int orderOfAppearanceInUiDropdown();
+
+    /**
+     * Whether activation of this table presentation view should result in a full page reload.
+     */
+    default boolean isPageReloadRequiredOnTableViewActivation() { return false; }
 }

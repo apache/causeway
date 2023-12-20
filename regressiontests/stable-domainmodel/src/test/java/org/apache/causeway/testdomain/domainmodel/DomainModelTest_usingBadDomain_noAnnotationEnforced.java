@@ -36,6 +36,7 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.badnoactenforce.Configuration_usingInvalidDomain_noActionEnforced;
 import org.apache.causeway.testdomain.model.badnoactenforce.InvalidOrphanedActionSupportNoAnnotationEnforced;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -54,7 +55,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class DomainModelTest_usingBadDomain_noAnnotationEnforced {
+class DomainModelTest_usingBadDomain_noAnnotationEnforced extends CausewayIntegrationTestAbstract {
 
     @Inject private CausewayConfiguration configuration;
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;

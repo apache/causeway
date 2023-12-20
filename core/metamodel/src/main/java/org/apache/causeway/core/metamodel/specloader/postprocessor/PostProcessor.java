@@ -19,84 +19,54 @@
 package org.apache.causeway.core.metamodel.specloader.postprocessor;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public class PostProcessor {
+public class PostProcessor implements AutoCloseable {
 
     private final ProgrammingModel programmingModel;
-    private Can<ObjectSpecificationPostProcessor> enabledPostProcessors = Can.empty(); // populated at #init
+    private Can<MetaModelPostProcessor> enabledPostProcessors = Can.empty(); // populated at #init
 
     public void init() {
         enabledPostProcessors = programmingModel.streamPostProcessors()
-                .filter(ObjectSpecificationPostProcessor::isEnabled)
+                .filter(MetaModelPostProcessor::isEnabled)
                 .collect(Can.toCan());
     }
 
-    public void shutdown() {
+    @Override
+    public void close() {
         enabledPostProcessors = Can.empty();
     }
 
     public void postProcess(final ObjectSpecification objectSpecification) {
-        // calling count on these 3 streams so these are actually consumed,
-        // as a side-effect the meta-model potentially gets further populated
-//        objectSpecification.streamRuntimeActions(MixedIn.INCLUDED).count();
-//        objectSpecification.streamCollections(MixedIn.INCLUDED).count();
-//        objectSpecification.streamProperties(MixedIn.INCLUDED).count();
 
-        postProcessObject(objectSpecification);
-
-        objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
-        .forEach(act->postProcessAction(objectSpecification, act));
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED)
-        .forEach(prop->postProcessProperty(objectSpecification, prop));
-
-        objectSpecification.streamCollections(MixedIn.INCLUDED)
-        .forEach(coll->postProcessCollection(objectSpecification, coll));
-    }
-
-    // -- HELPER
-
-    private void postProcessObject(
-            final ObjectSpecification objectSpecification) {
         for (val postProcessor : enabledPostProcessors) {
+
+            if(!postProcessor.getFilter().test(objectSpecification)) {
+                continue;
+            }
+
             postProcessor.postProcessObject(objectSpecification);
-        }
-    }
 
-    private void postProcessAction(
-            final ObjectSpecification objectSpecification,
-            final ObjectAction act) {
-        for (val postProcessor : enabledPostProcessors) {
-            act.streamParameters().forEach(param ->
-                postProcessor.postProcessParameter(objectSpecification, act, param));
-            postProcessor.postProcessAction(objectSpecification, act);
-        }
-    }
+            objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
+            .forEach(act->{
+                act.streamParameters().forEach(param ->
+                    postProcessor.postProcessParameter(objectSpecification, act, param));
+                postProcessor.postProcessAction(objectSpecification, act);
+            });
 
-    private void postProcessProperty(
-            final ObjectSpecification objectSpecification,
-            final OneToOneAssociation prop) {
-        for (val postProcessor : enabledPostProcessors) {
-            postProcessor.postProcessProperty(objectSpecification, prop);
-        }
-    }
+            objectSpecification.streamProperties(MixedIn.INCLUDED)
+            .forEach(prop->postProcessor.postProcessProperty(objectSpecification, prop));
 
-    private void postProcessCollection(
-            final ObjectSpecification objectSpecification,
-            final OneToManyAssociation coll) {
-        for (val postProcessor : enabledPostProcessors) {
-            postProcessor.postProcessCollection(objectSpecification, coll);
+            objectSpecification.streamCollections(MixedIn.INCLUDED)
+            .forEach(coll->postProcessor.postProcessCollection(objectSpecification, coll));
+
         }
     }
 

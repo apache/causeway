@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.ConversionException;
@@ -65,7 +64,7 @@ implements ChoiceTitleHandler {
 
     public ObjectChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-        this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
+        this.isCompactFormat = scalarModel.getRenderingHint().isInTable();
     }
 
     @Override
@@ -125,15 +124,15 @@ implements ChoiceTitleHandler {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-        super.onNotEditable(disableReason, target);
+    protected void onMakeNotEditable(final String disableReason) {
+        super.onMakeNotEditable(disableReason);
         if(isCompactFormat) return;
         setTitleAttribute(disableReason);
     }
 
     @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
-        super.onEditable(target);
+    protected void onMakeEditable() {
+        super.onMakeEditable();
         if(isCompactFormat) return;
         clearTitleAttribute();
     }
@@ -188,7 +187,7 @@ implements ChoiceTitleHandler {
 
         // set mutability
         select2.setEnabled(entityLink.isEnableAllowed()
-                && !getModel().isViewMode());
+                && !getModel().isViewingMode());
 
         /* XXX not sure if required any more
         if(hasAnyChoices()) {

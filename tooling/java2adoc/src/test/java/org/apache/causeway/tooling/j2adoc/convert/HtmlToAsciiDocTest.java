@@ -25,9 +25,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
-import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
+import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocWriter;
 
 import lombok.val;
 
@@ -51,7 +51,7 @@ class HtmlToAsciiDocTest {
 
         // then we expect 3 paragraphs delimited by an empty line
         final String adocAsString = AsciiDocWriter.toString(doc);
-        val lines = _Text.getLines(adocAsString).map(String::trim);
+        val lines = TextUtils.readLines(adocAsString).map(String::trim);
 
         assertEquals(Can.of("Hello", "", "second paragraph", "", "third paragraph", ""), lines);
     }

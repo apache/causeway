@@ -4,42 +4,186 @@
 
 The Full Calendar module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer], rendering any collection of domain objects that expose a date to be rendered in a calendar view (using the link:https://fullcalendar.io/[fullcalendar] javascript library).
 
+This can be accessed from the menu item for tables whose element type meets the appropriate criteria (see xref:#usage[usage], below).
 
-== Applib
+image::screenshot-menu.png[width=300px]
 
-[WARNING]
-====
-TODO: v2 - to write up...
+This will then bring up the fullcalendar view:
 
-need to reference implement either `Calendarable` or `CalandarEventable` in the applib.
-====
+image::screenshot-view.png[width=800px]
 
-== Usage
+From here the end-user can click on the object in the calendar to open each up.
 
-To configure the extension:
+== Setup
 
-* include the dependency:
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-fullcalendar</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayprev}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+In those modules where there are domain objects to be represented on the calendar, add a dependency/import to the applib module:
+
+* add this dependency:
 +
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-fullcalendar-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtFullcalendarApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In addition, in the webapp module of your application, add the following dependency:
+
 [source,xml]
 .pom.xml
 ----
 <dependency>
     <groupId>org.apache.causeway.extensions</groupId>
-    <artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
+    <artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>
 </dependency>
 ----
 
-* update the `AppManifest`:
-+
+And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the extension's implementation module:
+
 [source,java]
 .AppManifest.java
 ----
 @Configuration
 @Import({
-        CausewayModuleExtFullCalendarWicketUi.class,  // <.>
+        CausewayModuleExtFullcalendarWicketUi.class,
         ...
 })
 public class AppManifest {
 }
 ----
 
+[#usage]
+== Usage
+
+In order that a domain object can appear in the full calendar view, it must implement one of two interfaces:
+
+* `org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable`
++
+By implementing this interface, the domain object exposes two values: the name of a calendar, and a date (as well as the object's title, and optionally a tooltip).
++
+This is appropriate when there the domain object has just one date property of interest, for example an `Appointment` domain object.
+
+* `org.apache.causeway.extensions.fullcalendar.applib.Calendarable`
++
+This interface is very similar, but allows the domain object to expose multiple calendars and multiple corresponding dates.
++
+For example, a `HotelStay` domain object could expose its check-in and check-out dates as two separate dates of interest.
+
+For example,
+
+[source,java]
+.HotelStay.java
+----
+// ...
+public class HotelStay implements Calendarable {
+
+    @Property
+    @Getter
+    private java.time.LocalDate checkIn;
+
+    @Property
+    @Getter
+    private String checkInNotes;
+
+    @Property
+    @Getter
+    private java.time.LocalDate checkOut;
+
+    @Property
+    @Getter
+    private String checkOutNotes;
+
+    @Override
+    public Set<String> getCalendarNames() {
+        return _Sets.of("Check-in", "Check-out");
+    }
+
+    @Override
+    public Map<String, CalendarEventable> getCalendarEvents() {
+        String myTitle = titleService.titleOf(this);
+        return _Maps.unmodifiable(
+                "Check-in",  new MyCalendarEventable("Check-in",  getCheckIn(), myTitle, getCheckInNotes()),
+                "Check-out", new MyCalendarEventable("Check-out",  getCheckOut(), myTitle, getCheckOutNotes())
+                );
+    }
+
+    // ...
+
+    @Inject @Transient TitleService titleService;
+}
+----
+
+where `MyCalendarEventable` is a helper class:
+
+[source,java]
+.HotelStay.MyCalendarEventable.java
+----
+public class HotelStay ... {
+
+    // ...
+    @RequiredArgsConstructor
+    class MyCalendarEventable implements CalendarEventable {
+
+        @Getter
+        private final String calendarName;
+        private final localDate localDate;
+        private final String title;
+        private final String tooltip;
+
+        @Override
+        public CalendarEvent toCalendarEvent() {
+            return localDate != null
+                    ? toCalendarEvent(localDate)
+                    : null;
+        }
+
+        private CalendarEvent toCalendarEvent(LocalDate localDate) {
+            ZoneRules zoneRules = clockService.getClock().nowAsOffsetDateTime().toZonedDateTime().getZone().getRules();
+            long epochMillis = localDate.toEpochSecond(LocalTime.MIDNIGHT, zoneRules.getOffset(localDate.atStartOfDay())) * 1000L;
+            return new CalendarEvent(epochMillis, calendarName,
+                title, tooltip);
+        }
+    }
+
+    @Inject @Transient ClockService clockService;
+}
+----

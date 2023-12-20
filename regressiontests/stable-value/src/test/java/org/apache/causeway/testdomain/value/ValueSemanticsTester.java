@@ -20,56 +20,142 @@ package org.apache.causeway.testdomain.value;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import jakarta.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
+import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class ValueSemanticsTester<T> {
+class ValueSemanticsTester<T> {
 
     @Inject InteractionService interactionService;
     @Inject SpecificationLoader specLoader;
+    @Inject WrapperFactory wrapperFactory;
 
+    @SuppressWarnings("unused")
     private final Class<T> valueType;
-    private final Object domainObject;
+    private final ValueTypeExample<T> domainObject;
     private Optional<OrderRelation<T, ?>> currentOrderRelation = Optional.empty();
 
-    public ValueSemanticsTester(final Class<T> valueType, final Object domainObject) {
+    public ValueSemanticsTester(final Class<T> valueType, final ValueTypeExample<T> domainObject) {
         this.valueType = valueType;
         this.domainObject = domainObject;
     }
 
+    // -- ACTIONS
+
+    public static interface ActionInteractionProbe<T> {
+        void testCommandWithNonEmptyArg(ValueSemanticsProvider.Context context, Command command);
+        void testCommandWithEmptyArg(ValueSemanticsProvider.Context context, Command command);
+    }
+
     public void actionInteraction(
-            final @NonNull String actionId) {
+            final @NonNull String actionId,
+            final @NonNull InteractionContext interactionContext,
+            final @NonNull Supplier<T> actionArgumentProvider,
+            final @NonNull ActionInteractionProbe<T> probe) {
+
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val act = objSpec.getActionElseFail(actionId);
+        val context = valueFacet(act.getParameters().getFirstElseFail())
+                .createValueSemanticsContext(act);
+
+        {
+            val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+                val actInteraction = ActionInteraction
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+
+                val params = actInteraction.startParameterNegotiation().orElseThrow();
+                val singleArgPojoToUse = actionArgumentProvider.get();
+
+                params.updateParamValuePojo(0, __->singleArgPojoToUse);
+
+                actInteraction.invokeWith(params);
+
+                return command;
+            });
+
+            probe.testCommandWithNonEmptyArg(context, actionCommandWithNonEmptyArg);
+        }
+
+        {
+            val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+                val actInteraction = ActionInteraction
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+
+                val params = actInteraction.startParameterNegotiation().orElseThrow();
+
+                params.updateParamValuePojo(0, __->null); // overrides default values from value semantics
+
+                actInteraction.invokeWith(params);
+
+                return command;
+            });
+
+            probe.testCommandWithEmptyArg(context, actionCommandWithEmptyArg);
+        }
+
+        {
+            val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+
+                domainObject.invokeSampleActionUsingWrapper(wrapperFactory,
+                        actionArgumentProvider.get());
+
+                return command;
+            });
+
+            probe.testCommandWithNonEmptyArg(context, actionCommandWithNonEmptyArg);
+        }
+
+        {
+            val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+
+                domainObject.invokeSampleActionUsingWrapper(wrapperFactory, null); // overrides default values from value semantics
+
+                return command;
+            });
+
+            probe.testCommandWithEmptyArg(context, actionCommandWithEmptyArg);
+        }
+
     }
+
+    // -- PROPERTIES
 
     public static interface PropertyInteractionProbe<T> {
         void testComposer(ValueSemanticsProvider.Context context, ValueSemanticsProvider<T> semantics);
@@ -124,11 +210,15 @@ public class ValueSemanticsTester<T> {
         });
     }
 
+    // -- COLLECTIONS
+
     public void collectionInteraction(
             final @NonNull String collectionId,
             final @NonNull InteractionContext interactionContext) {
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val coll = objSpec.getCollectionElseFail(collectionId);
+        assertNotNull(coll);
+        // collections have no interactions (removed in v2)
     }
 
     // -- UTILITY
@@ -146,21 +236,6 @@ public class ValueSemanticsTester<T> {
         }
     }
 
-    // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>
-    public static String valueDtoToXml(final ValueWithTypeDto valueWithTypeDto) {
-        val rawXml = Try.call(()->JaxbUtils.toStringUtf8(valueWithTypeDto, opts->opts
-                .useContextCache(true)
-                .formattedOutput(true)))
-        .getValue().orElseThrow();
-
-        val xmlRef = _Refs.stringRef(rawXml);
-        xmlRef.cutAtIndexOf("<ValueWithTypeDto");
-        return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")
-                .replace(" null=\"false\" xmlns:com=\"https://causeway.apache.org/schema/common\" xmlns:cmd=\"https://causeway.apache.org/schema/cmd\"", "")
-                + "</ValueWithTypeDto>";
-
-    }
-
     // -- HELPER
 
     private ValueFacet<T> valueFacet(
@@ -172,7 +247,7 @@ public class ValueSemanticsTester<T> {
                         "Value type Property or Parameter %s is missing a ValueFacet",
                         feature.getFeatureIdentifier()));
 
-        currentOrderRelation = valueFacet.selectDefaultOrderRelation();
+        currentOrderRelation = _Casts.uncheckedCast(valueFacet.selectDefaultOrderRelation());
 
         return _Casts.uncheckedCast(valueFacet);
     }

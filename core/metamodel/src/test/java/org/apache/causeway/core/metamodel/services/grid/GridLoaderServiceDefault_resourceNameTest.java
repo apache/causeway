@@ -26,15 +26,20 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault.LayoutKey;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 
 class GridLoaderServiceDefault_resourceNameTest {
 
     private GridLoaderServiceDefault gridLoaderServiceDefault;
+    private LayoutResourceLoader layoutResourceLoader;
 
     @BeforeEach
     void setUp() throws Exception {
-        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, false);
+        layoutResourceLoader = new LayoutResourceLoaderDefault();
+        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, Can.of(layoutResourceLoader), false);
     }
 
     @Test

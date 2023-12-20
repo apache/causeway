@@ -27,16 +27,16 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -76,53 +76,48 @@ implements
     // -- FACTORIES
 
     public static UiObjectWkt ofPageParameters(
-            final MetaModelContext commonContext,
             final PageParameters pageParameters) {
         val bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
-        return ofBookmark(commonContext, bookmark);
+        return ofBookmark(bookmark);
     }
 
     public static UiObjectWkt ofAdapter(
-            final @NonNull MetaModelContext commonContext,
             final @Nullable ManagedObject adapter) {
-        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
+        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(adapter),
+                ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 
     public static UiObjectWkt ofAdapterForCollection(
-            final MetaModelContext commonContext,
             final ManagedObject adapter,
             final @NonNull EntityCollectionModel.Variant variant) {
-        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                ScalarRepresentation.VIEWING, variant.getTitleColumnRenderingHint());
+        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(adapter),
+                ViewOrEditMode.VIEWING, variant.getTitleColumnRenderingHint());
     }
 
 
     public static UiObjectWkt ofBookmark(
-            final @NonNull MetaModelContext commonContext,
             final @Nullable Bookmark bookmark) {
-        return new UiObjectWkt(BookmarkedObjectWkt.ofBookmark(commonContext, bookmark),
-                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
+        return new UiObjectWkt(BookmarkedObjectWkt.ofBookmark(bookmark),
+                ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 
     // -- CONSTRUCTORS
 
     /**
-     * As used by TreeModel (same as {@link #ofAdapter(MetaModelContext, ManagedObject)}
+     * As used by TreeModel (same as {@link #ofAdapter(ManagedObject)}
      */
     protected UiObjectWkt(
-            final MetaModelContext commonContext,
             final ManagedObject adapter) {
-        this(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
+        this(BookmarkedObjectWkt.ofAdapter(adapter),
+                ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 
     private UiObjectWkt(
             final @NonNull BookmarkedObjectWkt bookmarkedObject,
-            final ScalarRepresentation mode,
+            final ViewOrEditMode viewOrEditMode,
             final RenderingHint renderingHint) {
         super(bookmarkedObject);
-        this.mode = mode;
+        this.viewOrEditMode = viewOrEditMode;
         this.renderingHint = renderingHint;
     }
 
@@ -156,7 +151,7 @@ implements
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
-    private ScalarRepresentation mode;
+    private ViewOrEditMode viewOrEditMode;
 
     @Getter(onMethod = @__(@Override))
     private RenderingHint renderingHint;
@@ -189,11 +184,11 @@ implements
     }
 
     @Override
-    public Either<ObjectIcon, CssClassFaFactory> getIcon() {
-        return getManagedObject().eitherIconOrFaClass();
+    public Either<ObjectIcon, FontAwesomeLayers> getIcon() {
+        return getManagedObject().eitherIconOrFaLayers();
     }
 
-    public Either<ResourceReference, CssClassFaFactory> getIconAsResourceReference() {
+    public Either<ResourceReference, FontAwesomeLayers> getIconAsResourceReference() {
         return getIcon()
                 .mapLeft(objectIcon->
                     imageResourceCache().resourceReferenceForObjectIcon(objectIcon));
@@ -219,32 +214,47 @@ implements
      */
     public ScalarModel getPropertyModel(
             final OneToOneAssociation property,
-            final ScalarRepresentation viewOrEdit,
+            final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
+
+        val bookmarkedObjectModel = bookmarkedObjectModel();
+
+        //[CAUSEWAY-3532] guard against (owner entity) object deleted/not-found
+        //
+        // due to the lazy nature of the underlying model,
+        // (that is loading entities only if required),
+        // this guard only triggers, once the first property model gets looked up;
+        // in other words: this guard only works if every entity has at least a property
+        val ownerPojo = bookmarkedObjectModel.asManagedObject()
+                .getPojo();
+        if(ownerPojo==null) {
+            throw new ObjectNotFoundException(
+                    bookmarkedObjectModel.getBookmark().getIdentifier());
+        }
 
         val pm = property.getMemento();
         val propertyScalarModels = propertyScalarModels();
         final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
-        if (existingScalarModel == null) {
-
-            val propertyInteractionModel = new PropertyInteractionWkt(
-                    bookmarkedObjectModel(),
-                    pm.getIdentifier().getMemberLogicalName(),
-                    renderingHint.asWhere());
-
-            final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
-            .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
-            .peek(scalarModel->log.debug("adding: {}", scalarModel))
-            .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
-            .count();
-
-            // future extensions might allow to add multiple UI models per single property model (typed tuple support)
-            _Assert.assertEquals(1L, modelsAdded, ()->
-                String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
-
+        if (existingScalarModel != null) {
+            return existingScalarModel;
         }
-        return propertyScalarModels.get(pm);
 
+        val propertyInteractionModel = new PropertyInteractionWkt(
+                bookmarkedObjectModel,
+                pm.getIdentifier().getMemberLogicalName(),
+                renderingHint.asWhere());
+
+        final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
+        .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
+        .peek(scalarModel->log.debug("adding: {}", scalarModel))
+        .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
+        .count(); // consume the stream
+
+        // future extensions might allow to add multiple UI models per single property model (typed tuple support)
+        _Assert.assertEquals(1L, modelsAdded, ()->
+            String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
+
+        return propertyScalarModels.get(pm);
     }
 
     @Override
@@ -263,13 +273,13 @@ implements
     // -- VIEW OR EDIT
 
     @Override
-    public UiObjectWkt toEditMode() {
+    public UiObjectWkt toEditingMode() {
         //noop for objects
         return this;
     }
 
     @Override
-    public UiObjectWkt toViewMode() {
+    public UiObjectWkt toViewingMode() {
         //noop for objects
         return this;
     }

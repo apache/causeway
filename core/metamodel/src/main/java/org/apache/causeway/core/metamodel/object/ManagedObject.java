@@ -18,23 +18,25 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -371,14 +373,14 @@ extends
      * Domain Objects may either have an icon corresponding to an icon resource,
      * or they use a font awesome icon.
      */
-    default Either<ObjectIcon, CssClassFaFactory> eitherIconOrFaClass() {
+    default Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers() {
         val iconName = getIconName();
-        val cssClassFaFactory = getSpecification().getCssClassFaFactory().orElse(null);
+        val faLayers = getSpecification().getFaLayers(this).orElse(null);
         if (iconName != null
-                || cssClassFaFactory == null) {
+                || faLayers == null) {
             return Either.left(getIcon());
         } else {
-            return Either.right(cssClassFaFactory);
+            return Either.right(faLayers);
         }
     }
 
@@ -554,6 +556,29 @@ extends
         return adaptSingularInternal(guess, pojo, Optional.empty());
     }
 
+    static ManagedObject adaptProperty(
+            final @NonNull OneToOneAssociation oneToOneAssociation,
+            final @Nullable Object pojo) {
+        return adaptSingularInternal(oneToOneAssociation.getElementType(), pojo, Optional.empty());
+    }
+
+    static ManagedObject adaptParameter(
+            final @NonNull ObjectActionParameter param,
+            final @Nullable Object paramValue) {
+
+        return param.isSingular()
+                ? adaptSingular(param.getElementType(), paramValue)
+                // else adopt each element pojo then pack
+                : packed(param.getElementType(),
+                ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
+    }
+
+    static Can<ManagedObject> adaptParameters(
+            final Can<ObjectActionParameter> objectActionParameters,
+            final List<Object> args) {
+        return objectActionParameters.zipMap(args, ManagedObject::adaptParameter);
+    }
+
     /**
      * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
@@ -608,15 +633,5 @@ extends
         throw _Exceptions.unmatchedCase(specialization);
     }
 
-    static ManagedObject adaptParameter(
-            final @NonNull ObjectActionParameter param,
-            final @Nullable Object paramValue) {
-
-        return param.isSingular()
-                ? adaptSingular(param.getElementType(), paramValue)
-                // else adopt each element pojo then pack
-                : packed(param.getElementType(),
-                        ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
-    }
 
 }
