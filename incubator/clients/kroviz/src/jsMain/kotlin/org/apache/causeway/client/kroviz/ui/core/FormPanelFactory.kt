@@ -25,8 +25,8 @@ import io.kvision.form.FormPanel
 import io.kvision.form.check.CheckBox
 import io.kvision.form.formPanel
 import io.kvision.form.number.Range
-import io.kvision.form.select.Select
 import io.kvision.form.number.Spinner
+import io.kvision.form.select.Select
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
 import io.kvision.form.text.TextArea
@@ -40,18 +40,15 @@ import io.kvision.panel.SimplePanel
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.auto
-import io.kvision.utils.obj
 import io.kvision.utils.px
 import io.kvision.utils.vh
 import org.apache.causeway.client.kroviz.to.ValueType
-import org.apache.causeway.client.kroviz.to.Vega5
 import org.apache.causeway.client.kroviz.ui.dialog.Controller
 import org.apache.causeway.client.kroviz.ui.dialog.VegaPanel
 import org.apache.causeway.client.kroviz.ui.panel.SvgPanel
 import org.apache.causeway.client.kroviz.utils.DateHelper
 import org.apache.causeway.client.kroviz.utils.IconManager
 import org.apache.causeway.client.kroviz.utils.UUID
-import org.apache.causeway.client.kroviz.utils.js.Vega
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
 

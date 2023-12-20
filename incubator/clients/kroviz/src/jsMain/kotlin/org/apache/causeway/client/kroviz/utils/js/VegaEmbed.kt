@@ -16,25 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.handler
+package org.apache.causeway.client.kroviz.utils.js
 
-import kotlinx.serialization.json.Json
-import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
-import org.apache.causeway.client.kroviz.to.TransferObject
-import org.apache.causeway.client.kroviz.to.Vega5
-
-class VegaHandler : BaseHandler() {
-
-    override fun parse(response: String): TransferObject {
-        console.log("[VH_parse]")
-        console.log(response)
-        return Json.decodeFromString<Vega5>(response)
+//@JsModule("vega-embed")
+//@JsNonModule
+object VegaEmbed {
+    fun embed(spec: String, options: String): dynamic {
+        return js(code = """
+                      var vegaEmbed = require('vega-embed')();
+                      var result = vegaEmbed('#vis', spec);
+                      return result.view;
+                   """
+        )
     }
-
-    override fun doHandle() {
-        logEntry.addAggregator(ActionDispatcher())
-        update()
-    }
-
 }
-

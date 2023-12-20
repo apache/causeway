@@ -120,7 +120,8 @@ kotlin {
                 implementation(npm("xterm", "4.15.0"))
                 implementation(npm("pdfjs", "2.4.7"))
                 implementation(npm("vega", "5.22.1"))
-                implementation(npm("vega-lite", "5.6.0"))
+                implementation(npm("vega-lite", "5.16.3"))
+                implementation(npm("vega-embed", "6.23.0"))
                 implementation(npm("element-resize-event", "3.0.6"))
                 implementation(npm("asciidoctor", "2.2.6"))
             }

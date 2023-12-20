@@ -64,12 +64,12 @@ class PropertyBs(node: Node) : XmlLayout() {
     }
 
     fun isHidden():Boolean {
-        console.log("[PB_isHidden]")
-        console.log(this)
         return when {
             hidden == null -> false
             hidden.isEmpty() -> false
+            hidden.equals("NOWHERE") -> false
             hidden.equals("ALL_TABLES") -> true
+            hidden.equals("EVERYWHERE") -> true
             else -> false
         }
     }

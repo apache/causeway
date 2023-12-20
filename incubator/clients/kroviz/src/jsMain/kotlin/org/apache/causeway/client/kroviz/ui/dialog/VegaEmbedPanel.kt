@@ -16,25 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.handler
+package org.apache.causeway.client.kroviz.ui.dialog
 
-import kotlinx.serialization.json.Json
-import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
-import org.apache.causeway.client.kroviz.to.TransferObject
+import io.kvision.panel.SimplePanel
+import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.to.Vega5
+import org.apache.causeway.client.kroviz.utils.js.VegaEmbed
 
-class VegaHandler : BaseHandler() {
+class VegaEmbedPanel(val json: String) : SimplePanel() {
 
-    override fun parse(response: String): TransferObject {
-        console.log("[VH_parse]")
-        console.log(response)
-        return Json.decodeFromString<Vega5>(response)
-    }
-
-    override fun doHandle() {
-        logEntry.addAggregator(ActionDispatcher())
-        update()
+    init {
+        this.addAfterInsertHook {
+            val spec = JSON.parse<Vega5>(json)
+            val options = obj {
+                this.renderer = "canvas"
+                this.container = getElement()
+                this.hover = true
+            }
+            VegaEmbed.embed(spec.toString(), options) as Unit
+        }
     }
 
 }
-

@@ -35,12 +35,12 @@ import org.apache.causeway.client.kroviz.core.Session
 import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.Menubars
-import org.apache.causeway.client.kroviz.ui.samples.VEGA_SAMPLE
 import org.apache.causeway.client.kroviz.ui.dialog.*
 import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder
 import org.apache.causeway.client.kroviz.ui.panel.GeoMap
 import org.apache.causeway.client.kroviz.ui.panel.ImageSample
 import org.apache.causeway.client.kroviz.ui.panel.SvgMap
+import org.apache.causeway.client.kroviz.ui.samples.VEGA_SAMPLE
 import org.apache.causeway.client.kroviz.utils.IconManager
 import org.apache.causeway.client.kroviz.utils.Point
 

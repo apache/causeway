@@ -23,7 +23,6 @@ import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.to.Vega5
 import org.apache.causeway.client.kroviz.utils.js.Vega
 
-// https://vega.github.io/vega/examples/
 class VegaPanel(val json: String) : SimplePanel() {
 
     init {

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.core.event
 
+import kotlinx.browser.document
 import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.causeway.client.kroviz.handler.ResponseHandler
@@ -28,6 +29,7 @@ import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 import org.apache.causeway.client.kroviz.utils.StringUtils
 import org.apache.causeway.client.kroviz.utils.UrlUtils
+import org.w3c.dom.HTMLScriptElement
 import org.w3c.xhr.BLOB
 import org.w3c.xhr.TEXT
 import org.w3c.xhr.XMLHttpRequest
@@ -52,8 +54,11 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         }
         val credentials: String = SessionManager.getCredentials()!!
 
+        loadScriptFromAnotherDomain("https://another-domain.com/script.js", "handleScriptLoaded")
+        url = fixImageUrl(url)
+
         xhr.open(method, url, true)
-        xhr.setRequestHeader("Authorization", "Basic $credentials")
+        xhr.setRequestHeader(AUTHORIZATION, "Basic $credentials")
         xhr.setRequestHeader(CONTENT_TYPE, "application/$subType;charset=UTF-8")
         xhr.setRequestHeader(ACCEPT, "application/$subType, ${Constants.pngMimeType}")
         if (UrlUtils.isIcon(url)) {
@@ -67,14 +72,14 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
             body.isEmpty() -> xhr.send()
             else -> xhr.send(body)
         }
-        SessionManager.getEventStore().start(rs, method, body, aggregator)
+        eventStore().start(rs, method, body, aggregator)
     }
 
     private fun buildBody(link: Link): String {
         return when {
             link.hasArguments() -> StringUtils.argumentsAsBody(link)
             link.method == Method.PUT.operation -> {
-                val logEntry = SessionManager.getEventStore().findBy(aggregator!!)
+                val logEntry = eventStore().findBy(aggregator!!)
                 when (val obj = logEntry?.obj) {
                     is TObject -> StringUtils.propertiesAsBody(obj)
                     else -> ""
@@ -149,6 +154,25 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
 
     private fun eventStore() : EventStore {
         return SessionManager.getEventStore()
+    }
+
+    private fun fixImageUrl(url: String): String {
+        return if (url.startsWith("/images/")) {
+            Constants.demoUrl8.dropLast(1) + url
+        } else {
+            url
+        }
+    }
+
+    fun loadScriptFromAnotherDomain(url: String, callback: String) {
+        val script = document.createElement("script") as HTMLScriptElement
+        script.src = "$url?callback=$callback"
+        document.head?.appendChild(script)
+    }
+
+    // Callback function to handle the loaded script
+    fun handleScriptLoaded(data: dynamic) {
+        console.log("Script loaded from another domain:", data)
     }
 
 }
