@@ -1384,3 +1384,27 @@ li.additionalLinkItem.list-inline-item.hidden {
     padding-left: 0;
     display: none;
 }
+
+/* sidebar doesn't scroll, so prevent parameters from taking up too much space */
+fieldset.parameters > div.parameter {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+
+/* 25% for sidebar  */
+@media (min-width: 1440px) {
+    #body > #wrapper {
+        padding-left: 25%;
+    }
+    #body > #wrapper > #sidebar-wrapper {
+        width: 25%;
+        left: 25%;
+        margin-left: -25%;
+    }
+}
+
+/* ensure that long values wrap in choices drop-down */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    white-space: normal;
+}
