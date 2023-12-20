@@ -294,6 +294,17 @@ public class ParameterNegotiationModel {
                 : null;
     }
 
+    // -- UTILITY
+
+    /**
+     * Creates a serializable {@link PendingParamsSnapshot}, that is bound to this
+     * {@link ParameterNegotiationModel}.
+     * @see PendingParamsSnapshot
+     */
+    public PendingParamsSnapshot createSnapshotModel() {
+        return PendingParamsSnapshot.create(this);
+    }
+
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
 
     private static class ParameterModel extends ManagedParameter {

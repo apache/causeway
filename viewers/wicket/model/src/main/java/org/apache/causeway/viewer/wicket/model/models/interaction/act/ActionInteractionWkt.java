@@ -33,6 +33,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnapshot;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
@@ -259,7 +260,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private ParameterNegotiationModel startParameterNegotiationModel() {
         this.parameterNegotiationModel = actionInteraction().startParameterNegotiation()
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId));
-        this.pendingParamsSnapshot = PendingParamsSnapshot.create(parameterNegotiationModel);
+        this.pendingParamsSnapshot = parameterNegotiationModel.createSnapshotModel();
         return parameterNegotiationModel;
     }
     /**

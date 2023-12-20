@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models.interaction.act;
+package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
@@ -30,9 +30,6 @@ import org.apache.causeway.commons.collections.Cardinality;
 import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
-import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
@@ -43,17 +40,20 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 /**
- * In the event of page serialization memoizes all the current pending parameter values
+ * In the event of serialization memoizes all the current pending parameter values
  * form the {@link ParameterNegotiationModel} this instance was originally created from.
  * <p>
  * On de-serialization those snapshot-ed parameter values can be fed back into a new
  * {@link ParameterNegotiationModel} instance.
+ *
+ * @apiNote Introduced because {@link ParameterNegotiationModel} is not serializable
+ *      and we need a way to serialize pending parameter values. (see also [CAUSEWAY-3663])
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-class PendingParamsSnapshot implements Serializable {
+public class PendingParamsSnapshot implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static PendingParamsSnapshot create(final ParameterNegotiationModel parameterNegotiationModel) {
+    protected static PendingParamsSnapshot create(final ParameterNegotiationModel parameterNegotiationModel) {
         return new PendingParamsSnapshot(null, parameterNegotiationModel);
     }
 
@@ -78,6 +78,7 @@ class PendingParamsSnapshot implements Serializable {
         private static final long serialVersionUID = 1L;
         /**
          * For each parameter, only set if it is a plural.
+         * @implNote {@link LogicalType} is needed to recover a {@link PackedManagedObject}.
          */
         private final LogicalType[] cardinalityConstraints;
         private final Can<Can<Bookmark>> argBookmarks;
