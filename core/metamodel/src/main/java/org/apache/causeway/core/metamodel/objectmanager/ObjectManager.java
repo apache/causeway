@@ -30,6 +30,8 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -108,6 +110,28 @@ public interface ObjectManager extends HasMetaModelContext {
         val specLoader = getMetaModelContext().getSpecificationLoader();
         return ProtoObject.resolve(specLoader, bookmark)
                 .map(this::loadObject);
+    }
+
+    /**
+     * Introduced for serializing action parameter values to bookmarks and vice versa.
+     * <p>
+     * Does NOT handle {@link PackedManagedObject}. (Needs to be handled by the caller.)
+     * @see #debookmark(Bookmark)
+     */
+    default Bookmark bookmark(final @NonNull ManagedObject managedObj) {
+        return ManagedObjects.bookmark(managedObj)
+                .orElseGet(()->Bookmark.empty(managedObj.getLogicalType()));
+    }
+    /**
+     * Introduced for de-serializing action parameter values from bookmarks and vice versa.
+     * <p>
+     * Does NOT handle {@link PackedManagedObject}. (Needs to be handled by the caller.)
+     * @see #bookmark(ManagedObject)
+     */
+    default ManagedObject debookmark(final @NonNull Bookmark bookmark) {
+        return bookmark.isEmpty()
+            ? ManagedObject.empty(getSpecificationLoader().specForBookmarkElseFail(bookmark))
+            : loadObjectElseFail(bookmark);
     }
 
     /**

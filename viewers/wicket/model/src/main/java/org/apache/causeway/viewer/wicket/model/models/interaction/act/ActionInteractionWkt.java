@@ -33,8 +33,8 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnapshot;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
@@ -60,8 +60,9 @@ import lombok.val;
  * defaults provider. This is modeled with {@link #associatedWithCollectionIfAny}.
  *
  * @implSpec the state of pending parameters ParameterNegotiationModel is held transient,
- * that means it does not survive a serialization/de-serialization cycle; instead
- * is recreated with parameter defaults
+ * that means it does not survive a serialization/de-serialization cycle; however,
+ * we capture a snapshot of the pending parameter values in the event serialization
+ * using a serializable {@link PendingParamsSnapshot}.
  *
  * @see ChainingModel
  */
@@ -212,12 +213,20 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         if(parameterNegotiationModel!=null) {
             ManagedObjects.stream(parameterNegotiationModel.getParamValues())
             .forEach(domainObj->{
-                // domainObj might be an entity that is hollow
-                MmEntityUtils.requiresAttached(domainObj);
                 // domainObj might be a viewmodel that holds hollow entities
                 // assuming, viewmodel has its bookmark memoized
                 ManagedObjects.refreshViewmodel(domainObj, /*bookmark supplier*/ null);
             });
+            return parameterNegotiationModel;
+        }
+
+        //[CAUSEWAY-3663] restore pending params, in case we do have a snapshot of these
+        if(pendingParamsSnapshot!=null) {
+            this.parameterNegotiationModel =
+                    pendingParamsSnapshot.restoreParameterNegotiationModel(
+                            actionInteraction()
+                                .getManagedAction()
+                                .orElseThrow(()->_Exceptions.noSuchElement(memberId)));
             return parameterNegotiationModel;
         }
 
@@ -227,6 +236,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     public void resetParametersToDefault() {
         // in effect invalidates the currently memoized parameterNegotiationModel (if any)
         this.parameterNegotiationModel = null;
+        this.pendingParamsSnapshot = null;
     }
 
     public InlinePromptContext getInlinePromptContext() {
@@ -243,12 +253,15 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
      * memoized transiently
      */
     private transient ParameterNegotiationModel parameterNegotiationModel;
+    private PendingParamsSnapshot pendingParamsSnapshot;
     /**
      * Start and transiently memoize a new {@link ParameterNegotiationModel}.
      */
     private ParameterNegotiationModel startParameterNegotiationModel() {
-        return this.parameterNegotiationModel = actionInteraction().startParameterNegotiation()
+        this.parameterNegotiationModel = actionInteraction().startParameterNegotiation()
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId));
+        this.pendingParamsSnapshot = parameterNegotiationModel.createSnapshotModel();
+        return parameterNegotiationModel;
     }
     /**
      * [CAUSEWAY-3649] safe guard against access to the model while it is not attached
@@ -256,7 +269,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private void guardAgainstNotAttached() {
         if(!this.isAttached()) {
             // start over
-            this.parameterNegotiationModel = null;
+            resetParametersToDefault();
             getObject();
         }
         _Assert.assertTrue(this.isAttached(), ()->"model is not attached");
