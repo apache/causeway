@@ -3381,6 +3381,26 @@ public class CausewayConfiguration {
 
         }
 
+        private final Proxy proxy = new Proxy();
+        @Data
+        public static class Proxy {
+
+            /**
+             * Which urls are allowed to be proxied.
+             *
+             * <p>
+             * The (safe) default is an empty list, meaning nothing is allowed to be accessed via the proxy,
+             * Allowed url (prefixes) need to be whitelisted - use commas to separat multiple entries
+             * eg:
+             * </p>
+             * <p>
+             * <code>http://www.w3.org, https://www.apache.org</code>
+             * </p>
+            */
+            private List<String> allow= listOf();
+
+        }
+
         private final ExecutionLog executionLog = new ExecutionLog();
         @Data
         public static class ExecutionLog {
