@@ -1399,6 +1399,7 @@ fieldset.parameters > div.parameter {
 
 .objectChoicesSelect2Panel .select2-container .select2-selection--single  {
     height: fit-content;
+    white-space: normal;
 }
 
 .objectChoicesSelect2Panel .select2-container .select2-selection--single .select2-selection__rendered {
