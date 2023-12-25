@@ -1384,3 +1384,26 @@ li.additionalLinkItem.list-inline-item.hidden {
     padding-left: 0;
     display: none;
 }
+
+/* sidebar doesn't scroll, so prevent parameters from taking up too much space */
+fieldset.parameters > div.parameter {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+
+/* ensure that long values wrap in choices drop-down */
+.objectChoicesSelect2Panel .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    white-space: normal;
+}
+
+.objectChoicesSelect2Panel .select2-container .select2-selection--single  {
+    height: fit-content;
+    white-space: normal;
+}
+
+.objectChoicesSelect2Panel .select2-container .select2-selection--single .select2-selection__rendered {
+    word-wrap: break-word;
+    text-overflow: inherit;
+    white-space: normal;
+}

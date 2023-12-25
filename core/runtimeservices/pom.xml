@@ -137,6 +137,10 @@
                             <groupId>javax.activation</groupId>
                             <artifactId>activation</artifactId>
                         </exclusion>
+		                <exclusion>
+							<groupId>com.sun.activation</groupId>
+    						<artifactId>jakarta.activation</artifactId>
+		                </exclusion>
                     </exclusions>
                 </dependency>
                 <!-- required by EmailServiceDefault on v2, n/a f. v3

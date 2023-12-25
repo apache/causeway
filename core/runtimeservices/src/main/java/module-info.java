@@ -54,7 +54,7 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.xml;
     exports org.apache.causeway.core.runtimeservices.xmlsnapshot;
 
-    requires commons.email;
+    requires org.apache.commons.mail;
     requires jakarta.activation;
     requires jakarta.mail;
     requires jakarta.annotation;
