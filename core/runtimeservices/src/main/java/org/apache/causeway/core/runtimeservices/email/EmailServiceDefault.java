@@ -22,6 +22,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+//import jakarta.activation.DataSource; TODO[CAUSEWAY-3275] incompatible with commons-email 1.6.0
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+//import org.apache.commons.mail.DefaultAuthenticator; TODO[CAUSEWAY-3275]
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.ImageHtmlEmail;
 import org.apache.commons.mail.resolver.DataSourceClassPathResolver;
@@ -34,11 +41,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import jakarta.activation.DataSource;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -147,7 +149,7 @@ public class EmailServiceDefault implements EmailService {
             final List<String> bccList,
             final String subject,
             final String body,
-            final DataSource... attachments) {
+            final jakarta.activation.DataSource... attachments) {
 
         try {
             final ImageHtmlEmail email = new ImageHtmlEmail();
@@ -161,7 +163,7 @@ public class EmailServiceDefault implements EmailService {
             final int socketTimeout = getSocketTimeout();
             final int socketConnectionTimeout = getSocketConnectionTimeout();
 
-//TODO[ISIS-3275] commons email not available for jakarta API
+//TODO[CAUSEWAY-3275] commons email not available for jakarta API
 //            if (senderEmailUsername != null) {
 //                email.setAuthenticator(new DefaultAuthenticator(senderEmailUsername, senderEmailPassword));
 //            } else {
@@ -175,7 +177,7 @@ public class EmailServiceDefault implements EmailService {
             email.setSocketTimeout(socketTimeout);
             email.setSocketConnectionTimeout(socketConnectionTimeout);
 
-//TODO[ISIS-3275] commons email not available for jakarta API
+//TODO[CAUSEWAY-3275] commons email not available for jakarta API
 //            final Properties properties = email.getMailSession().getProperties();
             final var properties = new Properties();
 
@@ -193,9 +195,8 @@ public class EmailServiceDefault implements EmailService {
             email.setHtmlMsg(body);
 
             if (attachments != null && attachments.length > 0) {
-                for (DataSource attachment : attachments) {
-                    //TODO[ISIS-3275] commons email not available for jakarta API
-                    //email.attach(attachment, attachment.getName(), "");
+                for (jakarta.activation.DataSource attachment : attachments) {
+                    //email.attach(attachment, attachment.getName(), ""); TODO[CAUSEWAY-3275] incompatible with commons-email 1.6.0
                 }
             }
 
