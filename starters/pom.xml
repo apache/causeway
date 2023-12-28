@@ -85,7 +85,19 @@
 					<version>3.5.0</version>
 				</plugin>
 
-			</plugins>
+                <plugin>
+                    <groupId>org.apache.rat</groupId>
+                    <artifactId>apache-rat-plugin</artifactId>
+                    <version>0.15</version>
+                    <configuration>
+                        <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+                        <excludeSubProjects>true</excludeSubProjects>
+                        <excludes>
+                            <exclude>**/module-nav.adoc</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+            </plugins>
 		</pluginManagement>
 	</build>
 	<dependencyManagement>
