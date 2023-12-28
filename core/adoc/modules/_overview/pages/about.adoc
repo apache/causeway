@@ -467,14 +467,7 @@ Artifact: causeway-testing-fixtures-applib
 Type: jar
 Directory: /testing/fixtures/applib
 ----
-|.Components
-****
-o.a.i.testing.fixtures.applib.modules.ModuleWithFixturesService +
-o.a.i.testing.fixtures.applib.queryresultscache.QueryResultsCacheControlForFixtures +
-o.a.i.testing.fixtures.applib.services.InitialFixtureScriptsInstaller +
-****
-
-.Dependencies
+|.Dependencies
 ****
 joda-time:joda-time:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
@@ -506,12 +499,7 @@ Artifact: causeway-testing-h2console-ui
 Type: jar
 Directory: /testing/h2console/ui
 ----
-|.Components
-****
-o.a.i.testing.h2console.ui.webmodule.WebModuleH2Console +
-****
-
-.Dependencies
+|.Dependencies
 ****
 com.h2database:h2:jar:<managed> +
 javax.servlet:javax.servlet-api:jar:<managed> +
@@ -613,7 +601,7 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
-io.cucumber:messages:jar:23.0.0 +
+io.cucumber:messages:jar:24.0.1 +
 org.apache.causeway.testing:causeway-testing-fakedata-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -1067,7 +1055,7 @@ org.apache.causeway.core:causeway-schema:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:applib:index/CausewayModuleApplib.adoc[CausewayModuleApplib], xref:refguide:applib:index/CausewayModuleApplibChangeAndExecutionLoggers.adoc[CausewayModuleApplibChangeAndExecutionLoggers], xref:refguide:applib:index/CausewayModuleApplibMixins.adoc[CausewayModuleApplibMixins], xref:refguide:applib:index/Identifier.adoc[Identifier], xref:refguide:applib:index/ViewModel.adoc[ViewModel], xref:refguide:applib:index/annotation/Action.adoc[Action], xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout], xref:refguide:applib:index/annotation/BookmarkPolicy.adoc[BookmarkPolicy], xref:refguide:applib:index/annotation/Bounding.adoc[Bounding], xref:refguide:applib:index/annotation/Collection.adoc[Collection], xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout], xref:refguide:applib:index/annotation/DependentDefaultsPolicy.adoc[DependentDefaultsPolicy], xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject], xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout], xref:refguide:applib:index/annotation/DomainService.adoc[DomainService], xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout], xref:refguide:applib:index/annotation/DomainServiceLayout_MenuBar.adoc[DomainServiceLayout.MenuBar], xref:refguide:applib:index/annotation/Domain_Exclude.adoc[Domain.Exclude], xref:refguide:applib:index/annotation/Domain_Include.adoc[Domain.Include], xref:refguide:applib:index/annotation/Editing.adoc[Editing], xref:refguide:applib:index/annotation/EntityChangeKind.adoc[EntityChangeKind], xref:refguide:applib:index/annotation/HomePage.adoc[HomePage], xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope], xref:refguide:applib:index/annotation/Introspection.adoc[Introspection], xref:refguide:applib:index/annotation/LabelPosition.adoc[LabelPosition], xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport], xref:refguide:applib:index/annotation/MinLength.adoc[MinLength], xref:refguide:applib:index/annotation/Module.adoc[Module], xref:refguide:applib:index/annotation/Nature.adoc[Nature], xref:refguide:applib:index/annotation/NatureOfService.adoc[NatureOfService], xref:refguide:applib:index/annotation/Navigable.adoc[Navigable], xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[ObjectLifecycle], xref:refguide:applib:index/annotation/ObjectSupport.adoc[ObjectSupport], xref:refguide:applib:index/annotation/Optionality.adoc[Optionality], xref:refguide:applib:index/annotation/Parameter.adoc[Parameter], xref:refguide:applib:index/annotation/ParameterLayout.adoc[ParameterLayout], xref:refguide:applib:index/annotation/ParameterTuple.adoc[ParameterTuple], xref:refguide:applib:index/annotation/PriorityPrecedence.adoc[PriorityPrecedence], xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic], xref:refguide:applib:index/annotation/Projecting.adoc[Projecting], xref:refguide:applib:index/annotation/PromptStyle.adoc[PromptStyle], xref:refguide:applib:index/annotation/Property.adoc[Property], xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout], xref:refguide:applib:index/annotation/Publishing.adoc[Publishing], xref:refguide:applib:index/annotation/Redirect.adoc[Redirect], xref:refguide:applib:index/annotation/Repainting.adoc[Repainting], xref:refguide:applib:index/annotation/RestrictTo.adoc[RestrictTo], xref:refguide:applib:index/annotation/SemanticsOf.adoc[SemanticsOf], xref:refguide:applib:index/annotation/Snapshot.adoc[Snapshot], xref:refguide:applib:index/annotation/TimePrecision.adoc[TimePrecision], xref:refguide:applib:index/annotation/TimeZoneTranslation.adoc[TimeZoneTranslation], xref:refguide:applib:index/annotation/Title.adoc[Title], xref:refguide:applib:index/annotation/Value.adoc[Value], xref:refguide:applib:index/annotation/ValueSemantics.adoc[ValueSemantics], xref:refguide:applib:index/annotation/Where.adoc[Where], xref:refguide:applib:index/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2], xref:refguide:applib:index/client/SuppressionType.adoc[SuppressionType], xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock], xref:refguide:applib:index/domain/DomainObjectList.adoc[DomainObjectList], xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase], xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent], xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent], xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent], xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent], xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent], xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent], xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent], xref:refguide:applib:index/events/ui/AbstractUiEvent.adoc[AbstractUiEvent], xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent], xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent], xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent], xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent], xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException], xref:refguide:applib:index/exceptions/TranslatableException.adoc[TranslatableException], xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException], xref:refguide:applib:index/exceptions/unrecoverable/DomainModelException.adoc[DomainModelException], xref:refguide:applib:index/exceptions/unrecoverable/MetaModelException.adoc[MetaModelException], xref:refguide:applib:index/exceptions/unrecoverable/NoAuthenticatorException.adoc[NoAuthenticatorException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectNotFoundException.adoc[ObjectNotFoundException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectPersistenceException.adoc[ObjectPersistenceException], xref:refguide:applib:index/exceptions/unrecoverable/PersistFailedException.adoc[PersistFailedException], xref:refguide:applib:index/exceptions/unrecoverable/ReflectiveActionException.adoc[ReflectiveActionException], xref:refguide:applib:index/exceptions/unrecoverable/RepositoryException.adoc[RepositoryException], xref:refguide:applib:index/exceptions/unrecoverable/UnexpectedCallException.adoc[UnexpectedCallException], xref:refguide:applib:index/exceptions/unrecoverable/UnknownTypeException.adoc[UnknownTypeException], xref:refguide:applib:index/graph/Edge.adoc[Edge], xref:refguide:applib:index/graph/SimpleEdge.adoc[SimpleEdge], xref:refguide:applib:index/graph/Vertex.adoc[Vertex], xref:refguide:applib:index/graph/tree/TreeAdapter.adoc[TreeAdapter], xref:refguide:applib:index/graph/tree/TreeNode.adoc[TreeNode], xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath], xref:refguide:applib:index/graph/tree/TreeState.adoc[TreeState], xref:refguide:applib:index/id/HasLogicalType.adoc[HasLogicalType], xref:refguide:applib:index/id/LogicalType.adoc[LogicalType], xref:refguide:applib:index/jaxb/DataTypeFactory.adoc[DataTypeFactory], xref:refguide:applib:index/jaxb/JavaSqlJaxbAdapters.adoc[JavaSqlJaxbAdapters], xref:refguide:applib:index/jaxb/JavaSqlXMLGregorianCalendarMarshalling.adoc[JavaSqlXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaTimeJaxbAdapters.adoc[JavaTimeJaxbAdapters], xref:refguide:applib:index/jaxb/JavaTimeXMLGregorianCalendarMarshalling.adoc[JavaTimeXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaUtilJaxbAdapters.adoc[JavaUtilJaxbAdapters], xref:refguide:applib:index/jaxb/PersistentEntitiesAdapter.adoc[PersistentEntitiesAdapter], xref:refguide:applib:index/jaxb/PersistentEntityAdapter.adoc[PersistentEntityAdapter], xref:refguide:applib:index/jaxb/PrimitiveJaxbAdapters.adoc[PrimitiveJaxbAdapters], xref:refguide:applib:index/layout/LayoutConstants.adoc[LayoutConstants], xref:refguide:applib:index/layout/component/ActionLayoutData.adoc[ActionLayoutData], xref:refguide:applib:index/layout/component/ActionLayoutDataOwner.adoc[ActionLayoutDataOwner], xref:refguide:applib:index/layout/component/CollectionLayoutData.adoc[CollectionLayoutData], xref:refguide:applib:index/layout/component/CollectionLayoutDataOwner.adoc[CollectionLayoutDataOwner], xref:refguide:applib:index/layout/component/CssClassFaPosition.adoc[CssClassFaPosition], xref:refguide:applib:index/layout/component/DomainObjectLayoutData.adoc[DomainObjectLayoutData], xref:refguide:applib:index/layout/component/DomainObjectLayoutDataOwner.adoc[DomainObjectLayoutDataOwner], xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet], xref:refguide:applib:index/layout/component/FieldSetOwner.adoc[FieldSetOwner], xref:refguide:applib:index/layout/component/HasBookmarking.adoc[HasBookmarking], xref:refguide:applib:index/layout/component/HasCssClass.adoc[HasCssClass], xref:refguide:applib:index/layout/component/HasCssClassFa.adoc[HasCssClassFa], xref:refguide:applib:index/layout/component/HasDescribedAs.adoc[HasDescribedAs], xref:refguide:applib:index/layout/component/HasHidden.adoc[HasHidden], xref:refguide:applib:index/layout/component/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/component/MemberRegion.adoc[MemberRegion], xref:refguide:applib:index/layout/component/MemberRegionOwner.adoc[MemberRegionOwner], xref:refguide:applib:index/layout/component/Owned.adoc[Owned], xref:refguide:applib:index/layout/component/Owner.adoc[Owner], xref:refguide:applib:index/layout/component/PropertyLayoutData.adoc[PropertyLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutData.adoc[ServiceActionLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutDataOwner.adoc[ServiceActionLayoutDataOwner], xref:refguide:applib:index/layout/grid/Grid.adoc[Grid], xref:refguide:applib:index/layout/grid/GridAbstract.adoc[GridAbstract], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFix.adoc[BSClearFix], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFixHidden.adoc[BSClearFixHidden], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFixVisible.adoc[BSClearFixVisible], xref:refguide:applib:index/layout/grid/bootstrap/BSCol.adoc[BSCol], xref:refguide:applib:index/layout/grid/bootstrap/BSElement.adoc[BSElement], xref:refguide:applib:index/layout/grid/bootstrap/BSElementAbstract.adoc[BSElementAbstract], xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid], xref:refguide:applib:index/layout/grid/bootstrap/BSRow.adoc[BSRow], xref:refguide:applib:index/layout/grid/bootstrap/BSRowContent.adoc[BSRowContent], xref:refguide:applib:index/layout/grid/bootstrap/BSRowContentOwner.adoc[BSRowContentOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSRowOwner.adoc[BSRowOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSTab.adoc[BSTab], xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroup.adoc[BSTabGroup], xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroupOwner.adoc[BSTabGroupOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSTabOwner.adoc[BSTabOwner], xref:refguide:applib:index/layout/grid/bootstrap/HasCssId.adoc[HasCssId], xref:refguide:applib:index/layout/grid/bootstrap/Size.adoc[Size], xref:refguide:applib:index/layout/grid/bootstrap/SizeSpan.adoc[SizeSpan], xref:refguide:applib:index/layout/grid/bootstrap/WithinGrid.adoc[WithinGrid], xref:refguide:applib:index/layout/links/Link.adoc[Link], xref:refguide:applib:index/layout/menubars/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/menubars/Menu.adoc[Menu], xref:refguide:applib:index/layout/menubars/MenuBar.adoc[MenuBar], xref:refguide:applib:index/layout/menubars/MenuBars.adoc[MenuBars], xref:refguide:applib:index/layout/menubars/MenuBarsAbstract.adoc[MenuBarsAbstract], xref:refguide:applib:index/layout/menubars/MenuSection.adoc[MenuSection], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenu.adoc[BSMenu], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuBar.adoc[BSMenuBar], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuBars.adoc[BSMenuBars], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuSection.adoc[BSMenuSection], xref:refguide:applib:index/locale/UserLocale.adoc[UserLocale], xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto], xref:refguide:applib:index/mixins/dto/DtoMixinConstants.adoc[DtoMixinConstants], xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml], xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd], xref:refguide:applib:index/mixins/layout/Object_downloadLayout.adoc[Object_downloadLayout], xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml], xref:refguide:applib:index/mixins/metamodel/Object_logicalTypeName.adoc[Object_logicalTypeName], xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier], xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel], xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi], xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername], xref:refguide:applib:index/mixins/system/DomainChangeRecord.adoc[DomainChangeRecord], xref:refguide:applib:index/mixins/system/DomainChangeRecord_ChangeType.adoc[DomainChangeRecord.ChangeType], xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId], xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence], xref:refguide:applib:index/mixins/system/HasTarget_openTargetObject.adoc[HasTarget_openTargetObject], xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt], xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy], xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt], xref:refguide:applib:index/query/AllInstancesQuery.adoc[AllInstancesQuery], xref:refguide:applib:index/query/NamedQuery.adoc[NamedQuery], xref:refguide:applib:index/query/Query.adoc[Query], xref:refguide:applib:index/query/QueryRange.adoc[QueryRange], xref:refguide:applib:index/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService], xref:refguide:applib:index/services/appfeat/ApplicationFeature.adoc[ApplicationFeature], xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId], xref:refguide:applib:index/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository], xref:refguide:applib:index/services/appfeat/ApplicationFeatureSort.adoc[ApplicationFeatureSort], xref:refguide:applib:index/services/appfeat/ApplicationMemberSort.adoc[ApplicationMemberSort], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureMenu.adoc[ApplicationFeatureMenu], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureViewModel.adoc[ApplicationFeatureViewModel], xref:refguide:applib:index/services/appfeatui/ApplicationNamespace.adoc[ApplicationNamespace], xref:refguide:applib:index/services/appfeatui/ApplicationType.adoc[ApplicationType], xref:refguide:applib:index/services/appfeatui/ApplicationTypeAction.adoc[ApplicationTypeAction], xref:refguide:applib:index/services/appfeatui/ApplicationTypeCollection.adoc[ApplicationTypeCollection], xref:refguide:applib:index/services/appfeatui/ApplicationTypeMember.adoc[ApplicationTypeMember], xref:refguide:applib:index/services/appfeatui/ApplicationTypeProperty.adoc[ApplicationTypeProperty], xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark], xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], xref:refguide:applib:index/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup], xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object], xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService], xref:refguide:applib:index/services/bookmark/HasTarget.adoc[HasTarget], xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier], xref:refguide:applib:index/services/bookmark/Oid.adoc[Oid], xref:refguide:applib:index/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService], xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService], xref:refguide:applib:index/services/columnorder/ColumnOrderTxtFileService.adoc[ColumnOrderTxtFileService], xref:refguide:applib:index/services/command/Command.adoc[Command], xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService], xref:refguide:applib:index/services/command/CommandExecutorService_InteractionContextPolicy.adoc[CommandExecutorService.InteractionContextPolicy], xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler], xref:refguide:applib:index/services/commanddto/HasCommandDto.adoc[HasCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto], xref:refguide:applib:index/services/commanddto/conmap/UserDataKeys.adoc[UserDataKeys], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForActionAbstract.adoc[CommandDtoProcessorForActionAbstract], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForPropertyAbstract.adoc[CommandDtoProcessorForPropertyAbstract], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorServiceIdentity.adoc[CommandDtoProcessorServiceIdentity], xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu], xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty], xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService], xref:refguide:applib:index/services/confview/ConfigurationViewmodel.adoc[ConfigurationViewmodel], xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService], xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], xref:refguide:applib:index/services/error/ErrorDetails.adoc[ErrorDetails], xref:refguide:applib:index/services/error/ErrorReportingService.adoc[ErrorReportingService], xref:refguide:applib:index/services/error/SimpleTicket.adoc[SimpleTicket], xref:refguide:applib:index/services/error/Ticket.adoc[Ticket], xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], xref:refguide:applib:index/services/exceprecog/Category.adoc[Category], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerAbstract.adoc[ExceptionRecognizerAbstract], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerForType.adoc[ExceptionRecognizerForType], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService], xref:refguide:applib:index/services/exceprecog/Recognition.adoc[Recognition], xref:refguide:applib:index/services/exceprecog/RootCauseFinder.adoc[RootCauseFinder], xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService], xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService], xref:refguide:applib:index/services/grid/GridMarshallerService.adoc[GridMarshallerService], xref:refguide:applib:index/services/grid/GridService.adoc[GridService], xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], xref:refguide:applib:index/services/health/Health.adoc[Health], xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealthCheckService], xref:refguide:applib:index/services/hint/HintIdProvider.adoc[HintIdProvider], xref:refguide:applib:index/services/hint/HintStore.adoc[HintStore], xref:refguide:applib:index/services/homepage/HomePageResolverService.adoc[HomePageResolverService], xref:refguide:applib:index/services/i18n/HasTranslationContext.adoc[HasTranslationContext], xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider], xref:refguide:applib:index/services/i18n/Mode.adoc[Mode], xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString], xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext], xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService], xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver], xref:refguide:applib:index/services/iactn/ActionInvocation.adoc[ActionInvocation], xref:refguide:applib:index/services/iactn/Execution.adoc[Execution], xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider], xref:refguide:applib:index/services/iactn/PropertyEdit.adoc[PropertyEdit], xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext], xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker], xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService], xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector], xref:refguide:applib:index/services/jaxb/CausewaySchemas.adoc[CausewaySchemas], xref:refguide:applib:index/services/jaxb/JaxbService.adoc[JaxbService], xref:refguide:applib:index/services/keyvaluestore/KeyValueSessionStore.adoc[KeyValueSessionStore], xref:refguide:applib:index/services/layout/LayoutExportStyle.adoc[LayoutExportStyle], xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService], xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu], xref:refguide:applib:index/services/linking/DeepLinkService.adoc[DeepLinkService], xref:refguide:applib:index/services/locale/LocaleChoiceProvider.adoc[LocaleChoiceProvider], xref:refguide:applib:index/services/marshal/MarshallerService.adoc[MarshallerService], xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], xref:refguide:applib:index/services/menu/MenuBarsMarshallerService.adoc[MenuBarsMarshallerService], xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService], xref:refguide:applib:index/services/message/MessageService.adoc[MessageService], xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort], xref:refguide:applib:index/services/metamodel/Config.adoc[Config], xref:refguide:applib:index/services/metamodel/DomainMember.adoc[DomainMember], xref:refguide:applib:index/services/metamodel/DomainModel.adoc[DomainModel], xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService], xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu], xref:refguide:applib:index/services/metamodel/objgraph/ObjectGraph.adoc[ObjectGraph], xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService], xref:refguide:applib:index/services/placeholder/PlaceholderRenderService.adoc[PlaceholderRenderService], xref:refguide:applib:index/services/publishing/log/CommandLogger.adoc[CommandLogger], xref:refguide:applib:index/services/publishing/log/EntityChangesLogger.adoc[EntityChangesLogger], xref:refguide:applib:index/services/publishing/log/EntityPropertyChangeLogger.adoc[EntityPropertyChangeLogger], xref:refguide:applib:index/services/publishing/log/ExecutionLogger.adoc[ExecutionLogger], xref:refguide:applib:index/services/publishing/log/PageRenderLogger.adoc[PageRenderLogger], xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges], xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber], xref:refguide:applib:index/services/publishing/spi/PageRenderSubscriber.adoc[PageRenderSubscriber], xref:refguide:applib:index/services/queryresultscache/MethodReferences.adoc[MethodReferences], xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], xref:refguide:applib:index/services/queryresultscache/QueryResultsCacheControl.adoc[QueryResultsCacheControl], xref:refguide:applib:index/services/registry/InstanceByPriorityComparator.adoc[InstanceByPriorityComparator], xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry], xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState], xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService], xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService], xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad], xref:refguide:applib:index/services/session/SessionLogger.adoc[SessionLogger], xref:refguide:applib:index/services/session/SessionSubscriber.adoc[SessionSubscriber], xref:refguide:applib:index/services/sitemap/SitemapService.adoc[SitemapService], xref:refguide:applib:index/services/sitemap/SitemapServiceMenu.adoc[SitemapServiceMenu], xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService], xref:refguide:applib:index/services/swagger/Format.adoc[Format], xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService], xref:refguide:applib:index/services/swagger/Visibility.adoc[Visibility], xref:refguide:applib:index/services/tablecol/TableColumnOrderForCollectionTypeAbstract.adoc[TableColumnOrderForCollectionTypeAbstract], xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService], xref:refguide:applib:index/services/tablecol/TableColumnVisibilityService.adoc[TableColumnVisibilityService], xref:refguide:applib:index/services/title/TitleService.adoc[TitleService], xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService], xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu], xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor], xref:refguide:applib:index/services/user/ImpersonateStopMenu.adoc[ImpersonateStopMenu], xref:refguide:applib:index/services/user/RoleMemento.adoc[RoleMemento], xref:refguide:applib:index/services/user/UserCurrentSessionTimeZoneHolder.adoc[UserCurrentSessionTimeZoneHolder], xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento], xref:refguide:applib:index/services/user/UserService.adoc[UserService], xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[EmailNotificationService], xref:refguide:applib:index/services/userreg/UserDetails.adoc[UserDetails], xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService], xref:refguide:applib:index/services/userreg/events/EmailEventAbstract.adoc[EmailEventAbstract], xref:refguide:applib:index/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent], xref:refguide:applib:index/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent], xref:refguide:applib:index/services/userui/UserMenu.adoc[UserMenu], xref:refguide:applib:index/services/wrapper/DisabledException.adoc[DisabledException], xref:refguide:applib:index/services/wrapper/HiddenException.adoc[HiddenException], xref:refguide:applib:index/services/wrapper/InvalidException.adoc[InvalidException], xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory], xref:refguide:applib:index/services/wrapper/WrappingObject.adoc[WrappingObject], xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[AsyncCallable], xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl], xref:refguide:applib:index/services/wrapper/control/ControlAbstract.adoc[ControlAbstract], xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler], xref:refguide:applib:index/services/wrapper/control/ExceptionHandlerAbstract.adoc[ExceptionHandlerAbstract], xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode], xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl], xref:refguide:applib:index/services/wrapper/events/AccessEvent.adoc[AccessEvent], xref:refguide:applib:index/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent], xref:refguide:applib:index/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent], xref:refguide:applib:index/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent], xref:refguide:applib:index/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent], xref:refguide:applib:index/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionVisibilityEvent.adoc[CollectionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/InteractionEvent.adoc[InteractionEvent], xref:refguide:applib:index/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent], xref:refguide:applib:index/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent], xref:refguide:applib:index/services/wrapper/events/ObjectVisibilityEvent.adoc[ObjectVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ParseValueEvent.adoc[ParseValueEvent], xref:refguide:applib:index/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent], xref:refguide:applib:index/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent], xref:refguide:applib:index/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ProposedHolderEvent.adoc[ProposedHolderEvent], xref:refguide:applib:index/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ValidityEvent.adoc[ValidityEvent], xref:refguide:applib:index/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent], xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter], xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener], xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId], xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService], xref:refguide:applib:index/services/xactn/TransactionState.adoc[TransactionState], xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor], xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot.adoc[XmlSnapshotService.Snapshot], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot_Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:refguide:applib:index/snapshot/SnapshottableWithInclusions.adoc[SnapshottableWithInclusions], xref:refguide:applib:index/spec/AbstractSpecification.adoc[AbstractSpecification], xref:refguide:applib:index/spec/AbstractSpecification2.adoc[AbstractSpecification2], xref:refguide:applib:index/spec/Specification.adoc[Specification], xref:refguide:applib:index/spec/Specification2.adoc[Specification2], xref:refguide:applib:index/spec/SpecificationAnd.adoc[SpecificationAnd], xref:refguide:applib:index/spec/SpecificationNot.adoc[SpecificationNot], xref:refguide:applib:index/spec/SpecificationOr.adoc[SpecificationOr], xref:refguide:applib:index/types/DescriptionType.adoc[DescriptionType], xref:refguide:applib:index/types/MemberIdentifierType.adoc[MemberIdentifierType], xref:refguide:applib:index/types/TargetActionType.adoc[TargetActionType], xref:refguide:applib:index/types/TargetClassType.adoc[TargetClassType], xref:refguide:applib:index/util/Enums.adoc[Enums], xref:refguide:applib:index/util/Equality.adoc[Equality], xref:refguide:applib:index/util/Hashing.adoc[Hashing], xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts], xref:refguide:applib:index/util/ReasonBuffer.adoc[ReasonBuffer], xref:refguide:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2], xref:refguide:applib:index/util/Reasons.adoc[Reasons], xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer], xref:refguide:applib:index/util/TitleBufferException.adoc[TitleBufferException], xref:refguide:applib:index/util/ToString.adoc[ToString], xref:refguide:applib:index/util/schema/ChangesDtoUtils.adoc[ChangesDtoUtils], xref:refguide:applib:index/util/schema/CommandDtoUtils.adoc[CommandDtoUtils], xref:refguide:applib:index/util/schema/CommonDtoUtils.adoc[CommonDtoUtils], xref:refguide:applib:index/util/schema/InteractionDtoUtils.adoc[InteractionDtoUtils], xref:refguide:applib:index/util/schema/InteractionsDtoUtils.adoc[InteractionsDtoUtils], xref:refguide:applib:index/util/schema/MemberExecutionDtoUtils.adoc[MemberExecutionDtoUtils], xref:refguide:applib:index/value/Blob.adoc[Blob], xref:refguide:applib:index/value/Clob.adoc[Clob], xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath], xref:refguide:applib:index/value/Markup.adoc[Markup], xref:refguide:applib:index/value/NamedWithMimeType.adoc[NamedWithMimeType], xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy], xref:refguide:applib:index/value/Password.adoc[Password], xref:refguide:applib:index/value/semantics/Converter.adoc[Converter], xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider], xref:refguide:applib:index/value/semantics/OrderRelation.adoc[OrderRelation], xref:refguide:applib:index/value/semantics/Parser.adoc[Parser], xref:refguide:applib:index/value/semantics/ParsingException.adoc[ParsingException], xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer], xref:refguide:applib:index/value/semantics/ValueSemanticsAbstract.adoc[ValueSemanticsAbstract], xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider], xref:refguide:applib:index/value/semantics/ValueSemanticsResolver.adoc[ValueSemanticsResolver]
+xref:refguide:applib:index/CausewayModuleApplib.adoc[CausewayModuleApplib], xref:refguide:applib:index/CausewayModuleApplibChangeAndExecutionLoggers.adoc[CausewayModuleApplibChangeAndExecutionLoggers], xref:refguide:applib:index/CausewayModuleApplibMixins.adoc[CausewayModuleApplibMixins], xref:refguide:applib:index/Identifier.adoc[Identifier], xref:refguide:applib:index/ViewModel.adoc[ViewModel], xref:refguide:applib:index/annotation/Action.adoc[Action], xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout], xref:refguide:applib:index/annotation/BookmarkPolicy.adoc[BookmarkPolicy], xref:refguide:applib:index/annotation/Bounding.adoc[Bounding], xref:refguide:applib:index/annotation/Collection.adoc[Collection], xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout], xref:refguide:applib:index/annotation/DependentDefaultsPolicy.adoc[DependentDefaultsPolicy], xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject], xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout], xref:refguide:applib:index/annotation/DomainService.adoc[DomainService], xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout], xref:refguide:applib:index/annotation/DomainServiceLayout_MenuBar.adoc[DomainServiceLayout.MenuBar], xref:refguide:applib:index/annotation/Domain_Exclude.adoc[Domain.Exclude], xref:refguide:applib:index/annotation/Domain_Include.adoc[Domain.Include], xref:refguide:applib:index/annotation/Editing.adoc[Editing], xref:refguide:applib:index/annotation/EntityChangeKind.adoc[EntityChangeKind], xref:refguide:applib:index/annotation/HomePage.adoc[HomePage], xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope], xref:refguide:applib:index/annotation/Introspection.adoc[Introspection], xref:refguide:applib:index/annotation/LabelPosition.adoc[LabelPosition], xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport], xref:refguide:applib:index/annotation/MinLength.adoc[MinLength], xref:refguide:applib:index/annotation/Module.adoc[Module], xref:refguide:applib:index/annotation/Nature.adoc[Nature], xref:refguide:applib:index/annotation/NatureOfService.adoc[NatureOfService], xref:refguide:applib:index/annotation/Navigable.adoc[Navigable], xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[ObjectLifecycle], xref:refguide:applib:index/annotation/ObjectSupport.adoc[ObjectSupport], xref:refguide:applib:index/annotation/Optionality.adoc[Optionality], xref:refguide:applib:index/annotation/Parameter.adoc[Parameter], xref:refguide:applib:index/annotation/ParameterLayout.adoc[ParameterLayout], xref:refguide:applib:index/annotation/ParameterTuple.adoc[ParameterTuple], xref:refguide:applib:index/annotation/PriorityPrecedence.adoc[PriorityPrecedence], xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic], xref:refguide:applib:index/annotation/Projecting.adoc[Projecting], xref:refguide:applib:index/annotation/PromptStyle.adoc[PromptStyle], xref:refguide:applib:index/annotation/Property.adoc[Property], xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout], xref:refguide:applib:index/annotation/Publishing.adoc[Publishing], xref:refguide:applib:index/annotation/Redirect.adoc[Redirect], xref:refguide:applib:index/annotation/Repainting.adoc[Repainting], xref:refguide:applib:index/annotation/RestrictTo.adoc[RestrictTo], xref:refguide:applib:index/annotation/SemanticsOf.adoc[SemanticsOf], xref:refguide:applib:index/annotation/Snapshot.adoc[Snapshot], xref:refguide:applib:index/annotation/TimePrecision.adoc[TimePrecision], xref:refguide:applib:index/annotation/TimeZoneTranslation.adoc[TimeZoneTranslation], xref:refguide:applib:index/annotation/Title.adoc[Title], xref:refguide:applib:index/annotation/TransactionScope.adoc[TransactionScope], xref:refguide:applib:index/annotation/Value.adoc[Value], xref:refguide:applib:index/annotation/ValueSemantics.adoc[ValueSemantics], xref:refguide:applib:index/annotation/Where.adoc[Where], xref:refguide:applib:index/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2], xref:refguide:applib:index/client/SuppressionType.adoc[SuppressionType], xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock], xref:refguide:applib:index/domain/DomainObjectList.adoc[DomainObjectList], xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase], xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent], xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent], xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent], xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent], xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent], xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent], xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent], xref:refguide:applib:index/events/ui/AbstractUiEvent.adoc[AbstractUiEvent], xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent], xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent], xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent], xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent], xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException], xref:refguide:applib:index/exceptions/TranslatableException.adoc[TranslatableException], xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException], xref:refguide:applib:index/exceptions/unrecoverable/DomainModelException.adoc[DomainModelException], xref:refguide:applib:index/exceptions/unrecoverable/MetaModelException.adoc[MetaModelException], xref:refguide:applib:index/exceptions/unrecoverable/NoAuthenticatorException.adoc[NoAuthenticatorException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectNotFoundException.adoc[ObjectNotFoundException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectPersistenceException.adoc[ObjectPersistenceException], xref:refguide:applib:index/exceptions/unrecoverable/PersistFailedException.adoc[PersistFailedException], xref:refguide:applib:index/exceptions/unrecoverable/ReflectiveActionException.adoc[ReflectiveActionException], xref:refguide:applib:index/exceptions/unrecoverable/RepositoryException.adoc[RepositoryException], xref:refguide:applib:index/exceptions/unrecoverable/UnexpectedCallException.adoc[UnexpectedCallException], xref:refguide:applib:index/exceptions/unrecoverable/UnknownTypeException.adoc[UnknownTypeException], xref:refguide:applib:index/graph/Edge.adoc[Edge], xref:refguide:applib:index/graph/SimpleEdge.adoc[SimpleEdge], xref:refguide:applib:index/graph/Vertex.adoc[Vertex], xref:refguide:applib:index/graph/tree/TreeAdapter.adoc[TreeAdapter], xref:refguide:applib:index/graph/tree/TreeNode.adoc[TreeNode], xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath], xref:refguide:applib:index/graph/tree/TreeState.adoc[TreeState], xref:refguide:applib:index/id/HasLogicalType.adoc[HasLogicalType], xref:refguide:applib:index/id/LogicalType.adoc[LogicalType], xref:refguide:applib:index/jaxb/DataTypeFactory.adoc[DataTypeFactory], xref:refguide:applib:index/jaxb/JavaSqlJaxbAdapters.adoc[JavaSqlJaxbAdapters], xref:refguide:applib:index/jaxb/JavaSqlXMLGregorianCalendarMarshalling.adoc[JavaSqlXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaTimeJaxbAdapters.adoc[JavaTimeJaxbAdapters], xref:refguide:applib:index/jaxb/JavaTimeXMLGregorianCalendarMarshalling.adoc[JavaTimeXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaUtilJaxbAdapters.adoc[JavaUtilJaxbAdapters], xref:refguide:applib:index/jaxb/PersistentEntitiesAdapter.adoc[PersistentEntitiesAdapter], xref:refguide:applib:index/jaxb/PersistentEntityAdapter.adoc[PersistentEntityAdapter], xref:refguide:applib:index/jaxb/PrimitiveJaxbAdapters.adoc[PrimitiveJaxbAdapters], xref:refguide:applib:index/layout/LayoutConstants.adoc[LayoutConstants], xref:refguide:applib:index/layout/component/ActionLayoutData.adoc[ActionLayoutData], xref:refguide:applib:index/layout/component/ActionLayoutDataOwner.adoc[ActionLayoutDataOwner], xref:refguide:applib:index/layout/component/CollectionLayoutData.adoc[CollectionLayoutData], xref:refguide:applib:index/layout/component/CollectionLayoutDataOwner.adoc[CollectionLayoutDataOwner], xref:refguide:applib:index/layout/component/CssClassFaPosition.adoc[CssClassFaPosition], xref:refguide:applib:index/layout/component/DomainObjectLayoutData.adoc[DomainObjectLayoutData], xref:refguide:applib:index/layout/component/DomainObjectLayoutDataOwner.adoc[DomainObjectLayoutDataOwner], xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet], xref:refguide:applib:index/layout/component/FieldSetOwner.adoc[FieldSetOwner], xref:refguide:applib:index/layout/component/HasBookmarking.adoc[HasBookmarking], xref:refguide:applib:index/layout/component/HasCssClass.adoc[HasCssClass], xref:refguide:applib:index/layout/component/HasCssClassFa.adoc[HasCssClassFa], xref:refguide:applib:index/layout/component/HasDescribedAs.adoc[HasDescribedAs], xref:refguide:applib:index/layout/component/HasHidden.adoc[HasHidden], xref:refguide:applib:index/layout/component/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/component/MemberRegion.adoc[MemberRegion], xref:refguide:applib:index/layout/component/MemberRegionOwner.adoc[MemberRegionOwner], xref:refguide:applib:index/layout/component/Owned.adoc[Owned], xref:refguide:applib:index/layout/component/Owner.adoc[Owner], xref:refguide:applib:index/layout/component/PropertyLayoutData.adoc[PropertyLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutData.adoc[ServiceActionLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutDataOwner.adoc[ServiceActionLayoutDataOwner], xref:refguide:applib:index/layout/grid/Grid.adoc[Grid], xref:refguide:applib:index/layout/grid/GridAbstract.adoc[GridAbstract], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFix.adoc[BSClearFix], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFixHidden.adoc[BSClearFixHidden], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFixVisible.adoc[BSClearFixVisible], xref:refguide:applib:index/layout/grid/bootstrap/BSCol.adoc[BSCol], xref:refguide:applib:index/layout/grid/bootstrap/BSElement.adoc[BSElement], xref:refguide:applib:index/layout/grid/bootstrap/BSElementAbstract.adoc[BSElementAbstract], xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid], xref:refguide:applib:index/layout/grid/bootstrap/BSRow.adoc[BSRow], xref:refguide:applib:index/layout/grid/bootstrap/BSRowContent.adoc[BSRowContent], xref:refguide:applib:index/layout/grid/bootstrap/BSRowContentOwner.adoc[BSRowContentOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSRowOwner.adoc[BSRowOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSTab.adoc[BSTab], xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroup.adoc[BSTabGroup], xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroupOwner.adoc[BSTabGroupOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSTabOwner.adoc[BSTabOwner], xref:refguide:applib:index/layout/grid/bootstrap/HasCssId.adoc[HasCssId], xref:refguide:applib:index/layout/grid/bootstrap/Size.adoc[Size], xref:refguide:applib:index/layout/grid/bootstrap/SizeSpan.adoc[SizeSpan], xref:refguide:applib:index/layout/grid/bootstrap/WithinGrid.adoc[WithinGrid], xref:refguide:applib:index/layout/links/Link.adoc[Link], xref:refguide:applib:index/layout/menubars/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/menubars/Menu.adoc[Menu], xref:refguide:applib:index/layout/menubars/MenuBar.adoc[MenuBar], xref:refguide:applib:index/layout/menubars/MenuBars.adoc[MenuBars], xref:refguide:applib:index/layout/menubars/MenuBarsAbstract.adoc[MenuBarsAbstract], xref:refguide:applib:index/layout/menubars/MenuSection.adoc[MenuSection], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenu.adoc[BSMenu], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuBar.adoc[BSMenuBar], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuBars.adoc[BSMenuBars], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuSection.adoc[BSMenuSection], xref:refguide:applib:index/locale/UserLocale.adoc[UserLocale], xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto], xref:refguide:applib:index/mixins/dto/DtoMixinConstants.adoc[DtoMixinConstants], xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml], xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd], xref:refguide:applib:index/mixins/layout/Object_downloadLayout.adoc[Object_downloadLayout], xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml], xref:refguide:applib:index/mixins/metamodel/Object_logicalTypeName.adoc[Object_logicalTypeName], xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier], xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel], xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi], xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername], xref:refguide:applib:index/mixins/system/DomainChangeRecord.adoc[DomainChangeRecord], xref:refguide:applib:index/mixins/system/DomainChangeRecord_ChangeType.adoc[DomainChangeRecord.ChangeType], xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId], xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence], xref:refguide:applib:index/mixins/system/HasTarget_openTargetObject.adoc[HasTarget_openTargetObject], xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt], xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy], xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt], xref:refguide:applib:index/query/AllInstancesQuery.adoc[AllInstancesQuery], xref:refguide:applib:index/query/NamedQuery.adoc[NamedQuery], xref:refguide:applib:index/query/Query.adoc[Query], xref:refguide:applib:index/query/QueryRange.adoc[QueryRange], xref:refguide:applib:index/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService], xref:refguide:applib:index/services/appfeat/ApplicationFeature.adoc[ApplicationFeature], xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId], xref:refguide:applib:index/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository], xref:refguide:applib:index/services/appfeat/ApplicationFeatureSort.adoc[ApplicationFeatureSort], xref:refguide:applib:index/services/appfeat/ApplicationMemberSort.adoc[ApplicationMemberSort], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureMenu.adoc[ApplicationFeatureMenu], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureViewModel.adoc[ApplicationFeatureViewModel], xref:refguide:applib:index/services/appfeatui/ApplicationNamespace.adoc[ApplicationNamespace], xref:refguide:applib:index/services/appfeatui/ApplicationType.adoc[ApplicationType], xref:refguide:applib:index/services/appfeatui/ApplicationTypeAction.adoc[ApplicationTypeAction], xref:refguide:applib:index/services/appfeatui/ApplicationTypeCollection.adoc[ApplicationTypeCollection], xref:refguide:applib:index/services/appfeatui/ApplicationTypeMember.adoc[ApplicationTypeMember], xref:refguide:applib:index/services/appfeatui/ApplicationTypeProperty.adoc[ApplicationTypeProperty], xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark], xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], xref:refguide:applib:index/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup], xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object], xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService], xref:refguide:applib:index/services/bookmark/HasTarget.adoc[HasTarget], xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier], xref:refguide:applib:index/services/bookmark/Oid.adoc[Oid], xref:refguide:applib:index/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService], xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService], xref:refguide:applib:index/services/columnorder/ColumnOrderTxtFileService.adoc[ColumnOrderTxtFileService], xref:refguide:applib:index/services/command/Command.adoc[Command], xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService], xref:refguide:applib:index/services/command/CommandExecutorService_InteractionContextPolicy.adoc[CommandExecutorService.InteractionContextPolicy], xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler], xref:refguide:applib:index/services/commanddto/HasCommandDto.adoc[HasCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto], xref:refguide:applib:index/services/commanddto/conmap/UserDataKeys.adoc[UserDataKeys], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForActionAbstract.adoc[CommandDtoProcessorForActionAbstract], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForPropertyAbstract.adoc[CommandDtoProcessorForPropertyAbstract], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorServiceIdentity.adoc[CommandDtoProcessorServiceIdentity], xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu], xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty], xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService], xref:refguide:applib:index/services/confview/ConfigurationViewmodel.adoc[ConfigurationViewmodel], xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService], xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], xref:refguide:applib:index/services/error/ErrorDetails.adoc[ErrorDetails], xref:refguide:applib:index/services/error/ErrorReportingService.adoc[ErrorReportingService], xref:refguide:applib:index/services/error/SimpleTicket.adoc[SimpleTicket], xref:refguide:applib:index/services/error/Ticket.adoc[Ticket], xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], xref:refguide:applib:index/services/exceprecog/Category.adoc[Category], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerAbstract.adoc[ExceptionRecognizerAbstract], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerForType.adoc[ExceptionRecognizerForType], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService], xref:refguide:applib:index/services/exceprecog/Recognition.adoc[Recognition], xref:refguide:applib:index/services/exceprecog/RootCauseFinder.adoc[RootCauseFinder], xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService], xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService], xref:refguide:applib:index/services/grid/GridMarshallerService.adoc[GridMarshallerService], xref:refguide:applib:index/services/grid/GridService.adoc[GridService], xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], xref:refguide:applib:index/services/health/Health.adoc[Health], xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealthCheckService], xref:refguide:applib:index/services/hint/HintIdProvider.adoc[HintIdProvider], xref:refguide:applib:index/services/hint/HintStore.adoc[HintStore], xref:refguide:applib:index/services/homepage/HomePageResolverService.adoc[HomePageResolverService], xref:refguide:applib:index/services/i18n/HasTranslationContext.adoc[HasTranslationContext], xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider], xref:refguide:applib:index/services/i18n/Mode.adoc[Mode], xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString], xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext], xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService], xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver], xref:refguide:applib:index/services/iactn/ActionInvocation.adoc[ActionInvocation], xref:refguide:applib:index/services/iactn/Execution.adoc[Execution], xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider], xref:refguide:applib:index/services/iactn/PropertyEdit.adoc[PropertyEdit], xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext], xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker], xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService], xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector], xref:refguide:applib:index/services/jaxb/CausewaySchemas.adoc[CausewaySchemas], xref:refguide:applib:index/services/jaxb/JaxbService.adoc[JaxbService], xref:refguide:applib:index/services/keyvaluestore/KeyValueSessionStore.adoc[KeyValueSessionStore], xref:refguide:applib:index/services/layout/LayoutExportStyle.adoc[LayoutExportStyle], xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService], xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu], xref:refguide:applib:index/services/linking/DeepLinkService.adoc[DeepLinkService], xref:refguide:applib:index/services/locale/LocaleChoiceProvider.adoc[LocaleChoiceProvider], xref:refguide:applib:index/services/marshal/MarshallerService.adoc[MarshallerService], xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], xref:refguide:applib:index/services/menu/MenuBarsMarshallerService.adoc[MenuBarsMarshallerService], xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService], xref:refguide:applib:index/services/message/MessageService.adoc[MessageService], xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort], xref:refguide:applib:index/services/metamodel/Config.adoc[Config], xref:refguide:applib:index/services/metamodel/DomainMember.adoc[DomainMember], xref:refguide:applib:index/services/metamodel/DomainModel.adoc[DomainModel], xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService], xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu], xref:refguide:applib:index/services/metamodel/objgraph/ObjectGraph.adoc[ObjectGraph], xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService], xref:refguide:applib:index/services/placeholder/PlaceholderRenderService.adoc[PlaceholderRenderService], xref:refguide:applib:index/services/publishing/log/CommandLogger.adoc[CommandLogger], xref:refguide:applib:index/services/publishing/log/EntityChangesLogger.adoc[EntityChangesLogger], xref:refguide:applib:index/services/publishing/log/EntityPropertyChangeLogger.adoc[EntityPropertyChangeLogger], xref:refguide:applib:index/services/publishing/log/ExecutionLogger.adoc[ExecutionLogger], xref:refguide:applib:index/services/publishing/log/PageRenderLogger.adoc[PageRenderLogger], xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges], xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber], xref:refguide:applib:index/services/publishing/spi/PageRenderSubscriber.adoc[PageRenderSubscriber], xref:refguide:applib:index/services/queryresultscache/MethodReferences.adoc[MethodReferences], xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], xref:refguide:applib:index/services/queryresultscache/QueryResultsCacheControl.adoc[QueryResultsCacheControl], xref:refguide:applib:index/services/registry/InstanceByPriorityComparator.adoc[InstanceByPriorityComparator], xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry], xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState], xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService], xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService], xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad], xref:refguide:applib:index/services/session/SessionLogger.adoc[SessionLogger], xref:refguide:applib:index/services/session/SessionSubscriber.adoc[SessionSubscriber], xref:refguide:applib:index/services/sitemap/SitemapService.adoc[SitemapService], xref:refguide:applib:index/services/sitemap/SitemapServiceMenu.adoc[SitemapServiceMenu], xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService], xref:refguide:applib:index/services/swagger/Format.adoc[Format], xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService], xref:refguide:applib:index/services/swagger/Visibility.adoc[Visibility], xref:refguide:applib:index/services/tablecol/TableColumnOrderForCollectionTypeAbstract.adoc[TableColumnOrderForCollectionTypeAbstract], xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService], xref:refguide:applib:index/services/tablecol/TableColumnVisibilityService.adoc[TableColumnVisibilityService], xref:refguide:applib:index/services/title/TitleService.adoc[TitleService], xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService], xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu], xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor], xref:refguide:applib:index/services/user/ImpersonateStopMenu.adoc[ImpersonateStopMenu], xref:refguide:applib:index/services/user/RoleMemento.adoc[RoleMemento], xref:refguide:applib:index/services/user/UserCurrentSessionTimeZoneHolder.adoc[UserCurrentSessionTimeZoneHolder], xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento], xref:refguide:applib:index/services/user/UserService.adoc[UserService], xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[EmailNotificationService], xref:refguide:applib:index/services/userreg/UserDetails.adoc[UserDetails], xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService], xref:refguide:applib:index/services/userreg/events/EmailEventAbstract.adoc[EmailEventAbstract], xref:refguide:applib:index/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent], xref:refguide:applib:index/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent], xref:refguide:applib:index/services/userui/UserMenu.adoc[UserMenu], xref:refguide:applib:index/services/wrapper/DisabledException.adoc[DisabledException], xref:refguide:applib:index/services/wrapper/HiddenException.adoc[HiddenException], xref:refguide:applib:index/services/wrapper/InvalidException.adoc[InvalidException], xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory], xref:refguide:applib:index/services/wrapper/WrappingObject.adoc[WrappingObject], xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[AsyncCallable], xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl], xref:refguide:applib:index/services/wrapper/control/ControlAbstract.adoc[ControlAbstract], xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler], xref:refguide:applib:index/services/wrapper/control/ExceptionHandlerAbstract.adoc[ExceptionHandlerAbstract], xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode], xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl], xref:refguide:applib:index/services/wrapper/events/AccessEvent.adoc[AccessEvent], xref:refguide:applib:index/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent], xref:refguide:applib:index/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent], xref:refguide:applib:index/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent], xref:refguide:applib:index/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent], xref:refguide:applib:index/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionVisibilityEvent.adoc[CollectionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/InteractionEvent.adoc[InteractionEvent], xref:refguide:applib:index/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent], xref:refguide:applib:index/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent], xref:refguide:applib:index/services/wrapper/events/ObjectVisibilityEvent.adoc[ObjectVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ParseValueEvent.adoc[ParseValueEvent], xref:refguide:applib:index/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent], xref:refguide:applib:index/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent], xref:refguide:applib:index/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ProposedHolderEvent.adoc[ProposedHolderEvent], xref:refguide:applib:index/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ValidityEvent.adoc[ValidityEvent], xref:refguide:applib:index/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent], xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter], xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener], xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId], xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService], xref:refguide:applib:index/services/xactn/TransactionState.adoc[TransactionState], xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor], xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot.adoc[XmlSnapshotService.Snapshot], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot_Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:refguide:applib:index/snapshot/SnapshottableWithInclusions.adoc[SnapshottableWithInclusions], xref:refguide:applib:index/spec/AbstractSpecification.adoc[AbstractSpecification], xref:refguide:applib:index/spec/AbstractSpecification2.adoc[AbstractSpecification2], xref:refguide:applib:index/spec/Specification.adoc[Specification], xref:refguide:applib:index/spec/Specification2.adoc[Specification2], xref:refguide:applib:index/spec/SpecificationAnd.adoc[SpecificationAnd], xref:refguide:applib:index/spec/SpecificationNot.adoc[SpecificationNot], xref:refguide:applib:index/spec/SpecificationOr.adoc[SpecificationOr], xref:refguide:applib:index/types/DescriptionType.adoc[DescriptionType], xref:refguide:applib:index/types/MemberIdentifierType.adoc[MemberIdentifierType], xref:refguide:applib:index/types/TargetActionType.adoc[TargetActionType], xref:refguide:applib:index/types/TargetClassType.adoc[TargetClassType], xref:refguide:applib:index/util/Enums.adoc[Enums], xref:refguide:applib:index/util/Equality.adoc[Equality], xref:refguide:applib:index/util/Hashing.adoc[Hashing], xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts], xref:refguide:applib:index/util/ReasonBuffer.adoc[ReasonBuffer], xref:refguide:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2], xref:refguide:applib:index/util/Reasons.adoc[Reasons], xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer], xref:refguide:applib:index/util/TitleBufferException.adoc[TitleBufferException], xref:refguide:applib:index/util/ToString.adoc[ToString], xref:refguide:applib:index/util/schema/ChangesDtoUtils.adoc[ChangesDtoUtils], xref:refguide:applib:index/util/schema/CommandDtoUtils.adoc[CommandDtoUtils], xref:refguide:applib:index/util/schema/CommonDtoUtils.adoc[CommonDtoUtils], xref:refguide:applib:index/util/schema/InteractionDtoUtils.adoc[InteractionDtoUtils], xref:refguide:applib:index/util/schema/InteractionsDtoUtils.adoc[InteractionsDtoUtils], xref:refguide:applib:index/util/schema/MemberExecutionDtoUtils.adoc[MemberExecutionDtoUtils], xref:refguide:applib:index/value/Blob.adoc[Blob], xref:refguide:applib:index/value/Clob.adoc[Clob], xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath], xref:refguide:applib:index/value/Markup.adoc[Markup], xref:refguide:applib:index/value/NamedWithMimeType.adoc[NamedWithMimeType], xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy], xref:refguide:applib:index/value/Password.adoc[Password], xref:refguide:applib:index/value/semantics/Converter.adoc[Converter], xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider], xref:refguide:applib:index/value/semantics/OrderRelation.adoc[OrderRelation], xref:refguide:applib:index/value/semantics/Parser.adoc[Parser], xref:refguide:applib:index/value/semantics/ParsingException.adoc[ParsingException], xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer], xref:refguide:applib:index/value/semantics/ValueSemanticsAbstract.adoc[ValueSemanticsAbstract], xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider], xref:refguide:applib:index/value/semantics/ValueSemanticsResolver.adoc[ValueSemanticsResolver]
 ****
 
 |Apache Causeway Core - Code Gen (ByteBuddy)
@@ -1141,12 +1129,6 @@ Directory: /core/interaction
 |Provides _Interaction Scope_.
 Top level action execution or property changes are wrapped in an _Interaction_.
 That typically corresponds to a http request/response cycle or a JUnit test method execution.
-
-.Components
-****
-o.a.i.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler +
-o.a.i.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor +
-****
 
 .Dependencies
 ****
@@ -1278,12 +1260,6 @@ Directory: /core/runtime
 ----
 |Bundles framework internal services, utilities and events.
 
-.Components
-****
-o.a.i.core.runtime.events.MetamodelEventService +
-o.a.i.core.runtime.events.TransactionEventEmitter +
-****
-
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-interaction:jar:<managed> +
@@ -1302,54 +1278,6 @@ Type: jar
 Directory: /core/runtimeservices
 ----
 |Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.
-
-.Components
-****
-o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault +
-o.a.i.core.runtimeservices.command.CommandDtoFactoryDefault +
-o.a.i.core.runtimeservices.command.CommandExecutorServiceDefault +
-o.a.i.core.runtimeservices.command.SchemaValueMarshallerDefault +
-o.a.i.core.runtimeservices.email.EmailServiceDefault +
-o.a.i.core.runtimeservices.eventbus.EventBusServiceSpring +
-o.a.i.core.runtimeservices.executor.MemberExecutorServiceDefault +
-o.a.i.core.runtimeservices.factory.FactoryServiceDefault +
-o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault +
-o.a.i.core.runtimeservices.i18n.po.TranslationServicePo +
-o.a.i.core.runtimeservices.icons.ObjectIconServiceDefault +
-o.a.i.core.runtimeservices.interaction.InteractionDtoFactoryDefault +
-o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault +
-o.a.i.core.runtimeservices.locale.LanguageProviderDefault +
-o.a.i.core.runtimeservices.locale.LocaleChoiceProviderDefault +
-o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault +
-o.a.i.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap +
-o.a.i.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap +
-o.a.i.core.runtimeservices.message.MessageServiceDefault +
-o.a.i.core.runtimeservices.placeholder.PlaceholderRenderServiceDefault +
-o.a.i.core.runtimeservices.publish.CommandPublisherDefault +
-o.a.i.core.runtimeservices.publish.EntityChangesPublisherDefault +
-o.a.i.core.runtimeservices.publish.EntityPropertyChangePublisherDefault +
-o.a.i.core.runtimeservices.publish.ExecutionPublisherDefault +
-o.a.i.core.runtimeservices.publish.LifecycleCallbackNotifier +
-o.a.i.core.runtimeservices.publish.ObjectLifecyclePublisherDefault +
-o.a.i.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault +
-o.a.i.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException +
-o.a.i.core.runtimeservices.repository.RepositoryServiceDefault +
-o.a.i.core.runtimeservices.routing.RoutingServiceDefault +
-o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault +
-o.a.i.core.runtimeservices.serializing.SerializingAdapterDefault +
-o.a.i.core.runtimeservices.session.InteractionIdGeneratorDefault +
-o.a.i.core.runtimeservices.session.InteractionServiceDefault +
-o.a.i.core.runtimeservices.sitemap.SitemapServiceDefault +
-o.a.i.core.runtimeservices.spring.SpringBeansService +
-o.a.i.core.runtimeservices.transaction.TransactionServiceSpring +
-o.a.i.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression +
-o.a.i.core.runtimeservices.user.ImpersonateMenuAdvisorDefault +
-o.a.i.core.runtimeservices.user.UserCurrentSessionTimeZoneHolderDefault +
-o.a.i.core.runtimeservices.userreg.EmailNotificationServiceDefault +
-o.a.i.core.runtimeservices.wrapper.WrapperFactoryDefault +
-o.a.i.core.runtimeservices.xml.XmlServiceDefault +
-o.a.i.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault +
-****
 
 .Dependencies
 ****
@@ -1403,11 +1331,6 @@ Directory: /core/transaction
 |Provides transaction integration with Spring and also
 entity change tracking, with associated publishing and pre/post value events.
 
-.Components
-****
-o.a.i.core.transaction.changetracking.events.TimestampService +
-****
-
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -1416,7 +1339,7 @@ org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/transaction/changetracking/EntityChangeTracker.adoc[EntityChangeTracker], xref:refguide:core:index/transaction/changetracking/EntityChangesPublisher.adoc[EntityChangesPublisher], xref:refguide:core:index/transaction/changetracking/EntityPropertyChangePublisher.adoc[EntityPropertyChangePublisher], xref:refguide:core:index/transaction/events/TransactionAfterCompletionEvent.adoc[TransactionAfterCompletionEvent]
+xref:refguide:core:index/transaction/changetracking/EntityChangeTracker.adoc[EntityChangeTracker], xref:refguide:core:index/transaction/changetracking/EntityChangesPublisher.adoc[EntityChangesPublisher], xref:refguide:core:index/transaction/changetracking/EntityPropertyChangePublisher.adoc[EntityPropertyChangePublisher], xref:refguide:core:index/transaction/events/TransactionCompletionStatus.adoc[TransactionCompletionStatus]
 ****
 
 |Apache Causeway Core - WebApp
@@ -1429,16 +1352,6 @@ Directory: /core/webapp
 ----
 |Bundles all the web specific classes a srequired by viewers.
 Introduced to keep the 'runtime' package concise.
-
-.Components
-****
-o.a.i.core.webapp.confmenu.ConfigurationViewServiceDefault +
-o.a.i.core.webapp.health.HealthIndicatorUsingHealthCheckService +
-o.a.i.core.webapp.keyvaluestore.KeyValueStoreUsingHttpSession +
-o.a.i.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger +
-o.a.i.core.webapp.modules.templresources.WebModuleTemplateResources +
-o.a.i.core.webapp.webappctx.CausewayWebAppContextInitializer +
-****
 
 .Dependencies
 ****
@@ -1531,13 +1444,6 @@ Type: jar
 Directory: /persistence/commons
 ----
 |Apache Causeway Common utilities for persistence stacks
-
-.Components
-****
-o.a.i.persistence.commons.integration.changetracking.EntityChangeTrackerDefault +
-o.a.i.persistence.commons.integration.changetracking.EntityChangeTrackerDefault$TransactionSubscriber +
-o.a.i.persistence.commons.integration.changetracking.PreAndPostValueEvaluatorServiceDefault +
-****
 
 .Dependencies
 ****
@@ -1687,32 +1593,6 @@ Directory: /persistence/jdo/datanucleus
 ----
 |JDO Implementation (powered by DataNucleus)
 
-.Components
-****
-o.a.i.persistence.jdo.datanucleus.changetracking.PreAndPostValueEvaluatorServiceJdo +
-o.a.i.persistence.jdo.datanucleus.entities.DnEntityStateProvider +
-o.a.i.persistence.jdo.datanucleus.exrecog.JdoObjectNotFoundRecognizer +
-o.a.i.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnByteIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnCharIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnDatastoreIdImplValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnDatastoreUniqueLongIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnIntIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnLongIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnObjectIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnScoidValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnShortIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnStringIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoCharIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoDatastoreIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoIntIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoLongIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoObjectIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoShortIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoStringIdentityValueSemantics +
-****
-
 .Dependencies
 ****
 com.h2database:h2:jar:<managed> +
@@ -1764,11 +1644,6 @@ Type: jar
 Directory: /persistence/jdo/metamodel
 ----
 |JDO Metamodel Facets / Programming Model
-
-.Components
-****
-o.a.i.persistence.jdo.metamodel.JdoProgrammingModel +
-****
 
 .Dependencies
 ****
@@ -1951,7 +1826,7 @@ Directory: /persistence/jpa/eclipselink
 jakarta.el:jakarta.el-api:jar:3.0.3 +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-integration:jar:<managed> +
-org.eclipse.persistence:org.eclipse.persistence.jpa:jar:2.7.13 +
+org.eclipse.persistence:org.eclipse.persistence.jpa:jar:2.7.14 +
 org.springframework.boot:spring-boot-starter-data-jpa:jar:<managed> +
 ****
 
@@ -1969,11 +1844,6 @@ Type: jar
 Directory: /persistence/jpa/integration
 ----
 |JPA integration (facets, jpa-context)
-
-.Components
-****
-o.a.i.persistence.jpa.integration.entity.JpaEntityIntegration +
-****
 
 .Dependencies
 ****
@@ -1998,11 +1868,6 @@ Type: jar
 Directory: /persistence/jpa/metamodel
 ----
 |JPA Metamodel Facets / Programming Model
-
-.Components
-****
-o.a.i.persistence.jpa.metamodel.JpaProgrammingModel +
-****
 
 .Dependencies
 ****
@@ -2066,13 +1931,7 @@ Artifact: causeway-security-bypass
 Type: jar
 Directory: /security/bypass
 ----
-|.Components
-****
-o.a.i.security.bypass.authentication.AuthenticatorBypass +
-o.a.i.security.bypass.authorization.AuthorizorBypass +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 ****
@@ -2135,11 +1994,6 @@ Type: jar
 Directory: /security/keycloak
 ----
 |Authentication and Authorization using Keycloak
-
-.Components
-****
-o.a.i.security.keycloak.handler.LogoutHandlerForKeycloak +
-****
 
 .Dependencies
 ****
@@ -2213,13 +2067,6 @@ Directory: /security/shiro
 ----
 |Authentication and Authorization using Apache Shiro.
 
-.Components
-****
-o.a.i.security.shiro.authentication.AuthenticatorShiro +
-o.a.i.security.shiro.authorization.AuthorizorShiro +
-o.a.i.security.shiro.webmodule.WebModuleShiro +
-****
-
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -2288,15 +2135,6 @@ Type: jar
 Directory: /security/spring
 ----
 |Authentication using Spring Security
-
-.Components
-****
-o.a.i.security.spring.authconverters.AuthenticationConverterOfAuthenticatedPrincipal +
-o.a.i.security.spring.authconverters.AuthenticationConverterOfStringPrincipal +
-o.a.i.security.spring.authconverters.AuthenticationConverterOfUserDetailsPrincipal +
-o.a.i.security.spring.authentication.AuthenticatorSpring +
-o.a.i.security.spring.webmodule.WebModuleSpringSecurity +
-****
 
 .Dependencies
 ****
@@ -2429,7 +2267,7 @@ Directory: /viewers/commons/model
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
-org.webjars:font-awesome:jar:6.4.2 +
+org.webjars:font-awesome:jar:6.5.1 +
 ****
 
 |Apache Causeway Commons - Prism
@@ -2455,16 +2293,7 @@ Artifact: causeway-viewer-commons-services
 Type: jar
 Directory: /viewers/commons/services
 ----
-|.Components
-****
-o.a.i.viewer.commons.services.branding.BrandingUiServiceDefault +
-o.a.i.viewer.commons.services.header.HeaderUiServiceDefault +
-o.a.i.viewer.commons.services.i8n.TranslationsResolverDefault +
-o.a.i.viewer.commons.services.menu.MenuUiServiceDefault +
-o.a.i.viewer.commons.services.userprof.UserProfileUiServiceDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 javax.servlet:javax.servlet-api:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -2625,12 +2454,6 @@ Directory: /viewers/restfulobjects/jaxrs-resteasy
 ----
 |JAX-RS plugin using jboss resteasy.
 
-.Components
-****
-o.a.i.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml +
-o.a.i.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy +
-****
-
 .Dependencies
 ****
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-rendering:jar:<managed> +
@@ -2654,25 +2477,7 @@ Artifact: causeway-viewer-restfulobjects-rendering
 Type: jar
 Directory: /viewers/restfulobjects/rendering
 ----
-|.Components
-****
-o.a.i.viewer.restfulobjects.rendering.service.RepresentationService +
-o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest +
-o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$RequestFilter +
-o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$ResponseFilter +
-o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0 +
-o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheCausewayV2 +
-o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1 +
-o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType +
-o.a.i.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault +
-o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault +
-o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator +
-o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault +
-o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.ValueSchemaFactoryDefault +
-o.a.i.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
@@ -2707,23 +2512,7 @@ Artifact: causeway-viewer-restfulobjects-viewer
 Type: jar
 Directory: /viewers/restfulobjects/viewer
 ----
-|.Components
-****
-o.a.i.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound +
-o.a.i.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication +
-o.a.i.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRuntimeException +
-o.a.i.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside +
-o.a.i.viewer.restfulobjects.viewer.resources.DomainServiceResourceServerside +
-o.a.i.viewer.restfulobjects.viewer.resources.DomainTypeResourceServerside +
-o.a.i.viewer.restfulobjects.viewer.resources.HomePageResourceServerside +
-o.a.i.viewer.restfulobjects.viewer.resources.ImageResourceServerside +
-o.a.i.viewer.restfulobjects.viewer.resources.MenuBarsResourceServerside +
-o.a.i.viewer.restfulobjects.viewer.resources.SwaggerSpecResource +
-o.a.i.viewer.restfulobjects.viewer.resources.UserResourceServerside +
-o.a.i.viewer.restfulobjects.viewer.resources.VersionResourceServerside +
-****
-
-.Dependencies
+|.Dependencies
 ****
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -2881,14 +2670,7 @@ Artifact: causeway-viewer-wicket-ui
 Type: jar
 Directory: /viewers/wicket/ui
 ----
-|.Components
-****
-o.a.i.viewer.wicket.ui.app.logout.LogoutHandlerWkt +
-o.a.i.viewer.wicket.ui.components.collectioncontents.export.CollectionContentsAsExportFactory +
-o.a.i.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupportDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 com.google.guava:guava:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
@@ -2945,22 +2727,7 @@ Artifact: causeway-viewer-wicket-viewer
 Type: jar
 Directory: /viewers/wicket/viewer
 ----
-|.Components
-****
-o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault +
-o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageClassListDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault +
-o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
-o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
-o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
-o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
-o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
-o.a.i.viewer.wicket.viewer.wicketapp.CausewayWicketApplication$ServiceInjectorHolder +
-****
-
-.Dependencies
+|.Dependencies
 ****
 commons-io:commons-io:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
@@ -3282,15 +3049,7 @@ Artifact: causeway-valuetypes-asciidoc-metamodel
 Type: jar
 Directory: /valuetypes/asciidoc/metamodel
 ----
-|.Components
-****
-o.a.i.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics +
-o.a.i.valuetypes.asciidoc.metamodel.semantics.ChangesDtoValueSemanticsPrettyRender +
-o.a.i.valuetypes.asciidoc.metamodel.semantics.CommandDtoValueSemanticsPrettyRender +
-o.a.i.valuetypes.asciidoc.metamodel.semantics.InteractionDtoValueSemanticsPrettyRender +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed> +
@@ -3367,13 +3126,7 @@ Artifact: causeway-valuetypes-asciidoc-ui-wkt
 Type: jar
 Directory: /valuetypes/asciidoc/ui/wicket
 ----
-|.Components
-****
-o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Parented +
-o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Standalone +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
@@ -3514,12 +3267,7 @@ Artifact: causeway-valuetypes-markdown-metamodel
 Type: jar
 Directory: /valuetypes/markdown/metamodel
 ----
-|.Components
-****
-o.a.i.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-markdown-applib:jar:<managed> +
@@ -3593,13 +3341,7 @@ Artifact: causeway-valuetypes-markdown-ui-wkt
 Type: jar
 Directory: /valuetypes/markdown/ui/wicket
 ----
-|.Components
-****
-o.a.i.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt$Parented +
-o.a.i.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt$Standalone +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.valuetypes:causeway-valuetypes-markdown-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
@@ -3739,12 +3481,7 @@ Artifact: causeway-valuetypes-vega-metamodel
 Type: jar
 Directory: /valuetypes/vega/metamodel
 ----
-|.Components
-****
-o.a.i.valuetypes.vega.metamodel.semantics.VegaValueSemantics +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
@@ -3816,13 +3553,7 @@ Artifact: causeway-valuetypes-vega-ui-wkt
 Type: jar
 Directory: /valuetypes/vega/ui/wicket
 ----
-|.Components
-****
-o.a.i.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt$Parented +
-o.a.i.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt$Standalone +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.valuetypes:causeway-valuetypes-vega-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
@@ -4205,12 +3936,7 @@ Artifact: causeway-extensions-audittrail-applib
 Type: jar
 Directory: /extensions/security/audittrail/applib
 ----
-|.Components
-****
-o.a.i.extensions.audittrail.applib.spiimpl.EntityPropertyChangeSubscriberForAuditTrail +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -4229,12 +3955,7 @@ Artifact: causeway-extensions-audittrail-persistence-jdo
 Type: jar
 Directory: /extensions/security/audittrail/persistence-jdo
 ----
-|.Components
-****
-o.a.i.extensions.audittrail.jdo.dom.AuditTrailEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-audittrail-applib:jar:<managed> +
@@ -4253,12 +3974,7 @@ Artifact: causeway-extensions-audittrail-persistence-jpa
 Type: jar
 Directory: /extensions/security/audittrail/persistence-jpa
 ----
-|.Components
-****
-o.a.i.extensions.audittrail.jpa.dom.AuditTrailEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-audittrail-applib:jar:<managed> +
@@ -4378,12 +4094,6 @@ Directory: /extensions/vw/fullcalendar/wicket/ui
 ----
 |Integrates FullCalendar Wicket with the Wicket Viewer
 
-.Components
-****
-o.a.i.extensions.fullcalendar.wkt.ui.viewer.calendarable.CalendarableCollectionAsFullCalendarFactory +
-o.a.i.extensions.fullcalendar.wkt.ui.viewer.calendareventable.CalendarEventableCollectionAsFullCalendarFactory +
-****
-
 .Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
@@ -4416,11 +4126,6 @@ Type: jar
 Directory: /extensions/core/layoutloaders/github
 ----
 |Allows layout.xml files to be dynamically loaded from a github repo.
-
-.Components
-****
-o.a.i.extensions.layoutloaders.github.spiimpl.LayoutResourceLoaderFromGithub +
-****
 
 .Dependencies
 ****
@@ -4479,12 +4184,7 @@ Artifact: causeway-extensions-pdfjs-metamodel
 Type: jar
 Directory: /extensions/vw/pdfjs/metamodel
 ----
-|.Components
-****
-o.a.i.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotationFactory$Register +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-pdfjs-applib:jar:<managed> +
@@ -4531,12 +4231,7 @@ Artifact: causeway-extensions-pdfjs-wicket-ui
 Type: jar
 Directory: /extensions/vw/pdfjs/wicket/ui
 ----
-|.Components
-****
-o.a.i.extensions.pdfjs.wkt.ui.components.PdfJsViewerPanelComponentFactory +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-pdfjs-metamodel:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-pdfjs-wicket-integration:jar:<managed> +
@@ -4570,15 +4265,7 @@ Artifact: causeway-extensions-secman-applib
 Type: jar
 Directory: /extensions/security/secman/applib
 ----
-|.Components
-****
-o.a.i.extensions.secman.applib.feature.api.ApplicationFeatureChoices +
-o.a.i.extensions.secman.applib.role.dom.ApplicationRoleRepositoryAbstract +
-o.a.i.extensions.secman.applib.seed.SeedSecurityModuleService +
-o.a.i.extensions.secman.applib.user.menu.MeService$UserMenuMeActionAdvisor +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -4622,11 +4309,6 @@ Directory: /extensions/security/secman/delegated-springoauth2
 ----
 |Provides a domain service to automatically create a delegated ApplicationUser if authentication has been performed externally, eg by Spring OAuth2 or by Keycloak.
 
-.Components
-****
-o.a.i.extensions.secman.delegated.springoauth2.dom.ApplicationUserAutoCreationService +
-****
-
 .Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:<managed> +
@@ -4647,12 +4329,7 @@ Artifact: causeway-extensions-secman-encryption-jbcrypt
 Type: jar
 Directory: /extensions/security/secman/encryption-jbcrypt
 ----
-|.Components
-****
-o.a.i.extensions.secman.encryption.jbcrypt.services.PasswordEncoderUsingJBcrypt +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:<managed> +
@@ -4691,20 +4368,7 @@ Artifact: causeway-extensions-secman-integration
 Type: jar
 Directory: /extensions/security/secman/integration
 ----
-|.Components
-****
-o.a.i.extensions.secman.integration.authorizor.AuthorizorSecman +
-o.a.i.extensions.secman.integration.authorizor.AuthorizorSecman$PermissionCache +
-o.a.i.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor$Register +
-o.a.i.extensions.secman.integration.permissions.PermissionsEvaluationServiceForSecman +
-o.a.i.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman +
-o.a.i.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman$Cache +
-o.a.i.extensions.secman.integration.spiimpl.TableColumnVisibilityServiceForSecman +
-o.a.i.extensions.secman.integration.usermementorefiner.UserMementoRefinerFromApplicationUser +
-o.a.i.extensions.secman.integration.userreg.UserRegistrationServiceForSecman +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:<managed> +
@@ -4724,16 +4388,7 @@ Artifact: causeway-extensions-secman-persistence-jdo
 Type: jar
 Directory: /extensions/security/secman/persistence-jdo
 ----
-|.Components
-****
-o.a.i.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository +
-o.a.i.extensions.secman.jdo.role.dom.ApplicationRoleRepository +
-o.a.i.extensions.secman.jdo.tenancy.dom.ApplicationTenancyRepository +
-o.a.i.extensions.secman.jdo.user.dom.ApplicationUserRepository +
-o.a.i.extensions.secman.jdo.util.RegexReplacer +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:test-jar:<managed> +
@@ -4756,16 +4411,7 @@ Artifact: causeway-extensions-secman-persistence-jpa
 Type: jar
 Directory: /extensions/security/secman/persistence-jpa
 ----
-|.Components
-****
-o.a.i.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository +
-o.a.i.extensions.secman.jpa.role.dom.ApplicationRoleRepository +
-o.a.i.extensions.secman.jpa.tenancy.dom.ApplicationTenancyRepository +
-o.a.i.extensions.secman.jpa.user.dom.ApplicationUserRepository +
-o.a.i.extensions.secman.jpa.util.RegexReplacer +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:test-jar:<managed> +
@@ -4801,13 +4447,7 @@ Artifact: causeway-extensions-sessionlog-applib
 Type: jar
 Directory: /extensions/security/sessionlog/applib
 ----
-|.Components
-****
-o.a.i.extensions.sessionlog.applib.spiimpl.SessionLogServiceInitializer +
-o.a.i.extensions.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -4826,12 +4466,7 @@ Artifact: causeway-extensions-sessionlog-persistence-jdo
 Type: jar
 Directory: /extensions/security/sessionlog/persistence-jdo
 ----
-|.Components
-****
-o.a.i.extensions.sessionlog.jdo.dom.SessionLogEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sessionlog-applib:jar:<managed> +
@@ -4849,13 +4484,7 @@ Artifact: causeway-extensions-sessionlog-persistence-jpa
 Type: jar
 Directory: /extensions/security/sessionlog/persistence-jpa
 ----
-|.Components
-****
-o.a.i.extensions.sessionlog.jpa.dom.SessionLogEntryPK$Semantics +
-o.a.i.extensions.sessionlog.jpa.dom.SessionLogEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sessionlog-applib:jar:<managed> +
@@ -4874,12 +4503,6 @@ Type: jar
 Directory: /extensions/security/spring-oauth2
 ----
 |Authentication Converter, using Spring Security's OAuth2 client
-
-.Components
-****
-o.a.i.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfJwt +
-o.a.i.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfOAuth2UserPrincipal +
-****
 
 .Dependencies
 ****
@@ -4932,12 +4555,7 @@ Artifact: causeway-extensions-sse-metamodel
 Type: jar
 Directory: /extensions/vw/sse/metamodel
 ----
-|.Components
-****
-o.a.i.extensions.sse.metamodel.facets.SseAnnotationFacetFactory$Register +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sse-applib:jar:<managed> +
@@ -4951,15 +4569,7 @@ Artifact: causeway-extensions-sse-wicket
 Type: jar
 Directory: /extensions/vw/sse/wicket
 ----
-|.Components
-****
-o.a.i.extensions.sse.wicket.markup.ListeningMarkupPanelFactoriesForWicket$Parented +
-o.a.i.extensions.sse.wicket.markup.ListeningMarkupPanelFactoriesForWicket$Standalone +
-o.a.i.extensions.sse.wicket.services.SseServiceDefault +
-o.a.i.extensions.sse.wicket.webmodule.WebModuleServerSentEvents +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-sse-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
@@ -5066,12 +4676,7 @@ Artifact: causeway-extensions-excel-applib
 Type: jar
 Directory: /extensions/core/excel/applib
 ----
-|.Components
-****
-o.a.i.extensions.excel.applib.service.ExcelServiceDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -5228,18 +4833,7 @@ Artifact: causeway-extensions-commandlog-applib
 Type: jar
 Directory: /extensions/core/commandlog/applib
 ----
-|.Components
-****
-o.a.i.extensions.commandlog.applib.dom.BackgroundService +
-o.a.i.extensions.commandlog.applib.dom.BackgroundService$PersistCommandExecutorService +
-o.a.i.extensions.commandlog.applib.dom.CommandLogEntry$TableColumnOrderDefault +
-o.a.i.extensions.commandlog.applib.fakescheduler.FakeScheduler +
-o.a.i.extensions.commandlog.applib.job.BackgroundCommandsJobControl +
-o.a.i.extensions.commandlog.applib.job.RunBackgroundCommandsJob +
-o.a.i.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -5263,12 +4857,7 @@ Artifact: causeway-extensions-commandlog-persistence-jdo
 Type: jar
 Directory: /extensions/core/commandlog/persistence-jdo
 ----
-|.Components
-****
-o.a.i.extensions.commandlog.jdo.dom.CommandLogEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:test-jar:<managed> +
@@ -5290,13 +4879,7 @@ Artifact: causeway-extensions-commandlog-persistence-jpa
 Type: jar
 Directory: /extensions/core/commandlog/persistence-jpa
 ----
-|.Components
-****
-o.a.i.extensions.commandlog.jpa.dom.CommandLogEntryPK$Semantics +
-o.a.i.extensions.commandlog.jpa.dom.CommandLogEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:test-jar:<managed> +
@@ -5382,15 +4965,6 @@ Type: jar
 Directory: /extensions/core/docgen/help
 ----
 |Provides help/documentation pages for your application.
-
-.Components
-****
-o.a.i.extensions.docgen.help.topics.domainobjects.CausewayEntityDiagramPage +
-o.a.i.extensions.docgen.help.topics.domainobjects.DomainEntityDiagramPage +
-o.a.i.extensions.docgen.help.topics.domainobjects.DomainEntityDiagramPage2 +
-o.a.i.extensions.docgen.help.topics.domainobjects.EntityDiagramPageAbstract +
-o.a.i.extensions.docgen.help.topics.welcome.WelcomeHelpPage +
-****
 
 .Dependencies
 ****
@@ -5490,13 +5064,7 @@ Artifact: causeway-extensions-executionlog-applib
 Type: jar
 Directory: /extensions/core/executionlog/applib
 ----
-|.Components
-****
-o.a.i.extensions.executionlog.applib.dom.ExecutionLogEntry$TableColumnOrderDefault +
-o.a.i.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -5519,13 +5087,7 @@ Artifact: causeway-extensions-executionlog-persistence-jdo
 Type: jar
 Directory: /extensions/core/executionlog/persistence-jdo
 ----
-|.Components
-****
-o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryPK$Semantics +
-o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
@@ -5547,13 +5109,7 @@ Artifact: causeway-extensions-executionlog-persistence-jpa
 Type: jar
 Directory: /extensions/core/executionlog/persistence-jpa
 ----
-|.Components
-****
-o.a.i.extensions.executionlog.jpa.dom.ExecutionLogEntryPK$Semantics +
-o.a.i.extensions.executionlog.jpa.dom.ExecutionLogEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
@@ -5661,14 +5217,7 @@ Artifact: causeway-extensions-executionoutbox-applib
 Type: jar
 Directory: /extensions/core/executionoutbox/applib
 ----
-|.Components
-****
-o.a.i.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry$TableColumnOrderDefault +
-o.a.i.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents +
-o.a.i.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -5691,13 +5240,7 @@ Artifact: causeway-extensions-executionoutbox-persistence-jdo
 Type: jar
 Directory: /extensions/core/executionoutbox/persistence-jdo
 ----
-|.Components
-****
-o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryPK$Semantics +
-o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
@@ -5719,13 +5262,7 @@ Artifact: causeway-extensions-executionoutbox-persistence-jpa
 Type: jar
 Directory: /extensions/core/executionoutbox/persistence-jpa
 ----
-|.Components
-****
-o.a.i.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryPK$Semantics +
-o.a.i.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
@@ -6022,12 +5559,7 @@ Artifact: causeway-extensions-tabular-excel
 Type: jar
 Directory: /extensions/vw/tabular/excel
 ----
-|.Components
-****
-o.a.i.extensions.tabular.excel.exporter.CollectionContentsAsExcelExporter +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-tabular-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
@@ -6163,7 +5695,7 @@ eg. code mining, automated documentation.
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.checkerframework:checker-qual:jar:3.40.0 +
+org.checkerframework:checker-qual:jar:3.42.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.5.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
@@ -6527,7 +6059,6 @@ Directory: /regressiontests/stable
 ----
 |.Components
 ****
-o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
 o.a.i.testdomain.jdo.JdoInventoryDao +
 o.a.i.testdomain.jdo.JdoTestFixtures +
 o.a.i.testdomain.jpa.JpaInventoryDao +
@@ -7095,16 +6626,7 @@ Artifact: causeway-viewer-graphql-viewer
 Type: jar
 Directory: /incubator/viewers/graphql/viewer
 ----
-|.Components
-****
-o.a.i.viewer.graphql.viewer.source.ExecutionStrategyResolvingWithinInteraction +
-o.a.i.viewer.graphql.viewer.source.GraphQlServiceForCauseway +
-o.a.i.viewer.graphql.viewer.source.GraphQlSourceForCauseway +
-o.a.i.viewer.graphql.viewer.source.ObjectTypeFactory +
-o.a.i.viewer.graphql.viewer.source.QueryFieldFactory +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.incubator.viewer:causeway-viewer-graphql-model:jar:<managed> +
@@ -7191,12 +6713,6 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
-.Components
-****
-o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
-o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
-****
-
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7221,16 +6737,6 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
-
-.Components
-****
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
-o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
-o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
-o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
-o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
-****
 
 .Dependencies
 ****

@@ -44,7 +44,7 @@ commands:
       Spring: "org.apache.causeway.security:causeway-security-spring.*"
 
       Viewer: org.apache.causeway.viewer
-      "Common": "org.apache.causeway.viewer:causeway-viewer-common.*"
+      "Viewer Commons": "org.apache.causeway.viewer:causeway-viewer-commons.*"
       "Restful Objects": "org.apache.causeway.viewer:causeway-viewer-restfulobjects.*"
       Wicket: "org.apache.causeway.viewer:causeway-viewer-wicket.*"
 
@@ -61,12 +61,12 @@ commands:
       "Core: Execution Outbox": "org.apache.causeway.extensions:causeway-extensions-executionoutbox.*"
       "Core: Execution Republisher": "org.apache.causeway.extensions:causeway-extensions-executionrepublisher.*"
       "Core: Flyway": "org.apache.causeway.extensions:causeway-extensions-flyway.*"
+      "Core: Tabular": "org.apache.causeway.extensions:causeway-extensions-tabular.*"
       "Security: Audit Trail": "org.apache.causeway.security:causeway-extensions-audittrail.*"
       "Security: Secman": "org.apache.causeway.security:causeway-extensions-secman.*"
       "Security: Session Log": "org.apache.causeway.security:causeway-extensions-sessionlog.*"
       "Security: Spring Oauth2": "org.apache.causeway.security:causeway-extensions-spring-security-oauth2.*"
       "RO Viewer: CORS": "org.apache.causeway.security:causeway-extensions-cors.*"
-      "Wicket Viewer: Excel Download": "org.apache.causeway.security:causeway-extensions-exceldownload.*"
       "Wicket Viewer: Full Calendar": "org.apache.causeway.security:causeway-extensions-fullcalendar.*"
       "Wicket Viewer: PDF.js": "org.apache.causeway.security:causeway-extensions-fullcalendar.*"
       #"Wicket Viewer: Gmap3": "org.apache.causeway.security:causeway-extensions-gmap3.*"
