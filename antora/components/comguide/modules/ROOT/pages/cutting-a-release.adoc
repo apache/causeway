@@ -234,7 +234,7 @@ We also recommend creating a separate git worktree to capture any documentation 
 +
 [source,bash,subs="attributes+"]
 ----
-git branch -b $CAUSEWAYBRANCH
+git checkout -b $CAUSEWAYBRANCH
 ----
 
 * Push the branch:
