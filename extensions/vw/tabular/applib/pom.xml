@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-tabular</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>2.0.0-RC4</version>
     </parent>
 
     <artifactId>causeway-extensions-tabular-applib</artifactId>
