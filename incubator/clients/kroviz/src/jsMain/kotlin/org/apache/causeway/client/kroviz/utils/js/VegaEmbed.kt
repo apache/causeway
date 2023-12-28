@@ -18,15 +18,19 @@
  */
 package org.apache.causeway.client.kroviz.utils.js
 
+import org.apache.causeway.client.kroviz.to.Vega5
+
 //@JsModule("vega-embed")
 //@JsNonModule
-object VegaEmbed {
-    fun embed(spec: String, options: String): dynamic {
+//external class VegaEmbed {
+// object VegaEmbed {
+    //fun embed(divId: String, spec: Vega5): Vega.View
+
+    fun embed(divId: String, spec: Vega5): dynamic {
         return js(code = """
-                      var vegaEmbed = require('vega-embed')();
-                      var result = vegaEmbed('#vis', spec);
-                      return result.view;
+                      var vegaEmbed = require('vega-embed');
+                      return vegaEmbed(divId, spec);
                    """
         )
     }
-}
+//}

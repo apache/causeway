@@ -204,8 +204,9 @@ class RoMenuBar : SimplePanel() {
         )
 
         val vegaTitle = "Vega Sample"
+        val vegaPanel = VegaPanel(VEGA_SAMPLE.str)
         subMenu.add(
-            buildMenuEntry(vegaTitle, "Image", { ViewManager.add(vegaTitle, VegaPanel(VEGA_SAMPLE.str)) })
+            buildMenuEntry(vegaTitle, "Image", { ViewManager.add(vegaTitle, vegaPanel) })
         )
 
         mainMenu.add(subMenu)

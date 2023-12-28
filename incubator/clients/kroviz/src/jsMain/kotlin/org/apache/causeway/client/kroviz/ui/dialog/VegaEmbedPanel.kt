@@ -19,22 +19,22 @@
 package org.apache.causeway.client.kroviz.ui.dialog
 
 import io.kvision.panel.SimplePanel
-import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.to.Vega5
-import org.apache.causeway.client.kroviz.utils.js.VegaEmbed
+import org.apache.causeway.client.kroviz.utils.js.embed
 
 class VegaEmbedPanel(val json: String) : SimplePanel() {
 
     init {
         this.addAfterInsertHook {
             val spec = JSON.parse<Vega5>(json)
-            val options = obj {
-                this.renderer = "canvas"
-                this.container = getElement()
-                this.hover = true
-            }
-            VegaEmbed.embed(spec.toString(), options) as Unit
+            buildVega(spec)
         }
+    }
+
+    private fun buildVega(spec:Vega5)  {
+        //var spec = %2$s;\n"
+        val divId = "vis"
+        embed(divId, spec)
     }
 
 }
