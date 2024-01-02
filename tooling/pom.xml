@@ -49,7 +49,7 @@
 		<picocli.version>4.7.5</picocli.version>
 		
 		<!-- brings in structurizr-core as a transitive dependency -->
-		<structurizr-export.version>1.18.0</structurizr-export.version>
+		<structurizr-export.version>1.19.0</structurizr-export.version>
 		
 		<!-- override surefire defaults from bom, as this is not a Java module yet -->
 		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
