@@ -348,15 +348,23 @@ Now we make sure that the docs in the new doc branch are actually up-to-date.
 git checkout {page-causewayrel}
 ----
 
-* build prereqs
+* build framework
 +
 [source,bash,subs="attributes+"]
 ----
 pushd bom
 mvnd clean install -T1C -DskipTests -Dgithub
 popd
+----
+
+* build module tooling
++
+[source,bash,subs="attributes+"]
+----
 mvnd -D module-tooling -D skip.essential install -DskipTests
 ----
++
+NOTE: this now requires at least JDK 17 in order to build the `module-tooling` module that is used to generate some of the website.
 
 * generate the website:
 +
