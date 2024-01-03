@@ -467,7 +467,14 @@ Artifact: causeway-testing-fixtures-applib
 Type: jar
 Directory: /testing/fixtures/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testing.fixtures.applib.modules.ModuleWithFixturesService +
+o.a.i.testing.fixtures.applib.queryresultscache.QueryResultsCacheControlForFixtures +
+o.a.i.testing.fixtures.applib.services.InitialFixtureScriptsInstaller +
+****
+
+.Dependencies
 ****
 joda-time:joda-time:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
@@ -499,7 +506,12 @@ Artifact: causeway-testing-h2console-ui
 Type: jar
 Directory: /testing/h2console/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testing.h2console.ui.webmodule.WebModuleH2Console +
+****
+
+.Dependencies
 ****
 com.h2database:h2:jar:<managed> +
 javax.servlet:javax.servlet-api:jar:<managed> +
@@ -1130,6 +1142,11 @@ Directory: /core/interaction
 Top level action execution or property changes are wrapped in an _Interaction_.
 That typically corresponds to a http request/response cycle or a JUnit test method execution.
 
+.Components
+****
+o.a.i.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -1260,6 +1277,11 @@ Directory: /core/runtime
 ----
 |Bundles framework internal services, utilities and events.
 
+.Components
+****
+o.a.i.core.runtime.events.MetamodelEventService +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-interaction:jar:<managed> +
@@ -1278,6 +1300,54 @@ Type: jar
 Directory: /core/runtimeservices
 ----
 |Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.
+
+.Components
+****
+o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault +
+o.a.i.core.runtimeservices.command.CommandDtoFactoryDefault +
+o.a.i.core.runtimeservices.command.CommandExecutorServiceDefault +
+o.a.i.core.runtimeservices.command.SchemaValueMarshallerDefault +
+o.a.i.core.runtimeservices.email.EmailServiceDefault +
+o.a.i.core.runtimeservices.eventbus.EventBusServiceSpring +
+o.a.i.core.runtimeservices.executor.MemberExecutorServiceDefault +
+o.a.i.core.runtimeservices.factory.FactoryServiceDefault +
+o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault +
+o.a.i.core.runtimeservices.i18n.po.TranslationServicePo +
+o.a.i.core.runtimeservices.icons.ObjectIconServiceDefault +
+o.a.i.core.runtimeservices.interaction.InteractionDtoFactoryDefault +
+o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault +
+o.a.i.core.runtimeservices.locale.LanguageProviderDefault +
+o.a.i.core.runtimeservices.locale.LocaleChoiceProviderDefault +
+o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault +
+o.a.i.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap +
+o.a.i.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap +
+o.a.i.core.runtimeservices.message.MessageServiceDefault +
+o.a.i.core.runtimeservices.placeholder.PlaceholderRenderServiceDefault +
+o.a.i.core.runtimeservices.publish.CommandPublisherDefault +
+o.a.i.core.runtimeservices.publish.EntityChangesPublisherDefault +
+o.a.i.core.runtimeservices.publish.EntityPropertyChangePublisherDefault +
+o.a.i.core.runtimeservices.publish.ExecutionPublisherDefault +
+o.a.i.core.runtimeservices.publish.LifecycleCallbackNotifier +
+o.a.i.core.runtimeservices.publish.ObjectLifecyclePublisherDefault +
+o.a.i.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault +
+o.a.i.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException +
+o.a.i.core.runtimeservices.repository.RepositoryServiceDefault +
+o.a.i.core.runtimeservices.routing.RoutingServiceDefault +
+o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault +
+o.a.i.core.runtimeservices.serializing.SerializingAdapterDefault +
+o.a.i.core.runtimeservices.session.InteractionIdGeneratorDefault +
+o.a.i.core.runtimeservices.session.InteractionServiceDefault +
+o.a.i.core.runtimeservices.sitemap.SitemapServiceDefault +
+o.a.i.core.runtimeservices.spring.SpringBeansService +
+o.a.i.core.runtimeservices.transaction.TransactionServiceSpring +
+o.a.i.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression +
+o.a.i.core.runtimeservices.user.ImpersonateMenuAdvisorDefault +
+o.a.i.core.runtimeservices.user.UserCurrentSessionTimeZoneHolderDefault +
+o.a.i.core.runtimeservices.userreg.EmailNotificationServiceDefault +
+o.a.i.core.runtimeservices.wrapper.WrapperFactoryDefault +
+o.a.i.core.runtimeservices.xml.XmlServiceDefault +
+o.a.i.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault +
+****
 
 .Dependencies
 ****
@@ -1331,6 +1401,13 @@ Directory: /core/transaction
 |Provides transaction integration with Spring and also
 entity change tracking, with associated publishing and pre/post value events.
 
+.Components
+****
+o.a.i.core.transaction.changetracking.events.TimestampService +
+o.a.i.core.transaction.scope.NoopTransactionSynchronizationService +
+o.a.i.core.transaction.scope.TransactionScopeBeanFactoryPostProcessor +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -1352,6 +1429,16 @@ Directory: /core/webapp
 ----
 |Bundles all the web specific classes a srequired by viewers.
 Introduced to keep the 'runtime' package concise.
+
+.Components
+****
+o.a.i.core.webapp.confmenu.ConfigurationViewServiceDefault +
+o.a.i.core.webapp.health.HealthIndicatorUsingHealthCheckService +
+o.a.i.core.webapp.keyvaluestore.KeyValueStoreUsingHttpSession +
+o.a.i.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger +
+o.a.i.core.webapp.modules.templresources.WebModuleTemplateResources +
+o.a.i.core.webapp.webappctx.CausewayWebAppContextInitializer +
+****
 
 .Dependencies
 ****
@@ -1444,6 +1531,12 @@ Type: jar
 Directory: /persistence/commons
 ----
 |Apache Causeway Common utilities for persistence stacks
+
+.Components
+****
+o.a.i.persistence.commons.integration.changetracking.EntityChangeTrackerDefault +
+o.a.i.persistence.commons.integration.changetracking.PreAndPostValueEvaluatorServiceDefault +
+****
 
 .Dependencies
 ****
@@ -1593,6 +1686,32 @@ Directory: /persistence/jdo/datanucleus
 ----
 |JDO Implementation (powered by DataNucleus)
 
+.Components
+****
+o.a.i.persistence.jdo.datanucleus.changetracking.PreAndPostValueEvaluatorServiceJdo +
+o.a.i.persistence.jdo.datanucleus.entities.DnEntityStateProvider +
+o.a.i.persistence.jdo.datanucleus.exrecog.JdoObjectNotFoundRecognizer +
+o.a.i.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnByteIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnCharIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnDatastoreIdImplValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnDatastoreUniqueLongIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnIntIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnLongIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnObjectIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnScoidValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnShortIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnStringIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.JdoCharIdentityValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.JdoDatastoreIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.JdoIntIdentityValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.JdoLongIdentityValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.JdoObjectIdentityValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.JdoShortIdentityValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.JdoStringIdentityValueSemantics +
+****
+
 .Dependencies
 ****
 com.h2database:h2:jar:<managed> +
@@ -1644,6 +1763,11 @@ Type: jar
 Directory: /persistence/jdo/metamodel
 ----
 |JDO Metamodel Facets / Programming Model
+
+.Components
+****
+o.a.i.persistence.jdo.metamodel.JdoProgrammingModel +
+****
 
 .Dependencies
 ****
@@ -1845,6 +1969,11 @@ Directory: /persistence/jpa/integration
 ----
 |JPA integration (facets, jpa-context)
 
+.Components
+****
+o.a.i.persistence.jpa.integration.entity.JpaEntityIntegration +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -1868,6 +1997,11 @@ Type: jar
 Directory: /persistence/jpa/metamodel
 ----
 |JPA Metamodel Facets / Programming Model
+
+.Components
+****
+o.a.i.persistence.jpa.metamodel.JpaProgrammingModel +
+****
 
 .Dependencies
 ****
@@ -1931,7 +2065,13 @@ Artifact: causeway-security-bypass
 Type: jar
 Directory: /security/bypass
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.security.bypass.authentication.AuthenticatorBypass +
+o.a.i.security.bypass.authorization.AuthorizorBypass +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 ****
@@ -1994,6 +2134,11 @@ Type: jar
 Directory: /security/keycloak
 ----
 |Authentication and Authorization using Keycloak
+
+.Components
+****
+o.a.i.security.keycloak.handler.LogoutHandlerForKeycloak +
+****
 
 .Dependencies
 ****
@@ -2067,6 +2212,13 @@ Directory: /security/shiro
 ----
 |Authentication and Authorization using Apache Shiro.
 
+.Components
+****
+o.a.i.security.shiro.authentication.AuthenticatorShiro +
+o.a.i.security.shiro.authorization.AuthorizorShiro +
+o.a.i.security.shiro.webmodule.WebModuleShiro +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -2135,6 +2287,15 @@ Type: jar
 Directory: /security/spring
 ----
 |Authentication using Spring Security
+
+.Components
+****
+o.a.i.security.spring.authconverters.AuthenticationConverterOfAuthenticatedPrincipal +
+o.a.i.security.spring.authconverters.AuthenticationConverterOfStringPrincipal +
+o.a.i.security.spring.authconverters.AuthenticationConverterOfUserDetailsPrincipal +
+o.a.i.security.spring.authentication.AuthenticatorSpring +
+o.a.i.security.spring.webmodule.WebModuleSpringSecurity +
+****
 
 .Dependencies
 ****
@@ -2293,7 +2454,16 @@ Artifact: causeway-viewer-commons-services
 Type: jar
 Directory: /viewers/commons/services
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.commons.services.branding.BrandingUiServiceDefault +
+o.a.i.viewer.commons.services.header.HeaderUiServiceDefault +
+o.a.i.viewer.commons.services.i8n.TranslationsResolverDefault +
+o.a.i.viewer.commons.services.menu.MenuUiServiceDefault +
+o.a.i.viewer.commons.services.userprof.UserProfileUiServiceDefault +
+****
+
+.Dependencies
 ****
 javax.servlet:javax.servlet-api:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -2454,6 +2624,12 @@ Directory: /viewers/restfulobjects/jaxrs-resteasy
 ----
 |JAX-RS plugin using jboss resteasy.
 
+.Components
+****
+o.a.i.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml +
+o.a.i.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy +
+****
+
 .Dependencies
 ****
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-rendering:jar:<managed> +
@@ -2477,7 +2653,25 @@ Artifact: causeway-viewer-restfulobjects-rendering
 Type: jar
 Directory: /viewers/restfulobjects/rendering
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.restfulobjects.rendering.service.RepresentationService +
+o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest +
+o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$RequestFilter +
+o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$ResponseFilter +
+o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0 +
+o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheCausewayV2 +
+o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1 +
+o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType +
+o.a.i.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault +
+o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault +
+o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator +
+o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault +
+o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.ValueSchemaFactoryDefault +
+o.a.i.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
@@ -2512,7 +2706,23 @@ Artifact: causeway-viewer-restfulobjects-viewer
 Type: jar
 Directory: /viewers/restfulobjects/viewer
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound +
+o.a.i.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication +
+o.a.i.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRuntimeException +
+o.a.i.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside +
+o.a.i.viewer.restfulobjects.viewer.resources.DomainServiceResourceServerside +
+o.a.i.viewer.restfulobjects.viewer.resources.DomainTypeResourceServerside +
+o.a.i.viewer.restfulobjects.viewer.resources.HomePageResourceServerside +
+o.a.i.viewer.restfulobjects.viewer.resources.ImageResourceServerside +
+o.a.i.viewer.restfulobjects.viewer.resources.MenuBarsResourceServerside +
+o.a.i.viewer.restfulobjects.viewer.resources.SwaggerSpecResource +
+o.a.i.viewer.restfulobjects.viewer.resources.UserResourceServerside +
+o.a.i.viewer.restfulobjects.viewer.resources.VersionResourceServerside +
+****
+
+.Dependencies
 ****
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -2670,7 +2880,14 @@ Artifact: causeway-viewer-wicket-ui
 Type: jar
 Directory: /viewers/wicket/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.wicket.ui.app.logout.LogoutHandlerWkt +
+o.a.i.viewer.wicket.ui.components.collectioncontents.export.CollectionContentsAsExportFactory +
+o.a.i.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupportDefault +
+****
+
+.Dependencies
 ****
 com.google.guava:guava:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
@@ -2727,7 +2944,22 @@ Artifact: causeway-viewer-wicket-viewer
 Type: jar
 Directory: /viewers/wicket/viewer
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault +
+o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault +
+o.a.i.viewer.wicket.viewer.registries.pages.PageClassListDefault +
+o.a.i.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault +
+o.a.i.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault +
+o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
+o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
+o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
+o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
+o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
+o.a.i.viewer.wicket.viewer.wicketapp.CausewayWicketApplication$ServiceInjectorHolder +
+****
+
+.Dependencies
 ****
 commons-io:commons-io:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
@@ -3049,7 +3281,15 @@ Artifact: causeway-valuetypes-asciidoc-metamodel
 Type: jar
 Directory: /valuetypes/asciidoc/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics +
+o.a.i.valuetypes.asciidoc.metamodel.semantics.ChangesDtoValueSemanticsPrettyRender +
+o.a.i.valuetypes.asciidoc.metamodel.semantics.CommandDtoValueSemanticsPrettyRender +
+o.a.i.valuetypes.asciidoc.metamodel.semantics.InteractionDtoValueSemanticsPrettyRender +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed> +
@@ -3126,7 +3366,13 @@ Artifact: causeway-valuetypes-asciidoc-ui-wkt
 Type: jar
 Directory: /valuetypes/asciidoc/ui/wicket
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Standalone +
+****
+
+.Dependencies
 ****
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
@@ -3267,7 +3513,12 @@ Artifact: causeway-valuetypes-markdown-metamodel
 Type: jar
 Directory: /valuetypes/markdown/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-markdown-applib:jar:<managed> +
@@ -3341,7 +3592,13 @@ Artifact: causeway-valuetypes-markdown-ui-wkt
 Type: jar
 Directory: /valuetypes/markdown/ui/wicket
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt$Standalone +
+****
+
+.Dependencies
 ****
 org.apache.causeway.valuetypes:causeway-valuetypes-markdown-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
@@ -3481,7 +3738,12 @@ Artifact: causeway-valuetypes-vega-metamodel
 Type: jar
 Directory: /valuetypes/vega/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.vega.metamodel.semantics.VegaValueSemantics +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
@@ -3553,7 +3815,13 @@ Artifact: causeway-valuetypes-vega-ui-wkt
 Type: jar
 Directory: /valuetypes/vega/ui/wicket
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt$Standalone +
+****
+
+.Dependencies
 ****
 org.apache.causeway.valuetypes:causeway-valuetypes-vega-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
@@ -3936,7 +4204,12 @@ Artifact: causeway-extensions-audittrail-applib
 Type: jar
 Directory: /extensions/security/audittrail/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.audittrail.applib.spiimpl.EntityPropertyChangeSubscriberForAuditTrail +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -3955,7 +4228,12 @@ Artifact: causeway-extensions-audittrail-persistence-jdo
 Type: jar
 Directory: /extensions/security/audittrail/persistence-jdo
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.audittrail.jdo.dom.AuditTrailEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-audittrail-applib:jar:<managed> +
@@ -3974,7 +4252,12 @@ Artifact: causeway-extensions-audittrail-persistence-jpa
 Type: jar
 Directory: /extensions/security/audittrail/persistence-jpa
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.audittrail.jpa.dom.AuditTrailEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-audittrail-applib:jar:<managed> +
@@ -4094,6 +4377,12 @@ Directory: /extensions/vw/fullcalendar/wicket/ui
 ----
 |Integrates FullCalendar Wicket with the Wicket Viewer
 
+.Components
+****
+o.a.i.extensions.fullcalendar.wkt.ui.viewer.calendarable.CalendarableCollectionAsFullCalendarFactory +
+o.a.i.extensions.fullcalendar.wkt.ui.viewer.calendareventable.CalendarEventableCollectionAsFullCalendarFactory +
+****
+
 .Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
@@ -4126,6 +4415,11 @@ Type: jar
 Directory: /extensions/core/layoutloaders/github
 ----
 |Allows layout.xml files to be dynamically loaded from a github repo.
+
+.Components
+****
+o.a.i.extensions.layoutloaders.github.spiimpl.LayoutResourceLoaderFromGithub +
+****
 
 .Dependencies
 ****
@@ -4184,7 +4478,12 @@ Artifact: causeway-extensions-pdfjs-metamodel
 Type: jar
 Directory: /extensions/vw/pdfjs/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotationFactory$Register +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-pdfjs-applib:jar:<managed> +
@@ -4231,7 +4530,12 @@ Artifact: causeway-extensions-pdfjs-wicket-ui
 Type: jar
 Directory: /extensions/vw/pdfjs/wicket/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.pdfjs.wkt.ui.components.PdfJsViewerPanelComponentFactory +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-pdfjs-metamodel:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-pdfjs-wicket-integration:jar:<managed> +
@@ -4265,7 +4569,15 @@ Artifact: causeway-extensions-secman-applib
 Type: jar
 Directory: /extensions/security/secman/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.secman.applib.feature.api.ApplicationFeatureChoices +
+o.a.i.extensions.secman.applib.role.dom.ApplicationRoleRepositoryAbstract +
+o.a.i.extensions.secman.applib.seed.SeedSecurityModuleService +
+o.a.i.extensions.secman.applib.user.menu.MeService$UserMenuMeActionAdvisor +
+****
+
+.Dependencies
 ****
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -4309,6 +4621,11 @@ Directory: /extensions/security/secman/delegated-springoauth2
 ----
 |Provides a domain service to automatically create a delegated ApplicationUser if authentication has been performed externally, eg by Spring OAuth2 or by Keycloak.
 
+.Components
+****
+o.a.i.extensions.secman.delegated.springoauth2.dom.ApplicationUserAutoCreationService +
+****
+
 .Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:<managed> +
@@ -4329,7 +4646,12 @@ Artifact: causeway-extensions-secman-encryption-jbcrypt
 Type: jar
 Directory: /extensions/security/secman/encryption-jbcrypt
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.secman.encryption.jbcrypt.services.PasswordEncoderUsingJBcrypt +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:<managed> +
@@ -4368,7 +4690,20 @@ Artifact: causeway-extensions-secman-integration
 Type: jar
 Directory: /extensions/security/secman/integration
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.secman.integration.authorizor.AuthorizorSecman +
+o.a.i.extensions.secman.integration.authorizor.AuthorizorSecman$PermissionCache +
+o.a.i.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor$Register +
+o.a.i.extensions.secman.integration.permissions.PermissionsEvaluationServiceForSecman +
+o.a.i.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman +
+o.a.i.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman$Cache +
+o.a.i.extensions.secman.integration.spiimpl.TableColumnVisibilityServiceForSecman +
+o.a.i.extensions.secman.integration.usermementorefiner.UserMementoRefinerFromApplicationUser +
+o.a.i.extensions.secman.integration.userreg.UserRegistrationServiceForSecman +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:<managed> +
@@ -4388,7 +4723,16 @@ Artifact: causeway-extensions-secman-persistence-jdo
 Type: jar
 Directory: /extensions/security/secman/persistence-jdo
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository +
+o.a.i.extensions.secman.jdo.role.dom.ApplicationRoleRepository +
+o.a.i.extensions.secman.jdo.tenancy.dom.ApplicationTenancyRepository +
+o.a.i.extensions.secman.jdo.user.dom.ApplicationUserRepository +
+o.a.i.extensions.secman.jdo.util.RegexReplacer +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:test-jar:<managed> +
@@ -4411,7 +4755,16 @@ Artifact: causeway-extensions-secman-persistence-jpa
 Type: jar
 Directory: /extensions/security/secman/persistence-jpa
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository +
+o.a.i.extensions.secman.jpa.role.dom.ApplicationRoleRepository +
+o.a.i.extensions.secman.jpa.tenancy.dom.ApplicationTenancyRepository +
+o.a.i.extensions.secman.jpa.user.dom.ApplicationUserRepository +
+o.a.i.extensions.secman.jpa.util.RegexReplacer +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:test-jar:<managed> +
@@ -4447,7 +4800,13 @@ Artifact: causeway-extensions-sessionlog-applib
 Type: jar
 Directory: /extensions/security/sessionlog/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.sessionlog.applib.spiimpl.SessionLogServiceInitializer +
+o.a.i.extensions.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -4466,7 +4825,12 @@ Artifact: causeway-extensions-sessionlog-persistence-jdo
 Type: jar
 Directory: /extensions/security/sessionlog/persistence-jdo
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.sessionlog.jdo.dom.SessionLogEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sessionlog-applib:jar:<managed> +
@@ -4484,7 +4848,13 @@ Artifact: causeway-extensions-sessionlog-persistence-jpa
 Type: jar
 Directory: /extensions/security/sessionlog/persistence-jpa
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.sessionlog.jpa.dom.SessionLogEntryPK$Semantics +
+o.a.i.extensions.sessionlog.jpa.dom.SessionLogEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sessionlog-applib:jar:<managed> +
@@ -4503,6 +4873,12 @@ Type: jar
 Directory: /extensions/security/spring-oauth2
 ----
 |Authentication Converter, using Spring Security's OAuth2 client
+
+.Components
+****
+o.a.i.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfJwt +
+o.a.i.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfOAuth2UserPrincipal +
+****
 
 .Dependencies
 ****
@@ -4555,7 +4931,12 @@ Artifact: causeway-extensions-sse-metamodel
 Type: jar
 Directory: /extensions/vw/sse/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.sse.metamodel.facets.SseAnnotationFacetFactory$Register +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sse-applib:jar:<managed> +
@@ -4569,7 +4950,15 @@ Artifact: causeway-extensions-sse-wicket
 Type: jar
 Directory: /extensions/vw/sse/wicket
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.sse.wicket.markup.ListeningMarkupPanelFactoriesForWicket$Parented +
+o.a.i.extensions.sse.wicket.markup.ListeningMarkupPanelFactoriesForWicket$Standalone +
+o.a.i.extensions.sse.wicket.services.SseServiceDefault +
+o.a.i.extensions.sse.wicket.webmodule.WebModuleServerSentEvents +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-sse-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
@@ -4676,7 +5065,12 @@ Artifact: causeway-extensions-excel-applib
 Type: jar
 Directory: /extensions/core/excel/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.excel.applib.service.ExcelServiceDefault +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -4833,7 +5227,18 @@ Artifact: causeway-extensions-commandlog-applib
 Type: jar
 Directory: /extensions/core/commandlog/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.commandlog.applib.dom.BackgroundService +
+o.a.i.extensions.commandlog.applib.dom.BackgroundService$PersistCommandExecutorService +
+o.a.i.extensions.commandlog.applib.dom.CommandLogEntry$TableColumnOrderDefault +
+o.a.i.extensions.commandlog.applib.fakescheduler.FakeScheduler +
+o.a.i.extensions.commandlog.applib.job.BackgroundCommandsJobControl +
+o.a.i.extensions.commandlog.applib.job.RunBackgroundCommandsJob +
+o.a.i.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -4857,7 +5262,12 @@ Artifact: causeway-extensions-commandlog-persistence-jdo
 Type: jar
 Directory: /extensions/core/commandlog/persistence-jdo
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.commandlog.jdo.dom.CommandLogEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:test-jar:<managed> +
@@ -4879,7 +5289,13 @@ Artifact: causeway-extensions-commandlog-persistence-jpa
 Type: jar
 Directory: /extensions/core/commandlog/persistence-jpa
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.commandlog.jpa.dom.CommandLogEntryPK$Semantics +
+o.a.i.extensions.commandlog.jpa.dom.CommandLogEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:test-jar:<managed> +
@@ -4965,6 +5381,15 @@ Type: jar
 Directory: /extensions/core/docgen/help
 ----
 |Provides help/documentation pages for your application.
+
+.Components
+****
+o.a.i.extensions.docgen.help.topics.domainobjects.CausewayEntityDiagramPage +
+o.a.i.extensions.docgen.help.topics.domainobjects.DomainEntityDiagramPage +
+o.a.i.extensions.docgen.help.topics.domainobjects.DomainEntityDiagramPage2 +
+o.a.i.extensions.docgen.help.topics.domainobjects.EntityDiagramPageAbstract +
+o.a.i.extensions.docgen.help.topics.welcome.WelcomeHelpPage +
+****
 
 .Dependencies
 ****
@@ -5064,7 +5489,13 @@ Artifact: causeway-extensions-executionlog-applib
 Type: jar
 Directory: /extensions/core/executionlog/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.executionlog.applib.dom.ExecutionLogEntry$TableColumnOrderDefault +
+o.a.i.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -5087,7 +5518,13 @@ Artifact: causeway-extensions-executionlog-persistence-jdo
 Type: jar
 Directory: /extensions/core/executionlog/persistence-jdo
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryPK$Semantics +
+o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
@@ -5109,7 +5546,13 @@ Artifact: causeway-extensions-executionlog-persistence-jpa
 Type: jar
 Directory: /extensions/core/executionlog/persistence-jpa
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.executionlog.jpa.dom.ExecutionLogEntryPK$Semantics +
+o.a.i.extensions.executionlog.jpa.dom.ExecutionLogEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
@@ -5217,7 +5660,14 @@ Artifact: causeway-extensions-executionoutbox-applib
 Type: jar
 Directory: /extensions/core/executionoutbox/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry$TableColumnOrderDefault +
+o.a.i.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents +
+o.a.i.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -5240,7 +5690,13 @@ Artifact: causeway-extensions-executionoutbox-persistence-jdo
 Type: jar
 Directory: /extensions/core/executionoutbox/persistence-jdo
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryPK$Semantics +
+o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
@@ -5262,7 +5718,13 @@ Artifact: causeway-extensions-executionoutbox-persistence-jpa
 Type: jar
 Directory: /extensions/core/executionoutbox/persistence-jpa
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryPK$Semantics +
+o.a.i.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
@@ -5559,7 +6021,12 @@ Artifact: causeway-extensions-tabular-excel
 Type: jar
 Directory: /extensions/vw/tabular/excel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.tabular.excel.exporter.CollectionContentsAsExcelExporter +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-tabular-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
@@ -6057,31 +6524,7 @@ Artifact: causeway-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Components
-****
-o.a.i.testdomain.jdo.JdoInventoryDao +
-o.a.i.testdomain.jdo.JdoTestFixtures +
-o.a.i.testdomain.jpa.JpaInventoryDao +
-o.a.i.testdomain.jpa.JpaTestFixtures +
-o.a.i.testdomain.jpa.springdata.EmployeeRepository +
-o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
-o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
-o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
-o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
-o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
-o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
-o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
-o.a.i.testdomain.util.kv.KVStoreForTesting +
-o.a.i.testdomain.util.rest.RestEndpointService +
-o.a.i.testdomain.wrapperfactory.CounterRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +
