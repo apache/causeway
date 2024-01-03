@@ -16,31 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.ui.dialog
+package org.apache.causeway.client.kroviz.to
 
-import io.kvision.panel.SimplePanel
-import io.kvision.utils.obj
-import org.apache.causeway.client.kroviz.to.Vega5
-import org.apache.causeway.client.kroviz.utils.js.Vega
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-class VegaPanel(val json: String) : SimplePanel() {
+@Serializable
+data class VegaLite5(
+    @SerialName("\$schema") val schema: String,
+    val data: VlData,
+    val mark: String,
+    val encoding: VlEncoding
+) : TransferObject
 
-    init {
-        val spec = JSON.parse<Vega5>(json)
-        console.log("[VP_init]")
-//        console.log(spec.width)
-//        console.log(spec.height)
-        this.addAfterInsertHook {
-            buildVega(spec)
-        }
-    }
+@Serializable
+data class VlData(
+    val values: List<VlValue> = emptyList(),
+) : TransferObject
+@Serializable
+data class VlValue(
+    val a: String,
+    val b: Int
+) : TransferObject
 
-    private fun buildVega(spec:Vega5)  {
-        Vega.View(Vega.parse(spec), obj {
-            this.renderer = "canvas"
-            this.container = getElement()
-            this.hover = true
-        })
-    }
+@Serializable
+data class VlEncoding(
+    val x: FieldType,
+    val y: FieldType
+) : TransferObject
 
-}
+@Serializable
+data class FieldType(
+    val field: String,
+    val type: String
+) : TransferObject

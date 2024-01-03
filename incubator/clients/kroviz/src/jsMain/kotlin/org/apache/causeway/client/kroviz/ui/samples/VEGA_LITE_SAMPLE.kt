@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.ui.samples
 
-object VEGA_SAMPLE2 {
+object VEGA_LITE_SAMPLE {
     val schema = "\$schema"
 
     val url = "https://vega.github.io/vega/examples/packed-bubble-chart/"

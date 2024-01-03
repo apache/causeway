@@ -40,7 +40,7 @@ import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder
 import org.apache.causeway.client.kroviz.ui.panel.GeoMap
 import org.apache.causeway.client.kroviz.ui.panel.ImageSample
 import org.apache.causeway.client.kroviz.ui.panel.SvgMap
-import org.apache.causeway.client.kroviz.ui.samples.VEGA_SAMPLE
+import org.apache.causeway.client.kroviz.ui.samples.VEGA_LITE_SAMPLE
 import org.apache.causeway.client.kroviz.utils.IconManager
 import org.apache.causeway.client.kroviz.utils.Point
 
@@ -204,7 +204,7 @@ class RoMenuBar : SimplePanel() {
         )
 
         val vegaTitle = "Vega Sample"
-        val vegaPanel = VegaPanel(VEGA_SAMPLE.str)
+        val vegaPanel = VegaPanel(VEGA_LITE_SAMPLE.str)
         subMenu.add(
             buildMenuEntry(vegaTitle, "Image", { ViewManager.add(vegaTitle, vegaPanel) })
         )

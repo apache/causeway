@@ -21,7 +21,6 @@ package org.apache.causeway.client.kroviz.to
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class Vega5(
@@ -29,8 +28,10 @@ data class Vega5(
     val description: String? = null,
     val width: Int,
     val height: Int,
-    val padding: Float? = null,
+    val padding: Int, // List<Padding> = emptyList(),
+    val autosize: String? = null,
     val data: List<Data> = emptyList(),
+    val projections: List<Projection> = emptyList(),
     val signals: List<Signal> = emptyList(),
     val scales: List<Scale> = emptyList(),
     val axes: List<Axis> = emptyList(),
@@ -42,7 +43,9 @@ data class Data(
     val name: String,
     val values: List<VegaValue> = emptyList(),
     val source: String? = null,
-    val transform: List<Transformation> = emptyList()
+    val transform: List<Transformation> = emptyList(),
+    val format: Format? = null,
+    val url: String? = null,
 ) : TransferObject
 
 @Serializable
@@ -66,16 +69,52 @@ data class Size(
 data class VegaValue(
     val category: String? = null,
     val amount: Float? = null,
+    val link: String? = null,
     val id: String? = null,
     val parent: String? = null,
     val title: String? = null,
+    val type: String? = null,
+) : TransferObject
+
+@Serializable
+data class Format(
+    val type: String,
+    val feature: String? = null,
+    val property: String? = null,
+) : TransferObject
+
+@Serializable
+data class Projection(
+    val name: String,
+    val scale: Float,
+    val type: String? = null,
+    val translate: Translation? = null,
+    val rotate: List<Rotation> = emptyList(),
+) : TransferObject
+
+@Serializable
+data class Rotation(
+    val signal: String,
+) : TransferObject
+
+@Serializable
+data class Translation(
+    val signal: String,
 ) : TransferObject
 
 @Serializable
 data class Signal(
     val name: String,
-    val value: JsonObject? = null,
-    val on: List<Event> = emptyList()
+    val value: Float? = null,
+    val on: List<Event> = emptyList(),
+    val bind: Bind? = null
+) : TransferObject
+
+@Serializable
+data class Bind(
+    val input: String,
+    val min: Float? = null,
+    val max: Float? = null
 ) : TransferObject
 
 @Serializable
@@ -132,6 +171,7 @@ data class Update(
     val y: UpdateGroup? = null,
     val text: UpdateGroup? = null,
     val fill: StringValue? = null,
+    val href: Href? = null,
     val fillOpacity: List<FillOpacity>? = null,
 ) : TransferObject
 
@@ -152,6 +192,11 @@ data class UpdateGroup(
 @Serializable
 data class Fill(
     val fill: StringValue? = null
+) : TransferObject
+
+@Serializable
+data class Href(
+    val signal: String? = null
 ) : TransferObject
 
 @Serializable

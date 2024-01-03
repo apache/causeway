@@ -22,13 +22,18 @@ import kotlinx.serialization.json.Json
 import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.causeway.client.kroviz.to.TransferObject
 import org.apache.causeway.client.kroviz.to.Vega5
+import org.apache.causeway.client.kroviz.to.VegaLite5
 
 class VegaHandler : BaseHandler() {
 
     override fun parse(response: String): TransferObject {
         console.log("[VH_parse]")
         console.log(response)
-        return Json.decodeFromString<Vega5>(response)
+        return if (response.contains("vega-lite/v5")) {
+            Json.decodeFromString<VegaLite5>(response)
+        } else {
+            Json.decodeFromString<Vega5>(response)
+        }
     }
 
     override fun doHandle() {

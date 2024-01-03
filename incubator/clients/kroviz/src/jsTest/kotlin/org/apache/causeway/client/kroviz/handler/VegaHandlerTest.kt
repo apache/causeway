@@ -20,8 +20,8 @@
 package org.apache.causeway.client.kroviz.handler
 
 import org.apache.causeway.client.kroviz.to.Vega5
-import org.apache.causeway.client.kroviz.vega_samples.BAR_CHART
-import org.apache.causeway.client.kroviz.vega_samples.UML_DIAGRAM
+import org.apache.causeway.client.kroviz.to.VegaLite5
+import org.apache.causeway.client.kroviz.vega_samples.*
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -35,10 +35,31 @@ class VegaHandlerTest {
     }
 
     @Test
+    fun testParseBarChartWithLinks() {
+        val json = BAR_CHART_WITH_LINKS.str
+        val vega = VegaHandler().parse(json)
+        assertTrue(vega is Vega5)
+    }
+
+    @Test
     fun testParseUmlDiagram() {
         val json = UML_DIAGRAM.str
         val vega = VegaHandler().parse(json)
         assertTrue(vega is Vega5)
+    }
+
+    @Test
+    fun testParseEarthquakes() {
+        val json = EARTHQUAKES.str
+        val vega = VegaHandler().parse(json)
+        assertTrue(vega is Vega5)
+    }
+
+    @Test
+    fun testParseVegaLite() {
+        val json = VEGA_LITE.str
+        val vega = VegaHandler().parse(json)
+        assertTrue(vega is VegaLite5)
     }
 
 }
