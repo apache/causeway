@@ -21,10 +21,11 @@
 
 
 github:
-  description: "Apache Causeway™ software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services or view models, and the framework dynamically generates a representation of that domain model as a webapp or as a RESTful API. For prototyping or production. "
+  description: "Apache Causeway™ software is a framework for rapidly developing domain-driven apps in Java, built upon the Spring Boot platform. Write your business logic in entities, domain services or view models, and the framework dynamically generates a representation of that domain model as a webapp or as a RESTful API. For prototyping or production."
   homepage: https://causeway.apache.org/
   labels:
     - java
+    - spring-boot
     - web-framework
     - domain-driven-design
     - ddd
