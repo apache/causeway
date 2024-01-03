@@ -107,7 +107,7 @@ implements FixtureScriptWithExecutionStrategy {
             }
         }
         if (buf.length() > 0) {
-            throw new IllegalArgumentException("No such feature(s):\n" + buf.toString());
+            throw new IllegalArgumentException(String.format("No such feature(s):\n%s", buf));
         }
 
 

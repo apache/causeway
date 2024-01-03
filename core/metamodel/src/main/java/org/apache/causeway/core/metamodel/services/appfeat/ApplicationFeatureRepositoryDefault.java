@@ -74,8 +74,13 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleCoreMetamodel.NAMESPACE + ".ApplicationFeatureRepositoryDefault";
 
+    private final CausewayConfiguration configuration;
+    private final SpecificationLoader specificationLoader;
+
+
     // -- caches
     private Map<String, ApplicationFeatureId> featureIdentifiersByName;
+
     final SortedMap<ApplicationFeatureId, ApplicationFeature> namespaceFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> typeFeatures = _Maps.newTreeMap();
     private final SortedMap<LogicalType, ApplicationFeatureId> typeFeatureIdByLogicalType = _Maps.newTreeMap();
@@ -83,11 +88,6 @@ implements ApplicationFeatureRepository, MetamodelListener {
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
-    // apparently not used
-    //private final ListMultimap<String, ApplicationFeature> memberFeaturesByLogicalTypeName = _Multimaps.newListTreeMultimap();
-
-    private final CausewayConfiguration configuration;
-    private final SpecificationLoader specificationLoader;
 
     @Inject
     public ApplicationFeatureRepositoryDefault(
@@ -135,8 +135,6 @@ implements ApplicationFeatureRepository, MetamodelListener {
         visitFeatureIdentifierByName(typeFeatures, featuresByName::put);
         visitFeatureIdentifierByName(memberFeatures, featuresByName::put);
         this.featureIdentifiersByName = Collections.unmodifiableMap(featuresByName);
-//        memberFeatures.forEach((key, value) ->
-//            memberFeaturesByLogicalTypeName.putElement(key.getLogicalTypeName(), value));
     }
 
     private void visitFeatureIdentifierByName(
