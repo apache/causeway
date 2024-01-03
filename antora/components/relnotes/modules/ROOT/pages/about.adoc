@@ -16,12 +16,22 @@ This table summarises all releases of Apache Causeway v2.0 to date.
 | Bugs
 | Detail
 
+| 2.0.0-RC5
+| _tba_
+| Fifth release candidate for Apache Causeway 2.0.0.
+| _tba_
+| _tba_
+| _tba_
+|
+* xref:relnotes:ROOT:2024/2.0.0-RC5/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2024/2.0.0-RC5/mignotes.adoc[Migration Notes]
+
 | 2.0.0-RC4
-| _tba_
+| 2nd Jan 2024
 | Fourth release candidate for Apache Causeway 2.0.0.
-| _tba_
-| _tba_
-| _tba_
+| 4
+| 11
+| 18
 |
 * xref:relnotes:ROOT:2024/2.0.0-RC4/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2024/2.0.0-RC4/mignotes.adoc[Migration Notes]
