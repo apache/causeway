@@ -293,13 +293,14 @@ We are now ready to xref:#generate-website[generate the website].
 [#generate-website]
 == Generate website
 
-We use Antora to generate the site, not only the version being released but also any previous versions listed in `site.yml`; each of these are tags.
-This is done using the `content.sources.url[].branches` properties.
-We use branches for all cases - note that the branch name appears in the generated UI.
-If there are patches to the documentation, we move the branches.
+We use Antora to generate the site, setting up a document maintenance branch to allow the website to be updated in the future if required.
+The `site.yml` references this documentation branch.
 
 We therefore temporarily modify all of the `antora.yml` files (and update `index.html`) file and create a branch for this change; then we update `site.yml` with a reference to that new branch.
-All of this is changed afterwards.
+All of this is changed after.
+
+NOTE: Previously we built a site with the current version and all previous versions.
+For the moment, though, we've simplified to just publish the current version.
 
 We also use the link:https://docs.antora.org/antora/latest/playbook/urls-latest-version-segment/[latest version] support of Antora 3.x so that the most recent version is made available as "latest".
 This has two benefits: first, the top-level `index.html` (in `supplemental-ui`) does not need to be updated, and secondly, this improves search engine results as there will always be a `latest` version.
@@ -384,8 +385,7 @@ git push origin {page-causewayrel}
 [#generate-the-site]
 === Generate the site
 
-
-To build the site (referencing the current release and all previous releases), we need to update the `site.yml`.
+To build the site , we need to update the `site.yml`.
 This is done in the release branch (`$CAUSEWAYBRANCH`), _not_ in the documentation branch for the current release ({page-causewayrel}).
 
 * Switch to the release branch:
@@ -439,12 +439,16 @@ content:
   sources:
     - url: .
       start_path: antora/components/docs # docs
-      branches: [2.0.0-M5, ...  2.0.0-RC3]
+      branches: [{page-causewayrel}]
       # ...
     - url: .
       start_path: viewers/wicket/adoc # vw
-      branches: [2.0.0-M5, ... 2.0.0-RC3]
+      branches: [{page-causewayrel}]
 ----
++
+NOTE: Previously we built a site with the current version and all previous versions.
+For the moment, though, we've simplified to just publish the current version.
+
 
 * check that the attributes are correct.
 +
