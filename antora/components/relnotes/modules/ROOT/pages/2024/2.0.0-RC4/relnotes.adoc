@@ -5,5 +5,72 @@
 :page-partial:
 
 
-Not available yet.
+This release is primarily a stabilization and bug fix release, although there are a small number of new features.
 
+This release also brings deeper integration with Spring's transaction management, introducing a new xref:refguide:applib:index/annotation/TransactionScope.adoc[] annotation for services (similar to the existing xref:refguide:applib:index/annotation/InteractionScope.adoc[]).
+This was done as a fix for link:https://issues.apache.org/jira/browse/CAUSEWAY-3654[CAUSEWAY-3654].
+
+It also fixed an annoying bug to ensure layout metadata is now all properly loaded during bootstrapping (link:https://issues.apache.org/jira/browse/CAUSEWAY-3579[CAUSEWAY-3579]).
+
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3636[CAUSEWAY-3636] - Dynamic layout loading from github (developer utility)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3656[CAUSEWAY-3656] - Extend CausewayConfiguration to expose spring boot's BuildProperties, rework /restful/version to use this for implVersion tag.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3633[CAUSEWAY-3633] - [ValueTypes] AsciiDocFactory: Support for Table Options frame and grid
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3629[CAUSEWAY-3629] - [ValueTypes] AsciiDocFactory: Support for Sections
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3664[CAUSEWAY-3664] - Sidebar prompt CSS improvements for Wicket viewer
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3660[CAUSEWAY-3660] - Prevent duplicates in tooltip.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3657[CAUSEWAY-3657] - If an action/prop/coll element type is an interface, relax HiddenTypeFacet visibility.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3651[CAUSEWAY-3651] - Some test stability improvements
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3644[CAUSEWAY-3644] - [Wicket Viewer] Provide more width for modal dialogs
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3643[CAUSEWAY-3643] - [Spring] Support for convention-based annotation attribute overrides is deprecated and will be removed in Spring Framework 6.2.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3640[CAUSEWAY-3640] - On JVM 21, don't require add-opens java.base/java.lang
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3638[CAUSEWAY-3638] - ByteBudy Integration: replace org.objenesis with org.springframework.objenesis
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3637[CAUSEWAY-3637] - [Commons] flatMap (and conditionally map on presence of value) for Try<T>
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3624[CAUSEWAY-3624] - Allow MANDATORY Property/Parameter to be set even if backends are more relaxed.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3622[CAUSEWAY-3622] - [Wicket Viewer] cosmetic: Entity Link Tooltips should include full title, when abbreviated or hidden.
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3665[CAUSEWAY-3665] - expected: <ATTACHED> but was: <DETACHED>
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3663[CAUSEWAY-3663] - [Wicket Viewer] Dependent arg is sensitive to what happens in other browser tab.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3662[CAUSEWAY-3662] - Hollow objects in dependent choices dropdown
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3659[CAUSEWAY-3659] - [Wicket Viewer] Regression - ToogleBox-Column appears right of Title-Column
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3658[CAUSEWAY-3658] - [Wicket Viewer] Rendering of ToggleboxColumn may have side-effect of follow up page redirects being ignored.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3654[CAUSEWAY-3654] - Audit Trail can result in NPE, causing xactn to rollback, in some circumstances
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3653[CAUSEWAY-3653] - Menu Protoyping > Download JDO metamodel (ZIP) > Exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3652[CAUSEWAY-3652] - Switch views from calendar view back to table view, exception.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3649[CAUSEWAY-3649] - [Wicket Viewer] AssertionError: model is not attached (in ActionInteractionWkt)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3648[CAUSEWAY-3648] - [Regression] Composite Value Types: NoSuchElementException in LinkAndLabelFactory
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3647[CAUSEWAY-3647] - [Regression] Spring Context Caching for integration tests is broken
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3645[CAUSEWAY-3645] - Action buttons which are hidden should take no space and their tooltip should not be displayed.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3632[CAUSEWAY-3632] - Clob: does not flush on writeTo file
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3631[CAUSEWAY-3631] - Theme provider not showing any themes.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3628[CAUSEWAY-3628] - Use of Parameter as Tuple throws InvalidClassCast Exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3626[CAUSEWAY-3626] - Rendering "Object not found" produces MarkupException
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3625[CAUSEWAY-3625] - Wicket's sorting should be suppressed if Datatables enabled.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3579[CAUSEWAY-3579] - Metadata in layout.xml seems not to be honoured when rendered in a table; then corrects itself.
+
+
+== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3635[CAUSEWAY-3635] - [Wicket Viewer] Update to Wicket 9.15.0
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3627[CAUSEWAY-3627] - Release activities for 2.0.0-RC4
+
+
+== Duplicates / Won't Fix / Not a problem / Invalid / Can't Reproduce
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3639[CAUSEWAY-3639] - [DUPLICATE] Allow logical type name to also be an alias.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3544[CAUSEWAY-3544] - [WON'T FIX] Refactor preInteractionClosed calling of completeAndPublishCommand, instead treat similar to audit trail publisher.
