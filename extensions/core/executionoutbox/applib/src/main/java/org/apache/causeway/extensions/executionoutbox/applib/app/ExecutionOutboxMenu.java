@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
 
@@ -75,7 +75,7 @@ public class ExecutionOutboxMenu {
         return executionOutboxEntryRepository.findAll();
     }
 
-    final ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
+    final ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
     final ClockService clockService;
 
     /* not used

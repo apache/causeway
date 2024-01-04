@@ -37,7 +37,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepositoryAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.Getter;
@@ -137,6 +137,7 @@ public abstract class SessionLogIntegTestAbstract extends CausewayIntegrationTes
     }
 
     @Inject @Qualifier("sessionlog") SessionSubscriber sessionSubscriber;
-    @Inject SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
+    @Inject
+    SessionLogEntryRepositoryAbstract<? extends SessionLogEntry> sessionLogEntryRepository;
 
 }

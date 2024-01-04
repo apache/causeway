@@ -24,6 +24,9 @@ import javax.inject.Inject;
 
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
 
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,14 +44,11 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
-import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.CounterRepository;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter_bumpUsingMixin;
@@ -360,10 +360,10 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     }
 
 
-    @Inject AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntryRepository> auditTrailEntryRepository;
-    @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
-    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntry> auditTrailEntryRepository;
+    @Inject ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
+    @Inject ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
+    @Inject CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject InteractionService interactionService;
     @Inject CounterRepository<? extends Counter> counterRepository;
     @Inject WrapperFactory wrapperFactory;

@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.executionlog.jdo.dom;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ import lombok.Builder;
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 public class ExecutionLogEntryRepository
-extends org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository<ExecutionLogEntry> {
+extends ExecutionLogEntryRepositoryAbstract<ExecutionLogEntry> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogPersistenceJdo.NAMESPACE + ".ExecutionLogEntryRepository";
 

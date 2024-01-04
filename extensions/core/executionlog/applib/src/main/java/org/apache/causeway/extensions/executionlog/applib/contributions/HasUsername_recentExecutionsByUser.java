@@ -29,7 +29,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -69,5 +69,6 @@ public class HasUsername_recentExecutionsByUser {
         return hasUsername.getUsername() == null;
     }
 
-    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
+    @Inject
+    ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
 }
