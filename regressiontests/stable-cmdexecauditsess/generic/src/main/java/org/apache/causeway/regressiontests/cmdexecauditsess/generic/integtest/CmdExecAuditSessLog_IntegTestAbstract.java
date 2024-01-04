@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -358,7 +360,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     }
 
 
-    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    @Inject AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntryRepository> auditTrailEntryRepository;
     @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
     @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
