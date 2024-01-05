@@ -47,7 +47,7 @@ import lombok.Getter;
  *
  * @since 2.0 {@index}
  */
-public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEntry> {
+public interface ExecutionOutboxEntryRepository {
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxEntryRepository";
 
@@ -61,53 +61,13 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
         }
     }
 
-    private final Class<E> executionOutboxEntryClass;
+    ExecutionOutboxEntry createEntryAndPersist(final Execution execution);
 
-    @Inject Provider<RepositoryService> repositoryServiceProvider;
-    @Inject FactoryService factoryService;
-    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
-    @Inject CausewayConfiguration causewayConfiguration;
+    Optional<ExecutionOutboxEntry> findByInteractionIdAndSequence(final UUID interactionId, final int sequence);
 
-    protected ExecutionOutboxEntryRepository(final Class<E> executionOutboxEntryClass) {
-        this.executionOutboxEntryClass = executionOutboxEntryClass;
-    }
+    List<ExecutionOutboxEntry> findOldest();
 
-    public Class<E> getEntityClass() {
-        return executionOutboxEntryClass;
-    }
-
-
-    /**
-     * for testing only.
-     */
-    protected ExecutionOutboxEntryRepository(final Class<E> executionOutboxEntryClass, final Provider<RepositoryService> repositoryServiceProvider, final FactoryService factoryService) {
-        this.executionOutboxEntryClass = executionOutboxEntryClass;
-        this.repositoryServiceProvider = repositoryServiceProvider;
-        this.factoryService = factoryService;
-    }
-
-    public E createEntryAndPersist(final Execution execution) {
-        E e = factoryService.detachedEntity(executionOutboxEntryClass);
-        e.init(execution);
-        persist(e);
-        return e;
-    }
-
-    public Optional<E> findByInteractionIdAndSequence(final UUID interactionId, final int sequence) {
-        return repositoryService().firstMatch(
-                Query.named(executionOutboxEntryClass,  ExecutionOutboxEntry.Nq.FIND_BY_INTERACTION_ID_AND_SEQUENCE)
-                        .withParameter("interactionId", interactionId)
-                        .withParameter("sequence", sequence)
-        );
-    }
-
-    public List<E> findOldest() {
-        return repositoryService().allMatches(
-                Query.named(executionOutboxEntryClass, ExecutionOutboxEntry.Nq.FIND_OLDEST)
-                        .withLimit(causewayConfiguration.getExtensions().getExecutionOutbox().getRestApi().getMaxPending()));
-    }
-
-    public ExecutionOutboxEntry upsert(
+    ExecutionOutboxEntry upsert(
             final UUID interactionId,
             final int sequence,
             final ExecutionOutboxEntryType executionType,
@@ -115,12 +75,9 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
             final String username,
             final Bookmark target,
             final String logicalMemberIdentifier,
-            final String xml) {
-        return upsert(interactionId, sequence, executionType, startedAt, username, target, logicalMemberIdentifier,
-                InteractionDtoUtils.dtoMapper().read(xml));
-    }
+            final String xml);
 
-    public ExecutionOutboxEntry upsert(
+    ExecutionOutboxEntry upsert(
             final UUID interactionId,
             final int sequence,
             final ExecutionOutboxEntryType executionType,
@@ -128,71 +85,18 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
             final String username,
             final Bookmark target,
             final String logicalMemberIdentifier,
-            final InteractionDto interactionDto) {
+            final InteractionDto interactionDto);
 
-        return findByInteractionIdAndSequence(interactionId, sequence)
-                .orElseGet(() -> {
-
-                    E outboxEvent = factoryService.detachedEntity(executionOutboxEntryClass);
-
-                    outboxEvent.setExecutionType(executionType);
-                    outboxEvent.setInteractionId(interactionId);
-                    outboxEvent.setTimestamp(startedAt);
-                    outboxEvent.setSequence(sequence);
-                    outboxEvent.setUsername(username);
-
-                    outboxEvent.setTarget(target);
-                    outboxEvent.setLogicalMemberIdentifier(logicalMemberIdentifier);
-
-                    outboxEvent.setInteractionDto(interactionDto);
-
-                    repositoryService().persist(outboxEvent);
-
-                    return outboxEvent;
-                });
-    }
-
-    protected abstract E newExecutionOutboxEntry();
-
-    @Programmatic
-    public boolean deleteByInteractionIdAndSequence(final UUID interactionId, final int sequence) {
-        Optional<E> outboxEventIfAny = findByInteractionIdAndSequence(interactionId, sequence);
-        if(outboxEventIfAny.isPresent()) {
-            repositoryService().removeAndFlush(outboxEventIfAny.get());
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void persist(final E commandLogEntry) {
-        repositoryService().persist(commandLogEntry);
-    }
-
-    private RepositoryService repositoryService() {
-        return repositoryServiceProvider.get();
-    }
-
-
+    boolean deleteByInteractionIdAndSequence(final UUID interactionId, final int sequence);
 
     /**
      * for testing purposes only
      */
-    public List<E> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
-        }
-        return repositoryService().allInstances(executionOutboxEntryClass);
-    }
+    List<ExecutionOutboxEntry> findAll();
 
     /**
      * for testing purposes only
      */
-    public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
-        }
-        repositoryService().removeAll(executionOutboxEntryClass);
-    }
+    void removeAll();
 
 }

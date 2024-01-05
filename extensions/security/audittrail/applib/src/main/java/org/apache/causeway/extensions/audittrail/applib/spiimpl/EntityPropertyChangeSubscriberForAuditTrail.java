@@ -34,7 +34,7 @@ import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSu
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
-import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -57,7 +57,7 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtAuditTrailApplib.NAMESPACE + ".EntityPropertyChangeSubscriberForAuditTrail";
 
     final TransactionService transactionService;
-    final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    final AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntry> auditTrailEntryRepository;
     final CausewayConfiguration causewayConfiguration;
 
     @Override

@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>causeway-extensions-commandreplay-primary</artifactId>
-    <name>Apache Causeway Ext - Command Replay for Primary</name>
+    <name>Apache Causeway Inc - Core Command Replay for Primary</name>
 
     <packaging>jar</packaging>
 

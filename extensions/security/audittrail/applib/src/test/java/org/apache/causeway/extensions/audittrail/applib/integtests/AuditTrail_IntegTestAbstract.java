@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +36,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
-import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.CounterRepository;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter_bumpUsingMixin;
@@ -203,7 +205,7 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
     @Inject CounterRepository<? extends Counter> counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
-    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    @Inject AuditTrailEntryRepository auditTrailEntryRepository;
 
 
 }

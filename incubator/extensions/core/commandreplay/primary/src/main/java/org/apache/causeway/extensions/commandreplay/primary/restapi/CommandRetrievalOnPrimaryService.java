@@ -59,7 +59,7 @@ public class CommandRetrievalOnPrimaryService {
 
     public static class FindCommandsOnPrimaryFromDomainEvent extends ActionDomainEvent { }
 
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
 
     /**
      * Returns the command(s) that have been executed on the primary with the specified interactionId.

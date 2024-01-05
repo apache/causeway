@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.jpa.dom;
 
 import javax.inject.Named;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLog
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jpa")
 public class CommandLogEntryRepository
-extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository<CommandLogEntry> {
+extends CommandLogEntryRepositoryAbstract<CommandLogEntry> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogPersistenceJpa.NAMESPACE + ".CommandLogEntryRepository";
 

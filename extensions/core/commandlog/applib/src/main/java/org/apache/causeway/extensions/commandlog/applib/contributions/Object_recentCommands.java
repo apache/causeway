@@ -33,7 +33,7 @@ import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
 
@@ -78,6 +78,7 @@ public class Object_recentCommands {
         return (domainObject instanceof HasInteractionId);
     }
 
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject
+    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
 }

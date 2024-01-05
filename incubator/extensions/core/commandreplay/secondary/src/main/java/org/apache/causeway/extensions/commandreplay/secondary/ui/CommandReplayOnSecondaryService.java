@@ -60,7 +60,7 @@ import lombok.val;
 //@Log4j2
 public class CommandReplayOnSecondaryService {
 
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject JaxbService jaxbService;
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleExtCommandReplaySecondary.ActionDomainEvent<T> { }

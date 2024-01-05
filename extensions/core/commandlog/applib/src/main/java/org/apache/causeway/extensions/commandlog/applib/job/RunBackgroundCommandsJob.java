@@ -40,7 +40,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.val;
@@ -69,7 +69,8 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject InteractionService interactionService;
     @Inject TransactionService transactionService;
     @Inject ClockService clockService;
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject
+    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
     @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
 

@@ -19,10 +19,12 @@
  */
 package org.apache.causeway.extensions.audittrail.jdo.dom;
 
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
+
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuditTrailEntryRepository extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository<AuditTrailEntry> {
+public class AuditTrailEntryRepository extends AuditTrailEntryRepositoryAbstract<AuditTrailEntry> {
 
     public AuditTrailEntryRepository() {
         super(AuditTrailEntry.class);

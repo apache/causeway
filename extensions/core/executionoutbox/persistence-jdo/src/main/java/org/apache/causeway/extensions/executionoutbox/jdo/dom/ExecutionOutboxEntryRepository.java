@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.executionoutbox.jdo.dom;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +32,11 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import lombok.Builder;
 
 @Service
-@Named(org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository.LOGICAL_TYPE_NAME)
+@Named(ExecutionOutboxEntryRepositoryAbstract.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 public class ExecutionOutboxEntryRepository
-extends org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository<ExecutionOutboxEntry> {
+extends ExecutionOutboxEntryRepositoryAbstract<ExecutionOutboxEntry> {
 
     public ExecutionOutboxEntryRepository() {
         super(ExecutionOutboxEntry.class);

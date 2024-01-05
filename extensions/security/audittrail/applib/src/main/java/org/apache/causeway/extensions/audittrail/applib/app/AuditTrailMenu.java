@@ -41,7 +41,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
-import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
 
@@ -68,7 +68,7 @@ public class AuditTrailMenu {
             extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<T> { }
 
 
-    final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    final AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntry> auditTrailEntryRepository;
     final ClockService clockService;
 
 
