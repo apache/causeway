@@ -28,12 +28,12 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
 
-public class ChoiceProviderForReferences
+public class ChoiceProviderDefault
 extends ChoiceProviderAbstractForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
-    public ChoiceProviderForReferences(
+    public ChoiceProviderDefault(
             final ScalarModel scalarModel) {
         super(scalarModel);
     }

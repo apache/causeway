@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
 
 import lombok.val;
 
@@ -55,7 +55,7 @@ extends ChoiceProviderTestAbstract {
                 .map(mmc.getObjectManager()::adapt);
 
         val isRequired = true;
-        val choiceProvider = new ChoiceProviderForValues(mockScalarModel(choices, isRequired));
+        val choiceProvider = new ChoiceProviderDefault(mockScalarModel(choices, isRequired));
 
         val response = new Response<ObjectMemento>();
         choiceProvider.query(null, 0, response);
@@ -63,12 +63,13 @@ extends ChoiceProviderTestAbstract {
 
         assertEquals(3, mementos.size());
 
-        mementos
-        .forEach(memento->{
-            System.err.printf("id: %s%n", choiceProvider.getIdValue(memento));
-            System.err.printf("title (un-translated):  %s%n", memento.getTitle());
-            System.err.printf("displayValue: %s%n", choiceProvider.getDisplayValue(memento));
-        });
+//debug
+//        mementos
+//        .forEach(memento->{
+//            System.err.printf("id: %s%n", choiceProvider.getIdValue(memento));
+//            System.err.printf("title (un-translated):  %s%n", memento.getTitle());
+//            System.err.printf("displayValue: %s%n", choiceProvider.getDisplayValue(memento));
+//        });
 
         val asIds = mementos.map(choiceProvider::getIdValue);
 
