@@ -90,12 +90,6 @@ public interface SessionLogEntryRepository {
 
     List<SessionLogEntry> findRecentByUsername(final String username);
 
-    private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, final int daysOffset) {
-        return dt != null
-                ? Timestamp.valueOf(dt.atStartOfDay().plusDays(daysOffset))
-                : null;
-    }
-
 
     /**
      * for testing purposes only

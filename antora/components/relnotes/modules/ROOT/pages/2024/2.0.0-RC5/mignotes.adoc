@@ -5,3 +5,33 @@
 
 This page will be added to as development progresses.
 
+== AuditTrailEntryRepository and others have simplified the API.
+
+
+
+In this release the `AuditTrailEntryRepository` and similar is no longer parameterized by the entity type, and is also an interface.
+
+So, instead of:
+
+[source,java]
+----
+@Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+----
+
+it should now be just:
+
+[source,java]
+----
+@Inject AuditTrailEntryRepository auditTrailEntryRepository;
+----
+
+This applies to:
+
+* xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntryRepository.adoc[]
+* xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepository.adoc[]
+* xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryRepository.adoc[]
+* xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryRepository.adoc[]
+* xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntryRepository.adoc[]
+
+For more details, see link:https://issues.apache.org/jira/browse/CAUSEWAY-3390[CAUSEWAY-3390].
+
