@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
 import org.apache.causeway.viewer.commons.model.scalar.UiScalar.ChoiceProviderSort;
@@ -64,12 +63,8 @@ extends ChoiceProviderAbstract {
         return Can.empty();
     }
 
+    protected abstract Can<ObjectMemento> queryAll();
     protected abstract Can<ObjectMemento> queryWithAutoComplete(String term);
     protected abstract Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(String term);
-
-    protected final Can<ObjectMemento> queryAll() {
-        return scalarModel().getChoices() // must not return detached entities
-                .map(ManagedObject::getMementoElseFail);
-    }
 
 }

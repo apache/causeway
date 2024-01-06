@@ -39,6 +39,12 @@ extends ChoiceProviderAbstractForScalarModel {
     }
 
     @Override
+    protected Can<ObjectMemento> queryAll() {
+        return scalarModel().getChoices() // must not return detached entities
+                .map(ManagedObject::getMementoElseFail);
+    }
+
+    @Override
     protected Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(final String term) {
         val autoCompleteAdapters = Facets
                 .autoCompleteExecute(scalarModel().getElementType(), term);
