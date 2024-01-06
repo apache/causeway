@@ -54,6 +54,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @DomainService(
     nature = NatureOfService.VIEW
 )
@@ -68,7 +69,7 @@ import lombok.RequiredArgsConstructor;
 //@Log4j2
 public class CommandReplayOnPrimaryService {
 
-    @Inject final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject final CommandLogEntryRepository commandLogEntryRepository;
     @Inject final JaxbService jaxbService;
     @Inject final MessageService messageService;
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;

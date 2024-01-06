@@ -33,7 +33,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
 import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ public class OutboxRestApi  {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxRestApi";
 
-    final @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> entryRepository;
+    final @Inject ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> entryRepository;
 
     /**
      * This action is intended to be invoked with <code>Accept</code> header set to

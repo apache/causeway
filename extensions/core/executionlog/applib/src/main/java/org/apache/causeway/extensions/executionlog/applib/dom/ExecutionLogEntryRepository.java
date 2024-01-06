@@ -19,28 +19,18 @@
 package org.apache.causeway.extensions.executionlog.applib.dom;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactn.Execution;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -48,9 +38,9 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
-public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
+public interface ExecutionLogEntryRepository {
 
-    public static class NotFoundException extends RecoverableException {
+    class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
         @Getter
         private final UUID interactionId;
@@ -60,197 +50,49 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         }
     }
 
-    private final Class<E> executionLogEntryClass;
 
-    @Inject Provider<RepositoryService> repositoryServiceProvider;
-    @Inject FactoryService factoryService;
-    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
+    ExecutionLogEntry createEntryAndPersist(final Execution execution);
 
-    protected ExecutionLogEntryRepository(final Class<E> executionLogEntryClass) {
-        this.executionLogEntryClass = executionLogEntryClass;
-    }
+    List<ExecutionLogEntry> findByInteractionId(final UUID interactionId);
 
-    public Class<E> getEntityClass() {
-        return executionLogEntryClass;
-    }
+    Optional<ExecutionLogEntry> findByInteractionIdAndSequence(final UUID interactionId, final int sequence);
 
-
-    /**
-     * for testing only.
-     */
-    protected ExecutionLogEntryRepository(final Class<E> executionLogEntryClass, final Provider<RepositoryService> repositoryServiceProvider, final FactoryService factoryService) {
-        this.executionLogEntryClass = executionLogEntryClass;
-        this.repositoryServiceProvider = repositoryServiceProvider;
-        this.factoryService = factoryService;
-    }
-
-    public E createEntryAndPersist(final Execution execution) {
-        E e = factoryService.detachedEntity(executionLogEntryClass);
-        e.init(execution);
-        persist(e);
-        return e;
-    }
-
-    public List<E> findByInteractionId(final UUID interactionId) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_INTERACTION_ID)
-                        .withParameter("interactionId", interactionId));
-    }
-
-    public Optional<E> findByInteractionIdAndSequence(final UUID interactionId, final int sequence) {
-        return repositoryService().firstMatch(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_INTERACTION_ID_AND_SEQUENCE)
-                        .withParameter("interactionId", interactionId)
-                        .withParameter("sequence", sequence)
-        );
-    }
-
-    public List<E> findByFromAndTo(
+    List<ExecutionLogEntry> findByFromAndTo(
             final @Nullable LocalDate from,
-            final @Nullable LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+            final @Nullable LocalDate to);
 
-        final Query<E> query;
-        if(from != null) {
-            if(to != null) {
-                query = Query.named(executionLogEntryClass, ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_BETWEEN)
-                        .withParameter("from", fromTs)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(executionLogEntryClass, ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_AFTER)
-                        .withParameter("from", fromTs);
-            }
-        } else {
-            if(to != null) {
-                query = Query.named(executionLogEntryClass, ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_BEFORE)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(executionLogEntryClass, ExecutionLogEntry.Nq.FIND);
-            }
-        }
-        return repositoryService().allMatches(query);
-    }
+    List<ExecutionLogEntry> findMostRecent();
 
-    public List<E> findMostRecent() {
-        return findMostRecent(100);
-    }
+    List<ExecutionLogEntry> findMostRecent(final int limit);
 
-    public List<E> findMostRecent(final int limit) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_MOST_RECENT).withLimit(limit));
-    }
+    List<ExecutionLogEntry> findByTarget(final Bookmark target);
 
-    public List<E> findByTarget(final Bookmark target) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TARGET)
-                        .withParameter("target", target));
-    }
+    List<ExecutionLogEntry> findByTargetAndTimestampAfter(final Bookmark target, final Timestamp timestamp);
 
-    public List<E> findByTargetAndTimestampAfter(final Bookmark target, final Timestamp timestamp) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER)
-                        .withParameter("target", target)
-                        .withParameter("timestamp", timestamp)
-        );
-    }
+    List<ExecutionLogEntry> findByTargetAndTimestampBefore(final Bookmark target, final Timestamp timestamp);
 
-    public List<E> findByTargetAndTimestampBefore(final Bookmark target, final Timestamp timestamp) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE)
-                        .withParameter("target", target)
-                        .withParameter("timestamp", timestamp)
-        );
-    }
+    List<ExecutionLogEntry> findByTargetAndTimestampBetween(final Bookmark target, final Timestamp timestampFrom, final Timestamp timestampTo);
 
-    public List<E> findByTargetAndTimestampBetween(final Bookmark target, final Timestamp timestampFrom, final Timestamp timestampTo) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN)
-                        .withParameter("target", target)
-                        .withParameter("timestampFrom", timestampFrom)
-                        .withParameter("timestampTo", timestampTo)
-        );
-    }
+    List<ExecutionLogEntry> findByTimestampAfter(final Timestamp timestamp);
 
-    public List<E> findByTimestampAfter(final Timestamp timestamp) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_AFTER)
-                        .withParameter("from", timestamp)
-        );
-    }
+    List<ExecutionLogEntry> findByTimestampBefore(final Timestamp timestamp);
 
-    public List<E> findByTimestampBefore(final Timestamp timestamp) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_BEFORE)
-                        .withParameter("to", timestamp)
-        );
-    }
+    List<ExecutionLogEntry> findByTimestampBetween(final Timestamp timestampFrom, final Timestamp timestampTo);
 
-    public List<E> findByTimestampBetween(final Timestamp timestampFrom, final Timestamp timestampTo) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_BETWEEN)
-                        .withParameter("from", timestampFrom)
-                        .withParameter("to", timestampTo)
-        );
-    }
+    List<ExecutionLogEntry> findRecentByUsername(final String username);
 
-    public List<E> findRecentByUsername(final String username) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_RECENT_BY_USERNAME)
-                        .withParameter("username", username)
-                        .withLimit(30)
-        );
-    }
-
-    public List<E> findRecentByTarget(final Bookmark target) {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_RECENT_BY_TARGET)
-                        .withParameter("target", target)
-                        .withLimit(30)
-        );
-    }
-
-    private void persist(final E commandLogEntry) {
-        repositoryService().persist(commandLogEntry);
-    }
-
-    private RepositoryService repositoryService() {
-        return repositoryServiceProvider.get();
-    }
+    List<ExecutionLogEntry> findRecentByTarget(final Bookmark target);
 
 
     /**
      * intended for testing purposes only
      */
-    public List<E> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot call 'findAll' in production systems");
-        }
-        return repositoryService().allInstances(executionLogEntryClass);
-    }
+    List<ExecutionLogEntry> findAll();
 
 
     /**
      * intended for testing purposes only
      */
-    public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
-        }
-        repositoryService().removeAll(executionLogEntryClass);
-    }
-
-
-    private static Timestamp toTimestampStartOfDayWithOffset(
-            final @Nullable LocalDate dt,
-            final int daysOffset) {
-
-        return dt!=null
-                ? new java.sql.Timestamp(
-                Instant.from(dt.atStartOfDay().plusDays(daysOffset).atZone(ZoneId.systemDefault()))
-                        .toEpochMilli())
-                : null;
-    }
-
+    void removeAll();
 
 }

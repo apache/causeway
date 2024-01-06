@@ -33,7 +33,7 @@ import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
 
@@ -78,7 +78,8 @@ public class Object_recentExecutions {
         return (domainObject instanceof HasInteractionId);
     }
 
-    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
+    @Inject
+    ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
     @Inject BookmarkService bookmarkService;
 
 }

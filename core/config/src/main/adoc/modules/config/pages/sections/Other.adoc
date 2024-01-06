@@ -12,14 +12,6 @@ include::../section-hooks/Other~pre.adoc[]
 |Default
 |Description
 |
-[[causeway]]
-causeway
-
-| 
-| null
-
-
-|
 [[causeway.prototyping.h2-console.generate-random-web-admin-password]]
 causeway.prototyping.h2-console. +
 generate-random-web-admin-password

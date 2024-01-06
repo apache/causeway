@@ -3,10 +3,11 @@ Web site: https://causeway.apache.org/
 Description
 
   Apache Causeway software is a framework for rapidly developing domain-driven
-  apps in Java. Write your business logic in entities, domain services and
-  repositories, and the framework dynamically generates a representation of
-  that domain model as a webapp or a RESTful API.  Licensed under ASL v2.0.
-  Suitable for prototyping or for production.
+  apps in Java, built upon the Spring Boot platform.  Write your business
+  logic in entities, domain services and repositories, and the framework
+  dynamically generates a representation of that domain model as a webapp or a
+  RESTful API.  Licensed under ASL v2.0. Suitable for prototyping or for
+  production.
 
   Causeway was accepted into the Apache Incubator in Sept 2010 and graduated
   in Oct 2012.  Its first release as a TLP was in Dec 2012.  The framework's
@@ -23,6 +24,8 @@ Description
 
 
 TLP releases:
+
+  * causeway-2.0.0-RC4                             :  2 Jan 2024
 
   * causeway-2.0.0-RC3                             :  9 Oct 2023
 

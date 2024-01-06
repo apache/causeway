@@ -33,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Collection(
     domainEvent = CommandLogEntry_replayQueue.CollectionDomainEvent.class
 )
@@ -52,6 +53,6 @@ public class CommandLogEntry_replayQueue {
     }
 
     @Inject SecondaryConfig secondaryConfig;
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
 
 }

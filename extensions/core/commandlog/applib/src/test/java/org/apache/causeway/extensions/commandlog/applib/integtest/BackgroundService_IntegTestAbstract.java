@@ -22,6 +22,7 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,11 +43,7 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
-import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterRepository;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter_bumpUsingMixin;
@@ -228,7 +225,8 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
     @Inject BackgroundService backgroundService;
     @Inject BackgroundService.PersistCommandExecutorService persistCommandExecutorService;
     @Inject WrapperFactory wrapperFactory;
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject
+    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject TransactionService transactionService;
     @Inject RunBackgroundCommandsJob runBackgroundCommandsJob;
     @Inject BookmarkService bookmarkService;

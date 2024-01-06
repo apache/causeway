@@ -29,7 +29,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -48,7 +48,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SessionLogServiceInitializer implements MetamodelListener {
 
-    final SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
+    final SessionLogEntryRepositoryAbstract<? extends SessionLogEntry> sessionLogEntryRepository;
     final InteractionService interactionService;
     final ClockService clockService;
     final CausewayConfiguration causewayConfiguration;

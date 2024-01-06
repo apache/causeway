@@ -7,46 +7,46 @@
 .TransactionServiceSpring.java
 ----
 class TransactionServiceSpring {
-  TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers, List<PersistenceExceptionTranslator> persistenceExceptionTranslators, InteractionLayerTracker interactionLayerTracker)
+  TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers, List<PersistenceExceptionTranslator> persistenceExceptionTranslators, Provider<InteractionLayerTracker> interactionLayerTrackerProvider, ConfigurableListableBeanFactory configurableListableBeanFactory)
   Try<T> callTransactional(TransactionDefinition def, Callable<T> callable)
   void flushTransaction()
   Optional<TransactionId> currentTransactionId()
   TransactionState currentTransactionState()
-  void beforeEnteringTransactionalBoundary(Interaction interaction)     // <.>
-  void onTransactionEnded(TransactionAfterCompletionEvent event)     // <.>
-  void afterLeavingTransactionalBoundary(Interaction interaction)     // <.>
+  void onOpen(CausewayInteraction interaction)     // <.>
+  void requestRollback(CausewayInteraction interaction)     // <.>
+  void onClose(CausewayInteraction interaction)     // <.>
 }
 ----
 
-<.> xref:#beforeEnteringTransactionalBoundary_Interaction[beforeEnteringTransactionalBoundary(Interaction)]
+<.> xref:#onOpen_CausewayInteraction[onOpen(CausewayInteraction)]
 +
 --
-INTERACTION BEGIN BOUNDARY
+For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , sets up the initial transaction automatically against all available _PlatformTransactionManager_ s.
 --
-<.> xref:#onTransactionEnded_TransactionAfterCompletionEvent[onTransactionEnded(TransactionAfterCompletionEvent)]
+<.> xref:#requestRollback_CausewayInteraction[requestRollback(CausewayInteraction)]
 +
 --
-TRANSACTION END BOUNDARY
+For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , if _org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)_ or _org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)_ (or their various overloads) result in an exception.
 --
-<.> xref:#afterLeavingTransactionalBoundary_Interaction[afterLeavingTransactionalBoundary(Interaction)]
+<.> xref:#onClose_CausewayInteraction[onClose(CausewayInteraction)]
 +
 --
-INTERACTION END BOUNDARY
+For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , to close the transaction initially set up in _#onOpen(CausewayInteraction)_ against all configured _PlatformTransactionManager_ s.
 --
 
 == Members
 
-[#beforeEnteringTransactionalBoundary_Interaction]
-=== beforeEnteringTransactionalBoundary(Interaction)
+[#onOpen_CausewayInteraction]
+=== onOpen(CausewayInteraction)
 
-INTERACTION BEGIN BOUNDARY
+For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , sets up the initial transaction automatically against all available _PlatformTransactionManager_ s.
 
-[#onTransactionEnded_TransactionAfterCompletionEvent]
-=== onTransactionEnded(TransactionAfterCompletionEvent)
+[#requestRollback_CausewayInteraction]
+=== requestRollback(CausewayInteraction)
 
-TRANSACTION END BOUNDARY
+For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , if _org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)_ or _org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)_ (or their various overloads) result in an exception.
 
-[#afterLeavingTransactionalBoundary_Interaction]
-=== afterLeavingTransactionalBoundary(Interaction)
+[#onClose_CausewayInteraction]
+=== onClose(CausewayInteraction)
 
-INTERACTION END BOUNDARY
+For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , to close the transaction initially set up in _#onOpen(CausewayInteraction)_ against all configured _PlatformTransactionManager_ s.

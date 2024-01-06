@@ -203,7 +203,7 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
     @Inject CounterRepository<? extends Counter> counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
-    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    @Inject AuditTrailEntryRepository auditTrailEntryRepository;
 
 
 }

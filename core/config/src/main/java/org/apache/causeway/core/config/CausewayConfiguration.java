@@ -99,7 +99,6 @@ import org.apache.causeway.schema.cmd.v2.ParamDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
@@ -3504,6 +3503,7 @@ public class CausewayConfiguration {
         public static class Secman {
 
             private final Seed seed = new Seed();
+            @Data
             public static class Seed {
 
                 public static final String ADMIN_USER_NAME_DEFAULT = "secman-admin";
@@ -3531,10 +3531,8 @@ public class CausewayConfiguration {
                  * Eg. seed from a YAML file, that was previously exported by SecMan's
                  * ApplicationRoleManager_exportAsYaml mixin.
                  */
-                @Getter @Setter
                 private String yamlFile = null;
 
-                @Getter
                 private final Admin admin = new Admin();
                 @Data
                 public static class Admin {
@@ -3634,7 +3632,6 @@ public class CausewayConfiguration {
 
                 }
 
-                @Getter
                 private final RegularUser regularUser = new RegularUser();
                 @Data
                 public static class RegularUser {
@@ -3650,6 +3647,37 @@ public class CausewayConfiguration {
                      */
                     private String roleName = REGULAR_USER_ROLE_NAME_DEFAULT;
 
+                }
+
+            }
+
+            private final FixtureScripts fixtureScripts = new FixtureScripts();
+            @Data
+            public static class FixtureScripts {
+
+                private final AbstractRoleAndPermissionsFixtureScript abstractRoleAndPermissionsFixtureScript = new AbstractRoleAndPermissionsFixtureScript();
+                @Data
+                public static class AbstractRoleAndPermissionsFixtureScript {
+
+                    public enum UnknownFeatureIdCheckingPolicy {
+                        /**
+                         * Do not check whether the featureIds passed in actually exist.
+                         */
+                        IGNORE,
+                        /**
+                         * Check that the featureIds passed in actually exist, and fail immediately if not.
+                         */
+                        FAIL_FAST,
+                        ;
+
+                        public boolean isIgnore() { return this == IGNORE; }
+                        public boolean isFailFast() { return this == FAIL_FAST; }
+                    }
+
+                    /**
+                     * Whether to check if every featureId passed in exists or not.
+                     */
+                    private UnknownFeatureIdCheckingPolicy unknownFeatureIdCheckingPolicy = UnknownFeatureIdCheckingPolicy.IGNORE;
                 }
 
             }

@@ -32,12 +32,12 @@ Whether (and how) this domain object can be bookmarked in the UI.
 <.> xref:#cssClass[cssClass]
 +
 --
-Indicates the css class that a domain class (type) should have, to allow more targeted styling in `application.css` .
+Indicates the CSS class that a domain class (type) should have, to allow more targeted styling in `application.css` .
 --
 <.> xref:#cssClassFa[cssClassFa]
 +
 --
-Indicates theFont AwesomeCSS class to decorate an domain object.
+TheFont AwesomeCSS class that is used as icon for the annotated domain object.
 --
 <.> xref:#cssClassFaPosition[cssClassFaPosition]
 +
@@ -95,19 +95,19 @@ Whether (and how) this domain object can be bookmarked in the UI.
 [#cssClass]
 === cssClass
 
-Indicates the css class that a domain class (type) should have, to allow more targeted styling in `application.css` .
+Indicates the CSS class that a domain class (type) should have, to allow more targeted styling in `application.css` .
 
 [#cssClassFa]
 === cssClassFa
 
-Indicates theFont AwesomeCSS class to decorate an domain object.
+TheFont AwesomeCSS class that is used as icon for the annotated domain object.
+
+Use the _FontAwesomeLayers iconFaLayers()_ object support method for more advanced icons.
 
 [#cssClassFaPosition]
 === cssClassFaPosition
 
 Indicates the position of theFont Awesomeicon. The icon could be rendered on the left or the right of the object's title.
-
-This attribute is currently ignored by Causeway viewers.
 
 [#describedAs]
 === describedAs

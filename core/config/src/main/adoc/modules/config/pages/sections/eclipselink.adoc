@@ -12,14 +12,6 @@ include::../section-hooks/eclipselink~pre.adoc[]
 |Default
 |Description
 |
-[[eclipselink]]
-eclipselink
-
-| 
-| null
-
-
-|
 [[eclipselink.cache.database-event-listener]]
 eclipselink.cache. +
 database-event-listener

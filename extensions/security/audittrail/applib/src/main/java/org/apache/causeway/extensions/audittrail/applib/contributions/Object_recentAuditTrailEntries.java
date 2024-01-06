@@ -38,7 +38,7 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
-import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -93,6 +93,7 @@ public class Object_recentAuditTrailEntries {
 
     @Inject MetaModelService metaModelService;
     @Inject ApplicationFeatureRepository applicationFeatureRepository;
-    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    @Inject
+    AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntry> auditTrailEntryRepository;
     @Inject BookmarkService bookmarkService;
 }

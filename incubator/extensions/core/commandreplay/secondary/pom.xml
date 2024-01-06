@@ -29,7 +29,7 @@
 	</parent>
 
 	<artifactId>causeway-extensions-commandreplay-secondary</artifactId>
-	<name>Apache Causeway Ext - Command Replay for Secondary</name>
+	<name>Apache Causeway Inc - Core Command Replay for Secondary</name>
 
 	<packaging>jar</packaging>
 

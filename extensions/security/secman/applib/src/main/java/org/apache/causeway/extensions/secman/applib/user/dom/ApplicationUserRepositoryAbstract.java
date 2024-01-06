@@ -55,6 +55,7 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class ApplicationUserRepositoryAbstract<U extends ApplicationUser>
 implements ApplicationUserRepository {
 
@@ -66,6 +67,7 @@ implements ApplicationUserRepository {
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     // empty if no candidate is available
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired(required = false) @Qualifier("Secman") PasswordEncoder passwordEncoder;
 
 

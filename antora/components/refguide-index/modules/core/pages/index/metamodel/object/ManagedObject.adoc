@@ -19,7 +19,7 @@ interface ManagedObject {
   String getTitle()     // <.>
   String getIconName()     // <.>
   ObjectIcon getIcon()
-  Either<ObjectIcon, CssClassFaFactory> eitherIconOrFaClass()     // <.>
+  Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers()     // <.>
   Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark()
   ManagedObject unspecified()     // <.>
   ManagedObject empty(ObjectSpecification spec)     // <.>
@@ -72,7 +72,7 @@ The (untranslated) title of the wrapped pojo.
 --
 Returns the name of an icon to use for this object.
 --
-<.> xref:#eitherIconOrFaClass_[eitherIconOrFaClass()]
+<.> xref:#eitherIconOrFaLayers_[eitherIconOrFaLayers()]
 +
 --
 Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
@@ -172,8 +172,8 @@ Returns the name of an icon to use for this object.
 
 May return `null` if no icon is specified.
 
-[#eitherIconOrFaClass_]
-=== eitherIconOrFaClass()
+[#eitherIconOrFaLayers_]
+=== eitherIconOrFaLayers()
 
 Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
 
