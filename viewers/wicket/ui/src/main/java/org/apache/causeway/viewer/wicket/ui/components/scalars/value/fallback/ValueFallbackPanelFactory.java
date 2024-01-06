@@ -46,11 +46,9 @@ extends ComponentFactoryScalarAbstract {
         if(!scalarModel.getElementType().isValue()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-
-        // autoComplete not supported for values, only for references
-        // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
-        return appliesIf( !(scalarModel.hasChoices() /*|| hasAutoComplete*/) );
+        return appliesIf(
+                !scalarModel.hasChoices()
+                && !scalarModel.hasAutoComplete());
     }
-
 
 }
