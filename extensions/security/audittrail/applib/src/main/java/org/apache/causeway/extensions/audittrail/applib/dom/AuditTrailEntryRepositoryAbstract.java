@@ -36,8 +36,6 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -54,7 +52,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
 
     private final Class<E> auditTrailEntryClass;
 
-    protected AuditTrailEntryRepositoryAbstract(Class<E> auditTrailEntryClass) {
+    protected AuditTrailEntryRepositoryAbstract(final Class<E> auditTrailEntryClass) {
         this.auditTrailEntryClass = auditTrailEntryClass;
     }
 
@@ -101,6 +99,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         );
     }
 
+    @Override
     public List<AuditTrailEntry> findByInteractionId(final UUID interactionId) {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
@@ -143,6 +142,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         return _Casts.uncheckedCast(repositoryService.allMatches(query));
     }
 
+    @Override
     public List<AuditTrailEntry> findByFromAndTo(
             final LocalDate from,
             final LocalDate to) {
@@ -177,10 +177,12 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     }
 
 
+    @Override
     public List<AuditTrailEntry> findMostRecent() {
         return findMostRecent(100);
     }
 
+    @Override
     public List<AuditTrailEntry> findMostRecent(final int limit) {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
@@ -189,6 +191,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         );
     }
 
+    @Override
     public List<AuditTrailEntry> findByUsernameAndFromAndTo(
             final String username,
             final LocalDate from,
@@ -261,6 +264,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     }
 
 
+    @Override
     public List<AuditTrailEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
@@ -276,6 +280,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     /**
      * intended for testing only
      */
+    @Override
     public List<AuditTrailEntry> findAll() {
         if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
@@ -290,6 +295,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     /**
      * intended for testing only
      */
+    @Override
     public void removeAll() {
         if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");

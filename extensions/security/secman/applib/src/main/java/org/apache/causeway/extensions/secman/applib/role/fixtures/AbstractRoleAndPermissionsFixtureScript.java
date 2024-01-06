@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.commons.collections.Can;
@@ -140,7 +139,7 @@ implements FixtureScriptWithExecutionStrategy {
         }
     }
 
-    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
+    private static <T> Supplier<T> nullSafe(final Supplier<T> supplier) {
         return supplier != null ? supplier : () -> null;
     }
 

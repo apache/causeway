@@ -20,24 +20,13 @@
 
 package org.apache.causeway.extensions.audittrail.applib.dom;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides supporting functionality for querying {@link AuditTrailEntry audit trail entry} entities.

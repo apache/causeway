@@ -18,38 +18,20 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.causeway.applib.query.Query;
-import org.apache.causeway.applib.query.QueryRange;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
-import org.apache.causeway.schema.cmd.v2.MapDto;
-import org.apache.causeway.schema.common.v2.InteractionType;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Provides supporting functionality for querying {@link CommandLogEntry command log entry} entities.

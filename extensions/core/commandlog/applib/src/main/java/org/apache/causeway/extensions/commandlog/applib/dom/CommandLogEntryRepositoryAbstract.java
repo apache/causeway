@@ -31,11 +31,8 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.internal.base._Casts;
-
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
@@ -44,13 +41,13 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 
-import lombok.Getter;
 import lombok.val;
 
 /**
@@ -85,6 +82,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return c;
     }
 
+    @Override
     public Optional<CommandLogEntry> findByInteractionId(final UUID interactionId) {
         return _Casts.uncheckedCast(
                 repositoryService().firstMatch(
@@ -93,10 +91,12 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public List<CommandLogEntry> findByParent(final CommandLogEntry parent) {
         return findByParentInteractionId(parent.getInteractionId());
     }
 
+    @Override
     public List<CommandLogEntry> findByParentInteractionId(final UUID parentInteractionId) {
         return _Casts.uncheckedCast( repositoryService().allMatches(
                 Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_PARENT_INTERACTION_ID)
@@ -104,6 +104,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public List<CommandLogEntry> findByFromAndTo(
             final @Nullable LocalDate from,
             final @Nullable LocalDate to) {
@@ -131,6 +132,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return _Casts.uncheckedCast(repositoryService().allMatches(query));
     }
 
+    @Override
     public List<CommandLogEntry> findCurrent() {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -138,6 +140,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public List<CommandLogEntry> findCompleted() {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -180,10 +183,12 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     }
 
 
+    @Override
     public List<CommandLogEntry> findMostRecent() {
         return findMostRecent(100);
     }
 
+    @Override
     public List<CommandLogEntry> findMostRecent(final int limit) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -192,6 +197,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     }
 
 
+    @Override
     public List<CommandLogEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -254,6 +260,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      * @param batchSize - to restrict the number returned (so that replay
      *                   commands can be batched).
      */
+    @Override
     public List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize) {
         if(interactionId == null) {
             return findFirst();
@@ -284,6 +291,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      * quartz or similar background job could execute the {@link Command} at some point later.
      * </p>
      */
+    @Override
     public List<CommandLogEntry> findBackgroundAndNotYetStarted() {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -310,6 +318,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      * (after restored the prod DB to secondary).
      * </p>
      */
+    @Override
     public Optional<CommandLogEntry> findMostRecentReplayed() {
         return _Casts.uncheckedCast(
                 repositoryService().firstMatch(
@@ -328,6 +337,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      *     secondary.
      * </p>
      */
+    @Override
     public Optional<CommandLogEntry> findMostRecentCompleted() {
         return _Casts.uncheckedCast(
                 repositoryService().firstMatch(
@@ -335,6 +345,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public List<CommandLogEntry> findNotYetReplayed() {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -385,10 +396,12 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     }
 
 
+    @Override
     public void persist(final CommandLogEntry commandLogEntry) {
         repositoryService().persistAndFlush(commandLogEntry);
     }
 
+    @Override
     public void truncateLog() {
         repositoryService().removeAll(commandLogEntryClass);
     }
@@ -396,6 +409,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     // --
 
 
+    @Override
     public List<CommandLogEntry> findCommandsOnPrimaryElseFail(
             final @Nullable UUID interactionId,
             final @Nullable Integer batchSize) throws NotFoundException {
@@ -457,6 +471,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     /**
      * intended for testing purposes only
      */
+    @Override
     public List<CommandLogEntry> findAll() {
         if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
@@ -468,6 +483,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     /**
      * intended for testing purposes only
      */
+    @Override
     public void removeAll() {
         if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");

@@ -29,19 +29,16 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.internal.base._Casts;
-
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
-import lombok.Getter;
 import lombok.val;
 
 /**
@@ -84,6 +81,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         return e;
     }
 
+    @Override
     public List<ExecutionLogEntry> findByInteractionId(final UUID interactionId) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -92,6 +90,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public Optional<ExecutionLogEntry> findByInteractionIdAndSequence(final UUID interactionId, final int sequence) {
         return _Casts.uncheckedCast(
                 repositoryService().firstMatch(
@@ -102,6 +101,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByFromAndTo(
             final @Nullable LocalDate from,
             final @Nullable LocalDate to) {
@@ -129,10 +129,12 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         return _Casts.uncheckedCast(repositoryService().allMatches(query));
     }
 
+    @Override
     public List<ExecutionLogEntry> findMostRecent() {
         return findMostRecent(100);
     }
 
+    @Override
     public List<ExecutionLogEntry> findMostRecent(final int limit) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -179,6 +181,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTimestampAfter(final Timestamp timestamp) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -188,6 +191,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTimestampBefore(final Timestamp timestamp) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -197,6 +201,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTimestampBetween(final Timestamp timestampFrom, final Timestamp timestampTo) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -207,6 +212,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -239,6 +245,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
     /**
      * intended for testing purposes only
      */
+    @Override
     public List<ExecutionLogEntry> findAll() {
         if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
@@ -250,6 +257,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
     /**
      * intended for testing purposes only
      */
+    @Override
     public void removeAll() {
         if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");

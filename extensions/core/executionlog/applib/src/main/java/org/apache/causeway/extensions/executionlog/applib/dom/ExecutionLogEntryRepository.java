@@ -19,28 +19,18 @@
 package org.apache.causeway.extensions.executionlog.applib.dom;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactn.Execution;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Provides supporting functionality for querying and persisting
