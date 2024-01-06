@@ -28,7 +28,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel._testing._TestDummies;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
 
 import lombok.val;
 
@@ -52,7 +52,7 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
                 .map(mmc.getObjectManager()::adapt);
 
         val isRequired = true;
-        val choiceProvider = new ChoiceProviderForReferences(mockScalarModel(choices, isRequired));
+        val choiceProvider = new ChoiceProviderDefault(mockScalarModel(choices, isRequired));
 
         val response = new Response<ObjectMemento>();
         choiceProvider.query(null, 0, response);

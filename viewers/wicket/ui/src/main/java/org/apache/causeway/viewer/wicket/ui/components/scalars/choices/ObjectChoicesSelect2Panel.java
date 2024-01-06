@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFac
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
@@ -90,7 +90,7 @@ implements ChoiceTitleHandler {
         entityLink.setRequired(scalarModel.isRequired());
 
         this.select2 = createSelect2(ID_AUTO_COMPLETE,
-                ChoiceProviderForReferences::new);
+                ChoiceProviderDefault::new);
 
         entityLink.addOrReplace(select2.asComponent());
         entityLink.setOutputMarkupId(true);

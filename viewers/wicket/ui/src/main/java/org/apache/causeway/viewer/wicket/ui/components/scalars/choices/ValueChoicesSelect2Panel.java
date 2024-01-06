@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
@@ -57,7 +57,7 @@ implements ChoiceTitleHandler {
     protected FormComponent<ManagedObject> createFormComponent(
             final String id, final ScalarModel scalarModel) {
         if(select2 == null) {
-            this.select2 = createSelect2(id, ChoiceProviderForValues::new);
+            this.select2 = createSelect2(id, ChoiceProviderDefault::new);
         } else {
             select2.clearInput();
         }
