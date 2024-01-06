@@ -18,14 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
+import org.apache.causeway.viewer.commons.model.scalar.UiScalar.ChoiceProviderSort;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ChoiceProviderAbstractForScalarModel
 extends ChoiceProviderAbstract {
 
@@ -33,10 +35,41 @@ extends ChoiceProviderAbstract {
 
     @Getter @Accessors(fluent = true)
     private final ScalarModel scalarModel;
+    private final UiScalar.ChoiceProviderSort choiceProviderSort;
+
+    protected ChoiceProviderAbstractForScalarModel(final ScalarModel scalarModel) {
+        super();
+        this.scalarModel = scalarModel;
+        this.choiceProviderSort = ChoiceProviderSort.valueOf(scalarModel);
+    }
 
     @Override
     protected final boolean isRequired() {
         return scalarModel().isRequired();
+    }
+
+    @Override
+    protected final Can<ObjectMemento> query(final String term) {
+        switch(choiceProviderSort) {
+        case CHOICES:
+            return super.filter(term, queryAll());
+        case AUTO_COMPLETE:
+            return queryWithAutoComplete(term);
+        case OBJECT_AUTO_COMPLETE:
+            return queryWithAutoCompleteUsingObjectSpecification(term);
+        case NO_CHOICES:
+        default:
+            // fall through
+        }
+        return Can.empty();
+    }
+
+    protected abstract Can<ObjectMemento> queryWithAutoComplete(String term);
+    protected abstract Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(String term);
+
+    protected final Can<ObjectMemento> queryAll() {
+        return scalarModel().getChoices() // must not return detached entities
+                .map(ManagedObject::getMementoElseFail);
     }
 
 }
