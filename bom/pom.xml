@@ -2330,7 +2330,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.15</version>
+                    <version>0.16</version>
                     <configuration>
                         <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
                         <excludeSubProjects>true</excludeSubProjects>
