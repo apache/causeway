@@ -1385,11 +1385,13 @@ li.additionalLinkItem.list-inline-item.hidden {
     display: none;
 }
 
-/* sidebar doesn't scroll, so prevent parameters from taking up too much space */
+/* sidebar doesn't scroll, so prevent parameters from taking up too much space
+[CAUSEWAY-3667] this breaks data/time picker (and potentially also nested composite value dialogs)  
 fieldset.parameters > div.parameter {
     max-height: 200px;
     overflow-y: auto;
 }
+*/
 
 
 /* ensure that long values wrap in choices drop-down */
