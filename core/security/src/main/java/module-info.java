@@ -43,4 +43,6 @@ module org.apache.causeway.security.api {
     requires spring.core;
     requires spring.tx;
     requires org.apache.causeway.core.config;
+
+    opens org.apache.causeway.core.security to spring.core;
 }

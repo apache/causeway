@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.applib {
+open module org.apache.causeway.applib {
     exports org.apache.causeway.applib;
     exports org.apache.causeway.applib.annotation;
     exports org.apache.causeway.applib.client;
@@ -146,13 +146,5 @@ module org.apache.causeway.applib {
     requires transitive spring.core;
     requires spring.tx;
 
-    // JAXB viewmodels
-    opens org.apache.causeway.applib.annotation;
-    opens org.apache.causeway.applib.layout.component;
-    opens org.apache.causeway.applib.layout.grid.bootstrap;
-    opens org.apache.causeway.applib.layout.grid;
-    opens org.apache.causeway.applib.layout.links;
-    opens org.apache.causeway.applib.layout.menubars.bootstrap;
-    opens org.apache.causeway.applib.layout.menubars;
 
 }

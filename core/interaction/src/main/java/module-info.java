@@ -35,4 +35,6 @@ module org.apache.causeway.core.interaction {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+
+    opens org.apache.causeway.core.interaction to spring.core;
 }

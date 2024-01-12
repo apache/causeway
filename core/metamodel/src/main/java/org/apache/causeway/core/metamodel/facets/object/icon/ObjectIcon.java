@@ -57,6 +57,9 @@ implements Serializable {
             final String shortName,
             final URL url,
             final CommonMimeType mimeType) {
+        if (url == null) {
+            return null;
+        }
         val id = _Strings.base64UrlEncode(url.getPath());
         val objectIcon = new ObjectIcon(shortName, url, mimeType, id);
         objectIcon.asBytes(); // memoize

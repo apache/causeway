@@ -36,4 +36,8 @@ module org.apache.causeway.core.transaction {
     requires spring.core;
     requires spring.tx;
     requires java.transaction;
+
+    opens org.apache.causeway.core.transaction to spring.core;
+    opens org.apache.causeway.core.transaction.changetracking.events to spring.core;
+    opens org.apache.causeway.core.transaction.scope to spring.core;
 }

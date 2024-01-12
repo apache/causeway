@@ -36,4 +36,7 @@ module org.apache.causeway.core.runtime {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+
+    opens org.apache.causeway.core.runtime to spring.core;
+    opens org.apache.causeway.core.runtime.events to spring.core;
 }

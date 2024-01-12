@@ -57,6 +57,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
@@ -1775,18 +1776,46 @@ public class CausewayConfiguration {
             private final Email email = new Email();
             @Data
             public static class Email {
+
+                @Deprecated
+                private int port = 587;
+
                 /**
                  * The port to use for sending email.
+                 *
+                 * @deprecated  - ignored, instead use <code>spring.mail.port</code>
                  */
-                private int port = 587;
+                @DeprecatedConfigurationProperty(replacement = "spring.mail.port")
+                public int getPort() {
+                    return port;
+                }
+
+                @Deprecated
+                private int socketConnectionTimeout = 2000;
+
                 /**
                  * The maximum number of millseconds to wait to obtain a socket connection before timing out.
+                 *
+                 * @deprecated  - ignored, instead use <code>spring.mail.properties.mail.smtp.connectiontimeout</code>
                  */
-                private int socketConnectionTimeout = 2000;
+                @DeprecatedConfigurationProperty(replacement = "spring.mail.properties.mail.smtp.connectiontimeout")
+                public int getSocketConnectionTimeout() {
+                    return socketConnectionTimeout;
+                }
+
+                @Deprecated
+                private int socketTimeout = 2000;
+
                 /**
                  * The maximum number of millseconds to wait to obtain a socket before timing out.
+                 *
+                 * @deprecated  - ignored, instead use <code>spring.mail.properties.mail.smtp.timeout</code>
                  */
-                private int socketTimeout = 2000;
+                @DeprecatedConfigurationProperty(replacement = "spring.mail.properties.mail.smtp.timeout")
+                public int getSocketTimeout() {
+                    return socketTimeout;
+                }
+
                 /**
                  * If an email fails to send, whether to propagate the exception (meaning that potentially the end-user
                  * might see the exception), or whether instead to just indicate failure through the return value of
@@ -1821,6 +1850,10 @@ public class CausewayConfiguration {
                 private final Sender sender = new Sender();
                 @Data
                 public static class Sender {
+
+                    @Deprecated
+                    private String hostname;
+
                     /**
                      * Specifies the host running the SMTP service.
                      *
@@ -1828,16 +1861,35 @@ public class CausewayConfiguration {
                      *     If not specified, then the value used depends upon the email implementation.  The default
                      *     implementation will use the <code>mail.smtp.host</code> system property.
                      * </p>
+                     *
+                     * @deprecated - now ignored, instead use <code>spring.mail.host</code>
                      */
-                    private String hostname;
+                    @DeprecatedConfigurationProperty(replacement = "spring.mail.host")
+                    public String getHostname() {
+                        return hostname;
+                    }
+
+                    @Deprecated
+                    private String username;
+
                     /**
                      * Specifies the username to use to connect to the SMTP service.
                      *
                      * <p>
                      *     If not specified, then the sender's {@link #getAddress() email address} will be used instead.
                      * </p>
+                     *
+                     * @deprecated - now ignored, instead use <code>spring.mail.username</code>
                      */
-                    private String username;
+                    @DeprecatedConfigurationProperty(replacement = "spring.mail.username")
+                    public String getUsername() {
+                        return username;
+                    }
+
+                    @Deprecated
+                    private String password;
+
+
                     /**
                      * Specifies the password (corresponding to the {@link #getUsername() username} to connect to the
                      * SMTP service.
@@ -1846,8 +1898,14 @@ public class CausewayConfiguration {
                      *     This configuration property is mandatory (for the default implementation of the
                      *     {@link org.apache.causeway.applib.services.email.EmailService}, at least).
                      * </p>
+                     *
+                     * @deprecated - now ignored, instead use <code>spring.mail.password</code>
                      */
-                    private String password;
+                    @DeprecatedConfigurationProperty(replacement = "spring.mail.password")
+                    public String getPassword() {
+                        return password;
+                    }
+
                     /**
                      * Specifies the email address of the user sending the email.
                      *
@@ -1865,13 +1923,23 @@ public class CausewayConfiguration {
                     private String address;
                 }
 
+                @Deprecated
                 private final Tls tls = new Tls();
+                @Deprecated
                 @Data
                 public static class Tls {
+                    @Deprecated
+                    private boolean enabled = true;
+
                     /**
                      * Whether TLS encryption should be started (that is, <code>STARTTLS</code>).
+                     *
+                     * @deprecated  - now ignored, instead use <code>spring.mail.javamail.properties.mail.smtp.starttls.enable</code>
                      */
-                    private boolean enabled = true;
+                    @DeprecatedConfigurationProperty(replacement = "spring.mail.javamail.properties.mail.smtp.starttls.enable")
+                    public boolean isEnabled() {
+                        return enabled;
+                    }
                 }
             }
 

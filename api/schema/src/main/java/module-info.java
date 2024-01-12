@@ -27,10 +27,13 @@ module org.apache.causeway.schema {
     requires java.xml.bind;
     requires spring.context;
     requires java.inject;
+    requires spring.core;
 
     opens org.apache.causeway.schema.metamodel.v2;
     opens org.apache.causeway.schema.common.v2;
     opens org.apache.causeway.schema.cmd.v2;
     opens org.apache.causeway.schema.ixn.v2;
     opens org.apache.causeway.schema.chg.v2;
+
+    opens org.apache.causeway.schema to spring.core;
 }

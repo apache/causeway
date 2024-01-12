@@ -95,7 +95,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <camel.version>3.14.9</camel.version>
 
-        <commons-email.version>1.6.0</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.15.1</commons-io.version>
 
@@ -1688,24 +1687,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 					<exclusion>
 						<groupId>javassist</groupId>
 						<artifactId>javassist</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<!-- TODO: when used, move exclusions down -->
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-email</artifactId>
-				<version>${commons-email.version}</version>
-				<exclusions>
-					<!-- excluded because provided by javax:javaee-api -->
-					<exclusion>
-						<groupId>com.sun.mail</groupId>
-						<artifactId>javax.mail</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.activation</groupId>
-						<artifactId>activation</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>

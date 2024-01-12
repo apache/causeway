@@ -54,7 +54,6 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.xml;
     exports org.apache.causeway.core.runtimeservices.xmlsnapshot;
 
-    requires org.apache.commons.mail;
     requires jakarta.activation;
     requires jakarta.mail;
     requires java.annotation;
@@ -80,7 +79,29 @@ module org.apache.causeway.core.runtimeservices {
     requires spring.tx;
     requires org.apache.causeway.core.codegen.bytebuddy;
     requires spring.aop;
+    requires spring.context.support;
+
+    opens org.apache.causeway.core.runtimeservices to spring.core;
+    opens org.apache.causeway.core.runtimeservices.bookmarks to spring.core;
+    opens org.apache.causeway.core.runtimeservices.command to spring.core;
+    opens org.apache.causeway.core.runtimeservices.email to spring.core;
+    opens org.apache.causeway.core.runtimeservices.eventbus to spring.core;
+    opens org.apache.causeway.core.runtimeservices.factory to spring.core;
+    opens org.apache.causeway.core.runtimeservices.i18n.po to spring.core;
+    opens org.apache.causeway.core.runtimeservices.icons to spring.core;
+    opens org.apache.causeway.core.runtimeservices.scratchpad to spring.core;
+    opens org.apache.causeway.core.runtimeservices.message to spring.core;
+    opens org.apache.causeway.core.runtimeservices.menubars to spring.beans;
+    opens org.apache.causeway.core.runtimeservices.placeholder to spring.core;
+    opens org.apache.causeway.core.runtimeservices.interaction to spring.core;
+    opens org.apache.causeway.core.runtimeservices.publish to spring.core;
+    opens org.apache.causeway.core.runtimeservices.recognizer to spring.core;
+    opens org.apache.causeway.core.runtimeservices.serializing to spring.core;
+    opens org.apache.causeway.core.runtimeservices.user to spring.core;
+    opens org.apache.causeway.core.runtimeservices.userreg to spring.core;
 
     opens org.apache.causeway.core.runtimeservices.wrapper;
     opens org.apache.causeway.core.runtimeservices.wrapper.proxy; //to org.apache.causeway.core.codegen.bytebuddy
+
+
 }

@@ -71,17 +71,12 @@
     </build>
 
     <dependencies>
-		
-		<dependency>
-		    <groupId>jakarta.mail</groupId>
-		    <artifactId>jakarta.mail-api</artifactId>
-		</dependency>
-	
+
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-runtime</artifactId>
         </dependency>
-      
+
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-codegen-bytebuddy</artifactId>
@@ -92,7 +87,23 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
 		<!-- TESTING -->
 
         <dependency>
@@ -109,53 +120,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail-junit5</artifactId>
+            <version>1.6.11</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
-    
-    <profiles>
-        <profile>
-            <id>email-notification-service</id>
-            <activation>
-                <property>
-                    <name>!skip.email-notification-service</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-email</artifactId>
-                    <exclusions>
-                        <!--
-                        excluded because provided by javax:javaee-api
-                        note: moved javax.mail from 1.5.2 to 1.5.0
-                        note: moved activation from 1.1.1 to 1.1    ... don't know if this is significant.
-                        -->
-                        <exclusion>
-                            <groupId>com.sun.mail</groupId>
-                            <artifactId>javax.mail</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>javax.activation</groupId>
-                            <artifactId>activation</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-					<!-- required by EmailServiceDefault -->
-		    		<groupId>com.sun.mail</groupId>
-		    		<artifactId>jakarta.mail</artifactId>
-		    		<exclusions>
-			    		<exclusion>
-                            <groupId>javax.activation</groupId>
-                            <artifactId>activation</artifactId>
-	                    </exclusion>
-	                    <exclusion>
-	                    	<groupId>com.sun.activation</groupId>
-    						<artifactId>jakarta.activation</artifactId>
-    					</exclusion>
-                    </exclusions>
-				</dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 
 </project>
