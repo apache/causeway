@@ -34,6 +34,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -59,6 +61,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.MutablePropertySources;
 import org.springframework.validation.annotation.Validated;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -155,6 +160,37 @@ public class CausewayConfiguration {
         this.environment = environment;
         this.buildProperties = buildProperties;
     }
+
+
+    /**
+     * All known configuration property names.
+     *
+     * <p>
+     *     Or at least, from the {@link org.springframework.core.env.PropertySource} obtained from
+     *     {@link ConfigurableEnvironment#getPropertySources()} that are also {@link EnumerablePropertySource}s.
+     * </p>
+     * @return
+     */
+    public Stream<String> streamConfigurationPropertyNames() {
+        MutablePropertySources propertySources = environment.getPropertySources();
+        return StreamSupport
+                .stream(propertySources.spliterator(), false)
+                .filter(EnumerablePropertySource.class::isInstance)
+                .map(EnumerablePropertySource.class::cast)
+                .filter(ps->!"systemEnvironment".equalsIgnoreCase(ps.getName())) // exclude system env
+                .map(EnumerablePropertySource::getPropertyNames)
+                .flatMap(_NullSafe::stream);
+    }
+
+    /**
+     * The value of a specific configuration property
+     *
+     * @param configurationPropertyName  - eg as obtained from {@link #streamConfigurationPropertyNames()}.
+     */
+    public Optional<String> valueOf(String configurationPropertyName) {
+        return Optional.ofNullable(environment.getProperty(configurationPropertyName));
+    }
+
 
     private final Security security = new Security();
     @Data
