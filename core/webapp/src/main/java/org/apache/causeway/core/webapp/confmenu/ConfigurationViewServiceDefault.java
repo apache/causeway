@@ -195,11 +195,10 @@ implements
     private Map<String, ConfigurationProperty> loadPrimary(final List<String> primaryPrefixes) {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-            final ConfigurableEnvironment springEnv = configuration.getEnvironment();
-            streamConfigurationPropertyNames(springEnv)
+            configuration.streamConfigurationPropertyNames()
             .filter(propName->primaryPrefixes.stream().anyMatch(propName::startsWith))
             .forEach(propName -> {
-                String propertyValue = springEnv.getProperty(propName);
+                String propertyValue = configuration.valueOf(propName).orElse(null);
                 add(propName, propertyValue, map);
             });
 
@@ -222,11 +221,10 @@ implements
     private Map<String, ConfigurationProperty> loadSecondary(final Set<String> toBeExcluded) {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-            final ConfigurableEnvironment springEnv = configuration.getEnvironment();
-            streamConfigurationPropertyNames(springEnv)
+            configuration.streamConfigurationPropertyNames()
             .filter(propName->!toBeExcluded.contains(propName))
             .forEach(propName -> {
-                String propertyValue = springEnv.getProperty(propName);
+                String propertyValue = configuration.valueOf(propName).orElse(null);
                 add(propName, propertyValue, map);
             });
 
@@ -265,17 +263,6 @@ implements
                 configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())
                 // fallback to configuration default policy
                 .orElseGet(()->new CausewayConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
-    }
-
-    private static Stream<String> streamConfigurationPropertyNames(final ConfigurableEnvironment springEnv) {
-        MutablePropertySources propertySources = springEnv.getPropertySources();
-            return StreamSupport
-            .stream(propertySources.spliterator(), false)
-            .filter(EnumerablePropertySource.class::isInstance)
-            .map(EnumerablePropertySource.class::cast)
-            .filter(ps->!"systemEnvironment".equalsIgnoreCase(ps.getName())) // exclude system env
-            .map(EnumerablePropertySource::getPropertyNames)
-            .flatMap(_NullSafe::stream);
     }
 
 }
