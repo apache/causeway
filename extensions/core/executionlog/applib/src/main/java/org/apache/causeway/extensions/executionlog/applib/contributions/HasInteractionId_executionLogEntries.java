@@ -27,6 +27,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
@@ -64,7 +65,6 @@ public class HasInteractionId_executionLogEntries {
         return hasInteractionId instanceof ExecutionLogEntry;
     }
 
-    @Inject
-    ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
+    @Inject ExecutionLogEntryRepository executionLogEntryRepository;
 
 }

@@ -29,6 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -137,7 +139,6 @@ public abstract class SessionLogIntegTestAbstract extends CausewayIntegrationTes
     }
 
     @Inject @Qualifier("sessionlog") SessionSubscriber sessionSubscriber;
-    @Inject
-    SessionLogEntryRepositoryAbstract<? extends SessionLogEntry> sessionLogEntryRepository;
+    @Inject SessionLogEntryRepository sessionLogEntryRepository;
 
 }

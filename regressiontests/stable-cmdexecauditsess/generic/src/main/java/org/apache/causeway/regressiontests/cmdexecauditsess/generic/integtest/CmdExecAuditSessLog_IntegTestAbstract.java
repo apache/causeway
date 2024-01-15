@@ -360,10 +360,10 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     }
 
 
-    @Inject AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntry> auditTrailEntryRepository;
-    @Inject ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
-    @Inject ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
-    @Inject CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject AuditTrailEntryRepository auditTrailEntryRepository;
+    @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
+    @Inject ExecutionLogEntryRepository executionLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject InteractionService interactionService;
     @Inject CounterRepository<? extends Counter> counterRepository;
     @Inject WrapperFactory wrapperFactory;

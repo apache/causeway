@@ -28,6 +28,8 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -60,7 +62,7 @@ public class SessionSubscriberForSessionLog implements SessionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLoggingServiceDefault";
 
-    final SessionLogEntryRepositoryAbstract<? extends SessionLogEntry> sessionLogEntryRepository;
+    final SessionLogEntryRepository sessionLogEntryRepository;
     final TransactionService transactionService;
     final InteractionService interactionService;
     final ClockService clockService;

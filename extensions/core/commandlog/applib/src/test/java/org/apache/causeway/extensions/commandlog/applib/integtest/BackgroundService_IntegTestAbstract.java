@@ -225,8 +225,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
     @Inject BackgroundService backgroundService;
     @Inject BackgroundService.PersistCommandExecutorService persistCommandExecutorService;
     @Inject WrapperFactory wrapperFactory;
-    @Inject
-    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject TransactionService transactionService;
     @Inject RunBackgroundCommandsJob runBackgroundCommandsJob;
     @Inject BookmarkService bookmarkService;

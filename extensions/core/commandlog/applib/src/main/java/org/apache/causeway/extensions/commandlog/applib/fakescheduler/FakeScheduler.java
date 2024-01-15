@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -151,8 +153,7 @@ public class FakeScheduler {
         );
     }
 
-    @Inject
-    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
     @Inject TransactionService transactionService;
     @Inject InteractionService interactionService;

@@ -382,8 +382,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         return _Casts.uncheckedCast(commandLogEntry);
     }
 
-    @Inject
-    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
 
 
     @Property(

@@ -25,8 +25,8 @@ import javax.inject.Named;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +51,7 @@ public class ExecutionSubscriberForExecutionOutbox implements ExecutionSubscribe
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionSubscriberForExecutionOutbox";
 
-    final ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> repository;
+    final ExecutionOutboxEntryRepository executionOutboxEntryRepository;
     final CausewayConfiguration causewayConfiguration;
 
     @Override
@@ -65,7 +65,7 @@ public class ExecutionSubscriberForExecutionOutbox implements ExecutionSubscribe
             return;
         }
 
-        repository.createEntryAndPersist(execution);
+        executionOutboxEntryRepository.createEntryAndPersist(execution);
     }
 
 }
