@@ -31,6 +31,7 @@ import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
@@ -80,7 +81,7 @@ public class HasInteractionId_commandLogEntry {
         return (hasInteractionId instanceof CommandLogEntry);
     }
 
-    @Inject CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
 
 }

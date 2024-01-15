@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -69,8 +71,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject InteractionService interactionService;
     @Inject TransactionService transactionService;
     @Inject ClockService clockService;
-    @Inject
-    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
     @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
 

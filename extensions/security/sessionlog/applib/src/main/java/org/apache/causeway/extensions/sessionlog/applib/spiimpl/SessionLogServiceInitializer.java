@@ -22,6 +22,8 @@ package org.apache.causeway.extensions.sessionlog.applib.spiimpl;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
@@ -48,7 +50,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SessionLogServiceInitializer implements MetamodelListener {
 
-    final SessionLogEntryRepositoryAbstract<? extends SessionLogEntry> sessionLogEntryRepository;
+    final SessionLogEntryRepository sessionLogEntryRepository;
     final InteractionService interactionService;
     final ClockService clockService;
     final CausewayConfiguration causewayConfiguration;

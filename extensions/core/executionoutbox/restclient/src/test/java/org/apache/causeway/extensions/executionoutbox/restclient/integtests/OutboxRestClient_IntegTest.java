@@ -23,6 +23,7 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -246,8 +247,7 @@ public class OutboxRestClient_IntegTest  {
 
     @Inject RestEndpointService restEndpointService;
 
-    @Inject
-    ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
+    @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
     @Inject InteractionService interactionService;
     @Inject RepositoryService repositoryService;
     @Inject CounterRepository<Counter> counterRepository;

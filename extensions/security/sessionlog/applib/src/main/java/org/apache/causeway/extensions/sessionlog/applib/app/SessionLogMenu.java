@@ -26,6 +26,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -60,7 +62,7 @@ public class SessionLogMenu {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLogMenu";
 
-    final SessionLogEntryRepositoryAbstract<? extends SessionLogEntry> sessionLogEntryRepository;
+    final SessionLogEntryRepository sessionLogEntryRepository;
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleExtSessionLogApplib.ActionDomainEvent<T> { }
 

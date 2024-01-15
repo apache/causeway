@@ -25,6 +25,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +59,7 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtAuditTrailApplib.NAMESPACE + ".EntityPropertyChangeSubscriberForAuditTrail";
 
     final TransactionService transactionService;
-    final AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntry> auditTrailEntryRepository;
+    final AuditTrailEntryRepository auditTrailEntryRepository;
     final CausewayConfiguration causewayConfiguration;
 
     @Override

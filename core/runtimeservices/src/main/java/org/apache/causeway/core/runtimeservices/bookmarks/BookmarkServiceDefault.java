@@ -18,11 +18,19 @@
  */
 package org.apache.causeway.core.runtimeservices.bookmarks;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
+
+import org.apache.causeway.commons.collections.Can;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -58,6 +66,7 @@ public class BookmarkServiceDefault implements BookmarkService {
     @Inject private WrapperFactory wrapperFactory;
     @Inject private ObjectManager objectManager;
     @Inject private MetaModelContext mmc;
+    @Inject private MetaModelService metaModelService;
 
     @Override
     public Optional<Object> lookup(final @Nullable BookmarkHolder bookmarkHolder) {
@@ -68,6 +77,20 @@ public class BookmarkServiceDefault implements BookmarkService {
         return bookmark != null
                 ? lookup(bookmark)
                 : Optional.empty();
+    }
+
+    @Override
+    public List<Bookmark> bookmarksFor(Object domainObject) {
+        return bookmarkFor(domainObject)
+                .map(bookmark -> {
+                    Can<LogicalType> logicalTypes = metaModelService.logicalTypeAndAliasesFor(bookmark.getLogicalTypeName());
+                    String id = bookmark.getIdentifier();
+                    return logicalTypes.stream()
+                            .map(x -> Bookmark.forLogicalTypeAndIdentifier(x, id))
+                            .collect(Collectors.toList());
+                })
+                .orElse(Collections.emptyList());
+
     }
 
     // why would we ever store Service Beans as Bookmarks?
@@ -91,6 +114,7 @@ public class BookmarkServiceDefault implements BookmarkService {
         return Optional.ofNullable(adapter)
                 .flatMap(ManagedObject::getBookmark);
     }
+
 
     @Override
     public Optional<Bookmark> bookmarkFor(

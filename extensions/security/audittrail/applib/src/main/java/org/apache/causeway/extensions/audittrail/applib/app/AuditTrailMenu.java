@@ -27,6 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -68,7 +70,7 @@ public class AuditTrailMenu {
             extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<T> { }
 
 
-    final AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntry> auditTrailEntryRepository;
+    final AuditTrailEntryRepository auditTrailEntryRepository;
     final ClockService clockService;
 
 

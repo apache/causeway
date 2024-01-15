@@ -19,10 +19,10 @@
  */
 package org.apache.causeway.extensions.audittrail.applib.contributions;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -35,15 +35,14 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
-import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -53,7 +52,7 @@ import lombok.val;
  */
 @Action(
         commandPublishing = Publishing.DISABLED,
-        domainEvent = Object_recentAuditTrailEntries.ActionDomainEvent.class,
+        domainEvent = Object_createdByCommand.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.SAFE
 )
@@ -61,26 +60,31 @@ import lombok.val;
         cssClassFa = "fa-bolt",
         position = ActionLayout.Position.PANEL_DROPDOWN,
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
-        sequence = "900.3"
+        sequence = "900.4"
 )
 @RequiredArgsConstructor
-public class Object_recentAuditTrailEntries {
+public class Object_createdByCommand {
 
     private final Object domainObject;
 
     public static class ActionDomainEvent
-            extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<Object_recentAuditTrailEntries> {}
+            extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<Object_createdByCommand> {}
 
-    @MemberSupport public List<? extends AuditTrailEntry> act(
-            final String propertyName) {
-        List<AuditTrailEntry> auditTrailEntries = new ArrayList<>();
-        bookmarkService.bookmarksFor(domainObject).forEach(
-                bookmark -> {
-                    List<AuditTrailEntry> recent = auditTrailEntryRepository.findRecentByTargetAndPropertyId(bookmark, propertyName);
-                    auditTrailEntries.addAll(recent);
-                });
-        auditTrailEntries.sort(Comparator.comparing(AuditTrailEntry::getTimestamp).reversed());
-        return auditTrailEntries;
+    @MemberSupport public Object act() {
+        val commandIfAny = bookmarkService.bookmarksFor(domainObject)
+                .stream()
+                .map(target -> auditTrailEntryRepository.findFirstByTarget(target))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(AuditTrailEntry::getInteractionId)
+                .map(x -> commandLogEntryRepository.findByInteractionId(x))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .min(Comparator.comparing(CommandLogEntry::getTimestamp));
+
+        return commandIfAny.isPresent()
+                    ? commandIfAny.get()
+                    : domainObject;
     }
     @MemberSupport public List<String> choices0Act() {
         val domainClass = domainObject.getClass();
@@ -105,5 +109,6 @@ public class Object_recentAuditTrailEntries {
     @Inject MetaModelService metaModelService;
     @Inject ApplicationFeatureRepository applicationFeatureRepository;
     @Inject AuditTrailEntryRepository auditTrailEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
 }

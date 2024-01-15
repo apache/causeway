@@ -44,6 +44,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-commandlog-applib</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.causeway.testing</groupId>
             <artifactId>causeway-testing-integtestsupport-applib</artifactId>
             <scope>test</scope>

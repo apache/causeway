@@ -34,6 +34,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,9 @@ public class ExecutionOutboxMenu {
         extends CausewayModuleExtExecutionOutboxApplib.ActionDomainEvent<ExecutionOutboxMenu> { }
 
 
+    final ExecutionOutboxEntryRepository executionOutboxEntryRepository;
+    final ClockService clockService;
+
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(describedAs = "Returns to oldest 100 entries (next to be processed) in the outbox")
     public List<? extends ExecutionOutboxEntry> findOldest() {
@@ -75,12 +79,5 @@ public class ExecutionOutboxMenu {
         return executionOutboxEntryRepository.findAll();
     }
 
-    final ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
-    final ClockService clockService;
-
-    /* not used
-    private LocalDate now() {
-        return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
-    } */
 }
 

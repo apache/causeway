@@ -22,6 +22,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog";
 
-    final CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    final CommandLogEntryRepository commandLogEntryRepository;
     final RepositoryService repositoryService;
     final CausewayConfiguration causewayConfiguration;
     final ClockService clockService;

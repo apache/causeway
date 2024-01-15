@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -388,8 +389,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
 
     }
 
-    @Inject
-    ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
+    @Inject ExecutionLogEntryRepository executionLogEntryRepository;
     @Inject SudoService sudoService;
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;
