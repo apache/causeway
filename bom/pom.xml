@@ -163,7 +163,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
         <resteasy-spring.version>3.1.0.Final</resteasy-spring.version>
-        <resteasy.version>6.2.6.Final</resteasy.version> <!-- be awre of potential clashes with https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-spring-boot-starter -->
+        <resteasy.version>6.2.7.Final</resteasy.version> <!-- be awre of potential clashes with https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-spring-boot-starter -->
         <resteasy-jaxb-provider.version>6.2.2.Final</resteasy-jaxb-provider.version>
 
         <select2.version>4.0.13</select2.version>
