@@ -221,7 +221,7 @@ public class DomainEventHelper {
             return uncheckedCast(event);
         }
 
-        log.error("Unable to instantiate ActionDomainEvent for:\n- eventType : {}\n- identifier: {}\n- source: {} ", type.getName(), identifier.getMemberLogicalName(), source);
+        log.error("Unable to locate constructor of ActionDomainEvent subclass.\n* event's class name : {}\n* source's class name: {}\n* identifier         : {}\n", type.getName(), source.getClass().getName(), identifier.getMemberLogicalName());
 
         return null;
     }
