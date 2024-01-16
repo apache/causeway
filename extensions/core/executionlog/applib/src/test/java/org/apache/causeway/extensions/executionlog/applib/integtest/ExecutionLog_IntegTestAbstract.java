@@ -26,7 +26,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

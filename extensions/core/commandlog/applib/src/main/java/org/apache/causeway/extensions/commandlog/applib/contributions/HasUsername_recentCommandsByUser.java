@@ -30,8 +30,6 @@ import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
-
 import lombok.val;
 
 

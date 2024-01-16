@@ -34,8 +34,6 @@ import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepositoryAbstract;
-
 import lombok.RequiredArgsConstructor;
 
 

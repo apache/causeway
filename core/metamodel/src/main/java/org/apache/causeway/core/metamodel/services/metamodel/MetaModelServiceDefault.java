@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.metamodel;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +29,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.Null;
-
 import org.apache.causeway.commons.collections.Can;
-
-import org.apache.causeway.core.config.CausewayConfiguration;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;

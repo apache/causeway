@@ -43,7 +43,6 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterRepository;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter_bumpUsingMixin;

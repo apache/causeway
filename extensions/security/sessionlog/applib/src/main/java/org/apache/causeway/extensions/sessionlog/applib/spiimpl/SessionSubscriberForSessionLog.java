@@ -41,8 +41,6 @@ import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepositoryAbstract;
-
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

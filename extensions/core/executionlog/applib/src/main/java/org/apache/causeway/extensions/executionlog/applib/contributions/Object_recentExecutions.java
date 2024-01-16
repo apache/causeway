@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.executionlog.applib.contributions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -36,8 +35,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
-
 import lombok.RequiredArgsConstructor;
 
 /**

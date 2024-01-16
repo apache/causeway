@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;

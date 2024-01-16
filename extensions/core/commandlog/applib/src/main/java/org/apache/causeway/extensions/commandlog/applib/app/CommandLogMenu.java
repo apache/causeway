@@ -26,8 +26,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
