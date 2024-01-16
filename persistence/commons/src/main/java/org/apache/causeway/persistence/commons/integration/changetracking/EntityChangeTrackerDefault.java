@@ -33,6 +33,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import org.apache.causeway.persistence.commons.integration.repository.RepositoryServiceDefault;
@@ -163,7 +164,7 @@ implements
 
     private void suppressAutoFlushIfRequired(Runnable runnable) {
         if (suppressAutoFlush) {
-            RepositoryServiceDefault.suppressAutoFlush(runnable);
+            FlushMgmt.suppressAutoFlush(runnable);
         } else {
             runnable.run();
         }

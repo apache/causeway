@@ -31,6 +31,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
+import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -170,20 +171,10 @@ implements RepositoryService, HasMetaModelContext {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private static final ThreadLocal<Boolean> autoFlushSuppressed = ThreadLocal.withInitial(() -> false);
-    public static void suppressAutoFlush(Runnable runnable) {
-        Boolean onEntry = autoFlushSuppressed.get();
-        try {
-            autoFlushSuppressed.set(true);
-            runnable.run();
-        } finally {
-            autoFlushSuppressed.set(onEntry);
-        }
-    }
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        if(autoFlush && !autoFlushSuppressed.get()) {
+        if(autoFlush && !FlushMgmt.isAutoFlushSuppressed()) {
             transactionService.flushTransaction();
         }
         return submitQuery(query);
