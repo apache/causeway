@@ -221,7 +221,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         }
 
         //[CAUSEWAY-3663] restore pending params, in case we do have a snapshot of these
-        if(pendingParamsSnapshot!=null) {
+        if(PendingParamsSnapshot.canRestore(pendingParamsSnapshot)) {
             this.parameterNegotiationModel =
                     pendingParamsSnapshot.restoreParameterNegotiationModel(
                             actionInteraction()

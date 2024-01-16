@@ -23,6 +23,8 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
@@ -53,15 +55,30 @@ import lombok.NonNull;
 public class PendingParamsSnapshot implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    // -- FACTORIES
+
     protected static PendingParamsSnapshot create(final ParameterNegotiationModel parameterNegotiationModel) {
         return new PendingParamsSnapshot(null, parameterNegotiationModel);
     }
+
+    private static PendingParamsSnapshot empty() {
+        return new PendingParamsSnapshot(null, null);
+    }
+
+    // -- CONSTRUCTION
 
     private Can<ManagedObject> parameterValues;
     private ParameterNegotiationModel parameterNegotiationModel;
 
     public ParameterNegotiationModel restoreParameterNegotiationModel(final ManagedAction managedAction) {
         return this.parameterNegotiationModel = ParameterNegotiationModel.of(managedAction, parameterValues);
+    }
+
+    // -- UTILITY
+
+    public static boolean canRestore(final @Nullable PendingParamsSnapshot pendingParamsSnapshot) {
+        return pendingParamsSnapshot!=null
+                && pendingParamsSnapshot.parameterValues!=null;
     }
 
     // -- SERIALIZATION PROXY
@@ -82,16 +99,28 @@ public class PendingParamsSnapshot implements Serializable {
          */
         private final LogicalType[] cardinalityConstraints;
         private final Can<Can<Bookmark>> argBookmarks;
+        private final boolean isEmpty;
 
         private SerializationProxy(final PendingParamsSnapshot pendingParamsSnapshot) {
+
+            // guard against ParameterNegotiationModel not available
+            if(pendingParamsSnapshot.parameterNegotiationModel==null) {
+                this.cardinalityConstraints = null;
+                this.argBookmarks = null;
+                this.isEmpty = true;
+                return;
+            }
+
             var objectManager = MetaModelContext.instanceElseFail().getObjectManager();
             this.cardinalityConstraints = new LogicalType[pendingParamsSnapshot.parameterNegotiationModel.getParamCount()];
             this.argBookmarks = pendingParamsSnapshot.parameterNegotiationModel
                 .getParamModels()
                 .map(paramModel->bookmark(objectManager, paramModel));
+            this.isEmpty = false;
         }
 
         private Object readResolve() {
+            if(isEmpty) return PendingParamsSnapshot.empty();
             var objectManager = MetaModelContext.instanceElseFail().getObjectManager();
             return new PendingParamsSnapshot(
                     argBookmarks
