@@ -80,23 +80,4 @@ public class Configuration_headless {
         };
     }
 
-
-    @Bean @Singleton
-    public MetricsService metricsService() {
-        return new MetricsService() {
-
-            @Override
-            public int numberEntitiesLoaded() {
-                return 0;
-            }
-
-            @Override
-            public int numberEntitiesDirtied() {
-                return 0;
-            }
-
-        };
-    }
-
-
 }
