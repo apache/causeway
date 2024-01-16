@@ -20,7 +20,7 @@ package org.apache.causeway.commons.functional;
 
 import java.util.concurrent.Callable;
 
-import lombok.NonNull;
+import lombok.SneakyThrows;
 
 /**
  * Similar to a {@link Runnable}, except that it can also throw a checked {@link Exception}.
@@ -34,16 +34,48 @@ public interface ThrowingRunnable {
 
     void run() throws Exception;
 
-    // -- UTILITY
+    // -- VARIANTS
 
-    static Callable<Void> toCallable(final @NonNull ThrowingRunnable runnable) {
-        return ()->{
-            runnable.run();
-            return null;
-        };
+    /**
+     * Does <b>not</b> silently swallow, wrap into RuntimeException,
+     * or otherwise modify any exceptions of the wrapped {@link #run()} method.
+     * @see lombok.SneakyThrows
+     */
+    @SneakyThrows
+    default void runUncatched() {
+        run();
     }
 
-    static Try<Void> resultOf(final @NonNull ThrowingRunnable runnable) {
-        return Try.run(runnable);
+    /**
+     * Does <b>not</b> silently swallow, wrap into RuntimeException,
+     * or otherwise modify any exceptions of the wrapped {@link #run()} method.
+     * @see lombok.SneakyThrows
+     */
+    @SneakyThrows
+    default Void callUncatched() {
+        run();
+        return null;
     }
+
+    // -- CONVERSION
+
+    /**
+     * The resulting {@link Runnable} does <b>not</b> silently swallow, wrap into RuntimeException,
+     * or otherwise modify any exceptions of the wrapped {@link #run()} method.
+     * @see lombok.SneakyThrows
+     */
+
+    default Runnable toRunnable() {
+        return this::runUncatched;
+    }
+
+    /**
+     * The resulting {@link Callable} does <b>not</b> silently swallow, wrap into RuntimeException,
+     * or otherwise modify any exceptions of the wrapped {@link #run()} method.
+     * @see lombok.SneakyThrows
+     */
+    default Callable<Void> toCallable() {
+        return this::callUncatched;
+    }
+
 }

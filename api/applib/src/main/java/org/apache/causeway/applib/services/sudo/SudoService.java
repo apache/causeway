@@ -126,7 +126,7 @@ public class SudoService {
     public void run(
             final @NonNull UnaryOperator<InteractionContext> sudoMapper,
             final @NonNull ThrowingRunnable runnable) {
-        call(sudoMapper, ThrowingRunnable.toCallable(runnable));
+        call(sudoMapper, runnable.toCallable());
     }
 
 }
