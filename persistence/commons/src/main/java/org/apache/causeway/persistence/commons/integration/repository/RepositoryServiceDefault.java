@@ -16,18 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.repository;
+package org.apache.causeway.persistence.commons.integration.repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Named;
+
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -53,7 +57,6 @@ import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -61,7 +64,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".RepositoryServiceDefault")
+@Named(CausewayModulePersistenceCommons.NAMESPACE + ".RepositoryServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor
@@ -81,7 +84,9 @@ implements RepositoryService, HasMetaModelContext {
 
     @PostConstruct
     public void init() {
-        val disableAutoFlush = causewayConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
+        val disableAutoFlush =
+                causewayConfiguration.getPersistence().getCommons().getRepositoryService().isDisableAutoFlush() ||
+                causewayConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
         this.autoFlush = !disableAutoFlush;
     }
 
@@ -165,9 +170,20 @@ implements RepositoryService, HasMetaModelContext {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    private static final ThreadLocal<Boolean> autoFlushSuppressed = ThreadLocal.withInitial(() -> false);
+    public static void suppressAutoFlush(Runnable runnable) {
+        Boolean onEntry = autoFlushSuppressed.get();
+        try {
+            autoFlushSuppressed.set(true);
+            runnable.run();
+        } finally {
+            autoFlushSuppressed.set(onEntry);
+        }
+    }
+
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        if(autoFlush) {
+        if(autoFlush && !autoFlushSuppressed.get()) {
             transactionService.flushTransaction();
         }
         return submitQuery(query);
