@@ -120,6 +120,7 @@ open module org.apache.causeway.core.metamodel {
 
     exports org.apache.causeway.core.metamodel.specloader
         to org.apache.causeway.core.runtimeservices,
+        org.apache.causeway.persistence.commons,
         //TODO probably don't expose SpecificationLoader to persistence
         org.apache.causeway.persistence.jdo.metamodel,
         //TODO probably don't expose SpecificationLoader to viewers
