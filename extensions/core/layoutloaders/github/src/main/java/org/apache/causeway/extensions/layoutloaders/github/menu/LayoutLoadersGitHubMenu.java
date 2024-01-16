@@ -100,7 +100,7 @@ public class LayoutLoadersGitHubMenu {
     )
     public class disableDynamicLayoutLoading {
 
-        public class ActionDomainEvent extends LayoutLoadersGitHubMenu.ActionDomainEvent<enableDynamicLayoutLoading> {}
+        public class ActionDomainEvent extends LayoutLoadersGitHubMenu.ActionDomainEvent<DynamicLayoutLoading> {}
 
         @MemberSupport public void act() {
             LayoutLoadersGitHubMenu.this.enabled = false;

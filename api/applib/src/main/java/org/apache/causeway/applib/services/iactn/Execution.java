@@ -38,6 +38,8 @@ import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.MetricsDto;
 import org.apache.causeway.schema.ixn.v2.ObjectCountsDto;
 
+import org.springframework.lang.Nullable;
+
 import lombok.Getter;
 import lombok.val;
 
@@ -149,13 +151,16 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
      * {@link AbstractDomainEvent.Phase#EXECUTING executing} phase.
      * </p>
      */
-    @Getter
     private E event;
+
+    public @Nullable E getEvent() {
+        return event;
+    }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    public void setEvent(final E event) {
+    public void setEvent(final @Nullable E event) {
         this.event = event;
     }
 

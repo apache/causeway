@@ -147,38 +147,47 @@ implements
         }
 
         // ... post the executing event
-        final ActionDomainEvent<?> actionDomainEvent = getDomainEventHelper().postEventForAction(
+        final ActionDomainEvent<?> event = getDomainEventHelper().postEventForAction(
                 AbstractDomainEvent.Phase.EXECUTING,
                 getEventType(),
                 owningAction, owningAction,
                 head, arguments,
                 null);
 
-        // the event handlers may have updated the argument themselves
-        val argsAfterEventPolling = updateArguments(
-                owningAction.getParameters(),
-                arguments,
-                actionDomainEvent.getArguments());
+        final Can<ManagedObject> argsForInvocation;
+        if (event != null) {
+            // the event handlers may have updated the argument themselves
+            argsForInvocation = updateArguments(
+                    owningAction.getParameters(),
+                    arguments,
+                    event.getArguments());
+        } else {
+            argsForInvocation = arguments;
+        }
+
 
         // set event onto the execution
-        currentExecution.setEvent(actionDomainEvent);
+        currentExecution.setEvent(event);
 
         // invoke method
-        val resultPojo = executeWithoutEvents(argsAfterEventPolling);
+        val resultPojo = executeWithoutEvents(argsForInvocation);
 
-        // ... post the executed event
+        if (event != null) {
+            // ... post the executed event
+            getDomainEventHelper().postEventForAction(
+                    AbstractDomainEvent.Phase.EXECUTED,
+                    event,
+                    owningAction, owningAction, head, argsForInvocation,
+                    resultPojo);
 
-        getDomainEventHelper().postEventForAction(
-                AbstractDomainEvent.Phase.EXECUTED,
-                actionDomainEvent,
-                owningAction, owningAction, head, argsAfterEventPolling,
-                resultPojo);
+            // probably superfluous, but does no harm...
+            Object actualReturnValue = event.getReturnValue();  // usually the same as resultPojo
+            getServiceInjector().injectServicesInto(actualReturnValue);
 
-        // probably superfluous, but does no harm...
-        Object actualReturnValue = actionDomainEvent.getReturnValue();  // usually the same as resultPojo
-        getServiceInjector().injectServicesInto(actualReturnValue);
-
-        return actualReturnValue;
+            return actualReturnValue;
+        } else {
+            return resultPojo;
+        }
     }
 
     @SneakyThrows
