@@ -55,10 +55,11 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "ofEventService")
-//@Log4j2
+@Log4j2
 public class DomainEventHelper {
 
     public static DomainEventHelper ofServiceRegistry(final ServiceRegistry serviceRegistry) {
@@ -71,7 +72,7 @@ public class DomainEventHelper {
     // -- postEventForAction
 
     // variant using eventType and no existing event
-    public ActionDomainEvent<?> postEventForAction(
+    public @Nullable ActionDomainEvent<?> postEventForAction(
             final AbstractDomainEvent.Phase phase,
             final @NonNull Class<? extends ActionDomainEvent<?>> eventType,
             final ObjectAction objectAction,
@@ -86,7 +87,7 @@ public class DomainEventHelper {
     }
 
     // variant using existing event and not eventType (is derived from event)
-    public ActionDomainEvent<?> postEventForAction(
+    public void postEventForAction(
             final AbstractDomainEvent.Phase phase,
             final @NonNull ActionDomainEvent<?> existingEvent,
             final ObjectAction objectAction,
@@ -95,12 +96,12 @@ public class DomainEventHelper {
             final Can<ManagedObject> argumentAdapters,
             final @Nullable Object resultPojo) {
 
-        return postEventForAction(phase,
+        postEventForAction(phase,
                 uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, facetHolder,
                 head, argumentAdapters, resultPojo);
     }
 
-    private <S> ActionDomainEvent<S> postEventForAction(
+    private @Nullable <S> ActionDomainEvent<S> postEventForAction(
             final AbstractDomainEvent.Phase phase,
             final Class<? extends ActionDomainEvent<S>> eventType,
             final ActionDomainEvent<S> existingEvent,
@@ -126,13 +127,17 @@ public class DomainEventHelper {
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
                 // copy over if mixee is present
-                head.getMixee()
-                .ifPresent(mixedInAdapter->
-                    event.setMixee(mixedInAdapter.getPojo()));
+                if (event != null) {
+                    head.getMixee()
+                    .ifPresent(mixedInAdapter->
+                        event.setMixee(mixedInAdapter.getPojo()));
+                }
 
-                if(objectAction != null) {
-                    // should always be the case...
-                    event.setSemantics(objectAction.getSemantics());
+                if(objectAction != null) {  // should always be the case...
+
+                    if (event != null) {
+                        event.setSemantics(objectAction.getSemantics());
+                    }
 
                     val parameters = objectAction.getParameters();
 
@@ -145,18 +150,22 @@ public class DomainEventHelper {
                             .map(ObjectSpecification::getCorrespondingClass)
                             .collect(_Lists.toUnmodifiable());
 
-                    event.setParameterNames(parameterNames);
-                    event.setParameterTypes(parameterTypes);
+                    if (event != null) {
+                        event.setParameterNames(parameterNames);
+                        event.setParameterTypes(parameterTypes);
+                    }
                 }
             }
 
-            event.setEventPhase(phase);
+            if (event != null) {
+                event.setEventPhase(phase);
 
-            if(phase.isExecuted()) {
-                event.setReturnValue(resultPojo);
+                if(phase.isExecuted()) {
+                    event.setReturnValue(resultPojo);
+                }
+
+                metamodelEventService.fireActionDomainEvent(event);
             }
-
-            metamodelEventService.fireActionDomainEvent(event);
 
             return event;
         } catch (Exception e) {
@@ -164,13 +173,13 @@ public class DomainEventHelper {
         }
     }
 
-    static <S> ActionDomainEvent<S> newActionDomainEvent(
+    static @Nullable <S> ActionDomainEvent<S> newActionDomainEvent(
             final Class<? extends ActionDomainEvent<S>> type,
             final Identifier identifier,
             final S source,
             final Object... arguments)
         throws IllegalArgumentException,
-            NoSuchMethodException, SecurityException {
+            SecurityException {
 
         val constructors = _Reflect.getPublicConstructors(type);
 
@@ -212,7 +221,9 @@ public class DomainEventHelper {
             return uncheckedCast(event);
         }
 
-        throw new NoSuchMethodException(type.getName()+".<init>(...)");
+        log.error("Unable to locate constructor of ActionDomainEvent subclass.\n* event's class name : {}\n* source's class name: {}\n* identifier         : {}\n", type.getName(), source.getClass().getName(), identifier.getMemberLogicalName());
+
+        return null;
     }
 
     // same as in ActionDomainEvent's constructor.
