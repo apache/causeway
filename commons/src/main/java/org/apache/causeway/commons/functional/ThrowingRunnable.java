@@ -64,7 +64,6 @@ public interface ThrowingRunnable {
      * or otherwise modify any exceptions of the wrapped {@link #run()} method.
      * @see lombok.SneakyThrows
      */
-
     default Runnable toRunnable() {
         return this::runUncatched;
     }
