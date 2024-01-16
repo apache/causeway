@@ -27,8 +27,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
-
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -55,7 +54,6 @@ public class ExecutionLogEntry_siblingExecutions {
         return entries;
     }
 
-    @Inject
-    ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
+    @Inject ExecutionLogEntryRepository executionLogEntryRepository;
 
 }

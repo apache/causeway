@@ -25,9 +25,10 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
-
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import lombok.RequiredArgsConstructor;
+
+import jakarta.inject.Inject;
 
 
 /**
@@ -54,7 +55,6 @@ public class CommandLogEntry_childCommands {
         return commandLogEntryRepository.findByParent(commandLogEntry);
     }
 
-    @jakarta.inject.Inject
-    private CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject private CommandLogEntryRepository commandLogEntryRepository;
 
 }

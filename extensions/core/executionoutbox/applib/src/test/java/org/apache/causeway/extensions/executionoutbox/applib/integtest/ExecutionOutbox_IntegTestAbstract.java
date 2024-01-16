@@ -24,6 +24,8 @@ import java.util.UUID;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +43,6 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.CounterRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter_bumpUsingMixin;
@@ -283,8 +284,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
 
     }
 
-    @Inject
-    ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
+    @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
     @Inject SudoService sudoService;
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;

@@ -29,8 +29,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
-
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -59,8 +58,7 @@ public abstract class T_recentBackgroundCommands<T> {
                 .orElse(Collections.emptyList());
     }
 
-    @Inject
-    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
     @Inject QueryResultsCache queryResultsCache;
 }

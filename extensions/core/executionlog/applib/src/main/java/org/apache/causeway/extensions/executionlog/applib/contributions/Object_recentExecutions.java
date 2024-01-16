@@ -18,7 +18,8 @@
  */
 package org.apache.causeway.extensions.executionlog.applib.contributions;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -33,8 +34,7 @@ import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
-
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -65,9 +65,14 @@ public class Object_recentExecutions {
     private final Object domainObject;
 
     @MemberSupport public List<? extends ExecutionLogEntry> act() {
-        return bookmarkService.bookmarkFor(domainObject)
-        .map(executionLogEntryRepository::findRecentByTarget)
-        .orElse(Collections.emptyList());
+        final List<ExecutionLogEntry> executionLogEntries = new ArrayList<>();
+        bookmarkService.bookmarksFor(domainObject).forEach(
+                bookmark -> {
+                    List<ExecutionLogEntry> recent = executionLogEntryRepository.findRecentByTarget(bookmark);
+                    executionLogEntries.addAll(recent);
+                });
+        executionLogEntries.sort(Comparator.comparing(ExecutionLogEntry::getTimestamp).reversed());
+        return executionLogEntries;
     }
 
     /**
@@ -78,8 +83,7 @@ public class Object_recentExecutions {
         return (domainObject instanceof HasInteractionId);
     }
 
-    @Inject
-    ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
+    @Inject ExecutionLogEntryRepository executionLogEntryRepository;
     @Inject BookmarkService bookmarkService;
 
 }

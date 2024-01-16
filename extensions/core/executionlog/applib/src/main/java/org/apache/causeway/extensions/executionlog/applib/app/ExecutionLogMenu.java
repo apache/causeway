@@ -25,7 +25,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepositoryAbstract;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -67,7 +67,7 @@ public class ExecutionLogMenu {
             extends CausewayModuleExtExecutionLogApplib.ActionDomainEvent<T> { }
 
 
-    final ExecutionLogEntryRepositoryAbstract<? extends ExecutionLogEntry> executionLogEntryRepository;
+    final ExecutionLogEntryRepository executionLogEntryRepository;
     final ClockService clockService;
 
 

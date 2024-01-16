@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
-import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepositoryAbstract;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,6 +52,6 @@ public class HasInteractionId_auditTrailEntries {
     }
 
     @Inject
-    AuditTrailEntryRepositoryAbstract<? extends AuditTrailEntry> auditTrailEntryRepository;
+    AuditTrailEntryRepository auditTrailEntryRepository;
 
 }

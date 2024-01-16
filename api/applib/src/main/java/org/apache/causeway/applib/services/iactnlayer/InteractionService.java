@@ -160,7 +160,7 @@ public interface InteractionService extends InteractionLayerTracker {
     default Try<Void> runAndCatch(
             final @NonNull InteractionContext interactionContext,
             final @NonNull ThrowingRunnable runnable){
-        return callAndCatch(interactionContext, ThrowingRunnable.toCallable(runnable));
+        return callAndCatch(interactionContext, runnable.toCallable());
     }
 
     /**
@@ -179,7 +179,7 @@ public interface InteractionService extends InteractionLayerTracker {
      */
     default Try<Void> runAnonymousAndCatch(
             final @NonNull ThrowingRunnable runnable) {
-        return callAnonymousAndCatch(ThrowingRunnable.toCallable(runnable));
+        return callAnonymousAndCatch(runnable.toCallable());
     }
 
     /**

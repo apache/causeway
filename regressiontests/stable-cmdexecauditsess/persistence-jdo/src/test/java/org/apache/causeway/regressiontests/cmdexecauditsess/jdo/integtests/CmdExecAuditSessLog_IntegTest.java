@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.regressiontests.cmdexecauditsess.jdo.integtests;
 
+import org.junit.jupiter.api.Test;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,9 +32,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.jdo.CausewayModuleExtAuditTrailPersistenceJdo;
+import org.apache.causeway.extensions.audittrail.jdo.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
+import org.apache.causeway.extensions.commandlog.jdo.dom.CommandLogEntry;
 import org.apache.causeway.extensions.executionlog.jdo.CausewayModuleExtExecutionLogPersistenceJdo;
+import org.apache.causeway.extensions.executionlog.jdo.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionoutbox.jdo.CausewayModuleExtExecutionOutboxPersistenceJdo;
+import org.apache.causeway.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.sessionlog.jdo.CausewayModuleExtSessionLogPersistenceJdo;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.CmdExecAuditSessLog_IntegTestAbstract;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.CmdExecAuditSessTestDomainModel;
@@ -69,6 +75,14 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
     @Override
     protected org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
+    }
+
+    @Test
+    void check_facets() {
+        assertEntityPublishingDisabledFor(AuditTrailEntry.class);
+        assertEntityPublishingDisabledFor(CommandLogEntry.class);
+        assertEntityPublishingDisabledFor(ExecutionLogEntry.class);
+        assertEntityPublishingDisabledFor(ExecutionOutboxEntry.class);
     }
 
 }

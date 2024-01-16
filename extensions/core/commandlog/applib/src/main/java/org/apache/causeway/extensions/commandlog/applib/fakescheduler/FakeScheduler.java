@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -37,7 +39,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Builder;
@@ -151,8 +152,7 @@ public class FakeScheduler {
         );
     }
 
-    @Inject
-    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
     @Inject TransactionService transactionService;
     @Inject InteractionService interactionService;

@@ -25,8 +25,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
-
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -68,7 +67,7 @@ public class CommandLogMenu {
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
 
-    final CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    final CommandLogEntryRepository commandLogEntryRepository;
     final ClockService clockService;
 
 

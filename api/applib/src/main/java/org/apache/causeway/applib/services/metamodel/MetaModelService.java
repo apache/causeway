@@ -23,6 +23,8 @@ import java.util.function.BiPredicate;
 
 import jakarta.inject.Named;
 
+import org.apache.causeway.commons.collections.Can;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -56,6 +58,31 @@ public interface MetaModelService {
      * (interfaces and abstract types are never added to the lookup table).
      */
     Optional<LogicalType> lookupLogicalTypeByName(final String logicalTypeName);
+
+    /**
+     * Assuming that the {@link LogicalType} passed in actually represents a domain type, then
+     * returns it along with any aliases defined as per
+     * {@link DomainService#aliased()} or {@link DomainObject#aliased()}.
+     *
+     * <p>
+     *     If there is no such domain type, then an empty {@link Can} will be returned.
+     * </p>
+     *
+     * @param logicalType
+     * @return
+     */
+    Can<LogicalType> logicalTypeAndAliasesFor(final LogicalType logicalType);
+
+    /**
+     * Returns the {@link LogicalType} of a domain class' object type, corresponding to {@link Named#value()},
+     * along with any aliases defined as per
+     * {@link DomainService#aliased()} or {@link DomainObject#aliased()}.
+     *
+     * <p>
+     *     If there is no such domain type, then an empty {@link Can} will be returned.
+     * </p>
+     */
+    Can<LogicalType> logicalTypeAndAliasesFor(final String logicalTypeName);
 
     /**
      * Provides a lookup by class of a domain class' object type,corresponding to

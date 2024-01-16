@@ -41,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
@@ -95,7 +96,7 @@ extends RegressionTestAbstract {
 
             interactionService.runAnonymous(()->{
 
-                ThrowingRunnable.resultOf(uniqueConstraintViolator)
+                Try.run(uniqueConstraintViolator)
                 .ifSuccess(__->fail("expected to fail, but did not"))
                 .ifFailure(ex->{
                     if(!(ex instanceof DataIntegrityViolationException)) {

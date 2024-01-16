@@ -24,7 +24,7 @@ import java.util.UUID;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -471,11 +471,9 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
             Assertions.assertThat(mostRecentReplayedIfAny2).isPresent();
             Assertions.assertThat(mostRecentReplayedIfAny2.get().getInteractionId()).isEqualTo(commandTarget1User1Id);
         }
-
     }
 
-    @Inject
-    CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject SudoService sudoService;
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;

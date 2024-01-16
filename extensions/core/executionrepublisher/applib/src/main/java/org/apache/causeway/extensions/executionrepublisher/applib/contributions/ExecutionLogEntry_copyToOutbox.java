@@ -30,8 +30,7 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryType;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepositoryAbstract;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryType;
 import org.apache.causeway.extensions.executionrepublisher.applib.CausewayModuleExtExecutionRepublisherApplib;
 
@@ -91,7 +90,6 @@ public class ExecutionLogEntry_copyToOutbox {
                 : ExecutionOutboxEntryType.PROPERTY_EDIT;
     }
 
-    @Inject
-    ExecutionOutboxEntryRepositoryAbstract<? extends ExecutionOutboxEntry> outboxRepository;
+    @Inject ExecutionOutboxEntryRepository outboxRepository;
 
 }

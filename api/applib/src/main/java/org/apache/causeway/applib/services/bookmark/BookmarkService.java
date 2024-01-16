@@ -18,7 +18,11 @@
  */
 package org.apache.causeway.applib.services.bookmark;
 
+import java.util.List;
 import java.util.Optional;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainService;
 
 import org.springframework.lang.Nullable;
 
@@ -45,6 +49,12 @@ public interface BookmarkService {
      * @return optionally a {@link Bookmark} representing given {@code domainObject}
      */
     Optional<Bookmark> bookmarkFor(@Nullable Object domainObject);
+
+    /**
+     * Returns all possible {@link Bookmark}s for the provided domain object, taking into account any aliases
+     * defined as per {@link DomainObject#aliased()} or {@link DomainService#aliased()}.
+     */
+    List<Bookmark> bookmarksFor(@Nullable Object domainObject);
 
     /**
      * Optionally returns a {@link Bookmark} created from the constituent parts,
