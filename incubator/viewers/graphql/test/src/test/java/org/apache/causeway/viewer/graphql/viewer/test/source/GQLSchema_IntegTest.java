@@ -19,9 +19,17 @@
 package org.apache.causeway.viewer.graphql.viewer.test.source;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.TextUtils;
+
+import org.approvaltests.Approvals;
+import org.approvaltests.core.Options;
+import org.approvaltests.reporters.DiffReporter;
+import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -54,18 +62,14 @@ import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLSchemaElement;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
+import graphql.schema.idl.SchemaPrinter;
 
 @Transactional
-public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
+public class GQLSchema_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
-    @Inject
-    private CausewaySystemEnvironment causewaySystemEnvironment;
-
-    @Inject
-    private SpecificationLoader specificationLoader;
-
-    @Inject
-    private GraphQlSourceForCauseway graphQlSourceForCauseway;
+    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
+    @Inject private SpecificationLoader specificationLoader;
+    @Inject private GraphQlSourceForCauseway graphQlSourceForCauseway;
 
     @BeforeEach
     void beforeEach() {
@@ -73,6 +77,35 @@ public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
         assertNotNull(specificationLoader);
         assertNotNull(graphQlSourceForCauseway);
     }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void schema() {
+
+        GraphQLSchema x;
+
+        GraphQL graphQL = graphQlSourceForCauseway.graphQl();
+        GraphQLSchema graphQLSchema = graphQL.getGraphQLSchema();
+
+        SchemaPrinter printer = new SchemaPrinter();
+
+        // Print schema
+        String schemaDefinition = printer.print(graphQLSchema);
+
+        Approvals.verify(schemaDefinition, gqlSchemaOptions());
+    }
+
+    private Options gqlSchemaOptions() {
+        return new Options()
+                .withScrubber(this::unixLineEndings)
+                .forFile().withExtension(".gql");
+    }
+
+    private String unixLineEndings(final String input) {
+        return TextUtils.streamLines(input)
+                .collect(Collectors.joining("\n"));
+    }
+
 
     @Test
     @Disabled
@@ -98,6 +131,8 @@ public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
 
         GraphQL graphQL = graphQlSourceForCauseway.graphQl();
         GraphQLSchema graphQLSchema = graphQL.getGraphQLSchema();
+
+
 //        List<GraphQLNamedType> allTypesAsList = graphQLSchema.getAllTypesAsList();
 //        allTypesAsList.forEach(t->{
 //            System.out.println(t.getName());

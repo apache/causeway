@@ -34,6 +34,8 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.causeway.viewer.graphql.viewer.source.GraphQlServiceForCauseway;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
@@ -45,6 +47,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -69,12 +72,13 @@ import lombok.val;
 
 //@Transactional NOT USING @Transactional since we are running server within same transaction otherwise
 @ActiveProfiles("test")
-public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
+public class EndToEnd_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Inject TransactionService transactionService;
     @Inject CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject SpecificationLoader specificationLoader;
     @Inject GraphQlSourceForCauseway graphQlSourceForCauseway;
+    @Inject GraphQlServiceForCauseway graphQlServiceForCauseway;
 
     @Inject TestEntityRepository testEntityRepository;
     @Inject GQLTestDomainMenu gqlTestDomainMenu;
@@ -103,9 +107,28 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
         HttpClient client = HttpClient.newBuilder().build();
         URI uri = URI.create("http://0.0.0.0:" + port + "/graphql/schema");
+
         HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
         File targetFile1 = new File("src/test/resources/testfiles/schema.gql");
         HttpResponse<Path> response = client.send(request, HttpResponse.BodyHandlers.ofFile(targetFile1.toPath()));
+
+    }
+
+    @Test
+    void introspectionQuery() throws Exception {
+
+        HttpClient client = HttpClient.newBuilder().build();
+
+        URI uri = URI.create(String.format("http://0.0.0.0:%d/graphql", port));
+
+        String s = readResource("introspection-query-request.gql");
+//        HttpRequest request = HttpRequest.newBuilder().uri(uri).POST(HttpRequest.BodyPublishers.ofString(s)).build();
+//
+//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//        String body = response.body();
+
+        //graphQlTester().documentName()
+
 
     }
 

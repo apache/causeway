@@ -18,15 +18,22 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.source;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.graphql.test.tester.HttpGraphQlTester;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
@@ -38,12 +45,15 @@ import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.TestD
 
 @SpringBootTest(
         classes = {
-                TestDomainModuleIntegTestAbstract.TestApp.class
+                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@AutoConfigureHttpGraphQlTester
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
-public class TestDomainModuleIntegTestAbstract {
+public class CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     /**
      * Compared to the production app manifest <code>domainapp.webapp.AppManifest</code>,
@@ -74,6 +84,14 @@ public class TestDomainModuleIntegTestAbstract {
 
     @LocalServerPort
     protected int port;
+
+    protected HttpGraphQlTester graphQlTester() {
+        WebTestClient client =
+                WebTestClient.bindToServer()
+                        .baseUrl("http://0.0.0.0:" + port + "/graphql")
+                        .build();
+        return HttpGraphQlTester.create(client);
+    }
 
 
 }

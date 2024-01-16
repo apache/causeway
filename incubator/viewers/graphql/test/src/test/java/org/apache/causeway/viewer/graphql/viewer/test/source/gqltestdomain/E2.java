@@ -35,6 +35,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
@@ -51,7 +52,7 @@ import lombok.Setter;
         name = "E2"
 )
 @Named("gqltestdomain.E2")
-@DomainObject(nature = Nature.ENTITY)
+@DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
 public class E2 implements TestEntity{
 
     @Id
