@@ -50,6 +50,7 @@ import lombok.val;
 /**
  * @since 2.0 {@index}
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Action(
         commandPublishing = Publishing.DISABLED,
         domainEvent = Object_createdByCommand.ActionDomainEvent.class,
@@ -86,20 +87,6 @@ public class Object_createdByCommand {
                     ? commandIfAny.get()
                     : domainObject;
     }
-    @MemberSupport public List<String> choices0Act() {
-        val domainClass = domainObject.getClass();
-        val logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(domainClass);
-        if(logicalTypeIfAny.isEmpty()) {
-            // not expected, due to hide guard
-            return Collections.emptyList();
-        }
-        val propertyFeatureIds = applicationFeatureRepository.propertyIdsFor(logicalTypeIfAny.get());
-        return propertyFeatureIds.stream().map(ApplicationFeatureId::getLogicalMemberName).collect(Collectors.toList());
-    }
-    @MemberSupport public String default0Act() {
-        val choices = choices0Act();
-        return choices.size() == 1 ? choices.get(0): null;
-    }
     @MemberSupport public boolean hideAct() {
         val domainClass = domainObject.getClass();
         BeanSort beanSort = metaModelService.sortOf(domainClass, MetaModelService.Mode.RELAXED);
@@ -107,7 +94,6 @@ public class Object_createdByCommand {
     }
 
     @Inject MetaModelService metaModelService;
-    @Inject ApplicationFeatureRepository applicationFeatureRepository;
     @Inject AuditTrailEntryRepository auditTrailEntryRepository;
     @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
