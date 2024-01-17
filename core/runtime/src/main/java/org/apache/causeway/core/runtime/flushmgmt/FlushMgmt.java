@@ -16,25 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.core.runtime {
-    exports org.apache.causeway.core.runtime;
-    exports org.apache.causeway.core.runtime.flushmgmt;
-    exports org.apache.causeway.core.runtime.events;
+package org.apache.causeway.core.runtime.flushmgmt;
 
-    requires java.annotation;
-    requires java.desktop;
-    requires java.inject;
-    requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.interaction;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.transaction;
-    requires org.apache.causeway.security.api;
-    requires org.apache.causeway.valuetypes.jodatime.integration;
-    requires spring.beans;
-    requires spring.context;
-    requires spring.core;
-    requires spring.tx;
+
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class FlushMgmt {
+
+    private static final ThreadLocal<Boolean> autoFlushSuppressed = ThreadLocal.withInitial(() -> false);
+    public static boolean isAutoFlushSuppressed() {
+        return autoFlushSuppressed.get();
+    }
+    public static void suppressAutoFlush(Runnable runnable) {
+        Boolean onEntry = autoFlushSuppressed.get();
+        try {
+            autoFlushSuppressed.set(true);
+            runnable.run();
+        } finally {
+            autoFlushSuppressed.set(onEntry);
+        }
+    }
+
 }

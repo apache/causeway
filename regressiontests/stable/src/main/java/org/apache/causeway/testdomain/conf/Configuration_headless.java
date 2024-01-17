@@ -20,6 +20,8 @@ package org.apache.causeway.testdomain.conf;
 
 import javax.inject.Singleton;
 
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -41,6 +43,7 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 @Configuration
 @Import({
     CausewayModuleCoreRuntimeServices.class,
+    CausewayModulePersistenceCommons.class,
     CausewayModuleSecurityBypass.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
     DomainObjectTesterFactory.class // Helper for JUnit Tests
@@ -76,24 +79,5 @@ public class Configuration_headless {
             }
         };
     }
-
-
-    @Bean @Singleton
-    public MetricsService metricsService() {
-        return new MetricsService() {
-
-            @Override
-            public int numberEntitiesLoaded() {
-                return 0;
-            }
-
-            @Override
-            public int numberEntitiesDirtied() {
-                return 0;
-            }
-
-        };
-    }
-
 
 }

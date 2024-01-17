@@ -46,6 +46,7 @@
 			<artifactId>causeway-regressiontests-stable</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+
+    </dependencies>
 
 </project>

@@ -53,6 +53,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-commons</artifactId>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
