@@ -22,11 +22,15 @@ import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+
+import org.apache.causeway.applib.id.HasLogicalType;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
@@ -90,6 +94,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         specificationLoader.snapshotSpecifications()
         .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
+        .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
         .forEach(objectSpecification -> {
 
             val logicalTypeName = objectSpecification.getLogicalTypeName();

@@ -18,73 +18,38 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.causeway.viewer.graphql.viewer.source.GraphQlServiceForCauseway;
-
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
-
-import org.apache.causeway.viewer.graphql.viewer.test.schema.MyWinMergeDiffReporter;
-
 import org.approvaltests.Approvals;
-import org.approvaltests.core.Options;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.TextWebReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForCauseway;
+import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.TopLevelMenu;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
-import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
-
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
-import lombok.Value;
-import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @ActiveProfiles("test")
-public class EndToEnd_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
+public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Inject DepartmentRepository departmentRepository;
     @Inject DeptHeadRepository deptHeadRepository;
@@ -98,21 +63,9 @@ public class EndToEnd_IntegTest extends CausewayViewerGraphqlTestModuleIntegTest
         });
     }
 
-    @Test
-    @UseReporter({MyWinMergeDiffReporter.class, DiffReporter.class})
-    void schema() throws Exception {
-        Approvals.verify(submit(), jsonOptions());
-    }
 
     @Test
-    @UseReporter({MyWinMergeDiffReporter.class, DiffReporter.class})
-    void schema_types_name() throws Exception {
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-
-    @Test
-    @UseReporter({MyWinMergeDiffReporter.class, DiffReporter.class})
+    @UseReporter(DiffReporter.class)
     void find_all_departments() throws Exception {
 
         // given
@@ -135,7 +88,7 @@ public class EndToEnd_IntegTest extends CausewayViewerGraphqlTestModuleIntegTest
 
     //TODO started to fail on 2022-09-04, with testEntityRepository findAll being empty
     @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-    @UseReporter(TextWebReporter.class)
+    @UseReporter(DiffReporter.class)
     void createE1() throws Exception {
 
         //File targetFile3 = new File("src/test/resources/testfiles/targetFile3.gql");
@@ -168,7 +121,7 @@ public class EndToEnd_IntegTest extends CausewayViewerGraphqlTestModuleIntegTest
     //TODO started to fail on 2023-07-25
     //disabled to rescue CI build
     @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-    @UseReporter(TextWebReporter.class)
+    @UseReporter(DiffReporter.class)
     void changeName() throws Exception {
 
         List<DeptHead> deptHeadList = new ArrayList<>();

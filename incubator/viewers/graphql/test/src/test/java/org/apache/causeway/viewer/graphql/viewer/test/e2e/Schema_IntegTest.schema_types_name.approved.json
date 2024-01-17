@@ -228,7 +228,7 @@
       }, {
         "name" : "gql_test_domain_DeptHead__DomainObject_mutators"
       }, {
-        "name" : "gqltestdomain_GQLTestDomainMenu"
+        "name" : "gql_test_domain_TopLevelMenu"
       }, {
         "name" : "java_lang_Runnable"
       }, {

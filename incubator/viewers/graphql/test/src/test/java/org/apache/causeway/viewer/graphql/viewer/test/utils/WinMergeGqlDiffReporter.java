@@ -1,6 +1,5 @@
-package org.apache.causeway.viewer.graphql.viewer.test.schema;
+package org.apache.causeway.viewer.graphql.viewer.test.utils;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.approvaltests.reporters.DiffInfo;
@@ -9,7 +8,7 @@ import org.approvaltests.reporters.GenericDiffReporter;
 
 import com.spun.util.ArrayUtils;
 
-public class MyWinMergeDiffReporter extends GenericDiffReporter {
+public class WinMergeGqlDiffReporter extends GenericDiffReporter {
 
     private static DiffInfo WIN_MERGE_REPORTER =
             new DiffInfo(DiffPrograms.Windows.WIN_MERGE_REPORTER.diffProgram,
@@ -21,7 +20,7 @@ public class MyWinMergeDiffReporter extends GenericDiffReporter {
                             )
                     );
 
-    public MyWinMergeDiffReporter() {
+    public WinMergeGqlDiffReporter() {
         super(WIN_MERGE_REPORTER);
     }
 

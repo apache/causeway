@@ -155,7 +155,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
      * @throws Exception if an error occurs during the submission
      */
     protected String submit() throws Exception{
-        val httpRequest = buildRequest(testInfo, ".gql");
+        val httpRequest = buildRequest(testInfo, "._.gql");
         return submitRequest(httpRequest);
     }
 

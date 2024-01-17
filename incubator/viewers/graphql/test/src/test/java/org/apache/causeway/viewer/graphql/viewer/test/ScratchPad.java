@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import graphql.Scalars;
@@ -48,6 +49,7 @@ class ScratchPad {
     }
 
     @Test
+    @Disabled
     public void xxx(){
 
         // given
