@@ -1,6 +1,6 @@
 {
-  gqltestdomain_GQLTestDomainMenu {
-    findAllE1 {
+  gql_test_domain_TopLevelMenu {
+    findAllDepartments {
       name
       _gql_meta {
           id

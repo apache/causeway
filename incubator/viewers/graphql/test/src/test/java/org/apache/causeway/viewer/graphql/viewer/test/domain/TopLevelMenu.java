@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
 import java.util.List;
 
@@ -33,39 +33,44 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("gqltestdomain.GQLTestDomainMenu")
+@Named("gql.test.domain.TopLevelMenu")
 @DomainService(
         nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class GQLTestDomainMenu {
+public class TopLevelMenu {
+
+    final DepartmentRepository departmentRepository;
+    final DeptHeadRepository deptHeadRepository;
+    final WithNameRepository withNameRepository;
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public E1 createE1(final String name, @Nullable final E2 e2){
-        return testEntityRepository.createE1(name, e2);
+    public Department createDepartment(
+            final String name,
+            @Nullable final DeptHead deptHead
+    ){
+        return departmentRepository.create(name, deptHead);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<E1> findAllE1(){
-        return testEntityRepository.findAllE1();
+    public List<Department> findAllDepartments(){
+        return departmentRepository.findAll();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<E2> findAllE2(){
-        return testEntityRepository.findAllE2();
+    public List<DeptHead> findAllDeptHeads(){
+        return deptHeadRepository.findAll();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<TestEntity> findAllTestEntities(){
-        return testEntityRepository.findAllTestEntities();
+    public List<WithName> findAllEntitiesWithName(){
+        return withNameRepository.findAll();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public E2 findE2(final String name){
-        return testEntityRepository.findE2ByName(name);
+    public DeptHead findDeptHeadByName(final String name){
+        return deptHeadRepository.findByName(name);
     }
 
-    @Inject
-    TestEntityRepository testEntityRepository;
 
 }

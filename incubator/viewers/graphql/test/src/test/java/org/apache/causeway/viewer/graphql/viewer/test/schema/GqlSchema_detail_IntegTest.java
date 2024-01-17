@@ -16,32 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.source;
+package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
 
-import org.approvaltests.Approvals;
-import org.approvaltests.core.Options;
-import org.approvaltests.reporters.DiffReporter;
-import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForCauseway;
-import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E1;
-import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E2;
-import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.GQLTestDomainMenu;
+import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.TopLevelMenu;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
@@ -62,10 +57,9 @@ import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLSchemaElement;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
-import graphql.schema.idl.SchemaPrinter;
 
 @Transactional
-public class GQLSchema_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
+public class GqlSchema_detail_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
@@ -78,38 +72,10 @@ public class GQLSchema_IntegTest extends CausewayViewerGraphqlTestModuleIntegTes
         assertNotNull(graphQlSourceForCauseway);
     }
 
-    @Test
-    @UseReporter(DiffReporter.class)
-    void schema() {
-
-        GraphQLSchema x;
-
-        GraphQL graphQL = graphQlSourceForCauseway.graphQl();
-        GraphQLSchema graphQLSchema = graphQL.getGraphQLSchema();
-
-        SchemaPrinter printer = new SchemaPrinter();
-
-        // Print schema
-        String schemaDefinition = printer.print(graphQLSchema);
-
-        Approvals.verify(schemaDefinition, gqlSchemaOptions());
-    }
-
-    private Options gqlSchemaOptions() {
-        return new Options()
-                .withScrubber(this::unixLineEndings)
-                .forFile().withExtension(".gql");
-    }
-
-    private String unixLineEndings(final String input) {
-        return TextUtils.streamLines(input)
-                .collect(Collectors.joining("\n"));
-    }
-
 
     @Test
     @Disabled
-    void assert_stuff_works() {
+    void detail() {
 
         GraphQLSchema x;
 
@@ -120,13 +86,13 @@ public class GQLSchema_IntegTest extends CausewayViewerGraphqlTestModuleIntegTes
 
         System.out.println(port);
 
-        ObjectSpecification objectSpecification1 = specificationLoader.specForType(E1.class).get();
+        ObjectSpecification objectSpecification1 = specificationLoader.specForType(Department.class).get();
         assertNotNull(objectSpecification1);
 
-        ObjectSpecification objectSpecification2 = specificationLoader.specForType(E2.class).get();
+        ObjectSpecification objectSpecification2 = specificationLoader.specForType(DeptHead.class).get();
         assertNotNull(objectSpecification2);
 
-        ObjectSpecification objectSpecification3 = specificationLoader.specForType(GQLTestDomainMenu.class).get();
+        ObjectSpecification objectSpecification3 = specificationLoader.specForType(TopLevelMenu.class).get();
         assertNotNull(objectSpecification3);
 
         GraphQL graphQL = graphQlSourceForCauseway.graphQl();
@@ -146,7 +112,7 @@ public class GQLSchema_IntegTest extends CausewayViewerGraphqlTestModuleIntegTes
 
         GraphQLType gqltestdomain_e1 = graphQLSchema.getType("gqltestdomain_E1");
         List<GraphQLSchemaElement> children = gqltestdomain_e1.getChildren();
-        assertEquals(5, children.size());
+        assertEquals(3, children.size());
 
         GraphQLObjectType gqltestdomain_e2 = (GraphQLObjectType) graphQLSchema.getType("gqltestdomain_E2");
         List<GraphQLFieldDefinition> fields = gqltestdomain_e2.getFields();
@@ -190,7 +156,7 @@ public class GQLSchema_IntegTest extends CausewayViewerGraphqlTestModuleIntegTes
         assertEquals("gqltestdomain_E2__DomainObject_mutators", mutationType.getName());
         assertEquals(1, mutationType.getFields().size());
         GraphQLFieldDefinition graphQLFieldDefinition = mutationType.getFields().get(0);
-        assertEquals("changeE1",graphQLFieldDefinition.getName());
+        assertEquals("changeDeptHead",graphQLFieldDefinition.getName());
         GraphQLArgument mutatorArgument = graphQLFieldDefinition.getArgument("e1");
 
         GraphQLType gqltestdomain_e1__domainObject_meta = graphQLSchema.getType("gqltestdomain_E1__DomainObject_meta");

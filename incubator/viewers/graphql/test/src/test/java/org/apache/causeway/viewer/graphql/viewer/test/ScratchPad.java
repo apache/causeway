@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.source;
+package org.apache.causeway.viewer.graphql.viewer.test;
 
 import java.util.ArrayList;
 import java.util.HashSet;

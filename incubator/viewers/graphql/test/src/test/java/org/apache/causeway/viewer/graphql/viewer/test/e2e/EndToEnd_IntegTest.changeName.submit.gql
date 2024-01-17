@@ -4,7 +4,7 @@
       name_gql_mutations {
         changeName(newName:"bar") {
           name
-          e1 {
+          department {
             name
           }
         }

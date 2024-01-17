@@ -16,27 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Bounding;
-import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
@@ -45,15 +41,14 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import lombok.Getter;
 import lombok.Setter;
 
-//@Profile("demo-jpa")
 @Entity
 @Table(
         schema = "public",
-        name = "E2"
+        name = "DeptHead"
 )
-@Named("gqltestdomain.E2")
+@javax.inject.Named("gql.test.domain.DeptHead")
 @DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
-public class E2 implements TestEntity{
+public class DeptHead implements WithName {
 
     @Id
     @GeneratedValue
@@ -66,56 +61,45 @@ public class E2 implements TestEntity{
     @Getter @Setter
     @Property
     @OneToOne(optional = true)
-    @JoinColumn(name = "e1_id")
-    private E1 e1;
+    @JoinColumn(name = "department_id")
+    private Department department;
+
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public E2 changeName(final String newName){
-        setName(newName);
-        return this;
+    public class changeName {
+
+        public DeptHead act(final String newName){
+            setName(newName);
+            return DeptHead.this;
+        }
+
+        public String default0Act(){
+            return getName();
+        }
     }
 
-    public String default0ChangeName(){
-        return getName();
-    }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public E2 changeE1(final E1 e1){
-        setE1(e1);
-        return this;
+    public class changeDeptHead {
+
+        public DeptHead act(final Department department){
+            setDepartment(department);
+            return DeptHead.this;
+        }
+
+        public List<Department> choices0Act(){
+            return departmentRepository.findAll().stream().
+                    filter(d -> d != getDepartment()).
+                    collect(Collectors.toList());
+        }
+
+        public String validateAct(final Department department){
+            if (getDepartment() == department) return "Already there";
+            return null;
+        }
     }
 
-    public List<E1> choices0ChangeE1(){
-        return testEntityRepository.findAllE1().stream().filter(e->e!=getE1()).collect(Collectors.toList());
-    }
 
-    public String validateChangeE1(final E1 e1){
-        if (getE1() == e1) return "Already there";
-        return null;
-    }
-
-    @OneToMany
-    @Getter @Setter
-    private List<E2> otherE2List = new ArrayList<>();
-
-    @Getter @Setter
-    @Collection
-    private List<String> stringList = new ArrayList<>();
-
-    @Getter @Setter
-    @Collection
-    private List<Integer> zintList = new ArrayList<>();
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public List<TestEntity> otherEntities(){
-        List<TestEntity> result = new ArrayList<>();
-        result.addAll(testEntityRepository.findAllE1());
-        result.addAll(testEntityRepository.findAllE2().stream().filter(e2->e2!=this).collect(Collectors.toList()));
-        return result;
-    }
-
-    @Inject
-    @Transient
-    TestEntityRepository testEntityRepository;
+    @Inject @Transient DepartmentRepository departmentRepository;
 
 }

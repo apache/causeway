@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
-import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,17 +30,24 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //@Profile("demo-jpa")
 @Entity
 @Table(
         schema = "public",
-        name = "E1"
+        name = "Department"
 )
-@Named("gqltestdomain.E1")
+@javax.inject.Named("gql.test.domain.Department")
+@NoArgsConstructor
 @DomainObject(nature = Nature.ENTITY)
-public class E1 implements TestEntity, Comparable {
+public class Department implements WithName, Comparable {
+
+    public Department(String name, DeptHead deptHead) {
+        this.name = name;
+        this.deptHead = deptHead;
+    }
 
     @Id
     @GeneratedValue
@@ -53,12 +59,12 @@ public class E1 implements TestEntity, Comparable {
     @Getter @Setter
     @Property
     @OneToOne(optional = true)
-    @JoinColumn(name = "e2_id")
-    private E2 e2;
+    @JoinColumn(name = "employee_id")
+    private DeptHead deptHead;
 
     @Override
     public int compareTo(final Object o) {
-        E1 e1 = (E1) o;
-        return this.getName().compareTo(e1.getName());
+        Department department = (Department) o;
+        return this.getName().compareTo(department.getName());
     }
 }

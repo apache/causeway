@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,8 +37,8 @@ public class TestDomainModule implements ModuleWithFixtures {
         return new FixtureScript() {
             @Override
             protected void execute(ExecutionContext executionContext) {
-                repositoryService.removeAll(E1.class);
-                repositoryService.removeAll(E2.class);
+                repositoryService.removeAll(Department.class);
+                repositoryService.removeAll(DeptHead.class);
             }
         };
     }

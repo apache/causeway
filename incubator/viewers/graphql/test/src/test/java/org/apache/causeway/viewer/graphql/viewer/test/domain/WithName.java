@@ -16,9 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
-public interface TestEntity {
+public interface WithName {
 
     public String getName();
 

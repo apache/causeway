@@ -26,7 +26,7 @@ type Query {
   causeway_applib_UserMenu: causeway_applib_UserMenu
   causeway_conf_ConfigurationMenu: causeway_conf_ConfigurationMenu
   causeway_security_LogoutMenu: causeway_security_LogoutMenu
-  gqltestdomain_GQLTestDomainMenu: gqltestdomain_GQLTestDomainMenu
+  gql_test_domain_TopLevelMenu: gql_test_domain_TopLevelMenu
   numServices: Int
 }
 
@@ -348,46 +348,42 @@ type causeway_testing_fixtures_FixtureResult__DomainObject_meta {
   logicalTypeName: String!
 }
 
-type gqltestdomain_E1 {
-  _gql_meta: gqltestdomain_E1__DomainObject_meta
-  e2: gqltestdomain_E2
+type gql_test_domain_Department {
+  _gql_meta: gql_test_domain_Department__DomainObject_meta
+  deptHead: gql_test_domain_DeptHead
   name: String!
 }
 
-type gqltestdomain_E1__DomainObject_meta {
+type gql_test_domain_Department__DomainObject_meta {
   id: String!
   logicalTypeName: String!
   version: String
 }
 
-type gqltestdomain_E2 {
-  _gql_meta: gqltestdomain_E2__DomainObject_meta
-  _gql_mutations: gqltestdomain_E2__DomainObject_mutators
-  e1: gqltestdomain_E1
+type gql_test_domain_DeptHead {
+  _gql_meta: gql_test_domain_DeptHead__DomainObject_meta
+  _gql_mutations: gql_test_domain_DeptHead__DomainObject_mutators
+  department: gql_test_domain_Department
   name: String
-  otherE2List: [gqltestdomain_E2]
-  otherEntities: [org_apache_causeway_viewer_graphql_viewer_test_source_gqltestdomain_TestEntity]
-  stringList: [String]
-  zintList: [Int]
 }
 
-type gqltestdomain_E2__DomainObject_meta {
+type gql_test_domain_DeptHead__DomainObject_meta {
   id: String!
   logicalTypeName: String!
   version: String
 }
 
-type gqltestdomain_E2__DomainObject_mutators {
-  changeE1(e1: _gql_input__gqltestdomain_E1!): gqltestdomain_E2
-  changeName(newName: String!): gqltestdomain_E2
+type gql_test_domain_DeptHead__DomainObject_mutators {
+  changeDeptHead(department: _gql_input__gql_test_domain_Department!): gql_test_domain_DeptHead
+  changeName(newName: String!): gql_test_domain_DeptHead
 }
 
-type gqltestdomain_GQLTestDomainMenu {
-  createE1(e2: _gql_input__gqltestdomain_E2, name: String): gqltestdomain_E1
-  findAllE1: [gqltestdomain_E1]
-  findAllE2: [gqltestdomain_E2]
-  findAllTestEntities: [org_apache_causeway_viewer_graphql_viewer_test_source_gqltestdomain_TestEntity]
-  findE2(name: String): gqltestdomain_E2
+type gql_test_domain_TopLevelMenu {
+  createDepartment(deptHead: _gql_input__gql_test_domain_DeptHead, name: String): gql_test_domain_Department
+  findAllDepartments: [gql_test_domain_Department]
+  findAllDeptHeads: [gql_test_domain_DeptHead]
+  findAllEntitiesWithName: [org_apache_causeway_viewer_graphql_viewer_test_domain_WithName]
+  findDeptHeadByName(name: String): gql_test_domain_DeptHead
 }
 
 type java_lang_Runnable {
@@ -623,12 +619,12 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__D
   logicalTypeName: String!
 }
 
-type org_apache_causeway_viewer_graphql_viewer_test_source_gqltestdomain_TestEntity {
-  _gql_meta: org_apache_causeway_viewer_graphql_viewer_test_source_gqltestdomain_TestEntity__DomainObject_meta
+type org_apache_causeway_viewer_graphql_viewer_test_domain_WithName {
+  _gql_meta: org_apache_causeway_viewer_graphql_viewer_test_domain_WithName__DomainObject_meta
   name: String!
 }
 
-type org_apache_causeway_viewer_graphql_viewer_test_source_gqltestdomain_TestEntity__DomainObject_meta {
+type org_apache_causeway_viewer_graphql_viewer_test_domain_WithName__DomainObject_meta {
   id: String!
   logicalTypeName: String!
 }
@@ -725,11 +721,11 @@ input _gql_input__causeway_testing_fixtures_FixtureResult {
   id: ID!
 }
 
-input _gql_input__gqltestdomain_E1 {
+input _gql_input__gql_test_domain_Department {
   id: ID!
 }
 
-input _gql_input__gqltestdomain_E2 {
+input _gql_input__gql_test_domain_DeptHead {
   id: ID!
 }
 
@@ -801,6 +797,6 @@ input _gql_input__org_apache_causeway_testing_fixtures_applib_fixturescripts_Fix
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_viewer_graphql_viewer_test_source_gqltestdomain_TestEntity {
+input _gql_input__org_apache_causeway_viewer_graphql_viewer_test_domain_WithName {
   id: ID!
 }
