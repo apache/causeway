@@ -347,10 +347,16 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
         Objects.requireNonNull(interactionService, "causewayInteractionFactory");
         Objects.requireNonNull(specificationLoader, "specificationLoader");
 
-        ensureMetamodelIsValid(specificationLoader);
-
         val httpServletRequest = (HttpServletRequest) request;
         val httpServletResponse = (HttpServletResponse) response;
+
+        // check that the app has bootstrapped; if it hasn't, then return a 503 (rather than a huge stack trace)
+        try {
+            ensureMetamodelIsValid(specificationLoader);
+        } catch (Exception ex) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+            return;
+        }
 
         try {
             val queryString = httpServletRequest.getQueryString();
