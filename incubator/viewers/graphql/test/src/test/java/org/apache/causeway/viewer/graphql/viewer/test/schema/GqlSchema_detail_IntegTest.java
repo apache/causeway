@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.commons.internal.ioc._IocContainer;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -170,9 +171,6 @@ public class GqlSchema_detail_IntegTest extends CausewayViewerGraphqlTestModuleI
         assertTrue(codeRegistry.hasDataFetcher(FieldCoordinates.coordinates("gqltestdomain_E1", "e2")));
         DataFetcher<?> dataFetcher = codeRegistry.getDataFetcher(FieldCoordinates.coordinates("gqltestdomain_E1", "e2"), (GraphQLFieldDefinition) gqltestdomain_e1.getChildren().get(0));
         assertNotNull(dataFetcher);
-
-
     }
-
 
 }

@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -60,17 +63,19 @@ public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIn
         assertNotNull(graphQlSourceForCauseway);
     }
 
-    @UseReporter({MyWinMergeDiffReporter.class, DiffReporter.class})
     @Test
-    void schema() {
+    void schema() throws Exception {
+
         val graphQL = graphQlSourceForCauseway.graphQl();
         val graphQLSchema = graphQL.getGraphQLSchema();
 
         val printer = new SchemaPrinter();
 
-        val schemaDefinition = printer.print(graphQLSchema);
+        val submit = printer.print(graphQLSchema);
 
-        Approvals.verify(schemaDefinition, gqlSchemaOptions());
+        File targetFile1 = new File("src/test/resources/schema.gql");
+
+        Files.write(Paths.get(targetFile1.getPath()), submit.getBytes());
     }
 
     private Options gqlSchemaOptions() {

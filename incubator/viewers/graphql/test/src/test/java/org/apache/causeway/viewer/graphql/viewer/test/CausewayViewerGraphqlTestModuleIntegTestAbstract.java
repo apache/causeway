@@ -141,7 +141,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
     protected HttpGraphQlTester graphQlTester() {
         WebTestClient client =
                 WebTestClient.bindToServer()
-                        .baseUrl("http://0.0.0.0:" + port + "/graphql")
+                        .baseUrl(String.format("http://0.0.0.0:%d/graphql", port))
                         .build();
         return HttpGraphQlTester.create(client);
     }
@@ -155,7 +155,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
      * @throws Exception if an error occurs during the submission
      */
     protected String submit() throws Exception{
-        val httpRequest = buildRequest(testInfo, ".submit.gql");
+        val httpRequest = buildRequest(testInfo, ".gql");
         return submitRequest(httpRequest);
     }
 

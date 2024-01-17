@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -25,6 +26,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +57,7 @@ import org.approvaltests.reporters.TextWebReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
@@ -91,6 +96,12 @@ public class EndToEnd_IntegTest extends CausewayViewerGraphqlTestModuleIntegTest
             departmentRepository.removeAll();
             deptHeadRepository.removeAll();
         });
+    }
+
+    @Test
+    @UseReporter({MyWinMergeDiffReporter.class, DiffReporter.class})
+    void schema() throws Exception {
+        Approvals.verify(submit(), jsonOptions());
     }
 
     @Test
