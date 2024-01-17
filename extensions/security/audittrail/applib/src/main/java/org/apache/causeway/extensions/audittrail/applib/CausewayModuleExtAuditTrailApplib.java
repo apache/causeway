@@ -20,13 +20,12 @@
 
 package org.apache.causeway.extensions.audittrail.applib;
 
-import org.apache.causeway.extensions.audittrail.applib.contributions.Object_createdByCommand;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.extensions.audittrail.applib.app.AuditTrailMenu;
 import org.apache.causeway.extensions.audittrail.applib.contributions.HasInteractionId_auditTrailEntries;
+import org.apache.causeway.extensions.audittrail.applib.contributions.Object_createdByCommand;
 import org.apache.causeway.extensions.audittrail.applib.contributions.Object_recentAuditTrailEntries;
 import org.apache.causeway.extensions.audittrail.applib.spiimpl.EntityPropertyChangeSubscriberForAuditTrail;
 
