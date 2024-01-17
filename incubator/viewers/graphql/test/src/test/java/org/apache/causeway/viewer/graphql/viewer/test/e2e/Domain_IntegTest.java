@@ -20,19 +20,16 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
 import lombok.val;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
-import org.approvaltests.reporters.TextWebReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -44,7 +41,7 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.TopLevelMenu;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentMenu;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
 import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
@@ -56,7 +53,7 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Inject DepartmentRepository departmentRepository;
     @Inject DeptHeadRepository deptHeadRepository;
-    @Inject TopLevelMenu topLevelMenu;
+    @Inject DepartmentMenu departmentMenu;
 
     @AfterEach
     void afterEach(){

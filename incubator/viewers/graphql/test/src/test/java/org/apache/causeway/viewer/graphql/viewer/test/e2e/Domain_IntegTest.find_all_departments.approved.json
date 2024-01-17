@@ -1,18 +1,18 @@
 {
   "data" : {
-    "gql_test_domain_TopLevelMenu" : {
+    "university_dept_DepartmentMenu" : {
       "findAllDepartments" : [ {
         "name" : "foo",
         "_gql_meta" : {
           "id" : "2",
-          "logicalTypeName" : "gql.test.domain.Department",
+          "logicalTypeName" : "university.dept.Department",
           "version" : null
         }
       }, {
         "name" : "bar",
         "_gql_meta" : {
           "id" : "3",
-          "logicalTypeName" : "gql.test.domain.Department",
+          "logicalTypeName" : "university.dept.Department",
           "version" : null
         }
       } ]

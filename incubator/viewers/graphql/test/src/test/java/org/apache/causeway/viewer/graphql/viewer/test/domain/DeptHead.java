@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,9 +47,9 @@ import lombok.Setter;
         schema = "public",
         name = "DeptHead"
 )
-@javax.inject.Named("gql.test.domain.DeptHead")
+@javax.inject.Named("university.dept.DeptHead")
 @DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
-public class DeptHead implements WithName {
+public class DeptHead implements Comparable<DeptHead> {
 
     @Id
     @GeneratedValue
@@ -99,7 +100,12 @@ public class DeptHead implements WithName {
         }
     }
 
+    @Override
+    public int compareTo(final DeptHead o) {
+        return Comparator.comparing(DeptHead::getName).compare(this, o);
+    }
 
     @Inject @Transient DepartmentRepository departmentRepository;
+
 
 }

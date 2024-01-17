@@ -26,8 +26,9 @@ type Query {
   causeway_applib_UserMenu: causeway_applib_UserMenu
   causeway_conf_ConfigurationMenu: causeway_conf_ConfigurationMenu
   causeway_security_LogoutMenu: causeway_security_LogoutMenu
-  gql_test_domain_TopLevelMenu: gql_test_domain_TopLevelMenu
   numServices: Int
+  university_dept_DepartmentMenu: university_dept_DepartmentMenu
+  university_dept_DeptHeadMenu: university_dept_DeptHeadMenu
 }
 
 type causeway_applib_DomainObjectList {
@@ -348,44 +349,6 @@ type causeway_testing_fixtures_FixtureResult__DomainObject_meta {
   logicalTypeName: String!
 }
 
-type gql_test_domain_Department {
-  _gql_meta: gql_test_domain_Department__DomainObject_meta
-  deptHead: gql_test_domain_DeptHead
-  name: String!
-}
-
-type gql_test_domain_Department__DomainObject_meta {
-  id: String!
-  logicalTypeName: String!
-  version: String
-}
-
-type gql_test_domain_DeptHead {
-  _gql_meta: gql_test_domain_DeptHead__DomainObject_meta
-  _gql_mutations: gql_test_domain_DeptHead__DomainObject_mutators
-  department: gql_test_domain_Department
-  name: String
-}
-
-type gql_test_domain_DeptHead__DomainObject_meta {
-  id: String!
-  logicalTypeName: String!
-  version: String
-}
-
-type gql_test_domain_DeptHead__DomainObject_mutators {
-  changeDepartment(department: _gql_input__gql_test_domain_Department!): gql_test_domain_DeptHead
-  changeName(newName: String!): gql_test_domain_DeptHead
-}
-
-type gql_test_domain_TopLevelMenu {
-  createDepartment(deptHead: _gql_input__gql_test_domain_DeptHead, name: String): gql_test_domain_Department
-  findAllDepartments: [gql_test_domain_Department]
-  findAllDeptHeads: [gql_test_domain_DeptHead]
-  findAllEntitiesWithName: [org_apache_causeway_viewer_graphql_viewer_test_domain_WithName]
-  findDeptHeadByName(name: String): gql_test_domain_DeptHead
-}
-
 type java_lang_Runnable {
   _gql_meta: java_lang_Runnable__DomainObject_meta
 }
@@ -619,14 +582,44 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__D
   logicalTypeName: String!
 }
 
-type org_apache_causeway_viewer_graphql_viewer_test_domain_WithName {
-  _gql_meta: org_apache_causeway_viewer_graphql_viewer_test_domain_WithName__DomainObject_meta
+type university_dept_Department {
+  _gql_meta: university_dept_Department__DomainObject_meta
+  deptHead: university_dept_DeptHead
   name: String!
 }
 
-type org_apache_causeway_viewer_graphql_viewer_test_domain_WithName__DomainObject_meta {
+type university_dept_DepartmentMenu {
+  createDepartment(deptHead: _gql_input__university_dept_DeptHead, name: String): university_dept_Department
+  findAllDepartments: [university_dept_Department]
+}
+
+type university_dept_Department__DomainObject_meta {
   id: String!
   logicalTypeName: String!
+  version: String
+}
+
+type university_dept_DeptHead {
+  _gql_meta: university_dept_DeptHead__DomainObject_meta
+  _gql_mutations: university_dept_DeptHead__DomainObject_mutators
+  department: university_dept_Department
+  name: String
+}
+
+type university_dept_DeptHeadMenu {
+  findAllDeptHeads: [university_dept_DeptHead]
+  findDeptHeadByName(name: String): university_dept_DeptHead
+}
+
+type university_dept_DeptHead__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+  version: String
+}
+
+type university_dept_DeptHead__DomainObject_mutators {
+  changeDepartment(department: _gql_input__university_dept_Department!): university_dept_DeptHead
+  changeName(newName: String!): university_dept_DeptHead
 }
 
 input _gql_input__causeway_applib_DomainObjectList {
@@ -721,14 +714,6 @@ input _gql_input__causeway_testing_fixtures_FixtureResult {
   id: ID!
 }
 
-input _gql_input__gql_test_domain_Department {
-  id: ID!
-}
-
-input _gql_input__gql_test_domain_DeptHead {
-  id: ID!
-}
-
 input _gql_input__java_lang_Runnable {
   id: ID!
 }
@@ -797,6 +782,10 @@ input _gql_input__org_apache_causeway_testing_fixtures_applib_fixturescripts_Fix
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_viewer_graphql_viewer_test_domain_WithName {
+input _gql_input__university_dept_Department {
+  id: ID!
+}
+
+input _gql_input__university_dept_DeptHead {
   id: ID!
 }

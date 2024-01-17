@@ -1,6 +1,6 @@
 {
   "data" : {
-    "gql_test_domain_TopLevelMenu" : {
+    "university_dept_DepartmentMenu" : {
       "createDepartment" : {
         "name" : "newbie"
       }

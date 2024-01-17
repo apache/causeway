@@ -33,16 +33,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//@Profile("demo-jpa")
+import java.util.Comparator;
+
 @Entity
 @Table(
         schema = "public",
         name = "Department"
 )
-@javax.inject.Named("gql.test.domain.Department")
+@javax.inject.Named("university.dept.Department")
 @NoArgsConstructor
 @DomainObject(nature = Nature.ENTITY)
-public class Department implements WithName, Comparable {
+public class Department implements Comparable<Department> {
 
     public Department(String name, DeptHead deptHead) {
         this.name = name;
@@ -59,12 +60,11 @@ public class Department implements WithName, Comparable {
     @Getter @Setter
     @Property
     @OneToOne(optional = true)
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "deptHead_id")
     private DeptHead deptHead;
 
     @Override
-    public int compareTo(final Object o) {
-        Department department = (Department) o;
-        return this.getName().compareTo(department.getName());
+    public int compareTo(final Department o) {
+        return Comparator.comparing(Department::getName).compare(this, o);
     }
 }

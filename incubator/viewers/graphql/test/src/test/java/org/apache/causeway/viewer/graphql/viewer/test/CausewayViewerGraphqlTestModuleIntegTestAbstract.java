@@ -65,7 +65,7 @@ import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistence
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.viewer.graphql.viewer.CausewayModuleIncViewerGraphqlViewer;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.TestDomainModule;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -99,7 +99,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
             CausewayModuleTestingFixturesApplib.class,
             CausewayModuleIncViewerGraphqlViewer.class,
 
-            TestDomainModule.class
+            UniversityModule.class
     })
     @PropertySources({
             @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),

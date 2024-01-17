@@ -18,32 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
-import org.approvaltests.reporters.TextWebReporter;
 import org.approvaltests.reporters.UseReporter;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.TopLevelMenu;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;

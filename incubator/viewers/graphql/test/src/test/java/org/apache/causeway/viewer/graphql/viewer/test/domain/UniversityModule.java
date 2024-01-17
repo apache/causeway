@@ -29,8 +29,8 @@ import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 @Configuration
 @ComponentScan
 @EnableJpaRepositories
-@EntityScan(basePackageClasses = {TestDomainModule.class})
-public class TestDomainModule implements ModuleWithFixtures {
+@EntityScan(basePackageClasses = {UniversityModule.class})
+public class UniversityModule implements ModuleWithFixtures {
 
     @Override
     public FixtureScript getTeardownFixture() {

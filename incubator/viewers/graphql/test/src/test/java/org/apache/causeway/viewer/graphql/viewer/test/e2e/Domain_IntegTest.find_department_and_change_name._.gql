@@ -1,5 +1,5 @@
 {
-    gql_test_domain_TopLevelMenu {
+    university_dept_DeptHeadMenu {
         findDeptHeadByName(name: "foo") {
             _gql_mutations {
                 changeName(newName: "bar") {

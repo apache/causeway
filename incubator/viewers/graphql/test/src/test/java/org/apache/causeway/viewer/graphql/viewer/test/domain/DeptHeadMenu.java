@@ -33,38 +33,17 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("gql.test.domain.TopLevelMenu")
-@DomainService(
-        nature=NatureOfService.VIEW)
+@Named("university.dept.DeptHeadMenu")
+@DomainService(nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class TopLevelMenu {
+public class DeptHeadMenu {
 
-    final DepartmentRepository departmentRepository;
     final DeptHeadRepository deptHeadRepository;
-    final WithNameRepository withNameRepository;
-
-    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public Department createDepartment(
-            final String name,
-            @Nullable final DeptHead deptHead
-    ){
-        return departmentRepository.create(name, deptHead);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public List<Department> findAllDepartments(){
-        return departmentRepository.findAll();
-    }
 
     @Action(semantics = SemanticsOf.SAFE)
     public List<DeptHead> findAllDeptHeads(){
         return deptHeadRepository.findAll();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public List<WithName> findAllEntitiesWithName(){
-        return withNameRepository.findAll();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

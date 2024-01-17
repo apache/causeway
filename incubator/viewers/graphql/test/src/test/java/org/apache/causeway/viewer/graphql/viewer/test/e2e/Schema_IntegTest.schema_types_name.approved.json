@@ -74,10 +74,6 @@
       }, {
         "name" : "_gql_input__causeway_testing_fixtures_FixtureResult"
       }, {
-        "name" : "_gql_input__gql_test_domain_Department"
-      }, {
-        "name" : "_gql_input__gql_test_domain_DeptHead"
-      }, {
         "name" : "_gql_input__java_lang_Runnable"
       }, {
         "name" : "_gql_input__java_util_Map"
@@ -112,7 +108,9 @@
       }, {
         "name" : "_gql_input__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript"
       }, {
-        "name" : "_gql_input__org_apache_causeway_viewer_graphql_viewer_test_domain_WithName"
+        "name" : "_gql_input__university_dept_Department"
+      }, {
+        "name" : "_gql_input__university_dept_DeptHead"
       }, {
         "name" : "causeway_applib_DomainObjectList"
       }, {
@@ -218,18 +216,6 @@
       }, {
         "name" : "causeway_testing_fixtures_FixtureResult__DomainObject_meta"
       }, {
-        "name" : "gql_test_domain_Department"
-      }, {
-        "name" : "gql_test_domain_Department__DomainObject_meta"
-      }, {
-        "name" : "gql_test_domain_DeptHead"
-      }, {
-        "name" : "gql_test_domain_DeptHead__DomainObject_meta"
-      }, {
-        "name" : "gql_test_domain_DeptHead__DomainObject_mutators"
-      }, {
-        "name" : "gql_test_domain_TopLevelMenu"
-      }, {
         "name" : "java_lang_Runnable"
       }, {
         "name" : "java_lang_Runnable__DomainObject_meta"
@@ -312,9 +298,19 @@
       }, {
         "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta"
       }, {
-        "name" : "org_apache_causeway_viewer_graphql_viewer_test_domain_WithName"
+        "name" : "university_dept_Department"
       }, {
-        "name" : "org_apache_causeway_viewer_graphql_viewer_test_domain_WithName__DomainObject_meta"
+        "name" : "university_dept_DepartmentMenu"
+      }, {
+        "name" : "university_dept_Department__DomainObject_meta"
+      }, {
+        "name" : "university_dept_DeptHead"
+      }, {
+        "name" : "university_dept_DeptHeadMenu"
+      }, {
+        "name" : "university_dept_DeptHead__DomainObject_meta"
+      }, {
+        "name" : "university_dept_DeptHead__DomainObject_mutators"
       } ]
     }
   }
