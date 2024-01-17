@@ -20,6 +20,8 @@
 
 package org.apache.causeway.extensions.audittrail.applib;
 
+import org.apache.causeway.extensions.audittrail.applib.contributions.Object_createdByCommand;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -34,7 +36,8 @@ import org.apache.causeway.extensions.audittrail.applib.spiimpl.EntityPropertyCh
         EntityPropertyChangeSubscriberForAuditTrail.class,
 
         HasInteractionId_auditTrailEntries.class,
-        Object_recentAuditTrailEntries.class
+        Object_recentAuditTrailEntries.class,
+        Object_createdByCommand.class,
 })
 public class CausewayModuleExtAuditTrailApplib {
 
