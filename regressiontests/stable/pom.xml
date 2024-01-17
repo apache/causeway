@@ -42,7 +42,12 @@
 
 	<dependencies>
 
-		<dependency>
+        <dependency>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-commons</artifactId>
+        </dependency>
+
+        <dependency>
 			<groupId>org.apache.causeway.persistence</groupId>
 			<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
 			<optional>true</optional>
