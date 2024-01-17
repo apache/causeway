@@ -4806,7 +4806,7 @@
         "name" : "gql_test_domain_DeptHead__DomainObject_mutators",
         "description" : null,
         "fields" : [ {
-          "name" : "changeDeptHead",
+          "name" : "changeDepartment",
           "description" : null,
           "args" : [ {
             "name" : "department",

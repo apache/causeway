@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "gql_test_domain_TopLevelMenu" : {
+      "createDepartment" : {
+        "name" : "newbie"
+      }
+    }
+  }
+}

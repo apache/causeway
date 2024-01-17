@@ -374,7 +374,7 @@ type gql_test_domain_DeptHead__DomainObject_meta {
 }
 
 type gql_test_domain_DeptHead__DomainObject_mutators {
-  changeDeptHead(department: _gql_input__gql_test_domain_Department!): gql_test_domain_DeptHead
+  changeDepartment(department: _gql_input__gql_test_domain_Department!): gql_test_domain_DeptHead
   changeName(newName: String!): gql_test_domain_DeptHead
 }
 

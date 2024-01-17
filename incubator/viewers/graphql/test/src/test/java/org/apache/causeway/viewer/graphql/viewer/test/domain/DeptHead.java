@@ -80,7 +80,7 @@ public class DeptHead implements WithName {
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public class changeDeptHead {
+    public class changeDepartment {
 
         public DeptHead act(final Department department){
             setDepartment(department);

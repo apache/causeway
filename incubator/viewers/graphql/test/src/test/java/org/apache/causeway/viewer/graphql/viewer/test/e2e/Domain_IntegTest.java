@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
+import lombok.val;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.TextWebReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
@@ -86,78 +89,56 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
         Approvals.verify(submit(), jsonOptions());
     }
 
-    //TODO started to fail on 2022-09-04, with testEntityRepository findAll being empty
-    @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    @Test
     @UseReporter(DiffReporter.class)
-    void createE1() throws Exception {
+    void create_department() throws Exception {
 
-        //File targetFile3 = new File("src/test/resources/testfiles/targetFile3.gql");
+        // when
+        val response = submit();
 
-        String response1 = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+        // then payload
+        Approvals.verify(response, jsonOptions());
 
-            String submit = submit();
-            // just to show we need to query in separate tranasction
-            List<DeptHead> list = deptHeadRepository.findAll();
-            assertTrue(list.isEmpty());
-            return submit;
+        // and also in the database
+        final List<Department> allDepartment =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> departmentRepository.findAll()
+                ).valueAsNonNullElseFail();
 
-        }).ifFailureFail().getValue().get();
-
-        final List<Department> allDepartment = new ArrayList<>();
-        transactionService.runTransactional(Propagation.REQUIRED, () -> {
-
-            List<Department> all = departmentRepository.findAll();
-            allDepartment.addAll(all);
-
-        });
-
-        assertEquals(1, allDepartment.size());
-        assertEquals("newbee", allDepartment.get(0).getName());
-
-        Approvals.verify(response1, jsonOptions());
-
+        assertThat(allDepartment)
+                .hasSize(1)
+                .element(0)
+                .extracting(Department::getName).isEqualTo("newbie");
     }
 
-    //TODO started to fail on 2023-07-25
-    //disabled to rescue CI build
-    @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    @Test
+    @Disabled // does not yet call 'changeName' action
     @UseReporter(DiffReporter.class)
-    void changeName() throws Exception {
+    void find_department_and_change_name() throws Exception {
 
-        List<DeptHead> deptHeadList = new ArrayList<>();
+        // given
+        transactionService.callTransactional(
+                Propagation.REQUIRED,
+                () -> deptHeadRepository.create("foo", null)
+        ).valueAsNonNullElseFail();
 
-        transactionService.runTransactional(Propagation.REQUIRED, () -> {
+        // when lookup 'foo' and change it to 'bar'
+        String response = transactionService.callTransactional(
+                Propagation.REQUIRED,
+                this::submit
+        ).valueAsNonNullElseFail();
 
-            deptHeadList.add(deptHeadRepository.create("foo", null));
+        // then payload
+        Approvals.verify(response, jsonOptions());
 
-        });
+        // and also in the database
+        DeptHead deptHeadAfter = transactionService.callTransactional(
+                Propagation.REQUIRED,
+                () -> deptHeadRepository.findByName("bar")
+        ).valueAsNullableElseFail();
 
-        DeptHead deptHead = deptHeadList.get(0);
-        assertEquals("foo", deptHead.getName());
-        assertEquals(deptHead.getName(), topLevelMenu.findDeptHeadByName("foo").getName());
-
-        String response = transactionService.callTransactional(Propagation.REQUIRED, () -> {
-
-            return submit();
-
-        }).ifFailureFail().getValue().get();
-
-        deptHeadList.clear();
-        transactionService.runTransactional(Propagation.REQUIRED, () -> {
-
-            List<DeptHead> all = deptHeadRepository.findAll();
-            deptHeadList.addAll(all);
-
-        });
-
-        DeptHead deptHeadModified = deptHeadList.get(0);
-
-        //TODO: implement ...
-//        assertEquals("bar", deptHeadModified.getName());
-//
-//        Approvals.verify(response, new Options());
-
+        assertThat(deptHeadAfter).isNotNull();
     }
-
 
 }

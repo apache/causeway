@@ -48,4 +48,11 @@ public class DepartmentRepository {
         repositoryService.removeAll(Department.class);
     }
 
+    public Department findByName(final String name){
+        return findAll().stream().
+                filter(dept -> dept.getName().equals(name)).
+                findFirst().
+                orElse(null);
+    }
+
 }

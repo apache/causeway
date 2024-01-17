@@ -1,0 +1,14 @@
+{
+    gql_test_domain_TopLevelMenu {
+        findDeptHeadByName(name: "foo") {
+            _gql_mutations {
+                changeName(newName: "bar") {
+                    name
+                    department {
+                        name
+                    }
+                }
+            }
+        }
+    }
+}

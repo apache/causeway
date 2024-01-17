@@ -49,7 +49,10 @@ public class DeptHeadRepository {
     }
 
     public DeptHead findByName(final String name){
-        return findAll().stream().filter(e2->e2.getName().equals(name)).findFirst().orElse(null);
+        return findAll().stream().
+                filter(deptHead -> deptHead.getName().equals(name)).
+                findFirst().
+                orElse(null);
     }
 
 }
