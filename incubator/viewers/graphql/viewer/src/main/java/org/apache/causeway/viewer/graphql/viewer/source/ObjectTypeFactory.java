@@ -356,7 +356,7 @@ public class ObjectTypeFactory {
 //
 //                    Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
 //                    if (bookmark == null) return null; //TODO: is this correct ?
-//                    return new GQLMutations(bookmark, bookmarkService, mutatorsTypeFields);
+//                    return new GqlMutations(bookmark, bookmarkService, mutatorsTypeFields);
 //                }
 //            });
 //
