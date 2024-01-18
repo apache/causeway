@@ -19,11 +19,8 @@
  */
 package org.apache.causeway.extensions.audittrail.applib.contributions;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -33,8 +30,6 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
@@ -50,7 +45,6 @@ import lombok.val;
 /**
  * @since 2.0 {@index}
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Action(
         commandPublishing = Publishing.DISABLED,
         domainEvent = Object_createdByCommand.ActionDomainEvent.class,

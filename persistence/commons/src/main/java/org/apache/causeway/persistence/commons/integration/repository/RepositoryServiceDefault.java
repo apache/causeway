@@ -22,17 +22,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Named;
-
-import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -58,6 +53,8 @@ import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import lombok.Getter;
 import lombok.NonNull;

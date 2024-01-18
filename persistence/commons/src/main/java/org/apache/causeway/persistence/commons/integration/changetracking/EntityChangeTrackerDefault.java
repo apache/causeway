@@ -32,12 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
-
-import org.apache.causeway.persistence.commons.integration.repository.RepositoryServiceDefault;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
@@ -62,6 +56,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -70,10 +65,12 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.HasEnlistedEn
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
+import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.causeway.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -162,7 +159,7 @@ implements
         persistentChangesEncountered.set(false);
     }
 
-    private void suppressAutoFlushIfRequired(Runnable runnable) {
+    private void suppressAutoFlushIfRequired(final Runnable runnable) {
         if (suppressAutoFlush) {
             FlushMgmt.suppressAutoFlush(runnable);
         } else {
@@ -200,7 +197,7 @@ implements
         return records;
     }
 
-    private boolean shouldPublish(PreAndPostValue preAndPostValue) {
+    private boolean shouldPublish(final PreAndPostValue preAndPostValue) {
         return preAndPostValueEvaluatorService.differ(preAndPostValue);
     }
 

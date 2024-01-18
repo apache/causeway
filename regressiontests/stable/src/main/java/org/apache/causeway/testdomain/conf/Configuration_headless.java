@@ -20,8 +20,6 @@ package org.apache.causeway.testdomain.conf;
 
 import javax.inject.Singleton;
 
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -33,9 +31,9 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
