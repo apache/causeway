@@ -20,14 +20,20 @@ package org.apache.causeway.viewer.graphql.viewer.source;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.Data;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Data
 public class GQLMeta {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;
+    private final ObjectManager objectManager;
 
     public String logicalTypeName(){
         return bookmark.getLogicalTypeName();
@@ -39,10 +45,15 @@ public class GQLMeta {
 
     public String version(){
         Object domainObject = bookmarkService.lookup(bookmark).orElse(null);
-        if (domainObject == null) return null;
-
-        // TODO: implement; we would like to be this independent of the persistence mechanism
-        return null;
+        if (domainObject == null) {
+            return null;
+        }
+        EntityFacet entityFacet = objectManager.adapt(domainObject).getSpecification().getFacet(EntityFacet.class);
+        return Optional.ofNullable(entityFacet)
+                .map(x -> x.versionOf(domainObject))
+                .filter(Objects::nonNull)
+                .map(Object::toString)
+                .orElse(null);
     }
 
 }

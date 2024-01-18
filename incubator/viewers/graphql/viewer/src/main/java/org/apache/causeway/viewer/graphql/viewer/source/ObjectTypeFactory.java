@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -70,6 +72,7 @@ public class ObjectTypeFactory {
 
     private final BookmarkService bookmarkService;
     private final SpecificationLoader specificationLoader;
+    private final ObjectManager objectManager;
 
     private static GraphQLFieldDefinition idField = newFieldDefinition()
             .name("id").type(nonNull(Scalars.GraphQLString)).build();
@@ -462,31 +465,24 @@ public class ObjectTypeFactory {
             final GraphQLObjectType graphQLObjectType) {
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), (DataFetcher<Object>) environment -> {
-
-            Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
-            if (bookmark == null) return null; //TODO: is this correct ?
-            return new GQLMeta(bookmark, bookmarkService);
+            return bookmarkService.bookmarkFor(environment.getSource())
+                    .map(bookmark -> new GQLMeta(bookmark, bookmarkService, objectManager))
+                    .orElse(null); //TODO: is this correct ?
         });
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, idField), (DataFetcher<Object>) environment -> {
-
             GQLMeta gqlMeta = environment.getSource();
-
             return gqlMeta.id();
         });
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, logicalTypeNameField), (DataFetcher<Object>) environment -> {
-
             GQLMeta gqlMeta = environment.getSource();
-
             return gqlMeta.logicalTypeName();
         });
 
         if (objectSpecificationBeanSort == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, versionField), (DataFetcher<Object>) environment -> {
-
                 GQLMeta gqlMeta = environment.getSource();
-
                 return gqlMeta.version();
             });
 
