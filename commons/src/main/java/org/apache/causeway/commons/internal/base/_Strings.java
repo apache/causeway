@@ -828,6 +828,12 @@ public final class _Strings {
 
     public static final StringOperator asLowerCase = _Strings::lower;
 
+    /**
+     * Converts given literal into a double-quoted literal, unless the literal is {@code null},
+     * in which case {@code ""} is returned.
+     */
+    public static final StringOperator asDoubleQuoted = s->s!=null ? "\"" + s + "\"" : "\"\"";
+
     public static final StringOperator asLowerDashed = asLowerCase
             .compose(s->_Strings.condenseWhitespaces(s, "-"));
 
