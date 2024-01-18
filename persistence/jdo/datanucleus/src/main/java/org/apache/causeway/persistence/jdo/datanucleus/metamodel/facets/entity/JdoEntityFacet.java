@@ -27,6 +27,7 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.jdo.FetchGroup;
+import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 
 import org.datanucleus.api.jdo.JDOQuery;
@@ -366,6 +367,14 @@ implements EntityFacet {
     @Override
     public EntityState getEntityState(final Object pojo) {
         return DnEntityStateProvider.entityState(pojo);
+    }
+
+    @Override
+    public Object versionOf(Object pojo) {
+        if (getEntityState(pojo).isAttached()) {
+            return JDOHelper.getVersion(pojo);
+        }
+        return null;
     }
 
     @Override
