@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
@@ -55,6 +56,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -63,10 +65,12 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.HasEnlistedEn
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
+import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.causeway.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -90,7 +94,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @TransactionScope
-@Named("causeway.persistence.commons.EntityChangeTrackerDefault")
+@Named(CausewayModulePersistenceCommons.NAMESPACE + ".EntityChangeTrackerDefault")
 @Qualifier("default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
@@ -113,6 +117,7 @@ implements
     private final EntityChangesPublisher entityChangesPublisher;
     private final Provider<InteractionProvider> interactionProviderProvider;
     private final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService;
+    private final CausewayConfiguration causewayConfiguration;
 
     /**
      * Contains a record for every objectId/propertyId that was changed.
@@ -135,6 +140,14 @@ implements
     private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
 
+    private boolean suppressAutoFlush;
+
+    @PostConstruct
+    public void init() {
+        this.suppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
+    }
+
+
     @Override
     public void destroy() throws Exception {
         enlistedPropertyChangeRecordsById.clear();
@@ -145,6 +158,15 @@ implements
         entityChangeEventCount.reset();
         persistentChangesEncountered.set(false);
     }
+
+    private void suppressAutoFlushIfRequired(final Runnable runnable) {
+        if (suppressAutoFlush) {
+            FlushMgmt.suppressAutoFlush(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
 
     Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
@@ -175,7 +197,7 @@ implements
         return records;
     }
 
-    private boolean shouldPublish(PreAndPostValue preAndPostValue) {
+    private boolean shouldPublish(final PreAndPostValue preAndPostValue) {
         return preAndPostValueEvaluatorService.differ(preAndPostValue);
     }
 
@@ -309,12 +331,14 @@ implements
             return;
         }
 
-        log.debug("enlist entity's property changes for publishing {}", entity);
-        enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
+        suppressAutoFlushIfRequired(() -> {
+            log.debug("enlist entity's property changes for publishing {}", entity);
+            enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
 
-        MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
+            MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
+                    .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                    .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
+        });
     }
 
     @Override
@@ -330,28 +354,30 @@ implements
 
         log.debug("enlist entity's property changes for publishing {}", entity);
 
-        // we call this come what may;
-        // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
+        suppressAutoFlushIfRequired(() -> {
+            // we call this come what may;
+            // additional properties may now have been changed, and the changeKind for publishing might also be modified
+            enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
 
-        final Can<PropertyChangeRecord> ormPropertyChangeRecords = propertyChangeRecordSupplier!=null
-                ? propertyChangeRecordSupplier.apply(entity)
-                : null;
+            final Can<PropertyChangeRecord> ormPropertyChangeRecords = propertyChangeRecordSupplier !=null
+                    ? propertyChangeRecordSupplier.apply(entity)
+                    : null;
 
-        if(ormPropertyChangeRecords != null) {
-            // provided by ORM
-            ormPropertyChangeRecords
-                    .stream()
-                    .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
-                    .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
-        } else {
-            // home-grown approach
-            MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                    .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                    .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
-                    .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
-                    .forEach(PropertyChangeRecord::withPreValueSetToCurrent);
-        }
+            if(ormPropertyChangeRecords != null) {
+                // provided by ORM
+                ormPropertyChangeRecords
+                        .stream()
+                        .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
+                        .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
+            } else {
+                // home-grown approach
+                MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
+                        .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                        .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
+                        .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
+                        .forEach(PropertyChangeRecord::withPreValueSetToCurrent);
+            }
+        });
     }
 
     @Override
@@ -363,14 +389,16 @@ implements
             return;
         }
 
-        final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
-        if(enlisted) {
-            log.debug("enlist entity's property changes for publishing {}", entity);
+        suppressAutoFlushIfRequired(() -> {
+            final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
+            if(enlisted) {
+                log.debug("enlist entity's property changes for publishing {}", entity);
 
-            MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                    .forEach(pcrId -> enlistedPropertyChangeRecordsById
-                            .computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
-        }
+                MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
+                        .forEach(pcrId -> enlistedPropertyChangeRecordsById
+                                .computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
+            }
+        });
     }
 
     /**

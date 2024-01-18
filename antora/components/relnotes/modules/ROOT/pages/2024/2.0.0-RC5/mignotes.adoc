@@ -5,9 +5,7 @@
 
 This page will be added to as development progresses.
 
-== AuditTrailEntryRepository and others have simplified the API.
-
-
+== AuditTrailEntryRepository and others have simplified the API (CAUSEWAY-3390)
 
 In this release the `AuditTrailEntryRepository` and similar is no longer parameterized by the entity type, and is also an interface.
 
@@ -34,4 +32,23 @@ This applies to:
 * xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntryRepository.adoc[]
 
 For more details, see link:https://issues.apache.org/jira/browse/CAUSEWAY-3390[CAUSEWAY-3390].
+
+
+== Auto-flush management (CAUSEWAY-3675)
+
+By default any queries executed by xref:refguide:applib:index/services/repository/RepositoryService.adoc[] are preceded by a flush first.
+The rationale behind this is to make sure that everything that might have changed is in the database.
+
+However, with JDO at least, this behaviour can cause a `ConcurrentModificationException` when coupled with the  xref:refguide:persistence:index/commons/integration/changetracking/EntityChangeTrackerDefault.adoc[] internal service, used by auditing.
+This grabs the value of properties, including derived properties that are evaluated using a query.
+
+So now, xref:refguide:persistence:index/commons/integration/changetracking/EntityChangeTrackerDefault.adoc[] suppresses the autoflush.
+
+Changes:
+
+* To revert to the original behaviour, use the new `causeway.commons.persistence.entity-change-tracker.suppress-auto-flush` property.
+
+* The `causeway.core.runtime-services.repository=service.disable-auto-flush` configuration property has been renamed to `causeway.commons.persistence.repository-service.disable-auto-flush`.
+
+For more details, see link:https://issues.apache.org/jira/browse/CAUSEWAY-3675[CAUSEWAY-3675].
 

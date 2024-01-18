@@ -33,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Collection(
     domainEvent = CommandLogEntry_replayQueue.CollectionDomainEvent.class
 )

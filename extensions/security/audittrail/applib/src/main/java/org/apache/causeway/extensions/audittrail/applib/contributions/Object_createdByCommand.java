@@ -19,11 +19,8 @@
  */
 package org.apache.causeway.extensions.audittrail.applib.contributions;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
@@ -33,8 +30,6 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
@@ -86,20 +81,6 @@ public class Object_createdByCommand {
                     ? commandIfAny.get()
                     : domainObject;
     }
-    @MemberSupport public List<String> choices0Act() {
-        val domainClass = domainObject.getClass();
-        val logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(domainClass);
-        if(logicalTypeIfAny.isEmpty()) {
-            // not expected, due to hide guard
-            return Collections.emptyList();
-        }
-        val propertyFeatureIds = applicationFeatureRepository.propertyIdsFor(logicalTypeIfAny.get());
-        return propertyFeatureIds.stream().map(ApplicationFeatureId::getLogicalMemberName).collect(Collectors.toList());
-    }
-    @MemberSupport public String default0Act() {
-        val choices = choices0Act();
-        return choices.size() == 1 ? choices.get(0): null;
-    }
     @MemberSupport public boolean hideAct() {
         val domainClass = domainObject.getClass();
         BeanSort beanSort = metaModelService.sortOf(domainClass, MetaModelService.Mode.RELAXED);
@@ -107,7 +88,6 @@ public class Object_createdByCommand {
     }
 
     @Inject MetaModelService metaModelService;
-    @Inject ApplicationFeatureRepository applicationFeatureRepository;
     @Inject AuditTrailEntryRepository auditTrailEntryRepository;
     @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;

@@ -28,6 +28,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
+
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -123,8 +125,12 @@ implements
 
             result = Try.call(() -> {
                         final T callResult = callable.call();
-                        // we flush here to ensure that the result captures any exception, eg from a declarative constraint violation
-                        txStatus.flush();
+
+                        if(!FlushMgmt.isAutoFlushSuppressed()) {
+                            // we flush here to ensure that the result captures any exception, eg from a declarative constraint violation
+                            txStatus.flush();
+                        }
+
                         return callResult;
                     })
                     .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));

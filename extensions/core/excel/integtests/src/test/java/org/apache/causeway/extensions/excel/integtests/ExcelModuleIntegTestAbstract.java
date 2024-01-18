@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.excel.integtests;
 
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -52,6 +54,7 @@ public abstract class ExcelModuleIntegTestAbstract extends CausewayIntegrationTe
     })
     @Import({
             CausewayModuleCoreRuntimeServices.class,
+            CausewayModulePersistenceCommons.class,
             CausewayModuleSecurityBypass.class,
             CausewayModulePersistenceJdoApplib.class,
             CausewayModuleTestingFixturesApplib.class,

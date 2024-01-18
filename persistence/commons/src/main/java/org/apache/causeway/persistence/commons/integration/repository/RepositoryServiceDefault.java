@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.repository;
+package org.apache.causeway.persistence.commons.integration.repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +53,8 @@ import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -61,7 +62,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".RepositoryServiceDefault")
+@Named(CausewayModulePersistenceCommons.NAMESPACE + ".RepositoryServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor
@@ -81,7 +82,9 @@ implements RepositoryService, HasMetaModelContext {
 
     @PostConstruct
     public void init() {
-        val disableAutoFlush = causewayConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
+        val disableAutoFlush =
+                causewayConfiguration.getPersistence().getCommons().getRepositoryService().isDisableAutoFlush() ||
+                causewayConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
         this.autoFlush = !disableAutoFlush;
     }
 
@@ -165,9 +168,10 @@ implements RepositoryService, HasMetaModelContext {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        if(autoFlush) {
+        if(autoFlush && !FlushMgmt.isAutoFlushSuppressed()) {
             transactionService.flushTransaction();
         }
         return submitQuery(query);

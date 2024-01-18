@@ -23,6 +23,8 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("causeway.persistence.commons.PreAndPostValueEvaluatorServiceDefault")
+@Named(CausewayModulePersistenceCommons.NAMESPACE + ".PreAndPostValueEvaluatorServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("default")
 @InteractionScope   // see note above regarding this

@@ -54,7 +54,6 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @DomainService(
     nature = NatureOfService.VIEW
 )

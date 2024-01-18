@@ -32,7 +32,7 @@
   <link href="_/img/home/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800|Montserrat:300,400,700" rel="stylesheet">
+  <link href="_/css/fonts-googleapis-com.css" rel="stylesheet">
 
   <!-- Bootstrap CSS File -->
   <link href="_/js/home/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@
   <link href="_/css/site-custom.css" rel="stylesheet">
 
   <!-- Algolia -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/>
+  <link rel="stylesheet" href="_/css/docsearch.min.css"/>
 
   <!-- =======================================================
     Theme Name: Reveal
@@ -138,8 +138,9 @@
             <li><hr/></li>
             <li><a href="https://www.apache.org/">Apache Home Page</a></li>
             <li><a href="https://www.apache.org/events/current-event">Events</a></li>
-            <li><a href="https://www.apache.org/licenses/">Licenses</a></li>
+            <li><a href="https://www.apache.org/licenses/">License</a></li>
             <li><a href="https://www.apache.org/security/">Security</a></li>
+            <li><a href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
             <li><a href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
             <li><a href="https://www.apache.org/foundation/thanks.html">Thanks</a></li>
             <li><hr/></li>
@@ -700,18 +701,18 @@ docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>
       </div>
 
       <div class="col-md-4">
-        <div class="copyright">
-          Bootstrap Template &copy; Copyright <strong>Reveal</strong>. All Rights Reserved
-        </div>
-        <div class="credits">
-          <!--
-            All the links in the footer should remain intact.
-            You can delete the links only if you purchased the pro version.
-            Licensing information: https://bootstrapmade.com/license/
-            Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Reveal
-          -->
-          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
+          <div class="copyright">
+              Website <a href="https://bootstrapmade.com/reveal-bootstrap-corporate-template/">template</a>
+          </div>
+          <div class="credits">
+              <!--
+                All the links in the footer should remain intact.
+                You can delete the links only if you purchased the pro version.
+                Licensing information: https://bootstrapmade.com/license/
+                Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Reveal
+              -->
+              designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+          </div>
       </div>
 
     </div>
@@ -791,7 +792,7 @@ docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>
 <!-- Template Main JavaScript File -->
 <script src="_/js/home/main.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script src="_/js/docsearch.min.js"></script>
 <script>
   function focusSearchInput () { document.querySelector('#algolia-search-input').focus() }
   var search = docsearch({

@@ -23,6 +23,8 @@ import java.util.Collections;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
+
 import org.approvaltests.Approvals;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -53,6 +55,7 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleCoreRuntimeServices.class,
+            CausewayModulePersistenceCommons.class,
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)
