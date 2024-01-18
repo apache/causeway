@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Data
-public class GQLMeta {
+public class GqlMeta {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;

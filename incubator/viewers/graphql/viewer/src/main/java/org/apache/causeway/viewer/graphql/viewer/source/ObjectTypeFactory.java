@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -366,7 +365,7 @@ public class ObjectTypeFactory {
 //                @Override
 //                public Object get(DataFetchingEnvironment environment) throws Exception {
 //
-//                    GQLMeta gqlMeta = environment.getSource();
+//                    GqlMeta gqlMeta = environment.getSource();
 //
 //                    return gqlMeta.id();
 //                }
@@ -466,23 +465,23 @@ public class ObjectTypeFactory {
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), (DataFetcher<Object>) environment -> {
             return bookmarkService.bookmarkFor(environment.getSource())
-                    .map(bookmark -> new GQLMeta(bookmark, bookmarkService, objectManager))
+                    .map(bookmark -> new GqlMeta(bookmark, bookmarkService, objectManager))
                     .orElse(null); //TODO: is this correct ?
         });
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, idField), (DataFetcher<Object>) environment -> {
-            GQLMeta gqlMeta = environment.getSource();
+            GqlMeta gqlMeta = environment.getSource();
             return gqlMeta.id();
         });
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, logicalTypeNameField), (DataFetcher<Object>) environment -> {
-            GQLMeta gqlMeta = environment.getSource();
+            GqlMeta gqlMeta = environment.getSource();
             return gqlMeta.logicalTypeName();
         });
 
         if (objectSpecificationBeanSort == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, versionField), (DataFetcher<Object>) environment -> {
-                GQLMeta gqlMeta = environment.getSource();
+                GqlMeta gqlMeta = environment.getSource();
                 return gqlMeta.version();
             });
 
