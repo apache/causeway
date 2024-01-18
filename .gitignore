@@ -99,3 +99,4 @@ _commit.sh
 
 /incubator/clients/kroviz/package.json
 create-db-schema.sql
+/antora/supplemental-ui/css/download.sh
