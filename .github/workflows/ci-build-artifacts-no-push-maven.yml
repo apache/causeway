@@ -65,7 +65,7 @@ jobs:
 
     - name: Activate Cache for Maven Downloads
       if: matrix.language == 'java'
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       env:
         # change the cache-name if we want to rebuild the cache
         # can be reset via github action page
