@@ -61,7 +61,7 @@ public class TypeMapper {
             case ENTITY:
             case VIEW_MODEL:
 
-                return GraphQLTypeReference.typeRef(_Utils.GQL_INPUTTYPE_PREFIX + _Utils.logicalTypeNameSanitized(elementType.getLogicalTypeName()));
+                return GraphQLTypeReference.typeRef(ObjectTypeFactory.GQL_INPUTTYPE_PREFIX + _LogicalTypeName.sanitized(elementType.getLogicalTypeName()));
 
             case VALUE:
                 return (GraphQLInputType) typeFor(elementType.getCorrespondingClass());
@@ -101,7 +101,7 @@ public class TypeMapper {
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return GraphQLTypeReference.typeRef(_Utils.logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
+                return GraphQLTypeReference.typeRef(_LogicalTypeName.sanitized(objectSpecification.getLogicalTypeName()));
 
             case VALUE:
                 return typeFor(objectSpecification.getCorrespondingClass());

@@ -18,21 +18,24 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.source;
 
-final class _Utils {
+import graphql.schema.GraphQLObjectType;
 
-    final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
-    final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
+import lombok.experimental.UtilityClass;
 
-    static String metaTypeName(final String logicalTypeNameSanitized){
-        return logicalTypeNameSanitized + "__DomainObject_meta";
+import org.apache.causeway.applib.services.metamodel.BeanSort;
+
+import static graphql.schema.GraphQLObjectType.newObject;
+
+@UtilityClass
+final class _GraphQLObjectType {
+    static GraphQLObjectType create(String logicalTypeNameSanitized, BeanSort objectSpecificationBeanSort) {
+        String metaTypeName = ObjectTypeFactory.metaTypeName(logicalTypeNameSanitized);
+        GraphQLObjectType.Builder metaTypeBuilder = newObject().name(metaTypeName);
+        metaTypeBuilder.field(ObjectTypeFactory.Fields.id);
+        metaTypeBuilder.field(ObjectTypeFactory.Fields.logicalTypeName);
+        if (objectSpecificationBeanSort == BeanSort.ENTITY) {
+            metaTypeBuilder.field(ObjectTypeFactory.Fields.version);
+        }
+        return metaTypeBuilder.build();
     }
-
-    static String mutatorsTypeName(final String logicalTypeNameSanitized){
-        return logicalTypeNameSanitized + "__DomainObject_mutators";
-    }
-
-    static String logicalTypeNameSanitized(final String logicalTypeName) {
-        return logicalTypeName.replace('.', '_');
-    }
-
 }

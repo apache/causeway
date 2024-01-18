@@ -65,7 +65,7 @@ public class QueryFieldFactory {
             final ObjectSpecification objectSpecification) {
 
         val logicalTypeName = objectSpecification.getLogicalTypeName();
-        String logicalTypeNameSanitized = _Utils.logicalTypeNameSanitized(logicalTypeName);
+        String logicalTypeNameSanitized = _LogicalTypeName.sanitized(logicalTypeName);
 
         serviceRegistry.lookupBeanById(logicalTypeName)
         .ifPresent(service -> {

@@ -32,6 +32,8 @@ import javax.inject.Inject;
 
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -43,9 +45,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.causeway.viewer.graphql.viewer.source._Utils.metaTypeName;
-import static org.apache.causeway.viewer.graphql.viewer.source._Utils.mutatorsTypeName;
-
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.FieldCoordinates;
@@ -55,54 +54,73 @@ import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectField;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
-import graphql.schema.GraphQLTypeReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ObjectTypeFactory {
 
+    final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
+    final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
     private final BookmarkService bookmarkService;
     private final SpecificationLoader specificationLoader;
     private final ObjectManager objectManager;
 
-    private static GraphQLFieldDefinition idField = newFieldDefinition()
-            .name("id").type(nonNull(Scalars.GraphQLString)).build();
+    static String mutatorsTypeName(final String logicalTypeNameSanitized){
+        return logicalTypeNameSanitized + "__DomainObject_mutators";
+    }
 
-    private static GraphQLFieldDefinition logicalTypeNameField = newFieldDefinition()
-            .name("logicalTypeName").type(nonNull(Scalars.GraphQLString)).build();
+    static String metaTypeName(final String logicalTypeNameSanitized){
+        return logicalTypeNameSanitized + "__DomainObject_meta";
+    }
 
-    private static GraphQLFieldDefinition versionField = newFieldDefinition()
-            .name("version").type(Scalars.GraphQLString).build();
+    @UtilityClass
+    static class Fields {
+        static GraphQLFieldDefinition id =
+                newFieldDefinition()
+                    .name("id")
+                    .type(nonNull(Scalars.GraphQLString))
+                    .build();
+        static GraphQLFieldDefinition logicalTypeName =
+                newFieldDefinition()
+                    .name("logicalTypeName")
+                    .type(nonNull(Scalars.GraphQLString))
+                    .build();
+        static GraphQLFieldDefinition version =
+                newFieldDefinition()
+                    .name("version")
+                    .type(Scalars.GraphQLString).build();
+    }
 
     public void objectTypeFromObjectSpecification(
-            final ObjectSpecification objectSpecification,
+            final ObjectSpecification objectSpec,
             final Set<GraphQLType> graphQLObjectTypes,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val logicalTypeName = objectSpecification.getLogicalTypeName();
-        String logicalTypeNameSanitized = _Utils.logicalTypeNameSanitized(logicalTypeName);
-
-        GraphQLObjectType.Builder objectTypeBuilder = newObject().name(logicalTypeNameSanitized);
+        val gqlvObjectSpec = GqlvObjectSpec.gqlv(objectSpec);
 
         // create meta field type
-        BeanSort objectSpecificationBeanSort = objectSpecification.getBeanSort();
-        GraphQLObjectType metaType =
-                createAndRegisterMetaType(logicalTypeNameSanitized, objectSpecificationBeanSort, graphQLObjectTypes);
+        BeanSort objectSpecificationBeanSort = objectSpec.getBeanSort();
+        final String logicalTypeNameSanitized = gqlvObjectSpec.getLogicalTypeNameSanitized();
+
+        GraphQLObjectType metaType = _GraphQLObjectType.create(logicalTypeNameSanitized, objectSpecificationBeanSort);
+
+        addTypeIfNotAlreadyPresent(graphQLObjectTypes, metaType, logicalTypeNameSanitized);
 
         // add meta field
-        GraphQLFieldDefinition gql_meta = newFieldDefinition().name("_gql_meta").type(metaType).build();
-        objectTypeBuilder.field(gql_meta);
+        val _gql_meta_Field = newFieldDefinition().name("_gql_meta").type(metaType).build();
+        gqlvObjectSpec.getObjectTypeBuilder().field(_gql_meta_Field);
 
         // create input type
-        String inputTypeName = _Utils.GQL_INPUTTYPE_PREFIX + logicalTypeNameSanitized;
+        String inputTypeName = GQL_INPUTTYPE_PREFIX + gqlvObjectSpec.getLogicalTypeNameSanitized();
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
         inputTypeBuilder
             .field(GraphQLInputObjectField.newInputObjectField()
@@ -113,28 +131,28 @@ public class ObjectTypeFactory {
         addTypeIfNotAlreadyPresent(graphQLObjectTypes, inputType, inputTypeName);
 
         // add fields
-        addFields(objectSpecification, objectTypeBuilder);
+        gqlvObjectSpec.addFields();
 
         // add collections
-        addCollections(objectSpecification, objectTypeBuilder);
+        gqlvObjectSpec.addCollections();
 
         // add actions
         MutatorsDataForEntity mutatorsDataForEntity =
-                addActions(logicalTypeNameSanitized, objectSpecification, objectTypeBuilder, graphQLObjectTypes);
+                addActions(gqlvObjectSpec.getLogicalTypeNameSanitized(), objectSpec, gqlvObjectSpec.getObjectTypeBuilder(), graphQLObjectTypes);
 
         // build and register object type
-        GraphQLObjectType graphQLObjectType = objectTypeBuilder.build();
-        addTypeIfNotAlreadyPresent(graphQLObjectTypes, graphQLObjectType, logicalTypeNameSanitized);
+        GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getObjectTypeBuilder().build();
+        addTypeIfNotAlreadyPresent(graphQLObjectTypes, graphQLObjectType, gqlvObjectSpec.getLogicalTypeNameSanitized());
 
         // create and register data fetchers
         createAndRegisterDataFetchersForMetaData(
-                codeRegistryBuilder, objectSpecificationBeanSort, metaType, gql_meta, graphQLObjectType);
-        if (mutatorsDataForEntity!=null) createAndRegisterDataFetchersForMutators(
-                codeRegistryBuilder, objectSpecificationBeanSort, mutatorsDataForEntity, graphQLObjectType);
-        createAndRegisterDataFetchersForField(objectSpecification, codeRegistryBuilder, graphQLObjectType);
-        createAndRegisterDataFetchersForCollection(objectSpecification, codeRegistryBuilder, graphQLObjectType);
-
-        return;
+                codeRegistryBuilder, objectSpecificationBeanSort, metaType, _gql_meta_Field, graphQLObjectType);
+        if (mutatorsDataForEntity!=null) {
+            createAndRegisterDataFetchersForMutators(
+                    codeRegistryBuilder, objectSpecificationBeanSort, mutatorsDataForEntity, graphQLObjectType);
+        }
+        createAndRegisterDataFetchersForField(objectSpec, codeRegistryBuilder, graphQLObjectType);
+        createAndRegisterDataFetchersForCollection(objectSpec, codeRegistryBuilder, graphQLObjectType);
     }
 
     private void createAndRegisterDataFetchersForMutators(
@@ -177,50 +195,6 @@ public class ObjectTypeFactory {
         }
     }
 
-    void addFields(
-            final ObjectSpecification objectSpecification,
-            final GraphQLObjectType.Builder objectTypeBuilder) {
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED)
-        .forEach(otoa -> {
-
-            ObjectSpecification fieldObjectSpecification = otoa.getElementType();
-            BeanSort beanSort = fieldObjectSpecification.getBeanSort();
-            switch (beanSort) {
-
-                case VIEW_MODEL:
-                case ENTITY:
-
-                    String logicalTypeNameOfField = fieldObjectSpecification.getLogicalTypeName();
-
-                    GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                        .name(otoa.getId())
-                        .type(otoa.isOptional()
-                                ? GraphQLTypeReference.typeRef(
-                                        _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))
-                                : nonNull(GraphQLTypeReference.typeRef(
-                                        _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))));
-                    objectTypeBuilder.field(fieldBuilder);
-
-                    break;
-
-                case VALUE:
-
-                    // todo: map ...
-
-                    GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
-                        .name(otoa.getId())
-                        .type(otoa.isOptional()
-                                ? Scalars.GraphQLString
-                                : nonNull(Scalars.GraphQLString));
-                    objectTypeBuilder.field(valueBuilder);
-
-                    break;
-
-            }
-        });
-    }
-
     void createAndRegisterDataFetchersForField(
             final ObjectSpecification objectSpecification,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
@@ -231,43 +205,6 @@ public class ObjectTypeFactory {
             createAndRegisterDataFetcherForObjectAssociation(codeRegistryBuilder, graphQLObjectType, otoa);
 
         });
-    }
-
-    void addCollections(
-            final ObjectSpecification objectSpecification,
-            final GraphQLObjectType.Builder objectTypeBuilder) {
-
-        objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(otom -> {
-
-            ObjectSpecification elementType = otom.getElementType();
-            BeanSort beanSort = elementType.getBeanSort();
-            switch (beanSort) {
-
-                case VIEW_MODEL:
-                case ENTITY:
-
-                    String logicalTypeNameOfField = elementType.getLogicalTypeName();
-                    GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(GraphQLList.list(GraphQLTypeReference.typeRef(
-                                _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))));
-                    objectTypeBuilder.field(fieldBuilder);
-
-                    break;
-
-                case VALUE:
-
-                    GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(GraphQLList.list(TypeMapper.typeFor(elementType.getCorrespondingClass())));
-                    objectTypeBuilder.field(valueBuilder);
-
-                    break;
-
-            }
-
-        });
-
     }
 
     void createAndRegisterDataFetchersForCollection(
@@ -287,67 +224,23 @@ public class ObjectTypeFactory {
             final GraphQLObjectType.Builder objectTypeBuilder,
             final Set<GraphQLType> graphQLObjectTypes) {
 
-        String mutatorsTypeName = mutatorsTypeName(logicalTypeNameSanitized);
-        GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
-        final List<GraphQLFieldDefinition> mutatorsTypeFields = new ArrayList<>();
+        MutatorManager result = mutatorManager(logicalTypeNameSanitized);
 
         objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
-                .forEach(objectAction -> {
+                .forEach(objectAction ->
+                        addAction(objectAction, objectTypeBuilder, result.mutatorsTypeBuilder, result.mutatorsTypeFields)
+                );
 
-                    if (objectAction.getSemantics().isSafeInNature()) {
-
-                        String fieldName = objectAction.getId();
-                        GraphQLFieldDefinition.Builder builder = newFieldDefinition()
-                                .name(fieldName)
-                                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-                        if (objectAction.getParameters().isNotEmpty()) {
-                            builder.arguments(objectAction.getParameters().stream()
-                                    .map(objectActionParameter -> GraphQLArgument.newArgument()
-                                            .name(objectActionParameter.getId())
-                                            .type(objectActionParameter.isOptional()
-                                                    ? TypeMapper.inputTypeFor(objectActionParameter)
-                                                    : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
-                                            .build())
-                                    .collect(Collectors.toList()));
-                        }
-                        objectTypeBuilder.field(builder);
-
-                    } else {
-
-                        String fieldName = objectAction.getId();
-                        GraphQLFieldDefinition.Builder builder = newFieldDefinition()
-                                .name(fieldName)
-                                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-                        if (objectAction.getParameters().isNotEmpty()) {
-                            builder.arguments(objectAction.getParameters().stream()
-                                    .map(objectActionParameter -> GraphQLArgument.newArgument()
-                                            .name(objectActionParameter.getId())
-                                            .type(objectActionParameter.isOptional()
-                                                    ? TypeMapper.inputTypeFor(objectActionParameter)
-                                                    : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
-                                            .build())
-                                    .collect(Collectors.toList()));
-                        }
-
-                        GraphQLFieldDefinition fieldDefinition = builder.build();
-                        mutatorsTypeBuilder.field(fieldDefinition);
-                        mutatorsTypeFields.add(fieldDefinition);
-
-                    }
-
-
-                });
-
-        if (!mutatorsTypeFields.isEmpty()){
-            GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
-            addTypeIfNotAlreadyPresent(graphQLObjectTypes, mutatorsType, mutatorsTypeName);
+        if (!result.mutatorsTypeFields.isEmpty()){
+            GraphQLObjectType mutatorsType = result.mutatorsTypeBuilder.build();
+            addTypeIfNotAlreadyPresent(graphQLObjectTypes, mutatorsType, result.mutatorsTypeName);
             GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-                    .name(_Utils.GQL_MUTATTIONS_FIELDNAME)
+                    .name(GQL_MUTATTIONS_FIELDNAME)
                     .type(mutatorsType)
                     .build();
             objectTypeBuilder.field(gql_mutations);
 
-            return new MutatorsDataForEntity(mutatorsType, mutatorsTypeFields);
+            return new MutatorsDataForEntity(mutatorsType, result.mutatorsTypeFields);
 
 //            // I think we have to create and register data fetcher for mutations here, but we can't since we have no objectTypeYet
 //            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLTypeReference, gql_mutations), new DataFetcher<Object>() {
@@ -374,6 +267,69 @@ public class ObjectTypeFactory {
 
         return null;
 
+    }
+
+    private static MutatorManager mutatorManager(String logicalTypeNameSanitized) {
+        val mutatorsTypeName = mutatorsTypeName(logicalTypeNameSanitized);
+        GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
+        final List<GraphQLFieldDefinition> mutatorsTypeFields = new ArrayList<>();
+        MutatorManager result = new MutatorManager(mutatorsTypeName, mutatorsTypeBuilder, mutatorsTypeFields);
+        return result;
+    }
+
+    private static class MutatorManager {
+        public final String mutatorsTypeName;
+        public final GraphQLObjectType.Builder mutatorsTypeBuilder;
+        public final List<GraphQLFieldDefinition> mutatorsTypeFields;
+
+        public MutatorManager(String mutatorsTypeName, GraphQLObjectType.Builder mutatorsTypeBuilder, List<GraphQLFieldDefinition> mutatorsTypeFields) {
+            this.mutatorsTypeName = mutatorsTypeName;
+            this.mutatorsTypeBuilder = mutatorsTypeBuilder;
+            this.mutatorsTypeFields = mutatorsTypeFields;
+        }
+    }
+
+    private static void addAction(ObjectAction objectAction, GraphQLObjectType.Builder objectTypeBuilder, GraphQLObjectType.Builder mutatorsTypeBuilder, List<GraphQLFieldDefinition> mutatorsTypeFields) {
+        if (objectAction.getSemantics().isSafeInNature()) {
+
+            String fieldName = objectAction.getId();
+            GraphQLFieldDefinition.Builder builder = newFieldDefinition()
+                    .name(fieldName)
+                    .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+            if (objectAction.getParameters().isNotEmpty()) {
+                builder.arguments(objectAction.getParameters().stream()
+                        .map(objectActionParameter -> GraphQLArgument.newArgument()
+                                .name(objectActionParameter.getId())
+                                .type(objectActionParameter.isOptional()
+                                        ? TypeMapper.inputTypeFor(objectActionParameter)
+                                        : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
+                                .build())
+                        .collect(Collectors.toList()));
+            }
+            objectTypeBuilder.field(builder);
+
+        } else {
+
+            String fieldName = objectAction.getId();
+            GraphQLFieldDefinition.Builder builder = newFieldDefinition()
+                    .name(fieldName)
+                    .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+            if (objectAction.getParameters().isNotEmpty()) {
+                builder.arguments(objectAction.getParameters().stream()
+                        .map(objectActionParameter -> GraphQLArgument.newArgument()
+                                .name(objectActionParameter.getId())
+                                .type(objectActionParameter.isOptional()
+                                        ? TypeMapper.inputTypeFor(objectActionParameter)
+                                        : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
+                                .build())
+                        .collect(Collectors.toList()));
+            }
+
+            GraphQLFieldDefinition fieldDefinition = builder.build();
+            mutatorsTypeBuilder.field(fieldDefinition);
+            mutatorsTypeFields.add(fieldDefinition);
+
+        }
     }
 
     @Data
@@ -426,23 +382,6 @@ public class ObjectTypeFactory {
     }
 
 
-    GraphQLObjectType createAndRegisterMetaType(
-            final String logicalTypeNameSanitized,
-            final BeanSort objectSpecificationBeanSort,
-            final Set<GraphQLType> graphQLObjectTypes) {
-
-        String metaTypeName = metaTypeName(logicalTypeNameSanitized);
-        GraphQLObjectType.Builder metaTypeBuilder = newObject().name(metaTypeName);
-        metaTypeBuilder.field(idField);
-        metaTypeBuilder.field(logicalTypeNameField);
-        if (objectSpecificationBeanSort == BeanSort.ENTITY) {
-            metaTypeBuilder.field(versionField);
-        }
-        GraphQLObjectType metaType = metaTypeBuilder.build();
-        addTypeIfNotAlreadyPresent(graphQLObjectTypes, metaType, logicalTypeNameSanitized);
-        return metaType;
-    }
-
     GraphQLObjectType createAndRegisterMutatorsType(
             final String logicalTypeNameSanitized,
             final BeanSort objectSpecificationBeanSort,
@@ -469,18 +408,18 @@ public class ObjectTypeFactory {
                     .orElse(null); //TODO: is this correct ?
         });
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, idField), (DataFetcher<Object>) environment -> {
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.id), (DataFetcher<Object>) environment -> {
             GqlMeta gqlMeta = environment.getSource();
             return gqlMeta.id();
         });
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, logicalTypeNameField), (DataFetcher<Object>) environment -> {
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.logicalTypeName), (DataFetcher<Object>) environment -> {
             GqlMeta gqlMeta = environment.getSource();
             return gqlMeta.logicalTypeName();
         });
 
         if (objectSpecificationBeanSort == BeanSort.ENTITY) {
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, versionField), (DataFetcher<Object>) environment -> {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.version), (DataFetcher<Object>) environment -> {
                 GqlMeta gqlMeta = environment.getSource();
                 return gqlMeta.version();
             });

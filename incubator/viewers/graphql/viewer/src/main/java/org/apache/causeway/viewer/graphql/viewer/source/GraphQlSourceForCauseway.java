@@ -30,6 +30,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.id.HasLogicalType;
+
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import org.springframework.graphql.execution.GraphQlSource;
@@ -43,6 +44,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.GraphQL;
 import graphql.Scalars;
+import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLObjectType;
@@ -87,46 +89,15 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        val queryBuilder = newObject().name("Query");
-        GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
+        final GraphQLObjectType.Builder queryBuilder = newObject().name("Query");
+        final GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
 
         Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
 
         specificationLoader.snapshotSpecifications()
-        .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
-        .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-        .forEach(objectSpecification -> {
-
-            val logicalTypeName = objectSpecification.getLogicalTypeName();
-            String logicalTypeNameSanitized = _Utils.logicalTypeNameSanitized(logicalTypeName);
-
-            switch (objectSpecification.getBeanSort()) {
-
-                case ABSTRACT:
-                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:    // @DomainObject(nature=ENTITY)
-
-                    // TODO: App interface should mapp to gql interfaces?
-                    objectTypeFactory
-                        .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
-
-                    break;
-
-                case MANAGED_BEAN_CONTRIBUTING: //@DomainService
-
-                    queryFieldFactory
-                        .queryFieldFromObjectSpecification(queryBuilder, codeRegistryBuilder, objectSpecification);
-                    break;
-
-                case MANAGED_BEAN_NOT_CONTRIBUTING: // a @Service or @Component ... ignore
-                case MIXIN:
-                case VALUE:
-                case COLLECTION:
-                case VETOED:
-                case UNKNOWN:
-                    break;
-            }
-        });
+            .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
+            .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
+            .forEach(objectSpec -> handleObjectSpec(objectSpec, graphQLObjectTypes, queryBuilder, codeRegistryBuilder));
 
         val query_numServices = newFieldDefinition()
                 .name("numServices")
@@ -137,12 +108,11 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .field(query_numServices)
                 .build();
 
-
         val codeRegistry = codeRegistryBuilder
-                .dataFetcher(coordinates(query.getName(), query_numServices.getName()),
+                .dataFetcher(
+                        coordinates(query.getName(), query_numServices.getName()),
                         (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count())
                 .build();
-
 
         return GraphQLSchema.newSchema()
                 .query(query)
@@ -151,4 +121,34 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .build();
     }
 
+    private void handleObjectSpec(
+            final ObjectSpecification objectSpec,
+            final Set<GraphQLType> graphQLObjectTypes,
+            final GraphQLObjectType.Builder queryBuilder, final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+        switch (objectSpec.getBeanSort()) {
+
+            case ABSTRACT:
+            case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
+            case ENTITY:     // @DomainObject(nature=ENTITY)
+
+                // TODO: App interface should map to gql interfaces?
+                objectTypeFactory.objectTypeFromObjectSpecification(objectSpec, graphQLObjectTypes, codeRegistryBuilder);
+
+                break;
+
+            case MANAGED_BEAN_CONTRIBUTING: //@DomainService
+
+                queryFieldFactory
+                    .queryFieldFromObjectSpecification(queryBuilder, codeRegistryBuilder, objectSpec);
+                break;
+
+            case MANAGED_BEAN_NOT_CONTRIBUTING: // a @Service or @Component ... ignore
+            case MIXIN:
+            case VALUE:
+            case COLLECTION:
+            case VETOED:
+            case UNKNOWN:
+                break;
+        }
+    }
 }
