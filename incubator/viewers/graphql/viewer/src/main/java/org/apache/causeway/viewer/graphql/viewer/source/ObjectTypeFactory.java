@@ -111,11 +111,10 @@ public class ObjectTypeFactory {
 
         // create meta field type
         BeanSort objectSpecificationBeanSort = gqlvObjectSpec.getBeanSort();
-        final String logicalTypeNameSanitized = gqlvObjectSpec.getLogicalTypeNameSanitized();
 
         GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
 
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(metaType, logicalTypeNameSanitized);
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectSpec.getMetaType());
 
         // add meta field
         val _gql_meta_Field = newFieldDefinition().name("_gql_meta").type(metaType).build();

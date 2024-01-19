@@ -25,18 +25,6 @@ public class GraphQLTypeRegistry {
     }
 
 
-
-    void addTypeIfNotAlreadyPresent(
-            final GraphQLInputObjectType typeToAdd,
-            final String logicalTypeName) {
-        if (isPresent(typeToAdd, GraphQLInputObjectType.class)){
-            // For now we just log and skip
-            log.info("GraphQLInputObjectType for {} already present", logicalTypeName);
-            return;
-        }
-        graphQLObjectTypes.add(typeToAdd);
-    }
-
     void addTypeIfNotAlreadyPresent(
             final GraphQLObjectType typeToAdd,
             final String logicalTypeName){
