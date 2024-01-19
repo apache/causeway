@@ -24,6 +24,7 @@ import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -159,13 +160,12 @@ public class ObjectTypeFactory {
     MutatorsDataForEntity addActions(final GqlvObjectSpec gqlvObjectSpec) {
 
         gqlvObjectSpec.getObjectSpec().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
-                .forEach(objectAction ->
-                        gqlvObjectSpec.addAction(objectAction)
-                );
+                .forEach(gqlvObjectSpec::addAction);
 
-        if (!gqlvObjectSpec.mutatorsTypeFields.isEmpty()){
-            GraphQLObjectType mutatorsType = gqlvObjectSpec.mutatorsTypeBuilder.build();
-            graphQLTypeRegistry.addTypeIfNotAlreadyPresent(mutatorsType, gqlvObjectSpec.mutatorsTypeName);
+        Optional<GraphQLObjectType> mutatorsTypeIfAny = gqlvObjectSpec.buildMutatorsTypeIfAny();
+        return mutatorsTypeIfAny.map(mutatorsType -> {
+
+            graphQLTypeRegistry.addTypeIfNotAlreadyPresent(mutatorsType, gqlvObjectSpec.getMutatorsTypeName());
 
             GraphQLFieldDefinition gql_mutations = newFieldDefinition()
                     .name(GQL_MUTATIONS_FIELDNAME)
@@ -196,9 +196,8 @@ public class ObjectTypeFactory {
 //                    return gqlMeta.id();
 //                }
 //            });
-        }
-
-        return null;
+        })
+        .orElse(null);
 
     }
 

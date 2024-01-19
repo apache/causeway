@@ -15,6 +15,7 @@ import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -44,6 +45,10 @@ public class GqlvObjectSpec {
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
+    private String getLogicalTypeName() {
+        return objectSpec.getLogicalTypeName();
+    }
+
     public String getLogicalTypeNameSanitized() {
         val logicalTypeName = objectSpec.getLogicalTypeName();
         return _LogicalTypeName.sanitized(logicalTypeName);
@@ -68,6 +73,11 @@ public class GqlvObjectSpec {
      * Built using {@link #buildGqlObjectType()}
      */
     private GraphQLObjectType gqlObjectType;
+
+    /**
+     * Built lazily using {@link #buildMutatorsTypeIfAny()}
+     */
+    private Optional<GraphQLObjectType> mutatorsTypeIfAny;
 
     public GqlvObjectSpec(final ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
@@ -221,6 +231,9 @@ public class GqlvObjectSpec {
         mutatorsTypeFields.add(fieldDefinition);
     }
 
+    boolean hasMutators() {
+        return !mutatorsTypeFields.isEmpty();
+    }
 
 
     /**
@@ -230,10 +243,9 @@ public class GqlvObjectSpec {
      */
     GraphQLObjectType buildGqlObjectType() {
         if (gqlObjectType != null) {
-            throw new IllegalArgumentException("GqlObjectType has already been built");
+            throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
         }
-        gqlObjectType = getGqlObjectTypeBuilder().name(getLogicalTypeNameSanitized()).build();
-        return gqlObjectType;
+        return gqlObjectType = getGqlObjectTypeBuilder().name(getLogicalTypeNameSanitized()).build();
     }
 
     /**
@@ -242,10 +254,33 @@ public class GqlvObjectSpec {
     GraphQLObjectType getGqlObjectType() {
         if (gqlObjectType == null) {
             throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeNameSanitized()));
+                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
         }
         return gqlObjectType;
     }
 
 
+    /**
+     * @see #buildMutatorsTypeIfAny()
+     */
+    public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
+        //noinspection OptionalAssignedToNull
+        if (mutatorsTypeIfAny == null) {
+            throw new IllegalArgumentException(String.format("Gql MutatorsType has not yet been built for %s", getLogicalTypeName()));
+        }
+        return mutatorsTypeIfAny;
+    }
+
+    /**
+     * @see #getMutatorsTypeIfAny()
+     */
+    public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
+        //noinspection OptionalAssignedToNull
+        if (mutatorsTypeIfAny != null) {
+            throw new IllegalArgumentException("MutatorsType has already been built for " + getLogicalTypeName());
+        }
+        return mutatorsTypeIfAny = hasMutators()
+                ? Optional.of(mutatorsTypeBuilder.build())
+                : Optional.empty();
+    }
 }
