@@ -78,8 +78,6 @@ public class QueryFieldFactory {
 
         val gqlvServiceStructure = new GqlvServiceStructure(serviceSpec, topLevelQueryStructure);
 
-        //final GraphQLObjectType.Builder queryBuilder = topLevelQueryStructure.getQueryBuilder();
-
         List<ObjectAction> objectActionList = serviceSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .map(ObjectAction.class::cast)
                 .filter((final ObjectAction x) -> x.containsFacet(ActionSemanticsFacet.class))
@@ -91,19 +89,17 @@ public class QueryFieldFactory {
 
             val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
 
-
             objectActionList
             .forEach(objectAction -> {
                 addAction(objectAction, serviceAsGraphQlType);
             });
 
-            GraphQLObjectType graphQLObjectType = serviceAsGraphQlType.build();
+
+            GraphQLObjectType graphQLObjectType = gqlvServiceStructure.buildObjectGqlType();
 
             objectActionList
             .forEach(objectAction -> {
-
                 addBehaviour(objectAction, graphQLObjectType, codeRegistryBuilder);
-
             });
 
             gqlvServiceStructure.addTypeToTopLevelQuery();

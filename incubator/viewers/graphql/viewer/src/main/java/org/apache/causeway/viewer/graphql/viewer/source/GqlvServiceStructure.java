@@ -14,9 +14,19 @@ public class GqlvServiceStructure {
     @Getter private final ObjectSpecification serviceSpec;
     @Getter private final GqlvTopLevelQueryStructure topLevelQueryStructure;
 
+    private String getLogicalTypeName() {
+        return serviceSpec.getLogicalTypeName();
+    }
+
+    public String getLogicalTypeNameSanitized() {
+        return _LTN.sanitized(serviceSpec);
+    }
+
     private final GraphQLObjectType.Builder queryBuilder;
 
     private GraphQLObjectType.Builder gqlObjectTypeBuilder;
+
+    private GraphQLObjectType gqlObjectType;
 
     // TODO - don't expose
     public GraphQLObjectType.Builder getGraphQlTypeBuilder() {
@@ -39,4 +49,24 @@ public class GqlvServiceStructure {
                 .build());
     }
 
+    /**
+     * @see #getGqlObjectType()
+     */
+    public GraphQLObjectType buildObjectGqlType() {
+        if (gqlObjectType != null) {
+            throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
+        }
+        return gqlObjectType = gqlObjectTypeBuilder.build();
+    }
+
+    /**
+     * @see #buildObjectGqlType()
+     */
+    public GraphQLObjectType getGqlObjectType() {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(String.format(
+                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
+        }
+        return gqlObjectType;
+    }
 }
