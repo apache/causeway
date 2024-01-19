@@ -35,6 +35,7 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 import org.apache.causeway.valuetypes.asciidoc.builder.objgraph.d3js.ObjectGraphRendererD3js;
 import org.apache.causeway.valuetypes.asciidoc.builder.objgraph.d3js.ObjectGraphRendererD3js.GraphRenderOptions;
+import org.apache.causeway.valuetypes.asciidoc.builder.objgraph.d3js.ObjectGraphRendererEdgeListing;
 import org.apache.causeway.valuetypes.asciidoc.builder.objgraph.plantuml.ObjectGraphRendererPlantuml;
 
 import lombok.RequiredArgsConstructor;
@@ -89,6 +90,11 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
                 new ObjectGraphRendererD3js(GraphRenderOptions.builder().build()));
         return new AsciiDocBuilder()
                 .append(doc->AsciiDocFactory.htmlPassthroughBlock(doc, d3jsSourceAsHtml))
+                .append(doc->{
+                    var source = objectGraph.render(new ObjectGraphRendererEdgeListing());
+                    var sourceBlock = AsciiDocFactory.sourceBlock(doc, "txt", source);
+                    sourceBlock.setTitle("Edge Listing");
+                })
                 .buildAsString();
     }
 

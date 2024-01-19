@@ -62,17 +62,20 @@ class _ObjectGraphRelationMerger implements ObjectGraph.Transformer {
         relations.removeIf(ObjectGraph.Relation::isAssociation);
 
         shared.forEach((key, list) -> {
-            if(list.size()<2) return;
-
+            if(list.isEmpty()) return;
+            var firstRel = list.get(0);
+            if(list.size()==1) {
+                relations.add(firstRel);
+                return;
+            }
             var mergedDescriptions = list.stream()
                     .map(rel->rel.descriptionFormatted())
                     .collect(Collectors.joining(","));
 
-            var a = list.get(0);
             var merged = new ObjectGraph.Relation(
                     ObjectGraph.RelationType.MERGED_ASSOCIATIONS,
-                    objectById.get(a.fromId()),
-                    objectById.get(a.toId()),
+                    objectById.get(firstRel.fromId()),
+                    objectById.get(firstRel.toId()),
                     mergedDescriptions, // already formatted honoring multiplicity notation
                     "", "");
             relations.add(merged);
