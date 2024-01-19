@@ -1,11 +1,13 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
 import graphql.Scalars;
+import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
+import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLTypeReference;
 
 import lombok.Getter;
@@ -13,10 +15,14 @@ import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -51,8 +57,10 @@ public class GqlvObjectSpec {
         return (GraphQLObjectType) metaField.getType();
     }
 
+    String getMutatorsTypeName() {
+        return getLogicalTypeNameSanitized() + "__DomainObject_mutators";
+    }
 
-    final String mutatorsTypeName;
     final GraphQLObjectType.Builder mutatorsTypeBuilder;
     final List<GraphQLFieldDefinition> mutatorsTypeFields = new ArrayList<>();
 
@@ -79,10 +87,9 @@ public class GqlvObjectSpec {
                         .build());
         gqlInputObjectType = inputTypeBuilder.build();
 
-        mutatorsTypeName = getLogicalTypeNameSanitized() + "__DomainObject_mutators";
-        mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
-
+        mutatorsTypeBuilder = newObject().name(getMutatorsTypeName());
     }
+
 
     private GraphQLObjectType metaType() {
         val metaTypeBuilder = newObject().name(getLogicalTypeNameSanitized() + "__DomainObject_meta");
@@ -95,37 +102,26 @@ public class GqlvObjectSpec {
     }
 
 
-
     void addPropertiesAsFields() {
         objectSpec.streamProperties(MixedIn.INCLUDED)
-        .forEach(this::addSafeActionAsField);
+        .forEach(this::addPropertyAsField);
     }
 
-    public void addSafeActionAsField(GraphQLFieldDefinition fieldDefinition) {
-        getGqlObjectTypeBuilder().field(fieldDefinition);
-    }
-
-    public void addNonSafeActionAsMutatorField(GraphQLFieldDefinition fieldDefinition) {
-        mutatorsTypeBuilder.field(fieldDefinition);
-        mutatorsTypeFields.add(fieldDefinition);
-    }
-
-    private void addSafeActionAsField(OneToOneAssociation otoa) {
+    private void addPropertyAsField(final OneToOneAssociation otoa) {
         ObjectSpecification otoaObjectSpec = otoa.getElementType();
         switch (otoaObjectSpec.getBeanSort()) {
 
             case VIEW_MODEL:
             case ENTITY:
-
                 String logicalTypeNameOfField = otoaObjectSpec.getLogicalTypeName();
 
                 GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                    .name(otoa.getId())
-                    .type(otoa.isOptional()
-                            ? GraphQLTypeReference.typeRef(
-                                    _LogicalTypeName.sanitized(logicalTypeNameOfField))
-                            : nonNull(GraphQLTypeReference.typeRef(
-                                    _LogicalTypeName.sanitized(logicalTypeNameOfField))));
+                        .name(otoa.getId())
+                        .type(otoa.isOptional()
+                                ? GraphQLTypeReference.typeRef(
+                                _LogicalTypeName.sanitized(logicalTypeNameOfField))
+                                : nonNull(GraphQLTypeReference.typeRef(
+                                _LogicalTypeName.sanitized(logicalTypeNameOfField))));
                 getGqlObjectTypeBuilder().field(fieldBuilder);
 
                 break;
@@ -135,18 +131,18 @@ public class GqlvObjectSpec {
                 // todo: map ...
 
                 GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
-                    .name(otoa.getId())
-                    .type(otoa.isOptional()
-                            ? Scalars.GraphQLString
-                            : nonNull(Scalars.GraphQLString));
+                        .name(otoa.getId())
+                        .type(otoa.isOptional()
+                                ? Scalars.GraphQLString
+                                : nonNull(Scalars.GraphQLString));
                 getGqlObjectTypeBuilder().field(valueBuilder);
 
                 break;
-
         }
     }
 
-    void addCollections() {
+
+    void addCollectionsAsLists() {
         objectSpec.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
     }
 
@@ -160,20 +156,72 @@ public class GqlvObjectSpec {
             case ENTITY:
                 String logicalTypeNameOfField = elementType.getLogicalTypeName();
                 GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                    .name(otom.getId())
-                    .type(GraphQLList.list(GraphQLTypeReference.typeRef(
-                            _LogicalTypeName.sanitized(logicalTypeNameOfField))));
+                        .name(otom.getId())
+                        .type(GraphQLList.list(GraphQLTypeReference.typeRef(
+                                _LogicalTypeName.sanitized(logicalTypeNameOfField))));
                 gqlObjectTypeBuilder.field(fieldBuilder);
                 break;
 
             case VALUE:
                 GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
-                    .name(otom.getId())
-                    .type(GraphQLList.list(TypeMapper.typeFor(elementType.getCorrespondingClass())));
+                        .name(otom.getId())
+                        .type(GraphQLList.list(TypeMapper.typeFor(elementType.getCorrespondingClass())));
                 gqlObjectTypeBuilder.field(valueBuilder);
                 break;
         }
     }
+
+
+
+    void addAction(final ObjectAction objectAction) {
+
+        val fieldName = objectAction.getId();
+        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+                .name(fieldName)
+                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+        addGqlArguments(objectAction, fieldBuilder);
+        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
+
+        if (objectAction.getSemantics().isSafeInNature()) {
+            addSafeActionAsField(fieldDefinition);
+        } else {
+            addNonSafeActionAsMutatorField(fieldDefinition);
+        }
+    }
+
+    private static void addGqlArguments(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder builder) {
+
+        Can<ObjectActionParameter> parameters = objectAction.getParameters();
+
+        if (parameters.isNotEmpty()) {
+            builder.arguments(parameters.stream()
+                    .map(GqlvObjectSpec::gqlArgumentFor)
+                    .collect(Collectors.toList()));
+        }
+    }
+
+    private static GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
+        return GraphQLArgument.newArgument()
+                .name(objectActionParameter.getId())
+                .type(objectActionParameter.isOptional()
+                        ? TypeMapper.inputTypeFor(objectActionParameter)
+                        : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
+                .build();
+    }
+
+
+    public void addSafeActionAsField(GraphQLFieldDefinition fieldDefinition) {
+        getGqlObjectTypeBuilder().field(fieldDefinition);
+    }
+
+    public void addNonSafeActionAsMutatorField(GraphQLFieldDefinition fieldDefinition) {
+        mutatorsTypeBuilder.field(fieldDefinition);
+        mutatorsTypeFields.add(fieldDefinition);
+    }
+
+
 
     /**
      * Should be called only after fields etc have been added.
@@ -198,5 +246,6 @@ public class GqlvObjectSpec {
         }
         return gqlObjectType;
     }
+
 
 }

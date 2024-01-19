@@ -25,13 +25,10 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import org.springframework.stereotype.Component;
 
@@ -47,12 +44,10 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
 
 import lombok.AllArgsConstructor;
@@ -110,7 +105,7 @@ public class ObjectTypeFactory {
         gqlvObjectSpec.addPropertiesAsFields();
 
         // add collections
-        gqlvObjectSpec.addCollections();
+        gqlvObjectSpec.addCollectionsAsLists();
 
         // add actions
         MutatorsDataForEntity mutatorsDataForEntity = addActions(gqlvObjectSpec);
@@ -165,7 +160,7 @@ public class ObjectTypeFactory {
 
         gqlvObjectSpec.getObjectSpec().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(objectAction ->
-                        addAction(gqlvObjectSpec, objectAction)
+                        gqlvObjectSpec.addAction(objectAction)
                 );
 
         if (!gqlvObjectSpec.mutatorsTypeFields.isEmpty()){
@@ -208,37 +203,6 @@ public class ObjectTypeFactory {
     }
 
 
-    private static void addAction(
-            final GqlvObjectSpec gqlvObjectSpec, final ObjectAction objectAction) {
-
-        val fieldName = objectAction.getId();
-        GraphQLFieldDefinition.Builder builder = newFieldDefinition()
-                .name(fieldName)
-                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-        addArguments(objectAction, builder);
-        GraphQLFieldDefinition fieldDefinition = builder.build();
-
-        if (objectAction.getSemantics().isSafeInNature()) {
-
-            gqlvObjectSpec.addSafeActionAsField(fieldDefinition);
-
-        } else {
-            gqlvObjectSpec.addNonSafeActionAsMutatorField(fieldDefinition);
-        }
-    }
-
-    private static void addArguments(ObjectAction objectAction, GraphQLFieldDefinition.Builder builder) {
-        if (objectAction.getParameters().isNotEmpty()) {
-            builder.arguments(objectAction.getParameters().stream()
-                    .map(objectActionParameter -> GraphQLArgument.newArgument()
-                            .name(objectActionParameter.getId())
-                            .type(objectActionParameter.isOptional()
-                                    ? TypeMapper.inputTypeFor(objectActionParameter)
-                                    : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
-                            .build())
-                    .collect(Collectors.toList()));
-        }
-    }
 
     @Data
     @AllArgsConstructor
