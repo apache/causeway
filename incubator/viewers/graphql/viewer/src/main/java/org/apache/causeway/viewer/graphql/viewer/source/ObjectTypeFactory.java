@@ -104,7 +104,7 @@ public class ObjectTypeFactory {
 
         val gqlvObjectSpec = new GqlvObjectSpec(objectSpec);
 
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectSpec.getMetaType());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectSpec.getMetaField().getType());
 
 
         // create input type
@@ -355,8 +355,10 @@ public class ObjectTypeFactory {
                             .orElse(null); //TODO: is this correct ?
                 });
 
+        GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
+        gqlvObjectSpec.getMetaField().getType();
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(gqlvObjectSpec.getMetaType(), Fields.id),
+                FieldCoordinates.coordinates(metaType, Fields.id),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.id();

@@ -20,6 +20,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -32,12 +33,8 @@ import static org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory
 public class GqlvObjectSpec {
 
     @Getter private final ObjectSpecification objectSpec;
-
-    @Getter private final GraphQLObjectType metaType;
     @Getter private final GraphQLFieldDefinition metaField;
-
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
     public String getLogicalTypeNameSanitized() {
@@ -49,6 +46,10 @@ public class GqlvObjectSpec {
         return objectSpec.getBeanSort();
     }
 
+    public GraphQLObjectType getMetaType() {
+        return (GraphQLObjectType) metaField.getType();
+    }
+
     /**
      * Built using {@link #buildGqlObjectType()}
      */
@@ -58,30 +59,29 @@ public class GqlvObjectSpec {
         this.objectSpec = objectSpec;
         this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
 
-        // meta type
+        // object type's meta field
+        metaField = newFieldDefinition().name("_gql_meta").type(metaType()).build();
+        gqlObjectTypeBuilder.field(metaField);
+
+        // input object type
+        String inputTypeName = GQL_INPUTTYPE_PREFIX + getLogicalTypeNameSanitized();
+        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
+        inputTypeBuilder
+                .field(newInputObjectField()
+                        .name("id")
+                        .type(nonNull(Scalars.GraphQLID))
+                        .build());
+        gqlInputObjectType = inputTypeBuilder.build();
+    }
+
+    private GraphQLObjectType metaType() {
         val metaTypeBuilder = newObject().name(getLogicalTypeNameSanitized() + "__DomainObject_meta");
         metaTypeBuilder.field(ObjectTypeFactory.Fields.id);
         metaTypeBuilder.field(ObjectTypeFactory.Fields.logicalTypeName);
         if (getBeanSort() == BeanSort.ENTITY) {
             metaTypeBuilder.field(ObjectTypeFactory.Fields.version);
         }
-        this.metaType = metaTypeBuilder.build();
-
-        // meta field
-        metaField = newFieldDefinition().name("_gql_meta").type(metaType).build();
-        gqlObjectTypeBuilder.field(metaField);
-
-
-        String inputTypeName = GQL_INPUTTYPE_PREFIX + getLogicalTypeNameSanitized();
-        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
-        inputTypeBuilder
-                .field(GraphQLInputObjectField.newInputObjectField()
-                        .name("id")
-                        .type(nonNull(Scalars.GraphQLID))
-                        .build());
-        gqlInputObjectType = inputTypeBuilder.build();
-
-
+        return metaTypeBuilder.build();
     }
 
 
