@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.services.metamodel.objgraph;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +28,11 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._Strings.StringOperator;
 import org.apache.causeway.commons.internal.collections._Multimaps;
+import org.apache.causeway.commons.io.DataSink;
+import org.apache.causeway.commons.io.DataSource;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -49,6 +55,7 @@ public class ObjectGraph {
         private final @With @NonNull String packageName;
         private final @With @NonNull String name;
         private final @With @NonNull Optional<String> stereotype;
+        private final @With @NonNull Optional<String> description;
         private final @With List<ObjectGraph.Field> fields;
     }
 
@@ -57,6 +64,7 @@ public class ObjectGraph {
         private final @With @NonNull String name;
         private final @With @NonNull String elementTypeShortName;
         private final @With boolean isPlural;
+        private final @With @NonNull Optional<String> description;
     }
 
     @lombok.Value @Accessors(fluent=true)
@@ -64,27 +72,34 @@ public class ObjectGraph {
         private final @With @NonNull RelationType relationType;
         private final @With @NonNull ObjectGraph.Object from;
         private final @With @NonNull ObjectGraph.Object to;
-        private final @With @NonNull String label;
-        private final @With @NonNull String label2;
+        private final @With @NonNull String description; // usually the middle label
+        private final @With @NonNull String nearLabel;
+        private final @With @NonNull String farLabel;
         public String fromId() { return from.id(); }
         public String toId() { return to.id(); }
-        public boolean isAssociation() { return relationType!=RelationType.INHERITANCE; }
-        /**
-         * If this is ONE_TO_MANY, decorate the label with enclosing square brackets.
-         */
-        public String labelFormatted() {
-            return relationType==RelationType.ONE_TO_MANY
-                    ? String.format("[%s]", label)
-                    : label;
+        public boolean isAssociation() { return relationType.isAssociationAny(); }
+        public StringOperator multiplicityNotation() {
+            return relationType.isOneToMany()
+                    ? _Strings.asSquareBracketed
+                    : StringOperator.identity();
+        }
+        public String descriptionFormatted() {
+            return multiplicityNotation().apply(description);
         }
     }
 
-    public static enum RelationType {
+    public enum RelationType {
         ONE_TO_ONE,
         ONE_TO_MANY,
         MERGED_ASSOCIATIONS,
         BIDIR_ASSOCIATION,
         INHERITANCE;
+        public boolean isOneToOne() { return this == ONE_TO_ONE; }
+        public boolean isOneToMany() { return this == ONE_TO_MANY; }
+        public boolean isMerged() { return this == MERGED_ASSOCIATIONS; }
+        public boolean isBidir() { return this == BIDIR_ASSOCIATION; }
+        public boolean isInheritance() { return this == INHERITANCE; }
+        public boolean isAssociationAny() { return this != INHERITANCE; }
     }
 
     public static interface Factory {
@@ -126,6 +141,25 @@ public class ObjectGraph {
         val sb = new StringBuilder();
         renderer.render(sb, this);
         return sb.toString();
+    }
+    public DataSource asDiagramDslSource(final @Nullable ObjectGraph.Renderer renderer) {
+        var dsl = render(renderer);
+        return dsl==null
+                ? DataSource.empty()
+                : DataSource.ofStringUtf8(dsl);
+    }
+    public void writeDiagramDsl(final @Nullable ObjectGraph.Renderer renderer, final DataSink sink) {
+        var dsl = render(renderer);
+        if(dsl==null) return;
+        sink.writeAll(os->
+            os.write(dsl.getBytes(StandardCharsets.UTF_8)));
+    }
+    public void writeDiagramDsl(final @Nullable ObjectGraph.Renderer renderer, final File destinationDslFile) {
+        var dsl = render(renderer);
+        if(dsl==null) return;
+        DataSink.ofFile(destinationDslFile)
+            .writeAll(os->
+                os.write(dsl.getBytes(StandardCharsets.UTF_8)));
     }
 
     /**

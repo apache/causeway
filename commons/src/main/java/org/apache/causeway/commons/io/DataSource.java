@@ -202,6 +202,15 @@ public interface DataSource {
     default void pipe(final @NonNull DataSink dataSink, final int bufferSize) {
         tryReadAndWrite(dataSink, bufferSize).ifFailureFail();
     }
+    /**
+     * Acts as a pipe, reading from this {@link DataSource} and writing to given {@link DataSink},
+     * using default bufferSize of 16k for the underlying byte data junks.
+     * <p>
+     * Throws if the write failed.
+     */
+    default void pipe(final @NonNull DataSink dataSink) {
+        pipe(dataSink, 16*1024);
+    }
 
     // -- FACTORIES
 
