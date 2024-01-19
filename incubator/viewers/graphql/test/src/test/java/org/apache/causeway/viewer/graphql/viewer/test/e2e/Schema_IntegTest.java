@@ -42,7 +42,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 public class Schema_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Test
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    // @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @UseReporter(DiffReporter.class)
     void schema() throws Exception {
         Approvals.verify(submit(), jsonOptions());

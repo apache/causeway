@@ -1,10 +1,17 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
+import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import lombok.Getter;
 
+import java.util.Map;
+
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.graphql.viewer.util._BiMap;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -48,6 +55,21 @@ public class GqlvServiceStructure {
                 .type(getGraphQlTypeBuilder())
                 .build());
     }
+
+
+    private final _BiMap<ObjectAction, GraphQLFieldDefinition> safeActionToField = new _BiMap<>();
+    private final _BiMap<ObjectAction, GraphQLFieldDefinition> mutatorActionToField = new _BiMap<>();
+
+
+    Map<ObjectAction, GraphQLFieldDefinition> getSafeActions() {
+        return safeActionToField.getForwardMapAsImmutable();
+    }
+
+    Map<ObjectAction, GraphQLFieldDefinition> getMutatorActions() {
+        return mutatorActionToField.getForwardMapAsImmutable();
+    }
+
+
 
     /**
      * @see #getGqlObjectType()

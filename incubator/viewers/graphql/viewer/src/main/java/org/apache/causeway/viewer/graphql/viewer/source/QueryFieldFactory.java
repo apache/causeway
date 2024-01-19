@@ -81,10 +81,8 @@ public class QueryFieldFactory {
         List<ObjectAction> objectActionList = serviceSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .map(ObjectAction.class::cast)
                 .filter((final ObjectAction x) -> x.containsFacet(ActionSemanticsFacet.class))
-//              .filter(x -> x.getFacet(ActionSemanticsFacet.class).value() == SemanticsOf.SAFE)
                 .collect(Collectors.toList());
 
-        // for now filters when no safe actions
         if (!objectActionList.isEmpty()) {
 
             val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
