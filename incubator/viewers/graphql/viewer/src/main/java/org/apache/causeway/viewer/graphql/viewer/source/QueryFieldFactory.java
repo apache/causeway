@@ -56,6 +56,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class QueryFieldFactory {
 
+    private static ObjectAction objectAction;
     private final ServiceRegistry serviceRegistry;
     private final SpecificationLoader specificationLoader;
 
@@ -88,11 +89,9 @@ public class QueryFieldFactory {
             val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
 
             objectActionList
-            .forEach(objectAction -> {
-                addAction(objectAction, serviceAsGraphQlType);
-            });
+            .forEach(objectAction -> addAction(objectAction, gqlvServiceStructure));
 
-            GraphQLObjectType graphQLObjectType = gqlvServiceStructure.buildObjectGqlType();
+            gqlvServiceStructure.buildObjectGqlType();
 
             objectActionList
             .forEach(objectAction -> {
@@ -156,7 +155,13 @@ public class QueryFieldFactory {
             });
     }
 
-    private static void addAction(ObjectAction objectAction, GraphQLObjectType.Builder serviceAsGraphQlType) {
+    private static void addAction(
+            final ObjectAction objectAction,
+            final GqlvServiceStructure gqlvServiceStructure) {
+
+        val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
+
+        QueryFieldFactory.objectAction = objectAction;
         String fieldName = objectAction.getId();
 
         GraphQLFieldDefinition.Builder builder = newFieldDefinition()
