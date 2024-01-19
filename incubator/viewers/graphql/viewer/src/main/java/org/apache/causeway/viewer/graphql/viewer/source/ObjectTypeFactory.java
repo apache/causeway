@@ -23,9 +23,6 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import java.util.List;
-import java.util.Set;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -33,24 +30,14 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.Scalars;
-import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLType;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
@@ -94,21 +81,14 @@ public class ObjectTypeFactory {
         val gqlvObjectStructure = new GqlvObjectStructure(objectSpec);
 
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectStructure.getMetaField().getType());
-
-
-        // create input type
-        GraphQLInputType inputType = gqlvObjectStructure.getGqlInputObjectType();
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(inputType);
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectStructure.getGqlInputObjectType());
 
         gqlvObjectStructure.addPropertiesAsFields();
-
         gqlvObjectStructure.addCollectionsAsLists();
+        gqlvObjectStructure.addActionsAsFields();
 
-        // add actions
-        gqlvObjectStructure.addActions();
-        if(gqlvObjectStructure.hasMutators()) {
-            gqlvObjectStructure.getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
-        }
+        gqlvObjectStructure.getMutatorsTypeIfAny()
+                .ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
 
         // build and register object type
         GraphQLObjectType graphQLObjectType = gqlvObjectStructure.buildGqlObjectType();

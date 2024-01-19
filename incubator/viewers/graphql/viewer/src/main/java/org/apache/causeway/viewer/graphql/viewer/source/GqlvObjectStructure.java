@@ -285,7 +285,7 @@ public class GqlvObjectStructure {
                 : Optional.empty();
     }
 
-    void addActions() {
+    void addActionsAsFields() {
 
         getObjectSpec().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(this::addAction);
