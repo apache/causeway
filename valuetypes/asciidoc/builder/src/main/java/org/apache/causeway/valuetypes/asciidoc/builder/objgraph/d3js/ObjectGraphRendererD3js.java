@@ -102,7 +102,7 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
         objGraph.relations().forEach(rel->{
             val source = objectLookup.get(rel.from());
             val target = objectLookup.get(rel.to());
-            d3jsGraph.links.add(new D3jsGraph.Link(source, target, rel.multiplicityNotation().apply(rel.description())));
+            d3jsGraph.links.add(new D3jsGraph.Link(source, target, rel.descriptionFormatted()));
         });
 
         renderSvg(sb, d3jsGraph);
