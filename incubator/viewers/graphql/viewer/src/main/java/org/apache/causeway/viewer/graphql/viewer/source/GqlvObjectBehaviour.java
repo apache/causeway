@@ -1,6 +1,7 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
 
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -11,6 +12,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+
+import graphql.schema.GraphQLFieldDefinition;
 
 import lombok.RequiredArgsConstructor;
 
@@ -69,21 +72,19 @@ public class GqlvObjectBehaviour {
 
 
     public void createAndRegisterDataFetchersForField() {
-        structure.getObjectSpec().streamProperties(MixedIn.INCLUDED)
-                .forEach(this::createAndRegisterDataFetcherForObjectAssociation);
+        structure.getProperties().entrySet().forEach(this::createAndRegisterDataFetcherForAssociation);
     }
 
     void createAndRegisterDataFetchersForCollection() {
-        structure.getObjectSpec().streamCollections(MixedIn.INCLUDED)
-                .forEach(this::createAndRegisterDataFetcherForObjectAssociation);
+        structure.getCollections().entrySet().forEach(this::createAndRegisterDataFetcherForAssociation);
     }
 
-
-    private void createAndRegisterDataFetcherForObjectAssociation(final ObjectAssociation otom) {
+    private void createAndRegisterDataFetcherForAssociation(
+            final Map.Entry<? extends ObjectAssociation, GraphQLFieldDefinition> propertyAndField) {
 
         final GraphQLObjectType graphQLObjectType = structure.getGqlObjectType();
 
-        ObjectSpecification fieldObjectSpecification = otom.getElementType();
+        ObjectSpecification fieldObjectSpecification = propertyAndField.getKey().getElementType();
         BeanSort beanSort = fieldObjectSpecification.getBeanSort();
         switch (beanSort) {
 
@@ -95,7 +96,7 @@ public class GqlvObjectBehaviour {
 
                 codeRegistryBuilder
                         .dataFetcher(
-                                FieldCoordinates.coordinates(graphQLObjectType, otom.getId()),
+                                FieldCoordinates.coordinates(graphQLObjectType, propertyAndField.getKey().getId()),
                                 (DataFetcher<Object>) environment -> {
 
                                     Object domainObjectInstance = environment.getSource();
@@ -104,13 +105,10 @@ public class GqlvObjectBehaviour {
                                     ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
 
                                     ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-
-                                    ManagedObject managedObject = otom.get(owner);
+                                    ManagedObject managedObject = propertyAndField.getKey().get(owner);
 
                                     return managedObject!=null ? managedObject.getPojo() : null;
-
                                 });
-
 
                 break;
 

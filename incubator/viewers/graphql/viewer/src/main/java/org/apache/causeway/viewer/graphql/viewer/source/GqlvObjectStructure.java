@@ -1,6 +1,7 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
 import graphql.Scalars;
+import graphql.com.google.common.collect.BiMap;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
@@ -12,6 +13,7 @@ import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
 
 import lombok.Getter;
+import lombok.Synchronized;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 
@@ -31,6 +33,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.graphql.viewer.util._BiMap;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
@@ -91,10 +94,26 @@ public class GqlvObjectStructure {
 
     final GraphQLObjectType.Builder mutatorsTypeBuilder;
 
-    private final Map<OneToOneAssociation, GraphQLFieldDefinition> propertyToField = new LinkedHashMap<>();
-    private final Map<OneToManyAssociation, GraphQLFieldDefinition> collectionToField = new LinkedHashMap<>();
-    private final Map<ObjectAction, GraphQLFieldDefinition> safeActionToField = new LinkedHashMap<>();
-    private final Map<ObjectAction, GraphQLFieldDefinition> mutatorActionToField = new LinkedHashMap<>();
+    private final _BiMap<OneToOneAssociation, GraphQLFieldDefinition> propertyToField = new _BiMap<>();
+    private final _BiMap<OneToManyAssociation, GraphQLFieldDefinition> collectionToField = new _BiMap<>();
+    private final _BiMap<ObjectAction, GraphQLFieldDefinition> safeActionToField = new _BiMap<>();
+    private final _BiMap<ObjectAction, GraphQLFieldDefinition> mutatorActionToField = new _BiMap<>();
+
+    Map<OneToOneAssociation, GraphQLFieldDefinition> getProperties() {
+        return propertyToField.getForwardMapAsImmutable();
+    }
+
+    Map<OneToManyAssociation, GraphQLFieldDefinition> getCollections() {
+        return collectionToField.getForwardMapAsImmutable();
+    }
+
+    Map<ObjectAction, GraphQLFieldDefinition> getSafeActions() {
+        return safeActionToField.getForwardMapAsImmutable();
+    }
+
+    Map<ObjectAction, GraphQLFieldDefinition> getMutatorActions() {
+        return mutatorActionToField.getForwardMapAsImmutable();
+    }
 
     /**
      * Built using {@link #buildGqlObjectType()}
