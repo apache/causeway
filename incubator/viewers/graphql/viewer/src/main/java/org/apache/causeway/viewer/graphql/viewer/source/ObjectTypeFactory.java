@@ -164,13 +164,9 @@ public class ObjectTypeFactory {
 
     MutatorsDataForEntity addActions(final GqlvObjectSpec gqlvObjectSpec) {
 
-        final ObjectSpecification objectSpec = gqlvObjectSpec.getObjectSpec();
-        final GraphQLObjectType.Builder objectTypeBuilder = gqlvObjectSpec.getGqlObjectTypeBuilder();
-
-
-        objectSpec.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+        gqlvObjectSpec.getObjectSpec().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(objectAction ->
-                        addAction(objectAction, objectTypeBuilder, gqlvObjectSpec.mutatorsTypeBuilder, gqlvObjectSpec.mutatorsTypeFields)
+                        addAction(objectAction, gqlvObjectSpec.getGqlObjectTypeBuilder(), gqlvObjectSpec.mutatorsTypeBuilder, gqlvObjectSpec.mutatorsTypeFields)
                 );
 
         if (!gqlvObjectSpec.mutatorsTypeFields.isEmpty()){
@@ -181,7 +177,7 @@ public class ObjectTypeFactory {
                     .name(GQL_MUTATIONS_FIELDNAME)
                     .type(mutatorsType)
                     .build();
-            objectTypeBuilder.field(gql_mutations);
+            gqlvObjectSpec.getGqlObjectTypeBuilder().field(gql_mutations);
 
             return new MutatorsDataForEntity(mutatorsType, gqlvObjectSpec.mutatorsTypeFields);
 
