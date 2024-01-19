@@ -25,31 +25,6 @@ public class GraphQLTypeRegistry {
     }
 
 
-    void addTypeIfNotAlreadyPresent(
-            final GraphQLType typeToAdd,
-            final String logicalTypeName) {
-
-        if (typeToAdd instanceof GraphQLObjectType) {
-            addTypeIfNotAlreadyPresent((GraphQLObjectType) typeToAdd);
-            return;
-        }
-
-        if (typeToAdd instanceof GraphQLInputObjectType) {
-            addTypeIfNotAlreadyPresent((GraphQLInputObjectType) typeToAdd);
-            return;
-        }
-
-        // TODO: none of these types yet handled
-        // GraphQLTypeReference
-        // GraphQLScalarType
-        // GraphQLCompositeType
-        // GraphQLUnionType
-        // GraphQLEnumType
-        // GraphQLInterfaceType
-        // GraphQLList
-        // GraphQLNonNull
-        log.warn("GraphQLType {} not yet implemented", typeToAdd.getClass().getName());
-    }
 
     void addTypeIfNotAlreadyPresent(
             final GraphQLInputObjectType typeToAdd,

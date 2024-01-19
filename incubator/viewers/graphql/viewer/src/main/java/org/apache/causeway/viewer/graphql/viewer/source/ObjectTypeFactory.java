@@ -131,7 +131,7 @@ public class ObjectTypeFactory {
                 .build());
         GraphQLInputType inputType = inputTypeBuilder.build();
 
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(inputType, inputTypeName);
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(inputType);
 
         // add fields
         gqlvObjectSpec.addFields();
