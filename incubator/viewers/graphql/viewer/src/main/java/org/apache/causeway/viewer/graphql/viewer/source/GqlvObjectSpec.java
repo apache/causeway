@@ -38,7 +38,7 @@ public class GqlvObjectSpec {
 
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
-    @Getter private final GraphQLInputType inputType;
+    @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
     public String getLogicalTypeNameSanitized() {
         val logicalTypeName = objectSpec.getLogicalTypeName();
@@ -79,7 +79,7 @@ public class GqlvObjectSpec {
                         .name("id")
                         .type(nonNull(Scalars.GraphQLID))
                         .build());
-        inputType = inputTypeBuilder.build();
+        gqlInputObjectType = inputTypeBuilder.build();
 
 
     }

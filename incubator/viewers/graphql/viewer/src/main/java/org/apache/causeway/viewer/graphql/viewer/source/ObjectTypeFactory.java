@@ -51,8 +51,6 @@ import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLInputObjectField;
-import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
@@ -110,15 +108,7 @@ public class ObjectTypeFactory {
 
 
         // create input type
-//        String inputTypeName = GQL_INPUTTYPE_PREFIX + gqlvObjectSpec.getLogicalTypeNameSanitized();
-//        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
-//        inputTypeBuilder
-//            .field(GraphQLInputObjectField.newInputObjectField()
-//                .name("id")
-//                .type(nonNull(Scalars.GraphQLID))
-//                .build());
-//        GraphQLInputType inputType = inputTypeBuilder.build();
-        GraphQLInputType inputType = gqlvObjectSpec.getInputType();
+        GraphQLInputType inputType = gqlvObjectSpec.getGqlInputObjectType();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(inputType);
 
         // add fields
