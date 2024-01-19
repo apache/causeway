@@ -94,12 +94,11 @@ public class QueryFieldFactory {
                 addAction(objectAction, serviceAsGraphQlType);
             });
 
-
             GraphQLObjectType graphQLObjectType = gqlvServiceStructure.buildObjectGqlType();
 
             objectActionList
             .forEach(objectAction -> {
-                addBehaviour(objectAction, graphQLObjectType, codeRegistryBuilder);
+                addBehaviour(gqlvServiceStructure, objectAction, codeRegistryBuilder);
             });
 
             gqlvServiceStructure.addTypeToTopLevelQuery();
@@ -114,7 +113,13 @@ public class QueryFieldFactory {
         }
     }
 
-    private void addBehaviour(ObjectAction objectAction, GraphQLObjectType graphQLObjectType, GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+    private void addBehaviour(
+            final GqlvServiceStructure gqlvServiceStructure,
+            final ObjectAction objectAction,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+
+        final GraphQLObjectType graphQLObjectType = gqlvServiceStructure.getGqlObjectType();
+
         String fieldName = objectAction.getId();
         codeRegistryBuilder
         .dataFetcher(
