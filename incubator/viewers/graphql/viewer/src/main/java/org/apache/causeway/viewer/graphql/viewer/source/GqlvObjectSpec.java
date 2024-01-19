@@ -13,6 +13,9 @@ import graphql.schema.GraphQLTypeReference;
 import lombok.Getter;
 import lombok.val;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -50,6 +53,11 @@ public class GqlvObjectSpec {
         return (GraphQLObjectType) metaField.getType();
     }
 
+
+    final String mutatorsTypeName;
+    final GraphQLObjectType.Builder mutatorsTypeBuilder;
+    final List<GraphQLFieldDefinition> mutatorsTypeFields = new ArrayList<>();
+
     /**
      * Built using {@link #buildGqlObjectType()}
      */
@@ -72,6 +80,10 @@ public class GqlvObjectSpec {
                         .type(nonNull(Scalars.GraphQLID))
                         .build());
         gqlInputObjectType = inputTypeBuilder.build();
+
+        mutatorsTypeName = getLogicalTypeNameSanitized() + "__DomainObject_mutators";
+        mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
+
     }
 
     private GraphQLObjectType metaType() {
@@ -83,6 +95,7 @@ public class GqlvObjectSpec {
         }
         return metaTypeBuilder.build();
     }
+
 
 
     void addFields() {

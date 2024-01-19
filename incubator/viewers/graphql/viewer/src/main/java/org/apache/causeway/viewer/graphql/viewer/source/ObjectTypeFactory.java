@@ -76,10 +76,6 @@ public class ObjectTypeFactory {
     private final ObjectManager objectManager;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
 
-    static String mutatorsTypeName(final String logicalTypeNameSanitized){
-        return logicalTypeNameSanitized + "__DomainObject_mutators";
-    }
-
     @UtilityClass
     static class Fields {
         static GraphQLFieldDefinition id =
@@ -168,27 +164,26 @@ public class ObjectTypeFactory {
 
     MutatorsDataForEntity addActions(final GqlvObjectSpec gqlvObjectSpec) {
 
-        final String logicalTypeNameSanitized = gqlvObjectSpec.getLogicalTypeNameSanitized();
-        final ObjectSpecification objectSpecification = gqlvObjectSpec.getObjectSpec();
+        final ObjectSpecification objectSpec = gqlvObjectSpec.getObjectSpec();
         final GraphQLObjectType.Builder objectTypeBuilder = gqlvObjectSpec.getGqlObjectTypeBuilder();
 
-        MutatorManager result = mutatorManager(logicalTypeNameSanitized);
 
-        objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+        objectSpec.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(objectAction ->
-                        addAction(objectAction, objectTypeBuilder, result.mutatorsTypeBuilder, result.mutatorsTypeFields)
+                        addAction(objectAction, objectTypeBuilder, gqlvObjectSpec.mutatorsTypeBuilder, gqlvObjectSpec.mutatorsTypeFields)
                 );
 
-        if (!result.mutatorsTypeFields.isEmpty()){
-            GraphQLObjectType mutatorsType = result.mutatorsTypeBuilder.build();
-            graphQLTypeRegistry.addTypeIfNotAlreadyPresent(mutatorsType, result.mutatorsTypeName);
+        if (!gqlvObjectSpec.mutatorsTypeFields.isEmpty()){
+            GraphQLObjectType mutatorsType = gqlvObjectSpec.mutatorsTypeBuilder.build();
+            graphQLTypeRegistry.addTypeIfNotAlreadyPresent(mutatorsType, gqlvObjectSpec.mutatorsTypeName);
+
             GraphQLFieldDefinition gql_mutations = newFieldDefinition()
                     .name(GQL_MUTATIONS_FIELDNAME)
                     .type(mutatorsType)
                     .build();
             objectTypeBuilder.field(gql_mutations);
 
-            return new MutatorsDataForEntity(mutatorsType, result.mutatorsTypeFields);
+            return new MutatorsDataForEntity(mutatorsType, gqlvObjectSpec.mutatorsTypeFields);
 
 //            // I think we have to create and register data fetcher for mutations here, but we can't since we have no objectTypeYet
 //            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLTypeReference, gql_mutations), new DataFetcher<Object>() {
@@ -217,25 +212,6 @@ public class ObjectTypeFactory {
 
     }
 
-    private static MutatorManager mutatorManager(String logicalTypeNameSanitized) {
-        val mutatorsTypeName = mutatorsTypeName(logicalTypeNameSanitized);
-        GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
-        final List<GraphQLFieldDefinition> mutatorsTypeFields = new ArrayList<>();
-        MutatorManager result = new MutatorManager(mutatorsTypeName, mutatorsTypeBuilder, mutatorsTypeFields);
-        return result;
-    }
-
-    private static class MutatorManager {
-        public final String mutatorsTypeName;
-        public final GraphQLObjectType.Builder mutatorsTypeBuilder;
-        public final List<GraphQLFieldDefinition> mutatorsTypeFields;
-
-        public MutatorManager(String mutatorsTypeName, GraphQLObjectType.Builder mutatorsTypeBuilder, List<GraphQLFieldDefinition> mutatorsTypeFields) {
-            this.mutatorsTypeName = mutatorsTypeName;
-            this.mutatorsTypeBuilder = mutatorsTypeBuilder;
-            this.mutatorsTypeFields = mutatorsTypeFields;
-        }
-    }
 
     private static void addAction(ObjectAction objectAction, GraphQLObjectType.Builder objectTypeBuilder, GraphQLObjectType.Builder mutatorsTypeBuilder, List<GraphQLFieldDefinition> mutatorsTypeFields) {
         if (objectAction.getSemantics().isSafeInNature()) {
@@ -336,7 +312,7 @@ public class ObjectTypeFactory {
             final Set<GraphQLType> graphQLObjectTypes) {
 
         //TODO: this is not going to work, because we need to dynamically add fields
-        String mutatorsTypeName = mutatorsTypeName(logicalTypeNameSanitized);
+        String mutatorsTypeName = logicalTypeNameSanitized + "__DomainObject_mutators";
         GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
         GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
         graphQLObjectTypes.add(mutatorsType);
