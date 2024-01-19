@@ -71,14 +71,16 @@ public class QueryFieldFactory {
     }
 
     private void addService(
-            final ObjectSpecification objectSpec,
+            final ObjectSpecification serviceSpec,
             final Object service,
             final GqlvTopLevelQueryStructure topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        final GraphQLObjectType.Builder queryBuilder = topLevelQueryStructure.getQueryBuilder();
+        val gqlvServiceStructure = new GqlvServiceStructure(serviceSpec, topLevelQueryStructure);
 
-        List<ObjectAction> objectActionList = objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
+        //final GraphQLObjectType.Builder queryBuilder = topLevelQueryStructure.getQueryBuilder();
+
+        List<ObjectAction> objectActionList = serviceSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .map(ObjectAction.class::cast)
                 .filter((final ObjectAction x) -> x.containsFacet(ActionSemanticsFacet.class))
 //              .filter(x -> x.getFacet(ActionSemanticsFacet.class).value() == SemanticsOf.SAFE)
@@ -87,7 +89,8 @@ public class QueryFieldFactory {
         // for now filters when no safe actions
         if (!objectActionList.isEmpty()) {
 
-            val serviceAsGraphQlType = newObject().name(_LTN.sanitized(objectSpec));
+            val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
+
 
             objectActionList
             .forEach(objectAction -> {
@@ -103,15 +106,12 @@ public class QueryFieldFactory {
 
             });
 
-            queryBuilder.field(newFieldDefinition()
-                    .name(_LTN.sanitized(objectSpec))
-                    .type(serviceAsGraphQlType)
-                    .build());
+            gqlvServiceStructure.addTypeToTopLevelQuery();
 
             codeRegistryBuilder
             .dataFetcher(
                     FieldCoordinates.coordinates("Query", newFieldDefinition()
-                        .name(_LTN.sanitized(objectSpec))
+                        .name(_LTN.sanitized(serviceSpec))
                         .type(serviceAsGraphQlType)
                         .build().getName()),
                     (DataFetcher<Object>) environment -> service);

@@ -9,17 +9,14 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-
-import graphql.schema.GraphQLFieldDefinition;
 
 import lombok.RequiredArgsConstructor;
 
 import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
 
@@ -34,7 +31,6 @@ public class GqlvObjectBehaviour {
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;
     private final SpecificationLoader specificationLoader;
-
 
 
     public void createAndRegisterDataFetchersForMetaData() {
