@@ -16,7 +16,9 @@ import lombok.experimental.UtilityClass;
 import lombok.val;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -88,7 +90,11 @@ public class GqlvObjectStructure {
     }
 
     final GraphQLObjectType.Builder mutatorsTypeBuilder;
-    final List<GraphQLFieldDefinition> mutatorsTypeFields = new ArrayList<>();
+
+    private final Map<OneToOneAssociation, GraphQLFieldDefinition> propertyToField = new LinkedHashMap<>();
+    private final Map<OneToManyAssociation, GraphQLFieldDefinition> collectionToField = new LinkedHashMap<>();
+    private final Map<ObjectAction, GraphQLFieldDefinition> safeActionToField = new LinkedHashMap<>();
+    private final Map<ObjectAction, GraphQLFieldDefinition> mutatorActionToField = new LinkedHashMap<>();
 
     /**
      * Built using {@link #buildGqlObjectType()}
@@ -137,18 +143,22 @@ public class GqlvObjectStructure {
         objectSpec.streamProperties(MixedIn.INCLUDED).forEach(this::addPropertyAsField);
     }
 
+
     private void addPropertyAsField(final OneToOneAssociation otoa) {
         ObjectSpecification otoaObjectSpec = otoa.getElementType();
+
+        GraphQLFieldDefinition fieldDefinition = null;
         switch (otoaObjectSpec.getBeanSort()) {
 
             case VIEW_MODEL:
             case ENTITY:
 
                 GraphQLTypeReference fieldTypeRef = typeRef(_LTN.sanitized(otoaObjectSpec));
+                fieldDefinition = newFieldDefinition()
+                        .name(otoa.getId())
+                        .type(otoa.isOptional() ? fieldTypeRef : nonNull(fieldTypeRef)).build();
                 getGqlObjectTypeBuilder().field(
-                        newFieldDefinition()
-                            .name(otoa.getId())
-                            .type(otoa.isOptional() ? fieldTypeRef : nonNull(fieldTypeRef))
+                        fieldDefinition
                         );
 
                 break;
@@ -162,9 +172,13 @@ public class GqlvObjectStructure {
                         .type(otoa.isOptional()
                                 ? Scalars.GraphQLString
                                 : nonNull(Scalars.GraphQLString));
-                getGqlObjectTypeBuilder().field(valueBuilder);
+                fieldDefinition = valueBuilder.build();
+                getGqlObjectTypeBuilder().field(fieldDefinition);
 
                 break;
+        }
+        if (fieldDefinition != null) {
+            propertyToField.put(otoa, fieldDefinition);
         }
     }
 
@@ -176,26 +190,30 @@ public class GqlvObjectStructure {
     private void addCollection(OneToManyAssociation otom) {
 
         ObjectSpecification elementType = otom.getElementType();
+        GraphQLFieldDefinition fieldDefinition = null;
+
         switch (elementType.getBeanSort()) {
 
             case VIEW_MODEL:
             case ENTITY:
                 GraphQLTypeReference typeRef = typeRef(_LTN.sanitized(elementType));
-                gqlObjectTypeBuilder.field(
-                        newFieldDefinition()
-                            .name(otom.getId())
-                            .type(GraphQLList.list(typeRef))
-                        );
+                fieldDefinition = newFieldDefinition()
+                        .name(otom.getId())
+                        .type(GraphQLList.list(typeRef)).build();
+                gqlObjectTypeBuilder.field(fieldDefinition);
                 break;
 
             case VALUE:
                 GraphQLType wrappedType = TypeMapper.typeFor(elementType.getCorrespondingClass());
-                gqlObjectTypeBuilder.field(
-                        newFieldDefinition()
-                            .name(otom.getId())
-                            .type(GraphQLList.list(wrappedType))
-                        );
+                fieldDefinition = newFieldDefinition()
+                        .name(otom.getId())
+                        .type(GraphQLList.list(wrappedType)).build();
+                gqlObjectTypeBuilder.field(fieldDefinition);
                 break;
+        }
+
+        if (fieldDefinition != null) {
+            collectionToField.put(otom, fieldDefinition);
         }
     }
 
@@ -211,9 +229,9 @@ public class GqlvObjectStructure {
         GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
 
         if (objectAction.getSemantics().isSafeInNature()) {
-            addSafeActionAsField(fieldDefinition);
+            addSafeActionAsField(objectAction, fieldDefinition);
         } else {
-            addNonSafeActionAsMutatorField(fieldDefinition);
+            addNonSafeActionAsMutatorField(objectAction, fieldDefinition);
         }
     }
 
@@ -240,17 +258,22 @@ public class GqlvObjectStructure {
     }
 
 
-    public void addSafeActionAsField(GraphQLFieldDefinition fieldDefinition) {
+    public void addSafeActionAsField(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition fieldDefinition) {
         getGqlObjectTypeBuilder().field(fieldDefinition);
+        safeActionToField.put(objectAction, fieldDefinition);
     }
 
-    public void addNonSafeActionAsMutatorField(GraphQLFieldDefinition fieldDefinition) {
+    public void addNonSafeActionAsMutatorField(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition fieldDefinition) {
         mutatorsTypeBuilder.field(fieldDefinition);
-        mutatorsTypeFields.add(fieldDefinition);
+        mutatorActionToField.put(objectAction, fieldDefinition);
     }
 
     boolean hasMutators() {
-        return !mutatorsTypeFields.isEmpty();
+        return !mutatorActionToField.isEmpty();
     }
 
 
