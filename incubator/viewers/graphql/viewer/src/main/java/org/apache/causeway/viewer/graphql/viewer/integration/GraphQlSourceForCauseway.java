@@ -31,6 +31,7 @@ import org.apache.causeway.applib.id.HasLogicalType;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQueryBehaviour;
 import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQueryStructure;
 import org.apache.causeway.viewer.graphql.viewer.source.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory;
@@ -93,6 +94,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         final GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
 
+
+        // add to the top-level query
+        // (and also add behaviour to the child types)
         val topLevelQueryStructure = new GqlvTopLevelQueryStructure();
 
         specificationLoader.snapshotSpecifications()
@@ -102,11 +106,16 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         topLevelQueryStructure.buildQueryType();
 
-        val topLevelQueryBehaviour = new GqlvTopLevelQueryBehaviour(topLevelQueryStructure, serviceRegistry);
-        topLevelQueryBehaviour.addFetchersTo(codeRegistryBuilder);
 
+        // add behaviour to the top-level query's own fields
+        val topLevelQueryBehaviour = new GqlvTopLevelQueryBehaviour(topLevelQueryStructure, codeRegistryBuilder, serviceRegistry);
+        topLevelQueryBehaviour.addFetchers();
+
+        // finalize the fetcher/mutator code that's been registered
         val codeRegistry = codeRegistryBuilder.build();
 
+
+        // build the schema
         return GraphQLSchema.newSchema()
                 .query(topLevelQueryStructure.getQueryType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLObjectTypes())
@@ -116,7 +125,8 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
     private void addToSchema(
             final ObjectSpecification objectSpec,
-            final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure, final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+            final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         switch (objectSpec.getBeanSort()) {
 

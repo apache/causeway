@@ -25,7 +25,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 @RequiredArgsConstructor
 public class GqlvObjectBehaviour {
 
-    private final GqlvObjectStructure gqlvObjectStructure;
+    private final GqlvObjectStructure structure;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;
@@ -36,32 +36,30 @@ public class GqlvObjectBehaviour {
     public void createAndRegisterDataFetchersForMetaData() {
 
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(gqlvObjectStructure.getGqlObjectType(), gqlvObjectStructure.getMetaField()),
+                FieldCoordinates.coordinates(structure.getGqlObjectType(), structure.getMetaField()),
                 (DataFetcher<Object>) environment -> {
                     return bookmarkService.bookmarkFor(environment.getSource())
                             .map(bookmark -> new GqlvMeta(bookmark, bookmarkService, objectManager))
                             .orElse(null); //TODO: is this correct ?
                 });
 
-        GraphQLObjectType metaType = gqlvObjectStructure.getMetaType();
-        gqlvObjectStructure.getMetaField().getType();
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(metaType, GqlvObjectStructure.Fields.id),
+                FieldCoordinates.coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.id),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.id();
                 });
 
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(gqlvObjectStructure.getMetaType(), GqlvObjectStructure.Fields.logicalTypeName),
+                FieldCoordinates.coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.logicalTypeName),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.logicalTypeName();
                 });
 
-        if (gqlvObjectStructure.getBeanSort() == BeanSort.ENTITY) {
+        if (structure.getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(
-                    FieldCoordinates.coordinates(gqlvObjectStructure.getMetaType(), GqlvObjectStructure.Fields.version),
+                    FieldCoordinates.coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.version),
                     (DataFetcher<Object>) environment -> {
                         GqlvMeta gqlvMeta = environment.getSource();
                         return gqlvMeta.version();
@@ -71,19 +69,19 @@ public class GqlvObjectBehaviour {
 
 
     public void createAndRegisterDataFetchersForField() {
-        gqlvObjectStructure.getObjectSpec().streamProperties(MixedIn.INCLUDED)
+        structure.getObjectSpec().streamProperties(MixedIn.INCLUDED)
                 .forEach(this::createAndRegisterDataFetcherForObjectAssociation);
     }
 
     void createAndRegisterDataFetchersForCollection() {
-        gqlvObjectStructure.getObjectSpec().streamCollections(MixedIn.INCLUDED)
+        structure.getObjectSpec().streamCollections(MixedIn.INCLUDED)
                 .forEach(this::createAndRegisterDataFetcherForObjectAssociation);
     }
 
 
     private void createAndRegisterDataFetcherForObjectAssociation(final ObjectAssociation otom) {
 
-        final GraphQLObjectType graphQLObjectType = gqlvObjectStructure.getGqlObjectType();
+        final GraphQLObjectType graphQLObjectType = structure.getGqlObjectType();
 
         ObjectSpecification fieldObjectSpecification = otom.getElementType();
         BeanSort beanSort = fieldObjectSpecification.getBeanSort();
@@ -152,7 +150,7 @@ public class GqlvObjectBehaviour {
             final Set<GraphQLType> graphQLObjectTypes) {
 
         //TODO: this is not going to work, because we need to dynamically add fields
-        String mutatorsTypeName = gqlvObjectStructure.getLogicalTypeNameSanitized() + "__DomainObject_mutators";
+        String mutatorsTypeName = structure.getLogicalTypeNameSanitized() + "__DomainObject_mutators";
         GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
         GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
         graphQLObjectTypes.add(mutatorsType);

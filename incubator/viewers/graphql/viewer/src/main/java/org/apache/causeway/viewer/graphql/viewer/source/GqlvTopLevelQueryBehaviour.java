@@ -1,30 +1,32 @@
-package org.apache.causeway.viewer.graphql.viewer.integration;
+package org.apache.causeway.viewer.graphql.viewer.source;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQueryStructure;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 
 public class GqlvTopLevelQueryBehaviour {
 
-    private final GqlvTopLevelQueryStructure topLevelQueryStructure;
+    private final GqlvTopLevelQueryStructure structure;
+    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final ServiceRegistry serviceRegistry;
 
     public GqlvTopLevelQueryBehaviour(
-            final GqlvTopLevelQueryStructure topLevelQueryStructure,
+            final GqlvTopLevelQueryStructure structure,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final ServiceRegistry serviceRegistry) {
-        this.topLevelQueryStructure = topLevelQueryStructure;
+        this.structure = structure;
+        this.codeRegistryBuilder = codeRegistryBuilder;
         this.serviceRegistry = serviceRegistry;
     }
 
-    public void addFetchersTo(GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+    public void addFetchers() {
         codeRegistryBuilder
                 .dataFetcher(
-                        coordinates(topLevelQueryStructure.getQueryType(), topLevelQueryStructure.getNumServicesField()),
+                        coordinates(structure.getQueryType(), structure.getNumServicesField()),
                         (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
-
     }
+
 }

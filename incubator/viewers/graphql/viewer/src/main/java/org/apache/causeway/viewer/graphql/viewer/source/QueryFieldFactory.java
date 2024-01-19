@@ -61,102 +61,111 @@ public class QueryFieldFactory {
 
     public void queryFieldFromObjectSpecification(
             final ObjectSpecification objectSpec,
-            final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure,
+            final GqlvTopLevelQueryStructure topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-
-        final GraphQLObjectType.Builder queryBuilder = gqlvTopLevelQueryStructure.getQueryBuilder();
-
-        String logicalTypeNameSanitized = _LTN.sanitized(objectSpec);
 
         serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
         .ifPresent(service -> {
+            addService(objectSpec, service, topLevelQueryStructure, codeRegistryBuilder);
+        });
+    }
 
-            List<ObjectAction> objectActionList = objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
-                    .map(ObjectAction.class::cast)
-                    .filter((final ObjectAction x) -> x.containsFacet(ActionSemanticsFacet.class))
+    private void addService(
+            final ObjectSpecification objectSpec,
+            final Object service,
+            final GqlvTopLevelQueryStructure topLevelQueryStructure,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+
+        final GraphQLObjectType.Builder queryBuilder = topLevelQueryStructure.getQueryBuilder();
+
+        List<ObjectAction> objectActionList = objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
+                .map(ObjectAction.class::cast)
+                .filter((final ObjectAction x) -> x.containsFacet(ActionSemanticsFacet.class))
 //                            .filter(x -> x.getFacet(ActionSemanticsFacet.class).value() == SemanticsOf.SAFE)
-                    .collect(Collectors.toList());
+                .collect(Collectors.toList());
 
-            // for now filters when no safe actions
-            if (!objectActionList.isEmpty()) {
+        // for now filters when no safe actions
+        if (!objectActionList.isEmpty()) {
 
-                val serviceAsGraphQlType = newObject().name(logicalTypeNameSanitized);
+            val serviceAsGraphQlType = newObject().name(_LTN.sanitized(objectSpec));
 
-                objectActionList
-                .forEach(objectAction -> {
-                    String fieldName = objectAction.getId();
+            objectActionList
+            .forEach(objectAction -> {
+                addAction(objectAction, serviceAsGraphQlType);
+            });
 
-                    GraphQLFieldDefinition.Builder builder = newFieldDefinition()
-                            .name(fieldName)
-                            .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-                    if (objectAction.getParameters().isNotEmpty()) {
-                        builder.arguments(objectAction.getParameters().stream()
-                                .map(objectActionParameter -> GraphQLArgument.newArgument()
-                                        .name(objectActionParameter.getId())
-                                        .type(TypeMapper.inputTypeFor(objectActionParameter))
-                                        .build())
-                                .collect(Collectors.toList()));
-                    }
-                    serviceAsGraphQlType
-                            .field(builder
-                                    .build());
+            GraphQLObjectType graphQLObjectType = serviceAsGraphQlType.build();
 
-                });
+            objectActionList
+            .forEach(objectAction -> {
 
-                GraphQLObjectType graphQLObjectType = serviceAsGraphQlType.build();
-
-                objectActionList
-                .forEach(objectAction -> {
-
-                    String fieldName = objectAction.getId();
-                    codeRegistryBuilder
-                    .dataFetcher(
-                        FieldCoordinates.coordinates(graphQLObjectType, fieldName),
-                        new DataFetcher<Object>() {
-
-                            @Override
-                            public Object get(final DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
-
-                                Object domainObjectInstance = dataFetchingEnvironment.getSource();
-
-                                Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                                ObjectSpecification specification = specificationLoader
-                                        .loadSpecification(domainObjectInstanceClass);
-
-                                ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-
-                                ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
-
-                                Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-                                Can<ObjectActionParameter> parameters = objectAction.getParameters();
-                                Can<ManagedObject> canOfParams = parameters
-                                        .map(oap -> {
-                                            Object argumentValue = arguments.get(oap.getId());
-                                            return ManagedObject.adaptParameter(oap, argumentValue);
-                                        });
-
-                                ManagedObject managedObject = objectAction
-                                        .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
-
-                                return managedObject.getPojo();
-                            }
-
-                        });
-
-                });
-
-                queryBuilder.field(newFieldDefinition()
-                        .name(logicalTypeNameSanitized)
-                        .type(serviceAsGraphQlType)
-                        .build());
+                String fieldName = objectAction.getId();
                 codeRegistryBuilder
                 .dataFetcher(
-                        FieldCoordinates.coordinates("Query", newFieldDefinition()
-                            .name(logicalTypeNameSanitized)
-                            .type(serviceAsGraphQlType)
-                            .build().getName()),
-                        (DataFetcher<Object>) environment -> service);
-            }
-        });
+                    FieldCoordinates.coordinates(graphQLObjectType, fieldName),
+                    new DataFetcher<Object>() {
+
+                        @Override
+                        public Object get(final DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
+
+                            Object domainObjectInstance = dataFetchingEnvironment.getSource();
+
+                            Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
+                            ObjectSpecification specification = specificationLoader
+                                    .loadSpecification(domainObjectInstanceClass);
+
+                            ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
+
+                            ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
+
+                            Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
+                            Can<ObjectActionParameter> parameters = objectAction.getParameters();
+                            Can<ManagedObject> canOfParams = parameters
+                                    .map(oap -> {
+                                        Object argumentValue = arguments.get(oap.getId());
+                                        return ManagedObject.adaptParameter(oap, argumentValue);
+                                    });
+
+                            ManagedObject managedObject = objectAction
+                                    .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
+
+                            return managedObject.getPojo();
+                        }
+
+                    });
+
+            });
+
+            queryBuilder.field(newFieldDefinition()
+                    .name(_LTN.sanitized(objectSpec))
+                    .type(serviceAsGraphQlType)
+                    .build());
+            codeRegistryBuilder
+            .dataFetcher(
+                    FieldCoordinates.coordinates("Query", newFieldDefinition()
+                        .name(_LTN.sanitized(objectSpec))
+                        .type(serviceAsGraphQlType)
+                        .build().getName()),
+                    (DataFetcher<Object>) environment -> service);
+        }
+    }
+
+    private static void addAction(ObjectAction objectAction, GraphQLObjectType.Builder serviceAsGraphQlType) {
+        String fieldName = objectAction.getId();
+
+        GraphQLFieldDefinition.Builder builder = newFieldDefinition()
+                .name(fieldName)
+                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+        if (objectAction.getParameters().isNotEmpty()) {
+            builder.arguments(objectAction.getParameters().stream()
+                    .map(objectActionParameter -> GraphQLArgument.newArgument()
+                            .name(objectActionParameter.getId())
+                            .type(TypeMapper.inputTypeFor(objectActionParameter))
+                            .build())
+                    .collect(Collectors.toList()));
+        }
+        serviceAsGraphQlType
+                .field(builder
+                        .build());
     }
 }
