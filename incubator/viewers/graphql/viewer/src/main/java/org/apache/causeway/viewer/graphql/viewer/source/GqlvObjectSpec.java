@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -282,5 +283,49 @@ public class GqlvObjectSpec {
         return mutatorsTypeIfAny = hasMutators()
                 ? Optional.of(mutatorsTypeBuilder.build())
                 : Optional.empty();
+    }
+
+    ObjectTypeFactory.MutatorsDataForEntity addActions(GraphQLTypeRegistry graphQLTypeRegistry) {
+
+        getObjectSpec().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+                .forEach(this::addAction);
+
+        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
+        return mutatorsTypeIfAny.map(mutatorsType -> {
+
+            //graphQLTypeRegistry.addTypeIfNotAlreadyPresent(mutatorsType, getMutatorsTypeName());
+
+            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
+                    .name(ObjectTypeFactory.GQL_MUTATIONS_FIELDNAME)
+                    .type(mutatorsType)
+                    .build();
+            getGqlObjectTypeBuilder().field(gql_mutations);
+
+            return new ObjectTypeFactory.MutatorsDataForEntity(mutatorsType, mutatorsTypeFields);
+
+//            // I think we have to create and register data fetcher for mutations here, but we can't since we have no objectTypeYet
+//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLTypeReference, gql_mutations), new DataFetcher<Object>() {
+//                @Override
+//                public Object get(DataFetchingEnvironment environment) throws Exception {
+//
+//                    Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
+//                    if (bookmark == null) return null; //TODO: is this correct ?
+//                    return new GqlvMutations(bookmark, bookmarkService, mutatorsTypeFields);
+//                }
+//            });
+//
+//            // for each field something like
+//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(mutatorsType, idField), new DataFetcher<Object>() {
+//                @Override
+//                public Object get(DataFetchingEnvironment environment) throws Exception {
+//
+//                    GqlvMeta gqlMeta = environment.getSource();
+//
+//                    return gqlMeta.id();
+//                }
+//            });
+        })
+        .orElse(null);
+
     }
 }
