@@ -145,7 +145,7 @@ public class ObjectTypeFactory {
 
         // build and register object type
         GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getGqlObjectTypeBuilder().name(gqlvObjectSpec.getLogicalTypeNameSanitized()).build();
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType, gqlvObjectSpec.getLogicalTypeNameSanitized());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
 
 
         // create and register data fetchers
