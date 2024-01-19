@@ -31,6 +31,7 @@ import org.apache.causeway.applib.id.HasLogicalType;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQueryStructure;
 import org.apache.causeway.viewer.graphql.viewer.source.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory;
 import org.apache.causeway.viewer.graphql.viewer.source.QueryFieldFactory;
@@ -94,13 +95,15 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        final GraphQLObjectType.Builder queryBuilder = newObject().name("Query");
         final GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
+
+        val gqlvTopLevelQueryStructure = new GqlvTopLevelQueryStructure();
+        final GraphQLObjectType.Builder queryBuilder = gqlvTopLevelQueryStructure.getQueryBuilder();
 
         specificationLoader.snapshotSpecifications()
             .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
             .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-            .forEach(objectSpec -> addToSchema(objectSpec, queryBuilder, codeRegistryBuilder));
+            .forEach(objectSpec -> addToSchema(objectSpec, codeRegistryBuilder, gqlvTopLevelQueryStructure));
 
         final GraphQLFieldDefinition numServicesField = newFieldDefinition()
                 .name("numServices")
@@ -126,15 +129,16 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
     private void addToSchema(
             final ObjectSpecification objectSpec,
-            final GraphQLObjectType.Builder queryBuilder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
-    ) {
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
+            final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure) {
+
+        final GraphQLObjectType.Builder queryBuilder = gqlvTopLevelQueryStructure.getQueryBuilder();
 
         switch (objectSpec.getBeanSort()) {
 
             case MANAGED_BEAN_CONTRIBUTING: // @DomainService
 
-                queryFieldFactory.queryFieldFromObjectSpecification(queryBuilder, codeRegistryBuilder, objectSpec);
+                queryFieldFactory.queryFieldFromObjectSpecification(objectSpec, gqlvTopLevelQueryStructure, codeRegistryBuilder);
                 break;
 
             case ABSTRACT:

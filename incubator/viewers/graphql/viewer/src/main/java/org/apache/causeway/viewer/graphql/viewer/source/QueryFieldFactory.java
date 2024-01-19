@@ -60,9 +60,11 @@ public class QueryFieldFactory {
     private final SpecificationLoader specificationLoader;
 
     public void queryFieldFromObjectSpecification(
-            final GraphQLObjectType.Builder queryBuilder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final ObjectSpecification objectSpec) {
+            final ObjectSpecification objectSpec,
+            final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+
+        final GraphQLObjectType.Builder queryBuilder = gqlvTopLevelQueryStructure.getQueryBuilder();
 
         String logicalTypeNameSanitized = _LTN.sanitized(objectSpec);
 
