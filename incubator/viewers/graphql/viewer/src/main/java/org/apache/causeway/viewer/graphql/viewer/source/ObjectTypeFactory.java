@@ -110,15 +110,15 @@ public class ObjectTypeFactory {
 
 
         // create input type
-        String inputTypeName = GQL_INPUTTYPE_PREFIX + gqlvObjectSpec.getLogicalTypeNameSanitized();
-        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
-        inputTypeBuilder
-            .field(GraphQLInputObjectField.newInputObjectField()
-                .name("id")
-                .type(nonNull(Scalars.GraphQLID))
-                .build());
-        GraphQLInputType inputType = inputTypeBuilder.build();
-
+//        String inputTypeName = GQL_INPUTTYPE_PREFIX + gqlvObjectSpec.getLogicalTypeNameSanitized();
+//        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
+//        inputTypeBuilder
+//            .field(GraphQLInputObjectField.newInputObjectField()
+//                .name("id")
+//                .type(nonNull(Scalars.GraphQLID))
+//                .build());
+//        GraphQLInputType inputType = inputTypeBuilder.build();
+        GraphQLInputType inputType = gqlvObjectSpec.getInputType();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(inputType);
 
         // add fields

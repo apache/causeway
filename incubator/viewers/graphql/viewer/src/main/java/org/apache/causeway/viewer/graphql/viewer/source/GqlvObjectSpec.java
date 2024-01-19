@@ -2,6 +2,9 @@ package org.apache.causeway.viewer.graphql.viewer.source;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLInputObjectField;
+import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
@@ -17,8 +20,11 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
+
+import static org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory.GQL_INPUTTYPE_PREFIX;
 
 /**
  * A wrapper around {@link ObjectSpecification}
@@ -31,6 +37,8 @@ public class GqlvObjectSpec {
     @Getter private final GraphQLFieldDefinition metaField;
 
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+
+    @Getter private final GraphQLInputType inputType;
 
     public String getLogicalTypeNameSanitized() {
         val logicalTypeName = objectSpec.getLogicalTypeName();
@@ -62,6 +70,17 @@ public class GqlvObjectSpec {
         // meta field
         metaField = newFieldDefinition().name("_gql_meta").type(metaType).build();
         gqlObjectTypeBuilder.field(metaField);
+
+
+        String inputTypeName = GQL_INPUTTYPE_PREFIX + getLogicalTypeNameSanitized();
+        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
+        inputTypeBuilder
+                .field(GraphQLInputObjectField.newInputObjectField()
+                        .name("id")
+                        .type(nonNull(Scalars.GraphQLID))
+                        .build());
+        inputType = inputTypeBuilder.build();
+
 
     }
 
