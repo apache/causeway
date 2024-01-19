@@ -4,6 +4,7 @@ import graphql.schema.DataFetcher;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 
+import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import lombok.RequiredArgsConstructor;
@@ -28,15 +29,16 @@ public class GqlvServiceBehaviour {
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
 
-    public void addAction(
-            final ObjectAction objectAction,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+    public void addDataFetcher(
+            Map.Entry<ObjectAction, GraphQLFieldDefinition> entry) {
+
+        final ObjectAction objectAction = entry.getKey();
+        GraphQLFieldDefinition fieldDefinition = entry.getValue();
 
         final GraphQLObjectType graphQLObjectType = structure.getGqlObjectType();
 
-        String fieldName = objectAction.getId();
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(graphQLObjectType, fieldName),
+                FieldCoordinates.coordinates(graphQLObjectType, fieldDefinition),
                 (DataFetcher<Object>) dataFetchingEnvironment -> {
 
                     Object domainObjectInstance = dataFetchingEnvironment.getSource();

@@ -83,8 +83,9 @@ public class QueryFieldFactory {
 
         GqlvServiceBehaviour serviceBehaviour = new GqlvServiceBehaviour(serviceStructure, service, specificationLoader, codeRegistryBuilder);
 
-        objectActionList.forEach(objectAction -> serviceBehaviour.addAction(objectAction, codeRegistryBuilder));
+        serviceStructure.getSafeActions().entrySet().forEach(serviceBehaviour::addDataFetcher);
 
+        // instead, should delegate to GqlvTopLevelQueryStructure and then GqlvTopLevelQueryBehaviour
         GraphQLFieldDefinition topLevelQueryField = serviceStructure.addTopLevelQueryField();
 
         codeRegistryBuilder.dataFetcher(
