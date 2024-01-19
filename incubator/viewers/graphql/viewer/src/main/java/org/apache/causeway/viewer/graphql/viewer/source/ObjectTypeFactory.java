@@ -357,11 +357,16 @@ public class ObjectTypeFactory {
 
     void createAndRegisterDataFetchersForMetaData(
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BeanSort objectSpecificationBeanSort,
-            final GraphQLObjectType metaType,
-            final GraphQLFieldDefinition gql_meta,
-            final GraphQLObjectType graphQLObjectType,
+            final BeanSort objectSpecificationBeanSortx,
+            final GraphQLObjectType metaTypex,
+            final GraphQLFieldDefinition gql_metax,
+            final GraphQLObjectType graphQLObjectTypex,
             final GqlvObjectSpec gqlvObjectSpec) {
+
+        final BeanSort objectSpecificationBeanSort = gqlvObjectSpec.getBeanSort();
+        final GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
+        final GraphQLFieldDefinition gql_meta = gqlvObjectSpec.getMetaField();
+        final GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getGqlObjectType();
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), (DataFetcher<Object>) environment -> {
             return bookmarkService.bookmarkFor(environment.getSource())
