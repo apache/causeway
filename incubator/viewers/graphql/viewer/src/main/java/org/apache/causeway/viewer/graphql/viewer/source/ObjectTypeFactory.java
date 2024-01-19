@@ -120,6 +120,7 @@ public class ObjectTypeFactory {
         val _gql_meta_Field = newFieldDefinition().name("_gql_meta").type(metaType).build();
         gqlvObjectSpec.getObjectTypeBuilder().field(_gql_meta_Field);
 
+
         // create input type
         String inputTypeName = GQL_INPUTTYPE_PREFIX + gqlvObjectSpec.getLogicalTypeNameSanitized();
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
@@ -145,6 +146,7 @@ public class ObjectTypeFactory {
         // build and register object type
         GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getObjectTypeBuilder().build();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType, gqlvObjectSpec.getLogicalTypeNameSanitized());
+
 
         // create and register data fetchers
         createAndRegisterDataFetchersForMetaData(

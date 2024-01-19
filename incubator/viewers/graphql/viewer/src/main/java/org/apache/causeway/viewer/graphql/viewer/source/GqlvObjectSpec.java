@@ -52,14 +52,13 @@ public class GqlvObjectSpec {
     }
 
     private void addField(OneToOneAssociation otoa) {
-        ObjectSpecification fieldObjectSpecification = otoa.getElementType();
-        BeanSort beanSort = fieldObjectSpecification.getBeanSort();
-        switch (beanSort) {
+        ObjectSpecification otoaObjectSpec = otoa.getElementType();
+        switch (otoaObjectSpec.getBeanSort()) {
 
             case VIEW_MODEL:
             case ENTITY:
 
-                String logicalTypeNameOfField = fieldObjectSpecification.getLogicalTypeName();
+                String logicalTypeNameOfField = otoaObjectSpec.getLogicalTypeName();
 
                 GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                     .name(otoa.getId())
