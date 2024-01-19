@@ -54,7 +54,6 @@ import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectField;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
@@ -63,7 +62,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
@@ -73,10 +71,11 @@ import lombok.val;
 public class ObjectTypeFactory {
 
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
-    final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
+    final static String GQL_MUTATIONS_FIELDNAME = "_gql_mutations";
     private final BookmarkService bookmarkService;
     private final SpecificationLoader specificationLoader;
     private final ObjectManager objectManager;
+    private final GraphQLTypeRegistry graphQLTypeRegistry;
 
     static String mutatorsTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_mutators";
@@ -106,7 +105,6 @@ public class ObjectTypeFactory {
 
     public void objectTypeFromObjectSpecification(
             final ObjectSpecification objectSpec,
-            final Set<GraphQLType> graphQLObjectTypes,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         val gqlvObjectSpec = new GqlvObjectSpec(objectSpec);
@@ -117,7 +115,7 @@ public class ObjectTypeFactory {
 
         GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
 
-        addTypeIfNotAlreadyPresent(graphQLObjectTypes, metaType, logicalTypeNameSanitized);
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(metaType, logicalTypeNameSanitized);
 
         // add meta field
         val _gql_meta_Field = newFieldDefinition().name("_gql_meta").type(metaType).build();
@@ -133,7 +131,7 @@ public class ObjectTypeFactory {
                 .build());
         GraphQLInputType inputType = inputTypeBuilder.build();
 
-        addTypeIfNotAlreadyPresent(graphQLObjectTypes, inputType, inputTypeName);
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(inputType, inputTypeName);
 
         // add fields
         gqlvObjectSpec.addFields();
@@ -143,11 +141,11 @@ public class ObjectTypeFactory {
 
         // add actions
         MutatorsDataForEntity mutatorsDataForEntity =
-                addActions(gqlvObjectSpec.getLogicalTypeNameSanitized(), objectSpec, gqlvObjectSpec.getObjectTypeBuilder(), graphQLObjectTypes);
+                addActions(gqlvObjectSpec.getLogicalTypeNameSanitized(), objectSpec, gqlvObjectSpec.getObjectTypeBuilder());
 
         // build and register object type
         GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getObjectTypeBuilder().build();
-        addTypeIfNotAlreadyPresent(graphQLObjectTypes, graphQLObjectType, gqlvObjectSpec.getLogicalTypeNameSanitized());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType, gqlvObjectSpec.getLogicalTypeNameSanitized());
 
         // create and register data fetchers
         createAndRegisterDataFetchersForMetaData(
@@ -168,67 +166,6 @@ public class ObjectTypeFactory {
 
     }
 
-    void addTypeIfNotAlreadyPresent(
-            final Set<GraphQLType> graphQLObjectTypes,
-            final GraphQLType typeToAdd,
-            final String logicalTypeName) {
-
-        if (typeToAdd instanceof GraphQLObjectType) {
-            addTypeIfNotAlreadyPresent(graphQLObjectTypes, (GraphQLObjectType) typeToAdd, logicalTypeName);
-            return;
-        }
-
-        if (typeToAdd instanceof GraphQLInputObjectType) {
-            addTypeIfNotAlreadyPresent(graphQLObjectTypes, (GraphQLInputObjectType) typeToAdd, logicalTypeName);
-            return;
-        }
-
-        // TODO: none of these types yet handled
-        // GraphQLTypeReference
-        // GraphQLScalarType
-        // GraphQLCompositeType
-        // GraphQLUnionType
-        // GraphQLEnumType
-        // GraphQLInterfaceType
-        // GraphQLList
-        // GraphQLNonNull
-        log.warn("GraphQLType {} not yet implemented", typeToAdd.getClass().getName());
-    }
-
-    private static void addTypeIfNotAlreadyPresent(
-            final Set<GraphQLType> graphQLObjectTypes,
-            final GraphQLInputObjectType typeToAdd,
-            final String logicalTypeName) {
-        if (isPresent(graphQLObjectTypes, typeToAdd, GraphQLInputObjectType.class)){
-            // For now we just log and skip
-            log.info("GraphQLInputObjectType for {} already present", logicalTypeName);
-            return;
-        }
-        graphQLObjectTypes.add(typeToAdd);
-    }
-
-    void addTypeIfNotAlreadyPresent(
-            final Set<GraphQLType> graphQLObjectTypes,
-            final GraphQLObjectType typeToAdd,
-            final String logicalTypeName){
-
-        if (isPresent(graphQLObjectTypes, typeToAdd, GraphQLObjectType.class)){
-            // For now we just log and skip
-            log.info("GraphQLObjectType for {} already present", logicalTypeName);
-            return;
-        }
-        graphQLObjectTypes.add(typeToAdd);
-    }
-
-    private static boolean isPresent(
-            final Set<GraphQLType> graphQLObjectTypes,
-            final GraphQLNamedType typeToAdd,
-            final Class<? extends GraphQLNamedType> cls) {
-        return graphQLObjectTypes.stream()
-                .filter(o -> o.getClass().isAssignableFrom(cls))
-                .map(cls::cast)
-                .anyMatch(ot -> ot.getName().equals(typeToAdd.getName()));
-    }
 
     void createAndRegisterDataFetchersForField(
             final ObjectSpecification objectSpecification,
@@ -256,8 +193,7 @@ public class ObjectTypeFactory {
     MutatorsDataForEntity addActions(
             final String logicalTypeNameSanitized,
             final ObjectSpecification objectSpecification,
-            final GraphQLObjectType.Builder objectTypeBuilder,
-            final Set<GraphQLType> graphQLObjectTypes) {
+            final GraphQLObjectType.Builder objectTypeBuilder) {
 
         MutatorManager result = mutatorManager(logicalTypeNameSanitized);
 
@@ -268,9 +204,9 @@ public class ObjectTypeFactory {
 
         if (!result.mutatorsTypeFields.isEmpty()){
             GraphQLObjectType mutatorsType = result.mutatorsTypeBuilder.build();
-            addTypeIfNotAlreadyPresent(graphQLObjectTypes, mutatorsType, result.mutatorsTypeName);
+            graphQLTypeRegistry.addTypeIfNotAlreadyPresent(mutatorsType, result.mutatorsTypeName);
             GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-                    .name(GQL_MUTATTIONS_FIELDNAME)
+                    .name(GQL_MUTATIONS_FIELDNAME)
                     .type(mutatorsType)
                     .build();
             objectTypeBuilder.field(gql_mutations);

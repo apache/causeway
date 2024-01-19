@@ -33,8 +33,7 @@ import org.apache.causeway.applib.id.HasLogicalType;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.apache.causeway.viewer.graphql.viewer.integration.AsyncExecutionStrategyResolvingWithinInteraction;
-
+import org.apache.causeway.viewer.graphql.viewer.source.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory;
 import org.apache.causeway.viewer.graphql.viewer.source.QueryFieldFactory;
 
@@ -68,6 +67,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
     private final ObjectTypeFactory objectTypeFactory;
     private final QueryFieldFactory queryFieldFactory;
+    private final GraphQLTypeRegistry graphQLTypeRegistry;
 
     @PostConstruct
     public void init() {
@@ -96,12 +96,10 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         final GraphQLObjectType.Builder queryBuilder = newObject().name("Query");
         final GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
 
-        Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
-
         specificationLoader.snapshotSpecifications()
             .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
             .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-            .forEach(objectSpec -> handleObjectSpec(objectSpec, graphQLObjectTypes, queryBuilder, codeRegistryBuilder));
+            .forEach(objectSpec -> handleObjectSpec(objectSpec, queryBuilder, codeRegistryBuilder));
 
         val query_numServices = newFieldDefinition()
                 .name("numServices")
@@ -120,14 +118,13 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         return GraphQLSchema.newSchema()
                 .query(query)
-                .additionalTypes(graphQLObjectTypes)
+                .additionalTypes(graphQLTypeRegistry.getGraphQLObjectTypes())
                 .codeRegistry(codeRegistry)
                 .build();
     }
 
     private void handleObjectSpec(
             final ObjectSpecification objectSpec,
-            final Set<GraphQLType> graphQLObjectTypes,
             final GraphQLObjectType.Builder queryBuilder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
@@ -139,7 +136,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             case ENTITY:     // @DomainObject(nature=ENTITY)
 
                 // TODO: App interface should map to gql interfaces?
-                objectTypeFactory.objectTypeFromObjectSpecification(objectSpec, graphQLObjectTypes, codeRegistryBuilder);
+                objectTypeFactory.objectTypeFromObjectSpecification(objectSpec, codeRegistryBuilder);
 
                 break;
 
