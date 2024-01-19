@@ -45,6 +45,7 @@ import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import lombok.RequiredArgsConstructor;
@@ -82,31 +83,26 @@ public class QueryFieldFactory {
                 .filter((final ObjectAction x) -> x.containsFacet(ActionSemanticsFacet.class))
                 .collect(Collectors.toList());
 
-        if (!objectActionList.isEmpty()) {
-
-            val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
-
-            objectActionList.forEach(gqlvServiceStructure::addAction);
-
-            gqlvServiceStructure.buildObjectGqlType();
-
-            objectActionList
-            .forEach(objectAction -> {
-                addBehaviour(gqlvServiceStructure, objectAction, codeRegistryBuilder);
-            });
-
-            gqlvServiceStructure.addTopLevelQueryField();
-
-            String fieldName = newFieldDefinition()
-                    .name(_LTN.sanitized(serviceSpec))
-                    .type(serviceAsGraphQlType)
-                    .build().getName();
-
-            codeRegistryBuilder
-            .dataFetcher(
-                    FieldCoordinates.coordinates("Query", fieldName),
-                    (DataFetcher<Object>) environment -> service);
+        if (objectActionList.isEmpty()) {
+            return;
         }
+
+        val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
+
+        objectActionList.forEach(gqlvServiceStructure::addAction);
+
+        gqlvServiceStructure.buildObjectGqlType();
+
+        objectActionList
+        .forEach(objectAction -> {
+            addBehaviour(gqlvServiceStructure, objectAction, codeRegistryBuilder);
+        });
+
+        GraphQLFieldDefinition topLevelQueryField = gqlvServiceStructure.addTopLevelQueryField();
+
+        codeRegistryBuilder.dataFetcher(
+                FieldCoordinates.coordinates("Query", topLevelQueryField.getName()),
+                (DataFetcher<Object>) environment -> service);
     }
 
     private void addBehaviour(

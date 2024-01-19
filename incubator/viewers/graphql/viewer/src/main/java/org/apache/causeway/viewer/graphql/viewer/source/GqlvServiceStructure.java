@@ -24,7 +24,7 @@ public class GqlvServiceStructure {
     @Getter private final ObjectSpecification serviceSpec;
     @Getter private final GqlvTopLevelQueryStructure topLevelQueryStructure;
 
-    private GraphQLObjectType.Builder topLevelQueryField;
+    private GraphQLFieldDefinition topLevelQueryField;
 
 
     private String getLogicalTypeName() {
@@ -94,21 +94,23 @@ public class GqlvServiceStructure {
     /**
      * @see #getTopLevelQueryField()
      */
-    public GraphQLObjectType.Builder addTopLevelQueryField() {
+    public GraphQLFieldDefinition addTopLevelQueryField() {
         if (topLevelQueryField != null) {
             throw new IllegalStateException(String.format(
                     "queryField has already been added to top-level Query, for %s", getLogicalTypeName()));
         }
-        return topLevelQueryField = queryBuilder.field(newFieldDefinition()
+        topLevelQueryField = newFieldDefinition()
                 .name(_LTN.sanitized(serviceSpec))
                 .type(getGraphQlTypeBuilder())
-                .build());
+                .build();
+        queryBuilder.field(topLevelQueryField);
+        return topLevelQueryField;
     }
 
     /**
      * @see #addTopLevelQueryField()
      */
-    public GraphQLObjectType.Builder getTopLevelQueryField() {
+    public GraphQLFieldDefinition getTopLevelQueryField() {
         if (topLevelQueryField == null) {
             throw new IllegalStateException(String.format(
                     "queryField has not yet been added to top-level Query, for %s", getLogicalTypeName()));
