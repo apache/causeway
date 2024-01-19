@@ -2,9 +2,7 @@ package org.apache.causeway.viewer.graphql.viewer.source;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLInputObjectField;
 import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
@@ -98,12 +96,21 @@ public class GqlvObjectSpec {
 
 
 
-    void addFields() {
+    void addPropertiesAsFields() {
         objectSpec.streamProperties(MixedIn.INCLUDED)
-        .forEach(this::addField);
+        .forEach(this::addSafeActionAsField);
     }
 
-    private void addField(OneToOneAssociation otoa) {
+    public void addSafeActionAsField(GraphQLFieldDefinition fieldDefinition) {
+        getGqlObjectTypeBuilder().field(fieldDefinition);
+    }
+
+    public void addNonSafeActionAsMutatorField(GraphQLFieldDefinition fieldDefinition) {
+        mutatorsTypeBuilder.field(fieldDefinition);
+        mutatorsTypeFields.add(fieldDefinition);
+    }
+
+    private void addSafeActionAsField(OneToOneAssociation otoa) {
         ObjectSpecification otoaObjectSpec = otoa.getElementType();
         switch (otoaObjectSpec.getBeanSort()) {
 

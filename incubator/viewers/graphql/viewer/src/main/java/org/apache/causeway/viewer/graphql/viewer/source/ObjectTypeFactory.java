@@ -107,7 +107,7 @@ public class ObjectTypeFactory {
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(inputType);
 
         // add fields
-        gqlvObjectSpec.addFields();
+        gqlvObjectSpec.addPropertiesAsFields();
 
         // add collections
         gqlvObjectSpec.addCollections();
@@ -211,49 +211,32 @@ public class ObjectTypeFactory {
     private static void addAction(
             final GqlvObjectSpec gqlvObjectSpec, final ObjectAction objectAction) {
 
-        final GraphQLObjectType.Builder objectTypeBuilder = gqlvObjectSpec.getGqlObjectTypeBuilder();
-        final GraphQLObjectType.Builder mutatorsTypeBuilder = gqlvObjectSpec.mutatorsTypeBuilder;
-        final List<GraphQLFieldDefinition> mutatorsTypeFields = gqlvObjectSpec.mutatorsTypeFields;
+        val fieldName = objectAction.getId();
+        GraphQLFieldDefinition.Builder builder = newFieldDefinition()
+                .name(fieldName)
+                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+        addArguments(objectAction, builder);
+        GraphQLFieldDefinition fieldDefinition = builder.build();
 
         if (objectAction.getSemantics().isSafeInNature()) {
 
-            String fieldName = objectAction.getId();
-            GraphQLFieldDefinition.Builder builder = newFieldDefinition()
-                    .name(fieldName)
-                    .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-            if (objectAction.getParameters().isNotEmpty()) {
-                builder.arguments(objectAction.getParameters().stream()
-                        .map(objectActionParameter -> GraphQLArgument.newArgument()
-                                .name(objectActionParameter.getId())
-                                .type(objectActionParameter.isOptional()
-                                        ? TypeMapper.inputTypeFor(objectActionParameter)
-                                        : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
-                                .build())
-                        .collect(Collectors.toList()));
-            }
-            objectTypeBuilder.field(builder);
+            gqlvObjectSpec.addSafeActionAsField(fieldDefinition);
 
         } else {
+            gqlvObjectSpec.addNonSafeActionAsMutatorField(fieldDefinition);
+        }
+    }
 
-            String fieldName = objectAction.getId();
-            GraphQLFieldDefinition.Builder builder = newFieldDefinition()
-                    .name(fieldName)
-                    .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-            if (objectAction.getParameters().isNotEmpty()) {
-                builder.arguments(objectAction.getParameters().stream()
-                        .map(objectActionParameter -> GraphQLArgument.newArgument()
-                                .name(objectActionParameter.getId())
-                                .type(objectActionParameter.isOptional()
-                                        ? TypeMapper.inputTypeFor(objectActionParameter)
-                                        : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
-                                .build())
-                        .collect(Collectors.toList()));
-            }
-
-            GraphQLFieldDefinition fieldDefinition = builder.build();
-            mutatorsTypeBuilder.field(fieldDefinition);
-            mutatorsTypeFields.add(fieldDefinition);
-
+    private static void addArguments(ObjectAction objectAction, GraphQLFieldDefinition.Builder builder) {
+        if (objectAction.getParameters().isNotEmpty()) {
+            builder.arguments(objectAction.getParameters().stream()
+                    .map(objectActionParameter -> GraphQLArgument.newArgument()
+                            .name(objectActionParameter.getId())
+                            .type(objectActionParameter.isOptional()
+                                    ? TypeMapper.inputTypeFor(objectActionParameter)
+                                    : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
+                            .build())
+                    .collect(Collectors.toList()));
         }
     }
 
