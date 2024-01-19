@@ -64,10 +64,10 @@ public class ObjectTypeFactory {
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
     final static String GQL_MUTATIONS_FIELDNAME = "_gql_mutations";
 
-    private final BookmarkService bookmarkService;
-    private final SpecificationLoader specificationLoader;
-    private final ObjectManager objectManager;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
+    private final BookmarkService bookmarkService;
+    private final ObjectManager objectManager;
+    private final SpecificationLoader specificationLoader;
 
     @UtilityClass
     static class Fields {
@@ -91,171 +91,39 @@ public class ObjectTypeFactory {
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val gqlvObjectSpec = new GqlvObjectSpec(objectSpec);
+        val gqlvObjectStructure = new GqlvObjectStructure(objectSpec);
 
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectSpec.getMetaField().getType());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectStructure.getMetaField().getType());
 
 
         // create input type
-        GraphQLInputType inputType = gqlvObjectSpec.getGqlInputObjectType();
+        GraphQLInputType inputType = gqlvObjectStructure.getGqlInputObjectType();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(inputType);
 
-        gqlvObjectSpec.addPropertiesAsFields();
+        gqlvObjectStructure.addPropertiesAsFields();
 
-        gqlvObjectSpec.addCollectionsAsLists();
+        gqlvObjectStructure.addCollectionsAsLists();
 
         // add actions
-        MutatorsDataForEntity mutatorsDataForEntity = gqlvObjectSpec.addActions(graphQLTypeRegistry);
-        if(gqlvObjectSpec.hasMutators()) {
-            gqlvObjectSpec.getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+        gqlvObjectStructure.addActions();
+        if(gqlvObjectStructure.hasMutators()) {
+            gqlvObjectStructure.getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
         }
 
         // build and register object type
-        GraphQLObjectType graphQLObjectType = gqlvObjectSpec.buildGqlObjectType();
+        GraphQLObjectType graphQLObjectType = gqlvObjectStructure.buildGqlObjectType();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
 
 
+        GqlvObjectBehaviour gqlvObjectBehaviour =
+                new GqlvObjectBehaviour(gqlvObjectStructure, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
+
         // create and register data fetchers
-        createAndRegisterDataFetchersForMetaData(codeRegistryBuilder, gqlvObjectSpec);
-        if (mutatorsDataForEntity!=null) {
-            createAndRegisterDataFetchersForMutators(
-                    codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), mutatorsDataForEntity, gqlvObjectSpec.getGqlObjectType());
-        }
-        createAndRegisterDataFetchersForField(objectSpec, codeRegistryBuilder, graphQLObjectType);
-        createAndRegisterDataFetchersForCollection(objectSpec, codeRegistryBuilder, graphQLObjectType);
-    }
+        gqlvObjectBehaviour.createAndRegisterDataFetchersForMetaData();
+        gqlvObjectBehaviour.createAndRegisterDataFetchersForMutators();
 
-    private void createAndRegisterDataFetchersForMutators(
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BeanSort objectSpecificationBeanSort,
-            final MutatorsDataForEntity mutatorsDataForEntity,
-            final GraphQLObjectType graphQLObjectType) {
-
-    }
-
-    void createAndRegisterDataFetchersForField(
-            final ObjectSpecification objectSpecification,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final GraphQLObjectType graphQLObjectType) {
-        objectSpecification.streamProperties(MixedIn.INCLUDED)
-        .forEach(otoa -> {
-
-            createAndRegisterDataFetcherForObjectAssociation(codeRegistryBuilder, graphQLObjectType, otoa);
-
-        });
-    }
-
-    void createAndRegisterDataFetchersForCollection(
-            final ObjectSpecification objectSpecification,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final GraphQLObjectType graphQLObjectType) {
-
-        objectSpecification.streamCollections(MixedIn.INCLUDED)
-                .forEach(otom -> {
-                    createAndRegisterDataFetcherForObjectAssociation(codeRegistryBuilder, graphQLObjectType, otom);
-                });
-    }
-
-
-    @Data
-    @AllArgsConstructor
-    static class MutatorsDataForEntity {
-
-        private GraphQLObjectType mutatorsType;
-
-        private List<GraphQLFieldDefinition> mutatorsTypeFields;
-
-    }
-
-    private void createAndRegisterDataFetcherForObjectAssociation(
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final GraphQLObjectType graphQLObjectType,
-            final ObjectAssociation otom) {
-
-        ObjectSpecification fieldObjectSpecification = otom.getElementType();
-        BeanSort beanSort = fieldObjectSpecification.getBeanSort();
-        switch (beanSort) {
-
-            case VALUE: //TODO: does this work for values as well?
-
-            case VIEW_MODEL:
-
-            case ENTITY:
-
-                codeRegistryBuilder
-                .dataFetcher(
-                    FieldCoordinates.coordinates(graphQLObjectType, otom.getId()),
-                    (DataFetcher<Object>) environment -> {
-
-                        Object domainObjectInstance = environment.getSource();
-
-                        Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                        ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
-
-                        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-
-                        ManagedObject managedObject = otom.get(owner);
-
-                        return managedObject!=null ? managedObject.getPojo() : null;
-
-                    });
-
-
-                break;
-
-        }
-    }
-
-
-    GraphQLObjectType createAndRegisterMutatorsType(
-            final String logicalTypeNameSanitized,
-            final BeanSort objectSpecificationBeanSort,
-            final Set<GraphQLType> graphQLObjectTypes) {
-
-        //TODO: this is not going to work, because we need to dynamically add fields
-        String mutatorsTypeName = logicalTypeNameSanitized + "__DomainObject_mutators";
-        GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
-        GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
-        graphQLObjectTypes.add(mutatorsType);
-        return mutatorsType;
-    }
-
-    void createAndRegisterDataFetchersForMetaData(
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final GqlvObjectSpec gqlvObjectSpec) {
-
-        codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(gqlvObjectSpec.getGqlObjectType(), gqlvObjectSpec.getMetaField()),
-                (DataFetcher<Object>) environment -> {
-                    return bookmarkService.bookmarkFor(environment.getSource())
-                            .map(bookmark -> new GqlvMeta(bookmark, bookmarkService, objectManager))
-                            .orElse(null); //TODO: is this correct ?
-                });
-
-        GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
-        gqlvObjectSpec.getMetaField().getType();
-        codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(metaType, Fields.id),
-                (DataFetcher<Object>) environment -> {
-                    GqlvMeta gqlvMeta = environment.getSource();
-                    return gqlvMeta.id();
-                });
-
-        codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(gqlvObjectSpec.getMetaType(), Fields.logicalTypeName),
-                (DataFetcher<Object>) environment -> {
-                    GqlvMeta gqlvMeta = environment.getSource();
-                    return gqlvMeta.logicalTypeName();
-                });
-
-        if (gqlvObjectSpec.getBeanSort() == BeanSort.ENTITY) {
-            codeRegistryBuilder.dataFetcher(
-                    FieldCoordinates.coordinates(gqlvObjectSpec.getMetaType(), Fields.version),
-                    (DataFetcher<Object>) environment -> {
-                        GqlvMeta gqlvMeta = environment.getSource();
-                        return gqlvMeta.version();
-                    });
-        }
+        gqlvObjectBehaviour.createAndRegisterDataFetchersForField();
+        gqlvObjectBehaviour.createAndRegisterDataFetchersForCollection();
     }
 
 }

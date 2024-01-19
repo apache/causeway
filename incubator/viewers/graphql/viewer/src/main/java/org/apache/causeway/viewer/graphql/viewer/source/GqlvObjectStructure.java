@@ -39,7 +39,7 @@ import static org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory
 /**
  * A wrapper around {@link ObjectSpecification}
  */
-public class GqlvObjectSpec {
+public class GqlvObjectStructure {
 
     @Getter private final ObjectSpecification objectSpec;
     @Getter private final GraphQLFieldDefinition metaField;
@@ -80,7 +80,7 @@ public class GqlvObjectSpec {
      */
     private Optional<GraphQLObjectType> mutatorsTypeIfAny;
 
-    public GqlvObjectSpec(final ObjectSpecification objectSpec) {
+    public GqlvObjectStructure(final ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
         this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
 
@@ -208,7 +208,7 @@ public class GqlvObjectSpec {
 
         if (parameters.isNotEmpty()) {
             builder.arguments(parameters.stream()
-                    .map(GqlvObjectSpec::gqlArgumentFor)
+                    .map(GqlvObjectStructure::gqlArgumentFor)
                     .collect(Collectors.toList()));
         }
     }
@@ -285,15 +285,13 @@ public class GqlvObjectSpec {
                 : Optional.empty();
     }
 
-    ObjectTypeFactory.MutatorsDataForEntity addActions(GraphQLTypeRegistry graphQLTypeRegistry) {
+    void addActions() {
 
         getObjectSpec().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(this::addAction);
 
         Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
-        return mutatorsTypeIfAny.map(mutatorsType -> {
-
-            //graphQLTypeRegistry.addTypeIfNotAlreadyPresent(mutatorsType, getMutatorsTypeName());
+        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
 
             GraphQLFieldDefinition gql_mutations = newFieldDefinition()
                     .name(ObjectTypeFactory.GQL_MUTATIONS_FIELDNAME)
@@ -301,31 +299,7 @@ public class GqlvObjectSpec {
                     .build();
             getGqlObjectTypeBuilder().field(gql_mutations);
 
-            return new ObjectTypeFactory.MutatorsDataForEntity(mutatorsType, mutatorsTypeFields);
-
-//            // I think we have to create and register data fetcher for mutations here, but we can't since we have no objectTypeYet
-//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLTypeReference, gql_mutations), new DataFetcher<Object>() {
-//                @Override
-//                public Object get(DataFetchingEnvironment environment) throws Exception {
-//
-//                    Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
-//                    if (bookmark == null) return null; //TODO: is this correct ?
-//                    return new GqlvMutations(bookmark, bookmarkService, mutatorsTypeFields);
-//                }
-//            });
-//
-//            // for each field something like
-//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(mutatorsType, idField), new DataFetcher<Object>() {
-//                @Override
-//                public Object get(DataFetchingEnvironment environment) throws Exception {
-//
-//                    GqlvMeta gqlMeta = environment.getSource();
-//
-//                    return gqlMeta.id();
-//                }
-//            });
-        })
-        .orElse(null);
+        });
 
     }
 }
