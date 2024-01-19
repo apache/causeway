@@ -112,13 +112,13 @@ public class ObjectTypeFactory {
         // create meta field type
         BeanSort objectSpecificationBeanSort = gqlvObjectSpec.getBeanSort();
 
-        GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
-
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectSpec.getMetaType());
-
+        GraphQLObjectType metaType = gqlvObjectSpec.getGqlObjectType();
         // add meta field
         val _gql_meta_Field = newFieldDefinition().name("_gql_meta").type(metaType).build();
-        gqlvObjectSpec.getObjectTypeBuilder().field(_gql_meta_Field);
+        gqlvObjectSpec.getGqlObjectTypeBuilder().field(_gql_meta_Field);
+
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectSpec.getGqlObjectType());
+
 
 
         // create input type
@@ -141,10 +141,10 @@ public class ObjectTypeFactory {
 
         // add actions
         MutatorsDataForEntity mutatorsDataForEntity =
-                addActions(gqlvObjectSpec.getLogicalTypeNameSanitized(), objectSpec, gqlvObjectSpec.getObjectTypeBuilder());
+                addActions(gqlvObjectSpec.getLogicalTypeNameSanitized(), objectSpec, gqlvObjectSpec.getGqlObjectTypeBuilder());
 
         // build and register object type
-        GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getObjectTypeBuilder().build();
+        GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getGqlObjectTypeBuilder().name(gqlvObjectSpec.getLogicalTypeNameSanitized()).build();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType, gqlvObjectSpec.getLogicalTypeNameSanitized());
 
 

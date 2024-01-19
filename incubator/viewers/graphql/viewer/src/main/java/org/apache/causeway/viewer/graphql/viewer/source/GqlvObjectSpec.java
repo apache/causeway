@@ -36,13 +36,13 @@ public class GqlvObjectSpec {
         return objectSpec.getBeanSort();
     }
 
-    @Getter private final GraphQLObjectType.Builder objectTypeBuilder;
-    @Getter private final GraphQLObjectType metaType;
+    @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    @Getter private final GraphQLObjectType gqlObjectType;
 
     public GqlvObjectSpec(final ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
-        this.objectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
-        this.metaType = _GraphQLObjectType.create(getLogicalTypeNameSanitized(), getBeanSort());
+        this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
+        this.gqlObjectType = _GraphQLObjectType.create(getLogicalTypeNameSanitized(), getBeanSort());
     }
 
 
@@ -67,7 +67,7 @@ public class GqlvObjectSpec {
                                     _LogicalTypeName.sanitized(logicalTypeNameOfField))
                             : nonNull(GraphQLTypeReference.typeRef(
                                     _LogicalTypeName.sanitized(logicalTypeNameOfField))));
-                getObjectTypeBuilder().field(fieldBuilder);
+                getGqlObjectTypeBuilder().field(fieldBuilder);
 
                 break;
 
@@ -80,7 +80,7 @@ public class GqlvObjectSpec {
                     .type(otoa.isOptional()
                             ? Scalars.GraphQLString
                             : nonNull(Scalars.GraphQLString));
-                getObjectTypeBuilder().field(valueBuilder);
+                getGqlObjectTypeBuilder().field(valueBuilder);
 
                 break;
 
@@ -104,14 +104,14 @@ public class GqlvObjectSpec {
                     .name(otom.getId())
                     .type(GraphQLList.list(GraphQLTypeReference.typeRef(
                             _LogicalTypeName.sanitized(logicalTypeNameOfField))));
-                objectTypeBuilder.field(fieldBuilder);
+                gqlObjectTypeBuilder.field(fieldBuilder);
                 break;
 
             case VALUE:
                 GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
                     .name(otom.getId())
                     .type(GraphQLList.list(TypeMapper.typeFor(elementType.getCorrespondingClass())));
-                objectTypeBuilder.field(valueBuilder);
+                gqlObjectTypeBuilder.field(valueBuilder);
                 break;
         }
     }
