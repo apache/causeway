@@ -16,38 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.commons.internal.graph;
+package org.apache.causeway.applib.services.metamodel.objgraph;
 
-import java.util.function.BiPredicate;
-import java.util.stream.Stream;
-
-import org.apache.causeway.commons.collections.Can;
+import java.util.Objects;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * <h1>- internal use only -</h1>
- * <p>
- * Adjacency Matrix
- * </p>
- * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
- * These may be changed or removed without notice!
- * </p>
- *
- * @since 2.0
- */
-@RequiredArgsConstructor(staticName = "of")
-public class _Graph<T> {
+@RequiredArgsConstructor
+class _ObjectGraphObjectModifier implements ObjectGraph.Transformer {
 
-    private final Can<T> nodes;
-    private final BiPredicate<T, T> relationPredicate;
+    final UnaryOperator<ObjectGraph.Object> modifier;
 
-    public Stream<T> streamNeighbors(T a) {
-        return nodes.stream()
-        .filter(b->!a.equals(b))
-        .filter(b->relationPredicate.test(a, b));
+    @Override
+    public ObjectGraph transform(final ObjectGraph g) {
+        var modified = g.objects().stream()
+                .map(obj->Objects.requireNonNull(modifier.apply(obj),
+                        ()->"modifier returned null on non-null ObjectGraph.Object"))
+                .collect(Collectors.toList());
+        g.objects().clear();
+        g.objects().addAll(modified);
+        return g;
     }
-
-
 }

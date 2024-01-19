@@ -23,8 +23,6 @@ import java.util.function.BiPredicate;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -35,6 +33,7 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
 import lombok.NonNull;
@@ -69,7 +68,6 @@ public interface MetaModelService {
      * </p>
      *
      * @param logicalType
-     * @return
      */
     Can<LogicalType> logicalTypeAndAliasesFor(final LogicalType logicalType);
 

@@ -25,9 +25,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.graph.GraphUtils;
+import org.apache.causeway.commons.graph.GraphUtils.GraphKernel;
+import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Strings.StringOperator;
 import org.apache.causeway.commons.internal.collections._Multimaps;
@@ -57,6 +64,16 @@ public class ObjectGraph {
         private final @With @NonNull Optional<String> stereotype;
         private final @With @NonNull Optional<String> description;
         private final @With List<ObjectGraph.Field> fields;
+        /** @return {@code packageName + "." + name} */
+        public String fqName() {
+            return packageName + "." + name;
+        }
+        public Object copy() {
+            return withFields(
+                    fields.stream()
+                        .map(Field::copy)
+                        .collect(Collectors.toCollection(ArrayList::new)));
+        }
     }
 
     @lombok.Value @Accessors(fluent=true)
@@ -65,6 +82,9 @@ public class ObjectGraph {
         private final @With @NonNull String elementTypeShortName;
         private final @With boolean isPlural;
         private final @With @NonNull Optional<String> description;
+        public Field copy() {
+            return withName(name);
+        }
     }
 
     @lombok.Value @Accessors(fluent=true)
@@ -85,6 +105,10 @@ public class ObjectGraph {
         }
         public String descriptionFormatted() {
             return multiplicityNotation().apply(description);
+        }
+        public Relation copy(final Map<String, ObjectGraph.Object> objectById) {
+            return withFrom(objectById.get(fromId()))
+                    .withTo(objectById.get(toId()));
         }
     }
 
@@ -107,6 +131,10 @@ public class ObjectGraph {
     }
 
     public static interface Transformer {
+        /**
+         * If called from {@link ObjectGraph#transform(Transformer)},
+         * given {@link ObjectGraph objGraph} is a defensive copy, that can safely be mutated.
+         */
         ObjectGraph transform(ObjectGraph objGraph);
     }
 
@@ -117,6 +145,9 @@ public class ObjectGraph {
     public static class Transformers {
         @Getter(lazy = true)
         private final Transformer relationMerger = new _ObjectGraphRelationMerger();
+        public Transformer objectModifier(final @NonNull UnaryOperator<ObjectGraph.Object> modifier) {
+            return new _ObjectGraphObjectModifier(modifier);
+        }
     }
 
     public static interface Renderer {
@@ -130,9 +161,15 @@ public class ObjectGraph {
         return factory.create();
     }
 
+    /**
+     * Passes a (deep clone) copy of this {@link ObjectGraph} to given {@link Transformer}
+     * and returns a transformed {@link ObjectGraph}.
+     * <p>
+     * Hence transformers are not required to create defensive copies.
+     */
     public ObjectGraph transform(final @Nullable ObjectGraph.Transformer transfomer) {
         return transfomer!=null
-                ? transfomer.transform(this)
+                ? transfomer.transform(this.copy())
                 : this;
     }
 
@@ -163,6 +200,35 @@ public class ObjectGraph {
     }
 
     /**
+     * Returns a (deep clone) copy of this {@link ObjectGraph}.
+     */
+    public ObjectGraph copy() {
+        var copy = new ObjectGraph();
+        this.objects().stream()
+            .map(ObjectGraph.Object::copy)
+            .forEach(copy.objects()::add);
+        var copyiedObjectById = copy.objectById();
+        this.relations().stream()
+            .map(rel->rel.copy(copyiedObjectById))
+            .forEach(copy.relations()::add);
+        return copy;
+    }
+
+    /**
+     * Returns a {@link GraphKernel} of given characteristics.
+     */
+    public GraphKernel kernel(final @NonNull ImmutableEnumSet<GraphCharacteristic> characteristics) {
+        var kernel = new GraphUtils.GraphKernel(
+                objects().size(), characteristics);
+        relations().forEach(rel->{
+            kernel.addEdge(
+                    objects().indexOf(rel.from()),
+                    objects().indexOf(rel.to()));
+        });
+        return kernel;
+    }
+
+    /**
      * Returns objects grouped by package (as list-multimap).
      */
     public Map<String, List<ObjectGraph.Object>> objectsGroupedByPackage() {
@@ -180,6 +246,23 @@ public class ObjectGraph {
         objects()
             .forEach(obj->objectById.put(obj.id(), obj));
         return objectById;
+    }
+
+    /**
+     * Returns a sub-graph comprised only of object nodes as picked per zero based indexes {@code int[]}.
+     */
+    public ObjectGraph subGraph(final int[] objectIndexes) {
+        var subGraph = this.transform(g->{
+            var subSet = Can.ofCollection(g.objects()).pickByIndex(objectIndexes);
+            g.objects().clear();
+            subSet.forEach(g.objects()::add);
+            var objectIds = g.objectById().keySet();
+            g.relations().removeIf(rel->
+                !(objectIds.contains(rel.fromId())
+                    || objectIds.contains(rel.fromId())));
+            return g;
+        });
+        return subGraph;
     }
 
 }

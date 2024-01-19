@@ -43,9 +43,10 @@ import org.asciidoctor.ast.Document;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.graph.GraphUtils;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.graph._Graph;
 import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.tooling.c4.C4;
 import org.apache.causeway.tooling.cli.CliConfig;
@@ -232,7 +233,6 @@ public class ProjectDocModel {
             projectNodes.add(module);
         }
 
-        //XXX lombok issues, not using val here
         public String toPlantUml(final String softwareSystemName) {
 
             val softwareSystem = c4.softwareSystem(softwareSystemName, null);
@@ -246,16 +246,16 @@ public class ProjectDocModel {
                 return ProjectAndContainerTuple.of(projectNode, container);
             });
 
+            var adjMatrix = GraphUtils.kernelForAdjacency(tuples,
+                    (a, b)->a.projectNode.getChildren().contains(b.projectNode));
 
-            final _Graph<ProjectAndContainerTuple> adjMatrix =
-                    _Graph.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
-
-            tuples.forEach(tuple->{
-                adjMatrix.streamNeighbors(tuple)
-                .forEach(dependentTuple->{
-                    tuple.container.uses(dependentTuple.container, "");
-                });
-            });
+            tuples.forEach(IndexedConsumer.zeroBased((i, tuple)->{
+                adjMatrix.streamNeighbors(i)
+                    .mapToObj(tuples::getElseFail)
+                    .forEach(dependentTuple->{
+                        tuple.container.uses(dependentTuple.container, "");
+                    });
+            }));
 
             val containerView = c4.getViewSet()
                     .createContainerView(softwareSystem, c4.getWorkspaceName(), "Artifact Hierarchy (Maven)");
