@@ -46,11 +46,7 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.GraphQL;
-import graphql.Scalars;
-import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 
 import lombok.RequiredArgsConstructor;
@@ -97,24 +93,22 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         final GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
 
-        val gqlvTopLevelQueryStructure = new GqlvTopLevelQueryStructure();
+        val topLevelQueryStructure = new GqlvTopLevelQueryStructure();
 
         specificationLoader.snapshotSpecifications()
             .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
             .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-            .forEach(objectSpec -> addToSchema(objectSpec, codeRegistryBuilder, gqlvTopLevelQueryStructure));
+            .forEach(objectSpec -> addToSchema(objectSpec, topLevelQueryStructure, codeRegistryBuilder));
 
+        topLevelQueryStructure.buildQueryType();
 
-        GraphQLObjectType queryType = gqlvTopLevelQueryStructure.buildQueryType();
+        val topLevelQueryBehaviour = new GqlvTopLevelQueryBehaviour(topLevelQueryStructure, serviceRegistry);
+        topLevelQueryBehaviour.addFetchersTo(codeRegistryBuilder);
 
-        codeRegistryBuilder
-                .dataFetcher(
-                        coordinates(queryType, gqlvTopLevelQueryStructure.getNumServicesField()),
-                        (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
         val codeRegistry = codeRegistryBuilder.build();
 
         return GraphQLSchema.newSchema()
-                .query(queryType)
+                .query(topLevelQueryStructure.getQueryType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLObjectTypes())
                 .codeRegistry(codeRegistry)
                 .build();
@@ -122,8 +116,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
     private void addToSchema(
             final ObjectSpecification objectSpec,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure) {
+            final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure, final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         switch (objectSpec.getBeanSort()) {
 
