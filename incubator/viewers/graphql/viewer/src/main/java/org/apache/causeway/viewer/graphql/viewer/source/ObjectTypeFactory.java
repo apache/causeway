@@ -72,6 +72,7 @@ public class ObjectTypeFactory {
 
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
     final static String GQL_MUTATIONS_FIELDNAME = "_gql_mutations";
+
     private final BookmarkService bookmarkService;
     private final SpecificationLoader specificationLoader;
     private final ObjectManager objectManager;
@@ -79,10 +80,6 @@ public class ObjectTypeFactory {
 
     static String mutatorsTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_mutators";
-    }
-
-    static String metaTypeName(final String logicalTypeNameSanitized){
-        return logicalTypeNameSanitized + "__DomainObject_meta";
     }
 
     @UtilityClass
@@ -110,15 +107,14 @@ public class ObjectTypeFactory {
         val gqlvObjectSpec = new GqlvObjectSpec(objectSpec);
 
         // create meta field type
-        BeanSort objectSpecificationBeanSort = gqlvObjectSpec.getBeanSort();
 
-        GraphQLObjectType metaType = gqlvObjectSpec.getGqlObjectType();
+        GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
 
         // add meta field
         val _gql_meta_Field = newFieldDefinition().name("_gql_meta").type(metaType).build();
         gqlvObjectSpec.getGqlObjectTypeBuilder().field(_gql_meta_Field);
 
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectSpec.getGqlObjectType());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectSpec.getMetaType());
 
 
 
@@ -151,10 +147,10 @@ public class ObjectTypeFactory {
 
         // create and register data fetchers
         createAndRegisterDataFetchersForMetaData(
-                codeRegistryBuilder, objectSpecificationBeanSort, metaType, _gql_meta_Field, graphQLObjectType);
+                codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), gqlvObjectSpec.getMetaType(), _gql_meta_Field, graphQLObjectType);
         if (mutatorsDataForEntity!=null) {
             createAndRegisterDataFetchersForMutators(
-                    codeRegistryBuilder, objectSpecificationBeanSort, mutatorsDataForEntity, graphQLObjectType);
+                    codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), mutatorsDataForEntity, graphQLObjectType);
         }
         createAndRegisterDataFetchersForField(objectSpec, codeRegistryBuilder, graphQLObjectType);
         createAndRegisterDataFetchersForCollection(objectSpec, codeRegistryBuilder, graphQLObjectType);

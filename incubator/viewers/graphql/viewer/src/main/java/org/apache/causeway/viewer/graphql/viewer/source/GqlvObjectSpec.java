@@ -36,22 +36,21 @@ public class GqlvObjectSpec {
         return objectSpec.getBeanSort();
     }
 
+    @Getter private final GraphQLObjectType metaType;
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    @Getter private final GraphQLObjectType gqlObjectType;
 
     public GqlvObjectSpec(final ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
         this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
-        String logicalTypeNameSanitized = getLogicalTypeNameSanitized();
-        BeanSort objectSpecificationBeanSort = getBeanSort();
-        String metaTypeName = ObjectTypeFactory.metaTypeName(logicalTypeNameSanitized);
-        GraphQLObjectType.Builder metaTypeBuilder = newObject().name(metaTypeName);
+
+        val metaTypeBuilder = newObject().name(getLogicalTypeNameSanitized() + "__DomainObject_meta");
         metaTypeBuilder.field(ObjectTypeFactory.Fields.id);
         metaTypeBuilder.field(ObjectTypeFactory.Fields.logicalTypeName);
-        if (objectSpecificationBeanSort == BeanSort.ENTITY) {
+        if (getBeanSort() == BeanSort.ENTITY) {
             metaTypeBuilder.field(ObjectTypeFactory.Fields.version);
         }
-        this.gqlObjectType = metaTypeBuilder.build();
+
+        this.metaType = metaTypeBuilder.build();
     }
 
 
