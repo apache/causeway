@@ -104,15 +104,14 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .type(Scalars.GraphQLInt)
                 .build();
 
-        GraphQLObjectType query = queryBuilder
-                .field(query_numServices)
-                .build();
+        queryBuilder.field(query_numServices);
+        GraphQLObjectType query = queryBuilder.build();
 
-        val codeRegistry = codeRegistryBuilder
+        codeRegistryBuilder
                 .dataFetcher(
-                        coordinates(query.getName(), query_numServices.getName()),
-                        (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count())
-                .build();
+                        coordinates(query, query_numServices.getName()),
+                        (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
+        val codeRegistry = codeRegistryBuilder.build();
 
         return GraphQLSchema.newSchema()
                 .query(query)
