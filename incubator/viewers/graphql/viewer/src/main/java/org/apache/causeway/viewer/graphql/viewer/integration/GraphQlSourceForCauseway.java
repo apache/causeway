@@ -48,6 +48,7 @@ import graphql.GraphQL;
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 
@@ -62,7 +63,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final SpecificationLoader specificationLoader;
     private final CausewayConfiguration causewayConfiguration;
     private final CausewaySystemEnvironment causewaySystemEnvironment;
+
     private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
+
     private final ObjectTypeFactory objectTypeFactory;
     private final QueryFieldFactory queryFieldFactory;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
@@ -97,36 +100,42 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         specificationLoader.snapshotSpecifications()
             .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
             .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-            .forEach(objectSpec -> handleObjectSpec(objectSpec, queryBuilder, codeRegistryBuilder));
+            .forEach(objectSpec -> addToSchema(objectSpec, queryBuilder, codeRegistryBuilder));
 
-        val query_numServices = newFieldDefinition()
+        final GraphQLFieldDefinition numServicesField = newFieldDefinition()
                 .name("numServices")
                 .type(Scalars.GraphQLInt)
                 .build();
 
-        queryBuilder.field(query_numServices);
-        GraphQLObjectType query = queryBuilder.build();
+        queryBuilder.field(numServicesField);
+
+        GraphQLObjectType queryType = queryBuilder.build();
 
         codeRegistryBuilder
                 .dataFetcher(
-                        coordinates(query, query_numServices.getName()),
+                        coordinates(queryType, numServicesField),
                         (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
         val codeRegistry = codeRegistryBuilder.build();
 
         return GraphQLSchema.newSchema()
-                .query(query)
+                .query(queryType)
                 .additionalTypes(graphQLTypeRegistry.getGraphQLObjectTypes())
                 .codeRegistry(codeRegistry)
                 .build();
     }
 
-    private void handleObjectSpec(
+    private void addToSchema(
             final ObjectSpecification objectSpec,
             final GraphQLObjectType.Builder queryBuilder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
 
         switch (objectSpec.getBeanSort()) {
+
+            case MANAGED_BEAN_CONTRIBUTING: // @DomainService
+
+                queryFieldFactory.queryFieldFromObjectSpecification(queryBuilder, codeRegistryBuilder, objectSpec);
+                break;
 
             case ABSTRACT:
             case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
@@ -135,12 +144,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 // TODO: App interface should map to gql interfaces?
                 objectTypeFactory.createGqlObjectTypeWithFetchers(objectSpec, codeRegistryBuilder);
 
-                break;
-
-            case MANAGED_BEAN_CONTRIBUTING: //@DomainService
-
-                queryFieldFactory
-                    .queryFieldFromObjectSpecification(queryBuilder, codeRegistryBuilder, objectSpec);
                 break;
 
             case MANAGED_BEAN_NOT_CONTRIBUTING: // a @Service or @Component ... ignore

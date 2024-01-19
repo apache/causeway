@@ -8,6 +8,7 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
 import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
 
 import lombok.Getter;
@@ -35,7 +36,8 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import static org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory.GQL_INPUTTYPE_PREFIX;
+import static graphql.schema.GraphQLTypeReference.typeRef;
+import static org.apache.causeway.viewer.graphql.viewer.source._Constants.GQL_INPUTTYPE_PREFIX;
 
 /**
  * A wrapper around {@link ObjectSpecification}
@@ -70,8 +72,7 @@ public class GqlvObjectStructure {
     }
 
     public String getLogicalTypeNameSanitized() {
-        val logicalTypeName = objectSpec.getLogicalTypeName();
-        return _LogicalTypeName.sanitized(logicalTypeName);
+        return _LTN.sanitized(objectSpec);
     }
 
     public BeanSort getBeanSort() {
@@ -133,8 +134,7 @@ public class GqlvObjectStructure {
 
 
     void addPropertiesAsFields() {
-        objectSpec.streamProperties(MixedIn.INCLUDED)
-        .forEach(this::addPropertyAsField);
+        objectSpec.streamProperties(MixedIn.INCLUDED).forEach(this::addPropertyAsField);
     }
 
     private void addPropertyAsField(final OneToOneAssociation otoa) {
@@ -143,16 +143,13 @@ public class GqlvObjectStructure {
 
             case VIEW_MODEL:
             case ENTITY:
-                String logicalTypeNameOfField = otoaObjectSpec.getLogicalTypeName();
 
-                GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                        .name(otoa.getId())
-                        .type(otoa.isOptional()
-                                ? GraphQLTypeReference.typeRef(
-                                _LogicalTypeName.sanitized(logicalTypeNameOfField))
-                                : nonNull(GraphQLTypeReference.typeRef(
-                                _LogicalTypeName.sanitized(logicalTypeNameOfField))));
-                getGqlObjectTypeBuilder().field(fieldBuilder);
+                GraphQLTypeReference fieldTypeRef = typeRef(_LTN.sanitized(otoaObjectSpec));
+                getGqlObjectTypeBuilder().field(
+                        newFieldDefinition()
+                            .name(otoa.getId())
+                            .type(otoa.isOptional() ? fieldTypeRef : nonNull(fieldTypeRef))
+                        );
 
                 break;
 
@@ -179,24 +176,25 @@ public class GqlvObjectStructure {
     private void addCollection(OneToManyAssociation otom) {
 
         ObjectSpecification elementType = otom.getElementType();
-        BeanSort beanSort = elementType.getBeanSort();
-        switch (beanSort) {
+        switch (elementType.getBeanSort()) {
 
             case VIEW_MODEL:
             case ENTITY:
-                String logicalTypeNameOfField = elementType.getLogicalTypeName();
-                GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(GraphQLList.list(GraphQLTypeReference.typeRef(
-                                _LogicalTypeName.sanitized(logicalTypeNameOfField))));
-                gqlObjectTypeBuilder.field(fieldBuilder);
+                GraphQLTypeReference typeRef = typeRef(_LTN.sanitized(elementType));
+                gqlObjectTypeBuilder.field(
+                        newFieldDefinition()
+                            .name(otom.getId())
+                            .type(GraphQLList.list(typeRef))
+                        );
                 break;
 
             case VALUE:
-                GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(GraphQLList.list(TypeMapper.typeFor(elementType.getCorrespondingClass())));
-                gqlObjectTypeBuilder.field(valueBuilder);
+                GraphQLType wrappedType = TypeMapper.typeFor(elementType.getCorrespondingClass());
+                gqlObjectTypeBuilder.field(
+                        newFieldDefinition()
+                            .name(otom.getId())
+                            .type(GraphQLList.list(wrappedType))
+                        );
                 break;
         }
     }
@@ -313,7 +311,7 @@ public class GqlvObjectStructure {
         mutatorsTypeIfAny.ifPresent(mutatorsType -> {
 
             GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-                    .name(ObjectTypeFactory.GQL_MUTATIONS_FIELDNAME)
+                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
                     .type(mutatorsType)
                     .build();
             getGqlObjectTypeBuilder().field(gql_mutations);

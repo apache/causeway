@@ -44,9 +44,6 @@ import lombok.val;
 @Log4j2
 public class ObjectTypeFactory {
 
-    final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
-    final static String GQL_MUTATIONS_FIELDNAME = "_gql_mutations";
-
     private final GraphQLTypeRegistry graphQLTypeRegistry;
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;

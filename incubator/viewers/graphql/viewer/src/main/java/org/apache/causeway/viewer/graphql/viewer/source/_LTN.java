@@ -20,9 +20,14 @@ package org.apache.causeway.viewer.graphql.viewer.source;
 
 import lombok.experimental.UtilityClass;
 
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
 @UtilityClass
-final class _LogicalTypeName {
-    static String sanitized(final String name) {
+final class _LTN {
+    static String sanitized(ObjectSpecification objectSpecification) {
+        return sanitized(objectSpecification.getLogicalTypeName());
+    }
+    private static String sanitized(final String name) {
         return name.replace('.', '_');
     }
 }

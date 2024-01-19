@@ -62,15 +62,14 @@ public class QueryFieldFactory {
     public void queryFieldFromObjectSpecification(
             final GraphQLObjectType.Builder queryBuilder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final ObjectSpecification objectSpecification) {
+            final ObjectSpecification objectSpec) {
 
-        val logicalTypeName = objectSpecification.getLogicalTypeName();
-        String logicalTypeNameSanitized = _LogicalTypeName.sanitized(logicalTypeName);
+        String logicalTypeNameSanitized = _LTN.sanitized(objectSpec);
 
-        serviceRegistry.lookupBeanById(logicalTypeName)
+        serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
         .ifPresent(service -> {
 
-            List<ObjectAction> objectActionList = objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
+            List<ObjectAction> objectActionList = objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
                     .map(ObjectAction.class::cast)
                     .filter((final ObjectAction x) -> x.containsFacet(ActionSemanticsFacet.class))
 //                            .filter(x -> x.getFacet(ActionSemanticsFacet.class).value() == SemanticsOf.SAFE)
