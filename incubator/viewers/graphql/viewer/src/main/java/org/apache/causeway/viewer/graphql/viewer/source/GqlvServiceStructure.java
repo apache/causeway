@@ -1,28 +1,18 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import graphql.schema.GraphQLOutputType;
 
 import lombok.Getter;
-import lombok.val;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.viewer.util._BiMap;
 
@@ -103,7 +93,7 @@ public class GqlvServiceStructure {
     /**
      * @see #getTopLevelQueryField()
      */
-    public GraphQLFieldDefinition addTopLevelQueryField() {
+    public GraphQLFieldDefinition buildTopLevelQueryField() {
         if (topLevelQueryField != null) {
             throw new IllegalStateException(String.format(
                     "queryField has already been added to top-level Query, for %s", getLogicalTypeName()));
@@ -112,12 +102,11 @@ public class GqlvServiceStructure {
                 .name(_LTN.sanitized(serviceSpec))
                 .type(gqlObjectTypeBuilder)
                 .build();
-        queryBuilder.field(topLevelQueryField);
         return topLevelQueryField;
     }
 
     /**
-     * @see #addTopLevelQueryField()
+     * @see #buildTopLevelQueryField()
      */
     public GraphQLFieldDefinition getTopLevelQueryField() {
         if (topLevelQueryField == null) {

@@ -1,12 +1,13 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
 import graphql.Scalars;
+import graphql.schema.DataFetcher;
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import lombok.Getter;
-
-import java.util.Optional;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -53,4 +54,18 @@ public class GqlvTopLevelQueryStructure {
         return queryType;
     }
 
+    public void addFieldFor(
+            final GqlvServiceStructure serviceStructure,
+            final GqlvServiceBehaviour serviceBehaviour,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+
+        GraphQLFieldDefinition topLevelQueryField = serviceStructure.buildTopLevelQueryField();
+        queryBuilder.field(topLevelQueryField);
+
+        codeRegistryBuilder.dataFetcher(
+                // TODO: it would be nice to make these typesafe...
+                FieldCoordinates.coordinates("Query", topLevelQueryField.getName()),
+                (DataFetcher<Object>) environment -> serviceBehaviour.service);
+
+    }
 }

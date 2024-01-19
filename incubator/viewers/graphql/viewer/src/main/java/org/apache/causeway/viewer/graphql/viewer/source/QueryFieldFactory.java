@@ -34,10 +34,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -85,13 +82,7 @@ public class QueryFieldFactory {
 
         serviceStructure.getSafeActions().entrySet().forEach(serviceBehaviour::addDataFetcher);
 
-        // instead, should delegate to GqlvTopLevelQueryStructure and then GqlvTopLevelQueryBehaviour
-        GraphQLFieldDefinition topLevelQueryField = serviceStructure.addTopLevelQueryField();
-
-        codeRegistryBuilder.dataFetcher(
-                // TODO: it would be nice to make these typesafe...
-                FieldCoordinates.coordinates("Query", topLevelQueryField.getName()),
-                (DataFetcher<Object>) environment -> service);
+        topLevelQueryStructure.addFieldFor(serviceStructure, serviceBehaviour, codeRegistryBuilder);
     }
 
 }

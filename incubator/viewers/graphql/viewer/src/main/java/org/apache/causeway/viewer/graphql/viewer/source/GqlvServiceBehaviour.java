@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 public class GqlvServiceBehaviour {
 
     private final GqlvServiceStructure structure;
-    private final Object service;
+    final Object service;
     private final SpecificationLoader specificationLoader;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
