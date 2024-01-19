@@ -23,7 +23,6 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -166,7 +165,7 @@ public class ObjectTypeFactory {
 
         gqlvObjectSpec.getObjectSpec().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(objectAction ->
-                        addAction(objectAction, gqlvObjectSpec.getGqlObjectTypeBuilder(), gqlvObjectSpec.mutatorsTypeBuilder, gqlvObjectSpec.mutatorsTypeFields)
+                        addAction(gqlvObjectSpec, objectAction)
                 );
 
         if (!gqlvObjectSpec.mutatorsTypeFields.isEmpty()){
@@ -209,7 +208,13 @@ public class ObjectTypeFactory {
     }
 
 
-    private static void addAction(ObjectAction objectAction, GraphQLObjectType.Builder objectTypeBuilder, GraphQLObjectType.Builder mutatorsTypeBuilder, List<GraphQLFieldDefinition> mutatorsTypeFields) {
+    private static void addAction(
+            final GqlvObjectSpec gqlvObjectSpec, final ObjectAction objectAction) {
+
+        final GraphQLObjectType.Builder objectTypeBuilder = gqlvObjectSpec.getGqlObjectTypeBuilder();
+        final GraphQLObjectType.Builder mutatorsTypeBuilder = gqlvObjectSpec.mutatorsTypeBuilder;
+        final List<GraphQLFieldDefinition> mutatorsTypeFields = gqlvObjectSpec.mutatorsTypeFields;
+
         if (objectAction.getSemantics().isSafeInNature()) {
 
             String fieldName = objectAction.getId();
