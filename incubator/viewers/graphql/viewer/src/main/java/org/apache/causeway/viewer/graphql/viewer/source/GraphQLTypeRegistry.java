@@ -13,10 +13,12 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Just a simple wrapper around the set of discovered {@link GraphQLType}s.
+ */
 @Component
 @Log4j2
 public class GraphQLTypeRegistry {
-
 
     Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
 

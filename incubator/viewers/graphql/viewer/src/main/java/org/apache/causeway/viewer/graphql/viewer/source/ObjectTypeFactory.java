@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.graphql.viewer.source;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
-import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import javax.inject.Inject;
@@ -33,13 +32,10 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import graphql.Scalars;
 import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
@@ -56,25 +52,7 @@ public class ObjectTypeFactory {
     private final ObjectManager objectManager;
     private final SpecificationLoader specificationLoader;
 
-    @UtilityClass
-    static class Fields {
-        static GraphQLFieldDefinition id =
-                newFieldDefinition()
-                    .name("id")
-                    .type(nonNull(Scalars.GraphQLString))
-                    .build();
-        static GraphQLFieldDefinition logicalTypeName =
-                newFieldDefinition()
-                    .name("logicalTypeName")
-                    .type(nonNull(Scalars.GraphQLString))
-                    .build();
-        static GraphQLFieldDefinition version =
-                newFieldDefinition()
-                    .name("version")
-                    .type(Scalars.GraphQLString).build();
-    }
-
-    public void objectTypeFromObjectSpecification(
+    public void createGqlObjectTypeWithFetchers(
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
@@ -93,7 +71,6 @@ public class ObjectTypeFactory {
         // build and register object type
         GraphQLObjectType graphQLObjectType = gqlvObjectStructure.buildGqlObjectType();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
-
 
         GqlvObjectBehaviour gqlvObjectBehaviour =
                 new GqlvObjectBehaviour(gqlvObjectStructure, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);

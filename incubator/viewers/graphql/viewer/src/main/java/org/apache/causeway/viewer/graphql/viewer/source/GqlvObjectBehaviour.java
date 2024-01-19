@@ -1,19 +1,6 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
 
-import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLCodeRegistry;
-
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLType;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 import java.util.Set;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -24,6 +11,14 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+
+import lombok.RequiredArgsConstructor;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLType;
 
 import static graphql.schema.GraphQLObjectType.newObject;
 
@@ -51,14 +46,14 @@ public class GqlvObjectBehaviour {
         GraphQLObjectType metaType = gqlvObjectStructure.getMetaType();
         gqlvObjectStructure.getMetaField().getType();
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(metaType, ObjectTypeFactory.Fields.id),
+                FieldCoordinates.coordinates(metaType, GqlvObjectStructure.Fields.id),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.id();
                 });
 
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(gqlvObjectStructure.getMetaType(), ObjectTypeFactory.Fields.logicalTypeName),
+                FieldCoordinates.coordinates(gqlvObjectStructure.getMetaType(), GqlvObjectStructure.Fields.logicalTypeName),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.logicalTypeName();
@@ -66,7 +61,7 @@ public class GqlvObjectBehaviour {
 
         if (gqlvObjectStructure.getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(
-                    FieldCoordinates.coordinates(gqlvObjectStructure.getMetaType(), ObjectTypeFactory.Fields.version),
+                    FieldCoordinates.coordinates(gqlvObjectStructure.getMetaType(), GqlvObjectStructure.Fields.version),
                     (DataFetcher<Object>) environment -> {
                         GqlvMeta gqlvMeta = environment.getSource();
                         return gqlvMeta.version();

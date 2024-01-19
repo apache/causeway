@@ -11,6 +11,7 @@ import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLTypeReference;
 
 import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import lombok.val;
 
 import java.util.ArrayList;
@@ -40,6 +41,24 @@ import static org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory
  * A wrapper around {@link ObjectSpecification}
  */
 public class GqlvObjectStructure {
+
+    @UtilityClass
+    static class Fields {
+        static GraphQLFieldDefinition id =
+                newFieldDefinition()
+                        .name("id")
+                        .type(nonNull(Scalars.GraphQLString))
+                        .build();
+        static GraphQLFieldDefinition logicalTypeName =
+                newFieldDefinition()
+                        .name("logicalTypeName")
+                        .type(nonNull(Scalars.GraphQLString))
+                        .build();
+        static GraphQLFieldDefinition version =
+                newFieldDefinition()
+                        .name("version")
+                        .type(Scalars.GraphQLString).build();
+    }
 
     @Getter private final ObjectSpecification objectSpec;
     @Getter private final GraphQLFieldDefinition metaField;
@@ -104,10 +123,10 @@ public class GqlvObjectStructure {
 
     private GraphQLObjectType metaType() {
         val metaTypeBuilder = newObject().name(getLogicalTypeNameSanitized() + "__DomainObject_meta");
-        metaTypeBuilder.field(ObjectTypeFactory.Fields.id);
-        metaTypeBuilder.field(ObjectTypeFactory.Fields.logicalTypeName);
+        metaTypeBuilder.field(Fields.id);
+        metaTypeBuilder.field(Fields.logicalTypeName);
         if (getBeanSort() == BeanSort.ENTITY) {
-            metaTypeBuilder.field(ObjectTypeFactory.Fields.version);
+            metaTypeBuilder.field(Fields.version);
         }
         return metaTypeBuilder.build();
     }
