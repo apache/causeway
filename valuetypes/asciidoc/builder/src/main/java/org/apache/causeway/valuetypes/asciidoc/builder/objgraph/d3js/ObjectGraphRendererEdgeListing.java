@@ -24,6 +24,7 @@ import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,25 +43,27 @@ public class ObjectGraphRendererEdgeListing implements ObjectGraph.Renderer {
 
         var listOfWeaklyConnectedEdges = listOfWeaklyConnectedNodes.stream()
             .map(connectedObjectIndexes->renderConnectedSubGraph(objGraph.subGraph(connectedObjectIndexes)))
+            .filter(_Strings::isNotEmpty)
             .collect(Collectors.joining(",\n"));
         sb.append(listOfWeaklyConnectedEdges);
     }
 
-    private String renderConnectedSubGraph(final ObjectGraph objGraph) {
-        final int maxRelIndex = objGraph.relations().size() - 1;
+    private String renderConnectedSubGraph(final ObjectGraph subGraph) {
+        final int maxRelIndex = subGraph.relations().size() - 1;
+        if(maxRelIndex<0) return null;
 
         var sb = new StringBuilder();
-        sb.append("{");
+        sb.append("edges = {");
 
-        objGraph.relations().forEach(IndexedConsumer.zeroBased((i, rel)->{
-            var fromId = rel.from().id();
-            var toId = rel.to().id();
+        subGraph.relations().forEach(IndexedConsumer.zeroBased((i, rel)->{
+            var fromId = rel.from().name();
+            var toId = rel.to().name();
             sb.append(String.format("%s->%s", fromId, toId));
             if(i<maxRelIndex) sb.append(",");
             if(i%8==7) sb.append("\n");
         }));
 
-        sb.append("}").append("\n");
+        sb.append("}");
 
         return sb.toString();
     }
