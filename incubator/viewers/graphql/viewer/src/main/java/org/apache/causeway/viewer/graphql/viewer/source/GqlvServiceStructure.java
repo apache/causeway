@@ -143,43 +143,12 @@ public class GqlvServiceStructure {
                             .build())
                     .collect(Collectors.toList()));
         }
-        gqlObjectTypeBuilder.field(fieldBuilder.build());
+        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
+        gqlObjectTypeBuilder.field(fieldDefinition);
+
+        // TODO: either safe or mutator
+        safeActionToField.put(objectAction, fieldDefinition);
     }
 
 
-    void addBehaviour(
-            final ObjectAction objectAction,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-
-        final GraphQLObjectType graphQLObjectType = getGqlObjectType();
-
-        String fieldName = objectAction.getId();
-        codeRegistryBuilder.dataFetcher(
-            FieldCoordinates.coordinates(graphQLObjectType, fieldName),
-            (DataFetcher<Object>) dataFetchingEnvironment -> {
-
-                Object domainObjectInstance = dataFetchingEnvironment.getSource();
-
-                Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                ObjectSpecification specification = specificationLoader
-                        .loadSpecification(domainObjectInstanceClass);
-
-                ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-
-                ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
-
-                Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-                Can<ObjectActionParameter> parameters = objectAction.getParameters();
-                Can<ManagedObject> canOfParams = parameters
-                        .map(oap -> {
-                            Object argumentValue = arguments.get(oap.getId());
-                            return ManagedObject.adaptParameter(oap, argumentValue);
-                        });
-
-                ManagedObject managedObject = objectAction
-                        .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
-
-                return managedObject.getPojo();
-            });
-    }
 }

@@ -67,7 +67,7 @@ public class QueryFieldFactory {
             final GqlvTopLevelQueryStructure topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val gqlvServiceStructure = new GqlvServiceStructure(serviceSpec, topLevelQueryStructure, specificationLoader);
+        val serviceStructure = new GqlvServiceStructure(serviceSpec, topLevelQueryStructure, specificationLoader);
 
         List<ObjectAction> objectActionList = serviceSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .map(ObjectAction.class::cast)
@@ -77,15 +77,18 @@ public class QueryFieldFactory {
             return;
         }
 
-        objectActionList.forEach(gqlvServiceStructure::addAction);
+        objectActionList.forEach(serviceStructure::addAction);
 
-        gqlvServiceStructure.buildObjectGqlType();
+        serviceStructure.buildObjectGqlType();
 
-        objectActionList.forEach(objectAction -> gqlvServiceStructure.addBehaviour(objectAction, codeRegistryBuilder));
+        GqlvServiceBehaviour serviceBehaviour = new GqlvServiceBehaviour(serviceStructure, service, specificationLoader, codeRegistryBuilder);
 
-        GraphQLFieldDefinition topLevelQueryField = gqlvServiceStructure.addTopLevelQueryField();
+        objectActionList.forEach(objectAction -> serviceBehaviour.addAction(objectAction, codeRegistryBuilder));
+
+        GraphQLFieldDefinition topLevelQueryField = serviceStructure.addTopLevelQueryField();
 
         codeRegistryBuilder.dataFetcher(
+                // TODO: it would be nice to make these typesafe...
                 FieldCoordinates.coordinates("Query", topLevelQueryField.getName()),
                 (DataFetcher<Object>) environment -> service);
     }
