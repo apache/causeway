@@ -25,7 +25,12 @@ import static graphql.schema.GraphQLObjectType.newObject;
  */
 public class GqlvObjectSpec {
 
-    private final ObjectSpecification objectSpec;
+    @Getter private final ObjectSpecification objectSpec;
+
+    @Getter private final GraphQLObjectType metaType;
+    @Getter private final GraphQLFieldDefinition metaField;
+
+    @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     public String getLogicalTypeNameSanitized() {
         val logicalTypeName = objectSpec.getLogicalTypeName();
@@ -36,22 +41,10 @@ public class GqlvObjectSpec {
         return objectSpec.getBeanSort();
     }
 
-    @Getter private final GraphQLObjectType metaType;
-    @Getter private final GraphQLFieldDefinition metaField;
-
-    @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-
     /**
-     * Build using {@link #buildGqlObjectType()}
+     * Built using {@link #buildGqlObjectType()}
      */
     private GraphQLObjectType gqlObjectType;
-
-    public GraphQLObjectType getGqlObjectType() {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException("GraphQLObjectType has not yet been built for " + getLogicalTypeNameSanitized());
-        }
-        return gqlObjectType;
-    }
 
     public GqlvObjectSpec(final ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
@@ -143,11 +136,28 @@ public class GqlvObjectSpec {
         }
     }
 
-    public GraphQLObjectType buildGqlObjectType() {
+    /**
+     * Should be called only after fields etc have been added.
+     *
+     * @see #getGqlObjectType()
+     */
+    GraphQLObjectType buildGqlObjectType() {
         if (gqlObjectType != null) {
             throw new IllegalArgumentException("GqlObjectType has already been built");
         }
         gqlObjectType = getGqlObjectTypeBuilder().name(getLogicalTypeNameSanitized()).build();
         return gqlObjectType;
     }
+
+    /**
+     * @see #buildGqlObjectType()
+     */
+    GraphQLObjectType getGqlObjectType() {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(String.format(
+                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeNameSanitized()));
+        }
+        return gqlObjectType;
+    }
+
 }

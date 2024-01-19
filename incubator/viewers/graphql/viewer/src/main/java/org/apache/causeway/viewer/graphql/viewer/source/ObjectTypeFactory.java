@@ -137,11 +137,10 @@ public class ObjectTypeFactory {
 
 
         // create and register data fetchers
-        createAndRegisterDataFetchersForMetaData(
-                codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), gqlvObjectSpec.getMetaType(), gqlvObjectSpec.getMetaField(), gqlvObjectSpec.getGqlObjectType(), gqlvObjectSpec);
+        createAndRegisterDataFetchersForMetaData(codeRegistryBuilder, gqlvObjectSpec);
         if (mutatorsDataForEntity!=null) {
             createAndRegisterDataFetchersForMutators(
-                    codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), mutatorsDataForEntity, graphQLObjectType);
+                    codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), mutatorsDataForEntity, gqlvObjectSpec.getGqlObjectType());
         }
         createAndRegisterDataFetchersForField(objectSpec, codeRegistryBuilder, graphQLObjectType);
         createAndRegisterDataFetchersForCollection(objectSpec, codeRegistryBuilder, graphQLObjectType);
@@ -154,7 +153,6 @@ public class ObjectTypeFactory {
             final GraphQLObjectType graphQLObjectType) {
 
     }
-
 
     void createAndRegisterDataFetchersForField(
             final ObjectSpecification objectSpecification,
@@ -357,39 +355,37 @@ public class ObjectTypeFactory {
 
     void createAndRegisterDataFetchersForMetaData(
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BeanSort objectSpecificationBeanSortx,
-            final GraphQLObjectType metaTypex,
-            final GraphQLFieldDefinition gql_metax,
-            final GraphQLObjectType graphQLObjectTypex,
             final GqlvObjectSpec gqlvObjectSpec) {
 
-        final BeanSort objectSpecificationBeanSort = gqlvObjectSpec.getBeanSort();
-        final GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
-        final GraphQLFieldDefinition gql_meta = gqlvObjectSpec.getMetaField();
-        final GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getGqlObjectType();
+        codeRegistryBuilder.dataFetcher(
+                FieldCoordinates.coordinates(gqlvObjectSpec.getGqlObjectType(), gqlvObjectSpec.getMetaField()),
+                (DataFetcher<Object>) environment -> {
+                    return bookmarkService.bookmarkFor(environment.getSource())
+                            .map(bookmark -> new GqlvMeta(bookmark, bookmarkService, objectManager))
+                            .orElse(null); //TODO: is this correct ?
+                });
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), (DataFetcher<Object>) environment -> {
-            return bookmarkService.bookmarkFor(environment.getSource())
-                    .map(bookmark -> new GqlvMeta(bookmark, bookmarkService, objectManager))
-                    .orElse(null); //TODO: is this correct ?
-        });
+        codeRegistryBuilder.dataFetcher(
+                FieldCoordinates.coordinates(gqlvObjectSpec.getMetaType(), Fields.id),
+                (DataFetcher<Object>) environment -> {
+                    GqlvMeta gqlvMeta = environment.getSource();
+                    return gqlvMeta.id();
+                });
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.id), (DataFetcher<Object>) environment -> {
-            GqlvMeta gqlvMeta = environment.getSource();
-            return gqlvMeta.id();
-        });
+        codeRegistryBuilder.dataFetcher(
+                FieldCoordinates.coordinates(gqlvObjectSpec.getMetaType(), Fields.logicalTypeName),
+                (DataFetcher<Object>) environment -> {
+                    GqlvMeta gqlvMeta = environment.getSource();
+                    return gqlvMeta.logicalTypeName();
+                });
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.logicalTypeName), (DataFetcher<Object>) environment -> {
-            GqlvMeta gqlvMeta = environment.getSource();
-            return gqlvMeta.logicalTypeName();
-        });
-
-        if (objectSpecificationBeanSort == BeanSort.ENTITY) {
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.version), (DataFetcher<Object>) environment -> {
-                GqlvMeta gqlvMeta = environment.getSource();
-                return gqlvMeta.version();
-            });
-
+        if (gqlvObjectSpec.getBeanSort() == BeanSort.ENTITY) {
+            codeRegistryBuilder.dataFetcher(
+                    FieldCoordinates.coordinates(gqlvObjectSpec.getMetaType(), Fields.version),
+                    (DataFetcher<Object>) environment -> {
+                        GqlvMeta gqlvMeta = environment.getSource();
+                        return gqlvMeta.version();
+                    });
         }
     }
 
