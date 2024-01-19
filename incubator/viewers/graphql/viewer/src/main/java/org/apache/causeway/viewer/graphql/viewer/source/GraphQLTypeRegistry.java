@@ -30,12 +30,12 @@ public class GraphQLTypeRegistry {
             final String logicalTypeName) {
 
         if (typeToAdd instanceof GraphQLObjectType) {
-            addTypeIfNotAlreadyPresent((GraphQLObjectType) typeToAdd, logicalTypeName);
+            addTypeIfNotAlreadyPresent((GraphQLObjectType) typeToAdd);
             return;
         }
 
         if (typeToAdd instanceof GraphQLInputObjectType) {
-            addTypeIfNotAlreadyPresent((GraphQLInputObjectType) typeToAdd, logicalTypeName);
+            addTypeIfNotAlreadyPresent((GraphQLInputObjectType) typeToAdd);
             return;
         }
 
