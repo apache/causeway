@@ -23,6 +23,7 @@ import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
 
+import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class GqlvObjectBehaviour {
     public void createAndRegisterDataFetchersForMetaData() {
 
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(structure.getGqlObjectType(), structure.getMetaField()),
+                coordinates(structure.getGqlObjectType(), structure.getMetaField()),
                 (DataFetcher<Object>) environment -> {
                     return bookmarkService.bookmarkFor(environment.getSource())
                             .map(bookmark -> new GqlvMeta(bookmark, bookmarkService, objectManager))
@@ -47,14 +48,14 @@ public class GqlvObjectBehaviour {
                 });
 
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.id),
+                coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.id),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.id();
                 });
 
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.logicalTypeName),
+                coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.logicalTypeName),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.logicalTypeName();
@@ -62,12 +63,13 @@ public class GqlvObjectBehaviour {
 
         if (structure.getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(
-                    FieldCoordinates.coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.version),
+                    coordinates(structure.getMetaType(), GqlvObjectStructure.Fields.version),
                     (DataFetcher<Object>) environment -> {
                         GqlvMeta gqlvMeta = environment.getSource();
                         return gqlvMeta.version();
                     });
         }
+
     }
 
 
@@ -80,11 +82,14 @@ public class GqlvObjectBehaviour {
     }
 
     private void createAndRegisterDataFetcherForAssociation(
-            final Map.Entry<? extends ObjectAssociation, GraphQLFieldDefinition> propertyAndField) {
+            final Map.Entry<? extends ObjectAssociation, GraphQLFieldDefinition> associationAndField) {
+
+        final ObjectAssociation association = associationAndField.getKey();
+        final GraphQLFieldDefinition field = associationAndField.getValue();
 
         final GraphQLObjectType graphQLObjectType = structure.getGqlObjectType();
 
-        ObjectSpecification fieldObjectSpecification = propertyAndField.getKey().getElementType();
+        ObjectSpecification fieldObjectSpecification = association.getElementType();
         BeanSort beanSort = fieldObjectSpecification.getBeanSort();
         switch (beanSort) {
 
@@ -94,21 +99,20 @@ public class GqlvObjectBehaviour {
 
             case ENTITY:
 
-                codeRegistryBuilder
-                        .dataFetcher(
-                                FieldCoordinates.coordinates(graphQLObjectType, propertyAndField.getKey().getId()),
-                                (DataFetcher<Object>) environment -> {
+                codeRegistryBuilder.dataFetcher(
+                    coordinates(graphQLObjectType, field),
+                    (DataFetcher<Object>) environment -> {
 
-                                    Object domainObjectInstance = environment.getSource();
+                        Object domainObjectInstance = environment.getSource();
 
-                                    Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                                    ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
+                        Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
+                        ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
 
-                                    ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-                                    ManagedObject managedObject = propertyAndField.getKey().get(owner);
+                        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
+                        ManagedObject managedObject = association.get(owner);
 
-                                    return managedObject!=null ? managedObject.getPojo() : null;
-                                });
+                        return managedObject!=null ? managedObject.getPojo() : null;
+                    });
 
                 break;
 
