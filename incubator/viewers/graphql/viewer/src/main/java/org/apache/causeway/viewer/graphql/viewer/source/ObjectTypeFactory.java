@@ -113,6 +113,7 @@ public class ObjectTypeFactory {
         BeanSort objectSpecificationBeanSort = gqlvObjectSpec.getBeanSort();
 
         GraphQLObjectType metaType = gqlvObjectSpec.getGqlObjectType();
+
         // add meta field
         val _gql_meta_Field = newFieldDefinition().name("_gql_meta").type(metaType).build();
         gqlvObjectSpec.getGqlObjectTypeBuilder().field(_gql_meta_Field);

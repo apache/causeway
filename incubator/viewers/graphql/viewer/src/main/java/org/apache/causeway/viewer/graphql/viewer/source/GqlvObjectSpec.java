@@ -42,7 +42,16 @@ public class GqlvObjectSpec {
     public GqlvObjectSpec(final ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
         this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
-        this.gqlObjectType = _GraphQLObjectType.create(getLogicalTypeNameSanitized(), getBeanSort());
+        String logicalTypeNameSanitized = getLogicalTypeNameSanitized();
+        BeanSort objectSpecificationBeanSort = getBeanSort();
+        String metaTypeName = ObjectTypeFactory.metaTypeName(logicalTypeNameSanitized);
+        GraphQLObjectType.Builder metaTypeBuilder = newObject().name(metaTypeName);
+        metaTypeBuilder.field(ObjectTypeFactory.Fields.id);
+        metaTypeBuilder.field(ObjectTypeFactory.Fields.logicalTypeName);
+        if (objectSpecificationBeanSort == BeanSort.ENTITY) {
+            metaTypeBuilder.field(ObjectTypeFactory.Fields.version);
+        }
+        this.gqlObjectType = metaTypeBuilder.build();
     }
 
 
