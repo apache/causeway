@@ -119,12 +119,13 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
             final ObjectGraph.RelationType relationType,
             final String fromId,
             final String toId,
-            final String label) {
+            final String description) {
         val relation = new ObjectGraph.Relation(
                 relationType,
                 objectById.get(fromId),
                 objectById.get(toId),
-                label, "");
+                description,
+                "", "");
         objectGraph.relations().add(relation);
         return relation;
     }
@@ -136,12 +137,17 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                 objSpec.isAbstract()
                     ? Optional.of("abstract")
                     : Optional.empty(),
+                Optional.ofNullable(objSpec.getDescription()),
                 new ArrayList<>());
         return obj;
     }
 
     private ObjectGraph.Field fieldForAss(final ObjectAssociation ass) {
-        return new ObjectGraph.Field(ass.getId(), objectShortName(ass.getElementType()), ass.isOneToManyAssociation());
+        return new ObjectGraph.Field(
+                ass.getId(),
+                objectShortName(ass.getElementType()),
+                ass.isOneToManyAssociation(),
+                ass.getStaticDescription());
     }
 
     private Set<Relation> createInheritanceRelations() {
@@ -162,7 +168,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                     // we found an inheritance relation
                     val relation = new ObjectGraph.Relation(
                             ObjectGraph.RelationType.INHERITANCE,
-                            objectById.get(o1.id()), objectById.get(o2.id()), "", "");
+                            objectById.get(o1.id()), objectById.get(o2.id()), "", "", "");
                     inheritanceRelations.add(relation);
                 }
             }
