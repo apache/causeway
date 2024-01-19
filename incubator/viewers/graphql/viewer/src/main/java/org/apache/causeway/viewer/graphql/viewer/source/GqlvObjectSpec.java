@@ -41,6 +41,18 @@ public class GqlvObjectSpec {
 
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
+    /**
+     * Build using {@link #buildGqlObjectType()}
+     */
+    private GraphQLObjectType gqlObjectType;
+
+    public GraphQLObjectType getGqlObjectType() {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException("GraphQLObjectType has not yet been built for " + getLogicalTypeNameSanitized());
+        }
+        return gqlObjectType;
+    }
+
     public GqlvObjectSpec(final ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
         this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
@@ -129,5 +141,13 @@ public class GqlvObjectSpec {
                 gqlObjectTypeBuilder.field(valueBuilder);
                 break;
         }
+    }
+
+    public GraphQLObjectType buildGqlObjectType() {
+        if (gqlObjectType != null) {
+            throw new IllegalArgumentException("GqlObjectType has already been built");
+        }
+        gqlObjectType = getGqlObjectTypeBuilder().name(getLogicalTypeNameSanitized()).build();
+        return gqlObjectType;
     }
 }

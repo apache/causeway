@@ -132,13 +132,13 @@ public class ObjectTypeFactory {
                 addActions(gqlvObjectSpec.getLogicalTypeNameSanitized(), objectSpec, gqlvObjectSpec.getGqlObjectTypeBuilder());
 
         // build and register object type
-        GraphQLObjectType graphQLObjectType = gqlvObjectSpec.getGqlObjectTypeBuilder().name(gqlvObjectSpec.getLogicalTypeNameSanitized()).build();
+        GraphQLObjectType graphQLObjectType = gqlvObjectSpec.buildGqlObjectType();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
 
 
         // create and register data fetchers
         createAndRegisterDataFetchersForMetaData(
-                codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), gqlvObjectSpec.getMetaType(), gqlvObjectSpec.getMetaField(), graphQLObjectType);
+                codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), gqlvObjectSpec.getMetaType(), gqlvObjectSpec.getMetaField(), gqlvObjectSpec.getGqlObjectType(), gqlvObjectSpec);
         if (mutatorsDataForEntity!=null) {
             createAndRegisterDataFetchersForMutators(
                     codeRegistryBuilder, gqlvObjectSpec.getBeanSort(), mutatorsDataForEntity, graphQLObjectType);
@@ -360,7 +360,8 @@ public class ObjectTypeFactory {
             final BeanSort objectSpecificationBeanSort,
             final GraphQLObjectType metaType,
             final GraphQLFieldDefinition gql_meta,
-            final GraphQLObjectType graphQLObjectType) {
+            final GraphQLObjectType graphQLObjectType,
+            final GqlvObjectSpec gqlvObjectSpec) {
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), (DataFetcher<Object>) environment -> {
             return bookmarkService.bookmarkFor(environment.getSource())
