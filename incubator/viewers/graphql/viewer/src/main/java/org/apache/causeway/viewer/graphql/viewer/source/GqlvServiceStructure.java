@@ -9,8 +9,6 @@ import java.util.Map;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.viewer.util._BiMap;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -20,6 +18,9 @@ public class GqlvServiceStructure {
 
     @Getter private final ObjectSpecification serviceSpec;
     @Getter private final GqlvTopLevelQueryStructure topLevelQueryStructure;
+
+    private GraphQLObjectType.Builder topLevelQueryField;
+
 
     private String getLogicalTypeName() {
         return serviceSpec.getLogicalTypeName();
@@ -47,13 +48,6 @@ public class GqlvServiceStructure {
         queryBuilder = topLevelQueryStructure.getQueryBuilder();
 
         gqlObjectTypeBuilder = newObject().name(_LTN.sanitized(serviceSpec));
-    }
-
-    public void addTypeToTopLevelQuery() {
-        queryBuilder.field(newFieldDefinition()
-                .name(_LTN.sanitized(serviceSpec))
-                .type(getGraphQlTypeBuilder())
-                .build());
     }
 
 
@@ -91,4 +85,31 @@ public class GqlvServiceStructure {
         }
         return gqlObjectType;
     }
+
+    /**
+     * @see #getTopLevelQueryField()
+     */
+    public GraphQLObjectType.Builder addTopLevelQueryField() {
+        if (topLevelQueryField != null) {
+            throw new IllegalStateException(String.format(
+                    "queryField has already been added to top-level Query, for %s", getLogicalTypeName()));
+        }
+        return topLevelQueryField = queryBuilder.field(newFieldDefinition()
+                .name(_LTN.sanitized(serviceSpec))
+                .type(getGraphQlTypeBuilder())
+                .build());
+    }
+
+    /**
+     * @see #addTopLevelQueryField()
+     */
+    public GraphQLObjectType.Builder getTopLevelQueryField() {
+        if (topLevelQueryField == null) {
+            throw new IllegalStateException(String.format(
+                    "queryField has not yet been added to top-level Query, for %s", getLogicalTypeName()));
+        }
+        return topLevelQueryField;
+    }
+
+
 }

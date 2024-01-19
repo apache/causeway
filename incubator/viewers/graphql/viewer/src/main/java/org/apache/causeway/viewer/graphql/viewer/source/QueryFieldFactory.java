@@ -99,14 +99,16 @@ public class QueryFieldFactory {
                 addBehaviour(gqlvServiceStructure, objectAction, codeRegistryBuilder);
             });
 
-            gqlvServiceStructure.addTypeToTopLevelQuery();
+            gqlvServiceStructure.addTopLevelQueryField();
+
+            String fieldName = newFieldDefinition()
+                    .name(_LTN.sanitized(serviceSpec))
+                    .type(serviceAsGraphQlType)
+                    .build().getName();
 
             codeRegistryBuilder
             .dataFetcher(
-                    FieldCoordinates.coordinates("Query", newFieldDefinition()
-                        .name(_LTN.sanitized(serviceSpec))
-                        .type(serviceAsGraphQlType)
-                        .build().getName()),
+                    FieldCoordinates.coordinates("Query", fieldName),
                     (DataFetcher<Object>) environment -> service);
         }
     }
