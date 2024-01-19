@@ -295,7 +295,7 @@ public class GqlvObjectStructure {
     public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
         //noinspection OptionalAssignedToNull
         if (mutatorsTypeIfAny != null) {
-            throw new IllegalArgumentException("MutatorsType has already been built for " + getLogicalTypeName());
+            throw new IllegalArgumentException("Gql MutatorsType has already been built for " + getLogicalTypeName());
         }
         return mutatorsTypeIfAny = hasMutators()
                 ? Optional.of(mutatorsTypeBuilder.build())

@@ -98,25 +98,18 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         final GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
 
         val gqlvTopLevelQueryStructure = new GqlvTopLevelQueryStructure();
-        final GraphQLObjectType.Builder queryBuilder = gqlvTopLevelQueryStructure.getQueryBuilder();
 
         specificationLoader.snapshotSpecifications()
             .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
             .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
             .forEach(objectSpec -> addToSchema(objectSpec, codeRegistryBuilder, gqlvTopLevelQueryStructure));
 
-        final GraphQLFieldDefinition numServicesField = newFieldDefinition()
-                .name("numServices")
-                .type(Scalars.GraphQLInt)
-                .build();
 
-        queryBuilder.field(numServicesField);
-
-        GraphQLObjectType queryType = queryBuilder.build();
+        GraphQLObjectType queryType = gqlvTopLevelQueryStructure.buildQueryType();
 
         codeRegistryBuilder
                 .dataFetcher(
-                        coordinates(queryType, numServicesField),
+                        coordinates(queryType, gqlvTopLevelQueryStructure.getNumServicesField()),
                         (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
         val codeRegistry = codeRegistryBuilder.build();
 
@@ -131,8 +124,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure) {
-
-        final GraphQLObjectType.Builder queryBuilder = gqlvTopLevelQueryStructure.getQueryBuilder();
 
         switch (objectSpec.getBeanSort()) {
 

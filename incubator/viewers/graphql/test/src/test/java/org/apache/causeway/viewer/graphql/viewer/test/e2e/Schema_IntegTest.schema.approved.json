@@ -38,6 +38,17 @@
         "name" : "Query",
         "description" : null,
         "fields" : [ {
+          "name" : "numServices",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Int",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
           "name" : "causeway_applib_UserMenu",
           "description" : null,
           "args" : [ ],
@@ -88,17 +99,6 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_dept_DeptHeadMenu",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "numServices",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Int",
             "ofType" : null
           },
           "isDeprecated" : false,
