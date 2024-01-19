@@ -119,7 +119,7 @@ public class ObjectTypeFactory {
 
         // add actions
         MutatorsDataForEntity mutatorsDataForEntity =
-                addActions(gqlvObjectSpec.getLogicalTypeNameSanitized(), objectSpec, gqlvObjectSpec.getGqlObjectTypeBuilder());
+                addActions(gqlvObjectSpec.getLogicalTypeNameSanitized(), gqlvObjectSpec.getObjectSpec(), gqlvObjectSpec.getGqlObjectTypeBuilder(), gqlvObjectSpec);
 
         // build and register object type
         GraphQLObjectType graphQLObjectType = gqlvObjectSpec.buildGqlObjectType();
@@ -170,7 +170,7 @@ public class ObjectTypeFactory {
     MutatorsDataForEntity addActions(
             final String logicalTypeNameSanitized,
             final ObjectSpecification objectSpecification,
-            final GraphQLObjectType.Builder objectTypeBuilder) {
+            final GraphQLObjectType.Builder objectTypeBuilder, GqlvObjectSpec gqlvObjectSpec) {
 
         MutatorManager result = mutatorManager(logicalTypeNameSanitized);
 
