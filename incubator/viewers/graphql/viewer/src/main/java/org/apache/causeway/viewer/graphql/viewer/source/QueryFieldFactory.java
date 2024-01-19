@@ -44,11 +44,9 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLOutputType;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -88,8 +86,7 @@ public class QueryFieldFactory {
 
             val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
 
-            objectActionList
-            .forEach(objectAction -> addAction(objectAction, gqlvServiceStructure));
+            objectActionList.forEach(gqlvServiceStructure::addAction);
 
             gqlvServiceStructure.buildObjectGqlType();
 
@@ -155,28 +152,4 @@ public class QueryFieldFactory {
             });
     }
 
-    private static void addAction(
-            final ObjectAction objectAction,
-            final GqlvServiceStructure gqlvServiceStructure) {
-
-        val serviceAsGraphQlType = gqlvServiceStructure.getGraphQlTypeBuilder();
-
-        QueryFieldFactory.objectAction = objectAction;
-        String fieldName = objectAction.getId();
-
-        GraphQLFieldDefinition.Builder builder = newFieldDefinition()
-                .name(fieldName)
-                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-        if (objectAction.getParameters().isNotEmpty()) {
-            builder.arguments(objectAction.getParameters().stream()
-                    .map(objectActionParameter -> GraphQLArgument.newArgument()
-                            .name(objectActionParameter.getId())
-                            .type(TypeMapper.inputTypeFor(objectActionParameter))
-                            .build())
-                    .collect(Collectors.toList()));
-        }
-        serviceAsGraphQlType
-                .field(builder
-                        .build());
-    }
 }

@@ -1,11 +1,16 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
+import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
+import graphql.schema.GraphQLOutputType;
+
 import lombok.Getter;
+import lombok.val;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -112,4 +117,23 @@ public class GqlvServiceStructure {
     }
 
 
+    void addAction(final ObjectAction objectAction) {
+
+        val serviceAsGraphQlType = getGraphQlTypeBuilder();
+
+        String fieldName = objectAction.getId();
+
+        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+                .name(fieldName)
+                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+        if (objectAction.getParameters().isNotEmpty()) {
+            fieldBuilder.arguments(objectAction.getParameters().stream()
+                    .map(objectActionParameter -> GraphQLArgument.newArgument()
+                            .name(objectActionParameter.getId())
+                            .type(TypeMapper.inputTypeFor(objectActionParameter))
+                            .build())
+                    .collect(Collectors.toList()));
+        }
+        serviceAsGraphQlType.field(fieldBuilder.build());
+    }
 }
