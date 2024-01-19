@@ -81,7 +81,7 @@ public class QueryFieldFactory {
         List<ObjectAction> objectActionList = objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .map(ObjectAction.class::cast)
                 .filter((final ObjectAction x) -> x.containsFacet(ActionSemanticsFacet.class))
-//                            .filter(x -> x.getFacet(ActionSemanticsFacet.class).value() == SemanticsOf.SAFE)
+//              .filter(x -> x.getFacet(ActionSemanticsFacet.class).value() == SemanticsOf.SAFE)
                 .collect(Collectors.toList());
 
         // for now filters when no safe actions
@@ -99,40 +99,7 @@ public class QueryFieldFactory {
             objectActionList
             .forEach(objectAction -> {
 
-                String fieldName = objectAction.getId();
-                codeRegistryBuilder
-                .dataFetcher(
-                    FieldCoordinates.coordinates(graphQLObjectType, fieldName),
-                    new DataFetcher<Object>() {
-
-                        @Override
-                        public Object get(final DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
-
-                            Object domainObjectInstance = dataFetchingEnvironment.getSource();
-
-                            Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                            ObjectSpecification specification = specificationLoader
-                                    .loadSpecification(domainObjectInstanceClass);
-
-                            ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-
-                            ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
-
-                            Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-                            Can<ObjectActionParameter> parameters = objectAction.getParameters();
-                            Can<ManagedObject> canOfParams = parameters
-                                    .map(oap -> {
-                                        Object argumentValue = arguments.get(oap.getId());
-                                        return ManagedObject.adaptParameter(oap, argumentValue);
-                                    });
-
-                            ManagedObject managedObject = objectAction
-                                    .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
-
-                            return managedObject.getPojo();
-                        }
-
-                    });
+                addBehaviour(objectAction, graphQLObjectType, codeRegistryBuilder);
 
             });
 
@@ -140,6 +107,7 @@ public class QueryFieldFactory {
                     .name(_LTN.sanitized(objectSpec))
                     .type(serviceAsGraphQlType)
                     .build());
+
             codeRegistryBuilder
             .dataFetcher(
                     FieldCoordinates.coordinates("Query", newFieldDefinition()
@@ -148,6 +116,43 @@ public class QueryFieldFactory {
                         .build().getName()),
                     (DataFetcher<Object>) environment -> service);
         }
+    }
+
+    private void addBehaviour(ObjectAction objectAction, GraphQLObjectType graphQLObjectType, GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+        String fieldName = objectAction.getId();
+        codeRegistryBuilder
+        .dataFetcher(
+            FieldCoordinates.coordinates(graphQLObjectType, fieldName),
+            new DataFetcher<Object>() {
+
+                @Override
+                public Object get(final DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
+
+                    Object domainObjectInstance = dataFetchingEnvironment.getSource();
+
+                    Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
+                    ObjectSpecification specification = specificationLoader
+                            .loadSpecification(domainObjectInstanceClass);
+
+                    ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
+
+                    ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
+
+                    Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
+                    Can<ObjectActionParameter> parameters = objectAction.getParameters();
+                    Can<ManagedObject> canOfParams = parameters
+                            .map(oap -> {
+                                Object argumentValue = arguments.get(oap.getId());
+                                return ManagedObject.adaptParameter(oap, argumentValue);
+                            });
+
+                    ManagedObject managedObject = objectAction
+                            .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
+
+                    return managedObject.getPojo();
+                }
+
+            });
     }
 
     private static void addAction(ObjectAction objectAction, GraphQLObjectType.Builder serviceAsGraphQlType) {
