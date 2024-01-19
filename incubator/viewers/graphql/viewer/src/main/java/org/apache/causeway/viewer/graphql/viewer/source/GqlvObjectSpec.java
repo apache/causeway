@@ -37,14 +37,9 @@ public class GqlvObjectSpec {
     }
 
     @Getter private final GraphQLObjectType.Builder objectTypeBuilder;
-
     @Getter private final GraphQLObjectType metaType;
 
-    static GqlvObjectSpec gqlv(final ObjectSpecification objectSpec) {
-        return new GqlvObjectSpec(objectSpec);
-    }
-
-    GqlvObjectSpec(final ObjectSpecification objectSpec) {
+    public GqlvObjectSpec(final ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
         this.objectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
         this.metaType = _GraphQLObjectType.create(getLogicalTypeNameSanitized(), getBeanSort());

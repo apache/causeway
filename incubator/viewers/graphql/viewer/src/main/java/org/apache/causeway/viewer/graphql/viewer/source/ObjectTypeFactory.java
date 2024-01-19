@@ -54,6 +54,7 @@ import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectField;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
@@ -62,10 +63,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
 public class ObjectTypeFactory {
 
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
@@ -105,13 +109,13 @@ public class ObjectTypeFactory {
             final Set<GraphQLType> graphQLObjectTypes,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val gqlvObjectSpec = GqlvObjectSpec.gqlv(objectSpec);
+        val gqlvObjectSpec = new GqlvObjectSpec(objectSpec);
 
         // create meta field type
-        BeanSort objectSpecificationBeanSort = objectSpec.getBeanSort();
+        BeanSort objectSpecificationBeanSort = gqlvObjectSpec.getBeanSort();
         final String logicalTypeNameSanitized = gqlvObjectSpec.getLogicalTypeNameSanitized();
 
-        GraphQLObjectType metaType = _GraphQLObjectType.create(logicalTypeNameSanitized, objectSpecificationBeanSort);
+        GraphQLObjectType metaType = gqlvObjectSpec.getMetaType();
 
         addTypeIfNotAlreadyPresent(graphQLObjectTypes, metaType, logicalTypeNameSanitized);
 
@@ -128,6 +132,7 @@ public class ObjectTypeFactory {
                 .type(nonNull(Scalars.GraphQLID))
                 .build());
         GraphQLInputType inputType = inputTypeBuilder.build();
+
         addTypeIfNotAlreadyPresent(graphQLObjectTypes, inputType, inputTypeName);
 
         // add fields
@@ -166,33 +171,63 @@ public class ObjectTypeFactory {
     void addTypeIfNotAlreadyPresent(
             final Set<GraphQLType> graphQLObjectTypes,
             final GraphQLType typeToAdd,
+            final String logicalTypeName) {
+
+        if (typeToAdd instanceof GraphQLObjectType) {
+            addTypeIfNotAlreadyPresent(graphQLObjectTypes, (GraphQLObjectType) typeToAdd, logicalTypeName);
+            return;
+        }
+
+        if (typeToAdd instanceof GraphQLInputObjectType) {
+            addTypeIfNotAlreadyPresent(graphQLObjectTypes, (GraphQLInputObjectType) typeToAdd, logicalTypeName);
+            return;
+        }
+
+        // TODO: none of these types yet handled
+        // GraphQLTypeReference
+        // GraphQLScalarType
+        // GraphQLCompositeType
+        // GraphQLUnionType
+        // GraphQLEnumType
+        // GraphQLInterfaceType
+        // GraphQLList
+        // GraphQLNonNull
+        log.warn("GraphQLType {} not yet implemented", typeToAdd.getClass().getName());
+    }
+
+    private static void addTypeIfNotAlreadyPresent(
+            final Set<GraphQLType> graphQLObjectTypes,
+            final GraphQLInputObjectType typeToAdd,
+            final String logicalTypeName) {
+        if (isPresent(graphQLObjectTypes, typeToAdd, GraphQLInputObjectType.class)){
+            // For now we just log and skip
+            log.info("GraphQLInputObjectType for {} already present", logicalTypeName);
+            return;
+        }
+        graphQLObjectTypes.add(typeToAdd);
+    }
+
+    void addTypeIfNotAlreadyPresent(
+            final Set<GraphQLType> graphQLObjectTypes,
+            final GraphQLObjectType typeToAdd,
             final String logicalTypeName){
 
-        boolean present;
-        if (typeToAdd.getClass().isAssignableFrom(GraphQLObjectType.class)){
-            GraphQLObjectType typeToAdd1 = (GraphQLObjectType) typeToAdd;
-            present = graphQLObjectTypes.stream()
-                    .filter(o -> o.getClass().isAssignableFrom(GraphQLObjectType.class))
-                    .map(GraphQLObjectType.class::cast)
-                    .filter(ot -> ot.getName().equals(typeToAdd1.getName()))
-                    .findFirst().isPresent();
-        } else {
-            // must be input type
-            GraphQLInputObjectType typeToAdd1 = (GraphQLInputObjectType) typeToAdd;
-            present = graphQLObjectTypes.stream()
-                    .filter(o -> o.getClass().isAssignableFrom(GraphQLInputObjectType.class))
-                    .map(GraphQLInputObjectType.class::cast)
-                    .filter(ot -> ot.getName().equals(typeToAdd1.getName()))
-                    .findFirst().isPresent();
-        }
-        if (present){
+        if (isPresent(graphQLObjectTypes, typeToAdd, GraphQLObjectType.class)){
             // For now we just log and skip
-            System.out.println("==== DOUBLE ====");
-            System.out.println(logicalTypeName);
-
-        } else {
-            graphQLObjectTypes.add(typeToAdd);
+            log.info("GraphQLObjectType for {} already present", logicalTypeName);
+            return;
         }
+        graphQLObjectTypes.add(typeToAdd);
+    }
+
+    private static boolean isPresent(
+            final Set<GraphQLType> graphQLObjectTypes,
+            final GraphQLNamedType typeToAdd,
+            final Class<? extends GraphQLNamedType> cls) {
+        return graphQLObjectTypes.stream()
+                .filter(o -> o.getClass().isAssignableFrom(cls))
+                .map(cls::cast)
+                .anyMatch(ot -> ot.getName().equals(typeToAdd.getName()));
     }
 
     void createAndRegisterDataFetchersForField(
@@ -249,7 +284,7 @@ public class ObjectTypeFactory {
 //
 //                    Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
 //                    if (bookmark == null) return null; //TODO: is this correct ?
-//                    return new GqlMutations(bookmark, bookmarkService, mutatorsTypeFields);
+//                    return new GqlvMutations(bookmark, bookmarkService, mutatorsTypeFields);
 //                }
 //            });
 //
@@ -258,7 +293,7 @@ public class ObjectTypeFactory {
 //                @Override
 //                public Object get(DataFetchingEnvironment environment) throws Exception {
 //
-//                    GqlMeta gqlMeta = environment.getSource();
+//                    GqlvMeta gqlMeta = environment.getSource();
 //
 //                    return gqlMeta.id();
 //                }
@@ -404,24 +439,24 @@ public class ObjectTypeFactory {
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), (DataFetcher<Object>) environment -> {
             return bookmarkService.bookmarkFor(environment.getSource())
-                    .map(bookmark -> new GqlMeta(bookmark, bookmarkService, objectManager))
+                    .map(bookmark -> new GqlvMeta(bookmark, bookmarkService, objectManager))
                     .orElse(null); //TODO: is this correct ?
         });
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.id), (DataFetcher<Object>) environment -> {
-            GqlMeta gqlMeta = environment.getSource();
-            return gqlMeta.id();
+            GqlvMeta gqlvMeta = environment.getSource();
+            return gqlvMeta.id();
         });
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.logicalTypeName), (DataFetcher<Object>) environment -> {
-            GqlMeta gqlMeta = environment.getSource();
-            return gqlMeta.logicalTypeName();
+            GqlvMeta gqlvMeta = environment.getSource();
+            return gqlvMeta.logicalTypeName();
         });
 
         if (objectSpecificationBeanSort == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, Fields.version), (DataFetcher<Object>) environment -> {
-                GqlMeta gqlMeta = environment.getSource();
-                return gqlMeta.version();
+                GqlvMeta gqlvMeta = environment.getSource();
+                return gqlvMeta.version();
             });
 
         }

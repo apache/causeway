@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ExecutionStrategyResolvingWithinInteraction extends AsyncExecutionStrategy {
+public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecutionStrategy {
 
     private final InteractionService interactionService;
 

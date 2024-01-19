@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import javax.inject.Inject;
 
@@ -36,7 +36,7 @@ import reactor.core.publisher.Mono;
  */
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class GraphQlServiceForCauseway implements ExecutionGraphQlService {
+public class ExecutionGraphQlServiceForCauseway implements ExecutionGraphQlService {
 
     private final BatchLoaderRegistry batchLoaderRegistry;
     private final GraphQlSource graphQlSource;

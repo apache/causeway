@@ -36,8 +36,8 @@ import org.apache.causeway.commons.internal.resources._Resources;
 
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.viewer.source.GraphQlServiceForCauseway;
-import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForCauseway;
+import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
+import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
 
 import org.approvaltests.core.Options;
 import org.junit.jupiter.api.BeforeEach;
@@ -115,7 +115,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
     @Inject protected SpecificationLoader specificationLoader;
     @Inject protected TransactionService transactionService;
     @Inject protected GraphQlSourceForCauseway graphQlSourceForCauseway;
-    @Inject protected GraphQlServiceForCauseway graphQlServiceForCauseway;
+    @Inject protected ExecutionGraphQlServiceForCauseway executionGraphQlServiceForCauseway;
 
     @LocalServerPort
     protected int port;
@@ -127,7 +127,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
         assertNotNull(specificationLoader);
         assertNotNull(transactionService);
         assertNotNull(graphQlSourceForCauseway);
-        assertNotNull(graphQlServiceForCauseway);
+        assertNotNull(executionGraphQlServiceForCauseway);
     }
 
 

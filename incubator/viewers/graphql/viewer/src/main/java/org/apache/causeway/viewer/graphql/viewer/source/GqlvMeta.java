@@ -28,8 +28,11 @@ import lombok.Data;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Metadata for every domain object.
+ */
 @Data
-public class GqlMeta {
+public class GqlvMeta {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;

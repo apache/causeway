@@ -26,7 +26,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import lombok.Data;
 
 @Data
-public class GqlMutations {
+public class GqlvMutations {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;

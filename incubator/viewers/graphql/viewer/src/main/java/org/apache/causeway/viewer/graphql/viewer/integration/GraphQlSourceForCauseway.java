@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -33,6 +33,11 @@ import org.apache.causeway.applib.id.HasLogicalType;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import org.apache.causeway.viewer.graphql.viewer.integration.AsyncExecutionStrategyResolvingWithinInteraction;
+
+import org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory;
+import org.apache.causeway.viewer.graphql.viewer.source.QueryFieldFactory;
+
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +49,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.GraphQL;
 import graphql.Scalars;
-import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLObjectType;
@@ -61,7 +65,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final SpecificationLoader specificationLoader;
     private final CausewayConfiguration causewayConfiguration;
     private final CausewaySystemEnvironment causewaySystemEnvironment;
-    private final ExecutionStrategyResolvingWithinInteraction executionStrategy;
+    private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
     private final ObjectTypeFactory objectTypeFactory;
     private final QueryFieldFactory queryFieldFactory;
 
@@ -124,7 +128,10 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private void handleObjectSpec(
             final ObjectSpecification objectSpec,
             final Set<GraphQLType> graphQLObjectTypes,
-            final GraphQLObjectType.Builder queryBuilder, final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+            final GraphQLObjectType.Builder queryBuilder,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+    ) {
+
         switch (objectSpec.getBeanSort()) {
 
             case ABSTRACT:
