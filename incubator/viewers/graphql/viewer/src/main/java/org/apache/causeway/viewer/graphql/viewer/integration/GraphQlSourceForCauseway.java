@@ -203,16 +203,11 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         gqlvDomainObject.addCollectionsAsLists();
         gqlvDomainObject.addActionsAsFields();
 
-
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getMeta().getMetaField().getType());
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getGqlInputObjectType());
-
-        gqlvDomainObject.getMutatorsTypeIfAny()
-                .ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
-
         // build and register object type
         GraphQLObjectType graphQLObjectType = gqlvDomainObject.buildGqlObjectType();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
+
+        gqlvDomainObject.addTypesInto(graphQLTypeRegistry);
 
         // create and register data fetchers
         gqlvDomainObject.addDataFetchersForMetaData();

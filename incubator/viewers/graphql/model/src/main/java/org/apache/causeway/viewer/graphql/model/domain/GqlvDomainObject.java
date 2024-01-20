@@ -21,6 +21,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -415,6 +416,14 @@ public class GqlvDomainObject {
         GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
         graphQLObjectTypes.add(mutatorsType);
         return mutatorsType;
+    }
+
+    public void addTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
+
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getMeta().getMetaField().getType());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getGqlInputObjectType());
+
+        getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
     }
 
 }
