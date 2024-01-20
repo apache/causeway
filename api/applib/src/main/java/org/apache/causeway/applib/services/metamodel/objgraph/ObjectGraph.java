@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -257,9 +258,10 @@ public class ObjectGraph {
             g.objects().clear();
             subSet.forEach(g.objects()::add);
             var objectIds = g.objectById().keySet();
-            g.relations().removeIf(rel->
-                !(objectIds.contains(rel.fromId())
-                    || objectIds.contains(rel.fromId())));
+            var isInSubgraph = (Predicate<ObjectGraph.Relation>) rel->
+                objectIds.contains(rel.fromId())
+                && objectIds.contains(rel.toId());
+            g.relations().removeIf(isInSubgraph.negate());
             return g;
         });
         return subGraph;

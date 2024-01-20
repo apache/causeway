@@ -24,6 +24,8 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
@@ -92,6 +94,9 @@ public class GraphUtils {
         public boolean isUndirected() {
             return characteristics.contains(GraphCharacteristic.UNDIRECTED);
         }
+        public int edgeCount() {
+            return adjacencyList.stream().mapToInt(IntList::size).sum();
+        }
         public void addEdge(final int u, final int v) {
             boundsCheck(u);
             boundsCheck(v);
@@ -122,6 +127,23 @@ public class GraphUtils {
                 }
             }
             return copy;
+        }
+        /**
+         * Returns a sub-graph comprised only of nodes as picked per (zero based) indexes {@code int[]}.
+         * @apiNote assumes nodeIndexes are unique and valid
+         */
+        public GraphKernel subGraph(final @Nullable int[] nodeIndexes) {
+            var pickedSubset = new IntList(nodeIndexes);
+            final int subsize = pickedSubset.size();
+            var sub = new GraphKernel(subsize, characteristics);
+            for (int i = 0; i < subsize; i++) {
+                final int fromIndex = i;
+                for (int v : adjacencyList.get(nodeIndexes[i])) {
+                    pickedSubset.indexOf(v)
+                        .ifPresent(toIndex->sub.addEdge(fromIndex, toIndex));
+                }
+            }
+            return sub;
         }
         /**
          * Returns a list of {@code int[]},
