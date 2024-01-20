@@ -23,6 +23,8 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,6 +33,9 @@ import org.apache.causeway.applib.id.HasLogicalType;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory;
@@ -129,7 +134,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
             case MANAGED_BEAN_CONTRIBUTING: // @DomainService
 
-                queryFieldFactory.queryFieldFromObjectSpecification(objectSpec, gqlvTopLevelQuery, codeRegistryBuilder);
+                addServiceToTopLevelQuery(objectSpec, gqlvTopLevelQuery, codeRegistryBuilder);
                 break;
 
             case ABSTRACT:
@@ -150,4 +155,41 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 break;
         }
     }
+
+    public void addServiceToTopLevelQuery(
+            final ObjectSpecification objectSpec,
+            final GqlvTopLevelQuery topLevelQueryStructure,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+
+        serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
+                .ifPresent(service -> {
+                    addServiceToTopLevelQuery(service, objectSpec, topLevelQueryStructure, codeRegistryBuilder);
+                });
+    }
+
+    private void addServiceToTopLevelQuery(
+            final Object service,
+            final ObjectSpecification objectSpec,
+            final GqlvTopLevelQuery topLevelQueryStructure,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+
+        val domainService = new GqlvDomainService(objectSpec, service, codeRegistryBuilder, specificationLoader);
+
+        List<ObjectAction> objectActionList = objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
+                .map(ObjectAction.class::cast)
+                .collect(Collectors.toList());
+
+        if (objectActionList.isEmpty()) {
+            return;
+        }
+
+        objectActionList.forEach(domainService::addAction);
+
+        domainService.buildObjectGqlType();
+
+        domainService.getSafeActions().forEach(domainService::addDataFetcher);
+
+        topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
+    }
+
 }
