@@ -194,17 +194,11 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
 
     void addAction(final ObjectAction objectAction) {
-
         if (objectAction.getSemantics().isSafeInNature()) {
             safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
         } else {
             mutators.addAction(objectAction);
         }
-    }
-
-
-    boolean hasMutators() {
-        return mutators.hasActions();
     }
 
 
@@ -303,7 +297,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 //                    return gqlMeta.id();
 //                }
 //            });
-
 
     }
 

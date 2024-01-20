@@ -158,25 +158,24 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                .ifPresent(service -> {
-                    addDomainServiceToTopLevelQuery(service, objectSpec, topLevelQueryStructure, codeRegistryBuilder);
-                });
+            .ifPresent(servicePojo ->
+                addDomainServiceToTopLevelQuery(servicePojo, objectSpec, topLevelQueryStructure, codeRegistryBuilder));
     }
 
     private void addDomainServiceToTopLevelQuery(
-            final Object service,
+            final Object servicePojo,
             final ObjectSpecification objectSpec,
             final GqlvTopLevelQuery topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val domainService = new GqlvDomainService(objectSpec, service, codeRegistryBuilder);
+        val domainService = new GqlvDomainService(objectSpec, servicePojo, codeRegistryBuilder);
 
         boolean actionsAdded = domainService.addActions();
         if (!actionsAdded) {
             return;
         }
 
-        domainService.buildObjectGqlType();
+        domainService.registerTypesInto(graphQLTypeRegistry);
 
         domainService.getSafeActions().forEach(GqlvAction::addDataFetcher);
 
