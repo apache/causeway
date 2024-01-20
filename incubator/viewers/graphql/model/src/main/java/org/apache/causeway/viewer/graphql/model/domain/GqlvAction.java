@@ -7,30 +7,50 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLOutputType;
+
+import lombok.val;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
 
 public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
 
+    private final GraphQLObjectType.Builder objectTypeBuilder;
+
     public GqlvAction(
             final GqlvActionHolder holder,
             final ObjectAction objectAction,
-            final GraphQLFieldDefinition fieldDefinition,
+            final GraphQLObjectType.Builder objectTypeBuilder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
             ) {
-        super(holder, objectAction, fieldDefinition, codeRegistryBuilder);
+        super(holder, objectAction, fieldDefinition(objectAction, objectTypeBuilder), codeRegistryBuilder);
+        this.objectTypeBuilder = objectTypeBuilder;
+    }
+
+    private static GraphQLFieldDefinition fieldDefinition(
+            final ObjectAction objectAction,
+            final GraphQLObjectType.Builder objectTypeBuilder) {
+        val fieldName = objectAction.getId();
+        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+                .name(fieldName)
+                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+        addGqlArguments(objectAction, fieldBuilder);
+        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
+
+        objectTypeBuilder.field(fieldDefinition);
+        return fieldDefinition;
     }
 
     public ObjectAction getObjectAction() {

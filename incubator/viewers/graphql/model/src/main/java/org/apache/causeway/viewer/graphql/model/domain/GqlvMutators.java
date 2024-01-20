@@ -56,7 +56,7 @@ public class GqlvMutators implements GqlvActionHolder {
         GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
 
         objectTypeBuilder.field(fieldDefinition);
-        actions.add(new GqlvAction(holder, objectAction, fieldDefinition, codeRegistryBuilder));
+        actions.add(new GqlvAction(holder, objectAction, objectTypeBuilder, codeRegistryBuilder));
     }
 
     private final List<GqlvAction> actions = new ArrayList<>();

@@ -33,7 +33,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
         return objectSpecification.getLogicalTypeName();
     }
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    private final GraphQLObjectType.Builder objectTypeBuilder;
 
     private GraphQLObjectType gqlObjectType;
 
@@ -48,7 +48,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
 
         this.mutators = new GqlvMutators(this, codeRegistryBuilder);
 
-        this.gqlObjectTypeBuilder = newObject().name(_LTN.sanitized(objectSpecification));
+        this.objectTypeBuilder = newObject().name(_LTN.sanitized(objectSpecification));
     }
 
 
@@ -65,7 +65,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
         if (gqlObjectType != null) {
             throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
         }
-        return gqlObjectType = gqlObjectTypeBuilder.build();
+        return gqlObjectType = objectTypeBuilder.build();
     }
 
     /**
@@ -82,7 +82,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
     public GraphQLFieldDefinition createTopLevelQueryField() {
         return newFieldDefinition()
                 .name(_LTN.sanitized(objectSpecification))
-                .type(gqlObjectTypeBuilder)
+                .type(objectTypeBuilder)
                 .build();
     }
 
@@ -103,10 +103,10 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
                     .collect(Collectors.toList()));
         }
         GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
-        gqlObjectTypeBuilder.field(fieldDefinition);
+        objectTypeBuilder.field(fieldDefinition);
 
         // TODO: either safe or mutator
-        safeActions.add(new GqlvAction(this, objectAction, fieldDefinition, codeRegistryBuilder));
+        safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
     }
 
 

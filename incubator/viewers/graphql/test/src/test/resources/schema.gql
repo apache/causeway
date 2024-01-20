@@ -589,7 +589,7 @@ type university_dept_Department {
 }
 
 type university_dept_DepartmentMenu {
-  createDepartment(deptHead: _gql_input__university_dept_DeptHead, name: String): university_dept_Department
+  createDepartment(deptHead: _gql_input__university_dept_DeptHead, name: String!): university_dept_Department
   findAllDepartments: [university_dept_Department]
 }
 
@@ -608,7 +608,7 @@ type university_dept_DeptHead {
 
 type university_dept_DeptHeadMenu {
   findAllDeptHeads: [university_dept_DeptHead]
-  findDeptHeadByName(name: String): university_dept_DeptHead
+  findDeptHeadByName(name: String!): university_dept_DeptHead
 }
 
 type university_dept_DeptHead__meta {

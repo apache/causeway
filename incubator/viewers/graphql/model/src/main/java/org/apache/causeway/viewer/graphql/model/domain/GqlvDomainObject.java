@@ -5,17 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
@@ -23,20 +20,16 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
 import static org.apache.causeway.viewer.graphql.model.types._Constants.GQL_INPUTTYPE_PREFIX;
 
 import lombok.Getter;
-import lombok.val;
 
 import graphql.Scalars;
-import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
 
@@ -202,17 +195,10 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     void addAction(final ObjectAction objectAction) {
 
-
         if (objectAction.getSemantics().isSafeInNature()) {
+            GraphQLObjectType.Builder objectTypeBuilder = getGqlObjectTypeBuilder();
 
-            val fieldName = objectAction.getId();
-            GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                    .name(fieldName)
-                    .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-            addGqlArguments(objectAction, fieldBuilder);
-            GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
-            getGqlObjectTypeBuilder().field(fieldDefinition);
-            safeActions.add(new GqlvAction(this, objectAction, fieldDefinition, codeRegistryBuilder));
+            safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
         } else {
 
             mutators.addActionAsField(objectAction);
