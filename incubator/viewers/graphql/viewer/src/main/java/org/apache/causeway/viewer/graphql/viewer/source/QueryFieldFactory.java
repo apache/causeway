@@ -80,7 +80,7 @@ public class QueryFieldFactory {
 
         domainService.buildObjectGqlType();
 
-        domainService.getSafeActions().entrySet().forEach(domainService::addDataFetcher);
+        domainService.getSafeActions().forEach(domainService::addDataFetcher);
 
         topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
     }

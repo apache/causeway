@@ -9,8 +9,8 @@ import graphql.schema.GraphQLFieldDefinition;
 
 public abstract class GqlvMember<T extends ObjectMember> {
 
-    @Getter final T objectMember;
-    @Getter final GraphQLFieldDefinition fieldDefinition;
+    @Getter private final T objectMember;
+    @Getter private final GraphQLFieldDefinition fieldDefinition;
 
     public GqlvMember(
             final T objectMember,

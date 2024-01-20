@@ -1,6 +1,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
@@ -11,6 +12,9 @@ import graphql.schema.GraphQLOutputType;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,7 +28,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-import org.apache.causeway.viewer.graphql.model.util._BiMap;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -64,17 +67,11 @@ public class GqlvDomainService {
     }
 
 
-    private final _BiMap<ObjectAction, GraphQLFieldDefinition> safeActionToField = new _BiMap<>();
-    private final _BiMap<ObjectAction, GraphQLFieldDefinition> mutatorActionToField = new _BiMap<>();
+    private final List<GqlvAction> safeActions = new ArrayList<>();
+    public List<GqlvAction> getSafeActions() {return Collections.unmodifiableList(safeActions);}
 
-    public Map<ObjectAction, GraphQLFieldDefinition> getSafeActions() {
-        return safeActionToField.getForwardMapAsImmutable();
-    }
-
-    Map<ObjectAction, GraphQLFieldDefinition> getMutatorActions() {
-        return mutatorActionToField.getForwardMapAsImmutable();
-    }
-
+    private final List<GqlvAction> mutatorActions = new ArrayList<>();
+    public List<GqlvAction> getMutatorActions() {return Collections.unmodifiableList(mutatorActions);}
 
     /**
      * @see #getGqlObjectType()
@@ -124,43 +121,46 @@ public class GqlvDomainService {
         gqlObjectTypeBuilder.field(fieldDefinition);
 
         // TODO: either safe or mutator
-        safeActionToField.put(objectAction, fieldDefinition);
+        safeActions.add(new GqlvAction(objectAction, fieldDefinition));
     }
 
 
-    public void addDataFetcher(
-            Map.Entry<ObjectAction, GraphQLFieldDefinition> entry) {
-
-        final ObjectAction objectAction = entry.getKey();
-        GraphQLFieldDefinition fieldDefinition = entry.getValue();
+    public void addDataFetcher(final GqlvAction gqlvAction) {
+        GraphQLFieldDefinition fieldDefinition = gqlvAction.getFieldDefinition();
 
         codeRegistryBuilder.dataFetcher(
                 FieldCoordinates.coordinates(getGqlObjectType(), fieldDefinition),
-                (DataFetcher<Object>) dataFetchingEnvironment -> {
+                (DataFetcher<Object>) dataFetchingEnvironment -> invoke(gqlvAction, dataFetchingEnvironment)
+        );
+    }
 
-                    Object domainObjectInstance = dataFetchingEnvironment.getSource();
+    private Object invoke(
+            final GqlvAction gqlvAction,
+            final DataFetchingEnvironment dataFetchingEnvironment) {
+        final ObjectAction objectAction = gqlvAction.getObjectAction();
 
-                    Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                    ObjectSpecification specification = specificationLoader
-                            .loadSpecification(domainObjectInstanceClass);
+        Object domainObjectInstance = dataFetchingEnvironment.getSource();
 
-                    ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
+        Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
+        ObjectSpecification specification = specificationLoader
+                .loadSpecification(domainObjectInstanceClass);
 
-                    ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
+        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
 
-                    Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-                    Can<ObjectActionParameter> parameters = objectAction.getParameters();
-                    Can<ManagedObject> canOfParams = parameters
-                            .map(oap -> {
-                                Object argumentValue = arguments.get(oap.getId());
-                                return ManagedObject.adaptParameter(oap, argumentValue);
-                            });
+        ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
 
-                    ManagedObject managedObject = objectAction
-                            .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
-
-                    return managedObject.getPojo();
+        Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
+        Can<ObjectActionParameter> parameters = objectAction.getParameters();
+        Can<ManagedObject> canOfParams = parameters
+                .map(oap -> {
+                    Object argumentValue = arguments.get(oap.getId());
+                    return ManagedObject.adaptParameter(oap, argumentValue);
                 });
+
+        ManagedObject managedObject = objectAction
+                .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
+
+        return managedObject.getPojo();
     }
 
 }
