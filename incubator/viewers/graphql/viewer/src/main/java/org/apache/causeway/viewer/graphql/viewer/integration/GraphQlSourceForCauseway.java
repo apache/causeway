@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQueryBehaviour;
 import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQueryStructure;
-import org.apache.causeway.viewer.graphql.viewer.source.GraphQLTypeRegistry;
+import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory;
 import org.apache.causeway.viewer.graphql.viewer.source.QueryFieldFactory;
 

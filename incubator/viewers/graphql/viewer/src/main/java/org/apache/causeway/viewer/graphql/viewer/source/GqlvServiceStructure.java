@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.graphql.model.parts._LTN;
+import org.apache.causeway.viewer.graphql.model.util._LTN;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util._BiMap;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;

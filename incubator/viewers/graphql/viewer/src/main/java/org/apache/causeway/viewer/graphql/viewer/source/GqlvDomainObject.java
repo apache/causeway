@@ -27,7 +27,8 @@ import org.apache.causeway.viewer.graphql.model.parts.GqlvCollection;
 import org.apache.causeway.viewer.graphql.model.parts.GqlvMeta;
 import org.apache.causeway.viewer.graphql.model.parts.GqlvProperty;
 import org.apache.causeway.viewer.graphql.model.parts._Constants;
-import org.apache.causeway.viewer.graphql.model.parts._LTN;
+import org.apache.causeway.viewer.graphql.model.util._LTN;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 

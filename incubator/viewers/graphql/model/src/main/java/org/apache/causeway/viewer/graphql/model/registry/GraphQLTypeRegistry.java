@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.model.registry;
 
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;

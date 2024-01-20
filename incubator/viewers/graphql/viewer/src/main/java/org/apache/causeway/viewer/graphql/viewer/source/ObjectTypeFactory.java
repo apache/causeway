@@ -18,26 +18,22 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.source;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLInputObjectType.newInputObject;
-import static graphql.schema.GraphQLObjectType.newObject;
-
 import javax.inject.Inject;
-
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLObjectType;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

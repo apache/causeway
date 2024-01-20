@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.model.types;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.parts._Constants;
-import org.apache.causeway.viewer.graphql.model.parts._LTN;
+import org.apache.causeway.viewer.graphql.model.util._LTN;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLInputType;
