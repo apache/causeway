@@ -18,23 +18,19 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import static graphql.schema.FieldCoordinates.coordinates;
 
 import static org.apache.causeway.viewer.graphql.model.types._Constants.GQL_INPUTTYPE_PREFIX;
-
-import graphql.schema.GraphQLCodeRegistry;
 
 import lombok.Getter;
 import lombok.val;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLList;
@@ -53,33 +49,28 @@ import static graphql.schema.GraphQLTypeReference.typeRef;
 /**
  * A wrapper around {@link ObjectSpecification}
  */
-public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder {
+public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMutatorsHolder {
 
-    @Getter private final GqlvDomainObjectMeta meta;
-    @Getter private final GqlvDomainObjectMutators mutators;
-
-    private final ObjectSpecification objectSpec;
+    @Getter private final ObjectSpecification objectSpecification;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final SpecificationLoader specificationLoader;
+
+    @Getter private final GqlvMeta meta;
+    @Getter private final GqlvMutators mutators;
 
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
     String getLogicalTypeName() {
-        return objectSpec.getLogicalTypeName();
+        return objectSpecification.getLogicalTypeName();
     }
 
     public String getLogicalTypeNameSanitized() {
-        return _LTN.sanitized(objectSpec);
+        return _LTN.sanitized(objectSpecification);
     }
 
     public BeanSort getBeanSort() {
-        return objectSpec.getBeanSort();
+        return objectSpecification.getBeanSort();
     }
-
-
-
-
 
     private final List<GqlvProperty> properties = new ArrayList<>();
     public List<GqlvProperty> getProperties() {return Collections.unmodifiableList(properties);}
@@ -99,18 +90,16 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
 
     public GqlvDomainObject(
-            final ObjectSpecification objectSpec,
+            final ObjectSpecification objectSpecification,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService,
-            final ObjectManager objectManager,
-            final SpecificationLoader specificationLoader) {
-        this.objectSpec = objectSpec;
+            final ObjectManager objectManager) {
+        this.objectSpecification = objectSpecification;
         this.codeRegistryBuilder = codeRegistryBuilder;
-        this.specificationLoader = specificationLoader;
         this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
 
-        meta = new GqlvDomainObjectMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
-        mutators = new GqlvDomainObjectMutators(this, codeRegistryBuilder);
+        meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
+        mutators = new GqlvMutators(this, codeRegistryBuilder);
 
         // input object type
         String inputTypeName = GQL_INPUTTYPE_PREFIX + getLogicalTypeNameSanitized();
@@ -131,7 +120,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
 
     public void addPropertiesAsFields() {
-        objectSpec.streamProperties(MixedIn.INCLUDED).forEach(this::addPropertyAsField);
+        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addPropertyAsField);
     }
 
 
@@ -175,7 +164,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
 
     public void addCollectionsAsLists() {
-        objectSpec.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
+        objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
     }
 
     private void addCollection(OneToManyAssociation otom) {
@@ -308,7 +297,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     public void addActionsAsFields() {
 
-        objectSpec.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+        objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(this::addAction);
 
         Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
@@ -339,7 +328,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     public void addDataFetchersForMutators() {
 
-        // TODO: something similar to addFetchers for safe actions, but applied to GqlvDomainObjectMutators instead; perhaps they share a common interface?
+        // TODO: something similar to addFetchers for safe actions, but applied to GqlvMutators instead; perhaps they share a common interface?
 
         // earlier code...
 

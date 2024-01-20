@@ -16,27 +16,21 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvDomainService implements GqlvActionHolder {
+public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
 
-    private final ObjectSpecification serviceSpec;
+    @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object pojo;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final SpecificationLoader specificationLoader;
-
+    private final GqlvMutators mutators;
 
     private String getLogicalTypeName() {
-        return serviceSpec.getLogicalTypeName();
-    }
-
-    public String getLogicalTypeNameSanitized() {
-        return _LTN.sanitized(serviceSpec);
+        return objectSpecification.getLogicalTypeName();
     }
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
@@ -44,17 +38,17 @@ public class GqlvDomainService implements GqlvActionHolder {
     private GraphQLObjectType gqlObjectType;
 
     public GqlvDomainService(
-            final ObjectSpecification serviceSpec,
+            final ObjectSpecification objectSpecification,
             final Object pojo,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
-        this.serviceSpec = serviceSpec;
+        this.objectSpecification = objectSpecification;
         this.pojo = pojo;
         this.codeRegistryBuilder = codeRegistryBuilder;
-        this.specificationLoader = specificationLoader;
 
-        this.gqlObjectTypeBuilder = newObject().name(_LTN.sanitized(serviceSpec));
+        this.mutators = new GqlvMutators(this, codeRegistryBuilder);
+
+        this.gqlObjectTypeBuilder = newObject().name(_LTN.sanitized(objectSpecification));
     }
 
 
@@ -87,7 +81,7 @@ public class GqlvDomainService implements GqlvActionHolder {
 
     public GraphQLFieldDefinition createTopLevelQueryField() {
         return newFieldDefinition()
-                .name(_LTN.sanitized(serviceSpec))
+                .name(_LTN.sanitized(objectSpecification))
                 .type(gqlObjectTypeBuilder)
                 .build();
     }

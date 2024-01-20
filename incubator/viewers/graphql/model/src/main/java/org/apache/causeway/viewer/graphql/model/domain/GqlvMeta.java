@@ -14,14 +14,13 @@ import lombok.val;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.viewer.graphql.model.parts.GqlvMeta;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvDomainObjectMeta {
+public class GqlvMeta {
 
     @UtilityClass
     static class Fields {
@@ -49,7 +48,7 @@ public class GqlvDomainObjectMeta {
 
     @Getter private final GraphQLFieldDefinition metaField;
 
-    public GqlvDomainObjectMeta(
+    public GqlvMeta(
             final GqlvDomainObject domainObject,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService,
@@ -70,10 +69,10 @@ public class GqlvDomainObjectMeta {
 
     private GraphQLObjectType metaType() {
         val metaTypeBuilder = newObject().name(domainObject.getLogicalTypeNameSanitized() + "__meta");
-        metaTypeBuilder.field(GqlvDomainObjectMeta.Fields.id);
-        metaTypeBuilder.field(GqlvDomainObjectMeta.Fields.logicalTypeName);
+        metaTypeBuilder.field(GqlvMeta.Fields.id);
+        metaTypeBuilder.field(GqlvMeta.Fields.logicalTypeName);
         if (domainObject.getBeanSort() == BeanSort.ENTITY) {
-            metaTypeBuilder.field(GqlvDomainObjectMeta.Fields.version);
+            metaTypeBuilder.field(GqlvMeta.Fields.version);
         }
         return metaTypeBuilder.build();
     }
@@ -84,29 +83,29 @@ public class GqlvDomainObjectMeta {
                 coordinates(domainObject.getGqlObjectType(), getMetaField()),
                 (DataFetcher<Object>) environment -> {
                     return bookmarkService.bookmarkFor(environment.getSource())
-                            .map(bookmark -> new GqlvMeta(bookmark, bookmarkService, objectManager))
+                            .map(bookmark -> new org.apache.causeway.viewer.graphql.model.parts.GqlvMeta(bookmark, bookmarkService, objectManager))
                             .orElse(null); //TODO: is this correct ?
                 });
 
         codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), GqlvDomainObjectMeta.Fields.id),
+                coordinates(getMetaType(), GqlvMeta.Fields.id),
                 (DataFetcher<Object>) environment -> {
-                    GqlvMeta gqlvMeta = environment.getSource();
+                    org.apache.causeway.viewer.graphql.model.parts.GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.id();
                 });
 
         codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), GqlvDomainObjectMeta.Fields.logicalTypeName),
+                coordinates(getMetaType(), GqlvMeta.Fields.logicalTypeName),
                 (DataFetcher<Object>) environment -> {
-                    GqlvMeta gqlvMeta = environment.getSource();
+                    org.apache.causeway.viewer.graphql.model.parts.GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.logicalTypeName();
                 });
 
         if (domainObject.getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(
-                    coordinates(getMetaType(), GqlvDomainObjectMeta.Fields.version),
+                    coordinates(getMetaType(), GqlvMeta.Fields.version),
                     (DataFetcher<Object>) environment -> {
-                        GqlvMeta gqlvMeta = environment.getSource();
+                        org.apache.causeway.viewer.graphql.model.parts.GqlvMeta gqlvMeta = environment.getSource();
                         return gqlvMeta.version();
                     });
         }

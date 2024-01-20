@@ -172,7 +172,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final GqlvTopLevelQuery topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val domainService = new GqlvDomainService(objectSpec, service, codeRegistryBuilder, specificationLoader);
+        val domainService = new GqlvDomainService(objectSpec, service, codeRegistryBuilder);
 
         List<ObjectAction> objectActionList = objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .map(ObjectAction.class::cast)
@@ -196,7 +196,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val gqlvDomainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
+        val gqlvDomainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager);
 
         gqlvDomainObject.addPropertiesAsFields();
         gqlvDomainObject.addCollectionsAsLists();
