@@ -55,17 +55,16 @@ public class GqlvTopLevelQueryStructure {
     }
 
     public void addFieldFor(
-            final GqlvServiceStructure serviceStructure,
-            final GqlvServiceBehaviour serviceBehaviour,
+            final GqlvDomainService domainService,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        GraphQLFieldDefinition topLevelQueryField = serviceStructure.createTopLevelQueryField();
-        queryBuilder.field(serviceStructure.createTopLevelQueryField());
+        GraphQLFieldDefinition topLevelQueryField = domainService.createTopLevelQueryField();
+        queryBuilder.field(domainService.createTopLevelQueryField());
 
         codeRegistryBuilder.dataFetcher(
                 // TODO: it would be nice to make these typesafe...
                 FieldCoordinates.coordinates("Query", topLevelQueryField.getName()),
-                (DataFetcher<Object>) environment -> serviceBehaviour.service);
+                (DataFetcher<Object>) environment -> domainService.getPojo());
 
     }
 }

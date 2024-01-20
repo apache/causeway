@@ -64,7 +64,7 @@ public class QueryFieldFactory {
             final GqlvTopLevelQueryStructure topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val serviceStructure = new GqlvServiceStructure(serviceSpec);
+        val domainService = new GqlvDomainService(serviceSpec, service, codeRegistryBuilder, specificationLoader);
 
         List<ObjectAction> objectActionList = serviceSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .map(ObjectAction.class::cast)
@@ -74,15 +74,13 @@ public class QueryFieldFactory {
             return;
         }
 
-        objectActionList.forEach(serviceStructure::addAction);
+        objectActionList.forEach(domainService::addAction);
 
-        serviceStructure.buildObjectGqlType();
+        domainService.buildObjectGqlType();
 
-        GqlvServiceBehaviour serviceBehaviour = new GqlvServiceBehaviour(serviceStructure, service, specificationLoader, codeRegistryBuilder);
+        domainService.getSafeActions().entrySet().forEach(domainService::addDataFetcher);
 
-        serviceStructure.getSafeActions().entrySet().forEach(serviceBehaviour::addDataFetcher);
-
-        topLevelQueryStructure.addFieldFor(serviceStructure, serviceBehaviour, codeRegistryBuilder);
+        topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
     }
 
 }
