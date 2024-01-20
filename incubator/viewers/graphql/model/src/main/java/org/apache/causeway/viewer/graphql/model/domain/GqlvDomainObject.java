@@ -51,7 +51,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     @Getter private final GqlvMeta meta;
     @Getter private final GqlvMutators mutators;
 
-    @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    @Getter private final GraphQLObjectType.Builder objectTypeBuilder;
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
     String getLogicalTypeName() {
@@ -90,7 +90,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
             final ObjectManager objectManager) {
         this.objectSpecification = objectSpecification;
         this.codeRegistryBuilder = codeRegistryBuilder;
-        this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
+        this.objectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
 
         meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
         mutators = new GqlvMutators(this, codeRegistryBuilder);
@@ -106,7 +106,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         gqlInputObjectType = inputTypeBuilder.build();
 
         // object type's meta field
-        gqlObjectTypeBuilder.field(meta.getMetaField());
+        objectTypeBuilder.field(meta.getMetaField());
 
     }
 
@@ -131,7 +131,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                 fieldDefinition = newFieldDefinition()
                         .name(otoa.getId())
                         .type(otoa.isOptional() ? fieldTypeRef : nonNull(fieldTypeRef)).build();
-                getGqlObjectTypeBuilder().field(
+                getObjectTypeBuilder().field(
                         fieldDefinition
                         );
 
@@ -147,7 +147,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                                 ? Scalars.GraphQLString
                                 : nonNull(Scalars.GraphQLString));
                 fieldDefinition = valueBuilder.build();
-                getGqlObjectTypeBuilder().field(fieldDefinition);
+                getObjectTypeBuilder().field(fieldDefinition);
 
                 break;
         }
@@ -174,7 +174,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                 fieldDefinition = newFieldDefinition()
                         .name(otom.getId())
                         .type(GraphQLList.list(typeRef)).build();
-                gqlObjectTypeBuilder.field(fieldDefinition);
+                objectTypeBuilder.field(fieldDefinition);
                 break;
 
             case VALUE:
@@ -182,7 +182,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                 fieldDefinition = newFieldDefinition()
                         .name(otom.getId())
                         .type(GraphQLList.list(wrappedType)).build();
-                gqlObjectTypeBuilder.field(fieldDefinition);
+                objectTypeBuilder.field(fieldDefinition);
                 break;
         }
 
@@ -196,12 +196,9 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     void addAction(final ObjectAction objectAction) {
 
         if (objectAction.getSemantics().isSafeInNature()) {
-            GraphQLObjectType.Builder objectTypeBuilder = getGqlObjectTypeBuilder();
-
             safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
         } else {
-
-            mutators.addActionAsField(objectAction);
+            mutators.addAction(objectAction);
         }
     }
 
@@ -220,7 +217,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         if (gqlObjectType != null) {
             throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
         }
-        return gqlObjectType = getGqlObjectTypeBuilder().name(getLogicalTypeNameSanitized()).build();
+        return gqlObjectType = getObjectTypeBuilder().name(getLogicalTypeNameSanitized()).build();
     }
 
     /**
@@ -261,7 +258,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                     .name(_Constants.GQL_MUTATIONS_FIELDNAME)
                     .type(mutatorsType)
                     .build();
-            getGqlObjectTypeBuilder().field(gql_mutations);
+            getObjectTypeBuilder().field(gql_mutations);
 
         });
 

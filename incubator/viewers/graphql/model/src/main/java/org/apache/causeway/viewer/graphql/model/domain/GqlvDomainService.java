@@ -88,7 +88,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
 
 
     public void addAction(final ObjectAction objectAction) {
-
         // TODO: either safe or mutator
         safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
     }

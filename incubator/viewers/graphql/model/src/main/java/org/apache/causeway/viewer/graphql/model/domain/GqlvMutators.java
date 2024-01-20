@@ -45,17 +45,16 @@ public class GqlvMutators implements GqlvActionHolder {
 
     }
 
-    public void addActionAsField(
-            final ObjectAction objectAction) {
+    public void addAction(final ObjectAction objectAction) {
 
-        val fieldName = objectAction.getId();
-        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                .name(fieldName)
-                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-        addGqlArguments(objectAction, fieldBuilder);
-        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
-
-        objectTypeBuilder.field(fieldDefinition);
+//        val fieldName = objectAction.getId();
+//        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+//                .name(fieldName)
+//                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+//        addGqlArguments(objectAction, fieldBuilder);
+//        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
+//
+//        objectTypeBuilder.field(fieldDefinition);
         actions.add(new GqlvAction(holder, objectAction, objectTypeBuilder, codeRegistryBuilder));
     }
 
