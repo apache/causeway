@@ -9,12 +9,17 @@ import graphql.schema.GraphQLObjectType;
 
 import lombok.Getter;
 
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 
+import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvTopLevelQueryStructure {
+public class GqlvTopLevelQuery {
+
+    private final ServiceRegistry serviceRegistry;
+    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     @Getter final GraphQLObjectType.Builder queryBuilder;
 
@@ -26,7 +31,11 @@ public class GqlvTopLevelQueryStructure {
     private GraphQLObjectType queryType;
 
 
-    public GqlvTopLevelQueryStructure() {
+    public GqlvTopLevelQuery(
+            final ServiceRegistry serviceRegistry,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+        this.serviceRegistry = serviceRegistry;
+        this.codeRegistryBuilder = codeRegistryBuilder;
         queryBuilder = newObject().name("Query");
 
         numServicesField = newFieldDefinition()
@@ -69,4 +78,12 @@ public class GqlvTopLevelQueryStructure {
                 (DataFetcher<Object>) environment -> domainService.getPojo());
 
     }
+
+    public void addFetchers() {
+        codeRegistryBuilder
+                .dataFetcher(
+                        coordinates(getQueryType(), getNumServicesField()),
+                        (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
+    }
+
 }

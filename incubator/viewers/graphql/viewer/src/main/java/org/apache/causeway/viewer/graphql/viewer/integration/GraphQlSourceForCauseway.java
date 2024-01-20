@@ -31,8 +31,7 @@ import org.apache.causeway.applib.id.HasLogicalType;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQueryBehaviour;
-import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQueryStructure;
+import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory;
 import org.apache.causeway.viewer.graphql.viewer.source.QueryFieldFactory;
@@ -97,19 +96,17 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         // add to the top-level query
         // (and also add behaviour to the child types)
-        val topLevelQueryStructure = new GqlvTopLevelQueryStructure();
+        val topLevelQuery = new GqlvTopLevelQuery(serviceRegistry, codeRegistryBuilder);
 
         specificationLoader.snapshotSpecifications()
             .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
             .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-            .forEach(objectSpec -> addToSchema(objectSpec, topLevelQueryStructure, codeRegistryBuilder));
+            .forEach(objectSpec -> addToSchema(objectSpec, topLevelQuery, codeRegistryBuilder));
 
-        topLevelQueryStructure.buildQueryType();
+        topLevelQuery.buildQueryType();
 
 
-        // add behaviour to the top-level query's own fields
-        val topLevelQueryBehaviour = new GqlvTopLevelQueryBehaviour(topLevelQueryStructure, codeRegistryBuilder, serviceRegistry);
-        topLevelQueryBehaviour.addFetchers();
+        topLevelQuery.addFetchers();
 
         // finalize the fetcher/mutator code that's been registered
         val codeRegistry = codeRegistryBuilder.build();
@@ -117,7 +114,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         // build the schema
         return GraphQLSchema.newSchema()
-                .query(topLevelQueryStructure.getQueryType())
+                .query(topLevelQuery.getQueryType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLObjectTypes())
                 .codeRegistry(codeRegistry)
                 .build();
@@ -125,14 +122,14 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
     private void addToSchema(
             final ObjectSpecification objectSpec,
-            final GqlvTopLevelQueryStructure gqlvTopLevelQueryStructure,
+            final GqlvTopLevelQuery gqlvTopLevelQuery,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         switch (objectSpec.getBeanSort()) {
 
             case MANAGED_BEAN_CONTRIBUTING: // @DomainService
 
-                queryFieldFactory.queryFieldFromObjectSpecification(objectSpec, gqlvTopLevelQueryStructure, codeRegistryBuilder);
+                queryFieldFactory.queryFieldFromObjectSpecification(objectSpec, gqlvTopLevelQuery, codeRegistryBuilder);
                 break;
 
             case ABSTRACT:

@@ -45,13 +45,12 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class QueryFieldFactory {
 
-    private static ObjectAction objectAction;
     private final ServiceRegistry serviceRegistry;
     private final SpecificationLoader specificationLoader;
 
     public void queryFieldFromObjectSpecification(
             final ObjectSpecification objectSpec,
-            final GqlvTopLevelQueryStructure topLevelQueryStructure,
+            final GqlvTopLevelQuery topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
@@ -63,7 +62,7 @@ public class QueryFieldFactory {
     private void addService(
             final ObjectSpecification serviceSpec,
             final Object service,
-            final GqlvTopLevelQueryStructure topLevelQueryStructure,
+            final GqlvTopLevelQuery topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         val domainService = new GqlvDomainService(serviceSpec, service, codeRegistryBuilder, specificationLoader);
