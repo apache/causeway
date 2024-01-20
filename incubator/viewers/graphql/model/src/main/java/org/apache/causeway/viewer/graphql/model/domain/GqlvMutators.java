@@ -3,6 +3,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLOutputType;
+
+import lombok.val;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,9 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
+
+import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
 
 public class GqlvMutators implements GqlvActionHolder {
 
@@ -39,8 +46,14 @@ public class GqlvMutators implements GqlvActionHolder {
     }
 
     public void addActionAsField(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition fieldDefinition) {
+            final ObjectAction objectAction) {
+
+        val fieldName = objectAction.getId();
+        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+                .name(fieldName)
+                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+        addGqlArguments(objectAction, fieldBuilder);
+        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
 
         objectTypeBuilder.field(fieldDefinition);
         actions.add(new GqlvAction(holder, objectAction, fieldDefinition, codeRegistryBuilder));

@@ -8,14 +8,19 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static graphql.schema.GraphQLNonNull.nonNull;
 
 public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
 
@@ -67,5 +72,28 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
 
         return managedObject.getPojo();
     }
+
+    static void addGqlArguments(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder builder) {
+
+        Can<ObjectActionParameter> parameters = objectAction.getParameters();
+
+        if (parameters.isNotEmpty()) {
+            builder.arguments(parameters.stream()
+                    .map(GqlvAction::gqlArgumentFor)
+                    .collect(Collectors.toList()));
+        }
+    }
+
+    private static GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
+        return GraphQLArgument.newArgument()
+                .name(objectActionParameter.getId())
+                .type(objectActionParameter.isOptional()
+                        ? TypeMapper.inputTypeFor(objectActionParameter)
+                        : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
+                .build();
+    }
+
 
 }

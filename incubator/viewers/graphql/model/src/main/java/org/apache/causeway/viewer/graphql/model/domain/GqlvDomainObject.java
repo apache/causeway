@@ -23,6 +23,7 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 
+import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
 import static org.apache.causeway.viewer.graphql.model.types._Constants.GQL_INPUTTYPE_PREFIX;
 
 import lombok.Getter;
@@ -201,41 +202,21 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     void addAction(final ObjectAction objectAction) {
 
-        val fieldName = objectAction.getId();
-        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                .name(fieldName)
-                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-        addGqlArguments(objectAction, fieldBuilder);
-        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
 
         if (objectAction.getSemantics().isSafeInNature()) {
+
+            val fieldName = objectAction.getId();
+            GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+                    .name(fieldName)
+                    .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+            addGqlArguments(objectAction, fieldBuilder);
+            GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
             getGqlObjectTypeBuilder().field(fieldDefinition);
             safeActions.add(new GqlvAction(this, objectAction, fieldDefinition, codeRegistryBuilder));
         } else {
-            mutators.addActionAsField(objectAction, fieldDefinition);
+
+            mutators.addActionAsField(objectAction);
         }
-    }
-
-    private static void addGqlArguments(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition.Builder builder) {
-
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
-
-        if (parameters.isNotEmpty()) {
-            builder.arguments(parameters.stream()
-                    .map(GqlvDomainObject::gqlArgumentFor)
-                    .collect(Collectors.toList()));
-        }
-    }
-
-    private static GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
-        return GraphQLArgument.newArgument()
-                .name(objectActionParameter.getId())
-                .type(objectActionParameter.isOptional()
-                        ? TypeMapper.inputTypeFor(objectActionParameter)
-                        : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
-                .build();
     }
 
 
