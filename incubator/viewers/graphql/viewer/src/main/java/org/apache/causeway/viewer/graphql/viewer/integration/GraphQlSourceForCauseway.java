@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
-import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQuery;
+import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
 import org.springframework.graphql.execution.GraphQlSource;

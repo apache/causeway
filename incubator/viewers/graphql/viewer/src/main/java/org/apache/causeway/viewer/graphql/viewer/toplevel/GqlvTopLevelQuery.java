@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
