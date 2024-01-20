@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.model.parts;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,12 +21,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.parts.GqlvAction;
-import org.apache.causeway.viewer.graphql.model.parts.GqlvAssociation;
-import org.apache.causeway.viewer.graphql.model.parts.GqlvCollection;
-import org.apache.causeway.viewer.graphql.model.parts.GqlvMeta;
-import org.apache.causeway.viewer.graphql.model.parts.GqlvProperty;
-import org.apache.causeway.viewer.graphql.model.parts._Constants;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -179,7 +173,7 @@ public class GqlvDomainObject {
     }
 
 
-    void addPropertiesAsFields() {
+    public void addPropertiesAsFields() {
         objectSpec.streamProperties(MixedIn.INCLUDED).forEach(this::addPropertyAsField);
     }
 
@@ -223,7 +217,7 @@ public class GqlvDomainObject {
     }
 
 
-    void addCollectionsAsLists() {
+    public void addCollectionsAsLists() {
         objectSpec.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
     }
 
@@ -322,7 +316,7 @@ public class GqlvDomainObject {
      *
      * @see #getGqlObjectType()
      */
-    GraphQLObjectType buildGqlObjectType() {
+    public GraphQLObjectType buildGqlObjectType() {
         if (gqlObjectType != null) {
             throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
         }
@@ -365,7 +359,7 @@ public class GqlvDomainObject {
                 : Optional.empty();
     }
 
-    void addActionsAsFields() {
+    public void addActionsAsFields() {
 
         objectSpec.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(this::addAction);
@@ -423,7 +417,7 @@ public class GqlvDomainObject {
         getProperties().forEach(this::createAndRegisterDataFetcherForAssociation);
     }
 
-    void createAndRegisterDataFetchersForCollection() {
+    public void createAndRegisterDataFetchersForCollection() {
         getCollections().forEach(
                 this::createAndRegisterDataFetcherForAssociation);
     }
