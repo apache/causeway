@@ -4,22 +4,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.parts.GqlvAction;
+import org.apache.causeway.viewer.graphql.model.parts.GqlvAssociation;
 import org.apache.causeway.viewer.graphql.model.parts.GqlvCollection;
 import org.apache.causeway.viewer.graphql.model.parts.GqlvProperty;
 
+import static graphql.schema.FieldCoordinates.coordinates;
+
 import static org.apache.causeway.viewer.graphql.viewer.source._Constants.GQL_INPUTTYPE_PREFIX;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLCodeRegistry;
 
 import lombok.Getter;
 import lombok.val;
@@ -65,7 +77,12 @@ public class GqlvObjectStructure {
                         .type(Scalars.GraphQLString).build();
     }
 
-    @Getter private final ObjectSpecification objectSpec;
+    private final ObjectSpecification objectSpec;
+    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final BookmarkService bookmarkService;
+    private final ObjectManager objectManager;
+    private final SpecificationLoader specificationLoader;
+
     @Getter private final GraphQLFieldDefinition metaField;
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
@@ -115,8 +132,18 @@ public class GqlvObjectStructure {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<GraphQLObjectType> mutatorsTypeIfAny;
 
-    public GqlvObjectStructure(final ObjectSpecification objectSpec) {
+
+    public GqlvObjectStructure(
+            final ObjectSpecification objectSpec,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
+            final BookmarkService bookmarkService,
+            final ObjectManager objectManager,
+            final SpecificationLoader specificationLoader) {
         this.objectSpec = objectSpec;
+        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.bookmarkService = bookmarkService;
+        this.objectManager = objectManager;
+        this.specificationLoader = specificationLoader;
         this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
 
         // object type's meta field
@@ -336,7 +363,7 @@ public class GqlvObjectStructure {
 
     void addActionsAsFields() {
 
-        getObjectSpec().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+        objectSpec.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(this::addAction);
 
         Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
@@ -351,4 +378,127 @@ public class GqlvObjectStructure {
         });
 
     }
+
+    public void createAndRegisterDataFetchersForMetaData() {
+
+        codeRegistryBuilder.dataFetcher(
+                coordinates(getGqlObjectType(), getMetaField()),
+                (DataFetcher<Object>) environment -> {
+                    return bookmarkService.bookmarkFor(environment.getSource())
+                            .map(bookmark -> new GqlvMeta(bookmark, bookmarkService, objectManager))
+                            .orElse(null); //TODO: is this correct ?
+                });
+
+        codeRegistryBuilder.dataFetcher(
+                coordinates(getMetaType(), GqlvObjectStructure.Fields.id),
+                (DataFetcher<Object>) environment -> {
+                    GqlvMeta gqlvMeta = environment.getSource();
+                    return gqlvMeta.id();
+                });
+
+        codeRegistryBuilder.dataFetcher(
+                coordinates(getMetaType(), GqlvObjectStructure.Fields.logicalTypeName),
+                (DataFetcher<Object>) environment -> {
+                    GqlvMeta gqlvMeta = environment.getSource();
+                    return gqlvMeta.logicalTypeName();
+                });
+
+        if (getBeanSort() == BeanSort.ENTITY) {
+            codeRegistryBuilder.dataFetcher(
+                    coordinates(getMetaType(), GqlvObjectStructure.Fields.version),
+                    (DataFetcher<Object>) environment -> {
+                        GqlvMeta gqlvMeta = environment.getSource();
+                        return gqlvMeta.version();
+                    });
+        }
+
+    }
+
+
+    public void createAndRegisterDataFetchersForField() {
+        getProperties().forEach(this::createAndRegisterDataFetcherForAssociation);
+    }
+
+    void createAndRegisterDataFetchersForCollection() {
+        getCollections().forEach(
+                this::createAndRegisterDataFetcherForAssociation);
+    }
+
+    private void createAndRegisterDataFetcherForAssociation(final GqlvAssociation<?> property) {
+
+        final ObjectAssociation association = property.getObjectMember();
+        final GraphQLFieldDefinition field = property.getFieldDefinition();
+
+        final GraphQLObjectType graphQLObjectType = getGqlObjectType();
+
+        ObjectSpecification fieldObjectSpecification = association.getElementType();
+        BeanSort beanSort = fieldObjectSpecification.getBeanSort();
+        switch (beanSort) {
+
+            case VALUE: //TODO: does this work for values as well?
+
+            case VIEW_MODEL:
+
+            case ENTITY:
+
+                codeRegistryBuilder.dataFetcher(
+                        coordinates(graphQLObjectType, field),
+                        (DataFetcher<Object>) environment -> {
+
+                            Object domainObjectInstance = environment.getSource();
+
+                            Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
+                            ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
+
+                            ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
+                            ManagedObject managedObject = association.get(owner);
+
+                            return managedObject!=null ? managedObject.getPojo() : null;
+                        });
+
+                break;
+
+        }
+    }
+
+    public void createAndRegisterDataFetchersForMutators() {
+
+        // something like:
+
+//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLTypeReference, gql_mutations), new DataFetcher<Object>() {
+//                @Override
+//                public Object get(DataFetchingEnvironment environment) throws Exception {
+//
+//                    Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
+//                    if (bookmark == null) return null; //TODO: is this correct ?
+//                    return new GqlvMutations(bookmark, bookmarkService, mutatorsTypeFields);
+//                }
+//            });
+//
+//            // for each field something like
+//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(mutatorsType, idField), new DataFetcher<Object>() {
+//                @Override
+//                public Object get(DataFetchingEnvironment environment) throws Exception {
+//
+//                    GqlvMeta gqlMeta = environment.getSource();
+//
+//                    return gqlMeta.id();
+//                }
+//            });
+
+
+    }
+
+
+    GraphQLObjectType createAndRegisterMutatorsType(
+            final Set<GraphQLType> graphQLObjectTypes) {
+
+        //TODO: this is not going to work, because we need to dynamically add fields
+        String mutatorsTypeName = getLogicalTypeNameSanitized() + "__DomainObject_mutators";
+        GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
+        GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
+        graphQLObjectTypes.add(mutatorsType);
+        return mutatorsType;
+    }
+
 }

@@ -53,31 +53,28 @@ public class ObjectTypeFactory {
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val gqlvObjectStructure = new GqlvObjectStructure(objectSpec);
+        val gqlvDomainObject = new GqlvObjectStructure(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
 
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectStructure.getMetaField().getType());
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvObjectStructure.getGqlInputObjectType());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getMetaField().getType());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getGqlInputObjectType());
 
-        gqlvObjectStructure.addPropertiesAsFields();
-        gqlvObjectStructure.addCollectionsAsLists();
-        gqlvObjectStructure.addActionsAsFields();
+        gqlvDomainObject.addPropertiesAsFields();
+        gqlvDomainObject.addCollectionsAsLists();
+        gqlvDomainObject.addActionsAsFields();
 
-        gqlvObjectStructure.getMutatorsTypeIfAny()
+        gqlvDomainObject.getMutatorsTypeIfAny()
                 .ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
 
         // build and register object type
-        GraphQLObjectType graphQLObjectType = gqlvObjectStructure.buildGqlObjectType();
+        GraphQLObjectType graphQLObjectType = gqlvDomainObject.buildGqlObjectType();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
 
-        GqlvObjectBehaviour gqlvObjectBehaviour =
-                new GqlvObjectBehaviour(gqlvObjectStructure, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
-
         // create and register data fetchers
-        gqlvObjectBehaviour.createAndRegisterDataFetchersForMetaData();
-        gqlvObjectBehaviour.createAndRegisterDataFetchersForMutators();
+        gqlvDomainObject.createAndRegisterDataFetchersForMetaData();
+        gqlvDomainObject.createAndRegisterDataFetchersForMutators();
 
-        gqlvObjectBehaviour.createAndRegisterDataFetchersForField();
-        gqlvObjectBehaviour.createAndRegisterDataFetchersForCollection();
+        gqlvDomainObject.createAndRegisterDataFetchersForField();
+        gqlvDomainObject.createAndRegisterDataFetchersForCollection();
     }
 
 }
