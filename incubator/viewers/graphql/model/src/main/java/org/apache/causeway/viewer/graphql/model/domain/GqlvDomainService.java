@@ -12,11 +12,14 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -93,18 +96,31 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
         safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
     }
 
+    public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
+        return mutators.buildMutatorsTypeIfAny();
+    }
 
     /**
      * @return <code>true</code> if any (at least one) actions were added
      */
     public boolean addActions() {
-        List<ObjectAction> objectActionList = getObjectSpecification().streamRuntimeActions(MixedIn.INCLUDED)
-                .map(ObjectAction.class::cast)
-                .collect(Collectors.toList());
 
+        List<ObjectAction> objectActionList = objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+                .collect(Collectors.toList());
 
         objectActionList.forEach(this::addAction);
 
+
+        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
+        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
+
+            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
+                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
+                    .type(mutatorsType)
+                    .build();
+            objectTypeBuilder.field(gql_mutations);
+
+        });
 
         return !objectActionList.isEmpty();
     }

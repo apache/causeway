@@ -192,7 +192,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         gqlvDomainObject.addPropertiesAsFields();
         gqlvDomainObject.addCollectionsAsLists();
-        gqlvDomainObject.addActionsAsFields();
+        gqlvDomainObject.addActions();
 
         // build
         gqlvDomainObject.registerTypesInto(graphQLTypeRegistry);

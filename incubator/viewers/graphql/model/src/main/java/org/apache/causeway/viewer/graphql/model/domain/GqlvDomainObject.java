@@ -246,7 +246,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         return mutators.buildMutatorsTypeIfAny();
     }
 
-    public void addActionsAsFields() {
+    public void addActions() {
 
         objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(this::addAction);
