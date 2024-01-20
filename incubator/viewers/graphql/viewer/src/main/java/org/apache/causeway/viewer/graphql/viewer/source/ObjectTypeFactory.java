@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.graphql.viewer.source;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.viewer.graphql.model.parts.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 
 import org.springframework.stereotype.Component;
 

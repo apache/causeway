@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.model.parts;
+package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,12 +21,14 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.parts.GqlvMeta;
+import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 
-import static org.apache.causeway.viewer.graphql.model.parts._Constants.GQL_INPUTTYPE_PREFIX;
+import static org.apache.causeway.viewer.graphql.model.types._Constants.GQL_INPUTTYPE_PREFIX;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;

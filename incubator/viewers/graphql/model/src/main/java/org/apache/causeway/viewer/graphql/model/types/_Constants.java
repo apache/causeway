@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.model.parts;
+package org.apache.causeway.viewer.graphql.model.types;
 
 import lombok.experimental.UtilityClass;
 
