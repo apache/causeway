@@ -1,5 +1,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
@@ -12,9 +13,10 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvDomainObjectMutators {
+public class GqlvDomainObjectMutators implements GqlvActionHolder {
 
     private final GqlvDomainObject domainObject;
+    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     final GraphQLObjectType.Builder mutatorsTypeBuilder;
 
@@ -25,8 +27,11 @@ public class GqlvDomainObjectMutators {
     private Optional<GraphQLObjectType> mutatorsTypeIfAny;
 
     public GqlvDomainObjectMutators(
-            final GqlvDomainObject domainObject) {
+            final GqlvDomainObject domainObject,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+    ) {
         this.domainObject = domainObject;
+        this.codeRegistryBuilder = codeRegistryBuilder;
 
         mutatorsTypeBuilder = newObject().name(this.domainObject.getLogicalTypeNameSanitized() + "__DomainObject_mutators");
 
@@ -37,7 +42,7 @@ public class GqlvDomainObjectMutators {
             final GraphQLFieldDefinition fieldDefinition) {
 
         mutatorsTypeBuilder.field(fieldDefinition);
-        actions.add(new GqlvAction(objectAction, fieldDefinition));
+        actions.add(new GqlvAction(domainObject, objectAction, fieldDefinition, codeRegistryBuilder));
     }
 
     private final List<GqlvAction> actions = new ArrayList<>();
@@ -72,4 +77,8 @@ public class GqlvDomainObjectMutators {
                 : Optional.empty();
     }
 
+    @Override
+    public GraphQLObjectType getGqlObjectType() {
+        return mutatorsTypeIfAny.orElse(null);
+    }
 }

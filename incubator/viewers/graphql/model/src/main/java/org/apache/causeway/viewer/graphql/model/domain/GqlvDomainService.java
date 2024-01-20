@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvDomainService {
+public class GqlvDomainService implements GqlvActionHolder {
 
     private final ObjectSpecification serviceSpec;
     @Getter private final Object pojo;
@@ -121,7 +121,7 @@ public class GqlvDomainService {
         gqlObjectTypeBuilder.field(fieldDefinition);
 
         // TODO: either safe or mutator
-        safeActions.add(new GqlvAction(objectAction, fieldDefinition));
+        safeActions.add(new GqlvAction(this, objectAction, fieldDefinition, codeRegistryBuilder));
     }
 
 

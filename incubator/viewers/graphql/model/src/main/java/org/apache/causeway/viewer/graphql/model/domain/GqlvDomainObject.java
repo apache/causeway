@@ -10,14 +10,12 @@ import java.util.stream.Collectors;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -30,7 +28,6 @@ import static graphql.schema.FieldCoordinates.coordinates;
 
 import static org.apache.causeway.viewer.graphql.model.types._Constants.GQL_INPUTTYPE_PREFIX;
 
-import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
 
 import lombok.Getter;
@@ -56,7 +53,7 @@ import static graphql.schema.GraphQLTypeReference.typeRef;
 /**
  * A wrapper around {@link ObjectSpecification}
  */
-public class GqlvDomainObject {
+public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder {
 
     @Getter private final GqlvDomainObjectMeta meta;
     @Getter private final GqlvDomainObjectMutators mutators;
@@ -113,7 +110,7 @@ public class GqlvDomainObject {
         this.gqlObjectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
 
         meta = new GqlvDomainObjectMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
-        mutators = new GqlvDomainObjectMutators(this);
+        mutators = new GqlvDomainObjectMutators(this, codeRegistryBuilder);
 
         // input object type
         String inputTypeName = GQL_INPUTTYPE_PREFIX + getLogicalTypeNameSanitized();
@@ -172,7 +169,7 @@ public class GqlvDomainObject {
                 break;
         }
         if (fieldDefinition != null) {
-            properties.add(new GqlvProperty(otoa, fieldDefinition));
+            properties.add(new GqlvProperty(this, otoa, fieldDefinition, codeRegistryBuilder, specificationLoader));
         }
     }
 
@@ -207,7 +204,7 @@ public class GqlvDomainObject {
         }
 
         if (fieldDefinition != null) {
-            collections.add(new GqlvCollection(otom, fieldDefinition));
+            collections.add(new GqlvCollection(this, otom, fieldDefinition, codeRegistryBuilder, specificationLoader));
         }
     }
 
@@ -256,7 +253,7 @@ public class GqlvDomainObject {
             final ObjectAction objectAction,
             final GraphQLFieldDefinition fieldDefinition) {
         getGqlObjectTypeBuilder().field(fieldDefinition);
-        safeActions.add(new GqlvAction(objectAction, fieldDefinition));
+        safeActions.add(new GqlvAction(this, objectAction, fieldDefinition, codeRegistryBuilder));
     }
 
     public void addNonSafeActionAsMutatorField(
@@ -286,7 +283,7 @@ public class GqlvDomainObject {
     /**
      * @see #buildGqlObjectType()
      */
-    GraphQLObjectType getGqlObjectType() {
+    public GraphQLObjectType getGqlObjectType() {
         if (gqlObjectType == null) {
             throw new IllegalStateException(String.format(
                     "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
@@ -332,49 +329,13 @@ public class GqlvDomainObject {
     }
 
     public void addDataFetchersForProperties() {
-        getProperties().forEach(this::addDataFetcherForAssociation);
+        getProperties().forEach(property -> property.addDataFetcher());
     }
 
     public void addDataFetchersForCollections() {
-        getCollections().forEach(this::addDataFetcherForAssociation);
+        getCollections().forEach(collection -> collection.addDataFetcher());
     }
 
-    private void addDataFetcherForAssociation(final GqlvAssociation<?> property) {
-
-        final ObjectAssociation association = property.getObjectMember();
-        final GraphQLFieldDefinition field = property.getFieldDefinition();
-
-        final GraphQLObjectType graphQLObjectType = getGqlObjectType();
-
-        ObjectSpecification fieldObjectSpecification = association.getElementType();
-        BeanSort beanSort = fieldObjectSpecification.getBeanSort();
-        switch (beanSort) {
-
-            case VALUE: //TODO: does this work for values as well?
-
-            case VIEW_MODEL:
-
-            case ENTITY:
-
-                codeRegistryBuilder.dataFetcher(
-                        coordinates(graphQLObjectType, field),
-                        (DataFetcher<Object>) environment -> {
-
-                            Object domainObjectInstance = environment.getSource();
-
-                            Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                            ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
-
-                            ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-                            ManagedObject managedObject = association.get(owner);
-
-                            return managedObject!=null ? managedObject.getPojo() : null;
-                        });
-
-                break;
-
-        }
-    }
 
     public void addDataFetchersForMutators() {
 

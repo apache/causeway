@@ -1,18 +1,28 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-public class GqlvCollection extends GqlvAssociation<OneToManyAssociation> {
+public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCollectionHolder> {
 
     public GqlvCollection(
+            final GqlvCollectionHolder domainObject,
             final OneToManyAssociation oneToManyAssociation,
-            final GraphQLFieldDefinition fieldDefinition) {
-        super(oneToManyAssociation, fieldDefinition);
+            final GraphQLFieldDefinition fieldDefinition,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
+            final SpecificationLoader specificationLoader
+    ) {
+        super(domainObject, oneToManyAssociation, fieldDefinition, codeRegistryBuilder, specificationLoader);
     }
 
     public OneToManyAssociation getOneToManyAssociation() {
         return getObjectAssociation();
+    }
+
+    public void addDataFetcher() {
+
     }
 }
