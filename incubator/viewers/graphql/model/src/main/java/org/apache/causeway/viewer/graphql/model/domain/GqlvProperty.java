@@ -12,10 +12,9 @@ public class GqlvProperty extends GqlvAssociation<OneToOneAssociation, GqlvPrope
             final GqlvPropertyHolder domainObject,
             final OneToOneAssociation oneToOneAssociation,
             final GraphQLFieldDefinition fieldDefinition,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
-        super(domainObject, oneToOneAssociation, fieldDefinition, codeRegistryBuilder, specificationLoader);
+        super(domainObject, oneToOneAssociation, fieldDefinition, codeRegistryBuilder);
     }
 
     public OneToOneAssociation getOneToOneAssociation() {

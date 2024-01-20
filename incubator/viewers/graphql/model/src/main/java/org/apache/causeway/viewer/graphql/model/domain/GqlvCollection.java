@@ -12,17 +12,13 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
             final GqlvCollectionHolder domainObject,
             final OneToManyAssociation oneToManyAssociation,
             final GraphQLFieldDefinition fieldDefinition,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
-        super(domainObject, oneToManyAssociation, fieldDefinition, codeRegistryBuilder, specificationLoader);
+        super(domainObject, oneToManyAssociation, fieldDefinition, codeRegistryBuilder);
     }
 
     public OneToManyAssociation getOneToManyAssociation() {
         return getObjectAssociation();
     }
 
-    public void addDataFetcher() {
-
-    }
 }

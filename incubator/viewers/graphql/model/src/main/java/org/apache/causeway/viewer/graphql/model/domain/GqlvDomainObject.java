@@ -169,7 +169,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                 break;
         }
         if (fieldDefinition != null) {
-            properties.add(new GqlvProperty(this, otoa, fieldDefinition, codeRegistryBuilder, specificationLoader));
+            properties.add(new GqlvProperty(this, otoa, fieldDefinition, codeRegistryBuilder));
         }
     }
 
@@ -204,7 +204,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         }
 
         if (fieldDefinition != null) {
-            collections.add(new GqlvCollection(this, otom, fieldDefinition, codeRegistryBuilder, specificationLoader));
+            collections.add(new GqlvCollection(this, otom, fieldDefinition, codeRegistryBuilder));
         }
     }
 
@@ -329,11 +329,11 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
     public void addDataFetchersForProperties() {
-        getProperties().forEach(property -> property.addDataFetcher());
+        getProperties().forEach(GqlvAssociation::addDataFetcher);
     }
 
     public void addDataFetchersForCollections() {
-        getCollections().forEach(collection -> collection.addDataFetcher());
+        getCollections().forEach(GqlvCollection::addDataFetcher);
     }
 
 

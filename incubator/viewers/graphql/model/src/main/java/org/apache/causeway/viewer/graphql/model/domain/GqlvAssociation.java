@@ -15,18 +15,13 @@ import static graphql.schema.FieldCoordinates.coordinates;
 
 public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvAssociationHolder> extends GqlvMember<T, H> {
 
-
-    private final SpecificationLoader specificationLoader;
-
     public GqlvAssociation(
             final H holder,
             final T objectAssociation,
             final GraphQLFieldDefinition fieldDefinition,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder
             ) {
         super(holder, objectAssociation, fieldDefinition, codeRegistryBuilder);
-        this.specificationLoader = specificationLoader;
     }
 
     /**

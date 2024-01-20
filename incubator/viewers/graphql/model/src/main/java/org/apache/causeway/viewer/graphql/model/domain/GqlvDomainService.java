@@ -1,8 +1,5 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
@@ -15,16 +12,10 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -125,42 +116,5 @@ public class GqlvDomainService implements GqlvActionHolder {
     }
 
 
-    public void addDataFetcher(final GqlvAction gqlvAction) {
-        GraphQLFieldDefinition fieldDefinition = gqlvAction.getFieldDefinition();
-
-        codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(getGqlObjectType(), fieldDefinition),
-                (DataFetcher<Object>) dataFetchingEnvironment -> invoke(gqlvAction, dataFetchingEnvironment)
-        );
-    }
-
-    private Object invoke(
-            final GqlvAction gqlvAction,
-            final DataFetchingEnvironment dataFetchingEnvironment) {
-        final ObjectAction objectAction = gqlvAction.getObjectAction();
-
-        Object domainObjectInstance = dataFetchingEnvironment.getSource();
-
-        Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-        ObjectSpecification specification = specificationLoader
-                .loadSpecification(domainObjectInstanceClass);
-
-        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-
-        ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
-
-        Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
-        Can<ManagedObject> canOfParams = parameters
-                .map(oap -> {
-                    Object argumentValue = arguments.get(oap.getId());
-                    return ManagedObject.adaptParameter(oap, argumentValue);
-                });
-
-        ManagedObject managedObject = objectAction
-                .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
-
-        return managedObject.getPojo();
-    }
 
 }

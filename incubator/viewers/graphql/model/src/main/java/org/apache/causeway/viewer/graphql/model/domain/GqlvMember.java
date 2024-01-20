@@ -1,6 +1,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.schema.GraphQLCodeRegistry;
 
@@ -14,6 +15,7 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMemberHol
     @Getter private final T objectMember;
     @Getter private final GraphQLFieldDefinition fieldDefinition;
     final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    final SpecificationLoader specificationLoader;
 
     public GqlvMember(
             final H holder,
@@ -25,6 +27,7 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMemberHol
         this.objectMember = objectMember;
         this.fieldDefinition = fieldDefinition;
         this.codeRegistryBuilder = codeRegistryBuilder;
+        this.specificationLoader = objectMember.getSpecificationLoader();
     }
 
     public String getId() {

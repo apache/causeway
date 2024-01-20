@@ -186,7 +186,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         domainService.buildObjectGqlType();
 
-        domainService.getSafeActions().forEach(domainService::addDataFetcher);
+        domainService.getSafeActions().forEach(gqlvAction -> gqlvAction.addDataFetcher());
 
         topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
     }
