@@ -64,7 +64,7 @@ public class QueryFieldFactory {
             final GqlvTopLevelQueryStructure topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val serviceStructure = new GqlvServiceStructure(serviceSpec, topLevelQueryStructure, specificationLoader);
+        val serviceStructure = new GqlvServiceStructure(serviceSpec);
 
         List<ObjectAction> objectActionList = serviceSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .map(ObjectAction.class::cast)

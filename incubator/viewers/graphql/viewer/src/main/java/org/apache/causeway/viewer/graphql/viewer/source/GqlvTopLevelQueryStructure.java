@@ -59,8 +59,8 @@ public class GqlvTopLevelQueryStructure {
             final GqlvServiceBehaviour serviceBehaviour,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        GraphQLFieldDefinition topLevelQueryField = serviceStructure.buildTopLevelQueryField();
-        queryBuilder.field(topLevelQueryField);
+        GraphQLFieldDefinition topLevelQueryField = serviceStructure.createTopLevelQueryField();
+        queryBuilder.field(serviceStructure.createTopLevelQueryField());
 
         codeRegistryBuilder.dataFetcher(
                 // TODO: it would be nice to make these typesafe...

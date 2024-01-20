@@ -22,10 +22,6 @@ import static graphql.schema.GraphQLObjectType.newObject;
 public class GqlvServiceStructure {
 
     @Getter private final ObjectSpecification serviceSpec;
-    @Getter private final GqlvTopLevelQueryStructure topLevelQueryStructure;
-    private final SpecificationLoader specificationLoader;
-
-    private GraphQLFieldDefinition topLevelQueryField;
 
 
     private String getLogicalTypeName() {
@@ -37,22 +33,14 @@ public class GqlvServiceStructure {
     }
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    private final GraphQLObjectType.Builder queryBuilder;
 
     private GraphQLObjectType gqlObjectType;
 
-    public GqlvServiceStructure(
-            final ObjectSpecification serviceSpec,
-            final GqlvTopLevelQueryStructure topLevelQueryStructure,
-            final SpecificationLoader specificationLoader
+    public GqlvServiceStructure(final ObjectSpecification serviceSpec
     ) {
         this.serviceSpec = serviceSpec;
-        this.topLevelQueryStructure = topLevelQueryStructure;
 
         this.gqlObjectTypeBuilder = newObject().name(_LTN.sanitized(serviceSpec));
-
-        this.queryBuilder = topLevelQueryStructure.getQueryBuilder();
-        this.specificationLoader = specificationLoader;
     }
 
 
@@ -90,30 +78,11 @@ public class GqlvServiceStructure {
         return gqlObjectType;
     }
 
-    /**
-     * @see #getTopLevelQueryField()
-     */
-    public GraphQLFieldDefinition buildTopLevelQueryField() {
-        if (topLevelQueryField != null) {
-            throw new IllegalStateException(String.format(
-                    "queryField has already been added to top-level Query, for %s", getLogicalTypeName()));
-        }
-        topLevelQueryField = newFieldDefinition()
+    public GraphQLFieldDefinition createTopLevelQueryField() {
+        return newFieldDefinition()
                 .name(_LTN.sanitized(serviceSpec))
                 .type(gqlObjectTypeBuilder)
                 .build();
-        return topLevelQueryField;
-    }
-
-    /**
-     * @see #buildTopLevelQueryField()
-     */
-    public GraphQLFieldDefinition getTopLevelQueryField() {
-        if (topLevelQueryField == null) {
-            throw new IllegalStateException(String.format(
-                    "queryField has not yet been added to top-level Query, for %s", getLogicalTypeName()));
-        }
-        return topLevelQueryField;
     }
 
 
