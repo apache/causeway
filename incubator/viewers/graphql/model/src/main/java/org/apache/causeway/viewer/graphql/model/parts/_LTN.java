@@ -16,20 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.model.parts;
 
-import java.util.List;
+import lombok.experimental.UtilityClass;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.Data;
-
-@Data
-public class GqlvMutations {
-
-    private final Bookmark bookmark;
-    private final BookmarkService bookmarkService;
-    private final List<String> mutatorFieldNames;
-
+@UtilityClass
+public final class _LTN {
+    public static String sanitized(ObjectSpecification objectSpecification) {
+        return sanitized(objectSpecification.getLogicalTypeName());
+    }
+    private static String sanitized(final String name) {
+        return name.replace('.', '_');
+    }
 }

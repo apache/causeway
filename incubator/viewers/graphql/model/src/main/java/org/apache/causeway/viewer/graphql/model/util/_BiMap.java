@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.viewer.util;
+package org.apache.causeway.viewer.graphql.model.util;
 
 import java.util.Collection;
 import java.util.Collections;

@@ -1,9 +1,10 @@
-package org.apache.causeway.viewer.graphql.viewer.util;
+package org.apache.causeway.viewer.graphql.model.util;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.causeway.viewer.graphql.model.util._BiMap;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 

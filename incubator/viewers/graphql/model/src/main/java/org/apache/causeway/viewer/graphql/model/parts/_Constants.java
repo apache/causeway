@@ -1,0 +1,9 @@
+package org.apache.causeway.viewer.graphql.model.parts;
+
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class _Constants {
+    public final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
+    public final static String GQL_MUTATIONS_FIELDNAME = "_gql_mutations";
+}

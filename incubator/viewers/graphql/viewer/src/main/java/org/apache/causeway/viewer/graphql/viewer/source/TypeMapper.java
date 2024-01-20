@@ -27,6 +27,8 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.viewer.graphql.model.parts._Constants;
+import org.apache.causeway.viewer.graphql.model.parts._LTN;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLInputType;
