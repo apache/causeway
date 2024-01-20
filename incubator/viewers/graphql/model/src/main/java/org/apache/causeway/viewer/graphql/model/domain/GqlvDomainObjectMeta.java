@@ -69,7 +69,7 @@ public class GqlvDomainObjectMeta {
     }
 
     private GraphQLObjectType metaType() {
-        val metaTypeBuilder = newObject().name(domainObject.getLogicalTypeNameSanitized() + "__DomainObject_meta");
+        val metaTypeBuilder = newObject().name(domainObject.getLogicalTypeNameSanitized() + "__meta");
         metaTypeBuilder.field(GqlvDomainObjectMeta.Fields.id);
         metaTypeBuilder.field(GqlvDomainObjectMeta.Fields.logicalTypeName);
         if (domainObject.getBeanSort() == BeanSort.ENTITY) {

@@ -114,203 +114,203 @@
       }, {
         "name" : "causeway_applib_DomainObjectList"
       }, {
-        "name" : "causeway_applib_DomainObjectList__DomainObject_meta"
+        "name" : "causeway_applib_DomainObjectList__meta"
       }, {
         "name" : "causeway_applib_FacetGroupNode"
       }, {
-        "name" : "causeway_applib_FacetGroupNode__DomainObject_meta"
+        "name" : "causeway_applib_FacetGroupNode__meta"
       }, {
         "name" : "causeway_applib_ParameterNode"
       }, {
-        "name" : "causeway_applib_ParameterNode__DomainObject_meta"
+        "name" : "causeway_applib_ParameterNode__meta"
       }, {
         "name" : "causeway_applib_PropertyNode"
       }, {
-        "name" : "causeway_applib_PropertyNode__DomainObject_meta"
+        "name" : "causeway_applib_PropertyNode__meta"
       }, {
-        "name" : "causeway_applib_PropertyNode__DomainObject_mutators"
+        "name" : "causeway_applib_PropertyNode__mutators"
       }, {
         "name" : "causeway_applib_RoleMemento"
       }, {
-        "name" : "causeway_applib_RoleMemento__DomainObject_meta"
+        "name" : "causeway_applib_RoleMemento__meta"
       }, {
         "name" : "causeway_applib_TypeNode"
       }, {
-        "name" : "causeway_applib_TypeNode__DomainObject_meta"
+        "name" : "causeway_applib_TypeNode__meta"
       }, {
         "name" : "causeway_applib_UserMemento"
       }, {
-        "name" : "causeway_applib_UserMemento__DomainObject_meta"
+        "name" : "causeway_applib_UserMemento__meta"
       }, {
         "name" : "causeway_applib_UserMenu"
       }, {
         "name" : "causeway_applib_node_ActionNode"
       }, {
-        "name" : "causeway_applib_node_ActionNode__DomainObject_meta"
+        "name" : "causeway_applib_node_ActionNode__meta"
       }, {
-        "name" : "causeway_applib_node_ActionNode__DomainObject_mutators"
+        "name" : "causeway_applib_node_ActionNode__mutators"
       }, {
         "name" : "causeway_applib_node_CollectionNode"
       }, {
-        "name" : "causeway_applib_node_CollectionNode__DomainObject_meta"
+        "name" : "causeway_applib_node_CollectionNode__meta"
       }, {
-        "name" : "causeway_applib_node_CollectionNode__DomainObject_mutators"
+        "name" : "causeway_applib_node_CollectionNode__mutators"
       }, {
         "name" : "causeway_applib_node_FacetAttrNode"
       }, {
-        "name" : "causeway_applib_node_FacetAttrNode__DomainObject_meta"
+        "name" : "causeway_applib_node_FacetAttrNode__meta"
       }, {
         "name" : "causeway_applib_node_FacetNode"
       }, {
-        "name" : "causeway_applib_node_FacetNode__DomainObject_meta"
+        "name" : "causeway_applib_node_FacetNode__meta"
       }, {
         "name" : "causeway_conf_ConfigurationMenu"
       }, {
         "name" : "causeway_conf_ConfigurationProperty"
       }, {
-        "name" : "causeway_conf_ConfigurationProperty__DomainObject_meta"
+        "name" : "causeway_conf_ConfigurationProperty__meta"
       }, {
         "name" : "causeway_conf_ConfigurationViewmodel"
       }, {
-        "name" : "causeway_conf_ConfigurationViewmodel__DomainObject_meta"
+        "name" : "causeway_conf_ConfigurationViewmodel__meta"
       }, {
         "name" : "causeway_feat_ApplicationFeatureViewModel"
       }, {
-        "name" : "causeway_feat_ApplicationFeatureViewModel__DomainObject_meta"
+        "name" : "causeway_feat_ApplicationFeatureViewModel__meta"
       }, {
         "name" : "causeway_feat_ApplicationNamespace"
       }, {
-        "name" : "causeway_feat_ApplicationNamespace__DomainObject_meta"
+        "name" : "causeway_feat_ApplicationNamespace__meta"
       }, {
         "name" : "causeway_feat_ApplicationType"
       }, {
         "name" : "causeway_feat_ApplicationTypeAction"
       }, {
-        "name" : "causeway_feat_ApplicationTypeAction__DomainObject_meta"
+        "name" : "causeway_feat_ApplicationTypeAction__meta"
       }, {
         "name" : "causeway_feat_ApplicationTypeCollection"
       }, {
-        "name" : "causeway_feat_ApplicationTypeCollection__DomainObject_meta"
+        "name" : "causeway_feat_ApplicationTypeCollection__meta"
       }, {
         "name" : "causeway_feat_ApplicationTypeMember"
       }, {
-        "name" : "causeway_feat_ApplicationTypeMember__DomainObject_meta"
+        "name" : "causeway_feat_ApplicationTypeMember__meta"
       }, {
         "name" : "causeway_feat_ApplicationTypeProperty"
       }, {
-        "name" : "causeway_feat_ApplicationTypeProperty__DomainObject_meta"
+        "name" : "causeway_feat_ApplicationTypeProperty__meta"
       }, {
-        "name" : "causeway_feat_ApplicationType__DomainObject_meta"
+        "name" : "causeway_feat_ApplicationType__meta"
       }, {
         "name" : "causeway_schema_metamodel_v2_DomainClassDto"
       }, {
-        "name" : "causeway_schema_metamodel_v2_DomainClassDto__DomainObject_meta"
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__meta"
       }, {
         "name" : "causeway_security_LoginRedirect"
       }, {
-        "name" : "causeway_security_LoginRedirect__DomainObject_meta"
+        "name" : "causeway_security_LoginRedirect__meta"
       }, {
         "name" : "causeway_security_LogoutMenu"
       }, {
         "name" : "causeway_testing_fixtures_FixtureResult"
       }, {
-        "name" : "causeway_testing_fixtures_FixtureResult__DomainObject_meta"
+        "name" : "causeway_testing_fixtures_FixtureResult__meta"
       }, {
         "name" : "java_lang_Runnable"
       }, {
-        "name" : "java_lang_Runnable__DomainObject_meta"
+        "name" : "java_lang_Runnable__meta"
       }, {
         "name" : "java_util_Map"
       }, {
-        "name" : "java_util_Map__DomainObject_meta"
+        "name" : "java_util_Map__meta"
       }, {
         "name" : "java_util_SortedMap"
       }, {
-        "name" : "java_util_SortedMap__DomainObject_meta"
+        "name" : "java_util_SortedMap__meta"
       }, {
         "name" : "java_util_concurrent_Callable"
       }, {
-        "name" : "java_util_concurrent_Callable__DomainObject_meta"
+        "name" : "java_util_concurrent_Callable__meta"
       }, {
         "name" : "java_util_function_BiFunction"
       }, {
-        "name" : "java_util_function_BiFunction__DomainObject_meta"
+        "name" : "java_util_function_BiFunction__meta"
       }, {
         "name" : "java_util_function_Consumer"
       }, {
-        "name" : "java_util_function_Consumer__DomainObject_meta"
+        "name" : "java_util_function_Consumer__meta"
       }, {
         "name" : "java_util_function_Function"
       }, {
-        "name" : "java_util_function_Function__DomainObject_meta"
+        "name" : "java_util_function_Function__meta"
       }, {
         "name" : "java_util_stream_Stream"
       }, {
-        "name" : "java_util_stream_Stream__DomainObject_meta"
+        "name" : "java_util_stream_Stream__meta"
       }, {
         "name" : "org_apache_causeway_commons_functional_Either"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__DomainObject_meta"
+        "name" : "org_apache_causeway_commons_functional_Either__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__DomainObject_mutators"
+        "name" : "org_apache_causeway_commons_functional_Either__mutators"
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Railway__DomainObject_meta"
+        "name" : "org_apache_causeway_commons_functional_Railway__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Railway__DomainObject_mutators"
+        "name" : "org_apache_causeway_commons_functional_Railway__mutators"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__DomainObject_meta"
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__DomainObject_mutators"
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutators"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__DomainObject_meta"
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__DomainObject_mutators"
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutators"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingRunnable"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__DomainObject_meta"
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__DomainObject_mutators"
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutators"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__DomainObject_meta"
+        "name" : "org_apache_causeway_commons_functional_Try__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__DomainObject_mutators"
+        "name" : "org_apache_causeway_commons_functional_Try__mutators"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode"
       }, {
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__DomainObject_meta"
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__meta"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode"
       }, {
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__DomainObject_meta"
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta"
       }, {
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__DomainObject_mutators"
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutators"
       }, {
         "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript"
       }, {
-        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta"
+        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__meta"
       }, {
         "name" : "university_dept_Department"
       }, {
         "name" : "university_dept_DepartmentMenu"
       }, {
-        "name" : "university_dept_Department__DomainObject_meta"
+        "name" : "university_dept_Department__meta"
       }, {
         "name" : "university_dept_DeptHead"
       }, {
         "name" : "university_dept_DeptHeadMenu"
       }, {
-        "name" : "university_dept_DeptHead__DomainObject_meta"
+        "name" : "university_dept_DeptHead__meta"
       }, {
-        "name" : "university_dept_DeptHead__DomainObject_mutators"
+        "name" : "university_dept_DeptHead__mutators"
       } ]
     }
   }

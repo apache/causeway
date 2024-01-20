@@ -33,7 +33,7 @@ public class GqlvDomainObjectMutators implements GqlvActionHolder {
         this.domainObject = domainObject;
         this.codeRegistryBuilder = codeRegistryBuilder;
 
-        mutatorsTypeBuilder = newObject().name(this.domainObject.getLogicalTypeNameSanitized() + "__DomainObject_mutators");
+        mutatorsTypeBuilder = newObject().name(this.domainObject.getLogicalTypeNameSanitized() + "__mutators");
 
     }
 
