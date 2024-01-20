@@ -199,12 +199,13 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         val gqlvDomainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
 
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getMeta().getMetaField().getType());
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getGqlInputObjectType());
-
         gqlvDomainObject.addPropertiesAsFields();
         gqlvDomainObject.addCollectionsAsLists();
         gqlvDomainObject.addActionsAsFields();
+
+
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getMeta().getMetaField().getType());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getGqlInputObjectType());
 
         gqlvDomainObject.getMutatorsTypeIfAny()
                 .ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
