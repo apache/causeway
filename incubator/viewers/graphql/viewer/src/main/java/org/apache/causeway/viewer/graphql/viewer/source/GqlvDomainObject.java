@@ -57,7 +57,7 @@ import static graphql.schema.GraphQLTypeReference.typeRef;
 /**
  * A wrapper around {@link ObjectSpecification}
  */
-public class GqlvObjectStructure {
+public class GqlvDomainObject {
 
     @UtilityClass
     static class Fields {
@@ -133,7 +133,7 @@ public class GqlvObjectStructure {
     private Optional<GraphQLObjectType> mutatorsTypeIfAny;
 
 
-    public GqlvObjectStructure(
+    public GqlvDomainObject(
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService,
@@ -279,7 +279,7 @@ public class GqlvObjectStructure {
 
         if (parameters.isNotEmpty()) {
             builder.arguments(parameters.stream()
-                    .map(GqlvObjectStructure::gqlArgumentFor)
+                    .map(GqlvDomainObject::gqlArgumentFor)
                     .collect(Collectors.toList()));
         }
     }
@@ -390,14 +390,14 @@ public class GqlvObjectStructure {
                 });
 
         codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), GqlvObjectStructure.Fields.id),
+                coordinates(getMetaType(), GqlvDomainObject.Fields.id),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.id();
                 });
 
         codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), GqlvObjectStructure.Fields.logicalTypeName),
+                coordinates(getMetaType(), GqlvDomainObject.Fields.logicalTypeName),
                 (DataFetcher<Object>) environment -> {
                     GqlvMeta gqlvMeta = environment.getSource();
                     return gqlvMeta.logicalTypeName();
@@ -405,7 +405,7 @@ public class GqlvObjectStructure {
 
         if (getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(
-                    coordinates(getMetaType(), GqlvObjectStructure.Fields.version),
+                    coordinates(getMetaType(), GqlvDomainObject.Fields.version),
                     (DataFetcher<Object>) environment -> {
                         GqlvMeta gqlvMeta = environment.getSource();
                         return gqlvMeta.version();

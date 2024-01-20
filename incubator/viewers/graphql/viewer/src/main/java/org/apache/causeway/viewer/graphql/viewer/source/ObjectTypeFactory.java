@@ -53,7 +53,7 @@ public class ObjectTypeFactory {
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val gqlvDomainObject = new GqlvObjectStructure(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
+        val gqlvDomainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
 
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getMetaField().getType());
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getGqlInputObjectType());
