@@ -23,8 +23,6 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -35,8 +33,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAction;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
@@ -174,19 +171,14 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         val domainService = new GqlvDomainService(objectSpec, service, codeRegistryBuilder);
 
-        List<ObjectAction> objectActionList = objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
-                .map(ObjectAction.class::cast)
-                .collect(Collectors.toList());
-
-        if (objectActionList.isEmpty()) {
+        boolean actionsAdded = domainService.addActions();
+        if (!actionsAdded) {
             return;
         }
 
-        objectActionList.forEach(domainService::addAction);
-
         domainService.buildObjectGqlType();
 
-        domainService.getSafeActions().forEach(gqlvAction -> gqlvAction.addDataFetcher());
+        domainService.getSafeActions().forEach(GqlvAction::addDataFetcher);
 
         topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
     }

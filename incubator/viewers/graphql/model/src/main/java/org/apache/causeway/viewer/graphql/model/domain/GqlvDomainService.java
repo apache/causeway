@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.util._LTN;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -93,5 +94,18 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
     }
 
 
+    /**
+     * @return <code>true</code> if any (at least one) actions were added
+     */
+    public boolean addActions() {
+        List<ObjectAction> objectActionList = getObjectSpecification().streamRuntimeActions(MixedIn.INCLUDED)
+                .map(ObjectAction.class::cast)
+                .collect(Collectors.toList());
 
+
+        objectActionList.forEach(this::addAction);
+
+
+        return !objectActionList.isEmpty();
+    }
 }
