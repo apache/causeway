@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.viewer.source;
+package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.FieldCoordinates;
@@ -67,8 +67,7 @@ public class GqlvDomainService {
     private final _BiMap<ObjectAction, GraphQLFieldDefinition> safeActionToField = new _BiMap<>();
     private final _BiMap<ObjectAction, GraphQLFieldDefinition> mutatorActionToField = new _BiMap<>();
 
-
-    Map<ObjectAction, GraphQLFieldDefinition> getSafeActions() {
+    public Map<ObjectAction, GraphQLFieldDefinition> getSafeActions() {
         return safeActionToField.getForwardMapAsImmutable();
     }
 
@@ -106,7 +105,7 @@ public class GqlvDomainService {
     }
 
 
-    void addAction(final ObjectAction objectAction) {
+    public void addAction(final ObjectAction objectAction) {
 
         String fieldName = objectAction.getId();
 

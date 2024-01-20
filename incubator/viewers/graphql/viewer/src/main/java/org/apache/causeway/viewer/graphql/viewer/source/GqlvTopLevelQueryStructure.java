@@ -9,6 +9,8 @@ import graphql.schema.GraphQLObjectType;
 
 import lombok.Getter;
 
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 

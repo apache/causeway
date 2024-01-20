@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
