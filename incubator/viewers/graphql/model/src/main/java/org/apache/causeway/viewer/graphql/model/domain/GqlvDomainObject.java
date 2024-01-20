@@ -59,6 +59,8 @@ import static graphql.schema.GraphQLTypeReference.typeRef;
  */
 public class GqlvDomainObject {
 
+    private final GqlvDomainObjectMutators mutators;
+
     @UtilityClass
     static class Fields {
         static GraphQLFieldDefinition id =
@@ -87,7 +89,7 @@ public class GqlvDomainObject {
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
-    private String getLogicalTypeName() {
+    String getLogicalTypeName() {
         return objectSpec.getLogicalTypeName();
     }
 
@@ -103,11 +105,8 @@ public class GqlvDomainObject {
         return (GraphQLObjectType) metaField.getType();
     }
 
-    String getMutatorsTypeName() {
-        return getLogicalTypeNameSanitized() + "__DomainObject_mutators";
-    }
 
-    final GraphQLObjectType.Builder mutatorsTypeBuilder;
+
 
     private final List<GqlvProperty> properties = new ArrayList<>();
     public List<GqlvProperty> getProperties() {return Collections.unmodifiableList(properties);}
@@ -118,19 +117,12 @@ public class GqlvDomainObject {
     private final List<GqlvAction> safeActions = new ArrayList<>();
     public List<GqlvAction> getSafeActions() {return Collections.unmodifiableList(safeActions);}
 
-    private final List<GqlvAction> mutatorActions = new ArrayList<>();
-    public List<GqlvAction> getMutatorActions() {return Collections.unmodifiableList(mutatorActions);}
 
     /**
      * Built using {@link #buildGqlObjectType()}
      */
     private GraphQLObjectType gqlObjectType;
 
-    /**
-     * Built lazily using {@link #buildMutatorsTypeIfAny()}
-     */
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Optional<GraphQLObjectType> mutatorsTypeIfAny;
 
 
     public GqlvDomainObject(
@@ -160,7 +152,7 @@ public class GqlvDomainObject {
                         .build());
         gqlInputObjectType = inputTypeBuilder.build();
 
-        mutatorsTypeBuilder = newObject().name(getMutatorsTypeName());
+        mutators = new GqlvDomainObjectMutators(this);
     }
 
 
@@ -304,12 +296,12 @@ public class GqlvDomainObject {
     public void addNonSafeActionAsMutatorField(
             final ObjectAction objectAction,
             final GraphQLFieldDefinition fieldDefinition) {
-        mutatorsTypeBuilder.field(fieldDefinition);
-        mutatorActions.add(new GqlvAction(objectAction, fieldDefinition));
+
+        mutators.addActionAsField(objectAction, fieldDefinition);
     }
 
     boolean hasMutators() {
-        return !mutatorActions.isEmpty();
+        return mutators.hasActions();
     }
 
 
@@ -341,24 +333,14 @@ public class GqlvDomainObject {
      * @see #buildMutatorsTypeIfAny()
      */
     public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
-        //noinspection OptionalAssignedToNull
-        if (mutatorsTypeIfAny == null) {
-            throw new IllegalArgumentException(String.format("Gql MutatorsType has not yet been built for %s", getLogicalTypeName()));
-        }
-        return mutatorsTypeIfAny;
+        return mutators.getMutatorsTypeIfAny();
     }
 
     /**
      * @see #getMutatorsTypeIfAny()
      */
     public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
-        //noinspection OptionalAssignedToNull
-        if (mutatorsTypeIfAny != null) {
-            throw new IllegalArgumentException("Gql MutatorsType has already been built for " + getLogicalTypeName());
-        }
-        return mutatorsTypeIfAny = hasMutators()
-                ? Optional.of(mutatorsTypeBuilder.build())
-                : Optional.empty();
+        return mutators.buildMutatorsTypeIfAny();
     }
 
     public void addActionsAsFields() {
