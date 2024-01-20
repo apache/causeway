@@ -19,7 +19,7 @@ public class GqlvMutators implements GqlvActionHolder {
     private final GqlvMutatorsHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
-    final GraphQLObjectType.Builder mutatorsTypeBuilder;
+    final GraphQLObjectType.Builder objectTypeBuilder;
 
     /**
      * Built lazily using {@link #buildMutatorsTypeIfAny()}
@@ -34,7 +34,7 @@ public class GqlvMutators implements GqlvActionHolder {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
 
-        mutatorsTypeBuilder = newObject().name(_LTN.sanitized(this.holder.getObjectSpecification()) + "__mutators");
+        objectTypeBuilder = newObject().name(_LTN.sanitized(this.holder.getObjectSpecification()) + "__mutators");
 
     }
 
@@ -42,7 +42,7 @@ public class GqlvMutators implements GqlvActionHolder {
             final ObjectAction objectAction,
             final GraphQLFieldDefinition fieldDefinition) {
 
-        mutatorsTypeBuilder.field(fieldDefinition);
+        objectTypeBuilder.field(fieldDefinition);
         actions.add(new GqlvAction(holder, objectAction, fieldDefinition, codeRegistryBuilder));
     }
 
@@ -74,7 +74,7 @@ public class GqlvMutators implements GqlvActionHolder {
             throw new IllegalArgumentException("Gql MutatorsType has already been built for " + holder.getObjectSpecification().getLogicalTypeName());
         }
         return mutatorsTypeIfAny = hasActions()
-                ? Optional.of(mutatorsTypeBuilder.build())
+                ? Optional.of(objectTypeBuilder.build())
                 : Optional.empty();
     }
 

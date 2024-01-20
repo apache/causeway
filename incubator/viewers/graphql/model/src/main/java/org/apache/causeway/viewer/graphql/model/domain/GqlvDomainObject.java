@@ -209,9 +209,10 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
 
         if (objectAction.getSemantics().isSafeInNature()) {
-            addSafeActionAsField(objectAction, fieldDefinition);
+            getGqlObjectTypeBuilder().field(fieldDefinition);
+            safeActions.add(new GqlvAction(this, objectAction, fieldDefinition, codeRegistryBuilder));
         } else {
-            addNonSafeActionAsMutatorField(objectAction, fieldDefinition);
+            mutators.addActionAsField(objectAction, fieldDefinition);
         }
     }
 
@@ -237,20 +238,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                 .build();
     }
 
-
-    public void addSafeActionAsField(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition fieldDefinition) {
-        getGqlObjectTypeBuilder().field(fieldDefinition);
-        safeActions.add(new GqlvAction(this, objectAction, fieldDefinition, codeRegistryBuilder));
-    }
-
-    public void addNonSafeActionAsMutatorField(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition fieldDefinition) {
-
-        mutators.addActionAsField(objectAction, fieldDefinition);
-    }
 
     boolean hasMutators() {
         return mutators.hasActions();
