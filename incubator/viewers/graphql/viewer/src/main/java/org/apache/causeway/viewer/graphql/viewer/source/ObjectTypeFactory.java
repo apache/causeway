@@ -47,32 +47,5 @@ public class ObjectTypeFactory {
     private final ObjectManager objectManager;
     private final SpecificationLoader specificationLoader;
 
-    public void createGqlObjectTypeWithFetchers(
-            final ObjectSpecification objectSpec,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-
-        val gqlvDomainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
-
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getMetaField().getType());
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getGqlInputObjectType());
-
-        gqlvDomainObject.addPropertiesAsFields();
-        gqlvDomainObject.addCollectionsAsLists();
-        gqlvDomainObject.addActionsAsFields();
-
-        gqlvDomainObject.getMutatorsTypeIfAny()
-                .ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
-
-        // build and register object type
-        GraphQLObjectType graphQLObjectType = gqlvDomainObject.buildGqlObjectType();
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
-
-        // create and register data fetchers
-        gqlvDomainObject.createAndRegisterDataFetchersForMetaData();
-        gqlvDomainObject.createAndRegisterDataFetchersForMutators();
-
-        gqlvDomainObject.createAndRegisterDataFetchersForField();
-        gqlvDomainObject.createAndRegisterDataFetchersForCollection();
-    }
 
 }

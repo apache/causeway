@@ -31,15 +31,16 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.id.HasLogicalType;
 
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.viewer.source.GqlvTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.viewer.source.ObjectTypeFactory;
-import org.apache.causeway.viewer.graphql.viewer.source.QueryFieldFactory;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.GraphQL;
 import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 
 import lombok.RequiredArgsConstructor;
@@ -61,16 +63,14 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GraphQlSourceForCauseway implements GraphQlSource {
 
-    private final ServiceRegistry serviceRegistry;
-    private final SpecificationLoader specificationLoader;
     private final CausewayConfiguration causewayConfiguration;
     private final CausewaySystemEnvironment causewaySystemEnvironment;
-
-    private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
-
-    private final ObjectTypeFactory objectTypeFactory;
-    private final QueryFieldFactory queryFieldFactory;
+    private final SpecificationLoader specificationLoader;
+    private final ServiceRegistry serviceRegistry;
+    private final ObjectManager objectManager;
+    private final BookmarkService bookmarkService;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
+    private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
 
     @PostConstruct
     public void init() {
@@ -134,15 +134,15 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
             case MANAGED_BEAN_CONTRIBUTING: // @DomainService
 
-                addServiceToTopLevelQuery(objectSpec, gqlvTopLevelQuery, codeRegistryBuilder);
+                addDomainServiceToTopLevelQuery(objectSpec, gqlvTopLevelQuery, codeRegistryBuilder);
                 break;
 
             case ABSTRACT:
+                // TODO: App interface should map to gql interfaces?
             case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
             case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                // TODO: App interface should map to gql interfaces?
-                objectTypeFactory.createGqlObjectTypeWithFetchers(objectSpec, codeRegistryBuilder);
+                addDomainObjectAsGqlObjectType(objectSpec, codeRegistryBuilder);
 
                 break;
 
@@ -156,18 +156,18 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         }
     }
 
-    public void addServiceToTopLevelQuery(
+    public void addDomainServiceToTopLevelQuery(
             final ObjectSpecification objectSpec,
             final GqlvTopLevelQuery topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                 .ifPresent(service -> {
-                    addServiceToTopLevelQuery(service, objectSpec, topLevelQueryStructure, codeRegistryBuilder);
+                    addDomainServiceToTopLevelQuery(service, objectSpec, topLevelQueryStructure, codeRegistryBuilder);
                 });
     }
 
-    private void addServiceToTopLevelQuery(
+    private void addDomainServiceToTopLevelQuery(
             final Object service,
             final ObjectSpecification objectSpec,
             final GqlvTopLevelQuery topLevelQueryStructure,
@@ -190,6 +190,35 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         domainService.getSafeActions().forEach(domainService::addDataFetcher);
 
         topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
+    }
+
+
+    public void addDomainObjectAsGqlObjectType(
+            final ObjectSpecification objectSpec,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+
+        val gqlvDomainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, specificationLoader);
+
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getMetaField().getType());
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlvDomainObject.getGqlInputObjectType());
+
+        gqlvDomainObject.addPropertiesAsFields();
+        gqlvDomainObject.addCollectionsAsLists();
+        gqlvDomainObject.addActionsAsFields();
+
+        gqlvDomainObject.getMutatorsTypeIfAny()
+                .ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+
+        // build and register object type
+        GraphQLObjectType graphQLObjectType = gqlvDomainObject.buildGqlObjectType();
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
+
+        // create and register data fetchers
+        gqlvDomainObject.createAndRegisterDataFetchersForMetaData();
+        gqlvDomainObject.createAndRegisterDataFetchersForMutators();
+
+        gqlvDomainObject.createAndRegisterDataFetchersForField();
+        gqlvDomainObject.createAndRegisterDataFetchersForCollection();
     }
 
 }
