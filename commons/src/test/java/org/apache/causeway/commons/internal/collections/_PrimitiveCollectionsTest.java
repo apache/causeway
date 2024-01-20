@@ -22,6 +22,7 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -101,5 +102,33 @@ class _PrimitiveCollectionsTest {
         assertEquals(2, intList.indexOf(7).orElse(-1));
     }
 
+    @Test
+    void wrapping() {
+        var array = new int[]{
+                1, 3, 2, 5,
+                1, 3, 2, 5,
+                1, 3, 2, 5,
+                1, 3, 2, 5};
+        var intList = new IntList(array);
+        assertEquals(4*4, intList.size());
+        assertFalse(intList.isEmpty());
+        assertEquals(44, intList.stream().sum());
+    }
+
+    @Test
+    void addAll() {
+        var array = new int[]{1, 3, 2, 5, 1, 3, 2, 5};
+        var intList = new IntList(array).addAll(array);
+        assertEquals(4*4, intList.size());
+        assertFalse(intList.isEmpty());
+        assertEquals(44, intList.stream().sum());
+    }
+
+    @Test
+    void pickByIndex() {
+        var array = new int[]{1, 3, 2, 5};
+        var intList = new IntList(array);
+        assertArrayEquals(new int[]{1, 1, 5}, intList.toArrayPickByIndex(0, 0, 9, -1, 3));
+    }
 
 }
