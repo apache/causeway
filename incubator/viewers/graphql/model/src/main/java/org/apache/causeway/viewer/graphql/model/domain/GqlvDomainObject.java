@@ -276,7 +276,7 @@ public class GqlvDomainObject {
      *
      * @see #getGqlObjectType()
      */
-    public GraphQLObjectType buildGqlObjectType() {
+    private GraphQLObjectType buildGqlObjectType() {
         if (gqlObjectType != null) {
             throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
         }
@@ -418,7 +418,10 @@ public class GqlvDomainObject {
         return mutatorsType;
     }
 
-    public void addTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
+    public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
+
+        GraphQLObjectType graphQLObjectType = buildGqlObjectType();
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
 
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getMeta().getMetaField().getType());
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getGqlInputObjectType());

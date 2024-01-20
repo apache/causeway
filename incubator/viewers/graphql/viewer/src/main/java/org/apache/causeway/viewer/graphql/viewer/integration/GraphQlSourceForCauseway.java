@@ -53,7 +53,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.GraphQL;
 import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 
 import lombok.RequiredArgsConstructor;
@@ -203,11 +202,8 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         gqlvDomainObject.addCollectionsAsLists();
         gqlvDomainObject.addActionsAsFields();
 
-        // build and register object type
-        GraphQLObjectType graphQLObjectType = gqlvDomainObject.buildGqlObjectType();
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
-
-        gqlvDomainObject.addTypesInto(graphQLTypeRegistry);
+        // build
+        gqlvDomainObject.registerTypesInto(graphQLTypeRegistry);
 
         // create and register data fetchers
         gqlvDomainObject.addDataFetchersForMetaData();
