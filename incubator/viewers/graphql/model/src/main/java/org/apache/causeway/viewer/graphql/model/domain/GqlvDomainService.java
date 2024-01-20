@@ -89,22 +89,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
 
     public void addAction(final ObjectAction objectAction) {
 
-        String fieldName = objectAction.getId();
-
-        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                .name(fieldName)
-                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-        if (objectAction.getParameters().isNotEmpty()) {
-            fieldBuilder.arguments(objectAction.getParameters().stream()
-                    .map(objectActionParameter -> GraphQLArgument.newArgument()
-                            .name(objectActionParameter.getId())
-                            .type(TypeMapper.inputTypeFor(objectActionParameter))
-                            .build())
-                    .collect(Collectors.toList()));
-        }
-        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
-        objectTypeBuilder.field(fieldDefinition);
-
         // TODO: either safe or mutator
         safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
     }
