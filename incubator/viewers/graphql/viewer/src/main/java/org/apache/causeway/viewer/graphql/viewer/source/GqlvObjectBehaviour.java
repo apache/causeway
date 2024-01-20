@@ -1,7 +1,6 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
 
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -11,6 +10,8 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.parts.GqlvAssociation;
+import org.apache.causeway.viewer.graphql.model.parts.GqlvProperty;
 
 import lombok.RequiredArgsConstructor;
 
@@ -70,18 +71,18 @@ public class GqlvObjectBehaviour {
 
 
     public void createAndRegisterDataFetchersForField() {
-        structure.getProperties().entrySet().forEach(this::createAndRegisterDataFetcherForAssociation);
+        structure.getProperties().forEach(this::createAndRegisterDataFetcherForAssociation);
     }
 
     void createAndRegisterDataFetchersForCollection() {
-        structure.getCollections().entrySet().forEach(this::createAndRegisterDataFetcherForAssociation);
+        structure.getCollections().forEach(
+                this::createAndRegisterDataFetcherForAssociation);
     }
 
-    private void createAndRegisterDataFetcherForAssociation(
-            final Map.Entry<? extends ObjectAssociation, GraphQLFieldDefinition> associationAndField) {
+    private void createAndRegisterDataFetcherForAssociation(final GqlvAssociation<?> property) {
 
-        final ObjectAssociation association = associationAndField.getKey();
-        final GraphQLFieldDefinition field = associationAndField.getValue();
+        final ObjectAssociation association = property.getObjectMember();
+        final GraphQLFieldDefinition field = property.getFieldDefinition();
 
         final GraphQLObjectType graphQLObjectType = structure.getGqlObjectType();
 

@@ -1,26 +1,8 @@
 package org.apache.causeway.viewer.graphql.viewer.source;
 
-import graphql.Scalars;
-import graphql.com.google.common.collect.BiMap;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLObjectType;
-
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-import graphql.schema.GraphQLTypeReference;
-
-import lombok.Getter;
-import lombok.Synchronized;
-import lombok.experimental.UtilityClass;
-import lombok.val;
-
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,16 +15,32 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.graphql.viewer.util._BiMap;
+import org.apache.causeway.viewer.graphql.model.parts.GqlvAction;
+import org.apache.causeway.viewer.graphql.model.parts.GqlvCollection;
+import org.apache.causeway.viewer.graphql.model.parts.GqlvProperty;
+
+import static org.apache.causeway.viewer.graphql.viewer.source._Constants.GQL_INPUTTYPE_PREFIX;
+
+import lombok.Getter;
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
+import graphql.Scalars;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
+import graphql.schema.GraphQLTypeReference;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
-
 import static graphql.schema.GraphQLTypeReference.typeRef;
-import static org.apache.causeway.viewer.graphql.viewer.source._Constants.GQL_INPUTTYPE_PREFIX;
 
 /**
  * A wrapper around {@link ObjectSpecification}
@@ -94,26 +92,17 @@ public class GqlvObjectStructure {
 
     final GraphQLObjectType.Builder mutatorsTypeBuilder;
 
-    private final _BiMap<OneToOneAssociation, GraphQLFieldDefinition> propertyToField = new _BiMap<>();
-    private final _BiMap<OneToManyAssociation, GraphQLFieldDefinition> collectionToField = new _BiMap<>();
-    private final _BiMap<ObjectAction, GraphQLFieldDefinition> safeActionToField = new _BiMap<>();
-    private final _BiMap<ObjectAction, GraphQLFieldDefinition> mutatorActionToField = new _BiMap<>();
+    private final List<GqlvProperty> properties = new ArrayList<>();
+    public List<GqlvProperty> getProperties() {return Collections.unmodifiableList(properties);}
 
-    Map<OneToOneAssociation, GraphQLFieldDefinition> getProperties() {
-        return propertyToField.getForwardMapAsImmutable();
-    }
+    private final List<GqlvCollection> collections = new ArrayList<>();
+    public List<GqlvCollection> getCollections() {return Collections.unmodifiableList(collections);}
 
-    Map<OneToManyAssociation, GraphQLFieldDefinition> getCollections() {
-        return collectionToField.getForwardMapAsImmutable();
-    }
+    private final List<GqlvAction> safeActions = new ArrayList<>();
+    public List<GqlvAction> getSafeActions() {return Collections.unmodifiableList(safeActions);}
 
-    Map<ObjectAction, GraphQLFieldDefinition> getSafeActions() {
-        return safeActionToField.getForwardMapAsImmutable();
-    }
-
-    Map<ObjectAction, GraphQLFieldDefinition> getMutatorActions() {
-        return mutatorActionToField.getForwardMapAsImmutable();
-    }
+    private final List<GqlvAction> mutatorActions = new ArrayList<>();
+    public List<GqlvAction> getMutatorActions() {return Collections.unmodifiableList(mutatorActions);}
 
     /**
      * Built using {@link #buildGqlObjectType()}
@@ -123,6 +112,7 @@ public class GqlvObjectStructure {
     /**
      * Built lazily using {@link #buildMutatorsTypeIfAny()}
      */
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<GraphQLObjectType> mutatorsTypeIfAny;
 
     public GqlvObjectStructure(final ObjectSpecification objectSpec) {
@@ -197,7 +187,7 @@ public class GqlvObjectStructure {
                 break;
         }
         if (fieldDefinition != null) {
-            propertyToField.put(otoa, fieldDefinition);
+            properties.add(new GqlvProperty(otoa, fieldDefinition));
         }
     }
 
@@ -232,7 +222,7 @@ public class GqlvObjectStructure {
         }
 
         if (fieldDefinition != null) {
-            collectionToField.put(otom, fieldDefinition);
+            collections.add(new GqlvCollection(otom, fieldDefinition));
         }
     }
 
@@ -281,18 +271,18 @@ public class GqlvObjectStructure {
             final ObjectAction objectAction,
             final GraphQLFieldDefinition fieldDefinition) {
         getGqlObjectTypeBuilder().field(fieldDefinition);
-        safeActionToField.put(objectAction, fieldDefinition);
+        safeActions.add(new GqlvAction(objectAction, fieldDefinition));
     }
 
     public void addNonSafeActionAsMutatorField(
             final ObjectAction objectAction,
             final GraphQLFieldDefinition fieldDefinition) {
         mutatorsTypeBuilder.field(fieldDefinition);
-        mutatorActionToField.put(objectAction, fieldDefinition);
+        mutatorActions.add(new GqlvAction(objectAction, fieldDefinition));
     }
 
     boolean hasMutators() {
-        return !mutatorActionToField.isEmpty();
+        return !mutatorActions.isEmpty();
     }
 
 
