@@ -98,8 +98,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         objectTypeBuilder.field(meta.getMetaField());
 
         // input object type
-        String inputTypeName = GQL_INPUTTYPE_PREFIX + getLogicalTypeNameSanitized();
-        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
+        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
         inputTypeBuilder
                 .field(newInputObjectField()
                         .name("id")

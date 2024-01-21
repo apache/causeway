@@ -21,12 +21,16 @@ package org.apache.causeway.viewer.graphql.model.util;
 import lombok.experimental.UtilityClass;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.viewer.graphql.model.types._Constants;
 
 @UtilityClass
 public final class TypeNames {
+
     public static String objectTypeNameFor(ObjectSpecification objectSpecification) {
         return sanitized(objectSpecification.getLogicalTypeName());
+    }
+
+    public static String metaTypeNameFor(ObjectSpecification objectSpecification) {
+        return objectTypeNameFor(objectSpecification) + "__meta";
     }
 
     public static String mutatorTypeNameFor(ObjectSpecification objectSpecification) {
@@ -34,11 +38,7 @@ public final class TypeNames {
     }
 
     public static String inputTypeNameFor(ObjectSpecification objectSpecification) {
-        return _Constants.GQL_INPUTTYPE_PREFIX + objectTypeNameFor(objectSpecification);
-    }
-
-    public static String metaTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__meta";
+        return "_gql_input__" + objectTypeNameFor(objectSpecification);
     }
 
     private static String sanitized(final String name) {
