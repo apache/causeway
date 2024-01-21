@@ -28,13 +28,18 @@ public class FlushMgmt {
     public static boolean isAutoFlushSuppressed() {
         return autoFlushSuppressed.get();
     }
-    public static void suppressAutoFlush(Runnable runnable) {
-        Boolean onEntry = autoFlushSuppressed.get();
+    public static void suppressAutoFlush(final Runnable runnable) {
+        final boolean onEntry = autoFlushSuppressed.get();
         try {
             autoFlushSuppressed.set(true);
             runnable.run();
         } finally {
-            autoFlushSuppressed.set(onEntry);
+            if(onEntry) {
+                // perhaps superfluous but just in case
+                autoFlushSuppressed.set(true);
+            } else {
+                autoFlushSuppressed.remove();
+            }
         }
     }
 
