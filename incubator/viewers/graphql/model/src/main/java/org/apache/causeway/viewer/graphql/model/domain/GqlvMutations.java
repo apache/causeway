@@ -132,20 +132,7 @@ public class GqlvMutations implements GqlvActionHolder {
                                 .orElseThrow();
                     });
 
-            // TODO: loop around actions and set up a fetcher for each.
-//            codeRegistryBuilder.dataFetcher(
-//                    coordinates(getMetaType(), logicalTypeName),
-//                    (DataFetcher<Object>) environment -> environment.<GqlvMeta.Fetcher>getSource().logicalTypeName());
-//
-//            codeRegistryBuilder.dataFetcher(
-//                    coordinates(getMetaType(), id),
-//                    (DataFetcher<Object>) environment -> environment.<GqlvMeta.Fetcher>getSource().id());
-//
-//            if (domainObject.getBeanSort() == BeanSort.ENTITY) {
-//                codeRegistryBuilder.dataFetcher(
-//                        coordinates(getMetaType(), version),
-//                        (DataFetcher<Object>) environment -> environment.<GqlvMeta.Fetcher>getSource().version());
-//            }
+            getActions().forEach(GqlvAction::addDataFetcher);
         }
     }
 
