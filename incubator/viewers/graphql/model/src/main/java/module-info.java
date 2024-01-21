@@ -1,6 +1,5 @@
 module org.apache.causeway.incubator.viewer.graphql.model {
     exports org.apache.causeway.viewer.graphql.model;
-    exports org.apache.causeway.viewer.graphql.model.parts;
     exports org.apache.causeway.viewer.graphql.model.util;
     exports org.apache.causeway.viewer.graphql.model.types;
     exports org.apache.causeway.viewer.graphql.model.registry;

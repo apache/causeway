@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -29,13 +28,13 @@ import static graphql.schema.GraphQLObjectType.newObject;
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
+public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder {
 
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
-    @Getter private final GqlvMutators mutators;
+    @Getter private final GqlvMutations mutators;
     private final GraphQLObjectType.Builder objectTypeBuilder;
 
     String getLogicalTypeName() {
@@ -65,7 +64,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
 
         this.objectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
-        this.mutators = new GqlvMutators(this, codeRegistryBuilder);
+        this.mutators = new GqlvMutations(this, codeRegistryBuilder);
 
     }
 

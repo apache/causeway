@@ -14,9 +14,9 @@ import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvMutators implements GqlvActionHolder {
+public class GqlvMutations implements GqlvActionHolder {
 
-    private final GqlvMutatorsHolder holder;
+    private final GqlvMutationsHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     final GraphQLObjectType.Builder objectTypeBuilder;
@@ -27,8 +27,8 @@ public class GqlvMutators implements GqlvActionHolder {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<GraphQLObjectType> mutatorsTypeIfAny;
 
-    public GqlvMutators(
-            final GqlvMutatorsHolder holder,
+    public GqlvMutations(
+            final GqlvMutationsHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
         this.holder = holder;
@@ -39,16 +39,7 @@ public class GqlvMutators implements GqlvActionHolder {
     }
 
     public void addAction(final ObjectAction objectAction) {
-
-//        val fieldName = objectAction.getId();
-//        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-//                .name(fieldName)
-//                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-//        addGqlArguments(objectAction, fieldBuilder);
-//        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
-//
-//        objectTypeBuilder.field(fieldDefinition);
-        actions.add(new GqlvAction(holder, objectAction, objectTypeBuilder, codeRegistryBuilder));
+        actions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
     }
 
     private final List<GqlvAction> actions = new ArrayList<>();

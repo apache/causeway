@@ -83,30 +83,30 @@ public class GqlvMeta {
                 coordinates(domainObject.getGqlObjectType(), getMetaField()),
                 (DataFetcher<Object>) environment -> {
                     return bookmarkService.bookmarkFor(environment.getSource())
-                            .map(bookmark -> new org.apache.causeway.viewer.graphql.model.parts.GqlvMeta(bookmark, bookmarkService, objectManager))
+                            .map(bookmark -> new GqlvMetaFetcher(bookmark, bookmarkService, objectManager))
                             .orElse(null); //TODO: is this correct ?
                 });
 
         codeRegistryBuilder.dataFetcher(
                 coordinates(getMetaType(), GqlvMeta.Fields.id),
                 (DataFetcher<Object>) environment -> {
-                    org.apache.causeway.viewer.graphql.model.parts.GqlvMeta gqlvMeta = environment.getSource();
-                    return gqlvMeta.id();
+                    GqlvMetaFetcher gqlvMetaFetcher = environment.getSource();
+                    return gqlvMetaFetcher.id();
                 });
 
         codeRegistryBuilder.dataFetcher(
                 coordinates(getMetaType(), GqlvMeta.Fields.logicalTypeName),
                 (DataFetcher<Object>) environment -> {
-                    org.apache.causeway.viewer.graphql.model.parts.GqlvMeta gqlvMeta = environment.getSource();
-                    return gqlvMeta.logicalTypeName();
+                    GqlvMetaFetcher gqlvMetaFetcher = environment.getSource();
+                    return gqlvMetaFetcher.logicalTypeName();
                 });
 
         if (domainObject.getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(
                     coordinates(getMetaType(), GqlvMeta.Fields.version),
                     (DataFetcher<Object>) environment -> {
-                        org.apache.causeway.viewer.graphql.model.parts.GqlvMeta gqlvMeta = environment.getSource();
-                        return gqlvMeta.version();
+                        GqlvMetaFetcher gqlvMetaFetcher = environment.getSource();
+                        return gqlvMetaFetcher.version();
                     });
         }
     }

@@ -46,13 +46,13 @@ import static graphql.schema.GraphQLTypeReference.typeRef;
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMutatorsHolder {
+public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMutationsHolder {
 
     @Getter private final ObjectSpecification objectSpecification;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     @Getter private final GqlvMeta meta;
-    @Getter private final GqlvMutators mutators;
+    @Getter private final GqlvMutations mutators;
     private final GraphQLObjectType.Builder objectTypeBuilder;
 
     String getLogicalTypeName() {
@@ -93,7 +93,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         this.objectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
-        this.mutators = new GqlvMutators(this, codeRegistryBuilder);
+        this.mutators = new GqlvMutations(this, codeRegistryBuilder);
 
         objectTypeBuilder.field(meta.getMetaField());
 
@@ -277,7 +277,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     public void addDataFetchersForMutators() {
 
-        // TODO: something similar to addFetchers for safe actions, but applied to GqlvMutators instead; perhaps they share a common interface?
+        // TODO: something similar to addFetchers for safe actions, but applied to GqlvMutationsFetcher instead; perhaps they share a common interface?
 
         // earlier code...
 
@@ -287,7 +287,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 //
 //                    Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
 //                    if (bookmark == null) return null; //TODO: is this correct ?
-//                    return new GqlvMutations(bookmark, bookmarkService, mutatorsTypeFields);
+//                    return new GqlvMutationsFetcher(bookmark, bookmarkService, mutatorsTypeFields);
 //                }
 //            });
 //
@@ -296,7 +296,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 //                @Override
 //                public Object get(DataFetchingEnvironment environment) throws Exception {
 //
-//                    GqlvMeta gqlMeta = environment.getSource();
+//                    GqlvMetaFetcher gqlMeta = environment.getSource();
 //
 //                    return gqlMeta.id();
 //                }
