@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -32,6 +33,8 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
+
+import lombok.val;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
@@ -103,10 +106,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                         .type(nonNull(Scalars.GraphQLID))
                         .build());
         gqlInputObjectType = inputTypeBuilder.build();
-
     }
-
-
 
 
     public void addPropertiesAsFields() {
@@ -187,7 +187,29 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         }
     }
 
+    /**
+     * @return <code>true</code> if any (at least one) actions were added
+     */
+    public boolean addActions() {
 
+        val anyActions = new AtomicBoolean(false);
+        objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+                .forEach(objectAction -> {
+                    anyActions.set(true);
+                    addAction(objectAction);
+                });
+
+        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
+        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
+            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
+                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
+                    .type(mutatorsType)
+                    .build();
+            objectTypeBuilder.field(gql_mutations);
+        });
+
+        return anyActions.get();
+    }
 
     void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
@@ -236,23 +258,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         return mutators.buildMutatorsTypeIfAny();
     }
 
-    public void addActions() {
-
-        objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
-                .forEach(this::addAction);
-
-        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
-        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
-
-            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
-                    .type(mutatorsType)
-                    .build();
-            objectTypeBuilder.field(gql_mutations);
-
-        });
-
-    }
 
     public void addDataFetchersForMetaData() {
         meta.addDataFetchers();
@@ -266,6 +271,9 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         getCollections().forEach(GqlvCollection::addDataFetcher);
     }
 
+    public void addDataFetchersForSafeActions() {
+        getSafeActions().forEach(GqlvAction::addDataFetcher);
+    }
 
     public void addDataFetchersForMutators() {
 

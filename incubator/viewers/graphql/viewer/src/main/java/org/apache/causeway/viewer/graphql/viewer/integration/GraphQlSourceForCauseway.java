@@ -49,6 +49,10 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.GraphQL;
+import graphql.execution.DataFetcherExceptionHandler;
+import graphql.execution.DataFetcherExceptionHandlerParameters;
+import graphql.execution.DataFetcherExceptionHandlerResult;
+import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
 
@@ -80,6 +84,12 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     public GraphQL graphQl() {
         return GraphQL.newGraphQL(schema())
 //                .instrumentation(new TracingInstrumentation())
+                .defaultDataFetcherExceptionHandler(new DataFetcherExceptionHandler() {
+                    @Override
+                    public DataFetcherExceptionHandlerResult onException(DataFetcherExceptionHandlerParameters handlerParameters) {
+                        return DataFetcherExceptionHandler.super.onException(handlerParameters);
+                    }
+                })
                 .queryExecutionStrategy(executionStrategy)
                 .build();
     }
@@ -198,10 +208,11 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         // create and register data fetchers
         gqlvDomainObject.addDataFetchersForMetaData();
-        gqlvDomainObject.addDataFetchersForMutators();
 
         gqlvDomainObject.addDataFetchersForProperties();
         gqlvDomainObject.addDataFetchersForCollections();
+        gqlvDomainObject.addDataFetchersForSafeActions();
+        gqlvDomainObject.getMutators().addDataFetchersForActions();
     }
 
 }

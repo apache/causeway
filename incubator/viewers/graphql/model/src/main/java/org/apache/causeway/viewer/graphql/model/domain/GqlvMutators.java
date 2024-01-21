@@ -87,4 +87,8 @@ public class GqlvMutators implements GqlvActionHolder {
     public GraphQLObjectType getGqlObjectType() {
         return mutatorsTypeIfAny.orElse(null);
     }
+
+    public void addDataFetchersForActions() {
+        // TODO
+    }
 }

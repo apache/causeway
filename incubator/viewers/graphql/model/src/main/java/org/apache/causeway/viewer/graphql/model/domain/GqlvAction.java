@@ -58,7 +58,6 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
     }
 
     public void addDataFetcher() {
-
         codeRegistryBuilder.dataFetcher(
                 FieldCoordinates.coordinates(getHolder().getGqlObjectType(), getFieldDefinition()),
                 this::invoke

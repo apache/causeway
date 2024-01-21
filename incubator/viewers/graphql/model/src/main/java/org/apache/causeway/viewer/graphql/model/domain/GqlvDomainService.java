@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -19,6 +20,8 @@ import lombok.Getter;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
+
+import lombok.val;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -66,8 +69,44 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
 
     }
 
+    /**
+     * @return <code>true</code> if any (at least one) actions were added
+     */
+    public boolean addActions() {
+
+        val anyActions = new AtomicBoolean(false);
+        objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+                .forEach(objectAction -> {
+                    anyActions.set(true);
+                    addAction(objectAction);
+                });
+
+        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
+        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
+            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
+                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
+                    .type(mutatorsType)
+                    .build();
+            objectTypeBuilder.field(gql_mutations);
+        });
+
+        return anyActions.get();
+    }
+
+    void addAction(final ObjectAction objectAction) {
+        if (objectAction.getSemantics().isSafeInNature()) {
+            safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
+        } else {
+             // TODO: should register with mutators instead ...
+//            mutators.addAction(objectAction);
+            safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
+        }
+    }
+
 
     /**
+     * Should be called only after fields etc have been added.
+     *
      * @see #getGqlObjectType()
      */
     public GraphQLObjectType buildGqlObjectType() {
@@ -88,6 +127,22 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
         return gqlObjectType;
     }
 
+
+    /**
+     * @see #buildMutatorsTypeIfAny()
+     */
+    public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
+        return mutators.getMutatorsTypeIfAny();
+    }
+
+    /**
+     * @see #getMutatorsTypeIfAny()
+     */
+    public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
+        return mutators.buildMutatorsTypeIfAny();
+    }
+
+
     public GraphQLFieldDefinition createTopLevelQueryField() {
         return newFieldDefinition()
                 .name(TypeNames.objectTypeNameFor(objectSpecification))
@@ -96,41 +151,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
     }
 
 
-    public void addAction(final ObjectAction objectAction) {
-        if (objectAction.getSemantics().isSafeInNature()) {
-            safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
-        } else {
-            // TODO: should register with mutators instead ...
-//            mutators.addAction(objectAction);
-            safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
-        }
-    }
-
-    public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
-        return mutators.buildMutatorsTypeIfAny();
-    }
-
-    /**
-     * @return <code>true</code> if any (at least one) actions were added
-     */
-    public boolean addActions() {
-
-        List<ObjectAction> objectActionList = objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
-                .collect(Collectors.toList());
-
-        objectActionList.forEach(this::addAction);
-
-        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
-        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
-            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
-                    .type(mutatorsType)
-                    .build();
-            objectTypeBuilder.field(gql_mutations);
-        });
-
-        return !objectActionList.isEmpty();
-    }
 
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
 
@@ -138,10 +158,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
         //graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
 
         getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
-    }
-
-    public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
-        return mutators.getMutatorsTypeIfAny();
     }
 
 }
