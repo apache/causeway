@@ -296,7 +296,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 //                @Override
 //                public Object get(DataFetchingEnvironment environment) throws Exception {
 //
-//                    GqlvMetaFetcher gqlMeta = environment.getSource();
+//                    Fetcher gqlMeta = environment.getSource();
 //
 //                    return gqlMeta.id();
 //                }

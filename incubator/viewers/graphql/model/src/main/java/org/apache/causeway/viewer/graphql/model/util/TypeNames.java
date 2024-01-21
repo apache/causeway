@@ -37,6 +37,10 @@ public final class TypeNames {
         return _Constants.GQL_INPUTTYPE_PREFIX + objectTypeNameFor(objectSpecification);
     }
 
+    public static String metaTypeNameFor(ObjectSpecification objectSpecification) {
+        return objectTypeNameFor(objectSpecification) + "__meta";
+    }
+
     private static String sanitized(final String name) {
         return name.replace('.', '_');
     }
