@@ -1370,7 +1370,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_PropertyNode__mutators",
+            "name" : "causeway_applib_PropertyNode__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1443,7 +1443,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_PropertyNode__mutators",
+        "name" : "causeway_applib_PropertyNode__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "streamChildNodes",
@@ -1976,7 +1976,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_node_ActionNode__mutators",
+            "name" : "causeway_applib_node_ActionNode__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2049,7 +2049,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_node_ActionNode__mutators",
+        "name" : "causeway_applib_node_ActionNode__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "streamChildNodes",
@@ -2133,7 +2133,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_node_CollectionNode__mutators",
+            "name" : "causeway_applib_node_CollectionNode__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2206,7 +2206,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_node_CollectionNode__mutators",
+        "name" : "causeway_applib_node_CollectionNode__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "streamChildNodes",
@@ -4872,7 +4872,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Either__mutators",
+            "name" : "org_apache_causeway_commons_functional_Either__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4945,7 +4945,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Either__mutators",
+        "name" : "org_apache_causeway_commons_functional_Either__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "accept",
@@ -5147,7 +5147,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Railway__mutators",
+            "name" : "org_apache_causeway_commons_functional_Railway__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5220,7 +5220,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Railway__mutators",
+        "name" : "org_apache_causeway_commons_functional_Railway__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "chain",
@@ -5368,7 +5368,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutators",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5441,7 +5441,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutators",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "andThen",
@@ -5517,7 +5517,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutators",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5590,7 +5590,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutators",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "andThen",
@@ -5690,7 +5690,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutators",
+            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5763,7 +5763,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutators",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "callUncatched",
@@ -5876,7 +5876,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try__mutators",
+            "name" : "org_apache_causeway_commons_functional_Try__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5949,7 +5949,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Try__mutators",
+        "name" : "org_apache_causeway_commons_functional_Try__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "accept",
@@ -6555,7 +6555,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutators",
+            "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6628,7 +6628,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutators",
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "streamChildNodes",
@@ -6975,7 +6975,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "university_dept_DeptHead__mutators",
+            "name" : "university_dept_DeptHead__mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -7107,7 +7107,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "university_dept_DeptHead__mutators",
+        "name" : "university_dept_DeptHead__mutations",
         "description" : null,
         "fields" : [ {
           "name" : "changeDepartment",

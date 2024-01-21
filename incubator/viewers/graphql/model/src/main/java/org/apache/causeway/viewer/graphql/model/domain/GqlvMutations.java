@@ -34,7 +34,7 @@ public class GqlvMutations implements GqlvActionHolder {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
 
-        objectTypeBuilder = newObject().name(TypeNames.mutatorTypeNameFor(this.holder.getObjectSpecification()));
+        objectTypeBuilder = newObject().name(TypeNames.mutationsTypeNameFor(this.holder.getObjectSpecification()));
 
     }
 

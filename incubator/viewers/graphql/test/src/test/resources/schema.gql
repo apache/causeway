@@ -68,7 +68,7 @@ type causeway_applib_ParameterNode__meta {
 
 type causeway_applib_PropertyNode {
   _gql_meta: causeway_applib_PropertyNode__meta
-  _gql_mutations: causeway_applib_PropertyNode__mutators
+  _gql_mutations: causeway_applib_PropertyNode__mutations
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
   property: String!
@@ -79,7 +79,7 @@ type causeway_applib_PropertyNode__meta {
   logicalTypeName: String!
 }
 
-type causeway_applib_PropertyNode__mutators {
+type causeway_applib_PropertyNode__mutations {
   streamChildNodes: java_util_stream_Stream
 }
 
@@ -130,7 +130,7 @@ type causeway_applib_UserMenu {
 
 type causeway_applib_node_ActionNode {
   _gql_meta: causeway_applib_node_ActionNode__meta
-  _gql_mutations: causeway_applib_node_ActionNode__mutators
+  _gql_mutations: causeway_applib_node_ActionNode__mutations
   action: String!
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
@@ -141,13 +141,13 @@ type causeway_applib_node_ActionNode__meta {
   logicalTypeName: String!
 }
 
-type causeway_applib_node_ActionNode__mutators {
+type causeway_applib_node_ActionNode__mutations {
   streamChildNodes: java_util_stream_Stream
 }
 
 type causeway_applib_node_CollectionNode {
   _gql_meta: causeway_applib_node_CollectionNode__meta
-  _gql_mutations: causeway_applib_node_CollectionNode__mutators
+  _gql_mutations: causeway_applib_node_CollectionNode__mutations
   collection: String!
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
@@ -158,7 +158,7 @@ type causeway_applib_node_CollectionNode__meta {
   logicalTypeName: String!
 }
 
-type causeway_applib_node_CollectionNode__mutators {
+type causeway_applib_node_CollectionNode__mutations {
   streamChildNodes: java_util_stream_Stream
 }
 
@@ -423,7 +423,7 @@ type java_util_stream_Stream__meta {
 
 type org_apache_causeway_commons_functional_Either {
   _gql_meta: org_apache_causeway_commons_functional_Either__meta
-  _gql_mutations: org_apache_causeway_commons_functional_Either__mutators
+  _gql_mutations: org_apache_causeway_commons_functional_Either__mutations
   left: String!
   right: String!
 }
@@ -433,7 +433,7 @@ type org_apache_causeway_commons_functional_Either__meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_Either__mutators {
+type org_apache_causeway_commons_functional_Either__mutations {
   accept(leftConsumer: java_util_function_Consumer__input!, rightConsumer: java_util_function_Consumer__input!): String
   left: String
   map(leftMapper: java_util_function_Function__input!, rightMapper: java_util_function_Function__input!): org_apache_causeway_commons_functional_Either
@@ -444,7 +444,7 @@ type org_apache_causeway_commons_functional_Either__mutators {
 
 type org_apache_causeway_commons_functional_Railway {
   _gql_meta: org_apache_causeway_commons_functional_Railway__meta
-  _gql_mutations: org_apache_causeway_commons_functional_Railway__mutators
+  _gql_mutations: org_apache_causeway_commons_functional_Railway__mutations
   failure: String!
   success: String!
 }
@@ -454,7 +454,7 @@ type org_apache_causeway_commons_functional_Railway__meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_Railway__mutators {
+type org_apache_causeway_commons_functional_Railway__mutations {
   chain(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Railway
   ifFailure(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Railway
   ifSuccess(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Railway
@@ -464,7 +464,7 @@ type org_apache_causeway_commons_functional_Railway__mutators {
 
 type org_apache_causeway_commons_functional_ThrowingConsumer {
   _gql_meta: org_apache_causeway_commons_functional_ThrowingConsumer__meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingConsumer__mutators
+  _gql_mutations: org_apache_causeway_commons_functional_ThrowingConsumer__mutations
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__meta {
@@ -472,14 +472,14 @@ type org_apache_causeway_commons_functional_ThrowingConsumer__meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_ThrowingConsumer__mutators {
+type org_apache_causeway_commons_functional_ThrowingConsumer__mutations {
   andThen(arg0: java_util_function_Consumer__input!): java_util_function_Consumer
   throwing(exceptionWrapper: java_util_function_BiFunction__input!): org_apache_causeway_commons_functional_ThrowingConsumer
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction {
   _gql_meta: org_apache_causeway_commons_functional_ThrowingFunction__meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingFunction__mutators
+  _gql_mutations: org_apache_causeway_commons_functional_ThrowingFunction__mutations
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__meta {
@@ -487,7 +487,7 @@ type org_apache_causeway_commons_functional_ThrowingFunction__meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_ThrowingFunction__mutators {
+type org_apache_causeway_commons_functional_ThrowingFunction__mutations {
   andThen(arg0: java_util_function_Function__input!): java_util_function_Function
   compose(arg0: java_util_function_Function__input!): java_util_function_Function
   throwing(exceptionWrapper: java_util_function_BiFunction__input!): org_apache_causeway_commons_functional_ThrowingFunction
@@ -495,7 +495,7 @@ type org_apache_causeway_commons_functional_ThrowingFunction__mutators {
 
 type org_apache_causeway_commons_functional_ThrowingRunnable {
   _gql_meta: org_apache_causeway_commons_functional_ThrowingRunnable__meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingRunnable__mutators
+  _gql_mutations: org_apache_causeway_commons_functional_ThrowingRunnable__mutations
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__meta {
@@ -503,7 +503,7 @@ type org_apache_causeway_commons_functional_ThrowingRunnable__meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_ThrowingRunnable__mutators {
+type org_apache_causeway_commons_functional_ThrowingRunnable__mutations {
   callUncatched: String
   run: String
   runUncatched: String
@@ -513,7 +513,7 @@ type org_apache_causeway_commons_functional_ThrowingRunnable__mutators {
 
 type org_apache_causeway_commons_functional_Try {
   _gql_meta: org_apache_causeway_commons_functional_Try__meta
-  _gql_mutations: org_apache_causeway_commons_functional_Try__mutators
+  _gql_mutations: org_apache_causeway_commons_functional_Try__mutations
   failure: String!
   success: String!
 }
@@ -523,7 +523,7 @@ type org_apache_causeway_commons_functional_Try__meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_Try__mutators {
+type org_apache_causeway_commons_functional_Try__mutations {
   accept(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Try
   flatMapSuccess(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
   flatMapSuccessAsNullable(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
@@ -557,7 +557,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MMNode__meta {
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode {
   _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta
-  _gql_mutations: org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutators
+  _gql_mutations: org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutations
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
 }
@@ -567,7 +567,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutators {
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutations {
   streamChildNodes: java_util_stream_Stream
 }
 
@@ -601,7 +601,7 @@ type university_dept_Department__meta {
 
 type university_dept_DeptHead {
   _gql_meta: university_dept_DeptHead__meta
-  _gql_mutations: university_dept_DeptHead__mutators
+  _gql_mutations: university_dept_DeptHead__mutations
   department: university_dept_Department
   name: String
 }
@@ -617,7 +617,7 @@ type university_dept_DeptHead__meta {
   version: String
 }
 
-type university_dept_DeptHead__mutators {
+type university_dept_DeptHead__mutations {
   changeDepartment(department: university_dept_Department__input!): university_dept_DeptHead
   changeName(newName: String!): university_dept_DeptHead
 }

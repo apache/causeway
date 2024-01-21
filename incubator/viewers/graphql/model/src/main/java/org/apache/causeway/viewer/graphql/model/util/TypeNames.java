@@ -33,8 +33,8 @@ public final class TypeNames {
         return objectTypeNameFor(objectSpecification) + "__meta";
     }
 
-    public static String mutatorTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__mutators";
+    public static String mutationsTypeNameFor(ObjectSpecification objectSpecification) {
+        return objectTypeNameFor(objectSpecification) + "__mutations";
     }
 
     public static String inputTypeNameFor(ObjectSpecification objectSpecification) {

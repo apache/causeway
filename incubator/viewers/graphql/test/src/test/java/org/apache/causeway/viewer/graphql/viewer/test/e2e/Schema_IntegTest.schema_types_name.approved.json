@@ -52,7 +52,7 @@
       }, {
         "name" : "causeway_applib_PropertyNode__meta"
       }, {
-        "name" : "causeway_applib_PropertyNode__mutators"
+        "name" : "causeway_applib_PropertyNode__mutations"
       }, {
         "name" : "causeway_applib_RoleMemento"
       }, {
@@ -80,7 +80,7 @@
       }, {
         "name" : "causeway_applib_node_ActionNode__meta"
       }, {
-        "name" : "causeway_applib_node_ActionNode__mutators"
+        "name" : "causeway_applib_node_ActionNode__mutations"
       }, {
         "name" : "causeway_applib_node_CollectionNode"
       }, {
@@ -88,7 +88,7 @@
       }, {
         "name" : "causeway_applib_node_CollectionNode__meta"
       }, {
-        "name" : "causeway_applib_node_CollectionNode__mutators"
+        "name" : "causeway_applib_node_CollectionNode__mutations"
       }, {
         "name" : "causeway_applib_node_FacetAttrNode"
       }, {
@@ -232,7 +232,7 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Either__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__mutators"
+        "name" : "org_apache_causeway_commons_functional_Either__mutations"
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway"
       }, {
@@ -240,7 +240,7 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Railway__mutators"
+        "name" : "org_apache_causeway_commons_functional_Railway__mutations"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer"
       }, {
@@ -248,7 +248,7 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutators"
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutations"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction"
       }, {
@@ -256,7 +256,7 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutators"
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutations"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingRunnable"
       }, {
@@ -264,7 +264,7 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutators"
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutations"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try"
       }, {
@@ -272,7 +272,7 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__meta"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__mutators"
+        "name" : "org_apache_causeway_commons_functional_Try__mutations"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode"
       }, {
@@ -286,7 +286,7 @@
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta"
       }, {
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutators"
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutations"
       }, {
         "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript"
       }, {
@@ -310,7 +310,7 @@
       }, {
         "name" : "university_dept_DeptHead__meta"
       }, {
-        "name" : "university_dept_DeptHead__mutators"
+        "name" : "university_dept_DeptHead__mutations"
       } ]
     }
   }
