@@ -1,11 +1,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLOutputType;
-
-import lombok.val;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,13 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-import org.apache.causeway.viewer.graphql.model.util._LTN;
+import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
-
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
 
 public class GqlvMutators implements GqlvActionHolder {
 
@@ -41,7 +34,7 @@ public class GqlvMutators implements GqlvActionHolder {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
 
-        objectTypeBuilder = newObject().name(_LTN.sanitized(this.holder.getObjectSpecification()) + "__mutators");
+        objectTypeBuilder = newObject().name(TypeNames.mutatorTypeNameFor(this.holder.getObjectSpecification()));
 
     }
 

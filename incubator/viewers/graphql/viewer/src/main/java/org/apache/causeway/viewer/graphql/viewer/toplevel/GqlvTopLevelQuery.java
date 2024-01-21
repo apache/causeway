@@ -75,7 +75,7 @@ public class GqlvTopLevelQuery {
         codeRegistryBuilder.dataFetcher(
                 // TODO: it would be nice to make these typesafe...
                 FieldCoordinates.coordinates("Query", topLevelQueryField.getName()),
-                (DataFetcher<Object>) environment -> domainService.getPojo());
+                (DataFetcher<Object>) environment -> domainService.getServicePojo());
 
     }
 

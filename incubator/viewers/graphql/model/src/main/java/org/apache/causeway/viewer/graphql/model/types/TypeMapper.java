@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.model.util._LTN;
+import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLInputType;
@@ -62,7 +62,7 @@ public class TypeMapper {
             case ENTITY:
             case VIEW_MODEL:
 
-                return GraphQLTypeReference.typeRef(_Constants.GQL_INPUTTYPE_PREFIX + _LTN.sanitized(elementType));
+                return GraphQLTypeReference.typeRef(TypeNames.inputTypeNameFor(elementType));
 
             case VALUE:
                 return (GraphQLInputType) typeFor(elementType.getCorrespondingClass());
@@ -102,7 +102,7 @@ public class TypeMapper {
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return GraphQLTypeReference.typeRef(_LTN.sanitized(objectSpecification));
+                return GraphQLTypeReference.typeRef(TypeNames.objectTypeNameFor(objectSpecification));
 
             case VALUE:
                 return typeFor(objectSpecification.getCorrespondingClass());

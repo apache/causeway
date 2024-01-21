@@ -18,7 +18,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
-import org.apache.causeway.viewer.graphql.model.util._LTN;
+import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import static org.apache.causeway.viewer.graphql.model.types._Constants.GQL_INPUTTYPE_PREFIX;
 
@@ -41,7 +41,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 import static graphql.schema.GraphQLTypeReference.typeRef;
 
 /**
- * A wrapper around {@link ObjectSpecification}
+ * Exposes a domain object (view model or entity) via the GQL viewer.
  */
 public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMutatorsHolder {
 
@@ -50,16 +50,13 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     @Getter private final GqlvMeta meta;
     @Getter private final GqlvMutators mutators;
-
-    @Getter private final GraphQLObjectType.Builder objectTypeBuilder;
-    @Getter private final GraphQLInputObjectType gqlInputObjectType;
+    private final GraphQLObjectType.Builder objectTypeBuilder;
 
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
     }
-
     public String getLogicalTypeNameSanitized() {
-        return _LTN.sanitized(objectSpecification);
+        return TypeNames.objectTypeNameFor(objectSpecification);
     }
 
     public BeanSort getBeanSort() {
@@ -75,13 +72,12 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     private final List<GqlvAction> safeActions = new ArrayList<>();
     public List<GqlvAction> getSafeActions() {return Collections.unmodifiableList(safeActions);}
 
-
     /**
      * Built using {@link #buildGqlObjectType()}
      */
     private GraphQLObjectType gqlObjectType;
 
-
+    @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
     public GqlvDomainObject(
             final ObjectSpecification objectSpecification,
@@ -90,10 +86,13 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
             final ObjectManager objectManager) {
         this.objectSpecification = objectSpecification;
         this.codeRegistryBuilder = codeRegistryBuilder;
-        this.objectTypeBuilder = newObject().name(getLogicalTypeNameSanitized());
 
-        meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
-        mutators = new GqlvMutators(this, codeRegistryBuilder);
+        this.objectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
+
+        this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
+        this.mutators = new GqlvMutators(this, codeRegistryBuilder);
+
+        objectTypeBuilder.field(meta.getMetaField());
 
         // input object type
         String inputTypeName = GQL_INPUTTYPE_PREFIX + getLogicalTypeNameSanitized();
@@ -104,9 +103,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                         .type(nonNull(Scalars.GraphQLID))
                         .build());
         gqlInputObjectType = inputTypeBuilder.build();
-
-        // object type's meta field
-        objectTypeBuilder.field(meta.getMetaField());
 
     }
 
@@ -127,11 +123,11 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
             case VIEW_MODEL:
             case ENTITY:
 
-                GraphQLTypeReference fieldTypeRef = typeRef(_LTN.sanitized(otoaObjectSpec));
+                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec));
                 fieldDefinition = newFieldDefinition()
                         .name(otoa.getId())
                         .type(otoa.isOptional() ? fieldTypeRef : nonNull(fieldTypeRef)).build();
-                getObjectTypeBuilder().field(
+                objectTypeBuilder.field(
                         fieldDefinition
                         );
 
@@ -147,7 +143,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                                 ? Scalars.GraphQLString
                                 : nonNull(Scalars.GraphQLString));
                 fieldDefinition = valueBuilder.build();
-                getObjectTypeBuilder().field(fieldDefinition);
+                objectTypeBuilder.field(fieldDefinition);
 
                 break;
         }
@@ -170,7 +166,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
             case VIEW_MODEL:
             case ENTITY:
-                GraphQLTypeReference typeRef = typeRef(_LTN.sanitized(elementType));
+                GraphQLTypeReference typeRef = typeRef(TypeNames.objectTypeNameFor(elementType));
                 fieldDefinition = newFieldDefinition()
                         .name(otom.getId())
                         .type(GraphQLList.list(typeRef)).build();
@@ -211,7 +207,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         if (gqlObjectType != null) {
             throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
         }
-        return gqlObjectType = getObjectTypeBuilder().name(getLogicalTypeNameSanitized()).build();
+        return gqlObjectType = objectTypeBuilder.name(getLogicalTypeNameSanitized()).build();
     }
 
     /**
@@ -252,7 +248,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                     .name(_Constants.GQL_MUTATIONS_FIELDNAME)
                     .type(mutatorsType)
                     .build();
-            getObjectTypeBuilder().field(gql_mutations);
+            objectTypeBuilder.field(gql_mutations);
 
         });
 

@@ -1,11 +1,5 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,46 +12,60 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
-import org.apache.causeway.viewer.graphql.model.util._LTN;
+import org.apache.causeway.viewer.graphql.model.util.TypeNames;
+
+import lombok.Getter;
+
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
+/**
+ * Exposes a domain service (view model or entity) via the GQL viewer.
+ */
 public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
 
     @Getter private final ObjectSpecification objectSpecification;
-    @Getter private final Object pojo;
+    @Getter private final Object servicePojo;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final GqlvMutators mutators;
 
-    private String getLogicalTypeName() {
-        return objectSpecification.getLogicalTypeName();
-    }
-
+    @Getter private final GqlvMutators mutators;
     private final GraphQLObjectType.Builder objectTypeBuilder;
 
-    private GraphQLObjectType gqlObjectType;
-
-    public GqlvDomainService(
-            final ObjectSpecification objectSpecification,
-            final Object pojo,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
-    ) {
-        this.objectSpecification = objectSpecification;
-        this.pojo = pojo;
-        this.codeRegistryBuilder = codeRegistryBuilder;
-
-        this.mutators = new GqlvMutators(this, codeRegistryBuilder);
-
-        this.objectTypeBuilder = newObject().name(_LTN.sanitized(objectSpecification));
+    String getLogicalTypeName() {
+        return objectSpecification.getLogicalTypeName();
+    }
+    public String getLogicalTypeNameSanitized() {
+        return TypeNames.objectTypeNameFor(objectSpecification);
     }
 
 
     private final List<GqlvAction> safeActions = new ArrayList<>();
     public List<GqlvAction> getSafeActions() {return Collections.unmodifiableList(safeActions);}
 
-    private final List<GqlvAction> mutatorActions = new ArrayList<>();
-    public List<GqlvAction> getMutatorActions() {return Collections.unmodifiableList(mutatorActions);}
+    /**
+     * Built using {@link #buildGqlObjectType()}
+     */
+    private GraphQLObjectType gqlObjectType;
+
+    public GqlvDomainService(
+            final ObjectSpecification objectSpecification,
+            final Object servicePojo,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+    ) {
+        this.objectSpecification = objectSpecification;
+        this.servicePojo = servicePojo;
+        this.codeRegistryBuilder = codeRegistryBuilder;
+
+        this.objectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
+
+        this.mutators = new GqlvMutators(this, codeRegistryBuilder);
+
+    }
+
 
     /**
      * @see #getGqlObjectType()
@@ -82,7 +90,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutatorsHolder {
 
     public GraphQLFieldDefinition createTopLevelQueryField() {
         return newFieldDefinition()
-                .name(_LTN.sanitized(objectSpecification))
+                .name(TypeNames.objectTypeNameFor(objectSpecification))
                 .type(objectTypeBuilder)
                 .build();
     }
