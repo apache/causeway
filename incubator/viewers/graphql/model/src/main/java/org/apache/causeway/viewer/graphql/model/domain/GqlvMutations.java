@@ -3,6 +3,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLObjectType;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,13 +21,16 @@ public class GqlvMutations implements GqlvActionHolder {
     private final GqlvMutationsHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
-    final GraphQLObjectType.Builder objectTypeBuilder;
+    /**
+     * Used to build {@link #mutationsTypeIfAny}.
+     */
+    @Getter final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     /**
-     * Built lazily using {@link #buildMutatorsTypeIfAny()}
+     * Built lazily using {@link #buildMutationsTypeIfAny()}
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Optional<GraphQLObjectType> mutatorsTypeIfAny;
+    private Optional<GraphQLObjectType> mutationsTypeIfAny;
 
     public GqlvMutations(
             final GqlvMutationsHolder holder,
@@ -34,12 +39,11 @@ public class GqlvMutations implements GqlvActionHolder {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
 
-        objectTypeBuilder = newObject().name(TypeNames.mutationsTypeNameFor(this.holder.getObjectSpecification()));
-
+        gqlObjectTypeBuilder = newObject().name(TypeNames.mutationsTypeNameFor(this.holder.getObjectSpecification()));
     }
 
     public void addAction(final ObjectAction objectAction) {
-        actions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
+        actions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
     }
 
     private final List<GqlvAction> actions = new ArrayList<>();
@@ -51,32 +55,32 @@ public class GqlvMutations implements GqlvActionHolder {
 
 
     /**
-     * @see #buildMutatorsTypeIfAny()
+     * @see #buildMutationsTypeIfAny()
      */
-    public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
+    public Optional<GraphQLObjectType> getMutationsTypeIfAny() {
         //noinspection OptionalAssignedToNull
-        if (mutatorsTypeIfAny == null) {
+        if (mutationsTypeIfAny == null) {
             throw new IllegalArgumentException(String.format("Gql MutatorsType has not yet been built for %s", holder.getObjectSpecification().getLogicalTypeName()));
         }
-        return mutatorsTypeIfAny;
+        return mutationsTypeIfAny;
     }
 
     /**
-     * @see #getMutatorsTypeIfAny()
+     * @see #getMutationsTypeIfAny()
      */
-    public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
+    public Optional<GraphQLObjectType> buildMutationsTypeIfAny() {
         //noinspection OptionalAssignedToNull
-        if (mutatorsTypeIfAny != null) {
+        if (mutationsTypeIfAny != null) {
             throw new IllegalArgumentException("Gql MutatorsType has already been built for " + holder.getObjectSpecification().getLogicalTypeName());
         }
-        return mutatorsTypeIfAny = hasActions()
-                ? Optional.of(objectTypeBuilder.build())
+        return mutationsTypeIfAny = hasActions()
+                ? Optional.of(gqlObjectTypeBuilder.build())
                 : Optional.empty();
     }
 
     @Override
     public GraphQLObjectType getGqlObjectType() {
-        return mutatorsTypeIfAny.orElse(null);
+        return mutationsTypeIfAny.orElse(null);
     }
 
     public void addDataFetchersForActions() {

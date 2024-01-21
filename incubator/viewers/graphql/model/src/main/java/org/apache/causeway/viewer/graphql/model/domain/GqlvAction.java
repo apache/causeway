@@ -27,8 +27,6 @@ import static graphql.schema.GraphQLNonNull.nonNull;
 
 public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
 
-    private final GraphQLObjectType.Builder objectTypeBuilder;
-
     public GqlvAction(
             final GqlvActionHolder holder,
             final ObjectAction objectAction,
@@ -36,7 +34,6 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
             ) {
         super(holder, objectAction, fieldDefinition(objectAction, objectTypeBuilder), codeRegistryBuilder);
-        this.objectTypeBuilder = objectTypeBuilder;
     }
 
     private static GraphQLFieldDefinition fieldDefinition(

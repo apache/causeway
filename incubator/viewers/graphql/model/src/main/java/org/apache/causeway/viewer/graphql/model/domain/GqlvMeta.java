@@ -51,11 +51,8 @@ public class GqlvMeta {
         this.bookmarkService = bookmarkService;
         this.objectManager = objectManager;
 
+        // we can build the metafield and meta type eagerly because we know exactly which fields it has.
         metaField = newFieldDefinition().name("_gql_meta").type(buildMetaType()).build();
-    }
-
-    GraphQLObjectType getMetaType() {
-        return (GraphQLObjectType) metaField.getType();
     }
 
     private GraphQLObjectType buildMetaType() {
@@ -68,6 +65,10 @@ public class GqlvMeta {
         return metaTypeBuilder.build();
     }
 
+    GraphQLObjectType getMetaType() {
+        return (GraphQLObjectType) metaField.getType();
+    }
+
     public void addDataFetchers() {
 
         codeRegistryBuilder.dataFetcher(
@@ -75,16 +76,16 @@ public class GqlvMeta {
                 (DataFetcher<Object>) environment -> {
                     return bookmarkService.bookmarkFor(environment.getSource())
                             .map(bookmark -> new Fetcher(bookmark, bookmarkService, objectManager))
-                            .orElse(null); //TODO: is this correct ?
+                            .orElseThrow();
                 });
-
-        codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), id),
-                (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
 
         codeRegistryBuilder.dataFetcher(
                 coordinates(getMetaType(), logicalTypeName),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().logicalTypeName());
+
+        codeRegistryBuilder.dataFetcher(
+                coordinates(getMetaType(), id),
+                (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
 
         if (domainObject.getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(

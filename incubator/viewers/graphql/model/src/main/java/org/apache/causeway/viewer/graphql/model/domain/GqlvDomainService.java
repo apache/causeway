@@ -35,7 +35,8 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     @Getter private final GqlvMutations mutators;
-    private final GraphQLObjectType.Builder objectTypeBuilder;
+
+    @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
@@ -62,7 +63,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         this.servicePojo = servicePojo;
         this.codeRegistryBuilder = codeRegistryBuilder;
 
-        this.objectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
+        this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.mutators = new GqlvMutations(this, codeRegistryBuilder);
 
@@ -86,7 +87,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
                     .name(_Constants.GQL_MUTATIONS_FIELDNAME)
                     .type(mutatorsType)
                     .build();
-            objectTypeBuilder.field(gql_mutations);
+            gqlObjectTypeBuilder.field(gql_mutations);
         });
 
         return anyActions.get();
@@ -94,11 +95,11 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
-            safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
+            safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         } else {
              // TODO: should register with mutators instead ...
 //            mutators.addAction(objectAction);
-            safeActions.add(new GqlvAction(this, objectAction, objectTypeBuilder, codeRegistryBuilder));
+            safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         }
     }
 
@@ -112,7 +113,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         if (gqlObjectType != null) {
             throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
         }
-        return gqlObjectType = objectTypeBuilder.build();
+        return gqlObjectType = gqlObjectTypeBuilder.build();
     }
 
     /**
@@ -131,21 +132,21 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
      * @see #buildMutatorsTypeIfAny()
      */
     public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
-        return mutators.getMutatorsTypeIfAny();
+        return mutators.getMutationsTypeIfAny();
     }
 
     /**
      * @see #getMutatorsTypeIfAny()
      */
     public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
-        return mutators.buildMutatorsTypeIfAny();
+        return mutators.buildMutationsTypeIfAny();
     }
 
 
     public GraphQLFieldDefinition createTopLevelQueryField() {
         return newFieldDefinition()
                 .name(TypeNames.objectTypeNameFor(objectSpecification))
-                .type(objectTypeBuilder)
+                .type(gqlObjectTypeBuilder)
                 .build();
     }
 
