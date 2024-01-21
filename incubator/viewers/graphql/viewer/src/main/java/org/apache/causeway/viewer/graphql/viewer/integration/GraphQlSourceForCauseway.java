@@ -23,6 +23,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import java.util.Comparator;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -107,10 +108,12 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         // (and also add behaviour to the child types)
         val topLevelQuery = new GqlvTopLevelQuery(serviceRegistry, codeRegistryBuilder);
 
-        specificationLoader.snapshotSpecifications()
-            .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
-            .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-            .forEach(objectSpec -> addToSchema(objectSpec, topLevelQuery, codeRegistryBuilder));
+        List<ObjectSpecification> objectSpecifications = specificationLoader.snapshotSpecifications()
+                .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
+                .filter(x -> x.isEntityOrViewModelOrAbstract() || x.getBeanSort().isManagedBeanContributing())
+                .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
+                .toList();
+        objectSpecifications.forEach(objectSpec -> addToSchema(objectSpec, topLevelQuery, codeRegistryBuilder));
 
         topLevelQuery.buildQueryType();
 

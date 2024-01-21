@@ -55,8 +55,10 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
     }
 
     public void addDataFetcher() {
+        GraphQLObjectType gqlObjectType = getHolder().getGqlObjectType();
+        GraphQLFieldDefinition fieldDefinition = getFieldDefinition();
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(getHolder().getGqlObjectType(), getFieldDefinition()),
+                FieldCoordinates.coordinates(gqlObjectType, fieldDefinition),
                 this::invoke
         );
     }
@@ -65,6 +67,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
             final DataFetchingEnvironment dataFetchingEnvironment) {
         final ObjectAction objectAction = getObjectAction();
 
+        // TODO: this assumes that the dataFetchingEnvironment is a domain object, but in fact it could be a 'mutations' object.
         Object domainObjectInstance = dataFetchingEnvironment.getSource();
 
         Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();

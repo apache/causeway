@@ -248,6 +248,10 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         return mutations.buildMutationsTypeAndFieldIfRequired();
     }
 
+    @Override
+    public void addMutationsField(GraphQLFieldDefinition mutationsField) {
+        gqlObjectTypeBuilder.field(mutationsField);
+    }
 
     public void addDataFetchersForMeta() {
         meta.addDataFetchers();
@@ -270,17 +274,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
 
-    GraphQLObjectType createAndRegisterMutatorsType(
-            final Set<GraphQLType> graphQLObjectTypes) {
-
-        //TODO: this is not going to work, because we need to dynamically add fields
-        String mutatorsTypeName = getLogicalTypeNameSanitized() + "__DomainObject_mutators";
-        GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
-        GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
-        graphQLObjectTypes.add(mutatorsType);
-        return mutatorsType;
-    }
-
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
 
         GraphQLObjectType graphQLObjectType = buildGqlObjectType();
@@ -290,6 +283,11 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getGqlInputObjectType());
 
         getMutationsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+    }
+
+    @Override
+    public String toString() {
+        return objectSpecification.getLogicalTypeName();
     }
 
 }

@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
@@ -92,6 +91,7 @@ public class GqlvMutations implements GqlvActionHolder {
         if (mutationsTypeIfAny != null) {
             throw new IllegalArgumentException("Gql mutations type and field has already been built for " + holder.getObjectSpecification().getLogicalTypeName());
         }
+
         if (hasActions()) {
 
             // create the type
@@ -106,7 +106,7 @@ public class GqlvMutations implements GqlvActionHolder {
             mutationsFieldIfAny = Optional.of(mutationsField);
 
             // register the field into the owning type
-            gqlObjectTypeBuilder.field(mutationsField);
+            holder.addMutationsField(mutationsField);
 
         } else {
             mutationsFieldIfAny = Optional.empty();

@@ -88,15 +88,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
                     addAction(objectAction);
                 });
 
-        buildMutatorsTypeIfRequired();
-//        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutationsTypeAndFieldIfRequired();
-//        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
-//            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-//                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
-//                    .type(mutatorsType)
-//                    .build();
-//            gqlObjectTypeBuilder.field(gql_mutations);
-//        });
+        buildMutationsTypeAndFieldIfRequired();
 
         return anyActions.get();
     }
@@ -105,8 +97,10 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         if (objectAction.getSemantics().isSafeInNature()) {
             safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         } else {
-             // TODO: should register with mutators instead ...
-//            mutators.addAction(objectAction);
+            // TODO: still trying to add the action to the mutations
+//             mutations.addAction(objectAction);
+
+            // for now, we go direct...
             safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         }
     }
@@ -137,7 +131,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
 
     /**
-     * @see #buildMutatorsTypeIfRequired()
+     * @see #buildMutationsTypeAndFieldIfRequired()
      */
     public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
         return mutations.getMutationsTypeIfAny();
@@ -146,10 +140,14 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     /**
      * @see #getMutatorsTypeIfAny()
      */
-    public Optional<GraphQLObjectType> buildMutatorsTypeIfRequired() {
+    public Optional<GraphQLObjectType> buildMutationsTypeAndFieldIfRequired() {
         return mutations.buildMutationsTypeAndFieldIfRequired();
     }
 
+    @Override
+    public void addMutationsField(GraphQLFieldDefinition mutationsField) {
+        gqlObjectTypeBuilder.field(mutationsField);
+    }
 
     public GraphQLFieldDefinition createTopLevelQueryField() {
         return newFieldDefinition()
@@ -162,8 +160,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
 
-        GraphQLObjectType graphQLObjectType = buildGqlObjectType();
-        //graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
+        buildGqlObjectType();
 
         getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
     }
@@ -174,6 +171,11 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     public void addDataFetchersForMutations() {
         getMutations().addDataFetchers();
+    }
+
+    @Override
+    public String toString() {
+        return objectSpecification.getLogicalTypeName();
     }
 
 }

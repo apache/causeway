@@ -3,5 +3,7 @@
         createDepartment(name: "newbie") {
             name
         }
+#        _gql_mutations {
+#        }
     }
 }
