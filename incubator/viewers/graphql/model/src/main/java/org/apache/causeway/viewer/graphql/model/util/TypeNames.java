@@ -38,7 +38,7 @@ public final class TypeNames {
     }
 
     public static String inputTypeNameFor(ObjectSpecification objectSpecification) {
-        return "_gql_input__" + objectTypeNameFor(objectSpecification);
+        return objectTypeNameFor(objectSpecification) + "__input";
     }
 
     private static String sanitized(final String name) {

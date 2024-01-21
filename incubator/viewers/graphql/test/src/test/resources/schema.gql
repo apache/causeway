@@ -434,11 +434,11 @@ type org_apache_causeway_commons_functional_Either__meta {
 }
 
 type org_apache_causeway_commons_functional_Either__mutators {
-  accept(leftConsumer: _gql_input__java_util_function_Consumer!, rightConsumer: _gql_input__java_util_function_Consumer!): String
+  accept(leftConsumer: java_util_function_Consumer__input!, rightConsumer: java_util_function_Consumer__input!): String
   left: String
-  map(leftMapper: _gql_input__java_util_function_Function!, rightMapper: _gql_input__java_util_function_Function!): org_apache_causeway_commons_functional_Either
-  mapLeft(leftMapper: _gql_input__java_util_function_Function!): org_apache_causeway_commons_functional_Either
-  mapRight(rightMapper: _gql_input__java_util_function_Function!): org_apache_causeway_commons_functional_Either
+  map(leftMapper: java_util_function_Function__input!, rightMapper: java_util_function_Function__input!): org_apache_causeway_commons_functional_Either
+  mapLeft(leftMapper: java_util_function_Function__input!): org_apache_causeway_commons_functional_Either
+  mapRight(rightMapper: java_util_function_Function__input!): org_apache_causeway_commons_functional_Either
   right: String
 }
 
@@ -455,11 +455,11 @@ type org_apache_causeway_commons_functional_Railway__meta {
 }
 
 type org_apache_causeway_commons_functional_Railway__mutators {
-  chain(chainingFunction: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Railway
-  ifFailure(failureConsumer: _gql_input__org_apache_causeway_commons_functional_ThrowingConsumer!): org_apache_causeway_commons_functional_Railway
-  ifSuccess(successConsumer: _gql_input__org_apache_causeway_commons_functional_ThrowingConsumer!): org_apache_causeway_commons_functional_Railway
-  mapFailure(failureMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Railway
-  mapSuccess(successMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Railway
+  chain(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Railway
+  ifFailure(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Railway
+  ifSuccess(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Railway
+  mapFailure(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Railway
+  mapSuccess(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Railway
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer {
@@ -473,8 +473,8 @@ type org_apache_causeway_commons_functional_ThrowingConsumer__meta {
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__mutators {
-  andThen(arg0: _gql_input__java_util_function_Consumer!): java_util_function_Consumer
-  throwing(exceptionWrapper: _gql_input__java_util_function_BiFunction!): org_apache_causeway_commons_functional_ThrowingConsumer
+  andThen(arg0: java_util_function_Consumer__input!): java_util_function_Consumer
+  throwing(exceptionWrapper: java_util_function_BiFunction__input!): org_apache_causeway_commons_functional_ThrowingConsumer
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction {
@@ -488,9 +488,9 @@ type org_apache_causeway_commons_functional_ThrowingFunction__meta {
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__mutators {
-  andThen(arg0: _gql_input__java_util_function_Function!): java_util_function_Function
-  compose(arg0: _gql_input__java_util_function_Function!): java_util_function_Function
-  throwing(exceptionWrapper: _gql_input__java_util_function_BiFunction!): org_apache_causeway_commons_functional_ThrowingFunction
+  andThen(arg0: java_util_function_Function__input!): java_util_function_Function
+  compose(arg0: java_util_function_Function__input!): java_util_function_Function
+  throwing(exceptionWrapper: java_util_function_BiFunction__input!): org_apache_causeway_commons_functional_ThrowingFunction
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable {
@@ -524,26 +524,26 @@ type org_apache_causeway_commons_functional_Try__meta {
 }
 
 type org_apache_causeway_commons_functional_Try__mutators {
-  accept(failureConsumer: _gql_input__org_apache_causeway_commons_functional_ThrowingConsumer!, successConsumer: _gql_input__org_apache_causeway_commons_functional_ThrowingConsumer!): org_apache_causeway_commons_functional_Try
-  flatMapSuccess(successMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Try
-  flatMapSuccessAsNullable(successMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Try
-  flatMapSuccessWhenPresent(successMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Try
+  accept(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Try
+  flatMapSuccess(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
+  flatMapSuccessAsNullable(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
+  flatMapSuccessWhenPresent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
   ifAbsentFail: org_apache_causeway_commons_functional_Try
-  ifFailure(exceptionConsumer: _gql_input__org_apache_causeway_commons_functional_ThrowingConsumer!): org_apache_causeway_commons_functional_Try
+  ifFailure(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Try
   ifFailureFail: org_apache_causeway_commons_functional_Try
-  ifSuccess(valueConsumer: _gql_input__org_apache_causeway_commons_functional_ThrowingConsumer!): org_apache_causeway_commons_functional_Try
-  ifSuccessAsNullable(valueConsumer: _gql_input__org_apache_causeway_commons_functional_ThrowingConsumer!): org_apache_causeway_commons_functional_Try
+  ifSuccess(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Try
+  ifSuccessAsNullable(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__input!): org_apache_causeway_commons_functional_Try
   mapEmptyToFailure: org_apache_causeway_commons_functional_Try
-  mapFailure(failureMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Try
-  mapFailureToSuccess(recoveryMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Try
-  mapSuccess(successMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Try
-  mapSuccessAsNullable(successMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Try
-  mapSuccessWhenPresent(successMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Try
-  mapToEither(failureMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!, successMapper: _gql_input__org_apache_causeway_commons_functional_ThrowingFunction!): org_apache_causeway_commons_functional_Either
-  orCall(fallback: _gql_input__java_util_concurrent_Callable!): org_apache_causeway_commons_functional_Try
-  then(next: _gql_input__java_util_concurrent_Callable!): org_apache_causeway_commons_functional_Try
-  thenCall(callable: _gql_input__java_util_concurrent_Callable!): org_apache_causeway_commons_functional_Try
-  thenRun(runnable: _gql_input__org_apache_causeway_commons_functional_ThrowingRunnable!): org_apache_causeway_commons_functional_Try
+  mapFailure(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
+  mapFailureToSuccess(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
+  mapSuccess(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
+  mapSuccessAsNullable(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
+  mapSuccessWhenPresent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Try
+  mapToEither(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__input!): org_apache_causeway_commons_functional_Either
+  orCall(fallback: java_util_concurrent_Callable__input!): org_apache_causeway_commons_functional_Try
+  then(next: java_util_concurrent_Callable__input!): org_apache_causeway_commons_functional_Try
+  thenCall(callable: java_util_concurrent_Callable__input!): org_apache_causeway_commons_functional_Try
+  thenRun(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode {
@@ -589,7 +589,7 @@ type university_dept_Department {
 }
 
 type university_dept_DepartmentMenu {
-  createDepartment(deptHead: _gql_input__university_dept_DeptHead, name: String!): university_dept_Department
+  createDepartment(deptHead: university_dept_DeptHead__input, name: String!): university_dept_Department
   findAllDepartments: [university_dept_Department]
 }
 
@@ -618,174 +618,174 @@ type university_dept_DeptHead__meta {
 }
 
 type university_dept_DeptHead__mutators {
-  changeDepartment(department: _gql_input__university_dept_Department!): university_dept_DeptHead
+  changeDepartment(department: university_dept_Department__input!): university_dept_DeptHead
   changeName(newName: String!): university_dept_DeptHead
 }
 
-input _gql_input__causeway_applib_DomainObjectList {
+input causeway_applib_DomainObjectList__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_FacetGroupNode {
+input causeway_applib_FacetGroupNode__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_ParameterNode {
+input causeway_applib_ParameterNode__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_PropertyNode {
+input causeway_applib_PropertyNode__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_RoleMemento {
+input causeway_applib_RoleMemento__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_TypeNode {
+input causeway_applib_TypeNode__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_UserMemento {
+input causeway_applib_UserMemento__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_node_ActionNode {
+input causeway_applib_node_ActionNode__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_node_CollectionNode {
+input causeway_applib_node_CollectionNode__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_node_FacetAttrNode {
+input causeway_applib_node_FacetAttrNode__input {
   id: ID!
 }
 
-input _gql_input__causeway_applib_node_FacetNode {
+input causeway_applib_node_FacetNode__input {
   id: ID!
 }
 
-input _gql_input__causeway_conf_ConfigurationProperty {
+input causeway_conf_ConfigurationProperty__input {
   id: ID!
 }
 
-input _gql_input__causeway_conf_ConfigurationViewmodel {
+input causeway_conf_ConfigurationViewmodel__input {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationFeatureViewModel {
+input causeway_feat_ApplicationFeatureViewModel__input {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationNamespace {
+input causeway_feat_ApplicationNamespace__input {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationType {
+input causeway_feat_ApplicationTypeAction__input {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationTypeAction {
+input causeway_feat_ApplicationTypeCollection__input {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationTypeCollection {
+input causeway_feat_ApplicationTypeMember__input {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationTypeMember {
+input causeway_feat_ApplicationTypeProperty__input {
   id: ID!
 }
 
-input _gql_input__causeway_feat_ApplicationTypeProperty {
+input causeway_feat_ApplicationType__input {
   id: ID!
 }
 
-input _gql_input__causeway_schema_metamodel_v2_DomainClassDto {
+input causeway_schema_metamodel_v2_DomainClassDto__input {
   id: ID!
 }
 
-input _gql_input__causeway_security_LoginRedirect {
+input causeway_security_LoginRedirect__input {
   id: ID!
 }
 
-input _gql_input__causeway_testing_fixtures_FixtureResult {
+input causeway_testing_fixtures_FixtureResult__input {
   id: ID!
 }
 
-input _gql_input__java_lang_Runnable {
+input java_lang_Runnable__input {
   id: ID!
 }
 
-input _gql_input__java_util_Map {
+input java_util_Map__input {
   id: ID!
 }
 
-input _gql_input__java_util_SortedMap {
+input java_util_SortedMap__input {
   id: ID!
 }
 
-input _gql_input__java_util_concurrent_Callable {
+input java_util_concurrent_Callable__input {
   id: ID!
 }
 
-input _gql_input__java_util_function_BiFunction {
+input java_util_function_BiFunction__input {
   id: ID!
 }
 
-input _gql_input__java_util_function_Consumer {
+input java_util_function_Consumer__input {
   id: ID!
 }
 
-input _gql_input__java_util_function_Function {
+input java_util_function_Function__input {
   id: ID!
 }
 
-input _gql_input__java_util_stream_Stream {
+input java_util_stream_Stream__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_commons_functional_Either {
+input org_apache_causeway_commons_functional_Either__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_commons_functional_Railway {
+input org_apache_causeway_commons_functional_Railway__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_commons_functional_ThrowingConsumer {
+input org_apache_causeway_commons_functional_ThrowingConsumer__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_commons_functional_ThrowingFunction {
+input org_apache_causeway_commons_functional_ThrowingFunction__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_commons_functional_ThrowingRunnable {
+input org_apache_causeway_commons_functional_ThrowingRunnable__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_commons_functional_Try {
+input org_apache_causeway_commons_functional_Try__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_core_metamodel_inspect_model_MMNode {
+input org_apache_causeway_core_metamodel_inspect_model_MMNode__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_core_metamodel_inspect_model_MemberNode {
+input org_apache_causeway_core_metamodel_inspect_model_MemberNode__input {
   id: ID!
 }
 
-input _gql_input__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
+input org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__input {
   id: ID!
 }
 
-input _gql_input__university_dept_Department {
+input university_dept_Department__input {
   id: ID!
 }
 
-input _gql_input__university_dept_DeptHead {
+input university_dept_DeptHead__input {
   id: ID!
 }
