@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
@@ -20,6 +22,8 @@ public class GqlvMutations implements GqlvActionHolder {
 
     private final GqlvMutationsHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final BookmarkService bookmarkService;
+    private final ObjectManager objectManager;
 
     /**
      * Used to build {@link #mutationsTypeIfAny}.
@@ -34,10 +38,14 @@ public class GqlvMutations implements GqlvActionHolder {
 
     public GqlvMutations(
             final GqlvMutationsHolder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
+            final BookmarkService bookmarkService,
+            final ObjectManager objectManager
     ) {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
+        this.bookmarkService = bookmarkService;
+        this.objectManager = objectManager;
 
         gqlObjectTypeBuilder = newObject().name(TypeNames.mutationsTypeNameFor(this.holder.getObjectSpecification()));
     }

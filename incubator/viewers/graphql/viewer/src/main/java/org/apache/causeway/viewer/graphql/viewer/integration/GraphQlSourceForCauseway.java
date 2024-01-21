@@ -178,7 +178,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final GqlvTopLevelQuery topLevelQueryStructure,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val domainService = new GqlvDomainService(objectSpec, servicePojo, codeRegistryBuilder);
+        val domainService = new GqlvDomainService(objectSpec, servicePojo, codeRegistryBuilder, bookmarkService, objectManager);
 
         boolean actionsAdded = domainService.addActions();
         if (!actionsAdded) {

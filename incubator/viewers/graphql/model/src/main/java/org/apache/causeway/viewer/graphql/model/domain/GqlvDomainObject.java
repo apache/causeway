@@ -92,7 +92,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
-        this.mutators = new GqlvMutations(this, codeRegistryBuilder);
+        this.mutators = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
 
         gqlObjectTypeBuilder.field(meta.getMetaField());
 
