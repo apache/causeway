@@ -1,6 +1,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import lombok.Getter;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -31,10 +33,16 @@ public class GqlvMutations implements GqlvActionHolder {
     @Getter final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     /**
-     * Built lazily using {@link #buildMutationsTypeIfAny()}
+     * Built lazily using {@link #buildMutationsTypeAndFieldIfRequired()}
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<GraphQLObjectType> mutationsTypeIfAny;
+
+    /**
+     * Built lazily using {@link #buildMutationsTypeAndFieldIfRequired()}
+     */
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private Optional<GraphQLFieldDefinition> mutationsFieldIfAny;
 
     public GqlvMutations(
             final GqlvMutationsHolder holder,
@@ -63,12 +71,12 @@ public class GqlvMutations implements GqlvActionHolder {
 
 
     /**
-     * @see #buildMutationsTypeIfAny()
+     * @see #buildMutationsTypeAndFieldIfRequired()
      */
     public Optional<GraphQLObjectType> getMutationsTypeIfAny() {
         //noinspection OptionalAssignedToNull
         if (mutationsTypeIfAny == null) {
-            throw new IllegalArgumentException(String.format("Gql MutatorsType has not yet been built for %s", holder.getObjectSpecification().getLogicalTypeName()));
+            throw new IllegalArgumentException(String.format("Gql mutators type and field has not yet been built for %s", holder.getObjectSpecification().getLogicalTypeName()));
         }
         return mutationsTypeIfAny;
     }
@@ -76,14 +84,32 @@ public class GqlvMutations implements GqlvActionHolder {
     /**
      * @see #getMutationsTypeIfAny()
      */
-    public Optional<GraphQLObjectType> buildMutationsTypeIfAny() {
+    public Optional<GraphQLObjectType> buildMutationsTypeAndFieldIfRequired() {
         //noinspection OptionalAssignedToNull
         if (mutationsTypeIfAny != null) {
-            throw new IllegalArgumentException("Gql MutatorsType has already been built for " + holder.getObjectSpecification().getLogicalTypeName());
+            throw new IllegalArgumentException("Gql mutations type and field has already been built for " + holder.getObjectSpecification().getLogicalTypeName());
         }
-        return mutationsTypeIfAny = hasActions()
-                ? Optional.of(gqlObjectTypeBuilder.build())
-                : Optional.empty();
+        if (hasActions()) {
+
+            // create the type
+            GraphQLObjectType mutationsType = gqlObjectTypeBuilder.build();
+            this.mutationsTypeIfAny = Optional.of(mutationsType);
+
+            // create the field
+            GraphQLFieldDefinition mutationsField = newFieldDefinition()
+                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
+                    .type(mutationsType)
+                    .build();
+            mutationsFieldIfAny = Optional.of(mutationsField);
+
+            // register the field into the owning type
+            gqlObjectTypeBuilder.field(mutationsField);
+
+        } else {
+            mutationsFieldIfAny = Optional.empty();
+            mutationsTypeIfAny = Optional.empty();
+        }
+        return mutationsTypeIfAny;
     }
 
     @Override

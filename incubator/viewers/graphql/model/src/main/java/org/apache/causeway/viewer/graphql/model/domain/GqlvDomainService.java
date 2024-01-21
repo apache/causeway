@@ -13,7 +13,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
@@ -36,7 +35,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     @Getter private final Object servicePojo;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
-    @Getter private final GqlvMutations mutators;
+    @Getter private final GqlvMutations mutations;
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;
 
@@ -71,7 +70,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
-        this.mutators = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
+        this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
 
         this.bookmarkService = bookmarkService;
         this.objectManager = objectManager;
@@ -89,14 +88,15 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
                     addAction(objectAction);
                 });
 
-        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
-        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
-            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
-                    .type(mutatorsType)
-                    .build();
-            gqlObjectTypeBuilder.field(gql_mutations);
-        });
+        buildMutatorsTypeIfRequired();
+//        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutationsTypeAndFieldIfRequired();
+//        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
+//            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
+//                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
+//                    .type(mutatorsType)
+//                    .build();
+//            gqlObjectTypeBuilder.field(gql_mutations);
+//        });
 
         return anyActions.get();
     }
@@ -137,17 +137,17 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
 
     /**
-     * @see #buildMutatorsTypeIfAny()
+     * @see #buildMutatorsTypeIfRequired()
      */
     public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
-        return mutators.getMutationsTypeIfAny();
+        return mutations.getMutationsTypeIfAny();
     }
 
     /**
      * @see #getMutatorsTypeIfAny()
      */
-    public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
-        return mutators.buildMutationsTypeIfAny();
+    public Optional<GraphQLObjectType> buildMutatorsTypeIfRequired() {
+        return mutations.buildMutationsTypeAndFieldIfRequired();
     }
 
 
@@ -166,6 +166,14 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         //graphQLTypeRegistry.addTypeIfNotAlreadyPresent(graphQLObjectType);
 
         getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+    }
+
+    public void addDataFetchersForSafeActions() {
+        getSafeActions().forEach(GqlvAction::addDataFetcher);
+    }
+
+    public void addDataFetchersForMutators() {
+        getMutations().addDataFetchersForActions();
     }
 
 }

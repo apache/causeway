@@ -52,7 +52,6 @@ import graphql.GraphQL;
 import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
-import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
 
@@ -187,7 +186,10 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         domainService.registerTypesInto(graphQLTypeRegistry);
 
-        domainService.getSafeActions().forEach(GqlvAction::addDataFetcher);
+        domainService.addDataFetchersForSafeActions();
+        domainService.addDataFetchersForMutators();
+
+
 
         topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
     }
@@ -197,22 +199,22 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val gqlvDomainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager);
+        val domainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager);
 
-        gqlvDomainObject.addPropertiesAsFields();
-        gqlvDomainObject.addCollectionsAsLists();
-        gqlvDomainObject.addActions();
+        domainObject.addPropertiesAsFields();
+        domainObject.addCollectionsAsLists();
+        domainObject.addActions();
 
         // build
-        gqlvDomainObject.registerTypesInto(graphQLTypeRegistry);
+        domainObject.registerTypesInto(graphQLTypeRegistry);
 
         // create and register data fetchers
-        gqlvDomainObject.addDataFetchersForMetaData();
+        domainObject.addDataFetchersForMetaData();
 
-        gqlvDomainObject.addDataFetchersForProperties();
-        gqlvDomainObject.addDataFetchersForCollections();
-        gqlvDomainObject.addDataFetchersForSafeActions();
-        gqlvDomainObject.getMutators().addDataFetchersForActions();
+        domainObject.addDataFetchersForProperties();
+        domainObject.addDataFetchersForCollections();
+        domainObject.addDataFetchersForSafeActions();
+        domainObject.addDataFetchersForMutators();
     }
 
 }

@@ -18,7 +18,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
@@ -50,7 +49,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     @Getter private final GqlvMeta meta;
-    @Getter private final GqlvMutations mutators;
+    @Getter private final GqlvMutations mutations;
 
     @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
@@ -92,7 +91,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
-        this.mutators = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
+        this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
 
         gqlObjectTypeBuilder.field(meta.getMetaField());
 
@@ -197,14 +196,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                     addAction(objectAction);
                 });
 
-        Optional<GraphQLObjectType> mutatorsTypeIfAny = buildMutatorsTypeIfAny();
-        mutatorsTypeIfAny.ifPresent(mutatorsType -> {
-            GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
-                    .type(mutatorsType)
-                    .build();
-            gqlObjectTypeBuilder.field(gql_mutations);
-        });
+        buildMutationsTypeAndFieldIfRequired();
 
         return anyActions.get();
     }
@@ -213,7 +205,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         if (objectAction.getSemantics().isSafeInNature()) {
             safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         } else {
-            mutators.addAction(objectAction);
+            mutations.addAction(objectAction);
         }
     }
 
@@ -243,17 +235,17 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
 
     /**
-     * @see #buildMutatorsTypeIfAny()
+     * @see #buildMutationsTypeAndFieldIfRequired()
      */
-    public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
-        return mutators.getMutationsTypeIfAny();
+    public Optional<GraphQLObjectType> getMutationsTypeIfAny() {
+        return mutations.getMutationsTypeIfAny();
     }
 
     /**
-     * @see #getMutatorsTypeIfAny()
+     * @see #getMutationsTypeIfAny()
      */
-    public Optional<GraphQLObjectType> buildMutatorsTypeIfAny() {
-        return mutators.buildMutationsTypeIfAny();
+    public Optional<GraphQLObjectType> buildMutationsTypeAndFieldIfRequired() {
+        return mutations.buildMutationsTypeAndFieldIfRequired();
     }
 
 
@@ -274,32 +266,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
     public void addDataFetchersForMutators() {
-
-        // TODO: something similar to addFetchers for safe actions, but applied to GqlvMutationsFetcher instead; perhaps they share a common interface?
-
-        // earlier code...
-
-//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLTypeReference, gql_mutations), new DataFetcher<Object>() {
-//                @Override
-//                public Object get(DataFetchingEnvironment environment) throws Exception {
-//
-//                    Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
-//                    if (bookmark == null) return null; //TODO: is this correct ?
-//                    return new GqlvMutationsFetcher(bookmark, bookmarkService, mutatorsTypeFields);
-//                }
-//            });
-//
-//            // for each field something like
-//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(mutatorsType, idField), new DataFetcher<Object>() {
-//                @Override
-//                public Object get(DataFetchingEnvironment environment) throws Exception {
-//
-//                    Fetcher gqlMeta = environment.getSource();
-//
-//                    return gqlMeta.id();
-//                }
-//            });
-
+        getMutations().addDataFetchersForActions();
     }
 
 
@@ -322,7 +289,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getMeta().getMetaField().getType());
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getGqlInputObjectType());
 
-        getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+        getMutationsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
     }
 
 }

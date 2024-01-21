@@ -68,7 +68,6 @@ type causeway_applib_ParameterNode__meta {
 
 type causeway_applib_PropertyNode {
   _gql_meta: causeway_applib_PropertyNode__meta
-  _gql_mutations: causeway_applib_PropertyNode__mutations
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
   property: String!
@@ -130,7 +129,6 @@ type causeway_applib_UserMenu {
 
 type causeway_applib_node_ActionNode {
   _gql_meta: causeway_applib_node_ActionNode__meta
-  _gql_mutations: causeway_applib_node_ActionNode__mutations
   action: String!
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
@@ -147,7 +145,6 @@ type causeway_applib_node_ActionNode__mutations {
 
 type causeway_applib_node_CollectionNode {
   _gql_meta: causeway_applib_node_CollectionNode__meta
-  _gql_mutations: causeway_applib_node_CollectionNode__mutations
   collection: String!
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
@@ -423,7 +420,6 @@ type java_util_stream_Stream__meta {
 
 type org_apache_causeway_commons_functional_Either {
   _gql_meta: org_apache_causeway_commons_functional_Either__meta
-  _gql_mutations: org_apache_causeway_commons_functional_Either__mutations
   left: String!
   right: String!
 }
@@ -444,7 +440,6 @@ type org_apache_causeway_commons_functional_Either__mutations {
 
 type org_apache_causeway_commons_functional_Railway {
   _gql_meta: org_apache_causeway_commons_functional_Railway__meta
-  _gql_mutations: org_apache_causeway_commons_functional_Railway__mutations
   failure: String!
   success: String!
 }
@@ -464,7 +459,6 @@ type org_apache_causeway_commons_functional_Railway__mutations {
 
 type org_apache_causeway_commons_functional_ThrowingConsumer {
   _gql_meta: org_apache_causeway_commons_functional_ThrowingConsumer__meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingConsumer__mutations
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__meta {
@@ -479,7 +473,6 @@ type org_apache_causeway_commons_functional_ThrowingConsumer__mutations {
 
 type org_apache_causeway_commons_functional_ThrowingFunction {
   _gql_meta: org_apache_causeway_commons_functional_ThrowingFunction__meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingFunction__mutations
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__meta {
@@ -495,7 +488,6 @@ type org_apache_causeway_commons_functional_ThrowingFunction__mutations {
 
 type org_apache_causeway_commons_functional_ThrowingRunnable {
   _gql_meta: org_apache_causeway_commons_functional_ThrowingRunnable__meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingRunnable__mutations
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__meta {
@@ -513,7 +505,6 @@ type org_apache_causeway_commons_functional_ThrowingRunnable__mutations {
 
 type org_apache_causeway_commons_functional_Try {
   _gql_meta: org_apache_causeway_commons_functional_Try__meta
-  _gql_mutations: org_apache_causeway_commons_functional_Try__mutations
   failure: String!
   success: String!
 }
@@ -557,7 +548,6 @@ type org_apache_causeway_core_metamodel_inspect_model_MMNode__meta {
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode {
   _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta
-  _gql_mutations: org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutations
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
 }
@@ -601,7 +591,6 @@ type university_dept_Department__meta {
 
 type university_dept_DeptHead {
   _gql_meta: university_dept_DeptHead__meta
-  _gql_mutations: university_dept_DeptHead__mutations
   department: university_dept_Department
   name: String
 }
