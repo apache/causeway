@@ -33,7 +33,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAction;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
@@ -187,7 +186,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         domainService.registerTypesInto(graphQLTypeRegistry);
 
         domainService.addDataFetchersForSafeActions();
-        domainService.addDataFetchersForMutators();
+        domainService.addDataFetchersForMutations();
 
 
 
@@ -209,12 +208,12 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         domainObject.registerTypesInto(graphQLTypeRegistry);
 
         // create and register data fetchers
-        domainObject.addDataFetchersForMetaData();
+        domainObject.addDataFetchersForMeta();
 
         domainObject.addDataFetchersForProperties();
         domainObject.addDataFetchersForCollections();
         domainObject.addDataFetchersForSafeActions();
-        domainObject.addDataFetchersForMutators();
+        domainObject.addDataFetchersForMutations();
     }
 
 }

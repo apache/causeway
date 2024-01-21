@@ -172,8 +172,8 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         getSafeActions().forEach(GqlvAction::addDataFetcher);
     }
 
-    public void addDataFetchersForMutators() {
-        getMutations().addDataFetchersForActions();
+    public void addDataFetchersForMutations() {
+        getMutations().addDataFetchers();
     }
 
 }

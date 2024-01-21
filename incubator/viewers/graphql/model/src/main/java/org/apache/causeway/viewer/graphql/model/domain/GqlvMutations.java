@@ -1,5 +1,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
@@ -12,11 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
+import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
@@ -117,7 +120,34 @@ public class GqlvMutations implements GqlvActionHolder {
         return mutationsTypeIfAny.orElse(null);
     }
 
-    public void addDataFetchersForActions() {
-        // TODO
+
+    public void addDataFetchers() {
+
+        if (mutationsFieldIfAny.isPresent()) {
+            codeRegistryBuilder.dataFetcher(
+                    coordinates(getGqlObjectType(), mutationsFieldIfAny.get()),
+                    (DataFetcher<Object>) environment -> {
+                        return bookmarkService.bookmarkFor(environment.getSource())
+                                .map(bookmark -> new GqlvMutationsFetcher(bookmark, getActions(), bookmarkService, objectManager))
+                                .orElseThrow();
+                    });
+
+            // TODO: loop around actions and set up a fetcher for each.
+//            codeRegistryBuilder.dataFetcher(
+//                    coordinates(getMetaType(), logicalTypeName),
+//                    (DataFetcher<Object>) environment -> environment.<GqlvMeta.Fetcher>getSource().logicalTypeName());
+//
+//            codeRegistryBuilder.dataFetcher(
+//                    coordinates(getMetaType(), id),
+//                    (DataFetcher<Object>) environment -> environment.<GqlvMeta.Fetcher>getSource().id());
+//
+//            if (domainObject.getBeanSort() == BeanSort.ENTITY) {
+//                codeRegistryBuilder.dataFetcher(
+//                        coordinates(getMetaType(), version),
+//                        (DataFetcher<Object>) environment -> environment.<GqlvMeta.Fetcher>getSource().version());
+//            }
+        }
     }
+
+
 }

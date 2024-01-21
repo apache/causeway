@@ -22,14 +22,26 @@ import java.util.List;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.Data;
 
-@Data
 public class GqlvMutationsFetcher {
 
     private final Bookmark bookmark;
+    private final List<GqlvAction> actions;
     private final BookmarkService bookmarkService;
-    private final List<String> mutatorFieldNames;
+    private final ObjectManager objectManager;
 
+    public GqlvMutationsFetcher(
+            final Bookmark bookmark,
+            final List<GqlvAction> actions,
+            final BookmarkService bookmarkService,
+            final ObjectManager objectManager) {
+
+        this.bookmark = bookmark;
+        this.actions = actions;
+        this.bookmarkService = bookmarkService;
+        this.objectManager = objectManager;
+    }
 }

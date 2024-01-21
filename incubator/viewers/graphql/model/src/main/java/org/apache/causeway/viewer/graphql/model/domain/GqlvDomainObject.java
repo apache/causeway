@@ -249,7 +249,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
 
-    public void addDataFetchersForMetaData() {
+    public void addDataFetchersForMeta() {
         meta.addDataFetchers();
     }
 
@@ -265,8 +265,8 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         getSafeActions().forEach(GqlvAction::addDataFetcher);
     }
 
-    public void addDataFetchersForMutators() {
-        getMutations().addDataFetchersForActions();
+    public void addDataFetchersForMutations() {
+        getMutations().addDataFetchers();
     }
 
 
