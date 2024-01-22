@@ -82,7 +82,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
                     addAction(objectAction);
                 });
 
-        buildMutationsTypeAndFieldIfRequired();
+        mutations.buildMutationsTypeAndFieldIfRequired();
 
         return anyActions.get();
     }
@@ -96,35 +96,22 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     }
 
 
-    /**
-     * Should be called only after fields etc have been added.
-     */
-    GraphQLObjectType buildGqlObjectType() {
-        if (gqlObjectType != null) {
-            throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
-        }
-        return gqlObjectType = gqlObjectTypeBuilder.build();
-    }
-
-
-
-    /**
-     * @see #buildMutationsTypeAndFieldIfRequired()
-     */
-    public Optional<GraphQLObjectType> getMutatorsTypeIfAny() {
-        return mutations.getMutationsTypeIfAny();
-    }
-
-    /**
-     * @see #getMutatorsTypeIfAny()
-     */
-    public Optional<GraphQLObjectType> buildMutationsTypeAndFieldIfRequired() {
-        return mutations.buildMutationsTypeAndFieldIfRequired();
-    }
-
     @Override
     public void addField(GraphQLFieldDefinition fieldDefinition) {
         gqlObjectTypeBuilder.field(fieldDefinition);
+    }
+
+
+    public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
+        gqlObjectType = gqlObjectTypeBuilder.build();
+        // TODO: unlike GqlvDomainObject, not sure why gqlObjectType doesn't need to be registered...
+
+        mutations.getMutationsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+    }
+
+    public void addDataFetchers() {
+        getSafeActions().forEach(GqlvAction::addDataFetcher);
+        getMutations().addDataFetchers();
     }
 
     @Override
@@ -141,22 +128,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
                 .name(TypeNames.objectTypeNameFor(objectSpecification))
                 .type(gqlObjectTypeBuilder)
                 .build();
-    }
-
-
-    public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
-        gqlObjectType = gqlObjectTypeBuilder.build();
-        // TODO: not sure why gqlObjectType doesn't need to be registered...
-
-        getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
-    }
-
-    public void addDataFetchersForSafeActions() {
-        getSafeActions().forEach(GqlvAction::addDataFetcher);
-    }
-
-    public void addDataFetchersForMutations() {
-        getMutations().addDataFetchers();
     }
 
     @Override

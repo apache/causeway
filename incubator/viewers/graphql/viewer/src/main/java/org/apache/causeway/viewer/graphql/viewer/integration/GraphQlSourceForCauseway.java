@@ -193,8 +193,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         domainService.registerTypesInto(graphQLTypeRegistry);
 
-        domainService.addDataFetchersForSafeActions();
-        domainService.addDataFetchersForMutations();
+        domainService.addDataFetchers();
 
 
         topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
