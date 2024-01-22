@@ -2,18 +2,27 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
+import org.springframework.lang.Nullable;
+
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
+
+import graphql.schema.GraphQLType;
+import graphql.schema.GraphQLTypeReference;
 
 import lombok.val;
 
@@ -36,15 +45,68 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
     private static GraphQLFieldDefinition fieldDefinition(
             final ObjectAction objectAction,
             final GqlvActionHolder holder) {
-        val fieldName = objectAction.getId();
-        val fieldBuilder = newFieldDefinition()
-                .name(fieldName)
-                .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-        addGqlArguments(objectAction, fieldBuilder);
-        GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
 
-        holder.addField(fieldDefinition);
+        GraphQLFieldDefinition fieldDefinition = null;
+        GraphQLOutputType type = typeFor(objectAction);
+
+        if (type != null) {
+            val fieldBuilder = newFieldDefinition()
+                    .name(objectAction.getId())
+                    .type(type);
+            addGqlArguments(objectAction, fieldBuilder);
+            fieldDefinition = fieldBuilder.build();
+
+            holder.addField(fieldDefinition);
+        }
         return fieldDefinition;
+    }
+
+    @Nullable
+    private static GraphQLOutputType typeFor(final ObjectAction objectAction){
+        ObjectSpecification objectSpecification = objectAction.getReturnType();
+        switch (objectSpecification.getBeanSort()){
+
+            case COLLECTION:
+
+                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
+                if (facet == null) return GraphQLList.list(Scalars.GraphQLString); // TODO: for now ... Investigate why this can happen
+                ObjectSpecification objectSpecificationForElementWhenCollection = facet.elementSpec();
+                GraphQLType wrappedType = outputTypeFor(objectSpecificationForElementWhenCollection);
+                if (wrappedType == null) {
+                    return null;
+                }
+                return GraphQLList.list(wrappedType);
+
+            case VALUE:
+            case ENTITY:
+            case VIEW_MODEL:
+            default:
+                // TODO: this cast is suspicious
+                return (GraphQLOutputType) outputTypeFor(objectSpecification);
+
+        }
+    }
+
+    @Nullable
+    private static GraphQLType outputTypeFor(final ObjectSpecification objectSpecification){
+
+        switch (objectSpecification.getBeanSort()){
+            case ABSTRACT:
+            case ENTITY:
+            case VIEW_MODEL:
+                return GraphQLTypeReference.typeRef(TypeNames.objectTypeNameFor(objectSpecification));
+
+            case VALUE:
+                return TypeMapper.typeFor(objectSpecification.getCorrespondingClass());
+
+            case COLLECTION:
+                // should be noop
+                return null;
+
+            default:
+                // for now
+                return Scalars.GraphQLString;
+        }
     }
 
     public ObjectAction getObjectAction() {

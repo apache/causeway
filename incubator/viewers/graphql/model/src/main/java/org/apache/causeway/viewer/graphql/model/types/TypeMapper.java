@@ -23,15 +23,12 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
 
@@ -74,47 +71,6 @@ public class TypeMapper {
                 return Scalars.GraphQLString;
         }
 
-    }
-
-    public static GraphQLType typeForObjectAction(final ObjectAction objectAction){
-        ObjectSpecification objectSpecification = objectAction.getReturnType();
-        switch (objectSpecification.getBeanSort()){
-
-            case COLLECTION:
-
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
-                if (facet == null) return GraphQLList.list(Scalars.GraphQLString); // TODO: for now ... Investigate why this can happen
-                ObjectSpecification objectSpecificationForElementWhenCollection = facet.elementSpec();
-                return GraphQLList.list(outputTypeFor(objectSpecificationForElementWhenCollection));
-
-            case VALUE:
-            case ENTITY:
-            case VIEW_MODEL:
-            default:
-                return outputTypeFor(objectSpecification);
-
-        }
-    }
-
-    public static GraphQLType outputTypeFor(final ObjectSpecification objectSpecification){
-
-        switch (objectSpecification.getBeanSort()){
-            case ABSTRACT:
-            case ENTITY:
-            case VIEW_MODEL:
-                return GraphQLTypeReference.typeRef(TypeNames.objectTypeNameFor(objectSpecification));
-
-            case VALUE:
-                return typeFor(objectSpecification.getCorrespondingClass());
-
-            case COLLECTION:
-                // should be noop
-                return null;
-
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
     }
 
 
