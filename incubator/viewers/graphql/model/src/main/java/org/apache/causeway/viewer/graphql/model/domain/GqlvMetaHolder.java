@@ -5,10 +5,9 @@ import graphql.schema.GraphQLFieldDefinition;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-public interface GqlvMetaHolder {
+public interface GqlvMetaHolder extends GqlvHolder {
     ObjectSpecification getObjectSpecification();
 
-    FieldCoordinates coordinatesFor(GraphQLFieldDefinition metaField);
-
     void addMetaField(GraphQLFieldDefinition metaField);
+
 }

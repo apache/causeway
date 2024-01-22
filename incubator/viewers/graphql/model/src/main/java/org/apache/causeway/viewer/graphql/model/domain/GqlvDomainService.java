@@ -39,18 +39,12 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     @Getter private final GqlvMutations mutations;
-    private final BookmarkService bookmarkService;
-    private final ObjectManager objectManager;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
     }
-    public String getLogicalTypeNameSanitized() {
-        return TypeNames.objectTypeNameFor(objectSpecification);
-    }
-
 
     private final List<GqlvAction> safeActions = new ArrayList<>();
     public List<GqlvAction> getSafeActions() {return Collections.unmodifiableList(safeActions);}
@@ -74,9 +68,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
-
-        this.bookmarkService = bookmarkService;
-        this.objectManager = objectManager;
     }
 
     /**
@@ -100,36 +91,19 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         if (objectAction.getSemantics().isSafeInNature()) {
             safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         } else {
-            // TODO: still trying to add the action to the mutations
              mutations.addAction(objectAction);
-
-            // for now, we go direct...
-//            safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         }
     }
 
 
     /**
      * Should be called only after fields etc have been added.
-     *
-     * @see #getGqlObjectType()
      */
-    public GraphQLObjectType buildGqlObjectType() {
+    GraphQLObjectType buildGqlObjectType() {
         if (gqlObjectType != null) {
             throw new IllegalArgumentException(String.format("GqlObjectType has already been built for %s", getLogicalTypeName()));
         }
         return gqlObjectType = gqlObjectTypeBuilder.build();
-    }
-
-    /**
-     * @see #buildGqlObjectType()
-     */
-    public GraphQLObjectType getGqlObjectType() {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
-        }
-        return gqlObjectType;
     }
 
 
@@ -170,9 +144,9 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     }
 
 
-
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
-        buildGqlObjectType();
+        gqlObjectType = gqlObjectTypeBuilder.build();
+        // TODO: not sure why gqlObjectType doesn't need to be registered...
 
         getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
     }

@@ -209,8 +209,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     /**
      * Should be called only after fields etc have been added.
-     *
-     * @see #getGqlObjectType()
      */
     private GraphQLObjectType buildGqlObjectType() {
         if (gqlObjectType != null) {
@@ -218,18 +216,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         }
         return gqlObjectType = gqlObjectTypeBuilder.name(getLogicalTypeNameSanitized()).build();
     }
-
-    /**
-     * @see #buildGqlObjectType()
-     */
-    public GraphQLObjectType getGqlObjectType() {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
-        }
-        return gqlObjectType;
-    }
-
 
     /**
      * @see #buildMutationsTypeAndFieldIfRequired()
