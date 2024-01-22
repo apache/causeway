@@ -4,14 +4,14 @@
       "findAllDepartments" : [ {
         "name" : "foo",
         "_gql_meta" : {
-          "id" : "1",
+          "id" : "3",
           "logicalTypeName" : "university.dept.Department",
           "version" : null
         }
       }, {
         "name" : "bar",
         "_gql_meta" : {
-          "id" : "2",
+          "id" : "4",
           "logicalTypeName" : "university.dept.Department",
           "version" : null
         }

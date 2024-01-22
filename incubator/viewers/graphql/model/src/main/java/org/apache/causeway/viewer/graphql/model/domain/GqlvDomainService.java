@@ -159,7 +159,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
 
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
-
         buildGqlObjectType();
 
         getMutatorsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);

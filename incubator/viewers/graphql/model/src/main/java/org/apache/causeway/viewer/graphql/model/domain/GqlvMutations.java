@@ -126,7 +126,7 @@ public class GqlvMutations implements GqlvActionHolder {
 
         if (mutationsFieldIfAny.isPresent()) {
             codeRegistryBuilder.dataFetcher(
-                    coordinates(getGqlObjectType(), mutationsFieldIfAny.get()),
+                    coordinates(holder.getGqlObjectType(), mutationsFieldIfAny.get()),
                     (DataFetcher<Object>) environment -> {
                         return bookmarkService.bookmarkFor(environment.getSource())
                                 .map(bookmark -> new Fetcher(bookmark, bookmarkService))

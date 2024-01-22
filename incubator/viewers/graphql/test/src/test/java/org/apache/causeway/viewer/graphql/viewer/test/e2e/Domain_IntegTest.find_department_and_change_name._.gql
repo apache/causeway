@@ -1,14 +1,14 @@
 {
-    university_dept_DeptHeadMenu {
-        findDeptHeadByName(name: "foo") {
-            _gql_mutations {
-                changeName(newName: "bar") {
-                    name
-                    department {
-                        name
-                    }
-                }
-            }
+  university_dept_DeptHeadMenu {
+    findDeptHeadByName(name: "foo") {
+      _gql_mutations {
+        changeName(newName: "bar") {
+          name
+          department {
+            name
+          }
         }
+      }
     }
+  }
 }

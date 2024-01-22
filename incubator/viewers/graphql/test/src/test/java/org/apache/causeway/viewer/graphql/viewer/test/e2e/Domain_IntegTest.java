@@ -110,7 +110,6 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
     }
 
     @Test
-    @Disabled // does not yet call 'changeName' action
     @UseReporter(DiffReporter.class)
     void find_department_and_change_name() throws Exception {
 

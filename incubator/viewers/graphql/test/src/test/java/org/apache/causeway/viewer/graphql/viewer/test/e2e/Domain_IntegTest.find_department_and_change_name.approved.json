@@ -1,21 +1,14 @@
 {
   "data" : {
-    "gql_test_domain_TopLevelMenu" : {
-      "findAllDepartments" : [ {
-        "name" : "foo",
-        "_gql_meta" : {
-          "id" : "1",
-          "logicalTypeName" : "gql.test.domain.Department",
-          "version" : null
+    "university_dept_DeptHeadMenu" : {
+      "findDeptHeadByName" : {
+        "_gql_mutations" : {
+          "changeName" : {
+            "name" : "bar",
+            "department" : null
+          }
         }
-      }, {
-        "name" : "bar",
-        "_gql_meta" : {
-          "id" : "2",
-          "logicalTypeName" : "gql.test.domain.Department",
-          "version" : null
-        }
-      } ]
+      }
     }
   }
 }
