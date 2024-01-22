@@ -3,10 +3,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import graphql.schema.GraphQLCodeRegistry;
-
 import lombok.Getter;
 
+import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
 public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMemberHolder> {

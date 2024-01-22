@@ -1,15 +1,15 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import org.springframework.lang.Nullable;
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLTypeReference.typeRef;

@@ -4,14 +4,10 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.FieldCoordinates.coordinates;
 
 public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvAssociationHolder> extends GqlvMember<T, H> {
 

@@ -3,7 +3,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -15,15 +14,13 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import graphql.schema.FieldCoordinates;
-
 import lombok.Getter;
+import lombok.val;
 
+import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
-
-import lombok.val;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;

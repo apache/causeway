@@ -1,5 +1,10 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -11,7 +16,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import org.springframework.lang.Nullable;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
@@ -20,15 +26,8 @@ import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
-
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
-
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
