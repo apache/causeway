@@ -15,6 +15,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
+import graphql.schema.FieldCoordinates;
+
 import lombok.Getter;
 
 import graphql.schema.GraphQLCodeRegistry;
@@ -23,6 +25,7 @@ import graphql.schema.GraphQLObjectType;
 
 import lombok.val;
 
+import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
@@ -130,6 +133,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     }
 
 
+
     /**
      * @see #buildMutationsTypeAndFieldIfRequired()
      */
@@ -147,6 +151,11 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     @Override
     public void addMutationsField(GraphQLFieldDefinition mutationsField) {
         gqlObjectTypeBuilder.field(mutationsField);
+    }
+
+    @Override
+    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
+        return coordinates(getGqlObjectType(), fieldDefinition);
     }
 
     public GraphQLFieldDefinition createTopLevelQueryField() {

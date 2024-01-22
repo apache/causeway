@@ -1,6 +1,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetcher;
+import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
@@ -126,7 +127,7 @@ public class GqlvMutations implements GqlvActionHolder {
 
         if (mutationsFieldIfAny.isPresent()) {
             codeRegistryBuilder.dataFetcher(
-                    coordinates(holder.getGqlObjectType(), mutationsFieldIfAny.get()),
+                    getCoordinates(mutationsFieldIfAny.get()),
                     (DataFetcher<Object>) environment -> {
                         return bookmarkService.bookmarkFor(environment.getSource())
                                 .map(bookmark -> new Fetcher(bookmark, bookmarkService))
@@ -135,6 +136,10 @@ public class GqlvMutations implements GqlvActionHolder {
 
             getActions().forEach(GqlvAction::addDataFetcher);
         }
+    }
+
+    private FieldCoordinates getCoordinates(GraphQLFieldDefinition fieldDefinition) {
+        return holder.coordinatesFor(fieldDefinition);
     }
 
 

@@ -1,5 +1,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
@@ -14,4 +15,6 @@ public interface GqlvMutationsHolder {
     void addMutationsField(GraphQLFieldDefinition mutationsField);
 
     GraphQLObjectType getGqlObjectType();
+
+    FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition);
 }

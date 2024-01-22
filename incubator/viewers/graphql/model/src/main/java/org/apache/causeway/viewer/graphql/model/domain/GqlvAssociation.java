@@ -36,8 +36,6 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
         final ObjectAssociation association = getObjectMember();
         final GraphQLFieldDefinition field = getFieldDefinition();
 
-        final GraphQLObjectType graphQLObjectType = getHolder().getGqlObjectType();
-
         ObjectSpecification fieldObjectSpecification = association.getElementType();
         BeanSort beanSort = fieldObjectSpecification.getBeanSort();
         switch (beanSort) {
@@ -49,7 +47,7 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
             case ENTITY:
 
                 codeRegistryBuilder.dataFetcher(
-                        coordinates(graphQLObjectType, field),
+                        getHolder().coordinatesFor(field),
                         (DataFetcher<Object>) environment -> {
 
                             Object domainObjectInstance = environment.getSource();

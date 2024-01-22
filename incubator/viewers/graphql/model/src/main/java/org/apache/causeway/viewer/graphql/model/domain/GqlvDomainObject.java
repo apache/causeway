@@ -20,6 +20,8 @@ import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
+import graphql.schema.FieldCoordinates;
+
 import lombok.Getter;
 
 import graphql.Scalars;
@@ -246,6 +248,11 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
      */
     public Optional<GraphQLObjectType> buildMutationsTypeAndFieldIfRequired() {
         return mutations.buildMutationsTypeAndFieldIfRequired();
+    }
+
+    @Override
+    public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
+        return FieldCoordinates.coordinates(getGqlObjectType(), fieldDefinition);
     }
 
     @Override
