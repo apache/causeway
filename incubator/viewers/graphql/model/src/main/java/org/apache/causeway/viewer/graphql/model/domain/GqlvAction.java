@@ -116,6 +116,4 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
                         : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
                 .build();
     }
-
-
 }

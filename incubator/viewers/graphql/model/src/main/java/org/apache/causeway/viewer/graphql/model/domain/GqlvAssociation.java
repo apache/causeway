@@ -37,28 +37,29 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
 
     public void addDataFetcher() {
 
-        final ObjectAssociation association = getObjectMember();
-        final GraphQLFieldDefinition field = getFieldDefinition();
+        final ObjectAssociation association = getObjectAssociation();
+        final ObjectSpecification fieldObjectSpecification = association.getElementType();
+        final BeanSort beanSort = fieldObjectSpecification.getBeanSort();
 
-        ObjectSpecification fieldObjectSpecification = association.getElementType();
-        BeanSort beanSort = fieldObjectSpecification.getBeanSort();
         switch (beanSort) {
 
-            case VALUE: //TODO: does this work for values as well?
-
+            case VALUE:
             case VIEW_MODEL:
-
             case ENTITY:
 
                 codeRegistryBuilder.dataFetcher(
-                        getHolder().coordinatesFor(field),
+                        getHolder().coordinatesFor(getFieldDefinition()),
                         (DataFetcher<Object>) environment -> {
 
                             Object domainObjectInstance = environment.getSource();
 
                             Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
                             ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
+                            if (specification == null) {
+                                return null;
+                            }
 
+                            // TODO: probably incorrect to adapt as a singular here.
                             ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
                             ManagedObject managedObject = association.get(owner);
 

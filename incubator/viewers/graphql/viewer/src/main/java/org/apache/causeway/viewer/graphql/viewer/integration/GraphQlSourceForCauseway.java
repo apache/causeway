@@ -197,7 +197,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         domainService.addDataFetchersForMutations();
 
 
-
         topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
     }
 
@@ -207,21 +206,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         val domainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager);
-
-        domainObject.addPropertiesAsFields();
-        domainObject.addCollectionsAsLists();
-        domainObject.addActions();
-
-        // build
+        domainObject.addMembers();
         domainObject.registerTypesInto(graphQLTypeRegistry);
-
-        // create and register data fetchers
-        domainObject.addDataFetchersForMeta();
-
-        domainObject.addDataFetchersForProperties();
-        domainObject.addDataFetchersForCollections();
-        domainObject.addDataFetchersForSafeActions();
-        domainObject.addDataFetchersForMutations();
+        domainObject.addDataFetchers();
     }
 
 }

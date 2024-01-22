@@ -30,7 +30,7 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
         ObjectSpecification elementType = otom.getElementType();
 
         GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLList type = typeFor(elementType);
+        GraphQLList type = listTypeFor(elementType);
         if (type != null) {
                 fieldDefinition = newFieldDefinition()
                         .name(otom.getId())
@@ -40,7 +40,7 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
         return fieldDefinition;
     }
 
-    @Nullable private static GraphQLList typeFor(ObjectSpecification elementType) {
+    @Nullable private static GraphQLList listTypeFor(ObjectSpecification elementType) {
         switch (elementType.getBeanSort()) {
             case VIEW_MODEL:
             case ENTITY:
@@ -50,7 +50,6 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
         }
         return null;
     }
-
 
     public OneToManyAssociation getOneToManyAssociation() {
         return getObjectAssociation();
