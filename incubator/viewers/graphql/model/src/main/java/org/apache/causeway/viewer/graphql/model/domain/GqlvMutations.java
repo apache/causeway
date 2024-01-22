@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -128,7 +129,7 @@ public class GqlvMutations implements GqlvActionHolder {
                     coordinates(getGqlObjectType(), mutationsFieldIfAny.get()),
                     (DataFetcher<Object>) environment -> {
                         return bookmarkService.bookmarkFor(environment.getSource())
-                                .map(bookmark -> new GqlvMutationsFetcher(bookmark, getActions(), bookmarkService, objectManager))
+                                .map(bookmark -> new Fetcher(bookmark, bookmarkService))
                                 .orElseThrow();
                     });
 
@@ -137,4 +138,21 @@ public class GqlvMutations implements GqlvActionHolder {
     }
 
 
+    public static class Fetcher {
+
+        private final Bookmark bookmark;
+        private final BookmarkService bookmarkService;
+
+        public Fetcher(
+                final Bookmark bookmark,
+                final BookmarkService bookmarkService) {
+
+            this.bookmark = bookmark;
+            this.bookmarkService = bookmarkService;
+        }
+
+        public Object getTargetPojo() {
+            return bookmarkService.lookup(bookmark).orElseThrow();
+        }
+    }
 }

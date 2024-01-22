@@ -589,8 +589,12 @@ type university_dept_Department {
 }
 
 type university_dept_DepartmentMenu {
-  createDepartment(deptHead: university_dept_DeptHead__input, name: String!): university_dept_Department
+  _gql_mutations: university_dept_DepartmentMenu__mutations
   findAllDepartments: [university_dept_Department]
+}
+
+type university_dept_DepartmentMenu__mutations {
+  createDepartment(deptHead: university_dept_DeptHead__input, name: String!): university_dept_Department
 }
 
 type university_dept_Department__meta {

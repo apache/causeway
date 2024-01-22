@@ -1,8 +1,10 @@
 {
   "data" : {
     "university_dept_DepartmentMenu" : {
-      "createDepartment" : {
-        "name" : "newbie"
+      "_gql_mutations" : {
+          "createDepartment" : {
+            "name" : "newbie"
+          }
       }
     }
   }

@@ -79,18 +79,23 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         }
     }
 
+    GraphQL graphQL;
+
     @Override
     public GraphQL graphQl() {
-        return GraphQL.newGraphQL(schema())
+        if (graphQL == null) {
+            graphQL = GraphQL.newGraphQL(schema())
 //                .instrumentation(new TracingInstrumentation())
-                .defaultDataFetcherExceptionHandler(new DataFetcherExceptionHandler() {
-                    @Override
-                    public DataFetcherExceptionHandlerResult onException(DataFetcherExceptionHandlerParameters handlerParameters) {
-                        return DataFetcherExceptionHandler.super.onException(handlerParameters);
-                    }
-                })
-                .queryExecutionStrategy(executionStrategy)
-                .build();
+                    .defaultDataFetcherExceptionHandler(new DataFetcherExceptionHandler() {
+                        @Override
+                        public DataFetcherExceptionHandlerResult onException(DataFetcherExceptionHandlerParameters handlerParameters) {
+                            return DataFetcherExceptionHandler.super.onException(handlerParameters);
+                        }
+                    })
+                    .queryExecutionStrategy(executionStrategy)
+                    .build();
+        }
+        return graphQL;
     }
 
     @Override

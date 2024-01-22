@@ -98,10 +98,10 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
             safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         } else {
             // TODO: still trying to add the action to the mutations
-//             mutations.addAction(objectAction);
+             mutations.addAction(objectAction);
 
             // for now, we go direct...
-            safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
+//            safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
         }
     }
 

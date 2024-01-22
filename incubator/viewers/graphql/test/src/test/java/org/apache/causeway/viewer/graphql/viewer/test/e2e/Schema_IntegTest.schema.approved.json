@@ -6808,6 +6808,41 @@
         "name" : "university_dept_DepartmentMenu",
         "description" : null,
         "fields" : [ {
+          "name" : "findAllDepartments",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "OBJECT",
+              "name" : "university_dept_Department",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "_gql_mutations",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DepartmentMenu__mutations",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DepartmentMenu__mutations",
+        "description" : null,
+        "fields" : [ {
           "name" : "createDepartment",
           "description" : null,
           "args" : [ {
@@ -6837,21 +6872,6 @@
             "kind" : "OBJECT",
             "name" : "university_dept_Department",
             "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "findAllDepartments",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "OBJECT",
-              "name" : "university_dept_Department",
-              "ofType" : null
-            }
           },
           "isDeprecated" : false,
           "deprecationReason" : null

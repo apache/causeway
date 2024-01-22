@@ -67,8 +67,15 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
             final DataFetchingEnvironment dataFetchingEnvironment) {
         final ObjectAction objectAction = getObjectAction();
 
-        // TODO: this assumes that the dataFetchingEnvironment is a domain object, but in fact it could be a 'mutations' object.
-        Object domainObjectInstance = dataFetchingEnvironment.getSource();
+        // TODO: not tested
+        Object source = dataFetchingEnvironment.getSource();
+        Object domainObjectInstance;
+        if (source instanceof GqlvMutations.Fetcher) {
+            GqlvMutations.Fetcher fetcher = (GqlvMutations.Fetcher) source;
+            domainObjectInstance = fetcher.getTargetPojo();
+        } else {
+            domainObjectInstance = source;
+        }
 
         Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
         ObjectSpecification specification = specificationLoader

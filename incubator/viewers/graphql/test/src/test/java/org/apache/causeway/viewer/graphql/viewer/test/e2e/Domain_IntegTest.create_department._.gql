@@ -1,9 +1,9 @@
 {
     university_dept_DepartmentMenu {
-        createDepartment(name: "newbie") {
-            name
+        _gql_mutations {
+            createDepartment(name: "newbie") {
+                name
+            }
         }
-#        _gql_mutations {
-#        }
     }
 }

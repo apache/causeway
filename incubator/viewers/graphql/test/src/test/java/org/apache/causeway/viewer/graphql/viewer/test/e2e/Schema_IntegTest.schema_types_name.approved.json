@@ -298,6 +298,8 @@
       }, {
         "name" : "university_dept_DepartmentMenu"
       }, {
+        "name" : "university_dept_DepartmentMenu__mutations"
+      }, {
         "name" : "university_dept_Department__input"
       }, {
         "name" : "university_dept_Department__meta"
