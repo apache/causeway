@@ -15,7 +15,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import graphql.schema.FieldCoordinates;
@@ -26,9 +25,7 @@ import graphql.Scalars;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
 
 import lombok.val;
@@ -151,32 +148,11 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     private void addCollection(OneToManyAssociation otom) {
 
-        ObjectSpecification elementType = otom.getElementType();
-        GraphQLFieldDefinition fieldDefinition = null;
-
-        switch (elementType.getBeanSort()) {
-
-            case VIEW_MODEL:
-            case ENTITY:
-                GraphQLTypeReference typeRef = typeRef(TypeNames.objectTypeNameFor(elementType));
-                fieldDefinition = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(GraphQLList.list(typeRef)).build();
-                gqlObjectTypeBuilder.field(fieldDefinition);
-                break;
-
-            case VALUE:
-                GraphQLType wrappedType = TypeMapper.typeFor(elementType.getCorrespondingClass());
-                fieldDefinition = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(GraphQLList.list(wrappedType)).build();
-                gqlObjectTypeBuilder.field(fieldDefinition);
-                break;
+        GqlvCollection gqlvCollection = new GqlvCollection(this, otom, codeRegistryBuilder);
+        if (gqlvCollection.hasFieldDefinition()) {
+            collections.add(gqlvCollection);
         }
 
-        if (fieldDefinition != null) {
-            collections.add(new GqlvCollection(this, otom, fieldDefinition, codeRegistryBuilder));
-        }
     }
 
     /**
@@ -240,13 +216,19 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
     @Override
-    public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
+    public void addActionField(GraphQLFieldDefinition fieldDefinition) {
+        gqlObjectTypeBuilder.field(fieldDefinition);
     }
 
     @Override
-    public void addActionField(GraphQLFieldDefinition mutationsField) {
+    public void addCollectionField(GraphQLFieldDefinition fieldDefinition) {
+        gqlObjectTypeBuilder.field(fieldDefinition);
+    }
 
+
+    @Override
+    public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
+        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
     public void addDataFetchersForMeta() {
