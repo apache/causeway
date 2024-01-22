@@ -45,7 +45,7 @@ import static graphql.schema.GraphQLTypeReference.typeRef;
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMutationsHolder {
+public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMutationsHolder, GqlvMetaHolder {
 
     @Getter private final ObjectSpecification objectSpecification;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
@@ -53,7 +53,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     @Getter private final GqlvMeta meta;
     @Getter private final GqlvMutations mutations;
 
-    @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();

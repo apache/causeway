@@ -34,7 +34,7 @@ public class GqlvMutations implements GqlvActionHolder {
     /**
      * Used to build {@link #mutationsTypeIfAny}.
      */
-    @Getter final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     /**
      * Built lazily using {@link #buildMutationsTypeAndFieldIfRequired()}

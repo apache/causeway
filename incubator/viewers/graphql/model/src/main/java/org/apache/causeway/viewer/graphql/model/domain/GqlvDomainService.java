@@ -42,7 +42,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;
 
-    @Getter private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
