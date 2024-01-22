@@ -14,6 +14,7 @@ import java.util.Optional;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
@@ -58,6 +59,11 @@ public class GqlvMutations implements GqlvActionHolder {
         this.objectManager = objectManager;
 
         gqlObjectTypeBuilder = newObject().name(TypeNames.mutationsTypeNameFor(this.holder.getObjectSpecification()));
+    }
+
+    @Override
+    public ObjectSpecification getObjectSpecification() {
+        return holder.getObjectSpecification();
     }
 
     public void addAction(final ObjectAction objectAction) {
