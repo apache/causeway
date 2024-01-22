@@ -26,7 +26,6 @@ import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLTypeReference;
 
 import lombok.val;
 
@@ -35,7 +34,6 @@ import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
-import static graphql.schema.GraphQLTypeReference.typeRef;
 
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
@@ -104,40 +102,9 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
 
     private void addPropertyAsField(final OneToOneAssociation otoa) {
-        ObjectSpecification otoaObjectSpec = otoa.getElementType();
-
-        GraphQLFieldDefinition fieldDefinition = null;
-        switch (otoaObjectSpec.getBeanSort()) {
-
-            case VIEW_MODEL:
-            case ENTITY:
-
-                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec));
-                fieldDefinition = newFieldDefinition()
-                        .name(otoa.getId())
-                        .type(otoa.isOptional() ? fieldTypeRef : nonNull(fieldTypeRef)).build();
-                gqlObjectTypeBuilder.field(
-                        fieldDefinition
-                        );
-
-                break;
-
-            case VALUE:
-
-                // todo: map ...
-
-                GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
-                        .name(otoa.getId())
-                        .type(otoa.isOptional()
-                                ? Scalars.GraphQLString
-                                : nonNull(Scalars.GraphQLString));
-                fieldDefinition = valueBuilder.build();
-                gqlObjectTypeBuilder.field(fieldDefinition);
-
-                break;
-        }
-        if (fieldDefinition != null) {
-            properties.add(new GqlvProperty(this, otoa, fieldDefinition, codeRegistryBuilder));
+        GqlvProperty property = new GqlvProperty(this, otoa, codeRegistryBuilder);
+        if (property.hasFieldDefinition()) {
+            properties.add(property);
         }
     }
 
@@ -225,6 +192,10 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         gqlObjectTypeBuilder.field(fieldDefinition);
     }
 
+    @Override
+    public void addPropertyField(GraphQLFieldDefinition fieldDefinition) {
+        gqlObjectTypeBuilder.field(fieldDefinition);
+    }
 
     @Override
     public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
