@@ -23,54 +23,30 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.model.util.TypeNames;
-
 import graphql.Scalars;
-import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLType;
-import graphql.schema.GraphQLTypeReference;
 
-public class TypeMapper {
+import lombok.experimental.UtilityClass;
 
-    private static List<Class<?>> mapToInteger = Arrays.asList(
+@UtilityClass
+public class ScalarMapper {
+
+    private static List<Class<?>> integerEquivalents = Arrays.asList(
             int.class, Integer.class, Short.class, short.class, BigInteger.class);
-    private static List<Class<?>> mapToLong = Arrays.asList(Long.class, long.class, BigDecimal.class);
-    private static List<Class<?>> mapToBoolean = Arrays.asList(Boolean.class, boolean.class);
+    private static List<Class<?>> longEquivalents = Arrays.asList(Long.class, long.class, BigDecimal.class);
+    private static List<Class<?>> booleanEquivalents = Arrays.asList(Boolean.class, boolean.class);
 
     public static GraphQLType typeFor(final Class<?> c){
-        if (mapToInteger.contains(c)){
+        if (integerEquivalents.contains(c)){
             return Scalars.GraphQLInt;
         }
-        if (mapToLong.contains(c)){
+        if (longEquivalents.contains(c)){
             return Scalars.GraphQLFloat;
         }
-        if (mapToBoolean.contains(c)){
+        if (booleanEquivalents.contains(c)){
             return Scalars.GraphQLBoolean;
         }
         return Scalars.GraphQLString;
-    }
-
-    public static GraphQLInputType inputTypeFor(final ObjectActionParameter objectActionParameter){
-        ObjectSpecification elementType = objectActionParameter.getElementType();
-        switch (elementType.getBeanSort()) {
-            case ABSTRACT:
-            case ENTITY:
-            case VIEW_MODEL:
-
-                return GraphQLTypeReference.typeRef(TypeNames.inputTypeNameFor(elementType));
-
-            case VALUE:
-                return (GraphQLInputType) typeFor(elementType.getCorrespondingClass());
-
-            case COLLECTION:
-                // TODO ...
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
-
     }
 
 

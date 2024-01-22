@@ -6,7 +6,7 @@ import graphql.schema.GraphQLList;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import org.springframework.lang.Nullable;
@@ -46,7 +46,7 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
             case ENTITY:
                 return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType)));
             case VALUE:
-                return GraphQLList.list(TypeMapper.typeFor(elementType.getCorrespondingClass()));
+                return GraphQLList.list(ScalarMapper.typeFor(elementType.getCorrespondingClass()));
         }
         return null;
     }

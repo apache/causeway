@@ -8,7 +8,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import org.springframework.lang.Nullable;
@@ -24,6 +24,7 @@ import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 import java.util.Map;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
 
+@Log4j2
 public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
 
     public GqlvAction(
@@ -69,10 +71,16 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
             case COLLECTION:
 
                 TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
-                if (facet == null) return GraphQLList.list(Scalars.GraphQLString); // TODO: for now ... Investigate why this can happen
+                if (facet == null) {
+                    log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
+                    return null;
+                }
                 ObjectSpecification objectSpecificationForElementWhenCollection = facet.elementSpec();
                 GraphQLType wrappedType = outputTypeFor(objectSpecificationForElementWhenCollection);
                 if (wrappedType == null) {
+                    log.warn("Unable to create wrapped type of for {} for action {}",
+                            objectSpecificationForElementWhenCollection.getFullIdentifier(),
+                            objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
                 return GraphQLList.list(wrappedType);
@@ -97,7 +105,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
                 return GraphQLTypeReference.typeRef(TypeNames.objectTypeNameFor(objectSpecification));
 
             case VALUE:
-                return TypeMapper.typeFor(objectSpecification.getCorrespondingClass());
+                return ScalarMapper.typeFor(objectSpecification.getCorrespondingClass());
 
             case COLLECTION:
                 // should be noop
@@ -174,8 +182,8 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
         return GraphQLArgument.newArgument()
                 .name(objectActionParameter.getId())
                 .type(objectActionParameter.isOptional()
-                        ? TypeMapper.inputTypeFor(objectActionParameter)
-                        : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
+                        ? GqlvActionParameter.inputTypeFor(objectActionParameter)
+                        : nonNull(GqlvActionParameter.inputTypeFor(objectActionParameter)))
                 .build();
     }
 }

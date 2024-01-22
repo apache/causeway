@@ -16,7 +16,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.graphql.model.types._Constants;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import static graphql.schema.FieldCoordinates.coordinates;
@@ -106,7 +105,7 @@ public class GqlvMutations implements GqlvActionHolder {
 
             // create the field
             GraphQLFieldDefinition mutationsField = newFieldDefinition()
-                    .name(_Constants.GQL_MUTATIONS_FIELDNAME)
+                    .name("_gql_mutations")
                     .type(mutationsType)
                     .build();
             mutationsFieldIfAny = Optional.of(mutationsField);
