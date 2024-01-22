@@ -55,10 +55,9 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
     }
 
     public void addDataFetcher() {
-        GraphQLObjectType gqlObjectType = getHolder().getGqlObjectType();
         GraphQLFieldDefinition fieldDefinition = getFieldDefinition();
         codeRegistryBuilder.dataFetcher(
-                FieldCoordinates.coordinates(gqlObjectType, fieldDefinition),
+                getHolder().coordinatesFor(fieldDefinition),
                 this::invoke
         );
     }

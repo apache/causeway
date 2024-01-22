@@ -6,8 +6,6 @@ import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -117,33 +115,25 @@ public class GqlvMutations implements GqlvActionHolder {
         return mutationsTypeIfAny;
     }
 
-    @Override
-    public GraphQLObjectType getGqlObjectType() {
-        return mutationsTypeIfAny.orElse(null);
-    }
-
-
     public void addDataFetchers() {
-
         if (mutationsFieldIfAny.isPresent()) {
             codeRegistryBuilder.dataFetcher(
-                    getCoordinates(mutationsFieldIfAny.get()),
-                    (DataFetcher<Object>) environment -> {
-                        return bookmarkService.bookmarkFor(environment.getSource())
-                                .map(bookmark -> new Fetcher(bookmark, bookmarkService))
-                                .orElseThrow();
-                    });
+                    holder.coordinatesFor(mutationsFieldIfAny.get()),
+                    (DataFetcher<Object>) environment ->
+                        bookmarkService.bookmarkFor(environment.getSource())
+                            .map(bookmark -> new Fetcher(bookmark, bookmarkService))
+                            .orElseThrow());
 
             getActions().forEach(GqlvAction::addDataFetcher);
         }
     }
 
-    private FieldCoordinates getCoordinates(GraphQLFieldDefinition fieldDefinition) {
-        return holder.coordinatesFor(fieldDefinition);
+    @Override
+    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
+        return FieldCoordinates.coordinates(mutationsTypeIfAny.orElse(null), fieldDefinition);
     }
 
-
-    public static class Fetcher {
+    static class Fetcher {
 
         private final Bookmark bookmark;
         private final BookmarkService bookmarkService;

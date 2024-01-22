@@ -62,10 +62,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         return TypeNames.objectTypeNameFor(objectSpecification);
     }
 
-    public BeanSort getBeanSort() {
-        return objectSpecification.getBeanSort();
-    }
-
     private final List<GqlvProperty> properties = new ArrayList<>();
     public List<GqlvProperty> getProperties() {return Collections.unmodifiableList(properties);}
 
@@ -95,7 +91,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
         this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
 
-        gqlObjectTypeBuilder.field(meta.getMetaField());
 
         // input object type
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
@@ -251,13 +246,18 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
     @Override
-    public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(getGqlObjectType(), fieldDefinition);
+    public void addMetaField(GraphQLFieldDefinition metaField) {
+        gqlObjectTypeBuilder.field(metaField);
     }
 
     @Override
     public void addMutationsField(GraphQLFieldDefinition mutationsField) {
         gqlObjectTypeBuilder.field(mutationsField);
+    }
+
+    @Override
+    public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
+        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
     public void addDataFetchersForMeta() {

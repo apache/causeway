@@ -31,7 +31,7 @@ public class GqlvMeta {
     static GraphQLFieldDefinition logicalTypeName = newFieldDefinition().name("logicalTypeName").type(nonNull(Scalars.GraphQLString)).build();
     static GraphQLFieldDefinition version = newFieldDefinition().name("version").type(Scalars.GraphQLString).build();
 
-    private final GqlvDomainObject domainObject;
+    private final GqlvMetaHolder holder;
 
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final BookmarkService bookmarkService;
@@ -40,12 +40,12 @@ public class GqlvMeta {
     @Getter private final GraphQLFieldDefinition metaField;
 
     public GqlvMeta(
-            final GqlvDomainObject domainObject,
+            final GqlvMetaHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService,
             final ObjectManager objectManager
     ) {
-        this.domainObject = domainObject;
+        this.holder = holder;
 
         this.codeRegistryBuilder = codeRegistryBuilder;
         this.bookmarkService = bookmarkService;
@@ -53,13 +53,15 @@ public class GqlvMeta {
 
         // we can build the metafield and meta type eagerly because we know exactly which fields it has.
         metaField = newFieldDefinition().name("_gql_meta").type(buildMetaType()).build();
+
+        holder.addMetaField(metaField);
     }
 
     private GraphQLObjectType buildMetaType() {
-        val metaTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(domainObject.getObjectSpecification()));
+        val metaTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(holder.getObjectSpecification()));
         metaTypeBuilder.field(id);
         metaTypeBuilder.field(logicalTypeName);
-        if (domainObject.getBeanSort() == BeanSort.ENTITY) {
+        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             metaTypeBuilder.field(version);
         }
         return metaTypeBuilder.build();
@@ -72,7 +74,7 @@ public class GqlvMeta {
     public void addDataFetchers() {
 
         codeRegistryBuilder.dataFetcher(
-                coordinates(domainObject.getGqlObjectType(), getMetaField()),
+                holder.coordinatesFor(getMetaField()),
                 (DataFetcher<Object>) environment -> {
                     return bookmarkService.bookmarkFor(environment.getSource())
                             .map(bookmark -> new Fetcher(bookmark, bookmarkService, objectManager))
@@ -87,7 +89,7 @@ public class GqlvMeta {
                 coordinates(getMetaType(), id),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
 
-        if (domainObject.getBeanSort() == BeanSort.ENTITY) {
+        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(
                     coordinates(getMetaType(), version),
                     (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());

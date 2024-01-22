@@ -4,5 +4,5 @@ import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
 
 public interface GqlvAssociationHolder extends GqlvMemberHolder {
-    FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition);
+
 }

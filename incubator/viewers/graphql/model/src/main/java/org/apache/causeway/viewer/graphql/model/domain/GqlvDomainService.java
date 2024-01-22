@@ -155,7 +155,11 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return coordinates(getGqlObjectType(), fieldDefinition);
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(String.format(
+                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
+        }
+        return coordinates(gqlObjectType, fieldDefinition);
     }
 
     public GraphQLFieldDefinition createTopLevelQueryField() {

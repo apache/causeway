@@ -6,8 +6,5 @@ import graphql.schema.GraphQLObjectType;
 
 public interface GqlvMemberHolder  {
 
-    /**
-     * For use once the type has been built, ie by the fetchers.
-     */
-    GraphQLObjectType getGqlObjectType();
+    FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition);
 }
