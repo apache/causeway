@@ -68,7 +68,7 @@ public class AuditTrailMenu {
             extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<T> { }
 
 
-    final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    final AuditTrailEntryRepository auditTrailEntryRepository;
     final ClockService clockService;
 
 

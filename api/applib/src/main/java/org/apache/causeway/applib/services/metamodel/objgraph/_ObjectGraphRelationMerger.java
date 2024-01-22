@@ -21,6 +21,7 @@ package org.apache.causeway.applib.services.metamodel.objgraph;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
@@ -61,11 +62,23 @@ class _ObjectGraphRelationMerger implements ObjectGraph.Transformer {
         relations.removeIf(ObjectGraph.Relation::isAssociation);
 
         shared.forEach((key, list) -> {
-            val merged = list.stream().reduce((a, b)->new ObjectGraph.Relation(
+            if(list.isEmpty()) return;
+            var firstRel = list.get(0);
+            if(list.size()==1) {
+                relations.add(firstRel);
+                return;
+            }
+            var mergedDescriptions = list.stream()
+                    .map(rel->rel.descriptionFormatted())
+                    .collect(Collectors.joining(","));
+
+            var merged = new ObjectGraph.Relation(
                     ObjectGraph.RelationType.MERGED_ASSOCIATIONS,
-                    objectById.get(a.fromId()), objectById.get(a.toId()),
-                    a.labelFormatted() + "," + b.labelFormatted(), ""));
-            merged.ifPresent(relations::add);
+                    objectById.get(firstRel.fromId()),
+                    objectById.get(firstRel.toId()),
+                    mergedDescriptions, // already formatted honoring multiplicity notation
+                    "", "");
+            relations.add(merged);
         });
 
     }
@@ -92,12 +105,21 @@ class _ObjectGraphRelationMerger implements ObjectGraph.Transformer {
         shared.forEach((key, list) -> {
             if(list.size()==2) {
                 relations.removeAll(list);
-                val a = list.get(0);
-                val b = list.get(1);
+                var a = list.get(0);
+                var b = list.get(1);
+                // near label receives b's description
+                // far label receives a's description
+                // (formatting has no effect on RelationType.MERGED_ASSOCIATIONS)
+                var nearLabel = b.descriptionFormatted();
+                var farLabel = a.descriptionFormatted();
+
                 relations.add(new ObjectGraph.Relation(
                         ObjectGraph.RelationType.BIDIR_ASSOCIATION,
-                        objectById.get(a.fromId()), objectById.get(a.toId()),
-                        a.labelFormatted(), b.labelFormatted()));
+                        objectById.get(a.fromId()),
+                        objectById.get(a.toId()),
+                        "", // middle label is cleared
+                        nearLabel,
+                        farLabel));
             }
         });
     }

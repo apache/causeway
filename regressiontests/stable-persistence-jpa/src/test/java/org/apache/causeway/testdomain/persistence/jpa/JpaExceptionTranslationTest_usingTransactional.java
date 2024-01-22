@@ -42,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaInventoryDao;
@@ -89,7 +90,7 @@ extends RegressionTestWithJpaFixtures {
 
             interactionService.runAnonymous(()->{
 
-                ThrowingRunnable.resultOf(uniqueConstraintViolator)
+                Try.run(uniqueConstraintViolator)
                 .ifSuccess(__->fail("expected to fail, but did not"))
                // .mapFailure(ex->_JpaExceptionTranslator.translate(ex, txManager))
                 .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))

@@ -13,7 +13,25 @@ _@InteractionScope_ may be used as a meta-annotation to create custom composed a
 .InteractionScope.java
 ----
 @interface InteractionScope {
+  String SCOPE_NAME;
+  @AliasFor(annotation = Scope.class)
+ScopedProxyMode proxyMode() default ScopedProxyMode.TARGET_CLASS;     // <.>
 }
 ----
+
+<.> xref:#proxyMode[proxyMode]
++
+--
+Alias for _Scope#proxyMode_ .
+--
+
+== Members
+
+[#proxyMode]
+=== proxyMode
+
+Alias for _Scope#proxyMode_ .
+
+Defaults to _ScopedProxyMode#TARGET_CLASS_ .
 
 include::hooks/InteractionScope_010-examples-and-usage.adoc[]

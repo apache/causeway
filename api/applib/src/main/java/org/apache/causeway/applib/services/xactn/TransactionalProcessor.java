@@ -61,7 +61,7 @@ public interface TransactionalProcessor {
      * @return {@link Try} of calling given {@code callable}
      */
     default Try<Void> runTransactional(final TransactionDefinition def, final ThrowingRunnable runnable) {
-        return callTransactional(def, ThrowingRunnable.toCallable(runnable));
+        return callTransactional(def, runnable.toCallable());
     }
 
     // -- SHORTCUTS - WITH PROPAGATION CONTROL
@@ -92,7 +92,7 @@ public interface TransactionalProcessor {
      * @return {@link Try} of calling given {@code callable}
      */
     default Try<Void> runTransactional(final Propagation propagation, final ThrowingRunnable runnable) {
-        return callTransactional(propagation, ThrowingRunnable.toCallable(runnable));
+        return callTransactional(propagation, runnable.toCallable());
     }
 
 
@@ -120,7 +120,7 @@ public interface TransactionalProcessor {
      * @param runnable
      */
     default Try<Void> runWithinCurrentTransactionElseCreateNew(final ThrowingRunnable runnable) {
-        return callWithinCurrentTransactionElseCreateNew(ThrowingRunnable.toCallable(runnable));
+        return callWithinCurrentTransactionElseCreateNew(runnable.toCallable());
     }
 
 }

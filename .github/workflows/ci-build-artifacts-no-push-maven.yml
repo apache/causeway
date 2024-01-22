@@ -33,7 +33,7 @@ jobs:
     env:
       # to be shared among all steps of this job
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      BASELINE: 2.0.0-RC3
+      BASELINE: 2.0.0-RC4
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
 
@@ -65,7 +65,7 @@ jobs:
 
     - name: Activate Cache for Maven Downloads
       if: matrix.language == 'java'
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       env:
         # change the cache-name if we want to rebuild the cache
         # can be reset via github action page

@@ -22,6 +22,7 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 
 import lombok.RequiredArgsConstructor;
@@ -58,7 +58,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog";
 
-    final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    final CommandLogEntryRepository commandLogEntryRepository;
     final RepositoryService repositoryService;
     final CausewayConfiguration causewayConfiguration;
     final ClockService clockService;

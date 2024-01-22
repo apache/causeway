@@ -18,7 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.contributions;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -34,7 +35,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -65,9 +65,13 @@ public class Object_recentCommands {
     private final Object domainObject;
 
     @MemberSupport public List<? extends CommandLogEntry> act() {
-        return bookmarkService.bookmarkFor(domainObject)
-        .map(commandLogEntryRepository::findRecentByTargetOrResult)
-        .orElse(Collections.emptyList());
+        List<CommandLogEntry> commandLogEntries = new ArrayList<>();
+        bookmarkService.bookmarksFor(domainObject).forEach(bookmark -> {
+            List<CommandLogEntry> recent = commandLogEntryRepository.findRecentByTargetOrResult(bookmark);
+            commandLogEntries.addAll(recent);
+        });
+        commandLogEntries.sort(Comparator.comparing(CommandLogEntry::getTimestamp).reversed());
+        return commandLogEntries;
     }
 
     /**
@@ -78,6 +82,6 @@ public class Object_recentCommands {
         return (domainObject instanceof HasInteractionId);
     }
 
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
 }

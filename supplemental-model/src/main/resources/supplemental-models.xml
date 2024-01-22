@@ -102,4 +102,34 @@
         </project>
     </supplement>
 
+    <supplement>
+        <project>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>popperjs__core</artifactId>
+            <version>2.11.8</version>
+            <name>popper.js</name>
+            <licenses>
+                <license>
+                    <name>MIT License</name>
+                    <url>github.com/popperjs/popper-core</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>eonasdan__tempus-dominus</artifactId>
+            <version>6.7.11</version>
+            <name>tempus-dominus</name>
+            <licenses>
+                <license>
+                    <name>MIT License</name>
+                    <url>https://github.com/Eonasdan/tempus-dominus</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
 </supplementalDataModels>

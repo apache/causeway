@@ -329,7 +329,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             return act() == SessionLogEntry.this ? "None after": null;
         }
 
-        @Inject SessionLogEntryRepository sessionLogEntryRepository;
+        @Inject
+        SessionLogEntryRepositoryAbstract sessionLogEntryRepository;
     }
 
 
@@ -358,7 +359,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             return act() == SessionLogEntry.this ? "None before": null;
         }
 
-        @Inject SessionLogEntryRepository sessionLogEntryRepository;
+        @Inject
+        SessionLogEntryRepositoryAbstract sessionLogEntryRepository;
     }
 
 

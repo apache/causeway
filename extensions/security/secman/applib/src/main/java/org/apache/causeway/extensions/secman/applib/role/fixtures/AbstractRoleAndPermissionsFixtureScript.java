@@ -18,12 +18,16 @@
  */
 package org.apache.causeway.extensions.secman.applib.role.fixtures;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
@@ -40,12 +44,14 @@ import lombok.val;
  *
  * @since 2.x {@index}
  */
-public abstract class AbstractRoleAndPermissionsFixtureScript 
+public abstract class AbstractRoleAndPermissionsFixtureScript
 extends FixtureScript
 implements FixtureScriptWithExecutionStrategy {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private ApplicationFeatureRepository applicationFeatureRepository;
+    @Inject private CausewayConfiguration causewayConfiguration;
 
     private final Supplier<String> roleNameSupplier;
     private final Supplier<String> roleDescriptionSupplier;
@@ -62,7 +68,7 @@ implements FixtureScriptWithExecutionStrategy {
         this.roleNameSupplier = nullSafe(roleNameSupplier);
         this.roleDescriptionSupplier = nullSafe(roleDescriptionSupplier);
     }
-    
+
     @Override
     public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
         return null;
@@ -91,10 +97,28 @@ implements FixtureScriptWithExecutionStrategy {
             final ApplicationPermissionMode mode,
             final Can<ApplicationFeatureId> featureIds) {
 
-        if(featureIds == null
-                || featureIds.isEmpty()) {
+        if(featureIds == null || featureIds.isEmpty()) {
             return;
         }
+
+        final List<ApplicationFeatureId> missingFeatureIds = new ArrayList<>();
+
+        for(val featureId : featureIds) {
+            val feature = applicationFeatureRepository.findFeature(featureId);
+            if (feature == null) {
+                missingFeatureIds.add(featureId);
+            }
+        }
+
+        if (causewayConfiguration.getExtensions().getSecman().getFixtureScripts().getAbstractRoleAndPermissionsFixtureScript().getUnknownFeatureIdCheckingPolicy().isFailFast()) {
+            // ensure all featureIds specified actually exist.
+            val buf = new StringBuilder();
+            for(val featureId : missingFeatureIds) {
+                buf.append("- ").append(featureId.getFullyQualifiedName()).append("\n");
+            }
+            throw new IllegalArgumentException(String.format("No such feature(s):\n%s", buf));
+        }
+
 
         val roleName = getRoleName();
         val securityRole = applicationRoleRepository.findByName(roleName)
@@ -115,7 +139,7 @@ implements FixtureScriptWithExecutionStrategy {
         }
     }
 
-    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
+    private static <T> Supplier<T> nullSafe(final Supplier<T> supplier) {
         return supplier != null ? supplier : () -> null;
     }
 

@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.extensions.audittrail.applib.app.AuditTrailMenu;
 import org.apache.causeway.extensions.audittrail.applib.contributions.HasInteractionId_auditTrailEntries;
+import org.apache.causeway.extensions.audittrail.applib.contributions.Object_createdByCommand;
 import org.apache.causeway.extensions.audittrail.applib.contributions.Object_recentAuditTrailEntries;
 import org.apache.causeway.extensions.audittrail.applib.spiimpl.EntityPropertyChangeSubscriberForAuditTrail;
 
@@ -34,7 +35,8 @@ import org.apache.causeway.extensions.audittrail.applib.spiimpl.EntityPropertyCh
         EntityPropertyChangeSubscriberForAuditTrail.class,
 
         HasInteractionId_auditTrailEntries.class,
-        Object_recentAuditTrailEntries.class
+        Object_recentAuditTrailEntries.class,
+        Object_createdByCommand.class,
 })
 public class CausewayModuleExtAuditTrailApplib {
 

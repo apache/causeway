@@ -36,7 +36,6 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.publish;
     exports org.apache.causeway.core.runtimeservices.recognizer;
     exports org.apache.causeway.core.runtimeservices.recognizer.dae;
-    exports org.apache.causeway.core.runtimeservices.repository;
     exports org.apache.causeway.core.runtimeservices.routing;
     exports org.apache.causeway.core.runtimeservices.scratchpad;
     exports org.apache.causeway.core.runtimeservices.serializing;

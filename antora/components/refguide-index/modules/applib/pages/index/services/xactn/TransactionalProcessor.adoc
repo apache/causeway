@@ -66,8 +66,6 @@ Runs given _runnable_ with a transactional boundary, where the detailed transact
 
 Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
 
-More fine grained control is given via _#callTransactional(TransactionDefinition, Callable)_
-
 [#runTransactional_Propagation_ThrowingRunnable]
 === runTransactional(Propagation, ThrowingRunnable)
 

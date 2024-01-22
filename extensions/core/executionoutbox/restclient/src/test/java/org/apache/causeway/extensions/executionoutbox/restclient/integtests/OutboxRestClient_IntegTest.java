@@ -246,7 +246,7 @@ public class OutboxRestClient_IntegTest  {
 
     @Inject RestEndpointService restEndpointService;
 
-    @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
+    @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
     @Inject InteractionService interactionService;
     @Inject RepositoryService repositoryService;
     @Inject CounterRepository<Counter> counterRepository;

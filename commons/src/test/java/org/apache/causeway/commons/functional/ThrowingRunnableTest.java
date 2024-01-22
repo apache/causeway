@@ -36,10 +36,8 @@ class ThrowingRunnableTest {
 
         val counter = new LongAdder();
 
-        ThrowingRunnable.toCallable(()->{
-            counter.increment();
-        })
-        .call();
+        var throwingRunnable = (ThrowingRunnable) counter::increment;
+        throwingRunnable.toCallable().call();
 
         assertEquals(1L, counter.longValue());
 
@@ -49,8 +47,10 @@ class ThrowingRunnableTest {
     void shouldNotSwallow() {
 
         assertThrows(IllegalArgumentException.class, ()->{
-            ThrowingRunnable.toCallable(()->{throw _Exceptions.illegalArgument("sample");})
-            .call();
+
+            var throwingRunnable = (ThrowingRunnable) ()->{throw _Exceptions.illegalArgument("sample");};
+            throwingRunnable.toCallable().call();
+
         });
     }
 

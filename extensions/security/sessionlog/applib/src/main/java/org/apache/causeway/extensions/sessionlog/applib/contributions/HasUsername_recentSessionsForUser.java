@@ -34,7 +34,6 @@ import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
-
 import lombok.RequiredArgsConstructor;
 
 
@@ -70,6 +69,6 @@ public class HasUsername_recentSessionsForUser {
         return hasUsername == null || hasUsername.getUsername() == null;
     }
 
-    @Inject SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
+    @Inject SessionLogEntryRepository sessionLogEntryRepository;
 
 }

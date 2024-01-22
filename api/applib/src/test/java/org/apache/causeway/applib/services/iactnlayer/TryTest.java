@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 
 import lombok.val;
@@ -141,7 +140,7 @@ class TryTest {
     @Test
     void void_happy_case() {
 
-        val result = ThrowingRunnable.resultOf(this::void_happy);
+        val result = Try.run(this::void_happy);
         assertTrue(result.isSuccess());
         assertFalse(result.isFailure());
         assertEquals(null, result.getValue().orElse(null));
@@ -152,7 +151,7 @@ class TryTest {
     @Test
     void void_throwing_uncatched_case() {
 
-        val result = ThrowingRunnable.resultOf(this::void_throwing_uncatched);
+        val result = Try.run(this::void_throwing_uncatched);
         assertFalse(result.isSuccess());
         assertTrue(result.isFailure());
         assertEquals("void failed", result.getFailure().get().getMessage());
@@ -168,7 +167,7 @@ class TryTest {
     @Test
     void void_throwing_catched_case() {
 
-        val result = ThrowingRunnable.resultOf(this::void_throwing_catched);
+        val result = Try.run(this::void_throwing_catched);
         assertFalse(result.isSuccess());
         assertTrue(result.isFailure());
         assertEquals("void failed", result.getFailure().get().getMessage());

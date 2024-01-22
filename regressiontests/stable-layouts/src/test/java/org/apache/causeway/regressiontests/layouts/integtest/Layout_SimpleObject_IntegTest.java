@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -74,6 +76,7 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
             CausewayModuleApplibMixins.class,
             CausewayModuleViewerWicketApplibMixins.class,
             CausewayModuleCoreRuntimeServices.class,
+            CausewayModulePersistenceCommons.class,
             CausewayModuleSecurityBypass.class,
     })
     @PropertySources({

@@ -18,11 +18,14 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
+import java.util.Optional;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 
 import lombok.NonNull;
@@ -44,9 +47,10 @@ public record MenuAction (
                 null);
     }
 
-    @Deprecated
-    public ManagedAction managedAction(){
-        throw _Exceptions.notImplemented();
+    public Optional<ManagedAction> managedAction(){
+        var mmc = MetaModelContext.instanceElseFail();
+        var service = mmc.getObjectManager().debookmark(serviceBookmark);
+        return ManagedAction.lookupAction(service, actionId.getMemberLogicalName(), Where.NOT_SPECIFIED);
     }
 
 }

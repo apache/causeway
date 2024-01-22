@@ -19,6 +19,7 @@
 module org.apache.causeway.commons {
     exports org.apache.causeway.commons.binding;
     exports org.apache.causeway.commons.collections;
+    exports org.apache.causeway.commons.graph;
     exports org.apache.causeway.commons.semantics;
     exports org.apache.causeway.commons.concurrent;
     exports org.apache.causeway.commons.functional;
@@ -43,7 +44,6 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.internal.exceptions;
     exports org.apache.causeway.commons.internal.factory;
     exports org.apache.causeway.commons.internal.functions;
-    exports org.apache.causeway.commons.internal.graph;
     exports org.apache.causeway.commons.internal.hardening;
     exports org.apache.causeway.commons.internal.hash;
     exports org.apache.causeway.commons.internal.html;

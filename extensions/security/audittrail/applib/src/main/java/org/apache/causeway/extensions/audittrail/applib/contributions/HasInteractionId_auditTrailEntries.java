@@ -51,6 +51,7 @@ public class HasInteractionId_auditTrailEntries {
         return auditTrailEntryRepository.findByInteractionId(hasInteractionId.getInteractionId());
     }
 
-    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    @Inject
+    AuditTrailEntryRepository auditTrailEntryRepository;
 
 }

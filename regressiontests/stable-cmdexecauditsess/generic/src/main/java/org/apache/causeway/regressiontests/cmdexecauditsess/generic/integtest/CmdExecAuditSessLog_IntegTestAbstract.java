@@ -40,12 +40,9 @@ import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.Ent
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.CounterRepository;
@@ -97,16 +94,8 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     @Inject SpecificationLoader specificationLoader;
 
 
-    @Test
-    void check_facets() {
-        assertEntityPublishingDisabledFor(auditTrailEntryRepository.getEntityClass());
-        assertEntityPublishingDisabledFor(commandLogEntryRepository.getEntityClass());
-        assertEntityPublishingDisabledFor(executionLogEntryRepository.getEntityClass());
-        assertEntityPublishingDisabledFor(executionOutboxEntryRepository.getEntityClass());
 
-    }
-
-    private void assertEntityPublishingDisabledFor(final Class<?> entityClass) {
+    protected void assertEntityPublishingDisabledFor(final Class<?> entityClass) {
         val objectSpecification = specificationLoader.loadSpecification(entityClass);
         EntityChangePublishingFacet facet = objectSpecification.getFacet(EntityChangePublishingFacet.class);
         Assertions.assertThat(facet)
@@ -358,10 +347,10 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     }
 
 
-    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
-    @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
-    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject AuditTrailEntryRepository auditTrailEntryRepository;
+    @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
+    @Inject ExecutionLogEntryRepository executionLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject InteractionService interactionService;
     @Inject CounterRepository<? extends Counter> counterRepository;
     @Inject WrapperFactory wrapperFactory;

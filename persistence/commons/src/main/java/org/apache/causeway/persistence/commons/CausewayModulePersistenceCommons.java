@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.persistence.commons;
 
+import org.apache.causeway.persistence.commons.integration.repository.RepositoryServiceDefault;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -33,7 +35,12 @@ import org.apache.causeway.persistence.commons.integration.changetracking.PreAnd
         // @Service's
         EntityChangeTrackerDefault.class,
         PreAndPostValueEvaluatorServiceDefault.class,
+
+        // @Repository's
+        RepositoryServiceDefault.class,
+
 })
 public class CausewayModulePersistenceCommons {
 
+    public static final String NAMESPACE = "causeway.persistence.commons";
 }

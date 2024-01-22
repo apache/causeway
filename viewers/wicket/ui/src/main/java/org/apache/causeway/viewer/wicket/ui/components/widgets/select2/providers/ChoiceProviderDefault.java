@@ -24,56 +24,36 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
-import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
-import org.apache.causeway.viewer.commons.model.scalar.UiScalar.ChoiceProviderSort;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
 
-public class ChoiceProviderForReferences
+public class ChoiceProviderDefault
 extends ChoiceProviderAbstractForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
-    private final UiScalar.ChoiceProviderSort choiceProviderSort;
-
-    public ChoiceProviderForReferences(
+    public ChoiceProviderDefault(
             final ScalarModel scalarModel) {
         super(scalarModel);
-        this.choiceProviderSort = ChoiceProviderSort.valueOf(scalarModel);
     }
 
     @Override
-    protected Can<ObjectMemento> query(final String term) {
-        switch(choiceProviderSort) {
-        case CHOICES:
-            return super.filter(term, queryAll());
-        case AUTO_COMPLETE:
-            return queryWithAutoComplete(term);
-        case OBJECT_AUTO_COMPLETE:
-            return queryWithAutoCompleteUsingObjectSpecification(term);
-        case NO_CHOICES:
-        default:
-            // fall through
-        }
-        return Can.empty();
-    }
-
-    // -- HELPER
-
-    private Can<ObjectMemento> queryAll() {
+    protected Can<ObjectMemento> queryAll() {
         return scalarModel().getChoices() // must not return detached entities
                 .map(ManagedObject::getMementoElseFail);
     }
 
-    private Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(final String term) {
+    @Override
+    protected Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(final String term) {
         val autoCompleteAdapters = Facets
                 .autoCompleteExecute(scalarModel().getElementType(), term);
         return autoCompleteAdapters
                 .map(ManagedObject::getMementoElseFail);
     }
 
-    private Can<ObjectMemento> queryWithAutoComplete(final String term) {
+    @Override
+    protected Can<ObjectMemento> queryWithAutoComplete(final String term) {
         val scalarModel = scalarModel();
         val pendingArgs = scalarModel.isParameter()
                 ? ((UiParameter)scalarModel).getParameterNegotiationModel().getParamValues()
@@ -96,6 +76,8 @@ extends ChoiceProviderAbstractForScalarModel {
                 .map(ManagedObject::getMementoElseFail);
     }
 
+    // -- HELPER
+
     private Can<ManagedObject> reconstructPendingArgs(
             final UiParameter parameterModel,
             final Can<ObjectMemento> pendingArgMementos) {
@@ -106,6 +88,5 @@ extends ChoiceProviderAbstractForScalarModel {
 
        return pendingArgsList;
     }
-
 
 }

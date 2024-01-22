@@ -53,7 +53,7 @@ public class OutboxRestApi  {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxRestApi";
 
-    final @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> entryRepository;
+    final @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
 
     /**
      * This action is intended to be invoked with <code>Accept</code> header set to
@@ -70,7 +70,7 @@ public class OutboxRestApi  {
     )
     public OutboxEvents pending() {
         val outboxEvents = factoryService.viewModel(new OutboxEvents());
-        List<? extends ExecutionOutboxEntry> entries = entryRepository.findOldest();
+        List<? extends ExecutionOutboxEntry> entries = executionOutboxEntryRepository.findOldest();
         outboxEvents.getExecutions().addAll(entries);
         return outboxEvents;
     }
@@ -81,7 +81,7 @@ public class OutboxRestApi  {
             commandPublishing = Publishing.DISABLED
     )
     public void delete(final String interactionId, final int sequence) {
-        entryRepository.deleteByInteractionIdAndSequence(UUID.fromString(interactionId), sequence);
+        executionOutboxEntryRepository.deleteByInteractionIdAndSequence(UUID.fromString(interactionId), sequence);
     }
 
     @Action(
@@ -95,7 +95,7 @@ public class OutboxRestApi  {
                 forEach(interactionType -> {
                     val interactionId = interactionType.getInteractionId();
                     val sequence = interactionType.getExecution().getSequence();
-                    entryRepository.deleteByInteractionIdAndSequence(UUID.fromString(interactionId), sequence);
+                    executionOutboxEntryRepository.deleteByInteractionIdAndSequence(UUID.fromString(interactionId), sequence);
                 });
     }
 

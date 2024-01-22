@@ -251,6 +251,24 @@ max-pending
 
 
 |
+[[causeway.extensions.layout-loaders.github.api-key]]
+causeway.extensions.layout-loaders. +
+github.api-key
+
+| 
+| As per https://github.com/settings/tokens, must have permissions to the ``/search`` and ``/contents`` APIs for the specified repository.
+
+
+|
+[[causeway.extensions.layout-loaders.github.repository]]
+causeway.extensions.layout-loaders. +
+github.repository
+
+| 
+| eg ``apache/causeway-app-simpleapp``
+
+
+|
 [[causeway.extensions.secman.delegated-users.auto-create-policy]]
 causeway.extensions.secman. +
 delegated-users.auto-create-policy

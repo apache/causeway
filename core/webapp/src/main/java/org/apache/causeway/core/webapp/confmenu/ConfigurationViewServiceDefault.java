@@ -28,18 +28,13 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.MutablePropertySources;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -48,7 +43,6 @@ import org.apache.causeway.applib.services.confview.ConfigurationViewService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -195,11 +189,10 @@ implements
     private Map<String, ConfigurationProperty> loadPrimary(final List<String> primaryPrefixes) {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-            final ConfigurableEnvironment springEnv = configuration.getEnvironment();
-            streamConfigurationPropertyNames(springEnv)
+            configuration.streamConfigurationPropertyNames()
             .filter(propName->primaryPrefixes.stream().anyMatch(propName::startsWith))
             .forEach(propName -> {
-                String propertyValue = springEnv.getProperty(propName);
+                String propertyValue = configuration.valueOf(propName).orElse(null);
                 add(propName, propertyValue, map);
             });
 
@@ -222,11 +215,10 @@ implements
     private Map<String, ConfigurationProperty> loadSecondary(final Set<String> toBeExcluded) {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-            final ConfigurableEnvironment springEnv = configuration.getEnvironment();
-            streamConfigurationPropertyNames(springEnv)
+            configuration.streamConfigurationPropertyNames()
             .filter(propName->!toBeExcluded.contains(propName))
             .forEach(propName -> {
-                String propertyValue = springEnv.getProperty(propName);
+                String propertyValue = configuration.valueOf(propName).orElse(null);
                 add(propName, propertyValue, map);
             });
 
@@ -265,17 +257,6 @@ implements
                 configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())
                 // fallback to configuration default policy
                 .orElseGet(()->new CausewayConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
-    }
-
-    private static Stream<String> streamConfigurationPropertyNames(final ConfigurableEnvironment springEnv) {
-        MutablePropertySources propertySources = springEnv.getPropertySources();
-            return StreamSupport
-            .stream(propertySources.spliterator(), false)
-            .filter(EnumerablePropertySource.class::isInstance)
-            .map(EnumerablePropertySource.class::cast)
-            .filter(ps->!"systemEnvironment".equalsIgnoreCase(ps.getName())) // exclude system env
-            .map(EnumerablePropertySource::getPropertyNames)
-            .flatMap(_NullSafe::stream);
     }
 
 }

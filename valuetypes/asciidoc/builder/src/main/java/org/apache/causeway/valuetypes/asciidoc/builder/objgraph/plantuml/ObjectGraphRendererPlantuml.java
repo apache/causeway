@@ -78,9 +78,11 @@ public class ObjectGraphRendererPlantuml implements ObjectGraph.Renderer {
         case ONE_TO_ONE:
         case ONE_TO_MANY:
         case MERGED_ASSOCIATIONS:
-            return String.format("%s -> \"%s\" %s", rel.fromId(), rel.labelFormatted(), rel.toId());
+            return String.format("%s -> \"%s\" %s",
+                    rel.fromId(), rel.descriptionFormatted() /*NOTE: format has no effect if merged*/, rel.toId());
         case BIDIR_ASSOCIATION:
-            return String.format("%s \"%s\" -- \"%s\" %s", rel.fromId(), rel.label(), rel.label2(), rel.toId());
+            return String.format("%s \"%s\" -- \"%s\" %s : %s",
+                    rel.fromId(), rel.nearLabel(), rel.farLabel(), rel.toId(), rel.description() /*NOTE: already formated*/);
         case INHERITANCE:
             return String.format("%s --|> %s", rel.fromId(), rel.toId());
         }

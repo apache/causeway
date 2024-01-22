@@ -1,0 +1,54 @@
+= Migrating from RC4 to RC5
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+This page will be added to as development progresses.
+
+== AuditTrailEntryRepository and others have simplified the API (CAUSEWAY-3390)
+
+In this release the `AuditTrailEntryRepository` and similar is no longer parameterized by the entity type, and is also an interface.
+
+So, instead of:
+
+[source,java]
+----
+@Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+----
+
+it should now be just:
+
+[source,java]
+----
+@Inject AuditTrailEntryRepository auditTrailEntryRepository;
+----
+
+This applies to:
+
+* xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntryRepository.adoc[]
+* xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepository.adoc[]
+* xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryRepository.adoc[]
+* xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryRepository.adoc[]
+* xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntryRepository.adoc[]
+
+For more details, see link:https://issues.apache.org/jira/browse/CAUSEWAY-3390[CAUSEWAY-3390].
+
+
+== Auto-flush management (CAUSEWAY-3675)
+
+By default any queries executed by xref:refguide:applib:index/services/repository/RepositoryService.adoc[] are preceded by a flush first.
+The rationale behind this is to make sure that everything that might have changed is in the database.
+
+However, with JDO at least, this behaviour can cause a `ConcurrentModificationException` when coupled with the  xref:refguide:persistence:index/commons/integration/changetracking/EntityChangeTrackerDefault.adoc[] internal service, used by auditing.
+This grabs the value of properties, including derived properties that are evaluated using a query.
+
+So now, xref:refguide:persistence:index/commons/integration/changetracking/EntityChangeTrackerDefault.adoc[] suppresses the autoflush.
+
+Changes:
+
+* To revert to the original behaviour, use the new `causeway.commons.persistence.entity-change-tracker.suppress-auto-flush` property.
+
+* The `causeway.core.runtime-services.repository=service.disable-auto-flush` configuration property has been renamed to `causeway.commons.persistence.repository-service.disable-auto-flush`.
+
+For more details, see link:https://issues.apache.org/jira/browse/CAUSEWAY-3675[CAUSEWAY-3675].
+

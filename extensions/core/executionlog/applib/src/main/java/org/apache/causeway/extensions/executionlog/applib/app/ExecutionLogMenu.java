@@ -25,6 +25,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -40,7 +41,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -67,7 +67,7 @@ public class ExecutionLogMenu {
             extends CausewayModuleExtExecutionLogApplib.ActionDomainEvent<T> { }
 
 
-    final ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
+    final ExecutionLogEntryRepository executionLogEntryRepository;
     final ClockService clockService;
 
 

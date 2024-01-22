@@ -34,6 +34,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -55,10 +57,15 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import org.apache.causeway.applib.query.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
+import org.springframework.core.env.MutablePropertySources;
 import org.springframework.validation.annotation.Validated;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -99,7 +106,6 @@ import org.apache.causeway.schema.cmd.v2.ParamDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
@@ -156,6 +162,37 @@ public class CausewayConfiguration {
         this.environment = environment;
         this.buildProperties = buildProperties;
     }
+
+
+    /**
+     * All known configuration property names.
+     *
+     * <p>
+     *     Or at least, from the {@link org.springframework.core.env.PropertySource} obtained from
+     *     {@link ConfigurableEnvironment#getPropertySources()} that are also {@link EnumerablePropertySource}s.
+     * </p>
+     * @return
+     */
+    public Stream<String> streamConfigurationPropertyNames() {
+        MutablePropertySources propertySources = environment.getPropertySources();
+        return StreamSupport
+                .stream(propertySources.spliterator(), false)
+                .filter(EnumerablePropertySource.class::isInstance)
+                .map(EnumerablePropertySource.class::cast)
+                .filter(ps->!"systemEnvironment".equalsIgnoreCase(ps.getName())) // exclude system env
+                .map(EnumerablePropertySource::getPropertyNames)
+                .flatMap(_NullSafe::stream);
+    }
+
+    /**
+     * The value of a specific configuration property
+     *
+     * @param configurationPropertyName  - eg as obtained from {@link #streamConfigurationPropertyNames()}.
+     */
+    public Optional<String> valueOf(String configurationPropertyName) {
+        return Optional.ofNullable(environment.getProperty(configurationPropertyName));
+    }
+
 
     private final Security security = new Security();
     @Data
@@ -1891,19 +1928,21 @@ public class CausewayConfiguration {
             private final RepositoryService repositoryService = new RepositoryService();
             @Data
             public static class RepositoryService {
+                private boolean disableAutoFlush = false;
+
                 /**
                  * Normally any queries are automatically preceded by flushing pending executions.
                  *
                  * <p>
                  * This key allows this behaviour to be disabled.
-                 *
-                 * <p>
-                 *     NOTE: this key is redundant for JPA/EclipseLink, which supports its own auto-flush using
-                 *     <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABDHEEB">eclipselink.persistence-context.flush-mode</a>
                  * </p>
+                 *
+                 * @deprecated - use instead <code>causeway.persistence.commons.repository-service.disable-auto-flush</code>
                  */
-                private boolean disableAutoFlush = false;
-
+                @DeprecatedConfigurationProperty(replacement = "causeway.persistence.commons.repository-service.disable-auto-flush")
+                public boolean isDisableAutoFlush() {
+                    return disableAutoFlush;
+                }
             }
 
             private final ExceptionRecognizer exceptionRecognizer = new ExceptionRecognizer();
@@ -1980,6 +2019,52 @@ public class CausewayConfiguration {
     private final Persistence persistence = new Persistence();
     @Data
     public static class Persistence {
+
+        private final Commons commons = new Commons();
+        @Data
+        public static class Commons {
+
+            private final RepositoryService repositoryService = new RepositoryService();
+            @Data
+            public static class RepositoryService {
+
+                /**
+                 * Normally any queries are automatically preceded by flushing pending executions.
+                 *
+                 * <p>
+                 * This key allows this behaviour to be disabled.
+                 *
+                 * <p>
+                 *     NOTE: this key is redundant for JPA/EclipseLink, which supports its own auto-flush using
+                 *     <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABDHEEB">eclipselink.persistence-context.flush-mode</a>
+                 * </p>
+                 */
+                private boolean disableAutoFlush = false;
+            }
+
+            private final EntityChangeTracker entityChangeTracker = new EntityChangeTracker();
+            @Data
+            public static class EntityChangeTracker {
+                /**
+                 * Normally any query submitted to {@link org.apache.causeway.applib.services.repository.RepositoryService#allMatches(Query)} will trigger a
+                 * flush first, unless auto-flush has been {@link Core.RuntimeServices.RepositoryService#isDisableAutoFlush() disabled}.
+                 *
+                 * <p>
+                 *     However, this auto-flush behaviour can be troublesome if the query occurs as a side-effect of the evaluation of a derived property,
+                 *     whose value in turn is enlisted by an implementation of a subscriber (in particular {@link EntityPropertyChangeSubscriber}) which
+                 *     captures the value of all properties (both persisted and derived).  However, this behaviour can (at least under JDO), result in a {@link java.util.ConcurrentModificationException}.
+                 * </p>
+                 *
+                 * <p>
+                 *     By default, {@link EntityChangeTracker} will therefore temporarily suppress any auto-flushing while this is ongoing.  The purpose
+                 *     of this configuration property is to never suppress, ie always autoflush.
+                 * </p>
+                 */
+                private boolean suppressAutoFlush = true;
+            }
+
+        }
+
 
         private final Schema schema = new Schema();
         @Data
@@ -3524,6 +3609,7 @@ public class CausewayConfiguration {
         public static class Secman {
 
             private final Seed seed = new Seed();
+            @Data
             public static class Seed {
 
                 public static final String ADMIN_USER_NAME_DEFAULT = "secman-admin";
@@ -3551,10 +3637,8 @@ public class CausewayConfiguration {
                  * Eg. seed from a YAML file, that was previously exported by SecMan's
                  * ApplicationRoleManager_exportAsYaml mixin.
                  */
-                @Getter @Setter
                 private String yamlFile = null;
 
-                @Getter
                 private final Admin admin = new Admin();
                 @Data
                 public static class Admin {
@@ -3654,7 +3738,6 @@ public class CausewayConfiguration {
 
                 }
 
-                @Getter
                 private final RegularUser regularUser = new RegularUser();
                 @Data
                 public static class RegularUser {
@@ -3670,6 +3753,37 @@ public class CausewayConfiguration {
                      */
                     private String roleName = REGULAR_USER_ROLE_NAME_DEFAULT;
 
+                }
+
+            }
+
+            private final FixtureScripts fixtureScripts = new FixtureScripts();
+            @Data
+            public static class FixtureScripts {
+
+                private final AbstractRoleAndPermissionsFixtureScript abstractRoleAndPermissionsFixtureScript = new AbstractRoleAndPermissionsFixtureScript();
+                @Data
+                public static class AbstractRoleAndPermissionsFixtureScript {
+
+                    public enum UnknownFeatureIdCheckingPolicy {
+                        /**
+                         * Do not check whether the featureIds passed in actually exist.
+                         */
+                        IGNORE,
+                        /**
+                         * Check that the featureIds passed in actually exist, and fail immediately if not.
+                         */
+                        FAIL_FAST,
+                        ;
+
+                        public boolean isIgnore() { return this == IGNORE; }
+                        public boolean isFailFast() { return this == FAIL_FAST; }
+                    }
+
+                    /**
+                     * Whether to check if every featureId passed in exists or not.
+                     */
+                    private UnknownFeatureIdCheckingPolicy unknownFeatureIdCheckingPolicy = UnknownFeatureIdCheckingPolicy.IGNORE;
                 }
 
             }

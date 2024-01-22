@@ -34,7 +34,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.2</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -81,9 +81,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-		<maven-surefire-report-plugin.version>3.2.3</maven-surefire-report-plugin.version>
+		<maven-surefire-report-plugin.version>3.2.5</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
-        <maven.plugin.tools.version>3.10.2</maven.plugin.tools.version>
+        <maven.plugin.tools.version>3.11.0</maven.plugin.tools.version>
 
         <!-- LIBRARY DEPENDENCIES -->
 
@@ -92,7 +92,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <asm.version>9.6</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>22.3.3</approvaltests.version>
 
-        <assertj-guava.version>3.24.2</assertj-guava.version>
+        <assertj-guava.version>3.25.1</assertj-guava.version>
 
         <commons-email.version>1.6.0</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
@@ -113,7 +113,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <docx4j.version>11.3.2</docx4j.version>
 
         <easymock.version>5.2.0</easymock.version>
-        <error_prone_annotations.version>2.24.0</error_prone_annotations.version>
+        <error_prone_annotations.version>2.24.1</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <guava.version>33.0.0-jre</guava.version>
@@ -139,13 +139,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <jdom.version>2.0.6.1</jdom.version>
         <jmock.version>2.12.0</jmock.version>
-        <joda-time.version>2.12.5</joda-time.version>
+        <joda-time.version>2.12.6</joda-time.version>
         <jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
         <jquery-ui.version>1.13.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
         <jsr305.version>3.0.2</jsr305.version>
-        <jsoup.version>1.17.1</jsoup.version>
+        <jsoup.version>1.17.2</jsoup.version>
         <junit-jupiter.version>5.10.1</junit-jupiter.version> <!-- overrides spring -->
         <junit-platform.version>1.10.1</junit-platform.version>
 
@@ -163,15 +163,15 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
         <resteasy-spring.version>3.1.0.Final</resteasy-spring.version>
-        <resteasy.version>6.2.6.Final</resteasy.version> <!-- be awre of potential clashes with https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-spring-boot-starter -->
+        <resteasy.version>6.2.7.Final</resteasy.version> <!-- be awre of potential clashes with https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-spring-boot-starter -->
         <resteasy-jaxb-provider.version>6.2.2.Final</resteasy-jaxb-provider.version>
 
         <select2.version>4.0.13</select2.version>
         <shiro.version>2.0.0-alpha-4</shiro.version> <!-- latest release was 1.10.0, however we need jakarta namespace support -->
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
-        <slf4j-api.version>2.0.9</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
+        <slf4j-api.version>2.0.11</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.2.1</spring-boot.version>
+        <spring-boot.version>3.2.2</spring-boot.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.20</swagger-core.version>
@@ -1466,7 +1466,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
 				<artifactId>woodstox-core</artifactId>
-				<version>6.5.1</version>
+				<version>6.6.0</version>
 			</dependency>
             <dependency>
 				<groupId>org.codehaus.woodstox</groupId>
@@ -2330,7 +2330,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.15</version>
+                    <version>0.16</version>
                     <configuration>
                         <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
                         <excludeSubProjects>true</excludeSubProjects>

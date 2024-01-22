@@ -421,6 +421,16 @@ public final class _Strings {
                 : input;
     }
 
+    /**
+     * Returns a {@link StringOperator} that converts given literal into {@code prefix + literal + suffix} ,
+     * unless the literal is {@code null}, in which case the operator returns {@code null}.
+     */
+    public static final StringOperator bracketed(final @NonNull String prefix, final @NonNull String suffix) {
+        return s->s!=null
+                ? prefix + s + suffix
+                : null;
+    }
+
     // -- REDUCTION (BINARY OPERATIOR)
 
     /**
@@ -827,6 +837,30 @@ public final class _Strings {
     // using naming convention asXxx...
 
     public static final StringOperator asLowerCase = _Strings::lower;
+    public static final StringOperator asUpperCase = _Strings::upper;
+    public static final StringOperator asCapitalized = _Strings::capitalize;
+    public static final StringOperator asDecapitalized = _Strings::decapitalize;
+
+    /**
+     * Converts given literal into a double-quoted literal, unless the literal is {@code null},
+     * in which case {@code null} is returned.
+     */
+    public static final StringOperator asDoubleQuoted = bracketed("\"", "\"");
+    /**
+     * Converts given literal into a square-bracketed literal, unless the literal is {@code null},
+     * in which case {@code null} is returned.
+     */
+    public static final StringOperator asSquareBracketed = bracketed("[", "]");
+    /**
+     * Converts given literal into a parenthesis-bracketed literal, unless the literal is {@code null},
+     * in which case {@code null} is returned.
+     */
+    public static final StringOperator asParenthesisBracketed = bracketed("(", ")");
+    /**
+     * Converts given literal into a curly-bracketed literal, unless the literal is {@code null},
+     * in which case {@code null} is returned.
+     */
+    public static final StringOperator asCurlyBracketed = bracketed("{", "}");
 
     public static final StringOperator asLowerDashed = asLowerCase
             .compose(s->_Strings.condenseWhitespaces(s, "-"));
@@ -851,10 +885,10 @@ public final class _Strings {
             s->_Strings_CamelCase.camelCase(s, firstToken->firstToken);
 
     public static final StringOperator asCamelCaseDecapitalized =
-            s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.decapitalize(firstToken));
+            s->_Strings_CamelCase.camelCase(s, asDecapitalized);
 
     public static final StringOperator asCamelCaseCapitalized =
-            s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.capitalize(firstToken));
+            s->_Strings_CamelCase.camelCase(s, asCapitalized);
     public static final StringOperator asPascalCase = asCamelCaseCapitalized; // synonym
 
     public static final String asFileNameWithExtension(final @NonNull String fileName, final @NonNull String fileExtension) {

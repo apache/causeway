@@ -31,9 +31,9 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
@@ -41,6 +41,7 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 @Configuration
 @Import({
     CausewayModuleCoreRuntimeServices.class,
+    CausewayModulePersistenceCommons.class,
     CausewayModuleSecurityBypass.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
     DomainObjectTesterFactory.class // Helper for JUnit Tests
@@ -76,24 +77,5 @@ public class Configuration_headless {
             }
         };
     }
-
-
-    @Bean @Singleton
-    public MetricsService metricsService() {
-        return new MetricsService() {
-
-            @Override
-            public int numberEntitiesLoaded() {
-                return 0;
-            }
-
-            @Override
-            public int numberEntitiesDirtied() {
-                return 0;
-            }
-
-        };
-    }
-
 
 }

@@ -157,6 +157,8 @@ Locate this property in `bom/pom.xml` and update to the current date/time.
 
 The next step is to generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated.
 
+* Switch to Java 17
+
 * Make sure the tooling is built:
 +
 [source,bash,subs="attributes+"]
@@ -172,6 +174,9 @@ sh preview.sh
 ----
 +
 NOTE: this now runs `mvnd clean install -pl core/config` automatically.
+
+* Switch to Java 11 afterwards
+
 
 Check for any Asciidoc errors, and fix.
 Also double-check that the config property files are correctly formatted.
@@ -229,7 +234,7 @@ We also recommend creating a separate git worktree to capture any documentation 
 +
 [source,bash,subs="attributes+"]
 ----
-git branch -b $CAUSEWAYBRANCH
+git checkout -b $CAUSEWAYBRANCH
 ----
 
 * Push the branch:
@@ -251,6 +256,8 @@ cd bom
 ----
 
 === Bump projects to `$CAUSEWAYREL`
+
+IMPORTANT: make sure you have switched back to Java 11 to perform the build.
 
 We use `mvnd versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).

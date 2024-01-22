@@ -28,6 +28,8 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -39,8 +41,6 @@ import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -60,7 +60,7 @@ public class SessionSubscriberForSessionLog implements SessionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLoggingServiceDefault";
 
-    final SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
+    final SessionLogEntryRepository sessionLogEntryRepository;
     final TransactionService transactionService;
     final InteractionService interactionService;
     final ClockService clockService;

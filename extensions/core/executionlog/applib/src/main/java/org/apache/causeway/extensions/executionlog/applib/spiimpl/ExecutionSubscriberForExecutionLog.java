@@ -22,16 +22,16 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -49,7 +49,7 @@ public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionSubscriberForExecutionLog";
 
-    final ExecutionLogEntryRepository<? extends ExecutionLogEntry> repository;
+    final ExecutionLogEntryRepository executionLogEntryRepository;
     final CausewayConfiguration causewayConfiguration;
 
     @Override
@@ -58,12 +58,12 @@ public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
     }
 
     @Override
-    public void onExecution(final Execution<?, ?> execution) {
+    public void onExecution(Execution<?, ?> execution) {
         if (!isEnabled()) {
             return;
         }
 
-        repository.createEntryAndPersist(execution);
+        executionLogEntryRepository.createEntryAndPersist(execution);
     }
 
 }

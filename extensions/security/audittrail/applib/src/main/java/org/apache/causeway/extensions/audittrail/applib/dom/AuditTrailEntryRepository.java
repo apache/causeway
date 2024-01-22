@@ -20,264 +20,69 @@
 
 package org.apache.causeway.extensions.audittrail.applib.dom;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
-
-import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides supporting functionality for querying {@link AuditTrailEntry audit trail entry} entities.
  *
  * @since 2.0 {@index}
  */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
+public interface AuditTrailEntryRepository {
 
 
-    private final Class<E> auditTrailEntryClass;
+    AuditTrailEntry createFor(final EntityPropertyChange change);
 
-    @Inject RepositoryService repositoryService;
-    @Inject FactoryService factoryService;
-    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
+    Optional<AuditTrailEntry> findFirstByTarget(final Bookmark target);
 
-    public Class<E> getEntityClass() {
-        return auditTrailEntryClass;
-    }
+    List<AuditTrailEntry> findRecentByTarget(final Bookmark target);
 
-    public AuditTrailEntry createFor(final EntityPropertyChange change) {
-        E entry = factoryService.detachedEntity(auditTrailEntryClass);
-        entry.init(change);
-        return repositoryService.persistAndFlush(entry);
-    }
-
-    public Optional<E> findFirstByTarget(final Bookmark target) {
-        return repositoryService.firstMatch(
-                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_FIRST_BY_TARGET)
-                        .withParameter("target", target)
-                        .withLimit(2)
-        );
-    }
-
-    public List<E> findRecentByTarget(final Bookmark target) {
-        return repositoryService.allMatches(
-                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_RECENT_BY_TARGET)
-                        .withParameter("target", target)
-                        .withLimit(100)
-        );
-    }
-
-    public List<E> findRecentByTargetAndPropertyId(
+    List<AuditTrailEntry> findRecentByTargetAndPropertyId(
             final Bookmark target,
-            final String propertyId) {
-        final String targetStr = target.toString();
-        return repositoryService.allMatches(
-                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_RECENT_BY_TARGET_AND_PROPERTY_ID)
-                        .withParameter("target", target)
-                        .withParameter("propertyId", propertyId)
-                        .withLimit(30)
-        );
-    }
+            final String propertyId);
 
-    public List<E> findByInteractionId(final UUID interactionId) {
-        return repositoryService.allMatches(
-                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_INTERACTION_ID)
-                        .withParameter("interactionId", interactionId)
-        );
-    }
+    List<AuditTrailEntry> findByInteractionId(final UUID interactionId);
 
-    public List<E> findByTargetAndFromAndTo(
+    List<AuditTrailEntry> findByTargetAndFromAndTo(
             final Bookmark target,
             final LocalDate from,
-            final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+            final LocalDate to);
 
-        final Query<E> query;
-        if(from != null) {
-            if(to != null) {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN)
-                        .withParameter("target", target)
-                        .withParameter("from", fromTs)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER)
-                        .withParameter("target", target)
-                        .withParameter("from", fromTs);
-            }
-        } else {
-            if(to != null) {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE)
-                        .withParameter("target", target)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_TARGET)
-                        .withParameter("target", target)
-                ;
-            }
-        }
-        return repositoryService.allMatches(query);
-    }
-
-    public List<E> findByFromAndTo(
+    List<AuditTrailEntry> findByFromAndTo(
             final LocalDate from,
-            final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+            final LocalDate to);
 
-        final Query<E> query;
-        if(from != null) {
-            if(to != null) {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_TIMESTAMP_BETWEEN)
-                        .withParameter("from", fromTs)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_TIMESTAMP_AFTER)
-                        .withParameter("from", fromTs);
-            }
-        } else {
-            if(to != null) {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_TIMESTAMP_BEFORE)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND);
-            }
-        }
-        return repositoryService.allMatches(query);
-    }
+    List<AuditTrailEntry> findMostRecent();
 
-    private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, final int daysOffset) {
-        return dt!=null
-                ? Timestamp.valueOf(dt.atStartOfDay().plusDays(daysOffset))
-                :null;
-    }
+    List<AuditTrailEntry> findMostRecent(final int limit);
 
-
-    public List<E> findMostRecent() {
-        return findMostRecent(100);
-    }
-
-    public List<E> findMostRecent(final int limit) {
-        return repositoryService.allMatches(
-                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_MOST_RECENT).withLimit(limit));
-    }
-
-    public List<E> findByUsernameAndFromAndTo(
+    List<AuditTrailEntry> findByUsernameAndFromAndTo(
             final String username,
             final LocalDate from,
-            final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+            final LocalDate to);
 
-        final Query<E> query;
-        if(from != null) {
-            if(to != null) {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN)
-                        .withParameter("username", username)
-                        .withParameter("from", fromTs)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_AFTER)
-                        .withParameter("username", username)
-                        .withParameter("from", fromTs);
-            }
-        } else {
-            if(to != null) {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE)
-                        .withParameter("username", username)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME)
-                        .withParameter("username", username)
-                ;
-            }
-        }
-        return repositoryService.allMatches(query);
-    }
-
-    public List<E> findByUsernameAndTargetAndFromAndTo(
+    List<AuditTrailEntry> findByUsernameAndTargetAndFromAndTo(
             final String username,
             final Bookmark target,
             final LocalDate from,
-            final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+            final LocalDate to);
 
-        final Query<E> query;
-        if(from != null) {
-            if(to != null) {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BETWEEN)
-                        .withParameter("username", username)
-                        .withParameter("target", target)
-                        .withParameter("from", fromTs)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_AFTER)
-                        .withParameter("username", username)
-                        .withParameter("target", target)
-                        .withParameter("from", fromTs);
-            }
-        } else {
-            if(to != null) {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BEFORE)
-                        .withParameter("username", username)
-                        .withParameter("target", target)
-                        .withParameter("to", toTs);
-            } else {
-                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TARGET)
-                        .withParameter("username", username)
-                        .withParameter("target", target)
-                ;
-            }
-        }
-        return repositoryService.allMatches(query);
-    }
-
-
-    public List<E> findRecentByUsername(final String username) {
-        return repositoryService.allMatches(
-                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_RECENT_BY_USERNAME)
-                        .withParameter("username", username)
-                        .withLimit(100)
-        );
-    }
-
+    List<AuditTrailEntry> findRecentByUsername(final String username);
 
 
     /**
      * intended for testing only
      */
-    public List<? extends AuditTrailEntry> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot call 'findAll' in production systems");
-        }
-        return repositoryService.allMatches(
-                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND)
-        );
-    }
+    List<AuditTrailEntry> findAll();
 
     /**
      * intended for testing only
      */
-    public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
-        }
-        repositoryService.removeAll(auditTrailEntryClass);
-    }
-
+    void removeAll();
 
 }

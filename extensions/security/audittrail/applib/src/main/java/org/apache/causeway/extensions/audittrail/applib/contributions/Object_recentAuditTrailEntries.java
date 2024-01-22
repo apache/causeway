@@ -19,7 +19,9 @@
  */
 package org.apache.causeway.extensions.audittrail.applib.contributions;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,8 +70,14 @@ public class Object_recentAuditTrailEntries {
 
     @MemberSupport public List<? extends AuditTrailEntry> act(
             final String propertyName) {
-        val target = bookmarkService.bookmarkForElseFail(domainObject);
-        return auditTrailEntryRepository.findRecentByTargetAndPropertyId(target, propertyName);
+        List<AuditTrailEntry> auditTrailEntries = new ArrayList<>();
+        bookmarkService.bookmarksFor(domainObject).forEach(
+                bookmark -> {
+                    List<AuditTrailEntry> recent = auditTrailEntryRepository.findRecentByTargetAndPropertyId(bookmark, propertyName);
+                    auditTrailEntries.addAll(recent);
+                });
+        auditTrailEntries.sort(Comparator.comparing(AuditTrailEntry::getTimestamp).reversed());
+        return auditTrailEntries;
     }
     @MemberSupport public List<String> choices0Act() {
         val domainClass = domainObject.getClass();
@@ -93,6 +101,6 @@ public class Object_recentAuditTrailEntries {
 
     @Inject MetaModelService metaModelService;
     @Inject ApplicationFeatureRepository applicationFeatureRepository;
-    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    @Inject AuditTrailEntryRepository auditTrailEntryRepository;
     @Inject BookmarkService bookmarkService;
 }

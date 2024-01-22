@@ -21,12 +21,15 @@ package org.apache.causeway.core.metamodel.services.metamodel;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.apache.causeway.commons.collections.Can;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -76,6 +79,24 @@ public class MetaModelServiceDefault implements MetaModelService {
     public Optional<LogicalType> lookupLogicalTypeByName(final @Nullable String logicalTypeName) {
         return specificationLoader.specForLogicalTypeName(logicalTypeName)
                 .map(ObjectSpecification::getLogicalType);
+    }
+
+    @Override
+    public Can<LogicalType> logicalTypeAndAliasesFor(final LogicalType logicalType) {
+        Set<LogicalType> logicalTypes = new TreeSet<>();
+        specificationLoader.specForLogicalType(logicalType)
+                .ifPresent(objectSpecification -> {
+                    logicalTypes.add(logicalType);
+                    objectSpecification.getAliases().stream().forEach(logicalTypes::add);
+                });
+        return Can.ofCollection(logicalTypes);
+    }
+
+    @Override
+    public Can<LogicalType> logicalTypeAndAliasesFor(final @Nullable String logicalTypeName) {
+        return lookupLogicalTypeByName(logicalTypeName)
+                .map(this::logicalTypeAndAliasesFor)
+                .orElse(Can.empty());
     }
 
     @Override

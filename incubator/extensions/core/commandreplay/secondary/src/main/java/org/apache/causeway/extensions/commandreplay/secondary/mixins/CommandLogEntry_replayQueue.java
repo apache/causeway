@@ -52,6 +52,6 @@ public class CommandLogEntry_replayQueue {
     }
 
     @Inject SecondaryConfig secondaryConfig;
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
 
 }

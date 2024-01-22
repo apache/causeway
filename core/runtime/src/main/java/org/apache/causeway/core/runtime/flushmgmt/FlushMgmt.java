@@ -16,38 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.commons.internal.graph;
+package org.apache.causeway.core.runtime.flushmgmt;
 
-import java.util.function.BiPredicate;
-import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
+import lombok.experimental.UtilityClass;
 
-import lombok.RequiredArgsConstructor;
+@UtilityClass
+public class FlushMgmt {
 
-/**
- * <h1>- internal use only -</h1>
- * <p>
- * Adjacency Matrix
- * </p>
- * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
- * These may be changed or removed without notice!
- * </p>
- *
- * @since 2.0
- */
-@RequiredArgsConstructor(staticName = "of")
-public class _Graph<T> {
-
-    private final Can<T> nodes;
-    private final BiPredicate<T, T> relationPredicate;
-
-    public Stream<T> streamNeighbors(T a) {
-        return nodes.stream()
-        .filter(b->!a.equals(b))
-        .filter(b->relationPredicate.test(a, b));
+    private static final ThreadLocal<Boolean> autoFlushSuppressed = ThreadLocal.withInitial(() -> false);
+    public static boolean isAutoFlushSuppressed() {
+        return autoFlushSuppressed.get();
     }
-
+    public static void suppressAutoFlush(final Runnable runnable) {
+        final boolean onEntry = autoFlushSuppressed.get();
+        try {
+            autoFlushSuppressed.set(true);
+            runnable.run();
+        } finally {
+            if(onEntry) {
+                // perhaps superfluous but just in case
+                autoFlushSuppressed.set(true);
+            } else {
+                autoFlushSuppressed.remove();
+            }
+        }
+    }
 
 }
