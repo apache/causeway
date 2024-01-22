@@ -37,7 +37,7 @@ public class GqlvProperty extends GqlvAssociation<OneToOneAssociation, GqlvPrope
             fieldDefinition = newFieldDefinition()
                     .name(otoa.getId())
                     .type(type).build();
-            domainObject.addPropertyField(fieldDefinition);
+            domainObject.addField(fieldDefinition);
         }
         return fieldDefinition;
     }
@@ -69,7 +69,4 @@ public class GqlvProperty extends GqlvAssociation<OneToOneAssociation, GqlvPrope
         return getObjectAssociation();
     }
 
-    public boolean hasFieldDefinition() {
-        return getFieldDefinition() != null;
-    }
 }

@@ -24,6 +24,10 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
         super(holder, objectAssociation, fieldDefinition, codeRegistryBuilder);
     }
 
+    public boolean hasFieldDefinition() {
+        return getFieldDefinition() != null;
+    }
+
     /**
      * @see #getObjectMember()
      */

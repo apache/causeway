@@ -54,7 +54,7 @@ public class GqlvMeta {
         // we can build the metafield and meta type eagerly because we know exactly which fields it has.
         metaField = newFieldDefinition().name("_gql_meta").type(buildMetaType()).build();
 
-        holder.addMetaField(metaField);
+        holder.addField(metaField);
     }
 
     private GraphQLObjectType buildMetaType() {

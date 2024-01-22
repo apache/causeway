@@ -4,6 +4,4 @@ import graphql.schema.GraphQLFieldDefinition;
 
 public interface GqlvPropertyHolder extends GqlvAssociationHolder {
 
-    void addPropertyField(GraphQLFieldDefinition fieldDefinition);
-
 }

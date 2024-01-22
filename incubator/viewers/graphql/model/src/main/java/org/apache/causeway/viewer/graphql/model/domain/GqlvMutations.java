@@ -112,7 +112,7 @@ public class GqlvMutations implements GqlvActionHolder {
             mutationsFieldIfAny = Optional.of(mutationsField);
 
             // register the field into the owning type
-            holder.addMutationsField(mutationsField);
+            holder.addField(mutationsField);
 
         } else {
             mutationsFieldIfAny = Optional.empty();
@@ -135,8 +135,8 @@ public class GqlvMutations implements GqlvActionHolder {
     }
 
     @Override
-    public void addActionField(GraphQLFieldDefinition actionField) {
-        gqlObjectTypeBuilder.field(actionField);
+    public void addField(GraphQLFieldDefinition fieldDefinition) {
+        gqlObjectTypeBuilder.field(fieldDefinition);
     }
 
     @Override

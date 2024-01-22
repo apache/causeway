@@ -35,7 +35,7 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
                 fieldDefinition = newFieldDefinition()
                         .name(otom.getId())
                         .type(type).build();
-                holder.addCollectionField(fieldDefinition);
+                holder.addField(fieldDefinition);
         }
         return fieldDefinition;
     }
@@ -51,9 +51,6 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
         return null;
     }
 
-    public boolean hasFieldDefinition() {
-        return getFieldDefinition() != null;
-    }
 
     public OneToManyAssociation getOneToManyAssociation() {
         return getObjectAssociation();

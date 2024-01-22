@@ -173,32 +173,17 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
     @Override
-    public void addMetaField(GraphQLFieldDefinition metaField) {
-        gqlObjectTypeBuilder.field(metaField);
-    }
-
-    @Override
-    public void addMutationsField(GraphQLFieldDefinition mutationsField) {
-        gqlObjectTypeBuilder.field(mutationsField);
-    }
-
-    @Override
-    public void addActionField(GraphQLFieldDefinition fieldDefinition) {
+    public void addField(GraphQLFieldDefinition fieldDefinition) {
         gqlObjectTypeBuilder.field(fieldDefinition);
     }
 
-    @Override
-    public void addCollectionField(GraphQLFieldDefinition fieldDefinition) {
-        gqlObjectTypeBuilder.field(fieldDefinition);
-    }
-
-    @Override
-    public void addPropertyField(GraphQLFieldDefinition fieldDefinition) {
-        gqlObjectTypeBuilder.field(fieldDefinition);
-    }
 
     @Override
     public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(String.format(
+                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
+        }
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 

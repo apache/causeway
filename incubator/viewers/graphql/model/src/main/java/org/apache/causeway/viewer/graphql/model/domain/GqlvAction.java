@@ -43,7 +43,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
         addGqlArguments(objectAction, fieldBuilder);
         GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
 
-        holder.addActionField(fieldDefinition);
+        holder.addField(fieldDefinition);
         return fieldDefinition;
     }
 
