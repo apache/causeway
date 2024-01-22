@@ -10,11 +10,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 
 import lombok.val;
@@ -30,23 +28,22 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
     public GqlvAction(
             final GqlvActionHolder holder,
             final ObjectAction objectAction,
-            final GraphQLObjectType.Builder objectTypeBuilder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
             ) {
-        super(holder, objectAction, fieldDefinition(objectAction, objectTypeBuilder), codeRegistryBuilder);
+        super(holder, objectAction, fieldDefinition(objectAction, holder), codeRegistryBuilder);
     }
 
     private static GraphQLFieldDefinition fieldDefinition(
             final ObjectAction objectAction,
-            final GraphQLObjectType.Builder objectTypeBuilder) {
+            final GqlvActionHolder holder) {
         val fieldName = objectAction.getId();
-        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+        val fieldBuilder = newFieldDefinition()
                 .name(fieldName)
                 .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
         addGqlArguments(objectAction, fieldBuilder);
         GraphQLFieldDefinition fieldDefinition = fieldBuilder.build();
 
-        objectTypeBuilder.field(fieldDefinition);
+        holder.addActionField(fieldDefinition);
         return fieldDefinition;
     }
 

@@ -89,7 +89,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
-            safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
+            safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
         } else {
              mutations.addAction(objectAction);
         }
@@ -124,6 +124,11 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     @Override
     public void addMutationsField(GraphQLFieldDefinition mutationsField) {
+        gqlObjectTypeBuilder.field(mutationsField);
+    }
+
+    @Override
+    public void addActionField(GraphQLFieldDefinition mutationsField) {
         gqlObjectTypeBuilder.field(mutationsField);
     }
 

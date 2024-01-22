@@ -67,7 +67,7 @@ public class GqlvMutations implements GqlvActionHolder {
     }
 
     public void addAction(final ObjectAction objectAction) {
-        actions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
+        actions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
     }
 
     private final List<GqlvAction> actions = new ArrayList<>();
@@ -135,9 +135,15 @@ public class GqlvMutations implements GqlvActionHolder {
     }
 
     @Override
+    public void addActionField(GraphQLFieldDefinition actionField) {
+        gqlObjectTypeBuilder.field(actionField);
+    }
+
+    @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
         return FieldCoordinates.coordinates(mutationsTypeIfAny.orElse(null), fieldDefinition);
     }
+
 
     static class Fetcher {
 

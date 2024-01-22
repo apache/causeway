@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
@@ -201,7 +198,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
-            safeActions.add(new GqlvAction(this, objectAction, gqlObjectTypeBuilder, codeRegistryBuilder));
+            safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
         } else {
             mutations.addAction(objectAction);
         }
@@ -247,6 +244,11 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
+    @Override
+    public void addActionField(GraphQLFieldDefinition mutationsField) {
+
+    }
+
     public void addDataFetchersForMeta() {
         meta.addDataFetchers();
     }
@@ -283,4 +285,5 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     public String toString() {
         return objectSpecification.getLogicalTypeName();
     }
+
 }

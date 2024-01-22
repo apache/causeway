@@ -6,4 +6,6 @@ import graphql.schema.GraphQLFieldDefinition;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 public interface GqlvActionHolder extends GqlvMemberHolder {
+
+    void addActionField(GraphQLFieldDefinition mutationsField);
 }
