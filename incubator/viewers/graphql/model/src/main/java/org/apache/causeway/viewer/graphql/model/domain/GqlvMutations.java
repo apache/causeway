@@ -10,6 +10,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import graphql.schema.DataFetcher;
@@ -137,9 +138,13 @@ public class GqlvMutations implements GqlvActionHolder {
         gqlObjectTypeBuilder.field(fieldDefinition);
     }
 
+    public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
+        getMutationsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+    }
+
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(mutationsTypeIfAny.orElse(null), fieldDefinition);
+        return FieldCoordinates.coordinates(mutationsTypeIfAny.orElseThrow(), fieldDefinition);
     }
 
 

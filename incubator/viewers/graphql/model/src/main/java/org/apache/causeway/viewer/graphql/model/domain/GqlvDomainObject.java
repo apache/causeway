@@ -80,7 +80,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
 
     public void addMembers() {
-        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addPropertyAsField);
+        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addProperty);
         objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
 
         val anyActions = new AtomicBoolean(false);
@@ -95,7 +95,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         anyActions.get();
     }
 
-    private void addPropertyAsField(final OneToOneAssociation otoa) {
+    private void addProperty(final OneToOneAssociation otoa) {
         GqlvProperty property = new GqlvProperty(this, otoa, codeRegistryBuilder);
         if (property.hasFieldDefinition()) {
             properties.add(property);
@@ -129,10 +129,12 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         gqlObjectType = gqlObjectTypeBuilder.name(TypeNames.objectTypeNameFor(objectSpecification)).build();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlObjectType);
 
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(meta.getMetaField().getType());
+        meta.registerTypesInto(graphQLTypeRegistry);
+
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getGqlInputObjectType());
 
-        mutations.getMutationsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+        mutations.registerTypesInto(graphQLTypeRegistry);
+
     }
 
     public void addDataFetchers() {

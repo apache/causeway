@@ -102,8 +102,9 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
         gqlObjectType = gqlObjectTypeBuilder.build();
         // TODO: unlike GqlvDomainObject, not sure why gqlObjectType doesn't need to be registered...
+        // graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlObjectType);
 
-        mutations.getMutationsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+        mutations.registerTypesInto(graphQLTypeRegistry);
     }
 
     public void addDataFetchers() {

@@ -8,6 +8,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
@@ -51,23 +52,23 @@ public class GqlvMeta {
         this.objectManager = objectManager;
 
         // we can build the metafield and meta type eagerly because we know exactly which fields it has.
-        metaField = newFieldDefinition().name("_gql_meta").type(buildMetaType()).build();
+        val metaTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(this.holder.getObjectSpecification()));
+        metaTypeBuilder.field(id);
+        metaTypeBuilder.field(logicalTypeName);
+        if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
+            metaTypeBuilder.field(version);
+        }
+        metaField = newFieldDefinition().name("_gql_meta").type(metaTypeBuilder.build()).build();
 
         holder.addField(metaField);
     }
 
-    private GraphQLObjectType buildMetaType() {
-        val metaTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(holder.getObjectSpecification()));
-        metaTypeBuilder.field(id);
-        metaTypeBuilder.field(logicalTypeName);
-        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            metaTypeBuilder.field(version);
-        }
-        return metaTypeBuilder.build();
-    }
-
     GraphQLObjectType getMetaType() {
         return (GraphQLObjectType) metaField.getType();
+    }
+
+    void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getMetaType());
     }
 
     public void addDataFetchers() {
@@ -94,6 +95,7 @@ public class GqlvMeta {
                     (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());
         }
     }
+
 
     /**
      * Metadata for every domain object.
