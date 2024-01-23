@@ -43,8 +43,8 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         return objectSpecification.getLogicalTypeName();
     }
 
-    private final List<GqlvAction> safeActions = new ArrayList<>();
-    public List<GqlvAction> getSafeActions() {return Collections.unmodifiableList(safeActions);}
+    private final List<GqlvActionSimple> safeActions = new ArrayList<>();
+    public List<GqlvActionSimple> getSafeActions() {return Collections.unmodifiableList(safeActions);}
 
     /**
      * Built using {@link #buildGqlObjectType()}
@@ -79,14 +79,14 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
                     addAction(objectAction);
                 });
 
-        mutations.buildMutationsTypeAndFieldIfRequired();
+        mutations.buildObjectTypeAndFieldIfRequired();
 
         return anyActions.get();
     }
 
     void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
-            safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
+            safeActions.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
         } else {
              mutations.addAction(objectAction);
         }
@@ -101,14 +101,13 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
         gqlObjectType = gqlObjectTypeBuilder.build();
-        // TODO: unlike GqlvDomainObject, not sure why gqlObjectType doesn't need to be registered...
-        // graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlObjectType);
+        // TODO: unlike GqlvDomainObject, not sure where gqlObjectType is already registered
 
         mutations.registerTypesInto(graphQLTypeRegistry);
     }
 
     public void addDataFetchers() {
-        getSafeActions().forEach(GqlvAction::addDataFetcher);
+        getSafeActions().forEach(GqlvActionSimple::addDataFetcher);
         getMutations().addDataFetchers();
     }
 

@@ -195,7 +195,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         domainService.addDataFetchers();
 
-
         topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
     }
 

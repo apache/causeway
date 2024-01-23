@@ -33,9 +33,9 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
 
 @Log4j2
-public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
+public class GqlvActionSimple extends GqlvMember<ObjectAction, GqlvActionHolder> {
 
-    public GqlvAction(
+    public GqlvActionSimple(
             final GqlvActionHolder holder,
             final ObjectAction objectAction,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
@@ -172,7 +172,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> {
 
         if (parameters.isNotEmpty()) {
             builder.arguments(parameters.stream()
-                    .map(GqlvAction::gqlArgumentFor)
+                    .map(GqlvActionSimple::gqlArgumentFor)
                     .collect(Collectors.toList()));
         }
     }

@@ -81,9 +81,9 @@ public class GqlvTopLevelQuery {
 
     public void addFetchers() {
         codeRegistryBuilder
-                .dataFetcher(
-                        coordinates(getQueryType(), getNumServicesField()),
-                        (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
+            .dataFetcher(
+                coordinates(getQueryType(), getNumServicesField()),
+                (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
     }
 
 }

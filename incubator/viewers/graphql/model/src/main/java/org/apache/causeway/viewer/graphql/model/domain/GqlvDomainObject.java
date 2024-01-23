@@ -45,11 +45,8 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     private final List<GqlvProperty> properties = new ArrayList<>();
     private final List<GqlvCollection> collections = new ArrayList<>();
-    private final List<GqlvAction> safeActions = new ArrayList<>();
+    private final List<GqlvActionSimple> safeActionSimples = new ArrayList<>();
 
-    /**
-     * Built using {@link #buildGqlObjectType()}
-     */
     private GraphQLObjectType gqlObjectType;
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
@@ -90,7 +87,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                     addAction(objectAction);
                 });
 
-        mutations.buildMutationsTypeAndFieldIfRequired();
+        mutations.buildObjectTypeAndFieldIfRequired();
 
         anyActions.get();
     }
@@ -111,7 +108,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     private void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
-            safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
+            safeActionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
         } else {
             mutations.addAction(objectAction);
         }
@@ -141,7 +138,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         meta.addDataFetchers();
         properties.forEach(GqlvAssociation::addDataFetcher);
         collections.forEach(GqlvCollection::addDataFetcher);
-        safeActions.forEach(GqlvAction::addDataFetcher);
+        safeActionSimples.forEach(GqlvActionSimple::addDataFetcher);
         mutations.addDataFetchers();
     }
 

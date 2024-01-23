@@ -1,7 +1,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,18 +29,18 @@ public class GqlvMutations implements GqlvActionHolder {
     private final ObjectManager objectManager;
 
     /**
-     * Used to build {@link #mutationsTypeIfAny}.
+     * Used to build {@link #objectTypeIfAny}.
      */
     final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     /**
-     * Built lazily using {@link #buildMutationsTypeAndFieldIfRequired()}
+     * Built lazily using {@link #buildObjectTypeAndFieldIfRequired()}
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Optional<GraphQLObjectType> mutationsTypeIfAny;
+    private Optional<GraphQLObjectType> objectTypeIfAny;
 
     /**
-     * Built lazily using {@link #buildMutationsTypeAndFieldIfRequired()}
+     * Built lazily using {@link #buildObjectTypeAndFieldIfRequired()}
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<GraphQLFieldDefinition> mutationsFieldIfAny;
@@ -66,34 +65,19 @@ public class GqlvMutations implements GqlvActionHolder {
     }
 
     public void addAction(final ObjectAction objectAction) {
-        actions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
+        actionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
     }
 
-    private final List<GqlvAction> actions = new ArrayList<>();
-    public List<GqlvAction> getActions() {return Collections.unmodifiableList(actions);}
+    private final List<GqlvActionSimple> actionSimples = new ArrayList<>();
 
     boolean hasActions() {
-        return !actions.isEmpty();
+        return !actionSimples.isEmpty();
     }
 
 
-    /**
-     * @see #buildMutationsTypeAndFieldIfRequired()
-     */
-    public Optional<GraphQLObjectType> getMutationsTypeIfAny() {
+    public Optional<GraphQLObjectType> buildObjectTypeAndFieldIfRequired() {
         //noinspection OptionalAssignedToNull
-        if (mutationsTypeIfAny == null) {
-            throw new IllegalArgumentException(String.format("Gql mutators type and field has not yet been built for %s", holder.getObjectSpecification().getLogicalTypeName()));
-        }
-        return mutationsTypeIfAny;
-    }
-
-    /**
-     * @see #getMutationsTypeIfAny()
-     */
-    public Optional<GraphQLObjectType> buildMutationsTypeAndFieldIfRequired() {
-        //noinspection OptionalAssignedToNull
-        if (mutationsTypeIfAny != null) {
+        if (objectTypeIfAny != null) {
             throw new IllegalArgumentException("Gql mutations type and field has already been built for " + holder.getObjectSpecification().getLogicalTypeName());
         }
 
@@ -101,7 +85,7 @@ public class GqlvMutations implements GqlvActionHolder {
 
             // create the type
             GraphQLObjectType mutationsType = gqlObjectTypeBuilder.build();
-            this.mutationsTypeIfAny = Optional.of(mutationsType);
+            this.objectTypeIfAny = Optional.of(mutationsType);
 
             // create the field
             GraphQLFieldDefinition mutationsField = newFieldDefinition()
@@ -115,9 +99,9 @@ public class GqlvMutations implements GqlvActionHolder {
 
         } else {
             mutationsFieldIfAny = Optional.empty();
-            mutationsTypeIfAny = Optional.empty();
+            objectTypeIfAny = Optional.empty();
         }
-        return mutationsTypeIfAny;
+        return objectTypeIfAny;
     }
 
     public void addDataFetchers() {
@@ -129,7 +113,7 @@ public class GqlvMutations implements GqlvActionHolder {
                             .map(bookmark -> new Fetcher(bookmark, bookmarkService))
                             .orElseThrow());
 
-            getActions().forEach(GqlvAction::addDataFetcher);
+            actionSimples.forEach(GqlvActionSimple::addDataFetcher);
         }
     }
 
@@ -139,12 +123,12 @@ public class GqlvMutations implements GqlvActionHolder {
     }
 
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
-        getMutationsTypeIfAny().ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
+        objectTypeIfAny.ifPresent(graphQLTypeRegistry::addTypeIfNotAlreadyPresent);
     }
 
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(mutationsTypeIfAny.orElseThrow(), fieldDefinition);
+        return FieldCoordinates.coordinates(objectTypeIfAny.orElseThrow(), fieldDefinition);
     }
 
 
