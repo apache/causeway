@@ -963,7 +963,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_DomainObjectList__meta",
+            "name" : "causeway_applib_DomainObjectList__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1038,7 +1038,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_DomainObjectList__input",
+        "name" : "causeway_applib_DomainObjectList__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -1060,7 +1060,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_DomainObjectList__meta",
+        "name" : "causeway_applib_DomainObjectList__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -1107,7 +1107,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_FacetGroupNode__meta",
+            "name" : "causeway_applib_FacetGroupNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1134,7 +1134,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_FacetGroupNode__input",
+        "name" : "causeway_applib_FacetGroupNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -1156,7 +1156,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_FacetGroupNode__meta",
+        "name" : "causeway_applib_FacetGroupNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -1203,7 +1203,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_ParameterNode__meta",
+            "name" : "causeway_applib_ParameterNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1245,7 +1245,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_ParameterNode__input",
+        "name" : "causeway_applib_ParameterNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -1267,7 +1267,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_ParameterNode__meta",
+        "name" : "causeway_applib_ParameterNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -1314,7 +1314,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_PropertyNode__meta",
+            "name" : "causeway_applib_PropertyNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1370,7 +1370,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_PropertyNode__mutations",
+            "name" : "causeway_applib_PropertyNode__gql_mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1382,7 +1382,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_PropertyNode__input",
+        "name" : "causeway_applib_PropertyNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -1404,7 +1404,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_PropertyNode__meta",
+        "name" : "causeway_applib_PropertyNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -1443,10 +1443,30 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_PropertyNode__mutations",
+        "name" : "causeway_applib_PropertyNode__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "streamChildNodes",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "causeway_applib_PropertyNode__streamChildNodes",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "causeway_applib_PropertyNode__streamChildNodes",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -1471,7 +1491,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_RoleMemento__meta",
+            "name" : "causeway_applib_RoleMemento__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1513,7 +1533,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_RoleMemento__input",
+        "name" : "causeway_applib_RoleMemento__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -1535,7 +1555,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_RoleMemento__meta",
+        "name" : "causeway_applib_RoleMemento__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -1582,7 +1602,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_TypeNode__meta",
+            "name" : "causeway_applib_TypeNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1609,7 +1629,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_TypeNode__input",
+        "name" : "causeway_applib_TypeNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -1631,7 +1651,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_TypeNode__meta",
+        "name" : "causeway_applib_TypeNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -1678,7 +1698,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_UserMemento__meta",
+            "name" : "causeway_applib_UserMemento__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1831,7 +1851,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_UserMemento__input",
+        "name" : "causeway_applib_UserMemento__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -1853,7 +1873,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_UserMemento__meta",
+        "name" : "causeway_applib_UserMemento__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -1900,6 +1920,26 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
+            "name" : "causeway_applib_UserMenu__me",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "causeway_applib_UserMenu__me",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
             "name" : "causeway_applib_UserMemento",
             "ofType" : null
           },
@@ -1920,7 +1960,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_node_ActionNode__meta",
+            "name" : "causeway_applib_node_ActionNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1976,7 +2016,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_node_ActionNode__mutations",
+            "name" : "causeway_applib_node_ActionNode__gql_mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -1988,7 +2028,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_node_ActionNode__input",
+        "name" : "causeway_applib_node_ActionNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -2010,7 +2050,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_node_ActionNode__meta",
+        "name" : "causeway_applib_node_ActionNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -2049,10 +2089,30 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_node_ActionNode__mutations",
+        "name" : "causeway_applib_node_ActionNode__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "streamChildNodes",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "causeway_applib_node_ActionNode__streamChildNodes",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "causeway_applib_node_ActionNode__streamChildNodes",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -2077,7 +2137,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_node_CollectionNode__meta",
+            "name" : "causeway_applib_node_CollectionNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2133,7 +2193,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_node_CollectionNode__mutations",
+            "name" : "causeway_applib_node_CollectionNode__gql_mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2145,7 +2205,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_node_CollectionNode__input",
+        "name" : "causeway_applib_node_CollectionNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -2167,7 +2227,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_node_CollectionNode__meta",
+        "name" : "causeway_applib_node_CollectionNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -2206,10 +2266,30 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_node_CollectionNode__mutations",
+        "name" : "causeway_applib_node_CollectionNode__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "streamChildNodes",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "causeway_applib_node_CollectionNode__streamChildNodes",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "causeway_applib_node_CollectionNode__streamChildNodes",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -2234,7 +2314,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_node_FacetAttrNode__meta",
+            "name" : "causeway_applib_node_FacetAttrNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2276,7 +2356,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_node_FacetAttrNode__input",
+        "name" : "causeway_applib_node_FacetAttrNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -2298,7 +2378,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_node_FacetAttrNode__meta",
+        "name" : "causeway_applib_node_FacetAttrNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -2345,7 +2425,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_applib_node_FacetNode__meta",
+            "name" : "causeway_applib_node_FacetNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2387,7 +2467,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_applib_node_FacetNode__input",
+        "name" : "causeway_applib_node_FacetNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -2409,7 +2489,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_applib_node_FacetNode__meta",
+        "name" : "causeway_applib_node_FacetNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -2456,6 +2536,26 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
+            "name" : "causeway_conf_ConfigurationMenu__configuration",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "causeway_conf_ConfigurationMenu__configuration",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
             "name" : "causeway_conf_ConfigurationViewmodel",
             "ofType" : null
           },
@@ -2476,7 +2576,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_conf_ConfigurationProperty__meta",
+            "name" : "causeway_conf_ConfigurationProperty__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2518,7 +2618,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_conf_ConfigurationProperty__input",
+        "name" : "causeway_conf_ConfigurationProperty__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -2540,7 +2640,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_conf_ConfigurationProperty__meta",
+        "name" : "causeway_conf_ConfigurationProperty__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -2587,7 +2687,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_conf_ConfigurationViewmodel__meta",
+            "name" : "causeway_conf_ConfigurationViewmodel__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2644,7 +2744,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_conf_ConfigurationViewmodel__input",
+        "name" : "causeway_conf_ConfigurationViewmodel__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -2666,7 +2766,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_conf_ConfigurationViewmodel__meta",
+        "name" : "causeway_conf_ConfigurationViewmodel__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -2713,7 +2813,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_feat_ApplicationFeatureViewModel__meta",
+            "name" : "causeway_feat_ApplicationFeatureViewModel__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2770,7 +2870,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_feat_ApplicationFeatureViewModel__input",
+        "name" : "causeway_feat_ApplicationFeatureViewModel__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -2792,7 +2892,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_feat_ApplicationFeatureViewModel__meta",
+        "name" : "causeway_feat_ApplicationFeatureViewModel__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -2839,7 +2939,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_feat_ApplicationNamespace__meta",
+            "name" : "causeway_feat_ApplicationNamespace__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2896,7 +2996,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_feat_ApplicationNamespace__input",
+        "name" : "causeway_feat_ApplicationNamespace__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -2918,7 +3018,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_feat_ApplicationNamespace__meta",
+        "name" : "causeway_feat_ApplicationNamespace__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -2965,7 +3065,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_feat_ApplicationType__meta",
+            "name" : "causeway_feat_ApplicationType__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3075,7 +3175,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_feat_ApplicationTypeAction__meta",
+            "name" : "causeway_feat_ApplicationTypeAction__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3162,7 +3262,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_feat_ApplicationTypeAction__input",
+        "name" : "causeway_feat_ApplicationTypeAction__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -3184,7 +3284,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_feat_ApplicationTypeAction__meta",
+        "name" : "causeway_feat_ApplicationTypeAction__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -3231,7 +3331,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_feat_ApplicationTypeCollection__meta",
+            "name" : "causeway_feat_ApplicationTypeCollection__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3318,7 +3418,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_feat_ApplicationTypeCollection__input",
+        "name" : "causeway_feat_ApplicationTypeCollection__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -3340,7 +3440,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_feat_ApplicationTypeCollection__meta",
+        "name" : "causeway_feat_ApplicationTypeCollection__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -3387,7 +3487,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_feat_ApplicationTypeMember__meta",
+            "name" : "causeway_feat_ApplicationTypeMember__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3444,7 +3544,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_feat_ApplicationTypeMember__input",
+        "name" : "causeway_feat_ApplicationTypeMember__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -3466,7 +3566,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_feat_ApplicationTypeMember__meta",
+        "name" : "causeway_feat_ApplicationTypeMember__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -3513,7 +3613,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_feat_ApplicationTypeProperty__meta",
+            "name" : "causeway_feat_ApplicationTypeProperty__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3622,7 +3722,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_feat_ApplicationTypeProperty__input",
+        "name" : "causeway_feat_ApplicationTypeProperty__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -3644,7 +3744,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_feat_ApplicationTypeProperty__meta",
+        "name" : "causeway_feat_ApplicationTypeProperty__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -3683,7 +3783,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_feat_ApplicationType__input",
+        "name" : "causeway_feat_ApplicationType__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -3705,7 +3805,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_feat_ApplicationType__meta",
+        "name" : "causeway_feat_ApplicationType__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -3752,7 +3852,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_schema_metamodel_v2_DomainClassDto__meta",
+            "name" : "causeway_schema_metamodel_v2_DomainClassDto__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3891,7 +3991,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_schema_metamodel_v2_DomainClassDto__input",
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -3913,7 +4013,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_schema_metamodel_v2_DomainClassDto__meta",
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -3960,7 +4060,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_security_LoginRedirect__meta",
+            "name" : "causeway_security_LoginRedirect__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3972,7 +4072,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_security_LoginRedirect__input",
+        "name" : "causeway_security_LoginRedirect__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -3994,7 +4094,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_security_LoginRedirect__meta",
+        "name" : "causeway_security_LoginRedirect__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4040,6 +4140,26 @@
           "description" : null,
           "args" : [ ],
           "type" : {
+            "kind" : "OBJECT",
+            "name" : "causeway_security_LogoutMenu__logout",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "causeway_security_LogoutMenu__logout",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
             "kind" : "SCALAR",
             "name" : "String",
             "ofType" : null
@@ -4061,7 +4181,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "causeway_testing_fixtures_FixtureResult__meta",
+            "name" : "causeway_testing_fixtures_FixtureResult__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4114,7 +4234,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "causeway_testing_fixtures_FixtureResult__input",
+        "name" : "causeway_testing_fixtures_FixtureResult__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4136,7 +4256,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "causeway_testing_fixtures_FixtureResult__meta",
+        "name" : "causeway_testing_fixtures_FixtureResult__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4183,7 +4303,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_lang_Runnable__meta",
+            "name" : "java_lang_Runnable__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4195,7 +4315,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "java_lang_Runnable__input",
+        "name" : "java_lang_Runnable__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4217,7 +4337,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "java_lang_Runnable__meta",
+        "name" : "java_lang_Runnable__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4264,7 +4384,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_Map__meta",
+            "name" : "java_util_Map__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4276,7 +4396,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "java_util_Map__input",
+        "name" : "java_util_Map__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4298,7 +4418,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "java_util_Map__meta",
+        "name" : "java_util_Map__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4345,7 +4465,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_SortedMap__meta",
+            "name" : "java_util_SortedMap__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4357,7 +4477,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "java_util_SortedMap__input",
+        "name" : "java_util_SortedMap__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4379,7 +4499,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "java_util_SortedMap__meta",
+        "name" : "java_util_SortedMap__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4426,7 +4546,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_concurrent_Callable__meta",
+            "name" : "java_util_concurrent_Callable__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4438,7 +4558,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "java_util_concurrent_Callable__input",
+        "name" : "java_util_concurrent_Callable__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4460,7 +4580,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "java_util_concurrent_Callable__meta",
+        "name" : "java_util_concurrent_Callable__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4507,7 +4627,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_function_BiFunction__meta",
+            "name" : "java_util_function_BiFunction__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4519,7 +4639,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "java_util_function_BiFunction__input",
+        "name" : "java_util_function_BiFunction__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4541,7 +4661,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "java_util_function_BiFunction__meta",
+        "name" : "java_util_function_BiFunction__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4588,7 +4708,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_function_Consumer__meta",
+            "name" : "java_util_function_Consumer__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4600,7 +4720,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "java_util_function_Consumer__input",
+        "name" : "java_util_function_Consumer__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4622,7 +4742,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "java_util_function_Consumer__meta",
+        "name" : "java_util_function_Consumer__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4669,7 +4789,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_function_Function__meta",
+            "name" : "java_util_function_Function__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4681,7 +4801,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "java_util_function_Function__input",
+        "name" : "java_util_function_Function__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4703,7 +4823,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "java_util_function_Function__meta",
+        "name" : "java_util_function_Function__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4750,7 +4870,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_stream_Stream__meta",
+            "name" : "java_util_stream_Stream__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4762,7 +4882,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "java_util_stream_Stream__input",
+        "name" : "java_util_stream_Stream__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4784,7 +4904,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "java_util_stream_Stream__meta",
+        "name" : "java_util_stream_Stream__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4831,7 +4951,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Either__meta",
+            "name" : "org_apache_causeway_commons_functional_Either__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4872,7 +4992,53 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Either__mutations",
+            "name" : "org_apache_causeway_commons_functional_Either__gql_mutations",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__accept",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "leftConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "java_util_function_Consumer__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "rightConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "java_util_function_Consumer__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4884,7 +5050,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Either__input",
+        "name" : "org_apache_causeway_commons_functional_Either__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -4906,7 +5072,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Either__meta",
+        "name" : "org_apache_causeway_commons_functional_Either__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -4945,41 +5111,15 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Either__mutations",
+        "name" : "org_apache_causeway_commons_functional_Either__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "accept",
           "description" : null,
-          "args" : [ {
-            "name" : "leftConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Consumer__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "rightConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Consumer__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__accept",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -4989,14 +5129,87 @@
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__left",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
           "name" : "map",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__map",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapLeft",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__mapLeft",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapRight",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__mapRight",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "right",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__right",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__left",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__map",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "leftMapper",
@@ -5006,7 +5219,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__input",
+                "name" : "java_util_function_Function__gql_input",
                 "ofType" : null
               }
             },
@@ -5019,7 +5232,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__input",
+                "name" : "java_util_function_Function__gql_input",
                 "ofType" : null
               }
             },
@@ -5032,8 +5245,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapLeft",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__mapLeft",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "leftMapper",
@@ -5043,7 +5265,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__input",
+                "name" : "java_util_function_Function__gql_input",
                 "ofType" : null
               }
             },
@@ -5056,8 +5278,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapRight",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__mapRight",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "rightMapper",
@@ -5067,7 +5298,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__input",
+                "name" : "java_util_function_Function__gql_input",
                 "ofType" : null
               }
             },
@@ -5080,8 +5311,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "right",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__right",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -5106,7 +5346,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Railway__meta",
+            "name" : "org_apache_causeway_commons_functional_Railway__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5147,7 +5387,40 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Railway__mutations",
+            "name" : "org_apache_causeway_commons_functional_Railway__gql_mutations",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__chain",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "chainingFunction",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5159,7 +5432,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Railway__input",
+        "name" : "org_apache_causeway_commons_functional_Railway__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -5181,7 +5454,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Railway__meta",
+        "name" : "org_apache_causeway_commons_functional_Railway__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -5220,34 +5493,74 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Railway__mutations",
+        "name" : "org_apache_causeway_commons_functional_Railway__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "chain",
           "description" : null,
-          "args" : [ {
-            "name" : "chainingFunction",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Railway",
+            "name" : "org_apache_causeway_commons_functional_Railway__chain",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
           "name" : "ifFailure",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__ifFailure",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "ifSuccess",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapFailure",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__mapFailure",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapSuccess",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__ifFailure",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "failureConsumer",
@@ -5257,7 +5570,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input",
                 "ofType" : null
               }
             },
@@ -5270,8 +5583,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "ifSuccess",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "successConsumer",
@@ -5281,7 +5603,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input",
                 "ofType" : null
               }
             },
@@ -5294,8 +5616,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapFailure",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__mapFailure",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "failureMapper",
@@ -5305,7 +5636,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -5318,8 +5649,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapSuccess",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "successMapper",
@@ -5329,7 +5669,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -5357,7 +5697,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__meta",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5368,7 +5708,40 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutations",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "arg0",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "java_util_function_Consumer__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "java_util_function_Consumer",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5380,7 +5753,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__input",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -5402,7 +5775,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__meta",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -5441,34 +5814,41 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__mutations",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "andThen",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Consumer__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_function_Consumer",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
           "name" : "throwing",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "exceptionWrapper",
@@ -5478,7 +5858,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_BiFunction__input",
+                "name" : "java_util_function_BiFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -5506,7 +5886,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__meta",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5517,7 +5897,73 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutations",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "arg0",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "java_util_function_Function__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "java_util_function_Function",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "arg0",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "java_util_function_Function__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "java_util_function_Function",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5529,7 +5975,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -5551,7 +5997,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__meta",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -5590,28 +6036,15 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__mutations",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "andThen",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_function_Function",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5619,29 +6052,36 @@
         }, {
           "name" : "compose",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_function_Function",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
           "name" : "throwing",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "exceptionWrapper",
@@ -5651,7 +6091,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_BiFunction__input",
+                "name" : "java_util_function_BiFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -5679,7 +6119,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__meta",
+            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5690,7 +6130,27 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutations",
+            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5702,7 +6162,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__input",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -5724,7 +6184,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__meta",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -5763,15 +6223,15 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__mutations",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "callUncatched",
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5781,8 +6241,8 @@
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__run",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5792,8 +6252,8 @@
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5804,13 +6264,93 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "java_util_concurrent_Callable",
+            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__toCallable",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
           "name" : "toRunnable",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__run",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__toCallable",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "java_util_concurrent_Callable",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -5835,7 +6375,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try__meta",
+            "name" : "org_apache_causeway_commons_functional_Try__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5876,7 +6416,152 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try__mutations",
+            "name" : "org_apache_causeway_commons_functional_Try__gql_mutations",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__accept",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "successConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5888,7 +6573,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Try__input",
+        "name" : "org_apache_causeway_commons_functional_Try__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -5910,7 +6595,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Try__meta",
+        "name" : "org_apache_causeway_commons_functional_Try__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -5949,41 +6634,15 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_commons_functional_Try__mutations",
+        "name" : "org_apache_causeway_commons_functional_Try__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "accept",
           "description" : null,
-          "args" : [ {
-            "name" : "failureConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "successConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__accept",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -5991,23 +6650,10 @@
         }, {
           "name" : "flatMapSuccess",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6015,23 +6661,10 @@
         }, {
           "name" : "flatMapSuccessAsNullable",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6039,23 +6672,10 @@
         }, {
           "name" : "flatMapSuccessWhenPresent",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6066,7 +6686,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__ifAbsentFail",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6074,23 +6694,10 @@
         }, {
           "name" : "ifFailure",
           "description" : null,
-          "args" : [ {
-            "name" : "exceptionConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__ifFailure",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6101,7 +6708,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__ifFailureFail",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6109,23 +6716,10 @@
         }, {
           "name" : "ifSuccess",
           "description" : null,
-          "args" : [ {
-            "name" : "valueConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__ifSuccess",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6133,23 +6727,10 @@
         }, {
           "name" : "ifSuccessAsNullable",
           "description" : null,
-          "args" : [ {
-            "name" : "valueConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6160,7 +6741,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_commons_functional_Try",
+            "name" : "org_apache_causeway_commons_functional_Try__mapEmptyToFailure",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6168,15 +6749,154 @@
         }, {
           "name" : "mapFailure",
           "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapFailure",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapFailureToSuccess",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapSuccess",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccess",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapSuccessAsNullable",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapSuccessWhenPresent",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "mapToEither",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapToEither",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "orCall",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__orCall",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "then",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__then",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "thenCall",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__thenCall",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "thenRun",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__thenRun",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifAbsentFail",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifFailure",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
           "args" : [ {
-            "name" : "failureMapper",
+            "name" : "exceptionConsumer",
             "description" : null,
             "type" : {
               "kind" : "NON_NULL",
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input",
                 "ofType" : null
               }
             },
@@ -6189,8 +6909,156 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapFailureToSuccess",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifFailureFail",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccess",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "valueConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "valueConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapEmptyToFailure",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailure",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "recoveryMapper",
@@ -6200,7 +7068,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -6213,8 +7081,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapSuccess",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccess",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "successMapper",
@@ -6224,7 +7101,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -6237,8 +7114,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapSuccessAsNullable",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "successMapper",
@@ -6248,7 +7134,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -6261,8 +7147,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapSuccessWhenPresent",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "successMapper",
@@ -6272,7 +7167,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -6285,8 +7180,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "mapToEither",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapToEither",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "failureMapper",
@@ -6296,7 +7200,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -6309,7 +7213,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input",
                 "ofType" : null
               }
             },
@@ -6322,8 +7226,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "orCall",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__orCall",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "fallback",
@@ -6333,7 +7246,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_concurrent_Callable__input",
+                "name" : "java_util_concurrent_Callable__gql_input",
                 "ofType" : null
               }
             },
@@ -6346,8 +7259,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "then",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__then",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "next",
@@ -6357,7 +7279,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_concurrent_Callable__input",
+                "name" : "java_util_concurrent_Callable__gql_input",
                 "ofType" : null
               }
             },
@@ -6370,8 +7292,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "thenCall",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__thenCall",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "callable",
@@ -6381,7 +7312,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "java_util_concurrent_Callable__input",
+                "name" : "java_util_concurrent_Callable__gql_input",
                 "ofType" : null
               }
             },
@@ -6394,8 +7325,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "thenRun",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__thenRun",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "runnable",
@@ -6405,7 +7345,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__input",
+                "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gql_input",
                 "ofType" : null
               }
             },
@@ -6433,7 +7373,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__meta",
+            "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6445,7 +7385,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__input",
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -6467,7 +7407,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__meta",
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -6514,7 +7454,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta",
+            "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6555,7 +7495,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutations",
+            "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6567,7 +7507,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__input",
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -6589,7 +7529,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta",
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -6628,10 +7568,30 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mutations",
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "streamChildNodes",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -6656,7 +7616,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__meta",
+            "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6698,7 +7658,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__input",
+        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -6720,7 +7680,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__meta",
+        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -6767,7 +7727,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "university_dept_Department__meta",
+            "name" : "university_dept_Department__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6812,13 +7772,9 @@
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "OBJECT",
-              "name" : "university_dept_Department",
-              "ofType" : null
-            }
+            "kind" : "OBJECT",
+            "name" : "university_dept_DepartmentMenu__findAllDepartments",
+            "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
@@ -6828,7 +7784,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "university_dept_DepartmentMenu__mutations",
+            "name" : "university_dept_DepartmentMenu__gql_mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6840,10 +7796,10 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "university_dept_DepartmentMenu__mutations",
+        "name" : "university_dept_DepartmentMenu__createDepartment",
         "description" : null,
         "fields" : [ {
-          "name" : "createDepartment",
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "name",
@@ -6863,7 +7819,7 @@
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_DeptHead__input",
+              "name" : "university_dept_DeptHead__gql_input",
               "ofType" : null
             },
             "defaultValue" : null
@@ -6881,8 +7837,52 @@
         "enumValues" : null,
         "possibleTypes" : null
       }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DepartmentMenu__findAllDepartments",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "OBJECT",
+              "name" : "university_dept_Department",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DepartmentMenu__gql_mutations",
+        "description" : null,
+        "fields" : [ {
+          "name" : "createDepartment",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DepartmentMenu__createDepartment",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "university_dept_Department__input",
+        "name" : "university_dept_Department__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -6904,7 +7904,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "university_dept_Department__meta",
+        "name" : "university_dept_Department__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -6962,7 +7962,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "university_dept_DeptHead__meta",
+            "name" : "university_dept_DeptHead__gql_meta",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6995,7 +7995,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "university_dept_DeptHead__mutations",
+            "name" : "university_dept_DeptHead__gql_mutations",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -7014,6 +8014,37 @@
           "description" : null,
           "args" : [ ],
           "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHeadMenu__findAllDeptHeads",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "findDeptHeadByName",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHeadMenu__findDeptHeadByName",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHeadMenu__findAllDeptHeads",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
             "kind" : "LIST",
             "name" : null,
             "ofType" : {
@@ -7024,8 +8055,17 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
-          "name" : "findDeptHeadByName",
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHeadMenu__findDeptHeadByName",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
           "description" : null,
           "args" : [ {
             "name" : "name",
@@ -7054,8 +8094,74 @@
         "enumValues" : null,
         "possibleTypes" : null
       }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHead__changeDepartment",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "department",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "university_dept_Department__gql_input",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHead",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHead__changeName",
+        "description" : null,
+        "fields" : [ {
+          "name" : "invoke",
+          "description" : null,
+          "args" : [ {
+            "name" : "newName",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "SCALAR",
+                "name" : "String",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHead",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "university_dept_DeptHead__input",
+        "name" : "university_dept_DeptHead__gql_input",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -7077,7 +8183,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "university_dept_DeptHead__meta",
+        "name" : "university_dept_DeptHead__gql_meta",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -7127,28 +8233,15 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "university_dept_DeptHead__mutations",
+        "name" : "university_dept_DeptHead__gql_mutations",
         "description" : null,
         "fields" : [ {
           "name" : "changeDepartment",
           "description" : null,
-          "args" : [ {
-            "name" : "department",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "university_dept_Department__input",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "university_dept_DeptHead",
+            "name" : "university_dept_DeptHead__changeDepartment",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -7156,23 +8249,10 @@
         }, {
           "name" : "changeName",
           "description" : null,
-          "args" : [ {
-            "name" : "newName",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "university_dept_DeptHead",
+            "name" : "university_dept_DeptHead__changeName",
             "ofType" : null
           },
           "isDeprecated" : false,

@@ -23,7 +23,10 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,6 +34,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.id.HasLogicalType;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -54,6 +58,8 @@ import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
+
+import graphql.schema.GraphQLType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -108,7 +114,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         final GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
 
-
         // add to the top-level query
         // (and also add behaviour to the child types)
         val topLevelQuery = new GqlvTopLevelQuery(serviceRegistry, codeRegistryBuilder);
@@ -132,7 +137,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         // build the schema
         return GraphQLSchema.newSchema()
                 .query(topLevelQuery.getQueryType())
-                .additionalTypes(graphQLTypeRegistry.getGraphQLObjectTypes())
+                .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
                 .codeRegistry(codeRegistry)
                 .build();
     }

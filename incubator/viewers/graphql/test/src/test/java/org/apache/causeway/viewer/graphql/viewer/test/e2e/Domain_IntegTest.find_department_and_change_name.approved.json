@@ -2,10 +2,14 @@
   "data" : {
     "university_dept_DeptHeadMenu" : {
       "findDeptHeadByName" : {
-        "_gql_mutations" : {
-          "changeName" : {
-            "name" : "bar",
-            "department" : null
+        "invoke" : {
+          "_gql_mutations" : {
+            "changeName" : {
+              "invoke" : {
+                "name" : "bar",
+                "department" : null
+              }
+            }
           }
         }
       }

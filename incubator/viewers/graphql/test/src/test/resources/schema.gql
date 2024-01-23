@@ -32,7 +32,7 @@ type Query {
 }
 
 type causeway_applib_DomainObjectList {
-  _gql_meta: causeway_applib_DomainObjectList__meta
+  _gql_meta: causeway_applib_DomainObjectList__gql_meta
   actionArguments: String
   actionId: String
   actionOwningFqcn: String
@@ -40,67 +40,76 @@ type causeway_applib_DomainObjectList {
   title: String!
 }
 
-type causeway_applib_DomainObjectList__meta {
+type causeway_applib_DomainObjectList__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_applib_FacetGroupNode {
-  _gql_meta: causeway_applib_FacetGroupNode__meta
+  _gql_meta: causeway_applib_FacetGroupNode__gql_meta
   facets: String!
 }
 
-type causeway_applib_FacetGroupNode__meta {
+type causeway_applib_FacetGroupNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_applib_ParameterNode {
-  _gql_meta: causeway_applib_ParameterNode__meta
+  _gql_meta: causeway_applib_ParameterNode__gql_meta
   parameter: String!
   parentNode: causeway_applib_node_ActionNode!
 }
 
-type causeway_applib_ParameterNode__meta {
+type causeway_applib_ParameterNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_applib_PropertyNode {
-  _gql_meta: causeway_applib_PropertyNode__meta
+  _gql_meta: causeway_applib_PropertyNode__gql_meta
+  _gql_mutations: causeway_applib_PropertyNode__gql_mutations
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
   property: String!
 }
 
-type causeway_applib_PropertyNode__meta {
+type causeway_applib_PropertyNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
+type causeway_applib_PropertyNode__gql_mutations {
+  streamChildNodes: causeway_applib_PropertyNode__streamChildNodes
+}
+
+type causeway_applib_PropertyNode__streamChildNodes {
+  invoke: java_util_stream_Stream
+}
+
 type causeway_applib_RoleMemento {
-  _gql_meta: causeway_applib_RoleMemento__meta
+  _gql_meta: causeway_applib_RoleMemento__gql_meta
   description: String!
   name: String!
 }
 
-type causeway_applib_RoleMemento__meta {
+type causeway_applib_RoleMemento__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_applib_TypeNode {
-  _gql_meta: causeway_applib_TypeNode__meta
+  _gql_meta: causeway_applib_TypeNode__gql_meta
   domainClassDto: causeway_schema_metamodel_v2_DomainClassDto!
 }
 
-type causeway_applib_TypeNode__meta {
+type causeway_applib_TypeNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_applib_UserMemento {
-  _gql_meta: causeway_applib_UserMemento__meta
+  _gql_meta: causeway_applib_UserMemento__gql_meta
   authenticationCode: String!
   authenticationSource: String!
   avatarUrl: String
@@ -114,122 +123,140 @@ type causeway_applib_UserMemento {
   timeFormatLocale: String
 }
 
-type causeway_applib_UserMemento__meta {
+type causeway_applib_UserMemento__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_applib_UserMenu {
-  me: causeway_applib_UserMenu_me
+  me: causeway_applib_UserMenu__me
 }
 
-type causeway_applib_UserMenu_me {
+type causeway_applib_UserMenu__me {
   invoke: causeway_applib_UserMemento
 }
 
 type causeway_applib_node_ActionNode {
-  _gql_meta: causeway_applib_node_ActionNode__meta
+  _gql_meta: causeway_applib_node_ActionNode__gql_meta
+  _gql_mutations: causeway_applib_node_ActionNode__gql_mutations
   action: String!
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
 }
 
-type causeway_applib_node_ActionNode__meta {
+type causeway_applib_node_ActionNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
+type causeway_applib_node_ActionNode__gql_mutations {
+  streamChildNodes: causeway_applib_node_ActionNode__streamChildNodes
+}
+
+type causeway_applib_node_ActionNode__streamChildNodes {
+  invoke: java_util_stream_Stream
+}
+
 type causeway_applib_node_CollectionNode {
-  _gql_meta: causeway_applib_node_CollectionNode__meta
+  _gql_meta: causeway_applib_node_CollectionNode__gql_meta
+  _gql_mutations: causeway_applib_node_CollectionNode__gql_mutations
   collection: String!
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
 }
 
-type causeway_applib_node_CollectionNode__meta {
+type causeway_applib_node_CollectionNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
+type causeway_applib_node_CollectionNode__gql_mutations {
+  streamChildNodes: causeway_applib_node_CollectionNode__streamChildNodes
+}
+
+type causeway_applib_node_CollectionNode__streamChildNodes {
+  invoke: java_util_stream_Stream
+}
+
 type causeway_applib_node_FacetAttrNode {
-  _gql_meta: causeway_applib_node_FacetAttrNode__meta
+  _gql_meta: causeway_applib_node_FacetAttrNode__gql_meta
   facetAttr: String!
   parentNode: causeway_applib_node_FacetNode!
 }
 
-type causeway_applib_node_FacetAttrNode__meta {
+type causeway_applib_node_FacetAttrNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_applib_node_FacetNode {
-  _gql_meta: causeway_applib_node_FacetNode__meta
+  _gql_meta: causeway_applib_node_FacetNode__gql_meta
   facet: String!
   shadowed: String!
 }
 
-type causeway_applib_node_FacetNode__meta {
+type causeway_applib_node_FacetNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_conf_ConfigurationMenu {
-  configuration: causeway_conf_ConfigurationMenu_configuration
+  configuration: causeway_conf_ConfigurationMenu__configuration
 }
 
-type causeway_conf_ConfigurationMenu_configuration {
+type causeway_conf_ConfigurationMenu__configuration {
   invoke: causeway_conf_ConfigurationViewmodel
 }
 
 type causeway_conf_ConfigurationProperty {
-  _gql_meta: causeway_conf_ConfigurationProperty__meta
+  _gql_meta: causeway_conf_ConfigurationProperty__gql_meta
   key: String!
   value: String!
 }
 
-type causeway_conf_ConfigurationProperty__meta {
+type causeway_conf_ConfigurationProperty__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_conf_ConfigurationViewmodel {
-  _gql_meta: causeway_conf_ConfigurationViewmodel__meta
+  _gql_meta: causeway_conf_ConfigurationViewmodel__gql_meta
   environment: [causeway_conf_ConfigurationProperty]
   primary: [causeway_conf_ConfigurationProperty]
   secondary: [causeway_conf_ConfigurationProperty]
 }
 
-type causeway_conf_ConfigurationViewmodel__meta {
+type causeway_conf_ConfigurationViewmodel__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_feat_ApplicationFeatureViewModel {
-  _gql_meta: causeway_feat_ApplicationFeatureViewModel__meta
+  _gql_meta: causeway_feat_ApplicationFeatureViewModel__gql_meta
   memberName: String!
   namespaceName: String!
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationFeatureViewModel__meta {
+type causeway_feat_ApplicationFeatureViewModel__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_feat_ApplicationNamespace {
-  _gql_meta: causeway_feat_ApplicationNamespace__meta
+  _gql_meta: causeway_feat_ApplicationNamespace__gql_meta
   memberName: String!
   namespaceName: String!
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationNamespace__meta {
+type causeway_feat_ApplicationNamespace__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_feat_ApplicationType {
-  _gql_meta: causeway_feat_ApplicationType__meta
+  _gql_meta: causeway_feat_ApplicationType__gql_meta
   actions: [causeway_feat_ApplicationTypeAction]
   collections: [causeway_feat_ApplicationTypeCollection]
   memberName: String!
@@ -239,7 +266,7 @@ type causeway_feat_ApplicationType {
 }
 
 type causeway_feat_ApplicationTypeAction {
-  _gql_meta: causeway_feat_ApplicationTypeAction__meta
+  _gql_meta: causeway_feat_ApplicationTypeAction__gql_meta
   actionSemantics: String!
   memberName: String!
   namespaceName: String!
@@ -247,13 +274,13 @@ type causeway_feat_ApplicationTypeAction {
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationTypeAction__meta {
+type causeway_feat_ApplicationTypeAction__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_feat_ApplicationTypeCollection {
-  _gql_meta: causeway_feat_ApplicationTypeCollection__meta
+  _gql_meta: causeway_feat_ApplicationTypeCollection__gql_meta
   derived: String!
   elementType: String!
   memberName: String!
@@ -261,25 +288,25 @@ type causeway_feat_ApplicationTypeCollection {
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationTypeCollection__meta {
+type causeway_feat_ApplicationTypeCollection__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_feat_ApplicationTypeMember {
-  _gql_meta: causeway_feat_ApplicationTypeMember__meta
+  _gql_meta: causeway_feat_ApplicationTypeMember__gql_meta
   memberName: String!
   namespaceName: String!
   typeSimpleName: String!
 }
 
-type causeway_feat_ApplicationTypeMember__meta {
+type causeway_feat_ApplicationTypeMember__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_feat_ApplicationTypeProperty {
-  _gql_meta: causeway_feat_ApplicationTypeProperty__meta
+  _gql_meta: causeway_feat_ApplicationTypeProperty__gql_meta
   derived: String!
   maxLength: String
   memberName: String!
@@ -289,18 +316,18 @@ type causeway_feat_ApplicationTypeProperty {
   typicalLength: String
 }
 
-type causeway_feat_ApplicationTypeProperty__meta {
+type causeway_feat_ApplicationTypeProperty__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationType__meta {
+type causeway_feat_ApplicationType__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto {
-  _gql_meta: causeway_schema_metamodel_v2_DomainClassDto__meta
+  _gql_meta: causeway_schema_metamodel_v2_DomainClassDto__gql_meta
   actions: String!
   annotations: String!
   collections: String!
@@ -312,412 +339,673 @@ type causeway_schema_metamodel_v2_DomainClassDto {
   service: String!
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__meta {
+type causeway_schema_metamodel_v2_DomainClassDto__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_security_LoginRedirect {
-  _gql_meta: causeway_security_LoginRedirect__meta
+  _gql_meta: causeway_security_LoginRedirect__gql_meta
 }
 
-type causeway_security_LoginRedirect__meta {
+type causeway_security_LoginRedirect__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_security_LogoutMenu {
-  logout: causeway_security_LogoutMenu_logout
+  logout: causeway_security_LogoutMenu__logout
 }
 
-type causeway_security_LogoutMenu_logout {
+type causeway_security_LogoutMenu__logout {
   invoke: String
 }
 
 type causeway_testing_fixtures_FixtureResult {
-  _gql_meta: causeway_testing_fixtures_FixtureResult__meta
+  _gql_meta: causeway_testing_fixtures_FixtureResult__gql_meta
   className: String!
   fixtureScriptClassName: String
   key: String!
 }
 
-type causeway_testing_fixtures_FixtureResult__meta {
+type causeway_testing_fixtures_FixtureResult__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_lang_Runnable {
-  _gql_meta: java_lang_Runnable__meta
+  _gql_meta: java_lang_Runnable__gql_meta
 }
 
-type java_lang_Runnable__meta {
+type java_lang_Runnable__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_Map {
-  _gql_meta: java_util_Map__meta
+  _gql_meta: java_util_Map__gql_meta
 }
 
-type java_util_Map__meta {
+type java_util_Map__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_SortedMap {
-  _gql_meta: java_util_SortedMap__meta
+  _gql_meta: java_util_SortedMap__gql_meta
 }
 
-type java_util_SortedMap__meta {
+type java_util_SortedMap__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_concurrent_Callable {
-  _gql_meta: java_util_concurrent_Callable__meta
+  _gql_meta: java_util_concurrent_Callable__gql_meta
 }
 
-type java_util_concurrent_Callable__meta {
+type java_util_concurrent_Callable__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_function_BiFunction {
-  _gql_meta: java_util_function_BiFunction__meta
+  _gql_meta: java_util_function_BiFunction__gql_meta
 }
 
-type java_util_function_BiFunction__meta {
+type java_util_function_BiFunction__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_function_Consumer {
-  _gql_meta: java_util_function_Consumer__meta
+  _gql_meta: java_util_function_Consumer__gql_meta
 }
 
-type java_util_function_Consumer__meta {
+type java_util_function_Consumer__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_function_Function {
-  _gql_meta: java_util_function_Function__meta
+  _gql_meta: java_util_function_Function__gql_meta
 }
 
-type java_util_function_Function__meta {
+type java_util_function_Function__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_stream_Stream {
-  _gql_meta: java_util_stream_Stream__meta
+  _gql_meta: java_util_stream_Stream__gql_meta
 }
 
-type java_util_stream_Stream__meta {
+type java_util_stream_Stream__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type org_apache_causeway_commons_functional_Either {
-  _gql_meta: org_apache_causeway_commons_functional_Either__meta
+  _gql_meta: org_apache_causeway_commons_functional_Either__gql_meta
+  _gql_mutations: org_apache_causeway_commons_functional_Either__gql_mutations
   left: String!
   right: String!
 }
 
-type org_apache_causeway_commons_functional_Either__meta {
+type org_apache_causeway_commons_functional_Either__accept {
+  invoke(leftConsumer: java_util_function_Consumer__gql_input!, rightConsumer: java_util_function_Consumer__gql_input!): String
+}
+
+type org_apache_causeway_commons_functional_Either__gql_meta {
   id: String!
   logicalTypeName: String!
+}
+
+type org_apache_causeway_commons_functional_Either__gql_mutations {
+  accept: org_apache_causeway_commons_functional_Either__accept
+  left: org_apache_causeway_commons_functional_Either__left
+  map: org_apache_causeway_commons_functional_Either__map
+  mapLeft: org_apache_causeway_commons_functional_Either__mapLeft
+  mapRight: org_apache_causeway_commons_functional_Either__mapRight
+  right: org_apache_causeway_commons_functional_Either__right
+}
+
+type org_apache_causeway_commons_functional_Either__left {
+  invoke: String
+}
+
+type org_apache_causeway_commons_functional_Either__map {
+  invoke(leftMapper: java_util_function_Function__gql_input!, rightMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
+}
+
+type org_apache_causeway_commons_functional_Either__mapLeft {
+  invoke(leftMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
+}
+
+type org_apache_causeway_commons_functional_Either__mapRight {
+  invoke(rightMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
+}
+
+type org_apache_causeway_commons_functional_Either__right {
+  invoke: String
 }
 
 type org_apache_causeway_commons_functional_Railway {
-  _gql_meta: org_apache_causeway_commons_functional_Railway__meta
+  _gql_meta: org_apache_causeway_commons_functional_Railway__gql_meta
+  _gql_mutations: org_apache_causeway_commons_functional_Railway__gql_mutations
   failure: String!
   success: String!
 }
 
-type org_apache_causeway_commons_functional_Railway__meta {
+type org_apache_causeway_commons_functional_Railway__chain {
+  invoke(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
+}
+
+type org_apache_causeway_commons_functional_Railway__gql_meta {
   id: String!
   logicalTypeName: String!
+}
+
+type org_apache_causeway_commons_functional_Railway__gql_mutations {
+  chain: org_apache_causeway_commons_functional_Railway__chain
+  ifFailure: org_apache_causeway_commons_functional_Railway__ifFailure
+  ifSuccess: org_apache_causeway_commons_functional_Railway__ifSuccess
+  mapFailure: org_apache_causeway_commons_functional_Railway__mapFailure
+  mapSuccess: org_apache_causeway_commons_functional_Railway__mapSuccess
+}
+
+type org_apache_causeway_commons_functional_Railway__ifFailure {
+  invoke(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Railway
+}
+
+type org_apache_causeway_commons_functional_Railway__ifSuccess {
+  invoke(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Railway
+}
+
+type org_apache_causeway_commons_functional_Railway__mapFailure {
+  invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
+}
+
+type org_apache_causeway_commons_functional_Railway__mapSuccess {
+  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingConsumer__meta
+  _gql_meta: org_apache_causeway_commons_functional_ThrowingConsumer__gql_meta
+  _gql_mutations: org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations
 }
 
-type org_apache_causeway_commons_functional_ThrowingConsumer__meta {
+type org_apache_causeway_commons_functional_ThrowingConsumer__andThen {
+  invoke(arg0: java_util_function_Consumer__gql_input!): java_util_function_Consumer
+}
+
+type org_apache_causeway_commons_functional_ThrowingConsumer__gql_meta {
   id: String!
   logicalTypeName: String!
+}
+
+type org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations {
+  andThen: org_apache_causeway_commons_functional_ThrowingConsumer__andThen
+  throwing: org_apache_causeway_commons_functional_ThrowingConsumer__throwing
+}
+
+type org_apache_causeway_commons_functional_ThrowingConsumer__throwing {
+  invoke(exceptionWrapper: java_util_function_BiFunction__gql_input!): org_apache_causeway_commons_functional_ThrowingConsumer
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingFunction__meta
+  _gql_meta: org_apache_causeway_commons_functional_ThrowingFunction__gql_meta
+  _gql_mutations: org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations
 }
 
-type org_apache_causeway_commons_functional_ThrowingFunction__meta {
+type org_apache_causeway_commons_functional_ThrowingFunction__andThen {
+  invoke(arg0: java_util_function_Function__gql_input!): java_util_function_Function
+}
+
+type org_apache_causeway_commons_functional_ThrowingFunction__compose {
+  invoke(arg0: java_util_function_Function__gql_input!): java_util_function_Function
+}
+
+type org_apache_causeway_commons_functional_ThrowingFunction__gql_meta {
   id: String!
   logicalTypeName: String!
+}
+
+type org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations {
+  andThen: org_apache_causeway_commons_functional_ThrowingFunction__andThen
+  compose: org_apache_causeway_commons_functional_ThrowingFunction__compose
+  throwing: org_apache_causeway_commons_functional_ThrowingFunction__throwing
+}
+
+type org_apache_causeway_commons_functional_ThrowingFunction__throwing {
+  invoke(exceptionWrapper: java_util_function_BiFunction__gql_input!): org_apache_causeway_commons_functional_ThrowingFunction
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingRunnable__meta
+  _gql_meta: org_apache_causeway_commons_functional_ThrowingRunnable__gql_meta
+  _gql_mutations: org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations
 }
 
-type org_apache_causeway_commons_functional_ThrowingRunnable__meta {
+type org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched {
+  invoke: String
+}
+
+type org_apache_causeway_commons_functional_ThrowingRunnable__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
+type org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations {
+  callUncatched: org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched
+  run: org_apache_causeway_commons_functional_ThrowingRunnable__run
+  runUncatched: org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched
+  toCallable: org_apache_causeway_commons_functional_ThrowingRunnable__toCallable
+  toRunnable: org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable
+}
+
+type org_apache_causeway_commons_functional_ThrowingRunnable__run {
+  invoke: String
+}
+
+type org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched {
+  invoke: String
+}
+
+type org_apache_causeway_commons_functional_ThrowingRunnable__toCallable {
+  invoke: java_util_concurrent_Callable
+}
+
+type org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable {
+  invoke: java_lang_Runnable
+}
+
 type org_apache_causeway_commons_functional_Try {
-  _gql_meta: org_apache_causeway_commons_functional_Try__meta
+  _gql_meta: org_apache_causeway_commons_functional_Try__gql_meta
+  _gql_mutations: org_apache_causeway_commons_functional_Try__gql_mutations
   failure: String!
   success: String!
 }
 
-type org_apache_causeway_commons_functional_Try__meta {
+type org_apache_causeway_commons_functional_Try__accept {
+  invoke(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccess {
+  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable {
+  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent {
+  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MMNode {
-  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__meta
+type org_apache_causeway_commons_functional_Try__gql_mutations {
+  accept: org_apache_causeway_commons_functional_Try__accept
+  flatMapSuccess: org_apache_causeway_commons_functional_Try__flatMapSuccess
+  flatMapSuccessAsNullable: org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable
+  flatMapSuccessWhenPresent: org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent
+  ifAbsentFail: org_apache_causeway_commons_functional_Try__ifAbsentFail
+  ifFailure: org_apache_causeway_commons_functional_Try__ifFailure
+  ifFailureFail: org_apache_causeway_commons_functional_Try__ifFailureFail
+  ifSuccess: org_apache_causeway_commons_functional_Try__ifSuccess
+  ifSuccessAsNullable: org_apache_causeway_commons_functional_Try__ifSuccessAsNullable
+  mapEmptyToFailure: org_apache_causeway_commons_functional_Try__mapEmptyToFailure
+  mapFailure: org_apache_causeway_commons_functional_Try__mapFailure
+  mapFailureToSuccess: org_apache_causeway_commons_functional_Try__mapFailureToSuccess
+  mapSuccess: org_apache_causeway_commons_functional_Try__mapSuccess
+  mapSuccessAsNullable: org_apache_causeway_commons_functional_Try__mapSuccessAsNullable
+  mapSuccessWhenPresent: org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent
+  mapToEither: org_apache_causeway_commons_functional_Try__mapToEither
+  orCall: org_apache_causeway_commons_functional_Try__orCall
+  then: org_apache_causeway_commons_functional_Try__then
+  thenCall: org_apache_causeway_commons_functional_Try__thenCall
+  thenRun: org_apache_causeway_commons_functional_Try__thenRun
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MMNode__meta {
+type org_apache_causeway_commons_functional_Try__ifAbsentFail {
+  invoke: org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__ifFailure {
+  invoke(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__ifFailureFail {
+  invoke: org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__ifSuccess {
+  invoke(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable {
+  invoke(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__mapEmptyToFailure {
+  invoke: org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__mapFailure {
+  invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__mapFailureToSuccess {
+  invoke(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccess {
+  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable {
+  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent {
+  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__mapToEither {
+  invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Either
+}
+
+type org_apache_causeway_commons_functional_Try__orCall {
+  invoke(fallback: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__then {
+  invoke(next: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__thenCall {
+  invoke(callable: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_commons_functional_Try__thenRun {
+  invoke(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gql_input!): org_apache_causeway_commons_functional_Try
+}
+
+type org_apache_causeway_core_metamodel_inspect_model_MMNode {
+  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta
+}
+
+type org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode {
-  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta
+  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_meta
+  _gql_mutations: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations
   mixedIn: String!
   parentNode: causeway_applib_TypeNode!
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MemberNode__meta {
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations {
+  streamChildNodes: org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes
+}
+
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes {
+  invoke: java_util_stream_Stream
+}
+
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
-  _gql_meta: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__meta
+  _gql_meta: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_meta
   friendlyName: String!
   qualifiedName: String!
 }
 
-type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__meta {
+type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type university_dept_Department {
-  _gql_meta: university_dept_Department__meta
+  _gql_meta: university_dept_Department__gql_meta
   deptHead: university_dept_DeptHead
   name: String!
 }
 
 type university_dept_DepartmentMenu {
-  findAllDepartments: university_dept_DepartmentMenu_findAllDepartments
+  _gql_mutations: university_dept_DepartmentMenu__gql_mutations
+  findAllDepartments: university_dept_DepartmentMenu__findAllDepartments
 }
 
-type university_dept_DepartmentMenu_findAllDepartments {
+type university_dept_DepartmentMenu__createDepartment {
+  invoke(deptHead: university_dept_DeptHead__gql_input, name: String!): university_dept_Department
+}
+
+type university_dept_DepartmentMenu__findAllDepartments {
   invoke: [university_dept_Department]
 }
 
-type university_dept_Department__meta {
+type university_dept_DepartmentMenu__gql_mutations {
+  createDepartment: university_dept_DepartmentMenu__createDepartment
+}
+
+type university_dept_Department__gql_meta {
   id: String!
   logicalTypeName: String!
   version: String
 }
 
 type university_dept_DeptHead {
-  _gql_meta: university_dept_DeptHead__meta
+  _gql_meta: university_dept_DeptHead__gql_meta
+  _gql_mutations: university_dept_DeptHead__gql_mutations
   department: university_dept_Department
   name: String
 }
 
 type university_dept_DeptHeadMenu {
-  findAllDeptHeads: university_dept_DeptHeadMenu_findAllDeptHeads
-  findDeptHeadByName: university_dept_DeptHeadMenu_findDeptHeadByName
+  findAllDeptHeads: university_dept_DeptHeadMenu__findAllDeptHeads
+  findDeptHeadByName: university_dept_DeptHeadMenu__findDeptHeadByName
 }
 
-type university_dept_DeptHeadMenu_findAllDeptHeads {
+type university_dept_DeptHeadMenu__findAllDeptHeads {
   invoke: [university_dept_DeptHead]
 }
 
-type university_dept_DeptHeadMenu_findDeptHeadByName {
+type university_dept_DeptHeadMenu__findDeptHeadByName {
   invoke(name: String!): university_dept_DeptHead
 }
 
-type university_dept_DeptHead__meta {
+type university_dept_DeptHead__changeDepartment {
+  invoke(department: university_dept_Department__gql_input!): university_dept_DeptHead
+}
+
+type university_dept_DeptHead__changeName {
+  invoke(newName: String!): university_dept_DeptHead
+}
+
+type university_dept_DeptHead__gql_meta {
   id: String!
   logicalTypeName: String!
   version: String
 }
 
-input causeway_applib_DomainObjectList__input {
+type university_dept_DeptHead__gql_mutations {
+  changeDepartment: university_dept_DeptHead__changeDepartment
+  changeName: university_dept_DeptHead__changeName
+}
+
+input causeway_applib_DomainObjectList__gql_input {
   id: ID!
 }
 
-input causeway_applib_FacetGroupNode__input {
+input causeway_applib_FacetGroupNode__gql_input {
   id: ID!
 }
 
-input causeway_applib_ParameterNode__input {
+input causeway_applib_ParameterNode__gql_input {
   id: ID!
 }
 
-input causeway_applib_PropertyNode__input {
+input causeway_applib_PropertyNode__gql_input {
   id: ID!
 }
 
-input causeway_applib_RoleMemento__input {
+input causeway_applib_RoleMemento__gql_input {
   id: ID!
 }
 
-input causeway_applib_TypeNode__input {
+input causeway_applib_TypeNode__gql_input {
   id: ID!
 }
 
-input causeway_applib_UserMemento__input {
+input causeway_applib_UserMemento__gql_input {
   id: ID!
 }
 
-input causeway_applib_node_ActionNode__input {
+input causeway_applib_node_ActionNode__gql_input {
   id: ID!
 }
 
-input causeway_applib_node_CollectionNode__input {
+input causeway_applib_node_CollectionNode__gql_input {
   id: ID!
 }
 
-input causeway_applib_node_FacetAttrNode__input {
+input causeway_applib_node_FacetAttrNode__gql_input {
   id: ID!
 }
 
-input causeway_applib_node_FacetNode__input {
+input causeway_applib_node_FacetNode__gql_input {
   id: ID!
 }
 
-input causeway_conf_ConfigurationProperty__input {
+input causeway_conf_ConfigurationProperty__gql_input {
   id: ID!
 }
 
-input causeway_conf_ConfigurationViewmodel__input {
+input causeway_conf_ConfigurationViewmodel__gql_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationFeatureViewModel__input {
+input causeway_feat_ApplicationFeatureViewModel__gql_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationNamespace__input {
+input causeway_feat_ApplicationNamespace__gql_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationTypeAction__input {
+input causeway_feat_ApplicationTypeAction__gql_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationTypeCollection__input {
+input causeway_feat_ApplicationTypeCollection__gql_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationTypeMember__input {
+input causeway_feat_ApplicationTypeMember__gql_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationTypeProperty__input {
+input causeway_feat_ApplicationTypeProperty__gql_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationType__input {
+input causeway_feat_ApplicationType__gql_input {
   id: ID!
 }
 
-input causeway_schema_metamodel_v2_DomainClassDto__input {
+input causeway_schema_metamodel_v2_DomainClassDto__gql_input {
   id: ID!
 }
 
-input causeway_security_LoginRedirect__input {
+input causeway_security_LoginRedirect__gql_input {
   id: ID!
 }
 
-input causeway_testing_fixtures_FixtureResult__input {
+input causeway_testing_fixtures_FixtureResult__gql_input {
   id: ID!
 }
 
-input java_lang_Runnable__input {
+input java_lang_Runnable__gql_input {
   id: ID!
 }
 
-input java_util_Map__input {
+input java_util_Map__gql_input {
   id: ID!
 }
 
-input java_util_SortedMap__input {
+input java_util_SortedMap__gql_input {
   id: ID!
 }
 
-input java_util_concurrent_Callable__input {
+input java_util_concurrent_Callable__gql_input {
   id: ID!
 }
 
-input java_util_function_BiFunction__input {
+input java_util_function_BiFunction__gql_input {
   id: ID!
 }
 
-input java_util_function_Consumer__input {
+input java_util_function_Consumer__gql_input {
   id: ID!
 }
 
-input java_util_function_Function__input {
+input java_util_function_Function__gql_input {
   id: ID!
 }
 
-input java_util_stream_Stream__input {
+input java_util_stream_Stream__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_Either__input {
+input org_apache_causeway_commons_functional_Either__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_Railway__input {
+input org_apache_causeway_commons_functional_Railway__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_ThrowingConsumer__input {
+input org_apache_causeway_commons_functional_ThrowingConsumer__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_ThrowingFunction__input {
+input org_apache_causeway_commons_functional_ThrowingFunction__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_ThrowingRunnable__input {
+input org_apache_causeway_commons_functional_ThrowingRunnable__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_Try__input {
+input org_apache_causeway_commons_functional_Try__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_core_metamodel_inspect_model_MMNode__input {
+input org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_core_metamodel_inspect_model_MemberNode__input {
+input org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_input {
   id: ID!
 }
 
-input org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__input {
+input org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_input {
   id: ID!
 }
 
-input university_dept_Department__input {
+input university_dept_Department__gql_input {
   id: ID!
 }
 
-input university_dept_DeptHead__input {
+input university_dept_DeptHead__gql_input {
   id: ID!
 }

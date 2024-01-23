@@ -5,14 +5,9 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLObjectType;
+import graphql.schema.*;
 
 import lombok.extern.log4j.Log4j2;
-
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -33,7 +28,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
             ) {
         super(holder, objectAction, codeRegistryBuilder);
 
-        gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(objectAction));
+        gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(objectAction, holder.getObjectSpecification()));
 
         this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder);
         this.bookmarkService = bookmarkService;
@@ -64,12 +59,27 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
 
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment ->
-                        bookmarkService.bookmarkFor(environment.getSource())
-                                .map(bookmark -> new GqlvAction.Fetcher(bookmark, bookmarkService))
-                                .orElseThrow());
+                new Fetcher2());
 
         invoke.addDataFetcher();
+    }
+
+    private class Fetcher2 implements DataFetcher<Object> {
+        @Override
+        public Object get(DataFetchingEnvironment environment) {
+            Object source = environment.getSource();
+            Object domainPojo;
+            if (source instanceof GqlvMutations.Fetcher) {
+                GqlvMutations.Fetcher mutationsFetcher = (GqlvMutations.Fetcher) source;
+                domainPojo = mutationsFetcher.getTargetPojo();
+            } else {
+                // presumably this is a safe action
+                domainPojo = source;
+            }
+            return bookmarkService.bookmarkFor(domainPojo)
+                    .map(bookmark -> new Fetcher(bookmark, bookmarkService))
+                    .orElseThrow();
+        }
     }
 
     static class Fetcher {

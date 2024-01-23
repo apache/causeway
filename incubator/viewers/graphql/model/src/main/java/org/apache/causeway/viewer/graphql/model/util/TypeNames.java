@@ -31,19 +31,19 @@ public final class TypeNames {
     }
 
     public static String metaTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__meta";
+        return objectTypeNameFor(objectSpecification) + "__gql_meta";
     }
 
     public static String mutationsTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__mutations";
+        return objectTypeNameFor(objectSpecification) + "__gql_mutations";
     }
 
     public static String inputTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__input";
+        return objectTypeNameFor(objectSpecification) + "__gql_input";
     }
 
-    public static String actionTypeNameFor(ObjectMember objectMember) {
-        String typeName = objectTypeNameFor(objectMember.getDeclaringType()) + "__" + objectMember.getId();
+    public static String actionTypeNameFor(ObjectMember objectMember, ObjectSpecification objectSpecification) {
+        String typeName = objectTypeNameFor(objectSpecification) + "__" + objectMember.getId();
         return typeName;
     }
 

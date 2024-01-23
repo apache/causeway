@@ -1,21 +1,23 @@
 {
   "data" : {
     "university_dept_DepartmentMenu" : {
-      "findAllDepartments" : [ {
-        "name" : "foo",
-        "_gql_meta" : {
-          "id" : "3",
-          "logicalTypeName" : "university.dept.Department",
-          "version" : null
-        }
-      }, {
-        "name" : "bar",
-        "_gql_meta" : {
-          "id" : "4",
-          "logicalTypeName" : "university.dept.Department",
-          "version" : null
-        }
-      } ]
+      "findAllDepartments" : {
+        "invoke" : [ {
+          "name" : "foo",
+          "_gql_meta" : {
+            "id" : "3",
+            "logicalTypeName" : "university.dept.Department",
+            "version" : null
+          }
+        }, {
+          "name" : "bar",
+          "_gql_meta" : {
+            "id" : "4",
+            "logicalTypeName" : "university.dept.Department",
+            "version" : null
+          }
+        } ]
+      }
     }
   }
 }

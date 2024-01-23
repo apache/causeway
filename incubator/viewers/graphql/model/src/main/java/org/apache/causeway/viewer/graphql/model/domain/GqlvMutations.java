@@ -2,7 +2,10 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -43,8 +46,7 @@ public class GqlvMutations implements GqlvActionHolder {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<GraphQLFieldDefinition> fieldIfAny;
 
-    private final List<GqlvActionSimple> actionSimples = new ArrayList<>();
-    private final List<GqlvAction> actions = new ArrayList<>();
+    private final SortedMap<String, GqlvAction> actions = new TreeMap<>();
 
     public GqlvMutations(
             final GqlvMutationsHolder holder,
@@ -65,7 +67,10 @@ public class GqlvMutations implements GqlvActionHolder {
 
     public void addAction(final ObjectAction objectAction) {
 //        actionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
-        actions.add(new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+        String actionId = objectAction.getId();
+        if (!actions.containsKey(actionId)) {
+            actions.put(actionId, new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+        }
     }
 
 
@@ -113,8 +118,7 @@ public class GqlvMutations implements GqlvActionHolder {
                             .map(bookmark -> new Fetcher(bookmark, bookmarkService))
                             .orElseThrow());
 
-            //actionSimples.forEach(GqlvActionSimple::addDataFetcher);
-            actions.forEach(GqlvAction::addDataFetcher);
+            actions.forEach((id, gqlvAction) -> gqlvAction.addDataFetcher());
         }
     }
 

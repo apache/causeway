@@ -42,7 +42,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         return objectSpecification.getLogicalTypeName();
     }
 
-    private final List<GqlvActionSimple> safeActionSimples = new ArrayList<>();
     private final List<GqlvAction> safeActions = new ArrayList<>();
 
     private GraphQLObjectType gqlObjectType;

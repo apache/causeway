@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class GraphQLTypeRegistry {
 
-    Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
+    Set<GraphQLType> graphQLTypes = new HashSet<>();
 
-    public Set<GraphQLType> getGraphQLObjectTypes() {
-        return Collections.unmodifiableSet(graphQLObjectTypes);
+    public Set<GraphQLType> getGraphQLTypes() {
+        return Collections.unmodifiableSet(graphQLTypes);
     }
 
 
@@ -36,7 +36,7 @@ public class GraphQLTypeRegistry {
             log.info("GraphQLObjectType for {} already present", logicalTypeName);
             return;
         }
-        graphQLObjectTypes.add(typeToAdd);
+        graphQLTypes.add(typeToAdd);
     }
 
 
@@ -86,7 +86,7 @@ public class GraphQLTypeRegistry {
     private boolean isPresent(
             final GraphQLNamedType typeToAdd,
             final Class<? extends GraphQLNamedType> cls) {
-        return  graphQLObjectTypes.stream()
+        return graphQLTypes.stream()
                 .filter(o -> o.getClass().isAssignableFrom(cls))
                 .map(cls::cast)
                 .anyMatch(ot -> ot.getName().equals(typeToAdd.getName()));
@@ -94,7 +94,7 @@ public class GraphQLTypeRegistry {
 
 
     private void add(GraphQLType typeToAdd) {
-        graphQLObjectTypes.add(typeToAdd);
+        graphQLTypes.add(typeToAdd);
     }
 
 }

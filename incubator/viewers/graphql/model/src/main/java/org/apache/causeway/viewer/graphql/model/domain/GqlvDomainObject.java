@@ -1,7 +1,8 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -44,10 +45,9 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
-    private final List<GqlvProperty> properties = new ArrayList<>();
-    private final List<GqlvCollection> collections = new ArrayList<>();
-    private final List<GqlvActionSimple> safeActionSimples = new ArrayList<>();
-    private final List<GqlvAction> safeActions = new ArrayList<>();
+    private final SortedMap<String, GqlvProperty> properties = new TreeMap<>();
+    private final SortedMap<String, GqlvCollection> collections = new TreeMap<>();
+    private final Map<String, GqlvAction> safeActions = new TreeMap<>();
 
     private GraphQLObjectType gqlObjectType;
 
@@ -98,21 +98,29 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     private void addProperty(final OneToOneAssociation otoa) {
         GqlvProperty property = new GqlvProperty(this, otoa, codeRegistryBuilder);
         if (property.hasFieldDefinition()) {
-            properties.add(property);
+            String propertyId = property.getId();
+            if (!properties.containsKey(propertyId)) {
+                properties.put(propertyId, property);
+            }
         }
     }
 
     private void addCollection(OneToManyAssociation otom) {
-        GqlvCollection gqlvCollection = new GqlvCollection(this, otom, codeRegistryBuilder);
-        if (gqlvCollection.hasFieldDefinition()) {
-            collections.add(gqlvCollection);
+        GqlvCollection collection = new GqlvCollection(this, otom, codeRegistryBuilder);
+        if (collection.hasFieldDefinition()) {
+            String collectionId = collection.getId();
+            if (!collections.containsKey(collectionId)) {
+                collections.put(collectionId, collection);
+            }
         }
     }
 
     private void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
-//            safeActionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
-            safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+            String actionId = objectAction.getId();
+            if (!safeActions.containsKey(actionId)) {
+                safeActions.put(actionId, new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+            }
         } else {
             mutations.addAction(objectAction);
         }
@@ -140,10 +148,9 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     public void addDataFetchers() {
         meta.addDataFetchers();
-        properties.forEach(GqlvAssociation::addDataFetcher);
-        collections.forEach(GqlvCollection::addDataFetcher);
-        //safeActionSimples.forEach(GqlvActionSimple::addDataFetcher);
-        safeActions.forEach(GqlvAction::addDataFetcher);
+        properties.forEach((id, property) -> property.addDataFetcher());
+        collections.forEach((id, collection) -> collection.addDataFetcher());
+        safeActions.forEach((id, action) -> action.addDataFetcher());
         mutations.addDataFetchers();
     }
 

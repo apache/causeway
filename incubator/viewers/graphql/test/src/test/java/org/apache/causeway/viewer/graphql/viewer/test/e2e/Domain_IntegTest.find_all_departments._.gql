@@ -1,11 +1,13 @@
 {
   university_dept_DepartmentMenu {
     findAllDepartments {
-      name
-      _gql_meta {
-        id
-        logicalTypeName
-        version
+      invoke {
+        name
+        _gql_meta {
+          id
+          logicalTypeName
+          version
+        }
       }
     }
   }
