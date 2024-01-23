@@ -121,7 +121,7 @@ public class GqlvActionSimple extends GqlvMember<ObjectAction, GqlvActionHolder>
     }
 
     public void addDataFetcher() {
-        GraphQLFieldDefinition fieldDefinition = getFieldDefinition();
+        GraphQLFieldDefinition fieldDefinition = getField();
         codeRegistryBuilder.dataFetcher(
                 getHolder().coordinatesFor(fieldDefinition),
                 this::invoke

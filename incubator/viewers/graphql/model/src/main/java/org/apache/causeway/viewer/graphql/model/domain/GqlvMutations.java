@@ -64,13 +64,14 @@ public class GqlvMutations implements GqlvActionHolder {
     }
 
     public void addAction(final ObjectAction objectAction) {
-        actionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
-        //actions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
+//        actionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
+        actions.add(new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
     }
 
 
     boolean hasActions() {
-        return !actionSimples.isEmpty();
+//        return !actionSimples.isEmpty();
+        return !actions.isEmpty();
     }
 
 
@@ -112,7 +113,8 @@ public class GqlvMutations implements GqlvActionHolder {
                             .map(bookmark -> new Fetcher(bookmark, bookmarkService))
                             .orElseThrow());
 
-            actionSimples.forEach(GqlvActionSimple::addDataFetcher);
+            //actionSimples.forEach(GqlvActionSimple::addDataFetcher);
+            actions.forEach(GqlvAction::addDataFetcher);
         }
     }
 

@@ -57,7 +57,7 @@ public class GqlvActionInvoke {
         GraphQLOutputType type = typeFor(objectAction);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
-                    .name(objectAction.getId())
+                    .name("invoke")
                     .type(type);
             addGqlArguments(objectAction, fieldBuilder);
             fieldDefinition = fieldBuilder.build();
@@ -156,8 +156,8 @@ public class GqlvActionInvoke {
 
         Object source = dataFetchingEnvironment.getSource();
         Object domainObjectInstance;
-        if (source instanceof GqlvMutations.Fetcher) {
-            GqlvMutations.Fetcher fetcher = (GqlvMutations.Fetcher) source;
+        if (source instanceof GqlvAction.Fetcher) {
+            GqlvAction.Fetcher fetcher = (GqlvAction.Fetcher) source;
             domainObjectInstance = fetcher.getTargetPojo();
         } else {
             domainObjectInstance = source;

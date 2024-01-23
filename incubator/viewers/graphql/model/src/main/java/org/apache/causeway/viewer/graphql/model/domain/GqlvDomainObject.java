@@ -37,6 +37,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     @Getter private final ObjectSpecification objectSpecification;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final BookmarkService bookmarkService;
 
     private final GqlvMeta meta;
     private final GqlvMutations mutations;
@@ -59,6 +60,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
             final ObjectManager objectManager) {
         this.objectSpecification = objectSpecification;
         this.codeRegistryBuilder = codeRegistryBuilder;
+        this.bookmarkService = bookmarkService;
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
@@ -109,8 +111,8 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     private void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
-            safeActionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
-            //safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
+//            safeActionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
+            safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
         } else {
             mutations.addAction(objectAction);
         }
@@ -140,7 +142,8 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         meta.addDataFetchers();
         properties.forEach(GqlvAssociation::addDataFetcher);
         collections.forEach(GqlvCollection::addDataFetcher);
-        safeActionSimples.forEach(GqlvActionSimple::addDataFetcher);
+        //safeActionSimples.forEach(GqlvActionSimple::addDataFetcher);
+        safeActions.forEach(GqlvAction::addDataFetcher);
         mutations.addDataFetchers();
     }
 

@@ -1,7 +1,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -33,21 +32,19 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-
-    @Getter private final GqlvMutations mutations;
+    private final BookmarkService bookmarkService;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+
+    @Getter private final GqlvMutations mutations;
 
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
     }
 
-    private final List<GqlvActionSimple> safeActions = new ArrayList<>();
-    public List<GqlvActionSimple> getSafeActions() {return Collections.unmodifiableList(safeActions);}
+    private final List<GqlvActionSimple> safeActionSimples = new ArrayList<>();
+    private final List<GqlvAction> safeActions = new ArrayList<>();
 
-    /**
-     * Built using {@link #buildGqlObjectType()}
-     */
     private GraphQLObjectType gqlObjectType;
 
     public GqlvDomainService(
@@ -59,6 +56,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
         this.codeRegistryBuilder = codeRegistryBuilder;
+        this.bookmarkService = bookmarkService;
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
@@ -84,7 +82,8 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
-            safeActions.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
+            // safeActionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
+            safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
         } else {
              mutations.addAction(objectAction);
         }
@@ -105,7 +104,8 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     }
 
     public void addDataFetchers() {
-        getSafeActions().forEach(GqlvActionSimple::addDataFetcher);
+        // safeActionSimples.forEach(GqlvActionSimple::addDataFetcher);
+        safeActions.forEach(GqlvAction::addDataFetcher);
         getMutations().addDataFetchers();
     }
 

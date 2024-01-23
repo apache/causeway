@@ -21,7 +21,7 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
     }
 
     public boolean hasFieldDefinition() {
-        return getFieldDefinition() != null;
+        return getField() != null;
     }
 
     /**
@@ -44,7 +44,7 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
             case ENTITY:
 
                 codeRegistryBuilder.dataFetcher(
-                        getHolder().coordinatesFor(getFieldDefinition()),
+                        getHolder().coordinatesFor(getField()),
                         (DataFetcher<Object>) environment -> {
 
                             Object domainObjectInstance = environment.getSource();
