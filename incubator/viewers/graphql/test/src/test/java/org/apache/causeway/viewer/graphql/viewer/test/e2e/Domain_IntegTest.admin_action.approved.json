@@ -1,0 +1,11 @@
+{
+  "data" : {
+    "university_dept_DepartmentMenu" : {
+      "_gql_mutations" : {
+        "adminAction" : {
+          "hidden" : true
+        }
+      }
+    }
+  }
+}

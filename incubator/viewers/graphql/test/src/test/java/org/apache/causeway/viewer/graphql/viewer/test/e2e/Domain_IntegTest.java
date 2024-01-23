@@ -111,6 +111,17 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Test
     @UseReporter(DiffReporter.class)
+    void admin_action() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void find_department_and_change_name() throws Exception {
 
         // given

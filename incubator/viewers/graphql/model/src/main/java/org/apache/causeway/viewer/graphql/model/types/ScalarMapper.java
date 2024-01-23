@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import graphql.Scalars;
+import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLType;
 
 import lombok.experimental.UtilityClass;
@@ -36,7 +37,7 @@ public class ScalarMapper {
     private static List<Class<?>> longEquivalents = Arrays.asList(Long.class, long.class, BigDecimal.class);
     private static List<Class<?>> booleanEquivalents = Arrays.asList(Boolean.class, boolean.class);
 
-    public static GraphQLType typeFor(final Class<?> c){
+    public static GraphQLScalarType typeFor(final Class<?> c){
         if (integerEquivalents.contains(c)){
             return Scalars.GraphQLInt;
         }

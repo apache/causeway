@@ -1,11 +1,8 @@
 {
   university_dept_DepartmentMenu {
     _gql_mutations {
-      createDepartment {
+      adminAction {
         hidden
-        invoke(name: "newbie") {
-          name
-        }
       }
     }
   }

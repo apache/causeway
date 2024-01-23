@@ -8,15 +8,17 @@ import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 import graphql.schema.*;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> implements GqlvActionInvokeHolder {
+public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> implements GqlvActionInvokeHolder, GqlvActionHiddenHolder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
+    private final GqlvActionHidden hidden;
     private final GqlvActionInvoke invoke;
     private final BookmarkService bookmarkService;
 
@@ -28,17 +30,18 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
             ) {
         super(holder, objectAction, codeRegistryBuilder);
 
-        gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(objectAction, holder.getObjectSpecification()));
-
-        this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder);
+        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(objectAction, holder.getObjectSpecification()));
         this.bookmarkService = bookmarkService;
 
-        gqlObjectType = gqlObjectTypeBuilder.build();
+        this.hidden = new GqlvActionHidden(this, codeRegistryBuilder);
+        this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder);
 
-        final GraphQLFieldDefinition field = newFieldDefinition()
-                .name(objectAction.getId())
-                .type(gqlObjectTypeBuilder)
-                .build();
+        this.gqlObjectType = gqlObjectTypeBuilder.build();
+
+        val field = newFieldDefinition()
+                        .name(objectAction.getId())
+                        .type(gqlObjectTypeBuilder)
+                        .build();
 
         holder.addField(field);
 
@@ -61,6 +64,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
                 holder.coordinatesFor(getField()),
                 new Fetcher2());
 
+        hidden.addDataFetcher();
         invoke.addDataFetcher();
     }
 

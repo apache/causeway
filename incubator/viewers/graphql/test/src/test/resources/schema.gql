@@ -84,6 +84,7 @@ type causeway_applib_PropertyNode__gql_mutations {
 }
 
 type causeway_applib_PropertyNode__streamChildNodes {
+  hidden: Boolean
   invoke: java_util_stream_Stream
 }
 
@@ -133,6 +134,7 @@ type causeway_applib_UserMenu {
 }
 
 type causeway_applib_UserMenu__me {
+  hidden: Boolean
   invoke: causeway_applib_UserMemento
 }
 
@@ -154,6 +156,7 @@ type causeway_applib_node_ActionNode__gql_mutations {
 }
 
 type causeway_applib_node_ActionNode__streamChildNodes {
+  hidden: Boolean
   invoke: java_util_stream_Stream
 }
 
@@ -175,6 +178,7 @@ type causeway_applib_node_CollectionNode__gql_mutations {
 }
 
 type causeway_applib_node_CollectionNode__streamChildNodes {
+  hidden: Boolean
   invoke: java_util_stream_Stream
 }
 
@@ -205,6 +209,7 @@ type causeway_conf_ConfigurationMenu {
 }
 
 type causeway_conf_ConfigurationMenu__configuration {
+  hidden: Boolean
   invoke: causeway_conf_ConfigurationViewmodel
 }
 
@@ -358,6 +363,7 @@ type causeway_security_LogoutMenu {
 }
 
 type causeway_security_LogoutMenu__logout {
+  hidden: Boolean
   invoke: String
 }
 
@@ -453,6 +459,7 @@ type org_apache_causeway_commons_functional_Either {
 }
 
 type org_apache_causeway_commons_functional_Either__accept {
+  hidden: Boolean
   invoke(leftConsumer: java_util_function_Consumer__gql_input!, rightConsumer: java_util_function_Consumer__gql_input!): String
 }
 
@@ -471,22 +478,27 @@ type org_apache_causeway_commons_functional_Either__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_Either__left {
+  hidden: Boolean
   invoke: String
 }
 
 type org_apache_causeway_commons_functional_Either__map {
+  hidden: Boolean
   invoke(leftMapper: java_util_function_Function__gql_input!, rightMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
 }
 
 type org_apache_causeway_commons_functional_Either__mapLeft {
+  hidden: Boolean
   invoke(leftMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
 }
 
 type org_apache_causeway_commons_functional_Either__mapRight {
+  hidden: Boolean
   invoke(rightMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
 }
 
 type org_apache_causeway_commons_functional_Either__right {
+  hidden: Boolean
   invoke: String
 }
 
@@ -498,6 +510,7 @@ type org_apache_causeway_commons_functional_Railway {
 }
 
 type org_apache_causeway_commons_functional_Railway__chain {
+  hidden: Boolean
   invoke(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
@@ -515,18 +528,22 @@ type org_apache_causeway_commons_functional_Railway__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_Railway__ifFailure {
+  hidden: Boolean
   invoke(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
 type org_apache_causeway_commons_functional_Railway__ifSuccess {
+  hidden: Boolean
   invoke(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
 type org_apache_causeway_commons_functional_Railway__mapFailure {
+  hidden: Boolean
   invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
 type org_apache_causeway_commons_functional_Railway__mapSuccess {
+  hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
@@ -536,6 +553,7 @@ type org_apache_causeway_commons_functional_ThrowingConsumer {
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__andThen {
+  hidden: Boolean
   invoke(arg0: java_util_function_Consumer__gql_input!): java_util_function_Consumer
 }
 
@@ -550,6 +568,7 @@ type org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__throwing {
+  hidden: Boolean
   invoke(exceptionWrapper: java_util_function_BiFunction__gql_input!): org_apache_causeway_commons_functional_ThrowingConsumer
 }
 
@@ -559,10 +578,12 @@ type org_apache_causeway_commons_functional_ThrowingFunction {
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__andThen {
+  hidden: Boolean
   invoke(arg0: java_util_function_Function__gql_input!): java_util_function_Function
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__compose {
+  hidden: Boolean
   invoke(arg0: java_util_function_Function__gql_input!): java_util_function_Function
 }
 
@@ -578,6 +599,7 @@ type org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__throwing {
+  hidden: Boolean
   invoke(exceptionWrapper: java_util_function_BiFunction__gql_input!): org_apache_causeway_commons_functional_ThrowingFunction
 }
 
@@ -587,6 +609,7 @@ type org_apache_causeway_commons_functional_ThrowingRunnable {
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched {
+  hidden: Boolean
   invoke: String
 }
 
@@ -604,18 +627,22 @@ type org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__run {
+  hidden: Boolean
   invoke: String
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched {
+  hidden: Boolean
   invoke: String
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__toCallable {
+  hidden: Boolean
   invoke: java_util_concurrent_Callable
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable {
+  hidden: Boolean
   invoke: java_lang_Runnable
 }
 
@@ -627,18 +654,22 @@ type org_apache_causeway_commons_functional_Try {
 }
 
 type org_apache_causeway_commons_functional_Try__accept {
+  hidden: Boolean
   invoke(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccess {
+  hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable {
+  hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent {
+  hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
@@ -671,66 +702,82 @@ type org_apache_causeway_commons_functional_Try__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_Try__ifAbsentFail {
+  hidden: Boolean
   invoke: org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__ifFailure {
+  hidden: Boolean
   invoke(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__ifFailureFail {
+  hidden: Boolean
   invoke: org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccess {
+  hidden: Boolean
   invoke(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable {
+  hidden: Boolean
   invoke(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapEmptyToFailure {
+  hidden: Boolean
   invoke: org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapFailure {
+  hidden: Boolean
   invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapFailureToSuccess {
+  hidden: Boolean
   invoke(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccess {
+  hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable {
+  hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent {
+  hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapToEither {
+  hidden: Boolean
   invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Either
 }
 
 type org_apache_causeway_commons_functional_Try__orCall {
+  hidden: Boolean
   invoke(fallback: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__then {
+  hidden: Boolean
   invoke(next: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__thenCall {
+  hidden: Boolean
   invoke(callable: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__thenRun {
+  hidden: Boolean
   invoke(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
@@ -760,6 +807,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations 
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes {
+  hidden: Boolean
   invoke: java_util_stream_Stream
 }
 
@@ -785,15 +833,23 @@ type university_dept_DepartmentMenu {
   findAllDepartments: university_dept_DepartmentMenu__findAllDepartments
 }
 
+type university_dept_DepartmentMenu__adminAction {
+  hidden: Boolean
+  invoke: String
+}
+
 type university_dept_DepartmentMenu__createDepartment {
+  hidden: Boolean
   invoke(deptHead: university_dept_DeptHead__gql_input, name: String!): university_dept_Department
 }
 
 type university_dept_DepartmentMenu__findAllDepartments {
+  hidden: Boolean
   invoke: [university_dept_Department]
 }
 
 type university_dept_DepartmentMenu__gql_mutations {
+  adminAction: university_dept_DepartmentMenu__adminAction
   createDepartment: university_dept_DepartmentMenu__createDepartment
 }
 
@@ -816,18 +872,22 @@ type university_dept_DeptHeadMenu {
 }
 
 type university_dept_DeptHeadMenu__findAllDeptHeads {
+  hidden: Boolean
   invoke: [university_dept_DeptHead]
 }
 
 type university_dept_DeptHeadMenu__findDeptHeadByName {
+  hidden: Boolean
   invoke(name: String!): university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeDepartment {
+  hidden: Boolean
   invoke(department: university_dept_Department__gql_input!): university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeName {
+  hidden: Boolean
   invoke(newName: String!): university_dept_DeptHead
 }
 

@@ -3,6 +3,7 @@
     "university_dept_DepartmentMenu" : {
       "_gql_mutations" : {
         "createDepartment" : {
+          "hidden" : false,
           "invoke" : {
             "name" : "newbie"
           }

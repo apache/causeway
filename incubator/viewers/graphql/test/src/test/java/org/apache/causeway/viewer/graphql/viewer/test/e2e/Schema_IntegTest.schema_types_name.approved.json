@@ -394,6 +394,8 @@
       }, {
         "name" : "university_dept_DepartmentMenu"
       }, {
+        "name" : "university_dept_DepartmentMenu__adminAction"
+      }, {
         "name" : "university_dept_DepartmentMenu__createDepartment"
       }, {
         "name" : "university_dept_DepartmentMenu__findAllDepartments"

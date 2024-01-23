@@ -23,6 +23,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.annotation.ActionLayout;
+
+import org.apache.causeway.applib.annotation.Where;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -55,5 +59,10 @@ public class DepartmentMenu {
         return departmentRepository.findAll();
     }
 
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    @ActionLayout(hidden = Where.EVERYWHERE)
+    public void adminAction() {
+    }
 
 }
