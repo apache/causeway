@@ -1,0 +1,9 @@
+{
+  university_dept_DepartmentMenu {
+    _gql_mutations {
+      otherAdminAction {
+        disabled
+      }
+    }
+  }
+}

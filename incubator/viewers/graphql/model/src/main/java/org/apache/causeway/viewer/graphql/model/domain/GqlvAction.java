@@ -1,6 +1,23 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
@@ -14,11 +31,12 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> implements GqlvActionInvokeHolder, GqlvActionHiddenHolder {
+public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> implements GqlvActionInvokeHolder, GqlvActionHiddenHolder, GqlvActionDisabledHolder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
     private final GqlvActionHidden hidden;
+    private final GqlvActionDisabled disabled;
     private final GqlvActionInvoke invoke;
     private final BookmarkService bookmarkService;
 
@@ -34,6 +52,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
         this.bookmarkService = bookmarkService;
 
         this.hidden = new GqlvActionHidden(this, codeRegistryBuilder);
+        this.disabled = new GqlvActionDisabled(this, codeRegistryBuilder);
         this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
@@ -62,45 +81,28 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
 
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
-                new Fetcher2());
+                new Fetcher());
 
         hidden.addDataFetcher();
+        disabled.addDataFetcher();
         invoke.addDataFetcher();
     }
 
-    private class Fetcher2 implements DataFetcher<Object> {
+    private class Fetcher implements DataFetcher<Object> {
         @Override
         public Object get(DataFetchingEnvironment environment) {
             Object source = environment.getSource();
             Object domainPojo;
-            if (source instanceof GqlvMutations.Fetcher) {
-                GqlvMutations.Fetcher mutationsFetcher = (GqlvMutations.Fetcher) source;
-                domainPojo = mutationsFetcher.getTargetPojo();
+            if (source instanceof BookmarkedPojo) {
+                BookmarkedPojo mutationsBookmarkedPojo = (BookmarkedPojo) source;
+                domainPojo = mutationsBookmarkedPojo.getTargetPojo();
             } else {
                 // presumably this is a safe action
                 domainPojo = source;
             }
             return bookmarkService.bookmarkFor(domainPojo)
-                    .map(bookmark -> new Fetcher(bookmark, bookmarkService))
+                    .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
                     .orElseThrow();
-        }
-    }
-
-    static class Fetcher {
-
-        private final Bookmark bookmark;
-        private final BookmarkService bookmarkService;
-
-        public Fetcher(
-                final Bookmark bookmark,
-                final BookmarkService bookmarkService) {
-
-            this.bookmark = bookmark;
-            this.bookmarkService = bookmarkService;
-        }
-
-        public Object getTargetPojo() {
-            return bookmarkService.lookup(bookmark).orElseThrow();
         }
     }
 

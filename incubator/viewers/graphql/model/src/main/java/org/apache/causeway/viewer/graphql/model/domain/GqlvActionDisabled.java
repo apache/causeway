@@ -25,24 +25,23 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
-import lombok.val;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
-public class GqlvActionHidden {
+public class GqlvActionDisabled {
 
     private final GqlvActionHiddenHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
 
-    public GqlvActionHidden(
+    public GqlvActionDisabled(
             final GqlvActionHiddenHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
@@ -55,8 +54,8 @@ public class GqlvActionHidden {
 
         GraphQLFieldDefinition fieldDefinition =
                 newFieldDefinition()
-                    .name("hidden")
-                    .type(ScalarMapper.typeFor(boolean.class))
+                    .name("disabled")
+                    .type(ScalarMapper.typeFor(String.class))
                     .build();
 
         holder.addField(fieldDefinition);
@@ -66,11 +65,11 @@ public class GqlvActionHidden {
     public void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
-                this::hidden
+                this::disabled
         );
     }
 
-    private boolean hidden(
+    private String disabled(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
         final ObjectAction objectAction = holder.getObjectAction();
@@ -89,13 +88,13 @@ public class GqlvActionHidden {
                 .loadSpecification(domainObjectInstanceClass);
         if (specification == null) {
             // not expected
-            return true;
+            return String.format("Disabled; could not determine target object's type ('%s')", domainObjectInstanceClass.getName());
         }
 
         ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
 
-        val visibleConsent = objectAction.isVisible(owner, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        return visibleConsent.isVetoed();
+        val usable = objectAction.isUsable(owner, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        return usable.getReasonAsString().orElse(null);
     }
 
 }

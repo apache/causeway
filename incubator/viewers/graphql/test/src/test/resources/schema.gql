@@ -84,6 +84,7 @@ type causeway_applib_PropertyNode__gql_mutations {
 }
 
 type causeway_applib_PropertyNode__streamChildNodes {
+  disabled: String
   hidden: Boolean
   invoke: java_util_stream_Stream
 }
@@ -134,6 +135,7 @@ type causeway_applib_UserMenu {
 }
 
 type causeway_applib_UserMenu__me {
+  disabled: String
   hidden: Boolean
   invoke: causeway_applib_UserMemento
 }
@@ -156,6 +158,7 @@ type causeway_applib_node_ActionNode__gql_mutations {
 }
 
 type causeway_applib_node_ActionNode__streamChildNodes {
+  disabled: String
   hidden: Boolean
   invoke: java_util_stream_Stream
 }
@@ -178,6 +181,7 @@ type causeway_applib_node_CollectionNode__gql_mutations {
 }
 
 type causeway_applib_node_CollectionNode__streamChildNodes {
+  disabled: String
   hidden: Boolean
   invoke: java_util_stream_Stream
 }
@@ -209,6 +213,7 @@ type causeway_conf_ConfigurationMenu {
 }
 
 type causeway_conf_ConfigurationMenu__configuration {
+  disabled: String
   hidden: Boolean
   invoke: causeway_conf_ConfigurationViewmodel
 }
@@ -363,6 +368,7 @@ type causeway_security_LogoutMenu {
 }
 
 type causeway_security_LogoutMenu__logout {
+  disabled: String
   hidden: Boolean
   invoke: String
 }
@@ -459,6 +465,7 @@ type org_apache_causeway_commons_functional_Either {
 }
 
 type org_apache_causeway_commons_functional_Either__accept {
+  disabled: String
   hidden: Boolean
   invoke(leftConsumer: java_util_function_Consumer__gql_input!, rightConsumer: java_util_function_Consumer__gql_input!): String
 }
@@ -478,26 +485,31 @@ type org_apache_causeway_commons_functional_Either__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_Either__left {
+  disabled: String
   hidden: Boolean
   invoke: String
 }
 
 type org_apache_causeway_commons_functional_Either__map {
+  disabled: String
   hidden: Boolean
   invoke(leftMapper: java_util_function_Function__gql_input!, rightMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
 }
 
 type org_apache_causeway_commons_functional_Either__mapLeft {
+  disabled: String
   hidden: Boolean
   invoke(leftMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
 }
 
 type org_apache_causeway_commons_functional_Either__mapRight {
+  disabled: String
   hidden: Boolean
   invoke(rightMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
 }
 
 type org_apache_causeway_commons_functional_Either__right {
+  disabled: String
   hidden: Boolean
   invoke: String
 }
@@ -510,6 +522,7 @@ type org_apache_causeway_commons_functional_Railway {
 }
 
 type org_apache_causeway_commons_functional_Railway__chain {
+  disabled: String
   hidden: Boolean
   invoke(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
 }
@@ -528,21 +541,25 @@ type org_apache_causeway_commons_functional_Railway__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_Railway__ifFailure {
+  disabled: String
   hidden: Boolean
   invoke(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
 type org_apache_causeway_commons_functional_Railway__ifSuccess {
+  disabled: String
   hidden: Boolean
   invoke(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
 type org_apache_causeway_commons_functional_Railway__mapFailure {
+  disabled: String
   hidden: Boolean
   invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
 }
 
 type org_apache_causeway_commons_functional_Railway__mapSuccess {
+  disabled: String
   hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
 }
@@ -553,6 +570,7 @@ type org_apache_causeway_commons_functional_ThrowingConsumer {
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__andThen {
+  disabled: String
   hidden: Boolean
   invoke(arg0: java_util_function_Consumer__gql_input!): java_util_function_Consumer
 }
@@ -568,6 +586,7 @@ type org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__throwing {
+  disabled: String
   hidden: Boolean
   invoke(exceptionWrapper: java_util_function_BiFunction__gql_input!): org_apache_causeway_commons_functional_ThrowingConsumer
 }
@@ -578,11 +597,13 @@ type org_apache_causeway_commons_functional_ThrowingFunction {
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__andThen {
+  disabled: String
   hidden: Boolean
   invoke(arg0: java_util_function_Function__gql_input!): java_util_function_Function
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__compose {
+  disabled: String
   hidden: Boolean
   invoke(arg0: java_util_function_Function__gql_input!): java_util_function_Function
 }
@@ -599,6 +620,7 @@ type org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__throwing {
+  disabled: String
   hidden: Boolean
   invoke(exceptionWrapper: java_util_function_BiFunction__gql_input!): org_apache_causeway_commons_functional_ThrowingFunction
 }
@@ -609,6 +631,7 @@ type org_apache_causeway_commons_functional_ThrowingRunnable {
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched {
+  disabled: String
   hidden: Boolean
   invoke: String
 }
@@ -627,21 +650,25 @@ type org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__run {
+  disabled: String
   hidden: Boolean
   invoke: String
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched {
+  disabled: String
   hidden: Boolean
   invoke: String
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__toCallable {
+  disabled: String
   hidden: Boolean
   invoke: java_util_concurrent_Callable
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable {
+  disabled: String
   hidden: Boolean
   invoke: java_lang_Runnable
 }
@@ -654,21 +681,25 @@ type org_apache_causeway_commons_functional_Try {
 }
 
 type org_apache_causeway_commons_functional_Try__accept {
+  disabled: String
   hidden: Boolean
   invoke(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccess {
+  disabled: String
   hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable {
+  disabled: String
   hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent {
+  disabled: String
   hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
@@ -702,81 +733,97 @@ type org_apache_causeway_commons_functional_Try__gql_mutations {
 }
 
 type org_apache_causeway_commons_functional_Try__ifAbsentFail {
+  disabled: String
   hidden: Boolean
   invoke: org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__ifFailure {
+  disabled: String
   hidden: Boolean
   invoke(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__ifFailureFail {
+  disabled: String
   hidden: Boolean
   invoke: org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccess {
+  disabled: String
   hidden: Boolean
   invoke(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable {
+  disabled: String
   hidden: Boolean
   invoke(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapEmptyToFailure {
+  disabled: String
   hidden: Boolean
   invoke: org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapFailure {
+  disabled: String
   hidden: Boolean
   invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapFailureToSuccess {
+  disabled: String
   hidden: Boolean
   invoke(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccess {
+  disabled: String
   hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable {
+  disabled: String
   hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent {
+  disabled: String
   hidden: Boolean
   invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__mapToEither {
+  disabled: String
   hidden: Boolean
   invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Either
 }
 
 type org_apache_causeway_commons_functional_Try__orCall {
+  disabled: String
   hidden: Boolean
   invoke(fallback: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__then {
+  disabled: String
   hidden: Boolean
   invoke(next: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__thenCall {
+  disabled: String
   hidden: Boolean
   invoke(callable: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
 }
 
 type org_apache_causeway_commons_functional_Try__thenRun {
+  disabled: String
   hidden: Boolean
   invoke(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gql_input!): org_apache_causeway_commons_functional_Try
 }
@@ -807,6 +854,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations 
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes {
+  disabled: String
   hidden: Boolean
   invoke: java_util_stream_Stream
 }
@@ -834,16 +882,19 @@ type university_dept_DepartmentMenu {
 }
 
 type university_dept_DepartmentMenu__adminAction {
+  disabled: String
   hidden: Boolean
   invoke: String
 }
 
 type university_dept_DepartmentMenu__createDepartment {
+  disabled: String
   hidden: Boolean
   invoke(deptHead: university_dept_DeptHead__gql_input, name: String!): university_dept_Department
 }
 
 type university_dept_DepartmentMenu__findAllDepartments {
+  disabled: String
   hidden: Boolean
   invoke: [university_dept_Department]
 }
@@ -851,6 +902,13 @@ type university_dept_DepartmentMenu__findAllDepartments {
 type university_dept_DepartmentMenu__gql_mutations {
   adminAction: university_dept_DepartmentMenu__adminAction
   createDepartment: university_dept_DepartmentMenu__createDepartment
+  otherAdminAction: university_dept_DepartmentMenu__otherAdminAction
+}
+
+type university_dept_DepartmentMenu__otherAdminAction {
+  disabled: String
+  hidden: Boolean
+  invoke: String
 }
 
 type university_dept_Department__gql_meta {
@@ -872,21 +930,25 @@ type university_dept_DeptHeadMenu {
 }
 
 type university_dept_DeptHeadMenu__findAllDeptHeads {
+  disabled: String
   hidden: Boolean
   invoke: [university_dept_DeptHead]
 }
 
 type university_dept_DeptHeadMenu__findDeptHeadByName {
+  disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeDepartment {
+  disabled: String
   hidden: Boolean
   invoke(department: university_dept_Department__gql_input!): university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeName {
+  disabled: String
   hidden: Boolean
   invoke(newName: String!): university_dept_DeptHead
 }

@@ -18,9 +18,23 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
-public interface GqlvMetaHolder extends GqlvHolder {
-    ObjectSpecification getObjectSpecification();
+class BookmarkedPojo {
 
+    private final Bookmark bookmark;
+    private final BookmarkService bookmarkService;
+
+    public BookmarkedPojo(
+            final Bookmark bookmark,
+            final BookmarkService bookmarkService) {
+
+        this.bookmark = bookmark;
+        this.bookmarkService = bookmarkService;
+    }
+
+    public Object getTargetPojo() {
+        return bookmarkService.lookup(bookmark).orElseThrow();
+    }
 }

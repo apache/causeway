@@ -4,6 +4,7 @@
       "_gql_mutations" : {
         "createDepartment" : {
           "hidden" : false,
+          "disabled" : null,
           "invoke" : {
             "name" : "newbie"
           }

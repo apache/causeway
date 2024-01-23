@@ -65,4 +65,12 @@ public class DepartmentMenu {
     public void adminAction() {
     }
 
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public void otherAdminAction() {
+    }
+    public String disableOtherAdminAction() {
+        return "yup, disabled!";
+    }
+
 }
