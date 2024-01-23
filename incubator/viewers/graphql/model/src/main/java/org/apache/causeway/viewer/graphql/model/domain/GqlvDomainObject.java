@@ -46,6 +46,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     private final List<GqlvProperty> properties = new ArrayList<>();
     private final List<GqlvCollection> collections = new ArrayList<>();
     private final List<GqlvActionSimple> safeActionSimples = new ArrayList<>();
+    private final List<GqlvAction> safeActions = new ArrayList<>();
 
     private GraphQLObjectType gqlObjectType;
 
@@ -62,7 +63,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
-        this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
+        this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService);
 
 
         // input object type
@@ -109,6 +110,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     private void addAction(final ObjectAction objectAction) {
         if (objectAction.getSemantics().isSafeInNature()) {
             safeActionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
+            //safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
         } else {
             mutations.addAction(objectAction);
         }

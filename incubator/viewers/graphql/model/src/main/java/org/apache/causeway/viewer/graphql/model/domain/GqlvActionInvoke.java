@@ -1,9 +1,21 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+
+import graphql.schema.GraphQLType;
+import graphql.schema.GraphQLTypeReference;
+
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
+
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -16,40 +28,33 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
-import graphql.Scalars;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-import graphql.schema.GraphQLTypeReference;
+import org.springframework.lang.Nullable;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
 
 @Log4j2
-public class GqlvActionSimple extends GqlvMember<ObjectAction, GqlvActionHolder> {
+public class GqlvActionInvoke {
 
-    public GqlvActionSimple(
-            final GqlvActionHolder holder,
-            final ObjectAction objectAction,
+    private final GqlvActionInvokeHolder holder;
+    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final GraphQLFieldDefinition field;
+
+    public GqlvActionInvoke(
+            final GqlvActionInvokeHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
-            ) {
-        super(holder, objectAction, fieldDefinition(objectAction, holder), codeRegistryBuilder);
+    ) {
+        this.holder = holder;
+        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(
-            final ObjectAction objectAction,
-            final GqlvActionHolder holder) {
+    private static GraphQLFieldDefinition fieldDefinition(final GqlvActionInvokeHolder holder) {
+
+        val objectAction = holder.getObjectAction();
 
         GraphQLFieldDefinition fieldDefinition = null;
         GraphQLOutputType type = typeFor(objectAction);
-
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name(objectAction.getId())
@@ -116,21 +121,38 @@ public class GqlvActionSimple extends GqlvMember<ObjectAction, GqlvActionHolder>
         }
     }
 
-    public ObjectAction getObjectAction() {
-        return getObjectMember();
+    static void addGqlArguments(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder builder) {
+
+        Can<ObjectActionParameter> parameters = objectAction.getParameters();
+
+        if (parameters.isNotEmpty()) {
+            builder.arguments(parameters.stream()
+                    .map(GqlvActionInvoke::gqlArgumentFor)
+                    .collect(Collectors.toList()));
+        }
+    }
+
+    private static GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
+        return GraphQLArgument.newArgument()
+                .name(objectActionParameter.getId())
+                .type(objectActionParameter.isOptional()
+                        ? GqlvActionParameter.inputTypeFor(objectActionParameter)
+                        : nonNull(GqlvActionParameter.inputTypeFor(objectActionParameter)))
+                .build();
     }
 
     public void addDataFetcher() {
-        GraphQLFieldDefinition fieldDefinition = getFieldDefinition();
         codeRegistryBuilder.dataFetcher(
-                getHolder().coordinatesFor(fieldDefinition),
+                holder.coordinatesFor(field),
                 this::invoke
         );
     }
 
     private Object invoke(
             final DataFetchingEnvironment dataFetchingEnvironment) {
-        final ObjectAction objectAction = getObjectAction();
+        final ObjectAction objectAction = holder.getObjectAction();
 
         Object source = dataFetchingEnvironment.getSource();
         Object domainObjectInstance;
@@ -142,7 +164,7 @@ public class GqlvActionSimple extends GqlvMember<ObjectAction, GqlvActionHolder>
         }
 
         Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-        ObjectSpecification specification = specificationLoader
+        ObjectSpecification specification = holder.getObjectAction().getSpecificationLoader()
                 .loadSpecification(domainObjectInstanceClass);
         if (specification == null) {
             // not expected
@@ -150,8 +172,6 @@ public class GqlvActionSimple extends GqlvMember<ObjectAction, GqlvActionHolder>
         }
 
         ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-
-
         ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
@@ -168,25 +188,4 @@ public class GqlvActionSimple extends GqlvMember<ObjectAction, GqlvActionHolder>
         return managedObject.getPojo();
     }
 
-    static void addGqlArguments(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition.Builder builder) {
-
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
-
-        if (parameters.isNotEmpty()) {
-            builder.arguments(parameters.stream()
-                    .map(GqlvActionSimple::gqlArgumentFor)
-                    .collect(Collectors.toList()));
-        }
-    }
-
-    private static GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
-        return GraphQLArgument.newArgument()
-                .name(objectActionParameter.getId())
-                .type(objectActionParameter.isOptional()
-                        ? GqlvActionParameter.inputTypeFor(objectActionParameter)
-                        : nonNull(GqlvActionParameter.inputTypeFor(objectActionParameter)))
-                .build();
-    }
 }

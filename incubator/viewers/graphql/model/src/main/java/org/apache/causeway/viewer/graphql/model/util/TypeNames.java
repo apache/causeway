@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.graphql.model.util;
 import lombok.experimental.UtilityClass;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 @UtilityClass
 public final class TypeNames {
@@ -39,6 +41,10 @@ public final class TypeNames {
 
     public static String inputTypeNameFor(ObjectSpecification objectSpecification) {
         return objectTypeNameFor(objectSpecification) + "__input";
+    }
+
+    public static String invokeTypeNameFor(ObjectMember objectMember) {
+        return sanitized(objectMember.getFeatureIdentifier().getFullIdentityString()) + "__invoke";
     }
 
     private static String sanitized(final String name) {

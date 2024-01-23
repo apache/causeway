@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
@@ -26,7 +25,6 @@ public class GqlvMutations implements GqlvActionHolder {
     private final GqlvMutationsHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final BookmarkService bookmarkService;
-    private final ObjectManager objectManager;
 
     /**
      * Used to build {@link #objectTypeIfAny}.
@@ -43,18 +41,19 @@ public class GqlvMutations implements GqlvActionHolder {
      * Built lazily using {@link #buildObjectTypeAndFieldIfRequired()}
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Optional<GraphQLFieldDefinition> mutationsFieldIfAny;
+    private Optional<GraphQLFieldDefinition> fieldIfAny;
+
+    private final List<GqlvActionSimple> actionSimples = new ArrayList<>();
+    private final List<GqlvAction> actions = new ArrayList<>();
 
     public GqlvMutations(
             final GqlvMutationsHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService,
-            final ObjectManager objectManager
+            final BookmarkService bookmarkService
     ) {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
         this.bookmarkService = bookmarkService;
-        this.objectManager = objectManager;
 
         gqlObjectTypeBuilder = newObject().name(TypeNames.mutationsTypeNameFor(this.holder.getObjectSpecification()));
     }
@@ -66,9 +65,9 @@ public class GqlvMutations implements GqlvActionHolder {
 
     public void addAction(final ObjectAction objectAction) {
         actionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
+        //actions.add(new GqlvAction(this, objectAction, codeRegistryBuilder));
     }
 
-    private final List<GqlvActionSimple> actionSimples = new ArrayList<>();
 
     boolean hasActions() {
         return !actionSimples.isEmpty();
@@ -92,22 +91,22 @@ public class GqlvMutations implements GqlvActionHolder {
                     .name("_gql_mutations")
                     .type(mutationsType)
                     .build();
-            mutationsFieldIfAny = Optional.of(mutationsField);
+            fieldIfAny = Optional.of(mutationsField);
 
             // register the field into the owning type
             holder.addField(mutationsField);
 
         } else {
-            mutationsFieldIfAny = Optional.empty();
+            fieldIfAny = Optional.empty();
             objectTypeIfAny = Optional.empty();
         }
         return objectTypeIfAny;
     }
 
     public void addDataFetchers() {
-        if (mutationsFieldIfAny.isPresent()) {
+        if (fieldIfAny.isPresent()) {
             codeRegistryBuilder.dataFetcher(
-                    holder.coordinatesFor(mutationsFieldIfAny.get()),
+                    holder.coordinatesFor(fieldIfAny.get()),
                     (DataFetcher<Object>) environment ->
                         bookmarkService.bookmarkFor(environment.getSource())
                             .map(bookmark -> new Fetcher(bookmark, bookmarkService))

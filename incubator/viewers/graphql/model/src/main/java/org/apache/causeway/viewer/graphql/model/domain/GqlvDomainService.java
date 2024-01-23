@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -55,8 +54,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService,
-            final ObjectManager objectManager
+            final BookmarkService bookmarkService
     ) {
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
@@ -64,7 +62,7 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
-        this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService, objectManager);
+        this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService);
     }
 
     /**
