@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 
 import lombok.extern.log4j.Log4j2;
@@ -36,14 +34,14 @@ import lombok.val;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
-public class GqlvActionHidden {
+public class GqlvMemberHidden {
 
-    private final GqlvActionHiddenHolder holder;
+    private final GqlvMemberHiddenHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
 
-    public GqlvActionHidden(
-            final GqlvActionHiddenHolder holder,
+    public GqlvMemberHidden(
+            final GqlvMemberHiddenHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
         this.holder = holder;
@@ -51,7 +49,7 @@ public class GqlvActionHidden {
         this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final GqlvActionHiddenHolder holder) {
+    private static GraphQLFieldDefinition fieldDefinition(final GqlvMemberHiddenHolder holder) {
 
         GraphQLFieldDefinition fieldDefinition =
                 newFieldDefinition()
@@ -73,28 +71,21 @@ public class GqlvActionHidden {
     private boolean hidden(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getObjectAction();
+        val objectMember = holder.getObjectMember();
 
-        Object source = dataFetchingEnvironment.getSource();
-        Object domainObjectInstance;
-        if (source instanceof BookmarkedPojo) {
-            BookmarkedPojo fetched = (BookmarkedPojo) source;
-            domainObjectInstance = fetched.getTargetPojo();
-        } else {
-            domainObjectInstance = source;
-        }
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-        ObjectSpecification specification = holder.getObjectAction().getSpecificationLoader()
-                .loadSpecification(domainObjectInstanceClass);
-        if (specification == null) {
+        val sourcePojoClass = sourcePojo.getClass();
+        val specificationLoader = holder.getObjectMember().getSpecificationLoader();
+        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        if (objectSpecification == null) {
             // not expected
             return true;
         }
 
-        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
+        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val visibleConsent = objectAction.isVisible(owner, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        val visibleConsent = objectMember.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         return visibleConsent.isVetoed();
     }
 

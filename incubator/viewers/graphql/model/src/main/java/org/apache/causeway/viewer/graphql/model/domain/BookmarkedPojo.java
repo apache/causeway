@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.DataFetchingEnvironment;
+
+import lombok.val;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
@@ -32,6 +36,14 @@ class BookmarkedPojo {
 
         this.bookmark = bookmark;
         this.bookmarkService = bookmarkService;
+    }
+
+    static Object sourceFrom(DataFetchingEnvironment dataFetchingEnvironment) {
+
+        val source = dataFetchingEnvironment.getSource();
+        return source instanceof BookmarkedPojo
+                ? ((BookmarkedPojo) source).getTargetPojo()
+                : source;
     }
 
     public Object getTargetPojo() {

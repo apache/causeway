@@ -19,9 +19,10 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-public interface GqlvActionHiddenHolder extends GqlvHolder {
+public interface GqlvMemberHiddenHolder extends GqlvHolder {
 
 
-    ObjectAction getObjectAction();
+    ObjectMember getObjectMember();
 }

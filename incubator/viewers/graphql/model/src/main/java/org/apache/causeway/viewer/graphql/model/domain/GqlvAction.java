@@ -31,12 +31,13 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> implements GqlvActionInvokeHolder, GqlvActionHiddenHolder, GqlvActionDisabledHolder {
+public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder>
+        implements GqlvActionInvokeHolder, GqlvMemberHiddenHolder, GqlvMemberDisabledHolder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
-    private final GqlvActionHidden hidden;
-    private final GqlvActionDisabled disabled;
+    private final GqlvMemberHidden hidden;
+    private final GqlvMemberDisabled disabled;
     private final GqlvActionInvoke invoke;
     private final BookmarkService bookmarkService;
 
@@ -51,8 +52,8 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(objectAction, holder.getObjectSpecification()));
         this.bookmarkService = bookmarkService;
 
-        this.hidden = new GqlvActionHidden(this, codeRegistryBuilder);
-        this.disabled = new GqlvActionDisabled(this, codeRegistryBuilder);
+        this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
+        this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
         this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
@@ -67,7 +68,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
         setField(field);
     }
 
-
+    @Override
     public ObjectAction getObjectAction() {
         return getObjectMember();
     }
@@ -90,17 +91,11 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder> imple
 
     private class Fetcher implements DataFetcher<Object> {
         @Override
-        public Object get(DataFetchingEnvironment environment) {
-            Object source = environment.getSource();
-            Object domainPojo;
-            if (source instanceof BookmarkedPojo) {
-                BookmarkedPojo mutationsBookmarkedPojo = (BookmarkedPojo) source;
-                domainPojo = mutationsBookmarkedPojo.getTargetPojo();
-            } else {
-                // presumably this is a safe action
-                domainPojo = source;
-            }
-            return bookmarkService.bookmarkFor(domainPojo)
+        public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
+
+            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+
+            return bookmarkService.bookmarkFor(sourcePojo)
                     .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
                     .orElseThrow();
         }

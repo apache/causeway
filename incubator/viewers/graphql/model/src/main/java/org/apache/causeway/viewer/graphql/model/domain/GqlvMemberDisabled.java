@@ -23,6 +23,8 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 
 import lombok.val;
@@ -35,14 +37,14 @@ import graphql.schema.GraphQLFieldDefinition;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
-public class GqlvActionDisabled {
+public class GqlvMemberDisabled {
 
-    private final GqlvActionHiddenHolder holder;
+    private final GqlvMemberDisabledHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
 
-    public GqlvActionDisabled(
-            final GqlvActionHiddenHolder holder,
+    public GqlvMemberDisabled(
+            final GqlvMemberDisabledHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
         this.holder = holder;
@@ -50,7 +52,7 @@ public class GqlvActionDisabled {
         this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final GqlvActionHiddenHolder holder) {
+    private static GraphQLFieldDefinition fieldDefinition(final GqlvMemberDisabledHolder holder) {
 
         GraphQLFieldDefinition fieldDefinition =
                 newFieldDefinition()
@@ -72,28 +74,21 @@ public class GqlvActionDisabled {
     private String disabled(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getObjectAction();
+        final ObjectMember objectMember = holder.getObjectMember();
 
-        Object source = dataFetchingEnvironment.getSource();
-        Object domainObjectInstance;
-        if (source instanceof BookmarkedPojo) {
-            BookmarkedPojo fetched = (BookmarkedPojo) source;
-            domainObjectInstance = fetched.getTargetPojo();
-        } else {
-            domainObjectInstance = source;
-        }
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-        ObjectSpecification specification = holder.getObjectAction().getSpecificationLoader()
-                .loadSpecification(domainObjectInstanceClass);
-        if (specification == null) {
+        val sourcePojoClass = sourcePojo.getClass();
+        val specificationLoader = holder.getObjectMember().getSpecificationLoader();
+        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        if (objectSpecification == null) {
             // not expected
-            return String.format("Disabled; could not determine target object's type ('%s')", domainObjectInstanceClass.getName());
+            return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
         }
 
-        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
+        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val usable = objectAction.isUsable(owner, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        val usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         return usable.getReasonAsString().orElse(null);
     }
 

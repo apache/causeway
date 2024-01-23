@@ -43,6 +43,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
@@ -172,25 +173,18 @@ public class GqlvActionInvoke {
             final DataFetchingEnvironment dataFetchingEnvironment) {
         final ObjectAction objectAction = holder.getObjectAction();
 
-        Object source = dataFetchingEnvironment.getSource();
-        Object domainObjectInstance;
-        if (source instanceof BookmarkedPojo) {
-            BookmarkedPojo fetched = (BookmarkedPojo) source;
-            domainObjectInstance = fetched.getTargetPojo();
-        } else {
-            domainObjectInstance = source;
-        }
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-        ObjectSpecification specification = holder.getObjectAction().getSpecificationLoader()
-                .loadSpecification(domainObjectInstanceClass);
-        if (specification == null) {
+        val sourcePojoClass = sourcePojo.getClass();
+        val specificationLoader = holder.getObjectAction().getSpecificationLoader();
+        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        if (objectSpecification == null) {
             // not expected
             return null;
         }
 
-        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-        ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
+        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        val actionInteractionHead = objectAction.interactionHead(managedObject);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Can<ObjectActionParameter> parameters = objectAction.getParameters();
@@ -200,10 +194,10 @@ public class GqlvActionInvoke {
                     return ManagedObject.adaptParameter(oap, argumentValue);
                 });
 
-        ManagedObject managedObject = objectAction
+        val resultManagedObject = objectAction
                 .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
 
-        return managedObject.getPojo();
+        return resultManagedObject.getPojo();
     }
 
 }
