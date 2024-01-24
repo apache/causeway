@@ -57,7 +57,7 @@ public class GqlvProperty extends GqlvAssociation<OneToOneAssociation, GqlvPrope
 
         this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
         this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
-        this.get = new GqlvPropertyGet(this, codeRegistryBuilder);
+        this.get = new GqlvPropertyGet(this, codeRegistryBuilder, specificationLoader);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 

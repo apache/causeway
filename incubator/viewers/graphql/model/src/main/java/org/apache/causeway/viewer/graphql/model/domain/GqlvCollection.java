@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.val;
@@ -57,7 +56,7 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
 
         this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
         this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
-        this.get = new GqlvCollectionGet(this, codeRegistryBuilder);
+        this.get = new GqlvCollectionGet(this, codeRegistryBuilder, specificationLoader);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 

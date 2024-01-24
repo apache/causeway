@@ -65,7 +65,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     private final SortedMap<String, GqlvProperty> properties = new TreeMap<>();
     private final SortedMap<String, GqlvCollection> collections = new TreeMap<>();
-    private final SortedMap<String, GqlvCollectionSimple> collectionSimples = new TreeMap<>();
     private final Map<String, GqlvAction> safeActions = new TreeMap<>();
 
     private GraphQLObjectType gqlObjectType;
@@ -132,13 +131,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                 collections.put(collectionId, collection);
             }
         }
-//        GqlvCollectionSimple collection = new GqlvCollectionSimple(this, otom, codeRegistryBuilder);
-//        if (collection.hasFieldDefinition()) {
-//            String collectionId = collection.getId();
-//            if (!collectionSimples.containsKey(collectionId)) {
-//                collectionSimples.put(collectionId, collection);
-//            }
-//        }
     }
 
     private void addAction(final ObjectAction objectAction) {
@@ -177,7 +169,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         meta.addDataFetchers();
         properties.forEach((id, property) -> property.addDataFetcher());
         collections.forEach((id, collection) -> collection.addDataFetcher());
-//        collectionSimples.forEach((id, collection) -> collection.addDataFetcher());
         safeActions.forEach((id, action) -> action.addDataFetcher());
         mutations.addDataFetchers();
     }

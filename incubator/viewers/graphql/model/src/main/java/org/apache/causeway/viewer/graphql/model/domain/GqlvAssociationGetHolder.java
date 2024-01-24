@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-public interface GqlvPropertyGetHolder extends GqlvAssociationGetHolder<OneToOneAssociation> {
+public interface GqlvAssociationGetHolder<T extends ObjectAssociation> extends GqlvHolder {
 
+    T getObjectAssociation();
 }

@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
-public interface GqlvCollectionGetHolder extends GqlvHolder {
+public interface GqlvCollectionGetHolder extends GqlvAssociationGetHolder<OneToManyAssociation> {
 
-    OneToManyAssociation getOneToManyAssociation();
 }

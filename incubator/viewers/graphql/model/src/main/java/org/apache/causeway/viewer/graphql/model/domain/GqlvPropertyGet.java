@@ -19,6 +19,9 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -30,80 +33,19 @@ import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-public class GqlvPropertyGet {
-
-    private final GqlvPropertyGetHolder holder;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final GraphQLFieldDefinition field;
-
+public class GqlvPropertyGet  extends GqlvAssociationGet<OneToOneAssociation> {
 
     public GqlvPropertyGet(
             final GqlvPropertyGetHolder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-        this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
-        this.field = fieldDefinition(holder);
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
+            final SpecificationLoader specificationLoader) {
+        super(holder, codeRegistryBuilder, specificationLoader);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final GqlvPropertyGetHolder holder) {
-
-        val oneToOneAssociation = holder.getOneToOneAssociation();
-
-        GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLOutputType type = TypeMapper.outputTypeFor(oneToOneAssociation);
-        if (type != null) {
-            val fieldBuilder = newFieldDefinition()
-                    .name("get")
-                    .type(type);
-            fieldDefinition = fieldBuilder.build();
-
-            holder.addField(fieldDefinition);
-        }
-        return fieldDefinition;
-    }
-
-    public void addDataFetcher() {
-
-        val association = holder.getOneToOneAssociation();
-        val fieldObjectSpecification = association.getElementType();
-        val beanSort = fieldObjectSpecification.getBeanSort();
-
-        val specificationLoader = association.getSpecificationLoader();
-        switch (beanSort) {
-
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-
-                codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
-                        this::get);
-
-                break;
-
-        }
-    }
-
-    private Object get(final DataFetchingEnvironment dataFetchingEnvironment) {
-
-        val association = holder.getOneToOneAssociation();
-
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-        val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = association.getSpecificationLoader();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
-            return null;
-        }
-
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = association.get(managedObject);
-
-        return resultManagedObject != null
-                ? resultManagedObject.getPojo()
-                : null;
+    @Override
+    GraphQLOutputType outputTypeFor(GqlvAssociationGetHolder<OneToOneAssociation> holder) {
+        val oneToOneAssociation = holder.getObjectAssociation();
+        return TypeMapper.outputTypeFor(oneToOneAssociation);
     }
 
 }

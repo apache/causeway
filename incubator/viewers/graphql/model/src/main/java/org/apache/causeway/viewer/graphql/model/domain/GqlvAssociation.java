@@ -57,40 +57,4 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
         return getObjectMember();
     }
 
-    public void addDataFetcher() {
-
-        final ObjectAssociation association = getObjectAssociation();
-        final ObjectSpecification fieldObjectSpecification = association.getElementType();
-        final BeanSort beanSort = fieldObjectSpecification.getBeanSort();
-
-        switch (beanSort) {
-
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-
-                codeRegistryBuilder.dataFetcher(
-                        getHolder().coordinatesFor(getField()),
-                        (DataFetcher<Object>) environment -> {
-
-                            Object domainObjectInstance = environment.getSource();
-
-                            Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                            ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
-                            if (specification == null) {
-                                return null;
-                            }
-
-                            // TODO: probably incorrect to adapt as a singular here.
-                            ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
-                            ManagedObject managedObject = association.get(owner);
-
-                            return managedObject!=null ? managedObject.getPojo() : null;
-                        });
-
-                break;
-
-        }
-    }
-
 }
