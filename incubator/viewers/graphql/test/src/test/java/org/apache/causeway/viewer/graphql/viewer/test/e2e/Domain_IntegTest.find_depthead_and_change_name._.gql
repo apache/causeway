@@ -7,15 +7,6 @@
             invoke(newName: "bar") {
               name {
                 get
-                hidden
-                disabled
-              }
-              department {
-                get {
-                  name {
-                    get
-                  }
-                }
               }
             }
           }

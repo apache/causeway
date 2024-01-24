@@ -7,12 +7,7 @@
             "changeName" : {
               "invoke" : {
                 "name" : {
-                  "get" : "bar",
-                  "hidden" : false,
-                  "disabled" : "Disabled via @DomainObject annotation, reason not given."
-                },
-                "department" : {
-                  "get" : null
+                  "get" : "bar"
                 }
               }
             }

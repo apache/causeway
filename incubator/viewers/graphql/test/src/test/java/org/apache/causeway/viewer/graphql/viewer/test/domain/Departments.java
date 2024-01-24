@@ -59,5 +59,9 @@ public class Departments {
         return departmentRepository.findAll();
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    public Department findByName(final String name){
+        return departmentRepository.findByName(name);
+    }
 
 }

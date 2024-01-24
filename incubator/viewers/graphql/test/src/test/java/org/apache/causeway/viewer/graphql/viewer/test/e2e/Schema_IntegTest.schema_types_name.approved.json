@@ -646,11 +646,15 @@
       }, {
         "name" : "university_dept_Department__name__property"
       }, {
+        "name" : "university_dept_Department__staffMembers__collection"
+      }, {
         "name" : "university_dept_Departments"
       }, {
         "name" : "university_dept_Departments__createDepartment__action"
       }, {
         "name" : "university_dept_Departments__findAllDepartments__action"
+      }, {
+        "name" : "university_dept_Departments__findByName__action"
       }, {
         "name" : "university_dept_Departments__gql_mutations"
       }, {

@@ -1611,6 +1611,7 @@ type university_dept_Department {
   _gql_meta: university_dept_Department__gql_meta
   deptHead: university_dept_Department__deptHead__property
   name: university_dept_Department__name__property
+  staffMembers: university_dept_Department__staffMembers__collection
 }
 
 type university_dept_Department__deptHead__property {
@@ -1631,9 +1632,16 @@ type university_dept_Department__name__property {
   hidden: Boolean
 }
 
+type university_dept_Department__staffMembers__collection {
+  disabled: String
+  get: [university_dept_StaffMember]
+  hidden: Boolean
+}
+
 type university_dept_Departments {
   _gql_mutations: university_dept_Departments__gql_mutations
   findAllDepartments: university_dept_Departments__findAllDepartments__action
+  findByName: university_dept_Departments__findByName__action
 }
 
 type university_dept_Departments__createDepartment__action {
@@ -1646,6 +1654,12 @@ type university_dept_Departments__findAllDepartments__action {
   disabled: String
   hidden: Boolean
   invoke: [university_dept_Department]
+}
+
+type university_dept_Departments__findByName__action {
+  disabled: String
+  hidden: Boolean
+  invoke(name: String!): university_dept_Department
 }
 
 type university_dept_Departments__gql_mutations {

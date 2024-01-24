@@ -22,10 +22,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.causeway.applib.annotation.Bounding;
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
@@ -35,6 +37,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(
@@ -63,6 +67,13 @@ public class Department implements Comparable<Department> {
     @OneToOne(optional = true)
     @JoinColumn(name = "deptHead_id")
     private DeptHead deptHead;
+
+
+    @Getter @Setter
+    @Collection
+    @OneToMany(mappedBy = "department")
+    private Set<StaffMember> staffMembers = new TreeSet<>();
+
 
     @Override
     public int compareTo(final Department o) {

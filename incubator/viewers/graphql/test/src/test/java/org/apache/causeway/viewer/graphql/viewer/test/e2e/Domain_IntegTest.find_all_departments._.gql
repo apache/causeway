@@ -6,7 +6,6 @@
           get
         }
         _gql_meta {
-          id
           logicalTypeName
           version
         }

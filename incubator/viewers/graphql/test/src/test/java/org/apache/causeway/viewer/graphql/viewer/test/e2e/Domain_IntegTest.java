@@ -43,7 +43,6 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.Departments;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
 import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
@@ -119,6 +118,22 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Test
     @UseReporter(DiffReporter.class)
+    void find_department_by_name() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void find_depthead_by_name() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void create_department() throws Exception {
 
         // given
@@ -182,7 +197,7 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Test
     @UseReporter(DiffReporter.class)
-    void find_department_and_change_name() throws Exception {
+    void find_depthead_and_change_name() throws Exception {
 
         // given
         transactionService.callTransactional(
