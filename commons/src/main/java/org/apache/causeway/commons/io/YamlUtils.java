@@ -106,7 +106,7 @@ public class YamlUtils {
             final YamlUtils.YamlDumpCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
-            Try.run(()->createMapper(pojo.getClass(), Can.empty(), Can.ofArray(customizers)).dump(pojo, new OutputStreamWriter(os))));
+            createMapper(pojo.getClass(), Can.empty(), Can.ofArray(customizers)).dump(pojo, new OutputStreamWriter(os)));
     }
 
     /**
