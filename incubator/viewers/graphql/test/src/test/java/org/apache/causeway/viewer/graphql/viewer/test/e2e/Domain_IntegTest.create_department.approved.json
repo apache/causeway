@@ -6,7 +6,9 @@
           "hidden" : false,
           "disabled" : null,
           "invoke" : {
-            "name" : "newbie"
+            "name" : {
+              "get" : "newbie"
+            }
           }
         }
       }

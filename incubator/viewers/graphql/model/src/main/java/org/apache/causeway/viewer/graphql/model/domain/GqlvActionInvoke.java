@@ -18,36 +18,30 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.Scalars;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
-
 import graphql.schema.GraphQLType;
-import graphql.schema.GraphQLTypeReference;
-
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
-import org.apache.causeway.viewer.graphql.model.util.TypeNames;
-
-import org.springframework.lang.Nullable;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
@@ -99,7 +93,7 @@ public class GqlvActionInvoke {
                     return null;
                 }
                 ObjectSpecification objectSpecificationForElementWhenCollection = facet.elementSpec();
-                GraphQLType wrappedType = outputTypeFor(objectSpecificationForElementWhenCollection);
+                GraphQLType wrappedType = TypeMapper.outputTypeFor(objectSpecificationForElementWhenCollection);
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
                             objectSpecificationForElementWhenCollection.getFullIdentifier(),
@@ -112,31 +106,8 @@ public class GqlvActionInvoke {
             case ENTITY:
             case VIEW_MODEL:
             default:
-                // TODO: this cast is suspicious
-                return (GraphQLOutputType) outputTypeFor(objectSpecification);
+                return TypeMapper.outputTypeFor(objectSpecification);
 
-        }
-    }
-
-    @Nullable
-    private static GraphQLType outputTypeFor(final ObjectSpecification objectSpecification){
-
-        switch (objectSpecification.getBeanSort()){
-            case ABSTRACT:
-            case ENTITY:
-            case VIEW_MODEL:
-                return GraphQLTypeReference.typeRef(TypeNames.objectTypeNameFor(objectSpecification));
-
-            case VALUE:
-                return ScalarMapper.typeFor(objectSpecification.getCorrespondingClass());
-
-            case COLLECTION:
-                // should be noop
-                return null;
-
-            default:
-                // for now
-                return Scalars.GraphQLString;
         }
     }
 
@@ -169,14 +140,14 @@ public class GqlvActionInvoke {
         );
     }
 
-    private Object invoke(
-            final DataFetchingEnvironment dataFetchingEnvironment) {
+    private Object invoke(final DataFetchingEnvironment dataFetchingEnvironment) {
+
         final ObjectAction objectAction = holder.getObjectAction();
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = holder.getObjectAction().getSpecificationLoader();
+        val specificationLoader = objectAction.getSpecificationLoader();
         val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected

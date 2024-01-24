@@ -49,7 +49,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder>
             ) {
         super(holder, objectAction, codeRegistryBuilder);
 
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(objectAction, holder.getObjectSpecification()));
+        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction));
         this.bookmarkService = bookmarkService;
 
         this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
@@ -74,12 +74,12 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder>
     }
 
     @Override
-    public void addField(GraphQLFieldDefinition fieldDefinition) {
-        gqlObjectTypeBuilder.field(fieldDefinition);
+    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        gqlObjectTypeBuilder.field(field);
+        return field;
     }
 
     public void addDataFetcher() {
-
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 new Fetcher());

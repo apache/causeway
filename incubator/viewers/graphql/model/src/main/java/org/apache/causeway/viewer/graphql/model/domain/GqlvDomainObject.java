@@ -64,6 +64,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
     private final SortedMap<String, GqlvProperty> properties = new TreeMap<>();
+//    private final SortedMap<String, GqlvPropertySimple> propertySimples = new TreeMap<>();
     private final SortedMap<String, GqlvCollection> collections = new TreeMap<>();
     private final Map<String, GqlvAction> safeActions = new TreeMap<>();
 
@@ -114,7 +115,14 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
     private void addProperty(final OneToOneAssociation otoa) {
-        GqlvProperty property = new GqlvProperty(this, otoa, codeRegistryBuilder);
+//        GqlvPropertySimple propertySimple = new GqlvPropertySimple(this, otoa, codeRegistryBuilder);
+//        if (propertySimple.hasFieldDefinition()) {
+//            String propertyId = propertySimple.getId();
+//            if (!propertySimples.containsKey(propertyId)) {
+//                propertySimples.put(propertyId, propertySimple);
+//            }
+//        }
+        GqlvProperty property = new GqlvProperty(this, otoa, codeRegistryBuilder, bookmarkService);
         if (property.hasFieldDefinition()) {
             String propertyId = property.getId();
             if (!properties.containsKey(propertyId)) {
@@ -146,8 +154,9 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
 
     @Override
-    public void addField(GraphQLFieldDefinition fieldDefinition) {
-        gqlObjectTypeBuilder.field(fieldDefinition);
+    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        gqlObjectTypeBuilder.field(field);
+        return field;
     }
 
 
@@ -167,6 +176,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     public void addDataFetchers() {
         meta.addDataFetchers();
         properties.forEach((id, property) -> property.addDataFetcher());
+//        propertySimples.forEach((id, property) -> property.addDataFetcher());
         collections.forEach((id, collection) -> collection.addDataFetcher());
         safeActions.forEach((id, action) -> action.addDataFetcher());
         mutations.addDataFetchers();

@@ -135,9 +135,10 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
 
         // build the schema
+        Set<GraphQLType> graphQLTypes = graphQLTypeRegistry.getGraphQLTypes();
         return GraphQLSchema.newSchema()
                 .query(topLevelQuery.getQueryType())
-                .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
+                .additionalTypes(graphQLTypes)
                 .codeRegistry(codeRegistry)
                 .build();
     }

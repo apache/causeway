@@ -2,7 +2,9 @@
   university_dept_DepartmentMenu {
     findAllDepartments {
       invoke {
-        name
+        name {
+          get
+        }
         _gql_meta {
           id
           logicalTypeName

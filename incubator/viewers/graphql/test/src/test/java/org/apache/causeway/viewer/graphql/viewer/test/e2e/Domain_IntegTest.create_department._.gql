@@ -5,7 +5,9 @@
         hidden
         disabled
         invoke(name: "newbie") {
-          name
+          name {
+            get
+          }
         }
       }
     }

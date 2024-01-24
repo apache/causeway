@@ -135,8 +135,9 @@ public class GqlvMutations implements GqlvActionHolder {
     }
 
     @Override
-    public void addField(GraphQLFieldDefinition fieldDefinition) {
-        gqlObjectTypeBuilder.field(fieldDefinition);
+    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        gqlObjectTypeBuilder.field(field);
+        return field;
     }
 
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {

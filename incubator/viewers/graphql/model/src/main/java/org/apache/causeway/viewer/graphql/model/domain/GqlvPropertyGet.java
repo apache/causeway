@@ -18,75 +18,92 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-@Log4j2
-public class GqlvMemberDisabled {
+public class GqlvPropertyGet {
 
-    private final GqlvMemberDisabledHolder holder;
+    private final GqlvPropertyGetHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
 
-    public GqlvMemberDisabled(
-            final GqlvMemberDisabledHolder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
-    ) {
+
+    public GqlvPropertyGet(
+            final GqlvPropertyGetHolder holder,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
         this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final GqlvMemberDisabledHolder holder) {
+    private static GraphQLFieldDefinition fieldDefinition(final GqlvPropertyGetHolder holder) {
 
-        GraphQLFieldDefinition fieldDefinition =
-                newFieldDefinition()
-                    .name("disabled")
-                    .type(TypeMapper.scalarTypeFor(String.class))
-                    .build();
+        val oneToOneAssociation = holder.getOneToOneAssociation();
 
-        holder.addField(fieldDefinition);
+        GraphQLFieldDefinition fieldDefinition = null;
+        GraphQLOutputType type = TypeMapper.outputTypeFor(oneToOneAssociation);
+        if (type != null) {
+            val fieldBuilder = newFieldDefinition()
+                    .name("get")
+                    .type(type);
+            fieldDefinition = fieldBuilder.build();
+
+            holder.addField(fieldDefinition);
+        }
         return fieldDefinition;
     }
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::disabled
-        );
+
+        val association = holder.getOneToOneAssociation();
+        val fieldObjectSpecification = association.getElementType();
+        val beanSort = fieldObjectSpecification.getBeanSort();
+
+        val specificationLoader = association.getSpecificationLoader();
+        switch (beanSort) {
+
+            case VALUE:
+            case VIEW_MODEL:
+            case ENTITY:
+
+                codeRegistryBuilder.dataFetcher(
+                        holder.coordinatesFor(field),
+                        this::get);
+
+                break;
+
+        }
     }
 
-    private String disabled(
-            final DataFetchingEnvironment dataFetchingEnvironment) {
+    private Object get(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectMember objectMember = holder.getObjectMember();
+        val association = holder.getOneToOneAssociation();
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = holder.getObjectMember().getSpecificationLoader();
+        val specificationLoader = association.getSpecificationLoader();
         val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
-            return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
+            return null;
         }
 
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        val resultManagedObject = association.get(managedObject);
 
-        val usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        return usable.getReasonAsString().orElse(null);
+        return resultManagedObject != null
+                ? resultManagedObject.getPojo()
+                : null;
     }
 
 }

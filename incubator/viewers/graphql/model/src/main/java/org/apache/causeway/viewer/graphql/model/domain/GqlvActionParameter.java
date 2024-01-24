@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.model.types.ScalarMapper;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import graphql.Scalars;
@@ -38,7 +38,7 @@ public class GqlvActionParameter {
                 return GraphQLTypeReference.typeRef(TypeNames.inputTypeNameFor(elementType));
 
             case VALUE:
-                return (GraphQLInputType) ScalarMapper.typeFor(elementType.getCorrespondingClass());
+                return (GraphQLInputType) TypeMapper.scalarTypeFor(elementType.getCorrespondingClass());
 
             case COLLECTION:
                 // TODO ...

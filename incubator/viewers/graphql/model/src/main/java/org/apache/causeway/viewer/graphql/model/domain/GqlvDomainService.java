@@ -108,8 +108,9 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
 
     @Override
-    public void addField(GraphQLFieldDefinition fieldDefinition) {
-        gqlObjectTypeBuilder.field(fieldDefinition);
+    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        gqlObjectTypeBuilder.field(field);
+        return field;
     }
 
 

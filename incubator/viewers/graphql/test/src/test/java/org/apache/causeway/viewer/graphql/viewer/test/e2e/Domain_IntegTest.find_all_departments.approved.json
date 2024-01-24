@@ -3,14 +3,18 @@
     "university_dept_DepartmentMenu" : {
       "findAllDepartments" : {
         "invoke" : [ {
-          "name" : "foo",
+          "name" : {
+            "get" : "foo"
+          },
           "_gql_meta" : {
             "id" : "3",
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
         }, {
-          "name" : "bar",
+          "name" : {
+            "get" : "bar"
+          },
           "_gql_meta" : {
             "id" : "4",
             "logicalTypeName" : "university.dept.Department",

@@ -5,9 +5,17 @@
         _gql_mutations {
           changeName {
             invoke(newName: "bar") {
-              name
+              name {
+                get
+                hidden
+                disabled
+              }
               department {
-                name
+                get {
+                  name {
+                    get
+                  }
+                }
               }
             }
           }

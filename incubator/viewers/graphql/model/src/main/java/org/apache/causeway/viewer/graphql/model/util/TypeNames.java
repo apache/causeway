@@ -21,7 +21,9 @@ package org.apache.causeway.viewer.graphql.model.util;
 import lombok.experimental.UtilityClass;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 @UtilityClass
 public final class TypeNames {
@@ -42,9 +44,16 @@ public final class TypeNames {
         return objectTypeNameFor(objectSpecification) + "__gql_input";
     }
 
-    public static String actionTypeNameFor(ObjectMember objectMember, ObjectSpecification objectSpecification) {
-        String typeName = objectTypeNameFor(objectSpecification) + "__" + objectMember.getId();
-        return typeName;
+    public static String actionTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
+        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__action";
+    }
+
+    public static String propertyTypeNameFor(ObjectSpecification owningType, OneToOneAssociation oneToOneAssociation) {
+        return objectTypeNameFor(owningType) + "__" + oneToOneAssociation.getId() + "__property";
+    }
+
+    public static String collectionTypeNameFor(ObjectSpecification owningType, OneToManyAssociation objectMember) {
+        return objectTypeNameFor(owningType) + "__" + objectMember.getId() + "__collection";
     }
 
     private static String sanitized(final String name) {

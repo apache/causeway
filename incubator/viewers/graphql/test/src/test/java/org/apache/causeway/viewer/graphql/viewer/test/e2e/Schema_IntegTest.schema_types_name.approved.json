@@ -30,21 +30,39 @@
       }, {
         "name" : "causeway_applib_DomainObjectList"
       }, {
+        "name" : "causeway_applib_DomainObjectList__actionArguments__property"
+      }, {
+        "name" : "causeway_applib_DomainObjectList__actionId__property"
+      }, {
+        "name" : "causeway_applib_DomainObjectList__actionOwningFqcn__property"
+      }, {
+        "name" : "causeway_applib_DomainObjectList__elementTypeFqcn__property"
+      }, {
         "name" : "causeway_applib_DomainObjectList__gql_input"
       }, {
         "name" : "causeway_applib_DomainObjectList__gql_meta"
       }, {
+        "name" : "causeway_applib_DomainObjectList__title__property"
+      }, {
         "name" : "causeway_applib_FacetGroupNode"
+      }, {
+        "name" : "causeway_applib_FacetGroupNode__facets__property"
       }, {
         "name" : "causeway_applib_FacetGroupNode__gql_input"
       }, {
         "name" : "causeway_applib_FacetGroupNode__gql_meta"
+      }, {
+        "name" : "causeway_applib_FacetGroupNode__parentNode__property"
       }, {
         "name" : "causeway_applib_ParameterNode"
       }, {
         "name" : "causeway_applib_ParameterNode__gql_input"
       }, {
         "name" : "causeway_applib_ParameterNode__gql_meta"
+      }, {
+        "name" : "causeway_applib_ParameterNode__parameter__property"
+      }, {
+        "name" : "causeway_applib_ParameterNode__parentNode__property"
       }, {
         "name" : "causeway_applib_PropertyNode"
       }, {
@@ -54,31 +72,67 @@
       }, {
         "name" : "causeway_applib_PropertyNode__gql_mutations"
       }, {
-        "name" : "causeway_applib_PropertyNode__streamChildNodes"
+        "name" : "causeway_applib_PropertyNode__mixedIn__property"
+      }, {
+        "name" : "causeway_applib_PropertyNode__parentNode__property"
+      }, {
+        "name" : "causeway_applib_PropertyNode__property__property"
+      }, {
+        "name" : "causeway_applib_PropertyNode__streamChildNodes__action"
       }, {
         "name" : "causeway_applib_RoleMemento"
+      }, {
+        "name" : "causeway_applib_RoleMemento__description__property"
       }, {
         "name" : "causeway_applib_RoleMemento__gql_input"
       }, {
         "name" : "causeway_applib_RoleMemento__gql_meta"
       }, {
+        "name" : "causeway_applib_RoleMemento__name__property"
+      }, {
         "name" : "causeway_applib_TypeNode"
+      }, {
+        "name" : "causeway_applib_TypeNode__domainClassDto__property"
       }, {
         "name" : "causeway_applib_TypeNode__gql_input"
       }, {
         "name" : "causeway_applib_TypeNode__gql_meta"
       }, {
+        "name" : "causeway_applib_TypeNode__parentNode__property"
+      }, {
         "name" : "causeway_applib_UserMemento"
+      }, {
+        "name" : "causeway_applib_UserMemento__authenticationCode__property"
+      }, {
+        "name" : "causeway_applib_UserMemento__authenticationSource__property"
+      }, {
+        "name" : "causeway_applib_UserMemento__avatarUrl__property"
       }, {
         "name" : "causeway_applib_UserMemento__gql_input"
       }, {
         "name" : "causeway_applib_UserMemento__gql_meta"
       }, {
+        "name" : "causeway_applib_UserMemento__impersonating__property"
+      }, {
+        "name" : "causeway_applib_UserMemento__languageLocale__property"
+      }, {
+        "name" : "causeway_applib_UserMemento__multiTenancyToken__property"
+      }, {
+        "name" : "causeway_applib_UserMemento__name__property"
+      }, {
+        "name" : "causeway_applib_UserMemento__numberFormatLocale__property"
+      }, {
+        "name" : "causeway_applib_UserMemento__realName__property"
+      }, {
+        "name" : "causeway_applib_UserMemento__timeFormatLocale__property"
+      }, {
         "name" : "causeway_applib_UserMenu"
       }, {
-        "name" : "causeway_applib_UserMenu__me"
+        "name" : "causeway_applib_UserMenu__me__action"
       }, {
         "name" : "causeway_applib_node_ActionNode"
+      }, {
+        "name" : "causeway_applib_node_ActionNode__action__property"
       }, {
         "name" : "causeway_applib_node_ActionNode__gql_input"
       }, {
@@ -86,9 +140,15 @@
       }, {
         "name" : "causeway_applib_node_ActionNode__gql_mutations"
       }, {
-        "name" : "causeway_applib_node_ActionNode__streamChildNodes"
+        "name" : "causeway_applib_node_ActionNode__mixedIn__property"
+      }, {
+        "name" : "causeway_applib_node_ActionNode__parentNode__property"
+      }, {
+        "name" : "causeway_applib_node_ActionNode__streamChildNodes__action"
       }, {
         "name" : "causeway_applib_node_CollectionNode"
+      }, {
+        "name" : "causeway_applib_node_CollectionNode__collection__property"
       }, {
         "name" : "causeway_applib_node_CollectionNode__gql_input"
       }, {
@@ -96,29 +156,47 @@
       }, {
         "name" : "causeway_applib_node_CollectionNode__gql_mutations"
       }, {
-        "name" : "causeway_applib_node_CollectionNode__streamChildNodes"
+        "name" : "causeway_applib_node_CollectionNode__mixedIn__property"
+      }, {
+        "name" : "causeway_applib_node_CollectionNode__parentNode__property"
+      }, {
+        "name" : "causeway_applib_node_CollectionNode__streamChildNodes__action"
       }, {
         "name" : "causeway_applib_node_FacetAttrNode"
+      }, {
+        "name" : "causeway_applib_node_FacetAttrNode__facetAttr__property"
       }, {
         "name" : "causeway_applib_node_FacetAttrNode__gql_input"
       }, {
         "name" : "causeway_applib_node_FacetAttrNode__gql_meta"
       }, {
+        "name" : "causeway_applib_node_FacetAttrNode__parentNode__property"
+      }, {
         "name" : "causeway_applib_node_FacetNode"
+      }, {
+        "name" : "causeway_applib_node_FacetNode__facet__property"
       }, {
         "name" : "causeway_applib_node_FacetNode__gql_input"
       }, {
         "name" : "causeway_applib_node_FacetNode__gql_meta"
       }, {
+        "name" : "causeway_applib_node_FacetNode__parentNode__property"
+      }, {
+        "name" : "causeway_applib_node_FacetNode__shadowed__property"
+      }, {
         "name" : "causeway_conf_ConfigurationMenu"
       }, {
-        "name" : "causeway_conf_ConfigurationMenu__configuration"
+        "name" : "causeway_conf_ConfigurationMenu__configuration__action"
       }, {
         "name" : "causeway_conf_ConfigurationProperty"
       }, {
         "name" : "causeway_conf_ConfigurationProperty__gql_input"
       }, {
         "name" : "causeway_conf_ConfigurationProperty__gql_meta"
+      }, {
+        "name" : "causeway_conf_ConfigurationProperty__key__property"
+      }, {
+        "name" : "causeway_conf_ConfigurationProperty__value__property"
       }, {
         "name" : "causeway_conf_ConfigurationViewmodel"
       }, {
@@ -132,25 +210,65 @@
       }, {
         "name" : "causeway_feat_ApplicationFeatureViewModel__gql_meta"
       }, {
+        "name" : "causeway_feat_ApplicationFeatureViewModel__memberName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationFeatureViewModel__namespaceName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationFeatureViewModel__parent__property"
+      }, {
+        "name" : "causeway_feat_ApplicationFeatureViewModel__typeSimpleName__property"
+      }, {
         "name" : "causeway_feat_ApplicationNamespace"
       }, {
         "name" : "causeway_feat_ApplicationNamespace__gql_input"
       }, {
         "name" : "causeway_feat_ApplicationNamespace__gql_meta"
       }, {
+        "name" : "causeway_feat_ApplicationNamespace__memberName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationNamespace__namespaceName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationNamespace__parent__property"
+      }, {
+        "name" : "causeway_feat_ApplicationNamespace__typeSimpleName__property"
+      }, {
         "name" : "causeway_feat_ApplicationType"
       }, {
         "name" : "causeway_feat_ApplicationTypeAction"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeAction__actionSemantics__property"
       }, {
         "name" : "causeway_feat_ApplicationTypeAction__gql_input"
       }, {
         "name" : "causeway_feat_ApplicationTypeAction__gql_meta"
       }, {
+        "name" : "causeway_feat_ApplicationTypeAction__memberName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeAction__namespaceName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeAction__parent__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeAction__returnType__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeAction__typeSimpleName__property"
+      }, {
         "name" : "causeway_feat_ApplicationTypeCollection"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeCollection__derived__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeCollection__elementType__property"
       }, {
         "name" : "causeway_feat_ApplicationTypeCollection__gql_input"
       }, {
         "name" : "causeway_feat_ApplicationTypeCollection__gql_meta"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeCollection__memberName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeCollection__namespaceName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeCollection__parent__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeCollection__typeSimpleName__property"
       }, {
         "name" : "causeway_feat_ApplicationTypeMember"
       }, {
@@ -158,21 +276,71 @@
       }, {
         "name" : "causeway_feat_ApplicationTypeMember__gql_meta"
       }, {
+        "name" : "causeway_feat_ApplicationTypeMember__memberName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeMember__namespaceName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeMember__parent__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeMember__typeSimpleName__property"
+      }, {
         "name" : "causeway_feat_ApplicationTypeProperty"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__derived__property"
       }, {
         "name" : "causeway_feat_ApplicationTypeProperty__gql_input"
       }, {
         "name" : "causeway_feat_ApplicationTypeProperty__gql_meta"
       }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__maxLength__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__memberName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__namespaceName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__parent__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__returnType__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__typeSimpleName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__typicalLength__property"
+      }, {
         "name" : "causeway_feat_ApplicationType__gql_input"
       }, {
         "name" : "causeway_feat_ApplicationType__gql_meta"
       }, {
+        "name" : "causeway_feat_ApplicationType__memberName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationType__namespaceName__property"
+      }, {
+        "name" : "causeway_feat_ApplicationType__parent__property"
+      }, {
+        "name" : "causeway_feat_ApplicationType__typeSimpleName__property"
+      }, {
         "name" : "causeway_schema_metamodel_v2_DomainClassDto"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__actions__property"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__annotations__property"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__collections__property"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__facets__property"
       }, {
         "name" : "causeway_schema_metamodel_v2_DomainClassDto__gql_input"
       }, {
         "name" : "causeway_schema_metamodel_v2_DomainClassDto__gql_meta"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__id__property"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__majorVersion__property"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__minorVersion__property"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__properties__property"
+      }, {
+        "name" : "causeway_schema_metamodel_v2_DomainClassDto__service__property"
       }, {
         "name" : "causeway_security_LoginRedirect"
       }, {
@@ -182,13 +350,21 @@
       }, {
         "name" : "causeway_security_LogoutMenu"
       }, {
-        "name" : "causeway_security_LogoutMenu__logout"
+        "name" : "causeway_security_LogoutMenu__logout__action"
       }, {
         "name" : "causeway_testing_fixtures_FixtureResult"
+      }, {
+        "name" : "causeway_testing_fixtures_FixtureResult__className__property"
+      }, {
+        "name" : "causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__property"
       }, {
         "name" : "causeway_testing_fixtures_FixtureResult__gql_input"
       }, {
         "name" : "causeway_testing_fixtures_FixtureResult__gql_meta"
+      }, {
+        "name" : "causeway_testing_fixtures_FixtureResult__key__property"
+      }, {
+        "name" : "causeway_testing_fixtures_FixtureResult__object__property"
       }, {
         "name" : "java_lang_Runnable"
       }, {
@@ -240,7 +416,7 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Either"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__accept"
+        "name" : "org_apache_causeway_commons_functional_Either__accept__action"
       }, {
         "name" : "org_apache_causeway_commons_functional_Either__gql_input"
       }, {
@@ -248,19 +424,25 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Either__gql_mutations"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__left"
+        "name" : "org_apache_causeway_commons_functional_Either__left__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__map"
+        "name" : "org_apache_causeway_commons_functional_Either__left__property"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__mapLeft"
+        "name" : "org_apache_causeway_commons_functional_Either__mapLeft__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__mapRight"
+        "name" : "org_apache_causeway_commons_functional_Either__mapRight__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Either__right"
+        "name" : "org_apache_causeway_commons_functional_Either__map__action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__right__action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__right__property"
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Railway__chain"
+        "name" : "org_apache_causeway_commons_functional_Railway__chain__action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__failure__property"
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway__gql_input"
       }, {
@@ -268,17 +450,19 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway__gql_mutations"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Railway__ifFailure"
+        "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess"
+        "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Railway__mapFailure"
+        "name" : "org_apache_causeway_commons_functional_Railway__mapFailure__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess"
+        "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess__action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__success__property"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen"
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__action"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_input"
       }, {
@@ -286,13 +470,13 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing"
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__action"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen"
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose"
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose__action"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_input"
       }, {
@@ -300,11 +484,11 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing"
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__action"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingRunnable"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched"
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched__action"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gql_input"
       }, {
@@ -312,23 +496,25 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__run"
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched"
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__run__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__toCallable"
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__toCallable__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable"
+        "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable__action"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__accept"
+        "name" : "org_apache_causeway_commons_functional_Try__accept__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess"
+        "name" : "org_apache_causeway_commons_functional_Try__failure__property"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable"
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent"
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess__action"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__gql_input"
       }, {
@@ -336,43 +522,49 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__gql_mutations"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__ifAbsentFail"
+        "name" : "org_apache_causeway_commons_functional_Try__ifAbsentFail__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__ifFailure"
+        "name" : "org_apache_causeway_commons_functional_Try__ifFailureFail__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__ifFailureFail"
+        "name" : "org_apache_causeway_commons_functional_Try__ifFailure__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__ifSuccess"
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable"
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccess__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__mapEmptyToFailure"
+        "name" : "org_apache_causeway_commons_functional_Try__mapEmptyToFailure__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__mapFailure"
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess"
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailure__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__mapSuccess"
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable"
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent"
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccess__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__mapToEither"
+        "name" : "org_apache_causeway_commons_functional_Try__mapToEither__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__orCall"
+        "name" : "org_apache_causeway_commons_functional_Try__orCall__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__then"
+        "name" : "org_apache_causeway_commons_functional_Try__success__property"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__thenCall"
+        "name" : "org_apache_causeway_commons_functional_Try__thenCall__action"
       }, {
-        "name" : "org_apache_causeway_commons_functional_Try__thenRun"
+        "name" : "org_apache_causeway_commons_functional_Try__thenRun__action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__then__action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__value__property"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_input"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta"
+      }, {
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__property"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode"
       }, {
@@ -382,49 +574,65 @@
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations"
       }, {
-        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes"
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__property"
+      }, {
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__property"
+      }, {
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes__action"
       }, {
         "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript"
+      }, {
+        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__property"
       }, {
         "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_input"
       }, {
         "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_meta"
       }, {
+        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__property"
+      }, {
         "name" : "university_dept_Department"
       }, {
         "name" : "university_dept_DepartmentMenu"
       }, {
-        "name" : "university_dept_DepartmentMenu__adminAction"
+        "name" : "university_dept_DepartmentMenu__adminAction__action"
       }, {
-        "name" : "university_dept_DepartmentMenu__createDepartment"
+        "name" : "university_dept_DepartmentMenu__createDepartment__action"
       }, {
-        "name" : "university_dept_DepartmentMenu__findAllDepartments"
+        "name" : "university_dept_DepartmentMenu__findAllDepartments__action"
       }, {
         "name" : "university_dept_DepartmentMenu__gql_mutations"
       }, {
-        "name" : "university_dept_DepartmentMenu__otherAdminAction"
+        "name" : "university_dept_DepartmentMenu__otherAdminAction__action"
+      }, {
+        "name" : "university_dept_Department__deptHead__property"
       }, {
         "name" : "university_dept_Department__gql_input"
       }, {
         "name" : "university_dept_Department__gql_meta"
       }, {
+        "name" : "university_dept_Department__name__property"
+      }, {
         "name" : "university_dept_DeptHead"
       }, {
         "name" : "university_dept_DeptHeadMenu"
       }, {
-        "name" : "university_dept_DeptHeadMenu__findAllDeptHeads"
+        "name" : "university_dept_DeptHeadMenu__findAllDeptHeads__action"
       }, {
-        "name" : "university_dept_DeptHeadMenu__findDeptHeadByName"
+        "name" : "university_dept_DeptHeadMenu__findDeptHeadByName__action"
       }, {
-        "name" : "university_dept_DeptHead__changeDepartment"
+        "name" : "university_dept_DeptHead__changeDepartment__action"
       }, {
-        "name" : "university_dept_DeptHead__changeName"
+        "name" : "university_dept_DeptHead__changeName__action"
+      }, {
+        "name" : "university_dept_DeptHead__department__property"
       }, {
         "name" : "university_dept_DeptHead__gql_input"
       }, {
         "name" : "university_dept_DeptHead__gql_meta"
       }, {
         "name" : "university_dept_DeptHead__gql_mutations"
+      }, {
+        "name" : "university_dept_DeptHead__name__property"
       } ]
     }
   }

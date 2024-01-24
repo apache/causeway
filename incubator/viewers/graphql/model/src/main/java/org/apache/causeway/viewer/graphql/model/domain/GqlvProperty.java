@@ -18,73 +18,95 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.springframework.lang.Nullable;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import graphql.Scalars;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLTypeReference;
+import graphql.schema.GraphQLObjectType;
+
+import lombok.val;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLTypeReference.typeRef;
+import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvProperty extends GqlvAssociation<OneToOneAssociation, GqlvPropertyHolder> {
+public class GqlvProperty extends GqlvAssociation<OneToOneAssociation, GqlvPropertyHolder> implements GqlvPropertyGetHolder, GqlvMemberHiddenHolder, GqlvMemberDisabledHolder {
+
+    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    private final GraphQLObjectType gqlObjectType;
+    private final GqlvMemberHidden hidden;
+    private final GqlvMemberDisabled disabled;
+    private final GqlvPropertyGet get;
+    private final BookmarkService bookmarkService;
 
     public GqlvProperty(
             final GqlvPropertyHolder domainObject,
             final OneToOneAssociation oneToOneAssociation,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
+            final BookmarkService bookmarkService
     ) {
-        super(domainObject, oneToOneAssociation, fieldDefinition(domainObject, oneToOneAssociation), codeRegistryBuilder);
+        super(domainObject, oneToOneAssociation, codeRegistryBuilder);
+
+        this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation));
+        this.bookmarkService = bookmarkService;
+
+        this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
+        this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
+        this.get = new GqlvPropertyGet(this, codeRegistryBuilder);
+
+        this.gqlObjectType = gqlObjectTypeBuilder.build();
+
+        setField(
+            holder.addField(
+                newFieldDefinition()
+                    .name(oneToOneAssociation.getId())
+                    .type(gqlObjectTypeBuilder)
+                    .build()
+            )
+        );
     }
 
-    @Nullable private static GraphQLFieldDefinition fieldDefinition(
-            final GqlvPropertyHolder domainObject,
-            final OneToOneAssociation otoa) {
-
-        GraphQLOutputType type = outputTypeFor(otoa);
-
-        GraphQLFieldDefinition fieldDefinition = null;
-        if (type != null) {
-            fieldDefinition = newFieldDefinition()
-                    .name(otoa.getId())
-                    .type(type).build();
-            domainObject.addField(fieldDefinition);
-        }
-        return fieldDefinition;
-    }
-
-    private static GraphQLOutputType outputTypeFor(final OneToOneAssociation otoa) {
-        ObjectSpecification otoaObjectSpec = otoa.getElementType();
-        switch (otoaObjectSpec.getBeanSort()) {
-
-            case VIEW_MODEL:
-            case ENTITY:
-
-                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec));
-                return otoa.isOptional()
-                        ? fieldTypeRef
-                        : nonNull(fieldTypeRef);
-
-            case VALUE:
-
-                // todo: map ...
-
-                return otoa.isOptional()
-                        ? Scalars.GraphQLString
-                        : nonNull(Scalars.GraphQLString);
-        }
-        return null;
-    }
 
     public OneToOneAssociation getOneToOneAssociation() {
         return getObjectAssociation();
     }
 
+    @Override
+    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        gqlObjectTypeBuilder.field(field);
+        return field;
+    }
+
+    public void addDataFetcher() {
+        codeRegistryBuilder.dataFetcher(
+                holder.coordinatesFor(getField()),
+                new GqlvProperty.Fetcher());
+
+        hidden.addDataFetcher();
+        disabled.addDataFetcher();
+        get.addDataFetcher();
+    }
+
+    private class Fetcher implements DataFetcher<Object> {
+        @Override
+        public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
+
+            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+
+            return bookmarkService.bookmarkFor(sourcePojo)
+                    .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
+                    .orElseThrow();
+        }
+    }
+
+
+    @Override
+    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
+        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
+    }
 }

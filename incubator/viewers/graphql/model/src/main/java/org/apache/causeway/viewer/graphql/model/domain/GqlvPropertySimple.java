@@ -21,55 +21,69 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
+import graphql.Scalars;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLTypeReference;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
 
-public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCollectionHolder> {
+public class GqlvPropertySimple extends GqlvAssociation<OneToOneAssociation, GqlvPropertyHolder> {
 
-    public GqlvCollection(
-            final GqlvCollectionHolder domainObject,
-            final OneToManyAssociation oneToManyAssociation,
+    public GqlvPropertySimple(
+            final GqlvPropertyHolder domainObject,
+            final OneToOneAssociation oneToOneAssociation,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
-        super(domainObject, oneToManyAssociation, fieldDefinition(domainObject, oneToManyAssociation), codeRegistryBuilder);
+        super(domainObject, oneToOneAssociation, fieldDefinition(domainObject, oneToOneAssociation), codeRegistryBuilder);
     }
 
     @Nullable private static GraphQLFieldDefinition fieldDefinition(
-            final GqlvCollectionHolder holder,
-            final OneToManyAssociation otom) {
-        ObjectSpecification elementType = otom.getElementType();
+            final GqlvPropertyHolder domainObject,
+            final OneToOneAssociation otoa) {
+
+        GraphQLOutputType type = outputTypeFor(otoa);
 
         GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLList type = listTypeFor(elementType);
         if (type != null) {
-                fieldDefinition = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(type).build();
-                holder.addField(fieldDefinition);
+            fieldDefinition = newFieldDefinition()
+                    .name(otoa.getId())
+                    .type(type).build();
+            domainObject.addField(fieldDefinition);
         }
         return fieldDefinition;
     }
 
-    @Nullable private static GraphQLList listTypeFor(ObjectSpecification elementType) {
-        switch (elementType.getBeanSort()) {
+    private static GraphQLOutputType outputTypeFor(final OneToOneAssociation otoa) {
+        ObjectSpecification otoaObjectSpec = otoa.getElementType();
+        switch (otoaObjectSpec.getBeanSort()) {
+
             case VIEW_MODEL:
             case ENTITY:
-                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType)));
+
+                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec));
+                return otoa.isOptional()
+                        ? fieldTypeRef
+                        : nonNull(fieldTypeRef);
+
             case VALUE:
-                return GraphQLList.list(TypeMapper.scalarTypeFor(elementType.getCorrespondingClass()));
+
+                // todo: map ...
+
+                return otoa.isOptional()
+                        ? Scalars.GraphQLString
+                        : nonNull(Scalars.GraphQLString);
         }
         return null;
     }
 
-    public OneToManyAssociation getOneToManyAssociation() {
+    public OneToOneAssociation getOneToOneAssociation() {
         return getObjectAssociation();
     }
 
