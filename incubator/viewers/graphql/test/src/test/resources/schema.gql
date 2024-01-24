@@ -37,6 +37,7 @@ type causeway_applib_DomainObjectList {
   actionId: causeway_applib_DomainObjectList__actionId__property
   actionOwningFqcn: causeway_applib_DomainObjectList__actionOwningFqcn__property
   elementTypeFqcn: causeway_applib_DomainObjectList__elementTypeFqcn__property
+  objects: causeway_applib_DomainObjectList__objects__collection
   title: causeway_applib_DomainObjectList__title__property
 }
 
@@ -69,6 +70,11 @@ type causeway_applib_DomainObjectList__gql_meta {
   logicalTypeName: String!
 }
 
+type causeway_applib_DomainObjectList__objects__collection {
+  disabled: String
+  hidden: Boolean
+}
+
 type causeway_applib_DomainObjectList__title__property {
   disabled: String
   get: String!
@@ -77,8 +83,14 @@ type causeway_applib_DomainObjectList__title__property {
 
 type causeway_applib_FacetGroupNode {
   _gql_meta: causeway_applib_FacetGroupNode__gql_meta
+  childNodes: causeway_applib_FacetGroupNode__childNodes__collection
   facets: causeway_applib_FacetGroupNode__facets__property
   parentNode: causeway_applib_FacetGroupNode__parentNode__property
+}
+
+type causeway_applib_FacetGroupNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type causeway_applib_FacetGroupNode__facets__property {
@@ -99,8 +111,14 @@ type causeway_applib_FacetGroupNode__parentNode__property {
 
 type causeway_applib_ParameterNode {
   _gql_meta: causeway_applib_ParameterNode__gql_meta
+  childNodes: causeway_applib_ParameterNode__childNodes__collection
   parameter: causeway_applib_ParameterNode__parameter__property
   parentNode: causeway_applib_ParameterNode__parentNode__property
+}
+
+type causeway_applib_ParameterNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type causeway_applib_ParameterNode__gql_meta {
@@ -123,9 +141,15 @@ type causeway_applib_ParameterNode__parentNode__property {
 type causeway_applib_PropertyNode {
   _gql_meta: causeway_applib_PropertyNode__gql_meta
   _gql_mutations: causeway_applib_PropertyNode__gql_mutations
+  childNodes: causeway_applib_PropertyNode__childNodes__collection
   mixedIn: causeway_applib_PropertyNode__mixedIn__property
   parentNode: causeway_applib_PropertyNode__parentNode__property
   property: causeway_applib_PropertyNode__property__property
+}
+
+type causeway_applib_PropertyNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type causeway_applib_PropertyNode__gql_meta {
@@ -186,8 +210,14 @@ type causeway_applib_RoleMemento__name__property {
 
 type causeway_applib_TypeNode {
   _gql_meta: causeway_applib_TypeNode__gql_meta
+  childNodes: causeway_applib_TypeNode__childNodes__collection
   domainClassDto: causeway_applib_TypeNode__domainClassDto__property
   parentNode: causeway_applib_TypeNode__parentNode__property
+}
+
+type causeway_applib_TypeNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type causeway_applib_TypeNode__domainClassDto__property {
@@ -217,7 +247,7 @@ type causeway_applib_UserMemento {
   name: causeway_applib_UserMemento__name__property
   numberFormatLocale: causeway_applib_UserMemento__numberFormatLocale__property
   realName: causeway_applib_UserMemento__realName__property
-  roles: [causeway_applib_RoleMemento]
+  roles: causeway_applib_UserMemento__roles__collection
   timeFormatLocale: causeway_applib_UserMemento__timeFormatLocale__property
 }
 
@@ -280,6 +310,12 @@ type causeway_applib_UserMemento__realName__property {
   hidden: Boolean
 }
 
+type causeway_applib_UserMemento__roles__collection {
+  disabled: String
+  get: [causeway_applib_RoleMemento]
+  hidden: Boolean
+}
+
 type causeway_applib_UserMemento__timeFormatLocale__property {
   disabled: String
   get: String
@@ -300,6 +336,7 @@ type causeway_applib_node_ActionNode {
   _gql_meta: causeway_applib_node_ActionNode__gql_meta
   _gql_mutations: causeway_applib_node_ActionNode__gql_mutations
   action: causeway_applib_node_ActionNode__action__property
+  childNodes: causeway_applib_node_ActionNode__childNodes__collection
   mixedIn: causeway_applib_node_ActionNode__mixedIn__property
   parentNode: causeway_applib_node_ActionNode__parentNode__property
 }
@@ -307,6 +344,11 @@ type causeway_applib_node_ActionNode {
 type causeway_applib_node_ActionNode__action__property {
   disabled: String
   get: String!
+  hidden: Boolean
+}
+
+type causeway_applib_node_ActionNode__childNodes__collection {
+  disabled: String
   hidden: Boolean
 }
 
@@ -340,9 +382,15 @@ type causeway_applib_node_ActionNode__streamChildNodes__action {
 type causeway_applib_node_CollectionNode {
   _gql_meta: causeway_applib_node_CollectionNode__gql_meta
   _gql_mutations: causeway_applib_node_CollectionNode__gql_mutations
+  childNodes: causeway_applib_node_CollectionNode__childNodes__collection
   collection: causeway_applib_node_CollectionNode__collection__property
   mixedIn: causeway_applib_node_CollectionNode__mixedIn__property
   parentNode: causeway_applib_node_CollectionNode__parentNode__property
+}
+
+type causeway_applib_node_CollectionNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type causeway_applib_node_CollectionNode__collection__property {
@@ -380,8 +428,14 @@ type causeway_applib_node_CollectionNode__streamChildNodes__action {
 
 type causeway_applib_node_FacetAttrNode {
   _gql_meta: causeway_applib_node_FacetAttrNode__gql_meta
+  childNodes: causeway_applib_node_FacetAttrNode__childNodes__collection
   facetAttr: causeway_applib_node_FacetAttrNode__facetAttr__property
   parentNode: causeway_applib_node_FacetAttrNode__parentNode__property
+}
+
+type causeway_applib_node_FacetAttrNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type causeway_applib_node_FacetAttrNode__facetAttr__property {
@@ -403,9 +457,15 @@ type causeway_applib_node_FacetAttrNode__parentNode__property {
 
 type causeway_applib_node_FacetNode {
   _gql_meta: causeway_applib_node_FacetNode__gql_meta
+  childNodes: causeway_applib_node_FacetNode__childNodes__collection
   facet: causeway_applib_node_FacetNode__facet__property
   parentNode: causeway_applib_node_FacetNode__parentNode__property
   shadowed: causeway_applib_node_FacetNode__shadowed__property
+}
+
+type causeway_applib_node_FacetNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type causeway_applib_node_FacetNode__facet__property {
@@ -465,14 +525,32 @@ type causeway_conf_ConfigurationProperty__value__property {
 
 type causeway_conf_ConfigurationViewmodel {
   _gql_meta: causeway_conf_ConfigurationViewmodel__gql_meta
-  environment: [causeway_conf_ConfigurationProperty]
-  primary: [causeway_conf_ConfigurationProperty]
-  secondary: [causeway_conf_ConfigurationProperty]
+  environment: causeway_conf_ConfigurationViewmodel__environment__collection
+  primary: causeway_conf_ConfigurationViewmodel__primary__collection
+  secondary: causeway_conf_ConfigurationViewmodel__secondary__collection
+}
+
+type causeway_conf_ConfigurationViewmodel__environment__collection {
+  disabled: String
+  get: [causeway_conf_ConfigurationProperty]
+  hidden: Boolean
 }
 
 type causeway_conf_ConfigurationViewmodel__gql_meta {
   id: String!
   logicalTypeName: String!
+}
+
+type causeway_conf_ConfigurationViewmodel__primary__collection {
+  disabled: String
+  get: [causeway_conf_ConfigurationProperty]
+  hidden: Boolean
+}
+
+type causeway_conf_ConfigurationViewmodel__secondary__collection {
+  disabled: String
+  get: [causeway_conf_ConfigurationProperty]
+  hidden: Boolean
 }
 
 type causeway_feat_ApplicationFeatureViewModel {
@@ -513,10 +591,16 @@ type causeway_feat_ApplicationFeatureViewModel__typeSimpleName__property {
 
 type causeway_feat_ApplicationNamespace {
   _gql_meta: causeway_feat_ApplicationNamespace__gql_meta
+  contents: causeway_feat_ApplicationNamespace__contents__collection
   memberName: causeway_feat_ApplicationNamespace__memberName__property
   namespaceName: causeway_feat_ApplicationNamespace__namespaceName__property
   parent: causeway_feat_ApplicationNamespace__parent__property
   typeSimpleName: causeway_feat_ApplicationNamespace__typeSimpleName__property
+}
+
+type causeway_feat_ApplicationNamespace__contents__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type causeway_feat_ApplicationNamespace__gql_meta {
@@ -549,12 +633,12 @@ type causeway_feat_ApplicationNamespace__typeSimpleName__property {
 
 type causeway_feat_ApplicationType {
   _gql_meta: causeway_feat_ApplicationType__gql_meta
-  actions: [causeway_feat_ApplicationTypeAction]
-  collections: [causeway_feat_ApplicationTypeCollection]
+  actions: causeway_feat_ApplicationType__actions__collection
+  collections: causeway_feat_ApplicationType__collections__collection
   memberName: causeway_feat_ApplicationType__memberName__property
   namespaceName: causeway_feat_ApplicationType__namespaceName__property
   parent: causeway_feat_ApplicationType__parent__property
-  properties: [causeway_feat_ApplicationTypeProperty]
+  properties: causeway_feat_ApplicationType__properties__collection
   typeSimpleName: causeway_feat_ApplicationType__typeSimpleName__property
 }
 
@@ -758,6 +842,18 @@ type causeway_feat_ApplicationTypeProperty__typicalLength__property {
   hidden: Boolean
 }
 
+type causeway_feat_ApplicationType__actions__collection {
+  disabled: String
+  get: [causeway_feat_ApplicationTypeAction]
+  hidden: Boolean
+}
+
+type causeway_feat_ApplicationType__collections__collection {
+  disabled: String
+  get: [causeway_feat_ApplicationTypeCollection]
+  hidden: Boolean
+}
+
 type causeway_feat_ApplicationType__gql_meta {
   id: String!
   logicalTypeName: String!
@@ -777,6 +873,12 @@ type causeway_feat_ApplicationType__namespaceName__property {
 
 type causeway_feat_ApplicationType__parent__property {
   disabled: String
+  hidden: Boolean
+}
+
+type causeway_feat_ApplicationType__properties__collection {
+  disabled: String
+  get: [causeway_feat_ApplicationTypeProperty]
   hidden: Boolean
 }
 
@@ -1400,7 +1502,13 @@ type org_apache_causeway_commons_functional_Try__value__property {
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode {
   _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta
+  childNodes: org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__collection
   parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__property
+}
+
+type org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta {
@@ -1416,8 +1524,14 @@ type org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__proper
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode {
   _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_meta
   _gql_mutations: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations
+  childNodes: org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__collection
   mixedIn: org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__property
   parentNode: org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__property
+}
+
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__collection {
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_meta {

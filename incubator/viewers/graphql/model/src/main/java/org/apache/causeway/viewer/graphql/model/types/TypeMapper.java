@@ -23,6 +23,7 @@ import java.math.BigInteger;
 import java.util.Map;
 
 import graphql.Scalars;
+import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLScalarType;
 
@@ -34,6 +35,7 @@ import javax.ws.rs.NotSupportedException;
 
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
@@ -114,4 +116,21 @@ public class TypeMapper {
                 return Scalars.GraphQLString;
         }
     }
+
+    @Nullable public static GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation) {
+        ObjectSpecification elementType = oneToManyAssociation.getElementType();
+        return TypeMapper.listTypeFor(elementType);
+    }
+
+    @Nullable public static GraphQLList listTypeFor(ObjectSpecification elementType) {
+        switch (elementType.getBeanSort()) {
+            case VIEW_MODEL:
+            case ENTITY:
+                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType)));
+            case VALUE:
+                return GraphQLList.list(TypeMapper.scalarTypeFor(elementType.getCorrespondingClass()));
+        }
+        return null;
+    }
+
 }

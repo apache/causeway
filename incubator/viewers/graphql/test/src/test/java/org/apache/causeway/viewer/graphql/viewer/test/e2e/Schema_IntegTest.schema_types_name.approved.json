@@ -42,9 +42,13 @@
       }, {
         "name" : "causeway_applib_DomainObjectList__gql_meta"
       }, {
+        "name" : "causeway_applib_DomainObjectList__objects__collection"
+      }, {
         "name" : "causeway_applib_DomainObjectList__title__property"
       }, {
         "name" : "causeway_applib_FacetGroupNode"
+      }, {
+        "name" : "causeway_applib_FacetGroupNode__childNodes__collection"
       }, {
         "name" : "causeway_applib_FacetGroupNode__facets__property"
       }, {
@@ -56,6 +60,8 @@
       }, {
         "name" : "causeway_applib_ParameterNode"
       }, {
+        "name" : "causeway_applib_ParameterNode__childNodes__collection"
+      }, {
         "name" : "causeway_applib_ParameterNode__gql_input"
       }, {
         "name" : "causeway_applib_ParameterNode__gql_meta"
@@ -65,6 +71,8 @@
         "name" : "causeway_applib_ParameterNode__parentNode__property"
       }, {
         "name" : "causeway_applib_PropertyNode"
+      }, {
+        "name" : "causeway_applib_PropertyNode__childNodes__collection"
       }, {
         "name" : "causeway_applib_PropertyNode__gql_input"
       }, {
@@ -91,6 +99,8 @@
         "name" : "causeway_applib_RoleMemento__name__property"
       }, {
         "name" : "causeway_applib_TypeNode"
+      }, {
+        "name" : "causeway_applib_TypeNode__childNodes__collection"
       }, {
         "name" : "causeway_applib_TypeNode__domainClassDto__property"
       }, {
@@ -124,6 +134,8 @@
       }, {
         "name" : "causeway_applib_UserMemento__realName__property"
       }, {
+        "name" : "causeway_applib_UserMemento__roles__collection"
+      }, {
         "name" : "causeway_applib_UserMemento__timeFormatLocale__property"
       }, {
         "name" : "causeway_applib_UserMenu"
@@ -133,6 +145,8 @@
         "name" : "causeway_applib_node_ActionNode"
       }, {
         "name" : "causeway_applib_node_ActionNode__action__property"
+      }, {
+        "name" : "causeway_applib_node_ActionNode__childNodes__collection"
       }, {
         "name" : "causeway_applib_node_ActionNode__gql_input"
       }, {
@@ -147,6 +161,8 @@
         "name" : "causeway_applib_node_ActionNode__streamChildNodes__action"
       }, {
         "name" : "causeway_applib_node_CollectionNode"
+      }, {
+        "name" : "causeway_applib_node_CollectionNode__childNodes__collection"
       }, {
         "name" : "causeway_applib_node_CollectionNode__collection__property"
       }, {
@@ -164,6 +180,8 @@
       }, {
         "name" : "causeway_applib_node_FacetAttrNode"
       }, {
+        "name" : "causeway_applib_node_FacetAttrNode__childNodes__collection"
+      }, {
         "name" : "causeway_applib_node_FacetAttrNode__facetAttr__property"
       }, {
         "name" : "causeway_applib_node_FacetAttrNode__gql_input"
@@ -173,6 +191,8 @@
         "name" : "causeway_applib_node_FacetAttrNode__parentNode__property"
       }, {
         "name" : "causeway_applib_node_FacetNode"
+      }, {
+        "name" : "causeway_applib_node_FacetNode__childNodes__collection"
       }, {
         "name" : "causeway_applib_node_FacetNode__facet__property"
       }, {
@@ -200,9 +220,15 @@
       }, {
         "name" : "causeway_conf_ConfigurationViewmodel"
       }, {
+        "name" : "causeway_conf_ConfigurationViewmodel__environment__collection"
+      }, {
         "name" : "causeway_conf_ConfigurationViewmodel__gql_input"
       }, {
         "name" : "causeway_conf_ConfigurationViewmodel__gql_meta"
+      }, {
+        "name" : "causeway_conf_ConfigurationViewmodel__primary__collection"
+      }, {
+        "name" : "causeway_conf_ConfigurationViewmodel__secondary__collection"
       }, {
         "name" : "causeway_feat_ApplicationFeatureViewModel"
       }, {
@@ -219,6 +245,8 @@
         "name" : "causeway_feat_ApplicationFeatureViewModel__typeSimpleName__property"
       }, {
         "name" : "causeway_feat_ApplicationNamespace"
+      }, {
+        "name" : "causeway_feat_ApplicationNamespace__contents__collection"
       }, {
         "name" : "causeway_feat_ApplicationNamespace__gql_input"
       }, {
@@ -306,6 +334,10 @@
       }, {
         "name" : "causeway_feat_ApplicationTypeProperty__typicalLength__property"
       }, {
+        "name" : "causeway_feat_ApplicationType__actions__collection"
+      }, {
+        "name" : "causeway_feat_ApplicationType__collections__collection"
+      }, {
         "name" : "causeway_feat_ApplicationType__gql_input"
       }, {
         "name" : "causeway_feat_ApplicationType__gql_meta"
@@ -315,6 +347,8 @@
         "name" : "causeway_feat_ApplicationType__namespaceName__property"
       }, {
         "name" : "causeway_feat_ApplicationType__parent__property"
+      }, {
+        "name" : "causeway_feat_ApplicationType__properties__collection"
       }, {
         "name" : "causeway_feat_ApplicationType__typeSimpleName__property"
       }, {
@@ -560,6 +594,8 @@
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode"
       }, {
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__collection"
+      }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_input"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta"
@@ -567,6 +603,8 @@
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__property"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode"
+      }, {
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__collection"
       }, {
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_input"
       }, {
