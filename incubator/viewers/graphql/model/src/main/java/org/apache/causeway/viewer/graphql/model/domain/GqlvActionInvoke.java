@@ -181,6 +181,7 @@ public class GqlvActionInvoke {
                     return ManagedObject.adaptParameter(oap, argumentValue);
                 });
 
+        // TODO: should validate args first.
         val resultManagedObject = objectAction
                 .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
 

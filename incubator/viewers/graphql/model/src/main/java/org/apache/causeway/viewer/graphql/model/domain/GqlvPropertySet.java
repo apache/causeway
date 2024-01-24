@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import org.apache.causeway.applib.services.wrapper.InvalidException;
+import org.apache.causeway.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -127,6 +130,12 @@ public class GqlvPropertySet {
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Object argumentValue = arguments.get(association.getId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(association, argumentValue);
+
+        Consent consent = association.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        if (consent.isVetoed()) {
+            throw new IllegalArgumentException(consent.getReasonAsString().orElse("Invalid"));
+        }
+
         association.set(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
 
         return managedObject; // return the original object because setters return void

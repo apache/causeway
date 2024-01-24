@@ -125,9 +125,8 @@ public class GqlvPropertyValidate {
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Object argumentValue = arguments.get(association.getId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(association, argumentValue);
-        Consent associationValid = association.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
-
-        return associationValid.isVetoed() ? associationValid.getReasonAsString().orElse("invalid") : null;
+        Consent consent = association.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        return consent.isVetoed() ? consent.getReasonAsString().orElse("invalid") : null;
     }
 
 }
