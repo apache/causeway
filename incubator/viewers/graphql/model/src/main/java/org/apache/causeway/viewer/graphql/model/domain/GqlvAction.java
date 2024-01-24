@@ -60,7 +60,7 @@ public class GqlvAction
         this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
         this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
         this.validate = new GqlvActionValidate(this, codeRegistryBuilder);
-        this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder);
+        this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder, bookmarkService);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 

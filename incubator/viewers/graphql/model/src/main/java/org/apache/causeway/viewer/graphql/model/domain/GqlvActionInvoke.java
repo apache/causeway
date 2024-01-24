@@ -19,9 +19,11 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 
 import org.springframework.lang.Nullable;
@@ -54,14 +56,16 @@ public class GqlvActionInvoke {
     private final GqlvActionInvokeHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
+    private final BookmarkService bookmarkService;
 
     public GqlvActionInvoke(
             final GqlvActionInvokeHolder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
-    ) {
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
+            final BookmarkService bookmarkService) {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
         this.field = fieldDefinition(holder);
+        this.bookmarkService = bookmarkService;
     }
 
     private static GraphQLFieldDefinition fieldDefinition(final GqlvActionInvokeHolder holder) {
@@ -178,8 +182,40 @@ public class GqlvActionInvoke {
         Can<ObjectActionParameter> parameters = objectAction.getParameters();
         Can<ManagedObject> argumentManagedObjects = parameters
                 .map(oap -> {
+                    final ObjectSpecification elementType = oap.getElementType();
                     Object argumentValue = argumentPojos.get(oap.getId());
-                    return ManagedObject.adaptParameter(oap, argumentValue);
+                    switch (elementType.getBeanSort()) {
+
+                        case VALUE:
+                            return ManagedObject.adaptParameter(oap, argumentValue);
+
+                        case ENTITY:
+                        case VIEW_MODEL:
+                            //noinspection unchecked
+                            if (argumentValue == null) {
+                                return ManagedObject.empty(elementType);
+                            }
+                            String idValue = ((Map<String, String>) argumentValue).get("id");
+                            Class<?> paramClass = elementType.getCorrespondingClass();
+                            Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
+                            return bookmarkIfAny
+                                    .map(bookmarkService::lookup)
+                                    .filter(Optional::isPresent)
+                                    .map(Optional::get)
+                                    .map(pojo -> ManagedObject.adaptParameter(oap, pojo))
+                                    .orElse(ManagedObject.empty(elementType));
+
+                        case ABSTRACT:
+                        case COLLECTION:
+                        case MANAGED_BEAN_CONTRIBUTING:
+                        case VETOED:
+                        case MANAGED_BEAN_NOT_CONTRIBUTING:
+                        case MIXIN:
+                        case UNKNOWN:
+                        default:
+                            throw new IllegalArgumentException(String.format(
+                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.getBeanSort()));
+                    }
                 });
 
         val consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);

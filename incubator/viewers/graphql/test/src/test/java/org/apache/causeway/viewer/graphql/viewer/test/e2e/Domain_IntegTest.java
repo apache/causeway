@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMember;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMemberRepository;
 
@@ -182,6 +183,26 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
         // when, then
         Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void create_staff_member_with_department() throws Exception {
+
+        final Bookmark bookmark =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> {
+                            Department department = departmentRepository.findByName("Classics");
+                            return bookmarkService.bookmarkFor(department).orElseThrow();
+                        }
+                ).valueAsNonNullElseFail();
+
+        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+
     }
 
     @Test

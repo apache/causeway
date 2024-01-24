@@ -28,6 +28,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -36,7 +38,6 @@ import org.apache.causeway.commons.internal.resources._Resources;
 
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
 import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
 
@@ -156,7 +157,11 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
      * @throws Exception if an error occurs during the submission
      */
     protected String submit() throws Exception{
-        val httpRequest = buildRequest(testInfo, "._.gql");
+        return submit(Collections.emptyMap());
+    }
+
+    protected String submit(Map<String,String> replacements) throws Exception{
+        val httpRequest = buildRequest(testInfo, "._.gql", replacements);
         return submitRequest(httpRequest);
     }
 
@@ -167,15 +172,17 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     protected HttpRequest buildRequest(
             final TestInfo testInfo,
-            final String resourceSuffix) throws IOException {
+            final String resourceSuffix,
+            final Map<String, String> replacements) throws IOException {
 
         val testMethodName = testInfo.getTestMethod().map(Method::getName).get();
         val resourceName = getClass().getSimpleName() + "." + testMethodName + resourceSuffix;
-        val resourceContents = readResource(resourceName);
+        String resourceContents = readResource(resourceName);
+        String resourceContent = replace(resourceContents, replacements);
 
         val uri = URI.create(String.format("http://0.0.0.0:%d/graphql", port));
 
-        val gqlBody = new GqlBody(resourceContents);
+        val gqlBody = new GqlBody(resourceContent);
         val gqlBodyStr = objectMapper.writeValueAsString(gqlBody);
         val bodyPublisher = HttpRequest.BodyPublishers.ofString(gqlBodyStr);
 
@@ -184,6 +191,22 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
                 POST(bodyPublisher).
                 setHeader("Content-Type", "application/json").
                 build();
+    }
+
+    private static String replace(String str, Map<String, String> replacements) {
+        val builder = new StringBuilder(str);
+        replacements.forEach((key, value) -> {
+            int index;
+            int numMatches = 0;
+            while ((index = builder.indexOf(key)) != -1) {
+                builder.replace(index, index + key.length(), value);
+                numMatches++;
+            }
+            if (numMatches == 0) {
+                throw new IllegalArgumentException("Could not find '" + key + "' to replace");
+            }
+        });
+        return builder.toString();
     }
 
     private String submitRequest(final HttpRequest request) throws IOException, InterruptedException {
