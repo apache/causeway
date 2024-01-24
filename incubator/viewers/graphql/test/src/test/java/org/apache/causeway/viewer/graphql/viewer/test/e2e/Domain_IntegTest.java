@@ -21,14 +21,19 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 import lombok.val;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMember;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMemberRepository;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,6 +60,7 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
     @Inject DepartmentRepository departmentRepository;
     @Inject DeptHeadRepository deptHeadRepository;
     @Inject StaffMemberRepository staffMemberRepository;
+    @Inject BookmarkService bookmarkService;
 
     @BeforeEach
     void beforeEach(){
@@ -122,6 +128,36 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
         // when, then
         Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void find_staff_member_by_name_and_edit() throws Exception {
+
+        // given
+        final Optional<Bookmark> bookmarkIfAny =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> {
+                            StaffMember pojo = staffMemberRepository.findByName("Gerry Jones");
+                            return bookmarkService.bookmarkFor(pojo);
+                        }
+                ).valueAsNullableElseFail();
+
+        assertThat(bookmarkIfAny).isPresent();
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
+        // and in the database...
+        final Optional<StaffMember> staffMemberIfAny =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> bookmarkService.lookup(bookmarkIfAny.get(), StaffMember.class)
+                ).valueAsNullableElseFail();
+
+        assertThat(staffMemberIfAny).isPresent();
+        assertThat(staffMemberIfAny.get()).extracting(StaffMember::getName).isEqualTo("Gerald Johns");
     }
 
     @Test

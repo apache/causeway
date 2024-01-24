@@ -650,13 +650,9 @@
       }, {
         "name" : "university_dept_DeptHeads__findHeadByName__gqlv_action"
       }, {
+        "name" : "university_dept_Staff"
+      }, {
         "name" : "university_dept_StaffMember"
-      }, {
-        "name" : "university_dept_StaffMemberMenu"
-      }, {
-        "name" : "university_dept_StaffMemberMenu__createStaffMember__gqlv_action"
-      }, {
-        "name" : "university_dept_StaffMemberMenu__findAllStaffMembers__gqlv_action"
       }, {
         "name" : "university_dept_StaffMember__department__gqlv_property"
       }, {
@@ -665,6 +661,12 @@
         "name" : "university_dept_StaffMember__gqlv_meta"
       }, {
         "name" : "university_dept_StaffMember__name__gqlv_property"
+      }, {
+        "name" : "university_dept_Staff__createStaffMember__gqlv_action"
+      }, {
+        "name" : "university_dept_Staff__findAllStaffMembers__gqlv_action"
+      }, {
+        "name" : "university_dept_Staff__findByName__gqlv_action"
       } ]
     }
   }

@@ -35,34 +35,41 @@ import lombok.val;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvProperty extends GqlvAssociation<OneToOneAssociation, GqlvPropertyHolder> implements GqlvPropertyGetHolder, GqlvMemberHiddenHolder, GqlvMemberDisabledHolder {
+public class GqlvProperty
+        extends GqlvAssociation<OneToOneAssociation, GqlvPropertyHolder>
+        implements GqlvPropertyGetHolder,
+                   GqlvMemberHiddenHolder,
+                   GqlvMemberDisabledHolder,
+                   GqlvPropertySetHolder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
     private final GqlvMemberHidden hidden;
     private final GqlvMemberDisabled disabled;
     private final GqlvPropertyGet get;
+    private final GqlvPropertySet set;
     private final BookmarkService bookmarkService;
 
     public GqlvProperty(
-            final GqlvPropertyHolder domainObject,
+            final GqlvPropertyHolder holder,
             final OneToOneAssociation oneToOneAssociation,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService
     ) {
-        super(domainObject, oneToOneAssociation, codeRegistryBuilder);
+        super(holder, oneToOneAssociation, codeRegistryBuilder);
 
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation));
+        this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(this.holder.getObjectSpecification(), oneToOneAssociation));
         this.bookmarkService = bookmarkService;
 
         this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
         this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
         this.get = new GqlvPropertyGet(this, codeRegistryBuilder, specificationLoader);
+        this.set = new GqlvPropertySet(this, codeRegistryBuilder, specificationLoader);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
         setField(
-            holder.addField(
+            this.holder.addField(
                 newFieldDefinition()
                     .name(oneToOneAssociation.getId())
                     .type(gqlObjectTypeBuilder)
@@ -90,6 +97,7 @@ public class GqlvProperty extends GqlvAssociation<OneToOneAssociation, GqlvPrope
         hidden.addDataFetcher();
         disabled.addDataFetcher();
         get.addDataFetcher();
+        set.addDataFetcher();
     }
 
     private class Fetcher implements DataFetcher<Object> {

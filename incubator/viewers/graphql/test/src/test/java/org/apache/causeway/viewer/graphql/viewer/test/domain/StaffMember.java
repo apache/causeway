@@ -27,6 +27,7 @@ import java.util.Comparator;
 import javax.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 
@@ -50,6 +51,7 @@ public class StaffMember implements Comparable<StaffMember> {
     private Long id;
 
     @Getter @Setter
+    @Property(editing = Editing.ENABLED)
     private String name;
 
     @Getter @Setter

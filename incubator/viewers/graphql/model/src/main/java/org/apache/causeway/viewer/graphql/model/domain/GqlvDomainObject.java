@@ -27,10 +27,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.*;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
@@ -132,7 +129,10 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     private void addAction(final ObjectAction objectAction) {
         String actionId = objectAction.getId();
         if (!safeActions.containsKey(actionId)) {
-            safeActions.put(actionId, new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+            // TODO: for now, we ignore any actions that have any collection parameters
+            if (objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural)) {
+                safeActions.put(actionId, new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+            }
         }
     }
 

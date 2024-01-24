@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 
 import org.springframework.lang.Nullable;
 
@@ -46,7 +46,6 @@ import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLNonNull.nonNull;
 
 @Log4j2
 public class GqlvActionInvoke {
@@ -137,17 +136,16 @@ public class GqlvActionInvoke {
 
         if (parameters.isNotEmpty()) {
             builder.arguments(parameters.stream()
+                    .map(OneToOneActionParameter.class::cast)   // we previously filter to ignore any actions that have collection parameters
                     .map(GqlvActionInvoke::gqlArgumentFor)
                     .collect(Collectors.toList()));
         }
     }
 
-    private static GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
+    private static GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
         return GraphQLArgument.newArgument()
-                .name(objectActionParameter.getId())
-                .type(objectActionParameter.isOptional()
-                        ? GqlvActionParameter.inputTypeFor(objectActionParameter)
-                        : nonNull(GqlvActionParameter.inputTypeFor(objectActionParameter)))
+                .name(oneToOneActionParameter.getId())
+                .type(TypeMapper.inputTypeFor(oneToOneActionParameter))
                 .build();
     }
 

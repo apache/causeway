@@ -23,11 +23,7 @@ import java.math.BigInteger;
 import java.util.Map;
 
 import graphql.Scalars;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLScalarType;
-
-import graphql.schema.GraphQLTypeReference;
+import graphql.schema.*;
 
 import lombok.experimental.UtilityClass;
 
@@ -36,6 +32,7 @@ import javax.ws.rs.NotSupportedException;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
@@ -131,6 +128,31 @@ public class TypeMapper {
                 return GraphQLList.list(TypeMapper.scalarTypeFor(elementType.getCorrespondingClass()));
         }
         return null;
+    }
+
+    public static GraphQLInputType inputTypeFor(final OneToOneFeature oneToOneFeature) {
+        return oneToOneFeature.isOptional()
+                ? inputTypeFor_(oneToOneFeature)
+                : nonNull(inputTypeFor_(oneToOneFeature));
+    }
+
+    private static GraphQLInputType inputTypeFor_(final OneToOneFeature oneToOneFeature){
+        ObjectSpecification elementType = oneToOneFeature.getElementType();
+        switch (elementType.getBeanSort()) {
+            case ABSTRACT:
+            case ENTITY:
+            case VIEW_MODEL:
+                return typeRef(TypeNames.inputTypeNameFor(elementType));
+
+            case VALUE:
+                return scalarTypeFor(elementType.getCorrespondingClass());
+
+            case COLLECTION:
+                // TODO ...
+            default:
+                // for now
+                return Scalars.GraphQLString;
+        }
     }
 
 }

@@ -1,0 +1,17 @@
+{
+  "data" : {
+    "university_dept_Staff" : {
+      "findByName" : {
+        "invoke" : {
+          "name" : {
+            "set" : {
+              "name" : {
+                "get" : "Gerald Johns"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

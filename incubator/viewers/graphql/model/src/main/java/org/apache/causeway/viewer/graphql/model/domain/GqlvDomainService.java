@@ -27,6 +27,7 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
@@ -84,8 +85,11 @@ public class GqlvDomainService implements GqlvActionHolder {
         val anyActions = new AtomicBoolean(false);
         objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .forEach(objectAction -> {
-                    anyActions.set(true);
-                    addAction(objectAction);
+                    // TODO: for now, we ignore any actions that have any collection parameters
+                    if (objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural)) {
+                        anyActions.set(true);
+                        addAction(objectAction);
+                    }
                 });
 
         return anyActions.get();

@@ -35,7 +35,7 @@ import org.apache.causeway.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("university.dept.StaffMemberMenu")
+@Named("university.dept.Staff")
 @DomainService(
         nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
@@ -55,6 +55,11 @@ public class Staff {
     @Action(semantics = SemanticsOf.SAFE)
     public List<StaffMember> findAllStaffMembers(){
         return staffMemberRepository.findAll();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public StaffMember findByName(final String name){
+        return staffMemberRepository.findByName(name);
     }
 
 }
