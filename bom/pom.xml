@@ -1687,24 +1687,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				</exclusions>
 			</dependency>
 
-			<!-- TODO: when used, move exclusions down -->
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-email</artifactId>
-				<version>${commons-email.version}</version>
-				<exclusions>
-					<!-- excluded because provided by javax:javaee-api -->
-					<exclusion>
-						<groupId>com.sun.mail</groupId>
-						<artifactId>javax.mail</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.activation</groupId>
-						<artifactId>activation</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-ooxml</artifactId>

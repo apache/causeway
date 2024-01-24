@@ -53,10 +53,9 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.xml;
     exports org.apache.causeway.core.runtimeservices.xmlsnapshot;
 
-    requires org.apache.commons.mail;
-    requires jakarta.activation;
-    requires jakarta.mail;
-    requires jakarta.annotation;
+    requires transitive jakarta.activation;
+    requires transitive jakarta.mail;
+    requires transitive jakarta.annotation;
     requires java.desktop;
     requires java.sql;
     requires java.xml;
@@ -75,6 +74,7 @@ module org.apache.causeway.core.runtimeservices {
     requires org.apache.logging.log4j;
     requires spring.beans;
     requires spring.context;
+    requires spring.context.support;
     requires spring.core;
     requires spring.tx;
     requires org.apache.causeway.core.codegen.bytebuddy;

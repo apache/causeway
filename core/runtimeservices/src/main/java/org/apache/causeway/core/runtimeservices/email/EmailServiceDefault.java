@@ -20,19 +20,18 @@ package org.apache.causeway.core.runtimeservices.email;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
-//import jakarta.activation.DataSource; TODO[CAUSEWAY-3275] incompatible with commons-email 1.6.0
+import jakarta.activation.DataSource;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
+import jakarta.mail.MessagingException;
 
-//import org.apache.commons.mail.DefaultAuthenticator; TODO[CAUSEWAY-3275]
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.ImageHtmlEmail;
-import org.apache.commons.mail.resolver.DataSourceClassPathResolver;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -41,6 +40,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -56,12 +56,14 @@ public class EmailServiceDefault implements EmailService {
     private static final long serialVersionUID = 1L;
     public static class EmailServiceException extends RuntimeException {
         static final long serialVersionUID = 1L;
-        public EmailServiceException(final EmailException cause) {
+        public EmailServiceException(final Exception cause) {
             super(cause);
         }
     }
 
     @Inject private CausewayConfiguration configuration;
+
+    @Inject private Provider<JavaMailSender> emailSenderProvider;
 
     // -- INIT
 
@@ -142,6 +144,7 @@ public class EmailServiceDefault implements EmailService {
         return !_Strings.isNullOrEmpty(senderEmailAddress) && !_Strings.isNullOrEmpty(senderEmailPassword);
     }
 
+
     @Override
     public boolean send(
             final List<String> toList,
@@ -149,57 +152,26 @@ public class EmailServiceDefault implements EmailService {
             final List<String> bccList,
             final String subject,
             final String body,
-            final jakarta.activation.DataSource... attachments) {
+            final DataSource... attachments) {
 
         try {
-            final ImageHtmlEmail email = new ImageHtmlEmail();
 
-            final String senderEmailUsername = getSenderEmailUsername();
-            final String senderEmailAddress = getSenderEmailAddress();
-            final String senderEmailPassword = getSenderEmailPassword();
-            final String senderEmailHostName = getSenderEmailHostName();
-            final Integer senderEmailPort = getSenderEmailPort();
-            final Boolean senderEmailTlsEnabled = getSenderEmailTlsEnabled();
-            final int socketTimeout = getSocketTimeout();
-            final int socketConnectionTimeout = getSocketConnectionTimeout();
+            val javaMailSender = emailSenderProvider.get();
 
-//TODO[CAUSEWAY-3275] commons email not available for jakarta API
-//            if (senderEmailUsername != null) {
-//                email.setAuthenticator(new DefaultAuthenticator(senderEmailUsername, senderEmailPassword));
-//            } else {
-//                email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
-//            }
-            email.setHostName(senderEmailHostName);
-            email.setSmtpPort(senderEmailPort);
-            email.setStartTLSEnabled(senderEmailTlsEnabled);
-            email.setDataSourceResolver(new DataSourceClassPathResolver("/", true));
+            val email = javaMailSender.createMimeMessage();
+            val emailHelper = new MimeMessageHelper(email, true);
 
-            email.setSocketTimeout(socketTimeout);
-            email.setSocketConnectionTimeout(socketConnectionTimeout);
+            emailHelper.setFrom(getSenderEmailAddress());
 
-//TODO[CAUSEWAY-3275] commons email not available for jakarta API
-//            final Properties properties = email.getMailSession().getProperties();
-            final var properties = new Properties();
+            emailHelper.setSubject(subject);
+            boolean html = true;
+            emailHelper.setText(body, html);
 
-            properties.put("mail.smtps.auth", "true");
-            properties.put("mail.debug", "true");
-            properties.put("mail.smtps.port", "" + senderEmailPort);
-            properties.put("mail.smtps.socketFactory.port", "" + senderEmailPort);
-            properties.put("mail.smtps.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            properties.put("mail.smtps.socketFactory.fallback", "false");
-            properties.put("mail.smtp.starttls.enable", "" + senderEmailTlsEnabled);
-
-            email.setFrom(senderEmailAddress);
-
-            email.setSubject(subject);
-            email.setHtmlMsg(body);
-
-            if (attachments != null && attachments.length > 0) {
-                for (jakarta.activation.DataSource attachment : attachments) {
-                    //email.attach(attachment, attachment.getName(), ""); TODO[CAUSEWAY-3275] incompatible with commons-email 1.6.0
+            if (attachments != null) {
+                for (DataSource attachment : attachments) {
+                    emailHelper.addAttachment(attachment.getName(), attachment);
                 }
             }
-
 
             final String overrideToList = getEmailOverrideTo();
             final String overrideCc = getEmailOverrideCc();
@@ -207,24 +179,24 @@ public class EmailServiceDefault implements EmailService {
 
             final String[] toListElseOverride = originalUnlessOverridden(toList, overrideToList);
             if (notEmpty(toListElseOverride)) {
-                email.addTo(toListElseOverride);
+                emailHelper.setTo(toListElseOverride);
             }
             final String[] ccListElseOverride = originalUnlessOverridden(ccList, overrideCc);
             if (notEmpty(ccListElseOverride)) {
-                email.addCc(ccListElseOverride);
+                emailHelper.setCc(ccListElseOverride);
             }
             final String[] bccListElseOverride = originalUnlessOverridden(bccList, overrideBcc);
             if (notEmpty(bccListElseOverride)) {
-                email.addBcc(bccListElseOverride);
+                emailHelper.setBcc(bccListElseOverride);
             }
 
-            email.send();
+            javaMailSender.send(email);
 
-        } catch (EmailException ex) {
-            log.error("An error occurred while trying to send an email", ex);
+        } catch (MessagingException e) {
+            log.error("An error occurred while trying to send an email", e);
             final Boolean throwExceptionOnFail = isThrowExceptionOnFail();
             if (throwExceptionOnFail) {
-                throw new EmailServiceException(ex);
+                throw new EmailServiceException(e);
             }
             return false;
         }
@@ -246,7 +218,5 @@ public class EmailServiceDefault implements EmailService {
     static boolean notEmpty(final String[] addresses) {
         return addresses != null && addresses.length > 0;
     }
-
-
 
 }
