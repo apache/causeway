@@ -76,6 +76,14 @@
 		    <groupId>jakarta.mail</groupId>
 		    <artifactId>jakarta.mail-api</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>jakarta.mail</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
 	
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
@@ -110,52 +118,7 @@
         </dependency>
 
     </dependencies>
-    
-    <profiles>
-        <profile>
-            <id>email-notification-service</id>
-            <activation>
-                <property>
-                    <name>!skip.email-notification-service</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-email</artifactId>
-                    <exclusions>
-                        <!--
-                        excluded because provided by javax:javaee-api
-                        note: moved javax.mail from 1.5.2 to 1.5.0
-                        note: moved activation from 1.1.1 to 1.1    ... don't know if this is significant.
-                        -->
-                        <exclusion>
-                            <groupId>com.sun.mail</groupId>
-                            <artifactId>javax.mail</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>javax.activation</groupId>
-                            <artifactId>activation</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-					<!-- required by EmailServiceDefault -->
-		    		<groupId>com.sun.mail</groupId>
-		    		<artifactId>jakarta.mail</artifactId>
-		    		<exclusions>
-			    		<exclusion>
-                            <groupId>javax.activation</groupId>
-                            <artifactId>activation</artifactId>
-	                    </exclusion>
-	                    <exclusion>
-	                    	<groupId>com.sun.activation</groupId>
-    						<artifactId>jakarta.activation</artifactId>
-    					</exclusion>
-                    </exclusions>
-				</dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+ 
+
 
 </project>
