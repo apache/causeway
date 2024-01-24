@@ -18,20 +18,36 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.apache.causeway.applib.annotation.*;
 
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
+import org.springframework.lang.Nullable;
 
-@Configuration
-@ComponentScan
-@EnableJpaRepositories
-@EntityScan(basePackageClasses = {UniversityModule.class})
-public class UniversityModule  {
+@Named("university.admin.AdminMenu")
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class AdminMenu {
+
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    @ActionLayout(hidden = Where.EVERYWHERE)
+    public void adminAction() {
+    }
+
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public void otherAdminAction() {
+    }
+    public String disableOtherAdminAction() {
+        return "yup, disabled!";
+    }
 
 }

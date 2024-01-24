@@ -628,19 +628,15 @@
       }, {
         "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__property"
       }, {
+        "name" : "university_admin_AdminMenu"
+      }, {
+        "name" : "university_admin_AdminMenu__adminAction__action"
+      }, {
+        "name" : "university_admin_AdminMenu__gql_mutations"
+      }, {
+        "name" : "university_admin_AdminMenu__otherAdminAction__action"
+      }, {
         "name" : "university_dept_Department"
-      }, {
-        "name" : "university_dept_DepartmentMenu"
-      }, {
-        "name" : "university_dept_DepartmentMenu__adminAction__action"
-      }, {
-        "name" : "university_dept_DepartmentMenu__createDepartment__action"
-      }, {
-        "name" : "university_dept_DepartmentMenu__findAllDepartments__action"
-      }, {
-        "name" : "university_dept_DepartmentMenu__gql_mutations"
-      }, {
-        "name" : "university_dept_DepartmentMenu__otherAdminAction__action"
       }, {
         "name" : "university_dept_Department__deptHead__property"
       }, {
@@ -650,13 +646,15 @@
       }, {
         "name" : "university_dept_Department__name__property"
       }, {
+        "name" : "university_dept_Departments"
+      }, {
+        "name" : "university_dept_Departments__createDepartment__action"
+      }, {
+        "name" : "university_dept_Departments__findAllDepartments__action"
+      }, {
+        "name" : "university_dept_Departments__gql_mutations"
+      }, {
         "name" : "university_dept_DeptHead"
-      }, {
-        "name" : "university_dept_DeptHeadMenu"
-      }, {
-        "name" : "university_dept_DeptHeadMenu__findAllDeptHeads__action"
-      }, {
-        "name" : "university_dept_DeptHeadMenu__findDeptHeadByName__action"
       }, {
         "name" : "university_dept_DeptHead__changeDepartment__action"
       }, {
@@ -671,6 +669,30 @@
         "name" : "university_dept_DeptHead__gql_mutations"
       }, {
         "name" : "university_dept_DeptHead__name__property"
+      }, {
+        "name" : "university_dept_DeptHeads"
+      }, {
+        "name" : "university_dept_DeptHeads__findAllHeads__action"
+      }, {
+        "name" : "university_dept_DeptHeads__findHeadByName__action"
+      }, {
+        "name" : "university_dept_StaffMember"
+      }, {
+        "name" : "university_dept_StaffMemberMenu"
+      }, {
+        "name" : "university_dept_StaffMemberMenu__createStaffMember__action"
+      }, {
+        "name" : "university_dept_StaffMemberMenu__findAllStaffMembers__action"
+      }, {
+        "name" : "university_dept_StaffMemberMenu__gql_mutations"
+      }, {
+        "name" : "university_dept_StaffMember__department__property"
+      }, {
+        "name" : "university_dept_StaffMember__gql_input"
+      }, {
+        "name" : "university_dept_StaffMember__gql_meta"
+      }, {
+        "name" : "university_dept_StaffMember__name__property"
       } ]
     }
   }

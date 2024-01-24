@@ -55,4 +55,11 @@ public class DeptHeadRepository {
                 orElse(null);
     }
 
+    public DeptHead findByNameContaining(final String name){
+        return findAll().stream().
+                filter(deptHead -> deptHead.getName().contains(name)).
+                findFirst().
+                orElse(null);
+    }
+
 }

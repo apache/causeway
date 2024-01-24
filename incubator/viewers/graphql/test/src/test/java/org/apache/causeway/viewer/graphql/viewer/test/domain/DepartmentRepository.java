@@ -34,8 +34,6 @@ public class DepartmentRepository {
 
     public Department create(final String name, @Nullable final DeptHead deptHead) {
         Department department = new Department(name, deptHead);
-        department.setName(name);
-        department.setDeptHead(deptHead);
         repositoryService.persistAndFlush(department);
         return department;
     }

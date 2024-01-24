@@ -48,7 +48,11 @@ import lombok.Setter;
         name = "DeptHead"
 )
 @javax.inject.Named("university.dept.DeptHead")
-@DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
+@DomainObject(
+        nature = Nature.ENTITY,
+        autoCompleteRepository = DeptHeadRepository.class,
+        autoCompleteMethod = "findByNameContaining"
+)
 public class DeptHead implements Comparable<DeptHead> {
 
     @Id

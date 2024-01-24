@@ -18,37 +18,31 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-import org.apache.causeway.applib.annotation.Bounding;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Comparator;
 
+import javax.persistence.*;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Property;
+
 @Entity
 @Table(
         schema = "public",
-        name = "Department"
+        name = "StaffMember"
 )
-@javax.inject.Named("university.dept.Department")
+@javax.inject.Named("university.dept.StaffMember")
 @NoArgsConstructor
-@DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
-public class Department implements Comparable<Department> {
+@DomainObject(nature = Nature.ENTITY)
+public class StaffMember implements Comparable<StaffMember> {
 
-    public Department(String name, DeptHead deptHead) {
+    public StaffMember(String name, Department department) {
         this.name = name;
-        this.deptHead = deptHead;
+        this.department = department;
     }
 
     @Id
@@ -60,12 +54,12 @@ public class Department implements Comparable<Department> {
 
     @Getter @Setter
     @Property
-    @OneToOne(optional = true)
-    @JoinColumn(name = "deptHead_id")
-    private DeptHead deptHead;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
     @Override
-    public int compareTo(final Department o) {
-        return Comparator.comparing(Department::getName).compare(this, o);
+    public int compareTo(final StaffMember o) {
+        return Comparator.comparing(StaffMember::getName).compare(this, o);
     }
 }

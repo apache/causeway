@@ -36,6 +36,7 @@ import org.apache.causeway.commons.internal.resources._Resources;
 
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
 import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
 

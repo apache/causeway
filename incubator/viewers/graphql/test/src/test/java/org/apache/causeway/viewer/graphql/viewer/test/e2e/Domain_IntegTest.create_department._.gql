@@ -1,5 +1,5 @@
 {
-  university_dept_DepartmentMenu {
+  university_dept_Departments {
     _gql_mutations {
       createDepartment {
         hidden

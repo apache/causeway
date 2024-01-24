@@ -1,7 +1,7 @@
 {
   "data" : {
-    "university_dept_DeptHeadMenu" : {
-      "findDeptHeadByName" : {
+    "university_dept_DeptHeads" : {
+      "findHeadByName" : {
         "invoke" : {
           "_gql_mutations" : {
             "changeName" : {

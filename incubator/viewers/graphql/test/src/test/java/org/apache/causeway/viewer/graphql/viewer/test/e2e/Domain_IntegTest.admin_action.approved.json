@@ -1,6 +1,6 @@
 {
   "data" : {
-    "university_dept_DepartmentMenu" : {
+    "university_admin_AdminMenu" : {
       "_gql_mutations" : {
         "adminAction" : {
           "hidden" : true

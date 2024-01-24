@@ -27,8 +27,10 @@ type Query {
   causeway_conf_ConfigurationMenu: causeway_conf_ConfigurationMenu
   causeway_security_LogoutMenu: causeway_security_LogoutMenu
   numServices: Int
-  university_dept_DepartmentMenu: university_dept_DepartmentMenu
-  university_dept_DeptHeadMenu: university_dept_DeptHeadMenu
+  university_admin_AdminMenu: university_admin_AdminMenu
+  university_dept_Departments: university_dept_Departments
+  university_dept_DeptHeads: university_dept_DeptHeads
+  university_dept_StaffMemberMenu: university_dept_StaffMemberMenu
 }
 
 type causeway_applib_DomainObjectList {
@@ -1584,45 +1586,31 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__q
   hidden: Boolean
 }
 
+type university_admin_AdminMenu {
+  _gql_mutations: university_admin_AdminMenu__gql_mutations
+}
+
+type university_admin_AdminMenu__adminAction__action {
+  disabled: String
+  hidden: Boolean
+  invoke: String
+}
+
+type university_admin_AdminMenu__gql_mutations {
+  adminAction: university_admin_AdminMenu__adminAction__action
+  otherAdminAction: university_admin_AdminMenu__otherAdminAction__action
+}
+
+type university_admin_AdminMenu__otherAdminAction__action {
+  disabled: String
+  hidden: Boolean
+  invoke: String
+}
+
 type university_dept_Department {
   _gql_meta: university_dept_Department__gql_meta
   deptHead: university_dept_Department__deptHead__property
   name: university_dept_Department__name__property
-}
-
-type university_dept_DepartmentMenu {
-  _gql_mutations: university_dept_DepartmentMenu__gql_mutations
-  findAllDepartments: university_dept_DepartmentMenu__findAllDepartments__action
-}
-
-type university_dept_DepartmentMenu__adminAction__action {
-  disabled: String
-  hidden: Boolean
-  invoke: String
-}
-
-type university_dept_DepartmentMenu__createDepartment__action {
-  disabled: String
-  hidden: Boolean
-  invoke(deptHead: university_dept_DeptHead__gql_input, name: String!): university_dept_Department
-}
-
-type university_dept_DepartmentMenu__findAllDepartments__action {
-  disabled: String
-  hidden: Boolean
-  invoke: [university_dept_Department]
-}
-
-type university_dept_DepartmentMenu__gql_mutations {
-  adminAction: university_dept_DepartmentMenu__adminAction__action
-  createDepartment: university_dept_DepartmentMenu__createDepartment__action
-  otherAdminAction: university_dept_DepartmentMenu__otherAdminAction__action
-}
-
-type university_dept_DepartmentMenu__otherAdminAction__action {
-  disabled: String
-  hidden: Boolean
-  invoke: String
 }
 
 type university_dept_Department__deptHead__property {
@@ -1643,28 +1631,32 @@ type university_dept_Department__name__property {
   hidden: Boolean
 }
 
+type university_dept_Departments {
+  _gql_mutations: university_dept_Departments__gql_mutations
+  findAllDepartments: university_dept_Departments__findAllDepartments__action
+}
+
+type university_dept_Departments__createDepartment__action {
+  disabled: String
+  hidden: Boolean
+  invoke(deptHead: university_dept_DeptHead__gql_input, name: String!): university_dept_Department
+}
+
+type university_dept_Departments__findAllDepartments__action {
+  disabled: String
+  hidden: Boolean
+  invoke: [university_dept_Department]
+}
+
+type university_dept_Departments__gql_mutations {
+  createDepartment: university_dept_Departments__createDepartment__action
+}
+
 type university_dept_DeptHead {
   _gql_meta: university_dept_DeptHead__gql_meta
   _gql_mutations: university_dept_DeptHead__gql_mutations
   department: university_dept_DeptHead__department__property
   name: university_dept_DeptHead__name__property
-}
-
-type university_dept_DeptHeadMenu {
-  findAllDeptHeads: university_dept_DeptHeadMenu__findAllDeptHeads__action
-  findDeptHeadByName: university_dept_DeptHeadMenu__findDeptHeadByName__action
-}
-
-type university_dept_DeptHeadMenu__findAllDeptHeads__action {
-  disabled: String
-  hidden: Boolean
-  invoke: [university_dept_DeptHead]
-}
-
-type university_dept_DeptHeadMenu__findDeptHeadByName__action {
-  disabled: String
-  hidden: Boolean
-  invoke(name: String!): university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeDepartment__action {
@@ -1699,6 +1691,68 @@ type university_dept_DeptHead__gql_mutations {
 type university_dept_DeptHead__name__property {
   disabled: String
   get: String
+  hidden: Boolean
+}
+
+type university_dept_DeptHeads {
+  findAllHeads: university_dept_DeptHeads__findAllHeads__action
+  findHeadByName: university_dept_DeptHeads__findHeadByName__action
+}
+
+type university_dept_DeptHeads__findAllHeads__action {
+  disabled: String
+  hidden: Boolean
+  invoke: [university_dept_DeptHead]
+}
+
+type university_dept_DeptHeads__findHeadByName__action {
+  disabled: String
+  hidden: Boolean
+  invoke(name: String!): university_dept_DeptHead
+}
+
+type university_dept_StaffMember {
+  _gql_meta: university_dept_StaffMember__gql_meta
+  department: university_dept_StaffMember__department__property
+  name: university_dept_StaffMember__name__property
+}
+
+type university_dept_StaffMemberMenu {
+  _gql_mutations: university_dept_StaffMemberMenu__gql_mutations
+  findAllStaffMembers: university_dept_StaffMemberMenu__findAllStaffMembers__action
+}
+
+type university_dept_StaffMemberMenu__createStaffMember__action {
+  disabled: String
+  hidden: Boolean
+  invoke(department: university_dept_Department__gql_input!, name: String!): university_dept_StaffMember
+}
+
+type university_dept_StaffMemberMenu__findAllStaffMembers__action {
+  disabled: String
+  hidden: Boolean
+  invoke: [university_dept_StaffMember]
+}
+
+type university_dept_StaffMemberMenu__gql_mutations {
+  createStaffMember: university_dept_StaffMemberMenu__createStaffMember__action
+}
+
+type university_dept_StaffMember__department__property {
+  disabled: String
+  get: university_dept_Department
+  hidden: Boolean
+}
+
+type university_dept_StaffMember__gql_meta {
+  id: String!
+  logicalTypeName: String!
+  version: String
+}
+
+type university_dept_StaffMember__name__property {
+  disabled: String
+  get: String!
   hidden: Boolean
 }
 
@@ -1867,5 +1921,9 @@ input university_dept_Department__gql_input {
 }
 
 input university_dept_DeptHead__gql_input {
+  id: ID!
+}
+
+input university_dept_StaffMember__gql_input {
   id: ID!
 }

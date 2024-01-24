@@ -1,22 +1,58 @@
 {
   "data" : {
-    "university_dept_DepartmentMenu" : {
+    "university_dept_Departments" : {
       "findAllDepartments" : {
         "invoke" : [ {
           "name" : {
-            "get" : "foo"
+            "get" : "Classics"
           },
           "_gql_meta" : {
-            "id" : "3",
+            "id" : "67",
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
         }, {
           "name" : {
-            "get" : "bar"
+            "get" : "Physics"
           },
           "_gql_meta" : {
-            "id" : "4",
+            "id" : "68",
+            "logicalTypeName" : "university.dept.Department",
+            "version" : null
+          }
+        }, {
+          "name" : {
+            "get" : "Textiles"
+          },
+          "_gql_meta" : {
+            "id" : "69",
+            "logicalTypeName" : "university.dept.Department",
+            "version" : null
+          }
+        }, {
+          "name" : {
+            "get" : "Pathology"
+          },
+          "_gql_meta" : {
+            "id" : "70",
+            "logicalTypeName" : "university.dept.Department",
+            "version" : null
+          }
+        }, {
+          "name" : {
+            "get" : "Mathematics"
+          },
+          "_gql_meta" : {
+            "id" : "71",
+            "logicalTypeName" : "university.dept.Department",
+            "version" : null
+          }
+        }, {
+          "name" : {
+            "get" : "Civil Engineering"
+          },
+          "_gql_meta" : {
+            "id" : "72",
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }

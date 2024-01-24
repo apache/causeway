@@ -1,6 +1,6 @@
 {
-  university_dept_DeptHeadMenu {
-    findDeptHeadByName {
+  university_dept_DeptHeads {
+    findHeadByName {
       invoke(name: "foo") {
         _gql_mutations {
           changeName {

@@ -21,35 +21,36 @@ package org.apache.causeway.viewer.graphql.viewer.test.domain;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Repository;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 
-import lombok.RequiredArgsConstructor;
+@Repository
+public class StaffMemberRepository {
 
-@Named("university.dept.DeptHeadMenu")
-@DomainService(nature=NatureOfService.VIEW)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class DeptHeadMenu {
+    @Inject private RepositoryService repositoryService;
 
-    final DeptHeadRepository deptHeadRepository;
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public List<DeptHead> findAllDeptHeads(){
-        return deptHeadRepository.findAll();
+    public StaffMember create(final String name, final Department department) {
+        StaffMember staffMember = new StaffMember(name, department);
+        repositoryService.persistAndFlush(staffMember);
+        return staffMember;
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
-    public DeptHead findDeptHeadByName(final String name){
-        return deptHeadRepository.findByName(name);
+    public List<StaffMember> findAll() {
+        return repositoryService.allInstances(StaffMember.class);
     }
 
+    public void removeAll(){
+        repositoryService.removeAll(StaffMember.class);
+    }
+
+    public StaffMember findByName(final String name){
+        return findAll().stream().
+                filter(dept -> dept.getName().equals(name)).
+                findFirst().
+                orElse(null);
+    }
 
 }

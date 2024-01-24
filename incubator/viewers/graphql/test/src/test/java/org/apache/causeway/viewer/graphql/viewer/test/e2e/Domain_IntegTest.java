@@ -24,11 +24,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMemberRepository;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -41,7 +43,7 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentMenu;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.Departments;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
 import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
@@ -53,13 +55,42 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Inject DepartmentRepository departmentRepository;
     @Inject DeptHeadRepository deptHeadRepository;
-    @Inject DepartmentMenu departmentMenu;
+    @Inject StaffMemberRepository staffMemberRepository;
 
+    @BeforeEach
+    void beforeEach(){
+        transactionService.runTransactional(Propagation.REQUIRED, () -> {
+
+            // departments
+            Department classics = departmentRepository.create("Classics", null);
+            Department physics = departmentRepository.create("Physics", null); // no head.
+            Department textiles = departmentRepository.create("Textiles", null);
+            Department pathology = departmentRepository.create("Pathology", null);
+            Department mathematics = departmentRepository.create("Mathematics", null);
+            Department civilEngineering = departmentRepository.create("Civil Engineering", null);
+
+            // heads
+            deptHeadRepository.create("Dr. Barney Jones", classics);
+            deptHeadRepository.create("Prof. Dicky Horwich", textiles);
+            deptHeadRepository.create("Dr. Susan Hopwood", pathology);
+            deptHeadRepository.create("Dr. Helen Johansen", mathematics);
+            deptHeadRepository.create("Dr. George Harwood", civilEngineering);
+
+            // staff
+            staffMemberRepository.create("Letitia Leadbetter", classics);
+            staffMemberRepository.create("Gerry Jones", classics);
+            staffMemberRepository.create("Mervin Hughes", physics);
+            staffMemberRepository.create("John Gaffney", physics);
+            staffMemberRepository.create("Margaret Randall", physics);
+
+        });
+    }
     @AfterEach
     void afterEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
-            departmentRepository.removeAll();
+            staffMemberRepository.removeAll();
             deptHeadRepository.removeAll();
+            departmentRepository.removeAll();
         });
     }
 
@@ -90,7 +121,15 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
     @UseReporter(DiffReporter.class)
     void create_department() throws Exception {
 
+        // given
+        final int numDepartmentsInitially =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> departmentRepository.findAll().size()
+                ).valueAsNonNullElseFail();
+
         // when
+        String newDepartmentName = "newbie";
         val response = submit();
 
         // then payload
@@ -104,9 +143,19 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
                 ).valueAsNonNullElseFail();
 
         assertThat(allDepartment)
-                .hasSize(1)
-                .element(0)
-                .extracting(Department::getName).isEqualTo("newbie");
+                .hasSize(numDepartmentsInitially + 1)
+                .filteredOn(x -> x.getName().equals(newDepartmentName))
+                .extracting(Department::getName)
+                .first()
+                .isEqualTo(newDepartmentName);
+
+        final Department newbieDepartment =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> departmentRepository.findByName(newDepartmentName)
+                ).valueAsNullableElseFail();
+
+        assertThat(newbieDepartment).isNotNull();
     }
 
     @Test

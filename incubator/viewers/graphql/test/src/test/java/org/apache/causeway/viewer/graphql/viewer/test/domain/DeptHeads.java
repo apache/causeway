@@ -23,12 +23,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
-
-import org.apache.causeway.applib.annotation.Where;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
@@ -37,40 +31,23 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("university.dept.DepartmentMenu")
-@DomainService(
-        nature=NatureOfService.VIEW)
+@Named("university.dept.DeptHeads")
+@DomainService(nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class DepartmentMenu {
+public class DeptHeads {
 
-    final DepartmentRepository departmentRepository;
+    final DeptHeadRepository deptHeadRepository;
 
-    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public Department createDepartment(
-            final String name,
-            @Nullable final DeptHead deptHead
-    ){
-        return departmentRepository.create(name, deptHead);
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<DeptHead> findAllHeads(){
+        return deptHeadRepository.findAll();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<Department> findAllDepartments(){
-        return departmentRepository.findAll();
+    public DeptHead findHeadByName(final String name){
+        return deptHeadRepository.findByName(name);
     }
 
-
-    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    @ActionLayout(hidden = Where.EVERYWHERE)
-    public void adminAction() {
-    }
-
-
-    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public void otherAdminAction() {
-    }
-    public String disableOtherAdminAction() {
-        return "yup, disabled!";
-    }
 
 }
