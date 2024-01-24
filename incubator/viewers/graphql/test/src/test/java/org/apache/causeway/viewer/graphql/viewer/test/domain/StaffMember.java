@@ -53,6 +53,12 @@ public class StaffMember implements Comparable<StaffMember> {
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
     private String name;
+    public String validateName(String proposedName) {
+        if(proposedName.contains("!")) {
+            return("Name cannot contain '!' character");
+        }
+        return null;
+    }
 
     @Getter @Setter
     @Property

@@ -37,10 +37,11 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 public class GqlvProperty
         extends GqlvAssociation<OneToOneAssociation, GqlvPropertyHolder>
-        implements GqlvPropertyGetHolder,
-                   GqlvMemberHiddenHolder,
+        implements GqlvMemberHiddenHolder,
                    GqlvMemberDisabledHolder,
-                   GqlvPropertySetHolder {
+                   GqlvPropertyGetHolder,
+                   GqlvPropertySetHolder,
+                   GqlvPropertyValidateHolder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
@@ -48,6 +49,7 @@ public class GqlvProperty
     private final GqlvMemberDisabled disabled;
     private final GqlvPropertyGet get;
     private final GqlvPropertySet set;
+    private final GqlvPropertyValidate validate;
     private final BookmarkService bookmarkService;
 
     public GqlvProperty(
@@ -65,6 +67,7 @@ public class GqlvProperty
         this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
         this.get = new GqlvPropertyGet(this, codeRegistryBuilder, specificationLoader);
         this.set = new GqlvPropertySet(this, codeRegistryBuilder, specificationLoader);
+        this.validate = new GqlvPropertyValidate(this, codeRegistryBuilder, specificationLoader);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
@@ -98,6 +101,7 @@ public class GqlvProperty
         disabled.addDataFetcher();
         get.addDataFetcher();
         set.addDataFetcher();
+        validate.addDataFetcher();
     }
 
     private class Fetcher implements DataFetcher<Object> {
