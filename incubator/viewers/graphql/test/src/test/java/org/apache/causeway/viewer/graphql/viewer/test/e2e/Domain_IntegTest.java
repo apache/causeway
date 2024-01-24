@@ -249,19 +249,20 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Test
     @UseReporter(DiffReporter.class)
+    void find_depthead_and_change_name_invalid() throws Exception {
+
+        String response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void find_depthead_and_change_name() throws Exception {
 
-        // given
-        transactionService.callTransactional(
-                Propagation.REQUIRED,
-                () -> deptHeadRepository.create("foo", null)
-        ).valueAsNonNullElseFail();
-
-        // when lookup 'foo' and change it to 'bar'
-        String response = transactionService.callTransactional(
-                Propagation.REQUIRED,
-                this::submit
-        ).valueAsNonNullElseFail();
+        // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
+        String response = submit();
 
         // then payload
         Approvals.verify(response, jsonOptions());
@@ -269,7 +270,7 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
         // and also in the database
         DeptHead deptHeadAfter = transactionService.callTransactional(
                 Propagation.REQUIRED,
-                () -> deptHeadRepository.findByName("bar")
+                () -> deptHeadRepository.findByName("Prof. Richard Horwich")
         ).valueAsNullableElseFail();
 
         assertThat(deptHeadAfter).isNotNull();

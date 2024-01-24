@@ -31,13 +31,18 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder>
-        implements GqlvActionInvokeHolder, GqlvMemberHiddenHolder, GqlvMemberDisabledHolder {
+public class GqlvAction
+        extends GqlvMember<ObjectAction, GqlvActionHolder>
+        implements  GqlvMemberHiddenHolder,
+                    GqlvMemberDisabledHolder,
+                    GqlvActionInvokeHolder,
+                    GqlvActionValidateHolder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
     private final GqlvMemberHidden hidden;
     private final GqlvMemberDisabled disabled;
+    private final GqlvActionValidate validate;
     private final GqlvActionInvoke invoke;
     private final BookmarkService bookmarkService;
 
@@ -54,6 +59,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder>
 
         this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
         this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
+        this.validate = new GqlvActionValidate(this, codeRegistryBuilder);
         this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
@@ -86,6 +92,7 @@ public class GqlvAction extends GqlvMember<ObjectAction, GqlvActionHolder>
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();
+        validate.addDataFetcher();
         invoke.addDataFetcher();
     }
 

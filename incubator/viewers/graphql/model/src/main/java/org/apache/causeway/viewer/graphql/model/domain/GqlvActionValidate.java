@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.consent.Consent;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 
 import org.springframework.lang.Nullable;
 
@@ -33,6 +32,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -49,14 +49,14 @@ import graphql.schema.GraphQLType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
-public class GqlvActionInvoke {
+public class GqlvActionValidate {
 
-    private final GqlvActionInvokeHolder holder;
+    private final GqlvActionValidateHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
 
-    public GqlvActionInvoke(
-            final GqlvActionInvokeHolder holder,
+    public GqlvActionValidate(
+            final GqlvActionValidateHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
         this.holder = holder;
@@ -64,15 +64,15 @@ public class GqlvActionInvoke {
         this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final GqlvActionInvokeHolder holder) {
+    private static GraphQLFieldDefinition fieldDefinition(final GqlvActionValidateHolder holder) {
 
         val objectAction = holder.getObjectAction();
 
         GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLOutputType type = typeFor(objectAction);
+        GraphQLOutputType type = TypeMapper.scalarTypeFor(String.class);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
-                    .name(fieldNameForSemanticsOf(objectAction))
+                    .name("validate")
                     .type(type);
             addGqlArguments(objectAction, fieldBuilder);
             fieldDefinition = fieldBuilder.build();
@@ -82,82 +82,21 @@ public class GqlvActionInvoke {
         return fieldDefinition;
     }
 
-    private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
-        switch (objectAction.getSemantics()) {
-            case SAFE_AND_REQUEST_CACHEABLE:
-            case SAFE:
-                return "invoke";
-            case IDEMPOTENT:
-            case IDEMPOTENT_ARE_YOU_SURE:
-                return "invokeIdempotent";
-            case NON_IDEMPOTENT:
-            case NON_IDEMPOTENT_ARE_YOU_SURE:
-            case NOT_SPECIFIED:
-            default:
-                return "invokeNonIdempotent";
-        }
-    }
-
-    @Nullable
-    private static GraphQLOutputType typeFor(final ObjectAction objectAction){
-        ObjectSpecification objectSpecification = objectAction.getReturnType();
-        switch (objectSpecification.getBeanSort()){
-
-            case COLLECTION:
-
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
-                if (facet == null) {
-                    log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
-                    return null;
-                }
-                ObjectSpecification objectSpecificationForElementWhenCollection = facet.elementSpec();
-                GraphQLType wrappedType = TypeMapper.outputTypeFor(objectSpecificationForElementWhenCollection);
-                if (wrappedType == null) {
-                    log.warn("Unable to create wrapped type of for {} for action {}",
-                            objectSpecificationForElementWhenCollection.getFullIdentifier(),
-                            objectAction.getFeatureIdentifier().getFullIdentityString());
-                    return null;
-                }
-                return GraphQLList.list(wrappedType);
-
-            case VALUE:
-            case ENTITY:
-            case VIEW_MODEL:
-            default:
-                return TypeMapper.outputTypeFor(objectSpecification);
-
-        }
-    }
-
     static void addGqlArguments(
             final ObjectAction objectAction,
             final GraphQLFieldDefinition.Builder builder) {
 
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
-
-        if (parameters.isNotEmpty()) {
-            builder.arguments(parameters.stream()
-                    .map(OneToOneActionParameter.class::cast)   // we previously filter to ignore any actions that have collection parameters
-                    .map(GqlvActionInvoke::gqlArgumentFor)
-                    .collect(Collectors.toList()));
-        }
-    }
-
-    private static GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
-        return GraphQLArgument.newArgument()
-                .name(oneToOneActionParameter.getId())
-                .type(TypeMapper.inputTypeFor(oneToOneActionParameter))
-                .build();
+        GqlvActionInvoke.addGqlArguments(objectAction, builder);
     }
 
     public void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
-                this::invoke
+                this::validate
         );
     }
 
-    private Object invoke(final DataFetchingEnvironment dataFetchingEnvironment) {
+    private Object validate(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         final ObjectAction objectAction = holder.getObjectAction();
 
@@ -182,16 +121,9 @@ public class GqlvActionInvoke {
                     return ManagedObject.adaptParameter(oap, argumentValue);
                 });
 
-        val consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (consent.isVetoed()) {
-            throw new IllegalArgumentException(consent.getReasonAsString().orElse("Invalid"));
-        }
+        Consent consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
 
-        val resultManagedObject = objectAction
-                .execute(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-
-        return resultManagedObject.getPojo();
-
+        return consent.isVetoed() ? consent.getReasonAsString().orElse("Invalid") : null;
     }
 
 }

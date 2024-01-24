@@ -55,7 +55,7 @@ public class StaffMember implements Comparable<StaffMember> {
     private String name;
     public String validateName(String proposedName) {
         if(proposedName.contains("!")) {
-            return("Name cannot contain '!' character");
+            return "Name cannot contain '!' character";
         }
         return null;
     }

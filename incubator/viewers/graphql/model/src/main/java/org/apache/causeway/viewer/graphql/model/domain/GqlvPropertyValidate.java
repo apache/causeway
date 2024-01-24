@@ -30,7 +30,6 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import lombok.val;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
@@ -57,7 +56,7 @@ public class GqlvPropertyValidate {
     GraphQLFieldDefinition fieldDefinition(final GqlvPropertyValidateHolder holder) {
 
         GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLOutputType type = outputTypeFor(holder);
+        GraphQLOutputType type = outputTypeFor();
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("validate")
@@ -70,7 +69,7 @@ public class GqlvPropertyValidate {
         return fieldDefinition;
     }
 
-    GraphQLOutputType outputTypeFor(GqlvPropertyValidateHolder holder) {
+    GraphQLOutputType outputTypeFor() {
         return TypeMapper.scalarTypeFor(String.class);
     }
 
@@ -78,16 +77,8 @@ public class GqlvPropertyValidate {
             final OneToOneAssociation oneToOneAssociation,
             final GraphQLFieldDefinition.Builder builder) {
 
-        builder.argument(gqlArgumentFor(oneToOneAssociation));
+        GqlvPropertySet.addGqlArgument(oneToOneAssociation, builder);
     }
-
-    private static GraphQLArgument gqlArgumentFor(final OneToOneAssociation oneToOneAssociation) {
-        return GraphQLArgument.newArgument()
-                .name(oneToOneAssociation.getId())
-                .type(TypeMapper.inputTypeFor(oneToOneAssociation))
-                .build();
-    }
-
 
     void addDataFetcher() {
 

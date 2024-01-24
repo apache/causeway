@@ -6,7 +6,7 @@
           "changeName" : {
             "invokeIdempotent" : {
               "name" : {
-                "get" : "bar"
+                "get" : "Prof. Richard Horwich"
               }
             }
           }

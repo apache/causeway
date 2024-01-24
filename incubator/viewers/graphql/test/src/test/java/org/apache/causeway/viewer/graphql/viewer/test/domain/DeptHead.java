@@ -86,7 +86,15 @@ public class DeptHead implements Comparable<DeptHead> {
         public String default0Act(){
             return getName();
         }
+
+        public String validateAct(String name) {
+            if (name.contains("!")) {
+                return "Name cannot contain '!' character";
+            }
+            return null;
+        }
     }
+
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)

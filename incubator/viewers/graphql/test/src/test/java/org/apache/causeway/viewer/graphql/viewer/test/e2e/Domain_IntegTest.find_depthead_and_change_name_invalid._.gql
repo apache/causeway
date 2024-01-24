@@ -3,7 +3,7 @@
     findHeadByName {
       invoke(name: "Prof. Dicky Horwich") {
         changeName {
-          invokeIdempotent(newName: "Prof. Richard Horwich") {
+          invokeIdempotent(newName: "Prof. Dicky Horwich!") {
             name {
               get
             }
