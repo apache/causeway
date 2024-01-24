@@ -3,12 +3,10 @@
     "university_dept_DeptHeads" : {
       "findHeadByName" : {
         "invoke" : {
-          "_gql_mutations" : {
-            "changeName" : {
-              "invoke" : {
-                "name" : {
-                  "get" : "bar"
-                }
+          "changeName" : {
+            "invokeIdempotent" : {
+              "name" : {
+                "get" : "bar"
               }
             }
           }

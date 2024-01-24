@@ -1,13 +1,11 @@
 {
   university_dept_Departments {
-    _gql_mutations {
-      createDepartment {
-        hidden
-        disabled
-        invoke(name: "newbie") {
-          name {
-            get
-          }
+    createDepartment {
+      hidden
+      disabled
+      invokeNonIdempotent(name: "newbie") {
+        name {
+          get
         }
       }
     }

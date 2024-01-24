@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -70,7 +72,7 @@ public class GqlvActionInvoke {
         GraphQLOutputType type = typeFor(objectAction);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
-                    .name("invoke")
+                    .name(fieldNameForSemanticsOf(objectAction))
                     .type(type);
             addGqlArguments(objectAction, fieldBuilder);
             fieldDefinition = fieldBuilder.build();
@@ -78,6 +80,22 @@ public class GqlvActionInvoke {
             holder.addField(fieldDefinition);
         }
         return fieldDefinition;
+    }
+
+    private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
+        switch (objectAction.getSemantics()) {
+            case SAFE_AND_REQUEST_CACHEABLE:
+            case SAFE:
+                return "invoke";
+            case IDEMPOTENT:
+            case IDEMPOTENT_ARE_YOU_SURE:
+                return "invokeIdempotent";
+            case NON_IDEMPOTENT:
+            case NON_IDEMPOTENT_ARE_YOU_SURE:
+            case NOT_SPECIFIED:
+            default:
+                return "invokeNonIdempotent";
+        }
     }
 
     @Nullable

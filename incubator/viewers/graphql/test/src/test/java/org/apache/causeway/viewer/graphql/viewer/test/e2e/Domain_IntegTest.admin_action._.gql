@@ -1,9 +1,7 @@
 {
   university_admin_AdminMenu {
-    _gql_mutations {
-      adminAction {
-        hidden
-      }
+    adminAction {
+      hidden
     }
   }
 }

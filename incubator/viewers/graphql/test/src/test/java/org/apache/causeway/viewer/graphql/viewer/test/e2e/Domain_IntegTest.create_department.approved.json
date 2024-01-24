@@ -1,14 +1,12 @@
 {
   "data" : {
     "university_dept_Departments" : {
-      "_gql_mutations" : {
-        "createDepartment" : {
-          "hidden" : false,
-          "disabled" : null,
-          "invoke" : {
-            "name" : {
-              "get" : "newbie"
-            }
+      "createDepartment" : {
+        "hidden" : false,
+        "disabled" : null,
+        "invokeNonIdempotent" : {
+          "name" : {
+            "get" : "newbie"
           }
         }
       }

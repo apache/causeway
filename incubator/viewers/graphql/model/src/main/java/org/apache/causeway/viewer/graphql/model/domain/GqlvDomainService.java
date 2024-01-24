@@ -45,7 +45,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder {
+public class GqlvDomainService implements GqlvActionHolder {
 
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
@@ -54,13 +54,11 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
-    @Getter private final GqlvMutations mutations;
-
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
     }
 
-    private final List<GqlvAction> safeActions = new ArrayList<>();
+    private final List<GqlvAction> actions = new ArrayList<>();
 
     private GraphQLObjectType gqlObjectType;
 
@@ -76,8 +74,6 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
         this.bookmarkService = bookmarkService;
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
-
-        this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService);
     }
 
     /**
@@ -92,18 +88,11 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
                     addAction(objectAction);
                 });
 
-        mutations.buildObjectTypeAndFieldIfRequired();
-
         return anyActions.get();
     }
 
     void addAction(final ObjectAction objectAction) {
-        if (objectAction.getSemantics().isSafeInNature()) {
-            // safeActionSimples.add(new GqlvActionSimple(this, objectAction, codeRegistryBuilder));
-            safeActions.add(new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
-        } else {
-             mutations.addAction(objectAction);
-        }
+        actions.add(new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
     }
 
 
@@ -117,14 +106,10 @@ public class GqlvDomainService implements GqlvActionHolder, GqlvMutationsHolder 
     public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
         gqlObjectType = gqlObjectTypeBuilder.build();
         // TODO: unlike GqlvDomainObject, not sure where gqlObjectType is already registered
-
-        mutations.registerTypesInto(graphQLTypeRegistry);
     }
 
     public void addDataFetchers() {
-        // safeActionSimples.forEach(GqlvActionSimple::addDataFetcher);
-        safeActions.forEach(GqlvAction::addDataFetcher);
-        getMutations().addDataFetchers();
+        actions.forEach(GqlvAction::addDataFetcher);
     }
 
     @Override

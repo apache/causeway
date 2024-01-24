@@ -33,27 +33,23 @@ public final class TypeNames {
     }
 
     public static String metaTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__gql_meta";
-    }
-
-    public static String mutationsTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__gql_mutations";
+        return objectTypeNameFor(objectSpecification) + "__gqlv_meta";
     }
 
     public static String inputTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__gql_input";
+        return objectTypeNameFor(objectSpecification) + "__gqlv_input";
     }
 
     public static String actionTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
-        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__action";
+        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action";
     }
 
     public static String propertyTypeNameFor(ObjectSpecification owningType, OneToOneAssociation oneToOneAssociation) {
-        return objectTypeNameFor(owningType) + "__" + oneToOneAssociation.getId() + "__property";
+        return objectTypeNameFor(owningType) + "__" + oneToOneAssociation.getId() + "__gqlv_property";
     }
 
     public static String collectionTypeNameFor(ObjectSpecification owningType, OneToManyAssociation objectMember) {
-        return objectTypeNameFor(owningType) + "__" + objectMember.getId() + "__collection";
+        return objectTypeNameFor(owningType) + "__" + objectMember.getId() + "__gqlv_collection";
     }
 
     private static String sanitized(final String name) {

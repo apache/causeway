@@ -1,10 +1,8 @@
 {
   "data" : {
     "university_admin_AdminMenu" : {
-      "_gql_mutations" : {
-        "otherAdminAction" : {
-          "disabled" : "yup, disabled!"
-        }
+      "otherAdminAction" : {
+        "disabled" : "yup, disabled!"
       }
     }
   }

@@ -34,1910 +34,1840 @@ type Query {
 }
 
 type causeway_applib_DomainObjectList {
-  _gql_meta: causeway_applib_DomainObjectList__gql_meta
-  actionArguments: causeway_applib_DomainObjectList__actionArguments__property
-  actionId: causeway_applib_DomainObjectList__actionId__property
-  actionOwningFqcn: causeway_applib_DomainObjectList__actionOwningFqcn__property
-  elementTypeFqcn: causeway_applib_DomainObjectList__elementTypeFqcn__property
-  objects: causeway_applib_DomainObjectList__objects__collection
-  title: causeway_applib_DomainObjectList__title__property
+  _gql_meta: causeway_applib_DomainObjectList__gqlv_meta
+  actionArguments: causeway_applib_DomainObjectList__actionArguments__gqlv_property
+  actionId: causeway_applib_DomainObjectList__actionId__gqlv_property
+  actionOwningFqcn: causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property
+  elementTypeFqcn: causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property
+  objects: causeway_applib_DomainObjectList__objects__gqlv_collection
+  title: causeway_applib_DomainObjectList__title__gqlv_property
 }
 
-type causeway_applib_DomainObjectList__actionArguments__property {
+type causeway_applib_DomainObjectList__actionArguments__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_applib_DomainObjectList__actionId__property {
+type causeway_applib_DomainObjectList__actionId__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_applib_DomainObjectList__actionOwningFqcn__property {
+type causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_applib_DomainObjectList__elementTypeFqcn__property {
+type causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_DomainObjectList__gql_meta {
+type causeway_applib_DomainObjectList__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_DomainObjectList__objects__collection {
+type causeway_applib_DomainObjectList__objects__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_DomainObjectList__title__property {
+type causeway_applib_DomainObjectList__title__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_applib_FacetGroupNode {
-  _gql_meta: causeway_applib_FacetGroupNode__gql_meta
-  childNodes: causeway_applib_FacetGroupNode__childNodes__collection
-  facets: causeway_applib_FacetGroupNode__facets__property
-  parentNode: causeway_applib_FacetGroupNode__parentNode__property
+  _gql_meta: causeway_applib_FacetGroupNode__gqlv_meta
+  childNodes: causeway_applib_FacetGroupNode__childNodes__gqlv_collection
+  facets: causeway_applib_FacetGroupNode__facets__gqlv_property
+  parentNode: causeway_applib_FacetGroupNode__parentNode__gqlv_property
 }
 
-type causeway_applib_FacetGroupNode__childNodes__collection {
+type causeway_applib_FacetGroupNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_FacetGroupNode__facets__property {
+type causeway_applib_FacetGroupNode__facets__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_FacetGroupNode__gql_meta {
+type causeway_applib_FacetGroupNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_FacetGroupNode__parentNode__property {
+type causeway_applib_FacetGroupNode__parentNode__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
 type causeway_applib_ParameterNode {
-  _gql_meta: causeway_applib_ParameterNode__gql_meta
-  childNodes: causeway_applib_ParameterNode__childNodes__collection
-  parameter: causeway_applib_ParameterNode__parameter__property
-  parentNode: causeway_applib_ParameterNode__parentNode__property
+  _gql_meta: causeway_applib_ParameterNode__gqlv_meta
+  childNodes: causeway_applib_ParameterNode__childNodes__gqlv_collection
+  parameter: causeway_applib_ParameterNode__parameter__gqlv_property
+  parentNode: causeway_applib_ParameterNode__parentNode__gqlv_property
 }
 
-type causeway_applib_ParameterNode__childNodes__collection {
+type causeway_applib_ParameterNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_ParameterNode__gql_meta {
+type causeway_applib_ParameterNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_ParameterNode__parameter__property {
+type causeway_applib_ParameterNode__parameter__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_ParameterNode__parentNode__property {
+type causeway_applib_ParameterNode__parentNode__gqlv_property {
   disabled: String
   get: causeway_applib_node_ActionNode!
   hidden: Boolean
 }
 
 type causeway_applib_PropertyNode {
-  _gql_meta: causeway_applib_PropertyNode__gql_meta
-  _gql_mutations: causeway_applib_PropertyNode__gql_mutations
-  childNodes: causeway_applib_PropertyNode__childNodes__collection
-  mixedIn: causeway_applib_PropertyNode__mixedIn__property
-  parentNode: causeway_applib_PropertyNode__parentNode__property
-  property: causeway_applib_PropertyNode__property__property
+  _gql_meta: causeway_applib_PropertyNode__gqlv_meta
+  childNodes: causeway_applib_PropertyNode__childNodes__gqlv_collection
+  mixedIn: causeway_applib_PropertyNode__mixedIn__gqlv_property
+  parentNode: causeway_applib_PropertyNode__parentNode__gqlv_property
+  property: causeway_applib_PropertyNode__property__gqlv_property
+  streamChildNodes: causeway_applib_PropertyNode__streamChildNodes__gqlv_action
 }
 
-type causeway_applib_PropertyNode__childNodes__collection {
+type causeway_applib_PropertyNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_PropertyNode__gql_meta {
+type causeway_applib_PropertyNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_PropertyNode__gql_mutations {
-  streamChildNodes: causeway_applib_PropertyNode__streamChildNodes__action
-}
-
-type causeway_applib_PropertyNode__mixedIn__property {
+type causeway_applib_PropertyNode__mixedIn__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type causeway_applib_PropertyNode__parentNode__property {
+type causeway_applib_PropertyNode__parentNode__gqlv_property {
   disabled: String
   get: causeway_applib_TypeNode!
   hidden: Boolean
 }
 
-type causeway_applib_PropertyNode__property__property {
+type causeway_applib_PropertyNode__property__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_PropertyNode__streamChildNodes__action {
+type causeway_applib_PropertyNode__streamChildNodes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: java_util_stream_Stream
+  invokeNonIdempotent: java_util_stream_Stream
 }
 
 type causeway_applib_RoleMemento {
-  _gql_meta: causeway_applib_RoleMemento__gql_meta
-  description: causeway_applib_RoleMemento__description__property
-  name: causeway_applib_RoleMemento__name__property
+  _gql_meta: causeway_applib_RoleMemento__gqlv_meta
+  description: causeway_applib_RoleMemento__description__gqlv_property
+  name: causeway_applib_RoleMemento__name__gqlv_property
 }
 
-type causeway_applib_RoleMemento__description__property {
+type causeway_applib_RoleMemento__description__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_RoleMemento__gql_meta {
+type causeway_applib_RoleMemento__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_RoleMemento__name__property {
+type causeway_applib_RoleMemento__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_applib_TypeNode {
-  _gql_meta: causeway_applib_TypeNode__gql_meta
-  childNodes: causeway_applib_TypeNode__childNodes__collection
-  domainClassDto: causeway_applib_TypeNode__domainClassDto__property
-  parentNode: causeway_applib_TypeNode__parentNode__property
+  _gql_meta: causeway_applib_TypeNode__gqlv_meta
+  childNodes: causeway_applib_TypeNode__childNodes__gqlv_collection
+  domainClassDto: causeway_applib_TypeNode__domainClassDto__gqlv_property
+  parentNode: causeway_applib_TypeNode__parentNode__gqlv_property
 }
 
-type causeway_applib_TypeNode__childNodes__collection {
+type causeway_applib_TypeNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_TypeNode__domainClassDto__property {
+type causeway_applib_TypeNode__domainClassDto__gqlv_property {
   disabled: String
   get: causeway_schema_metamodel_v2_DomainClassDto!
   hidden: Boolean
 }
 
-type causeway_applib_TypeNode__gql_meta {
+type causeway_applib_TypeNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_TypeNode__parentNode__property {
+type causeway_applib_TypeNode__parentNode__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
 type causeway_applib_UserMemento {
-  _gql_meta: causeway_applib_UserMemento__gql_meta
-  authenticationCode: causeway_applib_UserMemento__authenticationCode__property
-  authenticationSource: causeway_applib_UserMemento__authenticationSource__property
-  avatarUrl: causeway_applib_UserMemento__avatarUrl__property
-  impersonating: causeway_applib_UserMemento__impersonating__property
-  languageLocale: causeway_applib_UserMemento__languageLocale__property
-  multiTenancyToken: causeway_applib_UserMemento__multiTenancyToken__property
-  name: causeway_applib_UserMemento__name__property
-  numberFormatLocale: causeway_applib_UserMemento__numberFormatLocale__property
-  realName: causeway_applib_UserMemento__realName__property
-  roles: causeway_applib_UserMemento__roles__collection
-  timeFormatLocale: causeway_applib_UserMemento__timeFormatLocale__property
+  _gql_meta: causeway_applib_UserMemento__gqlv_meta
+  authenticationCode: causeway_applib_UserMemento__authenticationCode__gqlv_property
+  authenticationSource: causeway_applib_UserMemento__authenticationSource__gqlv_property
+  avatarUrl: causeway_applib_UserMemento__avatarUrl__gqlv_property
+  impersonating: causeway_applib_UserMemento__impersonating__gqlv_property
+  languageLocale: causeway_applib_UserMemento__languageLocale__gqlv_property
+  multiTenancyToken: causeway_applib_UserMemento__multiTenancyToken__gqlv_property
+  name: causeway_applib_UserMemento__name__gqlv_property
+  numberFormatLocale: causeway_applib_UserMemento__numberFormatLocale__gqlv_property
+  realName: causeway_applib_UserMemento__realName__gqlv_property
+  roles: causeway_applib_UserMemento__roles__gqlv_collection
+  timeFormatLocale: causeway_applib_UserMemento__timeFormatLocale__gqlv_property
 }
 
-type causeway_applib_UserMemento__authenticationCode__property {
+type causeway_applib_UserMemento__authenticationCode__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__authenticationSource__property {
+type causeway_applib_UserMemento__authenticationSource__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__avatarUrl__property {
+type causeway_applib_UserMemento__avatarUrl__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__gql_meta {
+type causeway_applib_UserMemento__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_UserMemento__impersonating__property {
+type causeway_applib_UserMemento__impersonating__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__languageLocale__property {
+type causeway_applib_UserMemento__languageLocale__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__multiTenancyToken__property {
+type causeway_applib_UserMemento__multiTenancyToken__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__name__property {
+type causeway_applib_UserMemento__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__numberFormatLocale__property {
+type causeway_applib_UserMemento__numberFormatLocale__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__realName__property {
+type causeway_applib_UserMemento__realName__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__roles__collection {
+type causeway_applib_UserMemento__roles__gqlv_collection {
   disabled: String
   get: [causeway_applib_RoleMemento]
   hidden: Boolean
 }
 
-type causeway_applib_UserMemento__timeFormatLocale__property {
+type causeway_applib_UserMemento__timeFormatLocale__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
 type causeway_applib_UserMenu {
-  me: causeway_applib_UserMenu__me__action
+  me: causeway_applib_UserMenu__me__gqlv_action
 }
 
-type causeway_applib_UserMenu__me__action {
+type causeway_applib_UserMenu__me__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: causeway_applib_UserMemento
 }
 
 type causeway_applib_node_ActionNode {
-  _gql_meta: causeway_applib_node_ActionNode__gql_meta
-  _gql_mutations: causeway_applib_node_ActionNode__gql_mutations
-  action: causeway_applib_node_ActionNode__action__property
-  childNodes: causeway_applib_node_ActionNode__childNodes__collection
-  mixedIn: causeway_applib_node_ActionNode__mixedIn__property
-  parentNode: causeway_applib_node_ActionNode__parentNode__property
+  _gql_meta: causeway_applib_node_ActionNode__gqlv_meta
+  action: causeway_applib_node_ActionNode__action__gqlv_property
+  childNodes: causeway_applib_node_ActionNode__childNodes__gqlv_collection
+  mixedIn: causeway_applib_node_ActionNode__mixedIn__gqlv_property
+  parentNode: causeway_applib_node_ActionNode__parentNode__gqlv_property
+  streamChildNodes: causeway_applib_node_ActionNode__streamChildNodes__gqlv_action
 }
 
-type causeway_applib_node_ActionNode__action__property {
+type causeway_applib_node_ActionNode__action__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_node_ActionNode__childNodes__collection {
+type causeway_applib_node_ActionNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_node_ActionNode__gql_meta {
+type causeway_applib_node_ActionNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_node_ActionNode__gql_mutations {
-  streamChildNodes: causeway_applib_node_ActionNode__streamChildNodes__action
-}
-
-type causeway_applib_node_ActionNode__mixedIn__property {
+type causeway_applib_node_ActionNode__mixedIn__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type causeway_applib_node_ActionNode__parentNode__property {
+type causeway_applib_node_ActionNode__parentNode__gqlv_property {
   disabled: String
   get: causeway_applib_TypeNode!
   hidden: Boolean
 }
 
-type causeway_applib_node_ActionNode__streamChildNodes__action {
+type causeway_applib_node_ActionNode__streamChildNodes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: java_util_stream_Stream
+  invokeNonIdempotent: java_util_stream_Stream
 }
 
 type causeway_applib_node_CollectionNode {
-  _gql_meta: causeway_applib_node_CollectionNode__gql_meta
-  _gql_mutations: causeway_applib_node_CollectionNode__gql_mutations
-  childNodes: causeway_applib_node_CollectionNode__childNodes__collection
-  collection: causeway_applib_node_CollectionNode__collection__property
-  mixedIn: causeway_applib_node_CollectionNode__mixedIn__property
-  parentNode: causeway_applib_node_CollectionNode__parentNode__property
+  _gql_meta: causeway_applib_node_CollectionNode__gqlv_meta
+  childNodes: causeway_applib_node_CollectionNode__childNodes__gqlv_collection
+  collection: causeway_applib_node_CollectionNode__collection__gqlv_property
+  mixedIn: causeway_applib_node_CollectionNode__mixedIn__gqlv_property
+  parentNode: causeway_applib_node_CollectionNode__parentNode__gqlv_property
+  streamChildNodes: causeway_applib_node_CollectionNode__streamChildNodes__gqlv_action
 }
 
-type causeway_applib_node_CollectionNode__childNodes__collection {
+type causeway_applib_node_CollectionNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_node_CollectionNode__collection__property {
+type causeway_applib_node_CollectionNode__collection__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_node_CollectionNode__gql_meta {
+type causeway_applib_node_CollectionNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_node_CollectionNode__gql_mutations {
-  streamChildNodes: causeway_applib_node_CollectionNode__streamChildNodes__action
-}
-
-type causeway_applib_node_CollectionNode__mixedIn__property {
+type causeway_applib_node_CollectionNode__mixedIn__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type causeway_applib_node_CollectionNode__parentNode__property {
+type causeway_applib_node_CollectionNode__parentNode__gqlv_property {
   disabled: String
   get: causeway_applib_TypeNode!
   hidden: Boolean
 }
 
-type causeway_applib_node_CollectionNode__streamChildNodes__action {
+type causeway_applib_node_CollectionNode__streamChildNodes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: java_util_stream_Stream
+  invokeNonIdempotent: java_util_stream_Stream
 }
 
 type causeway_applib_node_FacetAttrNode {
-  _gql_meta: causeway_applib_node_FacetAttrNode__gql_meta
-  childNodes: causeway_applib_node_FacetAttrNode__childNodes__collection
-  facetAttr: causeway_applib_node_FacetAttrNode__facetAttr__property
-  parentNode: causeway_applib_node_FacetAttrNode__parentNode__property
+  _gql_meta: causeway_applib_node_FacetAttrNode__gqlv_meta
+  childNodes: causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection
+  facetAttr: causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property
+  parentNode: causeway_applib_node_FacetAttrNode__parentNode__gqlv_property
 }
 
-type causeway_applib_node_FacetAttrNode__childNodes__collection {
+type causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_node_FacetAttrNode__facetAttr__property {
+type causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_node_FacetAttrNode__gql_meta {
+type causeway_applib_node_FacetAttrNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_node_FacetAttrNode__parentNode__property {
+type causeway_applib_node_FacetAttrNode__parentNode__gqlv_property {
   disabled: String
   get: causeway_applib_node_FacetNode!
   hidden: Boolean
 }
 
 type causeway_applib_node_FacetNode {
-  _gql_meta: causeway_applib_node_FacetNode__gql_meta
-  childNodes: causeway_applib_node_FacetNode__childNodes__collection
-  facet: causeway_applib_node_FacetNode__facet__property
-  parentNode: causeway_applib_node_FacetNode__parentNode__property
-  shadowed: causeway_applib_node_FacetNode__shadowed__property
+  _gql_meta: causeway_applib_node_FacetNode__gqlv_meta
+  childNodes: causeway_applib_node_FacetNode__childNodes__gqlv_collection
+  facet: causeway_applib_node_FacetNode__facet__gqlv_property
+  parentNode: causeway_applib_node_FacetNode__parentNode__gqlv_property
+  shadowed: causeway_applib_node_FacetNode__shadowed__gqlv_property
 }
 
-type causeway_applib_node_FacetNode__childNodes__collection {
+type causeway_applib_node_FacetNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_node_FacetNode__facet__property {
+type causeway_applib_node_FacetNode__facet__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_applib_node_FacetNode__gql_meta {
+type causeway_applib_node_FacetNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_applib_node_FacetNode__parentNode__property {
+type causeway_applib_node_FacetNode__parentNode__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_applib_node_FacetNode__shadowed__property {
+type causeway_applib_node_FacetNode__shadowed__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
 type causeway_conf_ConfigurationMenu {
-  configuration: causeway_conf_ConfigurationMenu__configuration__action
+  configuration: causeway_conf_ConfigurationMenu__configuration__gqlv_action
 }
 
-type causeway_conf_ConfigurationMenu__configuration__action {
+type causeway_conf_ConfigurationMenu__configuration__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: causeway_conf_ConfigurationViewmodel
 }
 
 type causeway_conf_ConfigurationProperty {
-  _gql_meta: causeway_conf_ConfigurationProperty__gql_meta
-  key: causeway_conf_ConfigurationProperty__key__property
-  value: causeway_conf_ConfigurationProperty__value__property
+  _gql_meta: causeway_conf_ConfigurationProperty__gqlv_meta
+  key: causeway_conf_ConfigurationProperty__key__gqlv_property
+  value: causeway_conf_ConfigurationProperty__value__gqlv_property
 }
 
-type causeway_conf_ConfigurationProperty__gql_meta {
+type causeway_conf_ConfigurationProperty__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_conf_ConfigurationProperty__key__property {
+type causeway_conf_ConfigurationProperty__key__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_conf_ConfigurationProperty__value__property {
+type causeway_conf_ConfigurationProperty__value__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_conf_ConfigurationViewmodel {
-  _gql_meta: causeway_conf_ConfigurationViewmodel__gql_meta
-  environment: causeway_conf_ConfigurationViewmodel__environment__collection
-  primary: causeway_conf_ConfigurationViewmodel__primary__collection
-  secondary: causeway_conf_ConfigurationViewmodel__secondary__collection
+  _gql_meta: causeway_conf_ConfigurationViewmodel__gqlv_meta
+  environment: causeway_conf_ConfigurationViewmodel__environment__gqlv_collection
+  primary: causeway_conf_ConfigurationViewmodel__primary__gqlv_collection
+  secondary: causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection
 }
 
-type causeway_conf_ConfigurationViewmodel__environment__collection {
+type causeway_conf_ConfigurationViewmodel__environment__gqlv_collection {
   disabled: String
   get: [causeway_conf_ConfigurationProperty]
   hidden: Boolean
 }
 
-type causeway_conf_ConfigurationViewmodel__gql_meta {
+type causeway_conf_ConfigurationViewmodel__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_conf_ConfigurationViewmodel__primary__collection {
+type causeway_conf_ConfigurationViewmodel__primary__gqlv_collection {
   disabled: String
   get: [causeway_conf_ConfigurationProperty]
   hidden: Boolean
 }
 
-type causeway_conf_ConfigurationViewmodel__secondary__collection {
+type causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection {
   disabled: String
   get: [causeway_conf_ConfigurationProperty]
   hidden: Boolean
 }
 
 type causeway_feat_ApplicationFeatureViewModel {
-  _gql_meta: causeway_feat_ApplicationFeatureViewModel__gql_meta
-  memberName: causeway_feat_ApplicationFeatureViewModel__memberName__property
-  namespaceName: causeway_feat_ApplicationFeatureViewModel__namespaceName__property
-  parent: causeway_feat_ApplicationFeatureViewModel__parent__property
-  typeSimpleName: causeway_feat_ApplicationFeatureViewModel__typeSimpleName__property
+  _gql_meta: causeway_feat_ApplicationFeatureViewModel__gqlv_meta
+  memberName: causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property
+  namespaceName: causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property
+  parent: causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property
+  typeSimpleName: causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property
 }
 
-type causeway_feat_ApplicationFeatureViewModel__gql_meta {
+type causeway_feat_ApplicationFeatureViewModel__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationFeatureViewModel__memberName__property {
+type causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationFeatureViewModel__namespaceName__property {
+type causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationFeatureViewModel__parent__property {
+type causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationFeatureViewModel__typeSimpleName__property {
+type causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_feat_ApplicationNamespace {
-  _gql_meta: causeway_feat_ApplicationNamespace__gql_meta
-  contents: causeway_feat_ApplicationNamespace__contents__collection
-  memberName: causeway_feat_ApplicationNamespace__memberName__property
-  namespaceName: causeway_feat_ApplicationNamespace__namespaceName__property
-  parent: causeway_feat_ApplicationNamespace__parent__property
-  typeSimpleName: causeway_feat_ApplicationNamespace__typeSimpleName__property
+  _gql_meta: causeway_feat_ApplicationNamespace__gqlv_meta
+  contents: causeway_feat_ApplicationNamespace__contents__gqlv_collection
+  memberName: causeway_feat_ApplicationNamespace__memberName__gqlv_property
+  namespaceName: causeway_feat_ApplicationNamespace__namespaceName__gqlv_property
+  parent: causeway_feat_ApplicationNamespace__parent__gqlv_property
+  typeSimpleName: causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property
 }
 
-type causeway_feat_ApplicationNamespace__contents__collection {
+type causeway_feat_ApplicationNamespace__contents__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationNamespace__gql_meta {
+type causeway_feat_ApplicationNamespace__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationNamespace__memberName__property {
+type causeway_feat_ApplicationNamespace__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationNamespace__namespaceName__property {
+type causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationNamespace__parent__property {
+type causeway_feat_ApplicationNamespace__parent__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationNamespace__typeSimpleName__property {
+type causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_feat_ApplicationType {
-  _gql_meta: causeway_feat_ApplicationType__gql_meta
-  actions: causeway_feat_ApplicationType__actions__collection
-  collections: causeway_feat_ApplicationType__collections__collection
-  memberName: causeway_feat_ApplicationType__memberName__property
-  namespaceName: causeway_feat_ApplicationType__namespaceName__property
-  parent: causeway_feat_ApplicationType__parent__property
-  properties: causeway_feat_ApplicationType__properties__collection
-  typeSimpleName: causeway_feat_ApplicationType__typeSimpleName__property
+  _gql_meta: causeway_feat_ApplicationType__gqlv_meta
+  actions: causeway_feat_ApplicationType__actions__gqlv_collection
+  collections: causeway_feat_ApplicationType__collections__gqlv_collection
+  memberName: causeway_feat_ApplicationType__memberName__gqlv_property
+  namespaceName: causeway_feat_ApplicationType__namespaceName__gqlv_property
+  parent: causeway_feat_ApplicationType__parent__gqlv_property
+  properties: causeway_feat_ApplicationType__properties__gqlv_collection
+  typeSimpleName: causeway_feat_ApplicationType__typeSimpleName__gqlv_property
 }
 
 type causeway_feat_ApplicationTypeAction {
-  _gql_meta: causeway_feat_ApplicationTypeAction__gql_meta
-  actionSemantics: causeway_feat_ApplicationTypeAction__actionSemantics__property
-  memberName: causeway_feat_ApplicationTypeAction__memberName__property
-  namespaceName: causeway_feat_ApplicationTypeAction__namespaceName__property
-  parent: causeway_feat_ApplicationTypeAction__parent__property
-  returnType: causeway_feat_ApplicationTypeAction__returnType__property
-  typeSimpleName: causeway_feat_ApplicationTypeAction__typeSimpleName__property
+  _gql_meta: causeway_feat_ApplicationTypeAction__gqlv_meta
+  actionSemantics: causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property
+  memberName: causeway_feat_ApplicationTypeAction__memberName__gqlv_property
+  namespaceName: causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property
+  parent: causeway_feat_ApplicationTypeAction__parent__gqlv_property
+  returnType: causeway_feat_ApplicationTypeAction__returnType__gqlv_property
+  typeSimpleName: causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property
 }
 
-type causeway_feat_ApplicationTypeAction__actionSemantics__property {
+type causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeAction__gql_meta {
+type causeway_feat_ApplicationTypeAction__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationTypeAction__memberName__property {
+type causeway_feat_ApplicationTypeAction__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeAction__namespaceName__property {
+type causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeAction__parent__property {
+type causeway_feat_ApplicationTypeAction__parent__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeAction__returnType__property {
+type causeway_feat_ApplicationTypeAction__returnType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeAction__typeSimpleName__property {
+type causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_feat_ApplicationTypeCollection {
-  _gql_meta: causeway_feat_ApplicationTypeCollection__gql_meta
-  derived: causeway_feat_ApplicationTypeCollection__derived__property
-  elementType: causeway_feat_ApplicationTypeCollection__elementType__property
-  memberName: causeway_feat_ApplicationTypeCollection__memberName__property
-  namespaceName: causeway_feat_ApplicationTypeCollection__namespaceName__property
-  parent: causeway_feat_ApplicationTypeCollection__parent__property
-  typeSimpleName: causeway_feat_ApplicationTypeCollection__typeSimpleName__property
+  _gql_meta: causeway_feat_ApplicationTypeCollection__gqlv_meta
+  derived: causeway_feat_ApplicationTypeCollection__derived__gqlv_property
+  elementType: causeway_feat_ApplicationTypeCollection__elementType__gqlv_property
+  memberName: causeway_feat_ApplicationTypeCollection__memberName__gqlv_property
+  namespaceName: causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property
+  parent: causeway_feat_ApplicationTypeCollection__parent__gqlv_property
+  typeSimpleName: causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property
 }
 
-type causeway_feat_ApplicationTypeCollection__derived__property {
+type causeway_feat_ApplicationTypeCollection__derived__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeCollection__elementType__property {
+type causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeCollection__gql_meta {
+type causeway_feat_ApplicationTypeCollection__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationTypeCollection__memberName__property {
+type causeway_feat_ApplicationTypeCollection__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeCollection__namespaceName__property {
+type causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeCollection__parent__property {
+type causeway_feat_ApplicationTypeCollection__parent__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeCollection__typeSimpleName__property {
+type causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_feat_ApplicationTypeMember {
-  _gql_meta: causeway_feat_ApplicationTypeMember__gql_meta
-  memberName: causeway_feat_ApplicationTypeMember__memberName__property
-  namespaceName: causeway_feat_ApplicationTypeMember__namespaceName__property
-  parent: causeway_feat_ApplicationTypeMember__parent__property
-  typeSimpleName: causeway_feat_ApplicationTypeMember__typeSimpleName__property
+  _gql_meta: causeway_feat_ApplicationTypeMember__gqlv_meta
+  memberName: causeway_feat_ApplicationTypeMember__memberName__gqlv_property
+  namespaceName: causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property
+  parent: causeway_feat_ApplicationTypeMember__parent__gqlv_property
+  typeSimpleName: causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property
 }
 
-type causeway_feat_ApplicationTypeMember__gql_meta {
+type causeway_feat_ApplicationTypeMember__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationTypeMember__memberName__property {
+type causeway_feat_ApplicationTypeMember__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeMember__namespaceName__property {
+type causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeMember__parent__property {
+type causeway_feat_ApplicationTypeMember__parent__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeMember__typeSimpleName__property {
+type causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_feat_ApplicationTypeProperty {
-  _gql_meta: causeway_feat_ApplicationTypeProperty__gql_meta
-  derived: causeway_feat_ApplicationTypeProperty__derived__property
-  maxLength: causeway_feat_ApplicationTypeProperty__maxLength__property
-  memberName: causeway_feat_ApplicationTypeProperty__memberName__property
-  namespaceName: causeway_feat_ApplicationTypeProperty__namespaceName__property
-  parent: causeway_feat_ApplicationTypeProperty__parent__property
-  returnType: causeway_feat_ApplicationTypeProperty__returnType__property
-  typeSimpleName: causeway_feat_ApplicationTypeProperty__typeSimpleName__property
-  typicalLength: causeway_feat_ApplicationTypeProperty__typicalLength__property
+  _gql_meta: causeway_feat_ApplicationTypeProperty__gqlv_meta
+  derived: causeway_feat_ApplicationTypeProperty__derived__gqlv_property
+  maxLength: causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property
+  memberName: causeway_feat_ApplicationTypeProperty__memberName__gqlv_property
+  namespaceName: causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property
+  parent: causeway_feat_ApplicationTypeProperty__parent__gqlv_property
+  returnType: causeway_feat_ApplicationTypeProperty__returnType__gqlv_property
+  typeSimpleName: causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property
+  typicalLength: causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property
 }
 
-type causeway_feat_ApplicationTypeProperty__derived__property {
+type causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeProperty__gql_meta {
+type causeway_feat_ApplicationTypeProperty__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationTypeProperty__maxLength__property {
+type causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property {
   disabled: String
   get: Int
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeProperty__memberName__property {
+type causeway_feat_ApplicationTypeProperty__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeProperty__namespaceName__property {
+type causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeProperty__parent__property {
+type causeway_feat_ApplicationTypeProperty__parent__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeProperty__returnType__property {
-  disabled: String
-  get: String!
-  hidden: Boolean
-}
-
-type causeway_feat_ApplicationTypeProperty__typeSimpleName__property {
+type causeway_feat_ApplicationTypeProperty__returnType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationTypeProperty__typicalLength__property {
+type causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property {
+  disabled: String
+  get: String!
+  hidden: Boolean
+}
+
+type causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property {
   disabled: String
   get: Int
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationType__actions__collection {
+type causeway_feat_ApplicationType__actions__gqlv_collection {
   disabled: String
   get: [causeway_feat_ApplicationTypeAction]
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationType__collections__collection {
+type causeway_feat_ApplicationType__collections__gqlv_collection {
   disabled: String
   get: [causeway_feat_ApplicationTypeCollection]
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationType__gql_meta {
+type causeway_feat_ApplicationType__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_feat_ApplicationType__memberName__property {
+type causeway_feat_ApplicationType__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationType__namespaceName__property {
+type causeway_feat_ApplicationType__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationType__parent__property {
+type causeway_feat_ApplicationType__parent__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationType__properties__collection {
+type causeway_feat_ApplicationType__properties__gqlv_collection {
   disabled: String
   get: [causeway_feat_ApplicationTypeProperty]
   hidden: Boolean
 }
 
-type causeway_feat_ApplicationType__typeSimpleName__property {
+type causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto {
-  _gql_meta: causeway_schema_metamodel_v2_DomainClassDto__gql_meta
-  actions: causeway_schema_metamodel_v2_DomainClassDto__actions__property
-  annotations: causeway_schema_metamodel_v2_DomainClassDto__annotations__property
-  collections: causeway_schema_metamodel_v2_DomainClassDto__collections__property
-  facets: causeway_schema_metamodel_v2_DomainClassDto__facets__property
-  id: causeway_schema_metamodel_v2_DomainClassDto__id__property
-  majorVersion: causeway_schema_metamodel_v2_DomainClassDto__majorVersion__property
-  minorVersion: causeway_schema_metamodel_v2_DomainClassDto__minorVersion__property
-  properties: causeway_schema_metamodel_v2_DomainClassDto__properties__property
-  service: causeway_schema_metamodel_v2_DomainClassDto__service__property
+  _gql_meta: causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta
+  actions: causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property
+  annotations: causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property
+  collections: causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property
+  facets: causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property
+  id: causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property
+  majorVersion: causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property
+  minorVersion: causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property
+  properties: causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property
+  service: causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__actions__property {
+type causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__annotations__property {
+type causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__collections__property {
+type causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__facets__property {
+type causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__gql_meta {
+type causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__id__property {
+type causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__majorVersion__property {
+type causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__minorVersion__property {
+type causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__properties__property {
+type causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_schema_metamodel_v2_DomainClassDto__service__property {
+type causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
 type causeway_security_LoginRedirect {
-  _gql_meta: causeway_security_LoginRedirect__gql_meta
+  _gql_meta: causeway_security_LoginRedirect__gqlv_meta
 }
 
-type causeway_security_LoginRedirect__gql_meta {
+type causeway_security_LoginRedirect__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type causeway_security_LogoutMenu {
-  logout: causeway_security_LogoutMenu__logout__action
+  logout: causeway_security_LogoutMenu__logout__gqlv_action
 }
 
-type causeway_security_LogoutMenu__logout__action {
+type causeway_security_LogoutMenu__logout__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: String
 }
 
 type causeway_testing_fixtures_FixtureResult {
-  _gql_meta: causeway_testing_fixtures_FixtureResult__gql_meta
-  className: causeway_testing_fixtures_FixtureResult__className__property
-  fixtureScriptClassName: causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__property
-  key: causeway_testing_fixtures_FixtureResult__key__property
-  object: causeway_testing_fixtures_FixtureResult__object__property
+  _gql_meta: causeway_testing_fixtures_FixtureResult__gqlv_meta
+  className: causeway_testing_fixtures_FixtureResult__className__gqlv_property
+  fixtureScriptClassName: causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_property
+  key: causeway_testing_fixtures_FixtureResult__key__gqlv_property
+  object: causeway_testing_fixtures_FixtureResult__object__gqlv_property
 }
 
-type causeway_testing_fixtures_FixtureResult__className__property {
+type causeway_testing_fixtures_FixtureResult__className__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__property {
+type causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
-type causeway_testing_fixtures_FixtureResult__gql_meta {
+type causeway_testing_fixtures_FixtureResult__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type causeway_testing_fixtures_FixtureResult__key__property {
+type causeway_testing_fixtures_FixtureResult__key__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type causeway_testing_fixtures_FixtureResult__object__property {
+type causeway_testing_fixtures_FixtureResult__object__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
 type java_lang_Runnable {
-  _gql_meta: java_lang_Runnable__gql_meta
+  _gql_meta: java_lang_Runnable__gqlv_meta
 }
 
-type java_lang_Runnable__gql_meta {
+type java_lang_Runnable__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_Map {
-  _gql_meta: java_util_Map__gql_meta
+  _gql_meta: java_util_Map__gqlv_meta
 }
 
-type java_util_Map__gql_meta {
+type java_util_Map__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_SortedMap {
-  _gql_meta: java_util_SortedMap__gql_meta
+  _gql_meta: java_util_SortedMap__gqlv_meta
 }
 
-type java_util_SortedMap__gql_meta {
+type java_util_SortedMap__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_concurrent_Callable {
-  _gql_meta: java_util_concurrent_Callable__gql_meta
+  _gql_meta: java_util_concurrent_Callable__gqlv_meta
 }
 
-type java_util_concurrent_Callable__gql_meta {
+type java_util_concurrent_Callable__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_function_BiFunction {
-  _gql_meta: java_util_function_BiFunction__gql_meta
+  _gql_meta: java_util_function_BiFunction__gqlv_meta
 }
 
-type java_util_function_BiFunction__gql_meta {
+type java_util_function_BiFunction__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_function_Consumer {
-  _gql_meta: java_util_function_Consumer__gql_meta
+  _gql_meta: java_util_function_Consumer__gqlv_meta
 }
 
-type java_util_function_Consumer__gql_meta {
+type java_util_function_Consumer__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_function_Function {
-  _gql_meta: java_util_function_Function__gql_meta
+  _gql_meta: java_util_function_Function__gqlv_meta
 }
 
-type java_util_function_Function__gql_meta {
+type java_util_function_Function__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type java_util_stream_Stream {
-  _gql_meta: java_util_stream_Stream__gql_meta
+  _gql_meta: java_util_stream_Stream__gqlv_meta
 }
 
-type java_util_stream_Stream__gql_meta {
+type java_util_stream_Stream__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
 type org_apache_causeway_commons_functional_Either {
-  _gql_meta: org_apache_causeway_commons_functional_Either__gql_meta
-  _gql_mutations: org_apache_causeway_commons_functional_Either__gql_mutations
-  left: org_apache_causeway_commons_functional_Either__left__property
-  right: org_apache_causeway_commons_functional_Either__right__property
+  _gql_meta: org_apache_causeway_commons_functional_Either__gqlv_meta
+  accept: org_apache_causeway_commons_functional_Either__accept__gqlv_action
+  left: org_apache_causeway_commons_functional_Either__left__gqlv_action
+  map: org_apache_causeway_commons_functional_Either__map__gqlv_action
+  mapLeft: org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action
+  mapRight: org_apache_causeway_commons_functional_Either__mapRight__gqlv_action
+  right: org_apache_causeway_commons_functional_Either__right__gqlv_action
 }
 
-type org_apache_causeway_commons_functional_Either__accept__action {
+type org_apache_causeway_commons_functional_Either__accept__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(leftConsumer: java_util_function_Consumer__gql_input!, rightConsumer: java_util_function_Consumer__gql_input!): String
+  invokeNonIdempotent(leftConsumer: java_util_function_Consumer__gqlv_input!, rightConsumer: java_util_function_Consumer__gqlv_input!): String
 }
 
-type org_apache_causeway_commons_functional_Either__gql_meta {
+type org_apache_causeway_commons_functional_Either__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_Either__gql_mutations {
-  accept: org_apache_causeway_commons_functional_Either__accept__action
-  left: org_apache_causeway_commons_functional_Either__left__action
-  map: org_apache_causeway_commons_functional_Either__map__action
-  mapLeft: org_apache_causeway_commons_functional_Either__mapLeft__action
-  mapRight: org_apache_causeway_commons_functional_Either__mapRight__action
-  right: org_apache_causeway_commons_functional_Either__right__action
-}
-
-type org_apache_causeway_commons_functional_Either__left__action {
+type org_apache_causeway_commons_functional_Either__left__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invokeNonIdempotent: String
 }
 
-type org_apache_causeway_commons_functional_Either__left__property {
+type org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action {
   disabled: String
-  get: Boolean!
   hidden: Boolean
+  invokeNonIdempotent(leftMapper: java_util_function_Function__gqlv_input!): org_apache_causeway_commons_functional_Either
 }
 
-type org_apache_causeway_commons_functional_Either__mapLeft__action {
+type org_apache_causeway_commons_functional_Either__mapRight__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(leftMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
+  invokeNonIdempotent(rightMapper: java_util_function_Function__gqlv_input!): org_apache_causeway_commons_functional_Either
 }
 
-type org_apache_causeway_commons_functional_Either__mapRight__action {
+type org_apache_causeway_commons_functional_Either__map__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(rightMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
+  invokeNonIdempotent(leftMapper: java_util_function_Function__gqlv_input!, rightMapper: java_util_function_Function__gqlv_input!): org_apache_causeway_commons_functional_Either
 }
 
-type org_apache_causeway_commons_functional_Either__map__action {
+type org_apache_causeway_commons_functional_Either__right__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(leftMapper: java_util_function_Function__gql_input!, rightMapper: java_util_function_Function__gql_input!): org_apache_causeway_commons_functional_Either
-}
-
-type org_apache_causeway_commons_functional_Either__right__action {
-  disabled: String
-  hidden: Boolean
-  invoke: String
-}
-
-type org_apache_causeway_commons_functional_Either__right__property {
-  disabled: String
-  get: Boolean!
-  hidden: Boolean
+  invokeNonIdempotent: String
 }
 
 type org_apache_causeway_commons_functional_Railway {
-  _gql_meta: org_apache_causeway_commons_functional_Railway__gql_meta
-  _gql_mutations: org_apache_causeway_commons_functional_Railway__gql_mutations
-  failure: org_apache_causeway_commons_functional_Railway__failure__property
-  success: org_apache_causeway_commons_functional_Railway__success__property
+  _gql_meta: org_apache_causeway_commons_functional_Railway__gqlv_meta
+  chain: org_apache_causeway_commons_functional_Railway__chain__gqlv_action
+  failure: org_apache_causeway_commons_functional_Railway__failure__gqlv_property
+  ifFailure: org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action
+  ifSuccess: org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action
+  mapFailure: org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action
+  mapSuccess: org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action
+  success: org_apache_causeway_commons_functional_Railway__success__gqlv_property
 }
 
-type org_apache_causeway_commons_functional_Railway__chain__action {
+type org_apache_causeway_commons_functional_Railway__chain__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
+  invokeNonIdempotent(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
 }
 
-type org_apache_causeway_commons_functional_Railway__failure__property {
+type org_apache_causeway_commons_functional_Railway__failure__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type org_apache_causeway_commons_functional_Railway__gql_meta {
+type org_apache_causeway_commons_functional_Railway__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_Railway__gql_mutations {
-  chain: org_apache_causeway_commons_functional_Railway__chain__action
-  ifFailure: org_apache_causeway_commons_functional_Railway__ifFailure__action
-  ifSuccess: org_apache_causeway_commons_functional_Railway__ifSuccess__action
-  mapFailure: org_apache_causeway_commons_functional_Railway__mapFailure__action
-  mapSuccess: org_apache_causeway_commons_functional_Railway__mapSuccess__action
-}
-
-type org_apache_causeway_commons_functional_Railway__ifFailure__action {
+type org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Railway
+  invokeNonIdempotent(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Railway
 }
 
-type org_apache_causeway_commons_functional_Railway__ifSuccess__action {
+type org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Railway
+  invokeNonIdempotent(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Railway
 }
 
-type org_apache_causeway_commons_functional_Railway__mapFailure__action {
+type org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
+  invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
 }
 
-type org_apache_causeway_commons_functional_Railway__mapSuccess__action {
+type org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Railway
+  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
 }
 
-type org_apache_causeway_commons_functional_Railway__success__property {
+type org_apache_causeway_commons_functional_Railway__success__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingConsumer__gql_meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations
+  _gql_meta: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta
+  andThen: org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action
+  throwing: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action
 }
 
-type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__action {
+type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(arg0: java_util_function_Consumer__gql_input!): java_util_function_Consumer
+  invokeNonIdempotent(arg0: java_util_function_Consumer__gqlv_input!): java_util_function_Consumer
 }
 
-type org_apache_causeway_commons_functional_ThrowingConsumer__gql_meta {
+type org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_ThrowingConsumer__gql_mutations {
-  andThen: org_apache_causeway_commons_functional_ThrowingConsumer__andThen__action
-  throwing: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__action
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__action {
+type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(exceptionWrapper: java_util_function_BiFunction__gql_input!): org_apache_causeway_commons_functional_ThrowingConsumer
+  invokeNonIdempotent(exceptionWrapper: java_util_function_BiFunction__gqlv_input!): org_apache_causeway_commons_functional_ThrowingConsumer
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingFunction__gql_meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations
+  _gql_meta: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta
+  andThen: org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action
+  compose: org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action
+  throwing: org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action
 }
 
-type org_apache_causeway_commons_functional_ThrowingFunction__andThen__action {
+type org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(arg0: java_util_function_Function__gql_input!): java_util_function_Function
+  invokeNonIdempotent(arg0: java_util_function_Function__gqlv_input!): java_util_function_Function
 }
 
-type org_apache_causeway_commons_functional_ThrowingFunction__compose__action {
+type org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(arg0: java_util_function_Function__gql_input!): java_util_function_Function
+  invokeNonIdempotent(arg0: java_util_function_Function__gqlv_input!): java_util_function_Function
 }
 
-type org_apache_causeway_commons_functional_ThrowingFunction__gql_meta {
+type org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_ThrowingFunction__gql_mutations {
-  andThen: org_apache_causeway_commons_functional_ThrowingFunction__andThen__action
-  compose: org_apache_causeway_commons_functional_ThrowingFunction__compose__action
-  throwing: org_apache_causeway_commons_functional_ThrowingFunction__throwing__action
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__throwing__action {
+type org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(exceptionWrapper: java_util_function_BiFunction__gql_input!): org_apache_causeway_commons_functional_ThrowingFunction
+  invokeNonIdempotent(exceptionWrapper: java_util_function_BiFunction__gqlv_input!): org_apache_causeway_commons_functional_ThrowingFunction
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingRunnable__gql_meta
-  _gql_mutations: org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations
+  _gql_meta: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_meta
+  callUncatched: org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched__gqlv_action
+  run: org_apache_causeway_commons_functional_ThrowingRunnable__run__gqlv_action
+  runUncatched: org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched__gqlv_action
+  toCallable: org_apache_causeway_commons_functional_ThrowingRunnable__toCallable__gqlv_action
+  toRunnable: org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable__gqlv_action
 }
 
-type org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched__action {
+type org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invokeNonIdempotent: String
 }
 
-type org_apache_causeway_commons_functional_ThrowingRunnable__gql_meta {
+type org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_ThrowingRunnable__gql_mutations {
-  callUncatched: org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched__action
-  run: org_apache_causeway_commons_functional_ThrowingRunnable__run__action
-  runUncatched: org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched__action
-  toCallable: org_apache_causeway_commons_functional_ThrowingRunnable__toCallable__action
-  toRunnable: org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable__action
-}
-
-type org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched__action {
+type org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invokeNonIdempotent: String
 }
 
-type org_apache_causeway_commons_functional_ThrowingRunnable__run__action {
+type org_apache_causeway_commons_functional_ThrowingRunnable__run__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invokeNonIdempotent: String
 }
 
-type org_apache_causeway_commons_functional_ThrowingRunnable__toCallable__action {
+type org_apache_causeway_commons_functional_ThrowingRunnable__toCallable__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: java_util_concurrent_Callable
+  invokeNonIdempotent: java_util_concurrent_Callable
 }
 
-type org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable__action {
+type org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: java_lang_Runnable
+  invokeNonIdempotent: java_lang_Runnable
 }
 
 type org_apache_causeway_commons_functional_Try {
-  _gql_meta: org_apache_causeway_commons_functional_Try__gql_meta
-  _gql_mutations: org_apache_causeway_commons_functional_Try__gql_mutations
-  failure: org_apache_causeway_commons_functional_Try__failure__property
-  success: org_apache_causeway_commons_functional_Try__success__property
-  value: org_apache_causeway_commons_functional_Try__value__property
+  _gql_meta: org_apache_causeway_commons_functional_Try__gqlv_meta
+  accept: org_apache_causeway_commons_functional_Try__accept__gqlv_action
+  failure: org_apache_causeway_commons_functional_Try__failure__gqlv_property
+  flatMapSuccess: org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action
+  flatMapSuccessAsNullable: org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action
+  flatMapSuccessWhenPresent: org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action
+  ifAbsentFail: org_apache_causeway_commons_functional_Try__ifAbsentFail__gqlv_action
+  ifFailure: org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action
+  ifFailureFail: org_apache_causeway_commons_functional_Try__ifFailureFail__gqlv_action
+  ifSuccess: org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action
+  ifSuccessAsNullable: org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action
+  mapEmptyToFailure: org_apache_causeway_commons_functional_Try__mapEmptyToFailure__gqlv_action
+  mapFailure: org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action
+  mapFailureToSuccess: org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action
+  mapSuccess: org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action
+  mapSuccessAsNullable: org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action
+  mapSuccessWhenPresent: org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action
+  mapToEither: org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action
+  orCall: org_apache_causeway_commons_functional_Try__orCall__gqlv_action
+  success: org_apache_causeway_commons_functional_Try__success__gqlv_property
+  then: org_apache_causeway_commons_functional_Try__then__gqlv_action
+  thenCall: org_apache_causeway_commons_functional_Try__thenCall__gqlv_action
+  thenRun: org_apache_causeway_commons_functional_Try__thenRun__gqlv_action
+  value: org_apache_causeway_commons_functional_Try__value__gqlv_property
 }
 
-type org_apache_causeway_commons_functional_Try__accept__action {
+type org_apache_causeway_commons_functional_Try__accept__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__failure__property {
+type org_apache_causeway_commons_functional_Try__failure__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__action {
+type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__action {
+type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__flatMapSuccess__action {
+type org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__gql_meta {
+type org_apache_causeway_commons_functional_Try__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_Try__gql_mutations {
-  accept: org_apache_causeway_commons_functional_Try__accept__action
-  flatMapSuccess: org_apache_causeway_commons_functional_Try__flatMapSuccess__action
-  flatMapSuccessAsNullable: org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__action
-  flatMapSuccessWhenPresent: org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__action
-  ifAbsentFail: org_apache_causeway_commons_functional_Try__ifAbsentFail__action
-  ifFailure: org_apache_causeway_commons_functional_Try__ifFailure__action
-  ifFailureFail: org_apache_causeway_commons_functional_Try__ifFailureFail__action
-  ifSuccess: org_apache_causeway_commons_functional_Try__ifSuccess__action
-  ifSuccessAsNullable: org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__action
-  mapEmptyToFailure: org_apache_causeway_commons_functional_Try__mapEmptyToFailure__action
-  mapFailure: org_apache_causeway_commons_functional_Try__mapFailure__action
-  mapFailureToSuccess: org_apache_causeway_commons_functional_Try__mapFailureToSuccess__action
-  mapSuccess: org_apache_causeway_commons_functional_Try__mapSuccess__action
-  mapSuccessAsNullable: org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__action
-  mapSuccessWhenPresent: org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__action
-  mapToEither: org_apache_causeway_commons_functional_Try__mapToEither__action
-  orCall: org_apache_causeway_commons_functional_Try__orCall__action
-  then: org_apache_causeway_commons_functional_Try__then__action
-  thenCall: org_apache_causeway_commons_functional_Try__thenCall__action
-  thenRun: org_apache_causeway_commons_functional_Try__thenRun__action
-}
-
-type org_apache_causeway_commons_functional_Try__ifAbsentFail__action {
+type org_apache_causeway_commons_functional_Try__ifAbsentFail__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent: org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__ifFailureFail__action {
+type org_apache_causeway_commons_functional_Try__ifFailureFail__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent: org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__ifFailure__action {
+type org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__action {
+type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__ifSuccess__action {
+type org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__mapEmptyToFailure__action {
+type org_apache_causeway_commons_functional_Try__mapEmptyToFailure__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent: org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__action {
+type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__mapFailure__action {
+type org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__action {
+type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__action {
+type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__mapSuccess__action {
+type org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__mapToEither__action {
+type org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gql_input!): org_apache_causeway_commons_functional_Either
+  invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Either
 }
 
-type org_apache_causeway_commons_functional_Try__orCall__action {
+type org_apache_causeway_commons_functional_Try__orCall__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(fallback: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(fallback: java_util_concurrent_Callable__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__success__property {
+type org_apache_causeway_commons_functional_Try__success__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type org_apache_causeway_commons_functional_Try__thenCall__action {
+type org_apache_causeway_commons_functional_Try__thenCall__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(callable: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(callable: java_util_concurrent_Callable__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__thenRun__action {
+type org_apache_causeway_commons_functional_Try__thenRun__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__then__action {
+type org_apache_causeway_commons_functional_Try__then__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(next: java_util_concurrent_Callable__gql_input!): org_apache_causeway_commons_functional_Try
+  invokeNonIdempotent(next: java_util_concurrent_Callable__gqlv_input!): org_apache_causeway_commons_functional_Try
 }
 
-type org_apache_causeway_commons_functional_Try__value__property {
+type org_apache_causeway_commons_functional_Try__value__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode {
-  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta
-  childNodes: org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__collection
-  parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__property
+  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta
+  childNodes: org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_collection
+  parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__collection {
+type org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_meta {
+type org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__property {
+type org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property {
   disabled: String
   hidden: Boolean
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode {
-  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_meta
-  _gql_mutations: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations
-  childNodes: org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__collection
-  mixedIn: org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__property
-  parentNode: org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__property
+  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta
+  childNodes: org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gqlv_collection
+  mixedIn: org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property
+  parentNode: org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property
+  streamChildNodes: org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes__gqlv_action
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__collection {
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gqlv_collection {
   disabled: String
   hidden: Boolean
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_meta {
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_mutations {
-  streamChildNodes: org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes__action
-}
-
-type org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__property {
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__property {
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property {
   disabled: String
   get: causeway_applib_TypeNode!
   hidden: Boolean
 }
 
-type org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes__action {
+type org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: java_util_stream_Stream
+  invokeNonIdempotent: java_util_stream_Stream
 }
 
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
-  _gql_meta: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_meta
-  friendlyName: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__property
-  qualifiedName: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__property
+  _gql_meta: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta
+  friendlyName: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__gqlv_property
+  qualifiedName: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__gqlv_property
 }
 
-type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__property {
+type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_meta {
+type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
   id: String!
   logicalTypeName: String!
 }
 
-type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__property {
+type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
 type university_admin_AdminMenu {
-  _gql_mutations: university_admin_AdminMenu__gql_mutations
+  adminAction: university_admin_AdminMenu__adminAction__gqlv_action
+  otherAdminAction: university_admin_AdminMenu__otherAdminAction__gqlv_action
 }
 
-type university_admin_AdminMenu__adminAction__action {
+type university_admin_AdminMenu__adminAction__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invokeNonIdempotent: String
 }
 
-type university_admin_AdminMenu__gql_mutations {
-  adminAction: university_admin_AdminMenu__adminAction__action
-  otherAdminAction: university_admin_AdminMenu__otherAdminAction__action
-}
-
-type university_admin_AdminMenu__otherAdminAction__action {
+type university_admin_AdminMenu__otherAdminAction__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invokeNonIdempotent: String
 }
 
 type university_dept_Department {
-  _gql_meta: university_dept_Department__gql_meta
-  deptHead: university_dept_Department__deptHead__property
-  name: university_dept_Department__name__property
-  staffMembers: university_dept_Department__staffMembers__collection
+  _gql_meta: university_dept_Department__gqlv_meta
+  deptHead: university_dept_Department__deptHead__gqlv_property
+  name: university_dept_Department__name__gqlv_property
+  staffMembers: university_dept_Department__staffMembers__gqlv_collection
 }
 
-type university_dept_Department__deptHead__property {
+type university_dept_Department__deptHead__gqlv_property {
   disabled: String
   get: university_dept_DeptHead
   hidden: Boolean
 }
 
-type university_dept_Department__gql_meta {
+type university_dept_Department__gqlv_meta {
   id: String!
   logicalTypeName: String!
   version: String
 }
 
-type university_dept_Department__name__property {
+type university_dept_Department__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-type university_dept_Department__staffMembers__collection {
+type university_dept_Department__staffMembers__gqlv_collection {
   disabled: String
   get: [university_dept_StaffMember]
   hidden: Boolean
 }
 
 type university_dept_Departments {
-  _gql_mutations: university_dept_Departments__gql_mutations
-  findAllDepartments: university_dept_Departments__findAllDepartments__action
-  findByName: university_dept_Departments__findByName__action
+  createDepartment: university_dept_Departments__createDepartment__gqlv_action
+  findAllDepartments: university_dept_Departments__findAllDepartments__gqlv_action
+  findByName: university_dept_Departments__findByName__gqlv_action
 }
 
-type university_dept_Departments__createDepartment__action {
+type university_dept_Departments__createDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(deptHead: university_dept_DeptHead__gql_input, name: String!): university_dept_Department
+  invokeNonIdempotent(deptHead: university_dept_DeptHead__gqlv_input, name: String!): university_dept_Department
 }
 
-type university_dept_Departments__findAllDepartments__action {
+type university_dept_Departments__findAllDepartments__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: [university_dept_Department]
 }
 
-type university_dept_Departments__findByName__action {
+type university_dept_Departments__findByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_Department
 }
 
-type university_dept_Departments__gql_mutations {
-  createDepartment: university_dept_Departments__createDepartment__action
-}
-
 type university_dept_DeptHead {
-  _gql_meta: university_dept_DeptHead__gql_meta
-  _gql_mutations: university_dept_DeptHead__gql_mutations
-  department: university_dept_DeptHead__department__property
-  name: university_dept_DeptHead__name__property
+  _gql_meta: university_dept_DeptHead__gqlv_meta
+  changeDepartment: university_dept_DeptHead__changeDepartment__gqlv_action
+  changeName: university_dept_DeptHead__changeName__gqlv_action
+  department: university_dept_DeptHead__department__gqlv_property
+  name: university_dept_DeptHead__name__gqlv_property
 }
 
-type university_dept_DeptHead__changeDepartment__action {
+type university_dept_DeptHead__changeDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(department: university_dept_Department__gql_input!): university_dept_DeptHead
+  invokeIdempotent(department: university_dept_Department__gqlv_input!): university_dept_DeptHead
 }
 
-type university_dept_DeptHead__changeName__action {
+type university_dept_DeptHead__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(newName: String!): university_dept_DeptHead
+  invokeIdempotent(newName: String!): university_dept_DeptHead
 }
 
-type university_dept_DeptHead__department__property {
+type university_dept_DeptHead__department__gqlv_property {
   disabled: String
   get: university_dept_Department
   hidden: Boolean
 }
 
-type university_dept_DeptHead__gql_meta {
+type university_dept_DeptHead__gqlv_meta {
   id: String!
   logicalTypeName: String!
   version: String
 }
 
-type university_dept_DeptHead__gql_mutations {
-  changeDepartment: university_dept_DeptHead__changeDepartment__action
-  changeName: university_dept_DeptHead__changeName__action
-}
-
-type university_dept_DeptHead__name__property {
+type university_dept_DeptHead__name__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
 }
 
 type university_dept_DeptHeads {
-  findAllHeads: university_dept_DeptHeads__findAllHeads__action
-  findHeadByName: university_dept_DeptHeads__findHeadByName__action
+  findAllHeads: university_dept_DeptHeads__findAllHeads__gqlv_action
+  findHeadByName: university_dept_DeptHeads__findHeadByName__gqlv_action
 }
 
-type university_dept_DeptHeads__findAllHeads__action {
+type university_dept_DeptHeads__findAllHeads__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: [university_dept_DeptHead]
 }
 
-type university_dept_DeptHeads__findHeadByName__action {
+type university_dept_DeptHeads__findHeadByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_DeptHead
 }
 
 type university_dept_StaffMember {
-  _gql_meta: university_dept_StaffMember__gql_meta
-  department: university_dept_StaffMember__department__property
-  name: university_dept_StaffMember__name__property
+  _gql_meta: university_dept_StaffMember__gqlv_meta
+  department: university_dept_StaffMember__department__gqlv_property
+  name: university_dept_StaffMember__name__gqlv_property
 }
 
 type university_dept_StaffMemberMenu {
-  _gql_mutations: university_dept_StaffMemberMenu__gql_mutations
-  findAllStaffMembers: university_dept_StaffMemberMenu__findAllStaffMembers__action
+  createStaffMember: university_dept_StaffMemberMenu__createStaffMember__gqlv_action
+  findAllStaffMembers: university_dept_StaffMemberMenu__findAllStaffMembers__gqlv_action
 }
 
-type university_dept_StaffMemberMenu__createStaffMember__action {
+type university_dept_StaffMemberMenu__createStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(department: university_dept_Department__gql_input!, name: String!): university_dept_StaffMember
+  invokeNonIdempotent(department: university_dept_Department__gqlv_input!, name: String!): university_dept_StaffMember
 }
 
-type university_dept_StaffMemberMenu__findAllStaffMembers__action {
+type university_dept_StaffMemberMenu__findAllStaffMembers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: [university_dept_StaffMember]
 }
 
-type university_dept_StaffMemberMenu__gql_mutations {
-  createStaffMember: university_dept_StaffMemberMenu__createStaffMember__action
-}
-
-type university_dept_StaffMember__department__property {
+type university_dept_StaffMember__department__gqlv_property {
   disabled: String
   get: university_dept_Department
   hidden: Boolean
 }
 
-type university_dept_StaffMember__gql_meta {
+type university_dept_StaffMember__gqlv_meta {
   id: String!
   logicalTypeName: String!
   version: String
 }
 
-type university_dept_StaffMember__name__property {
+type university_dept_StaffMember__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
 }
 
-input causeway_applib_DomainObjectList__gql_input {
+input causeway_applib_DomainObjectList__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_FacetGroupNode__gql_input {
+input causeway_applib_FacetGroupNode__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_ParameterNode__gql_input {
+input causeway_applib_ParameterNode__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_PropertyNode__gql_input {
+input causeway_applib_PropertyNode__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_RoleMemento__gql_input {
+input causeway_applib_RoleMemento__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_TypeNode__gql_input {
+input causeway_applib_TypeNode__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_UserMemento__gql_input {
+input causeway_applib_UserMemento__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_node_ActionNode__gql_input {
+input causeway_applib_node_ActionNode__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_node_CollectionNode__gql_input {
+input causeway_applib_node_CollectionNode__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_node_FacetAttrNode__gql_input {
+input causeway_applib_node_FacetAttrNode__gqlv_input {
   id: ID!
 }
 
-input causeway_applib_node_FacetNode__gql_input {
+input causeway_applib_node_FacetNode__gqlv_input {
   id: ID!
 }
 
-input causeway_conf_ConfigurationProperty__gql_input {
+input causeway_conf_ConfigurationProperty__gqlv_input {
   id: ID!
 }
 
-input causeway_conf_ConfigurationViewmodel__gql_input {
+input causeway_conf_ConfigurationViewmodel__gqlv_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationFeatureViewModel__gql_input {
+input causeway_feat_ApplicationFeatureViewModel__gqlv_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationNamespace__gql_input {
+input causeway_feat_ApplicationNamespace__gqlv_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationTypeAction__gql_input {
+input causeway_feat_ApplicationTypeAction__gqlv_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationTypeCollection__gql_input {
+input causeway_feat_ApplicationTypeCollection__gqlv_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationTypeMember__gql_input {
+input causeway_feat_ApplicationTypeMember__gqlv_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationTypeProperty__gql_input {
+input causeway_feat_ApplicationTypeProperty__gqlv_input {
   id: ID!
 }
 
-input causeway_feat_ApplicationType__gql_input {
+input causeway_feat_ApplicationType__gqlv_input {
   id: ID!
 }
 
-input causeway_schema_metamodel_v2_DomainClassDto__gql_input {
+input causeway_schema_metamodel_v2_DomainClassDto__gqlv_input {
   id: ID!
 }
 
-input causeway_security_LoginRedirect__gql_input {
+input causeway_security_LoginRedirect__gqlv_input {
   id: ID!
 }
 
-input causeway_testing_fixtures_FixtureResult__gql_input {
+input causeway_testing_fixtures_FixtureResult__gqlv_input {
   id: ID!
 }
 
-input java_lang_Runnable__gql_input {
+input java_lang_Runnable__gqlv_input {
   id: ID!
 }
 
-input java_util_Map__gql_input {
+input java_util_Map__gqlv_input {
   id: ID!
 }
 
-input java_util_SortedMap__gql_input {
+input java_util_SortedMap__gqlv_input {
   id: ID!
 }
 
-input java_util_concurrent_Callable__gql_input {
+input java_util_concurrent_Callable__gqlv_input {
   id: ID!
 }
 
-input java_util_function_BiFunction__gql_input {
+input java_util_function_BiFunction__gqlv_input {
   id: ID!
 }
 
-input java_util_function_Consumer__gql_input {
+input java_util_function_Consumer__gqlv_input {
   id: ID!
 }
 
-input java_util_function_Function__gql_input {
+input java_util_function_Function__gqlv_input {
   id: ID!
 }
 
-input java_util_stream_Stream__gql_input {
+input java_util_stream_Stream__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_Either__gql_input {
+input org_apache_causeway_commons_functional_Either__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_Railway__gql_input {
+input org_apache_causeway_commons_functional_Railway__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_ThrowingConsumer__gql_input {
+input org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_ThrowingFunction__gql_input {
+input org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_ThrowingRunnable__gql_input {
+input org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_commons_functional_Try__gql_input {
+input org_apache_causeway_commons_functional_Try__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_core_metamodel_inspect_model_MMNode__gql_input {
+input org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_core_metamodel_inspect_model_MemberNode__gql_input {
+input org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input {
   id: ID!
 }
 
-input org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gql_input {
+input org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
   id: ID!
 }
 
-input university_dept_Department__gql_input {
+input university_dept_Department__gqlv_input {
   id: ID!
 }
 
-input university_dept_DeptHead__gql_input {
+input university_dept_DeptHead__gqlv_input {
   id: ID!
 }
 
-input university_dept_StaffMember__gql_input {
+input university_dept_StaffMember__gqlv_input {
   id: ID!
 }

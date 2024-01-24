@@ -2,12 +2,10 @@
   university_dept_DeptHeads {
     findHeadByName {
       invoke(name: "foo") {
-        _gql_mutations {
-          changeName {
-            invoke(newName: "bar") {
-              name {
-                get
-              }
+        changeName {
+          invokeIdempotent(newName: "bar") {
+            name {
+              get
             }
           }
         }

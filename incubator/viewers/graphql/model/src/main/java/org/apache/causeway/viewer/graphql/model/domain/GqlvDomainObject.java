@@ -52,14 +52,13 @@ import static graphql.schema.GraphQLObjectType.newObject;
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMutationsHolder, GqlvMetaHolder {
+public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMetaHolder {
 
     @Getter private final ObjectSpecification objectSpecification;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final BookmarkService bookmarkService;
 
     private final GqlvMeta meta;
-    private final GqlvMutations mutations;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
@@ -83,7 +82,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
-        this.mutations = new GqlvMutations(this, codeRegistryBuilder, bookmarkService);
 
 
         // input object type
@@ -107,8 +105,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                     anyActions.set(true);
                     addAction(objectAction);
                 });
-
-        mutations.buildObjectTypeAndFieldIfRequired();
 
         anyActions.get();
     }
@@ -134,13 +130,9 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
     private void addAction(final ObjectAction objectAction) {
-        if (objectAction.getSemantics().isSafeInNature()) {
-            String actionId = objectAction.getId();
-            if (!safeActions.containsKey(actionId)) {
-                safeActions.put(actionId, new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
-            }
-        } else {
-            mutations.addAction(objectAction);
+        String actionId = objectAction.getId();
+        if (!safeActions.containsKey(actionId)) {
+            safeActions.put(actionId, new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
         }
     }
 
@@ -160,9 +152,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         meta.registerTypesInto(graphQLTypeRegistry);
 
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getGqlInputObjectType());
-
-        mutations.registerTypesInto(graphQLTypeRegistry);
-
     }
 
     public void addDataFetchers() {
@@ -170,7 +159,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         properties.forEach((id, property) -> property.addDataFetcher());
         collections.forEach((id, collection) -> collection.addDataFetcher());
         safeActions.forEach((id, action) -> action.addDataFetcher());
-        mutations.addDataFetchers();
     }
 
 
