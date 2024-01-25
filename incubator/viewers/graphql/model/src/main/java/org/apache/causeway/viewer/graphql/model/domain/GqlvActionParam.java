@@ -40,9 +40,9 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvActionParam {
+public class GqlvActionParam implements GqlvActionParamDisabledHolder {
 
-    private final GqlvActionHolder holder;
+    @Getter private final GqlvActionParamHolder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
@@ -50,10 +50,12 @@ public class GqlvActionParam {
     private final GraphQLObjectType gqlObjectType;
     private final BookmarkService bookmarkService;
 
-    @Setter(AccessLevel.PACKAGE) private GraphQLFieldDefinition field;
+    private final GqlvActionParamDisabled disabled;
+
+    private final GraphQLFieldDefinition field;
 
     public GqlvActionParam(
-            final GqlvActionHolder holder,
+            final GqlvActionParamHolder holder,
             final ObjectActionParameter objectActionParameter,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService
@@ -61,19 +63,18 @@ public class GqlvActionParam {
         this.holder = holder;
         this.objectActionParameter = objectActionParameter;
         this.codeRegistryBuilder = codeRegistryBuilder;
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter));
+        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getHolder().getHolder().getObjectSpecification(), objectActionParameter));
         this.bookmarkService = bookmarkService;
 
+        this.disabled = new GqlvActionParamDisabled(this, codeRegistryBuilder );
+
+        // TODO: add disabled etc
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
-        val field = newFieldDefinition()
+        this.field = holder.addField(newFieldDefinition()
                         .name(objectActionParameter.getId())
                         .type(gqlObjectTypeBuilder)
-                        .build();
-
-        holder.addField(field);
-
-        setField(field);
+                        .build());
     }
 
 

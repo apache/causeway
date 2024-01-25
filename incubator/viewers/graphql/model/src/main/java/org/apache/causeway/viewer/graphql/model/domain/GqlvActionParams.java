@@ -43,9 +43,9 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvActionParams {
+public class GqlvActionParams implements GqlvActionParamHolder {
 
-    private final GqlvActionParamsHolder holder;
+    @Getter private final GqlvActionParamsHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
@@ -69,12 +69,16 @@ public class GqlvActionParams {
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamsTypeNameFor(holder.getHolder().getObjectSpecification(), holder.getObjectAction()));
         this.bookmarkService = bookmarkService;
 
+        holder.getObjectAction().getParameters().forEach(this::addParam);
+
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
-        this.field = hasParams() ? holder.addField(newFieldDefinition()
-                .name("params")
-                .type(gqlObjectTypeBuilder)
-                .build()) : null;
+        this.field = hasParams() ?
+                holder.addField(newFieldDefinition()
+                    .name("params")
+                    .type(gqlObjectTypeBuilder)
+                    .build())
+                : null;
     }
 
     public boolean hasParams() {
@@ -82,11 +86,11 @@ public class GqlvActionParams {
     }
 
     void addParam(ObjectActionParameter objectActionParameter) {
-        // TODO
+        new GqlvActionParam(this, objectActionParameter, codeRegistryBuilder, bookmarkService);
     }
 
 
-    // @Override
+     @Override
     public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
         gqlObjectTypeBuilder.field(field);
         return field;
@@ -97,6 +101,7 @@ public class GqlvActionParams {
                 holder.coordinatesFor(field),
                 new Fetcher());
 
+        // TODO
     }
 
     private class Fetcher implements DataFetcher<Object> {
