@@ -23,8 +23,6 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -71,38 +69,15 @@ public class GqlvActionParamDisabled {
     private String disabled(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val evaluator = new Evaluator<>("Disabled") {
-
+        val evaluator = new Evaluator<String, ObjectActionParameter>("Disabled") {
             @Override
             public String evaluate(ActionInteractionHead head, ObjectActionParameter objectActionParameter, final Can<ManagedObject> argumentManagedObjects) {
                 Consent usable = objectActionParameter.isUsable(head, argumentManagedObjects, InteractionInitiatedBy.USER);
                 return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
             }
-
         };
 
-        return evaluate(holder, context, dataFetchingEnvironment, evaluator);
-    }
-
-    static <T> T evaluate(ObjectActionParameterProvider holder, Context context, DataFetchingEnvironment dataFetchingEnvironment, Evaluator<T> evaluator) {
-        final ObjectAction objectAction = holder.getObjectAction();
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-        val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = objectAction.getSpecificationLoader();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            return evaluator.unexpected();
-        }
-
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val actionInteractionHead = objectAction.interactionHead(managedObject);
-
-        val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-
-        final Can<ManagedObject> argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
-
-        return evaluator.evaluate(actionInteractionHead, objectActionParameter, argumentManagedObjects);
+        return GqlvAction.evaluate(holder, context, dataFetchingEnvironment, evaluator);
     }
 
     public interface Holder

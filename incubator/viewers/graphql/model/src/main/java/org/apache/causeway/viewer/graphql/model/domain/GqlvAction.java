@@ -25,6 +25,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
@@ -154,6 +155,53 @@ public class GqlvAction
                 .name(oneToOneActionParameter.getId())
                 .type(TypeMapper.inputTypeFor(oneToOneActionParameter, inputContext))
                 .build();
+    }
+
+    static <T> T evaluate(
+            ObjectActionProvider holder,
+            Context context,
+            DataFetchingEnvironment dataFetchingEnvironment,
+            Evaluator<T, ObjectAction> evaluator) {
+
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+        if (objectSpecification == null) {
+            return evaluator.unexpected();
+        }
+
+        val objectAction = holder.getObjectAction();
+        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        val actionInteractionHead = objectAction.interactionHead(managedObject);
+
+        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+
+        return evaluator.evaluate(actionInteractionHead, objectAction, argumentManagedObjects);
+    }
+
+    static <T> T evaluate(
+            ObjectActionParameterProvider holder,
+            Context context,
+            DataFetchingEnvironment dataFetchingEnvironment,
+            Evaluator<T, ObjectActionParameter> evaluator) {
+
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+
+        val sourcePojoClass = sourcePojo.getClass();
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        if (objectSpecification == null) {
+            return evaluator.unexpected();
+        }
+
+        val objectAction = holder.getObjectAction();
+        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        val actionInteractionHead = objectAction.interactionHead(managedObject);
+
+        val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
+
+        final Can<ManagedObject> argumentManagedObjects = argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+
+        return evaluator.evaluate(actionInteractionHead, objectActionParameter, argumentManagedObjects);
     }
 
     @Override

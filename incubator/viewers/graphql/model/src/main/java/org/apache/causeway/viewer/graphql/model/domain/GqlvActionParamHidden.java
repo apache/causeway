@@ -18,15 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
@@ -35,7 +32,6 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -71,7 +67,7 @@ public class GqlvActionParamHidden {
 
     private boolean hidden(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val evaluator = new Evaluator<>(true) {
+        val evaluator = new Evaluator<Boolean, ObjectActionParameter>(true) {
 
             @Override
             public Boolean evaluate(ActionInteractionHead head, ObjectActionParameter objectActionParameter, final Can<ManagedObject> argumentManagedObjects) {
@@ -80,7 +76,7 @@ public class GqlvActionParamHidden {
             }
         };
 
-        return GqlvActionParamDisabled.evaluate(holder, context, dataFetchingEnvironment, evaluator);
+        return GqlvAction.evaluate(holder, context, dataFetchingEnvironment, evaluator);
     }
 
     public interface Holder

@@ -20,6 +20,11 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -130,39 +135,34 @@ public class GqlvActionInvoke {
 
     private Object invoke(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getObjectAction();
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        val evaluator = new Evaluator<Object, ObjectAction>(null) {
+            @Override
+            public Object evaluate(ActionInteractionHead head, ObjectAction objectAction, final Can<ManagedObject> argumentManagedObjects) {
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = objectAction.getSpecificationLoader();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
-            return null;
-        }
+                // TODO: should also check visibility and usability
 
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val actionInteractionHead = objectAction.interactionHead(managedObject);
+                val consent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+                if (consent.isVetoed()) {
+                    throw new IllegalArgumentException(consent.getReasonAsString().orElse("Invalid"));
+                }
 
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+                val resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
 
-        val consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (consent.isVetoed()) {
-            throw new IllegalArgumentException(consent.getReasonAsString().orElse("Invalid"));
-        }
+                return resultManagedObject.getPojo();
 
-        val resultManagedObject = objectAction
-                .execute(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+            }
+        };
 
-        return resultManagedObject.getPojo();
+        return GqlvAction.evaluate(holder, context, dataFetchingEnvironment, evaluator);
+
 
     }
 
-    public interface Holder extends GqlvHolder {
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    ObjectActionProvider {
 
-        ObjectSpecification getObjectSpecification();
-
-        ObjectAction getObjectAction();
     }
 }
