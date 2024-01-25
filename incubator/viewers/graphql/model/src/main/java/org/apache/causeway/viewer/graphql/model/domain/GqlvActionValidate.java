@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -34,7 +33,6 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
 
@@ -67,7 +65,7 @@ public class GqlvActionValidate {
                     .name("validate")
                     .type(type);
 
-            GqlvAction.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE);
+            GqlvAction.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
             fieldDefinition = fieldBuilder.build();
 
             holder.addField(fieldDefinition);

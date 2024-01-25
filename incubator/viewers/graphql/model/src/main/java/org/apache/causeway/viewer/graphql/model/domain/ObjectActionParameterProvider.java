@@ -22,4 +22,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 public interface ObjectActionParameterProvider extends ObjectActionProvider {
     ObjectActionParameter getObjectActionParameter();
+
+    /**
+     * 0-based
+     */
+    int getParamNum();
 }

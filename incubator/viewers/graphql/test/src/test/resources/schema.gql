@@ -1283,13 +1283,13 @@ type org_apache_causeway_commons_functional_Either__accept__gqlv_action_params {
 }
 
 type org_apache_causeway_commons_functional_Either__accept__leftConsumer__gqlv_action_parameter {
-  disabled(leftConsumer: java_util_function_Consumer__gqlv_input, rightConsumer: java_util_function_Consumer__gqlv_input): String
-  hidden(leftConsumer: java_util_function_Consumer__gqlv_input, rightConsumer: java_util_function_Consumer__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Either__accept__rightConsumer__gqlv_action_parameter {
-  disabled(leftConsumer: java_util_function_Consumer__gqlv_input, rightConsumer: java_util_function_Consumer__gqlv_input): String
-  hidden(leftConsumer: java_util_function_Consumer__gqlv_input, rightConsumer: java_util_function_Consumer__gqlv_input): Boolean
+  disabled(leftConsumer: java_util_function_Consumer__gqlv_input): String
+  hidden(leftConsumer: java_util_function_Consumer__gqlv_input): Boolean
 }
 
 type org_apache_causeway_commons_functional_Either__gqlv_meta {
@@ -1317,8 +1317,8 @@ type org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action_params 
 }
 
 type org_apache_causeway_commons_functional_Either__mapLeft__leftMapper__gqlv_action_parameter {
-  disabled(leftMapper: java_util_function_Function__gqlv_input): String
-  hidden(leftMapper: java_util_function_Function__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Either__mapRight__gqlv_action {
@@ -1334,8 +1334,8 @@ type org_apache_causeway_commons_functional_Either__mapRight__gqlv_action_params
 }
 
 type org_apache_causeway_commons_functional_Either__mapRight__rightMapper__gqlv_action_parameter {
-  disabled(rightMapper: java_util_function_Function__gqlv_input): String
-  hidden(rightMapper: java_util_function_Function__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Either__map__gqlv_action {
@@ -1352,13 +1352,13 @@ type org_apache_causeway_commons_functional_Either__map__gqlv_action_params {
 }
 
 type org_apache_causeway_commons_functional_Either__map__leftMapper__gqlv_action_parameter {
-  disabled(leftMapper: java_util_function_Function__gqlv_input, rightMapper: java_util_function_Function__gqlv_input): String
-  hidden(leftMapper: java_util_function_Function__gqlv_input, rightMapper: java_util_function_Function__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Either__map__rightMapper__gqlv_action_parameter {
-  disabled(leftMapper: java_util_function_Function__gqlv_input, rightMapper: java_util_function_Function__gqlv_input): String
-  hidden(leftMapper: java_util_function_Function__gqlv_input, rightMapper: java_util_function_Function__gqlv_input): Boolean
+  disabled(leftMapper: java_util_function_Function__gqlv_input): String
+  hidden(leftMapper: java_util_function_Function__gqlv_input): Boolean
 }
 
 type org_apache_causeway_commons_functional_Either__right__gqlv_action {
@@ -1380,8 +1380,8 @@ type org_apache_causeway_commons_functional_Railway {
 }
 
 type org_apache_causeway_commons_functional_Railway__chain__chainingFunction__gqlv_action_parameter {
-  disabled(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Railway__chain__gqlv_action {
@@ -1410,8 +1410,8 @@ type org_apache_causeway_commons_functional_Railway__gqlv_meta {
 }
 
 type org_apache_causeway_commons_functional_Railway__ifFailure__failureConsumer__gqlv_action_parameter {
-  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action {
@@ -1439,13 +1439,13 @@ type org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action_para
 }
 
 type org_apache_causeway_commons_functional_Railway__ifSuccess__successConsumer__gqlv_action_parameter {
-  disabled(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Railway__mapFailure__failureMapper__gqlv_action_parameter {
-  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action {
@@ -1473,8 +1473,8 @@ type org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action_par
 }
 
 type org_apache_causeway_commons_functional_Railway__mapSuccess__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Railway__success__gqlv_property {
@@ -1492,8 +1492,8 @@ type org_apache_causeway_commons_functional_ThrowingConsumer {
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__arg0__gqlv_action_parameter {
-  disabled(arg0: java_util_function_Consumer__gqlv_input): String
-  hidden(arg0: java_util_function_Consumer__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action {
@@ -1514,8 +1514,8 @@ type org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta {
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__exceptionWrapper__gqlv_action_parameter {
-  disabled(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
-  hidden(exceptionWrapper: java_util_function_BiFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action {
@@ -1538,8 +1538,8 @@ type org_apache_causeway_commons_functional_ThrowingFunction {
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__andThen__arg0__gqlv_action_parameter {
-  disabled(arg0: java_util_function_Function__gqlv_input): String
-  hidden(arg0: java_util_function_Function__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action {
@@ -1555,8 +1555,8 @@ type org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_acti
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__compose__arg0__gqlv_action_parameter {
-  disabled(arg0: java_util_function_Function__gqlv_input): String
-  hidden(arg0: java_util_function_Function__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action {
@@ -1577,8 +1577,8 @@ type org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta {
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__throwing__exceptionWrapper__gqlv_action_parameter {
-  disabled(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
-  hidden(exceptionWrapper: java_util_function_BiFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action {
@@ -1670,8 +1670,8 @@ type org_apache_causeway_commons_functional_Try {
 }
 
 type org_apache_causeway_commons_functional_Try__accept__failureConsumer__gqlv_action_parameter {
-  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__accept__gqlv_action {
@@ -1688,8 +1688,8 @@ type org_apache_causeway_commons_functional_Try__accept__gqlv_action_params {
 }
 
 type org_apache_causeway_commons_functional_Try__accept__successConsumer__gqlv_action_parameter {
-  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
+  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+  hidden(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__failure__gqlv_property {
@@ -1713,8 +1713,8 @@ type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action {
@@ -1730,8 +1730,8 @@ type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action {
@@ -1747,8 +1747,8 @@ type org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action_par
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccess__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__gqlv_meta {
@@ -1771,8 +1771,8 @@ type org_apache_causeway_commons_functional_Try__ifFailureFail__gqlv_action {
 }
 
 type org_apache_causeway_commons_functional_Try__ifFailure__exceptionConsumer__gqlv_action_parameter {
-  disabled(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action {
@@ -1800,8 +1800,8 @@ type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_actio
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__valueConsumer__gqlv_action_parameter {
-  disabled(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action {
@@ -1817,8 +1817,8 @@ type org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action_params {
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccess__valueConsumer__gqlv_action_parameter {
-  disabled(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__mapEmptyToFailure__gqlv_action {
@@ -1841,13 +1841,13 @@ type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_actio
 }
 
 type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__recoveryMapper__gqlv_action_parameter {
-  disabled(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__mapFailure__failureMapper__gqlv_action_parameter {
-  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action {
@@ -1875,8 +1875,8 @@ type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_acti
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action {
@@ -1892,8 +1892,8 @@ type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_act
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action {
@@ -1909,13 +1909,13 @@ type org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action_params 
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccess__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__mapToEither__failureMapper__gqlv_action_parameter {
-  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action {
@@ -1932,13 +1932,13 @@ type org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action_params
 }
 
 type org_apache_causeway_commons_functional_Try__mapToEither__successMapper__gqlv_action_parameter {
-  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
+  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+  hidden(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__orCall__fallback__gqlv_action_parameter {
-  disabled(fallback: java_util_concurrent_Callable__gqlv_input): String
-  hidden(fallback: java_util_concurrent_Callable__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__orCall__gqlv_action {
@@ -1962,8 +1962,8 @@ type org_apache_causeway_commons_functional_Try__success__gqlv_property {
 }
 
 type org_apache_causeway_commons_functional_Try__thenCall__callable__gqlv_action_parameter {
-  disabled(callable: java_util_concurrent_Callable__gqlv_input): String
-  hidden(callable: java_util_concurrent_Callable__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__thenCall__gqlv_action {
@@ -1991,8 +1991,8 @@ type org_apache_causeway_commons_functional_Try__thenRun__gqlv_action_params {
 }
 
 type org_apache_causeway_commons_functional_Try__thenRun__runnable__gqlv_action_parameter {
-  disabled(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input): String
-  hidden(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__then__gqlv_action {
@@ -2008,8 +2008,8 @@ type org_apache_causeway_commons_functional_Try__then__gqlv_action_params {
 }
 
 type org_apache_causeway_commons_functional_Try__then__next__gqlv_action_parameter {
-  disabled(next: java_util_concurrent_Callable__gqlv_input): String
-  hidden(next: java_util_concurrent_Callable__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type org_apache_causeway_commons_functional_Try__value__gqlv_property {
@@ -2118,8 +2118,8 @@ type university_admin_AdminMenu {
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter {
-  disabled(firstParam: String, secondParam: String, thirdParameter: String): String
-  hidden(firstParam: String, secondParam: String, thirdParameter: String): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
@@ -2137,18 +2137,18 @@ type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params {
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter {
-  disabled(firstParam: String, secondParam: String, thirdParameter: String): String
-  hidden(firstParam: String, secondParam: String, thirdParameter: String): Boolean
+  disabled(firstParam: String): String
+  hidden(firstParam: String): Boolean
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter {
-  disabled(firstParam: String, secondParam: String, thirdParameter: String): String
-  hidden(firstParam: String, secondParam: String, thirdParameter: String): Boolean
+  disabled(firstParam: String, secondParam: String): String
+  hidden(firstParam: String, secondParam: String): Boolean
 }
 
 type university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter {
-  disabled(firstParam: String, secondParam: String): String
-  hidden(firstParam: String, secondParam: String): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
@@ -2165,8 +2165,8 @@ type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params {
 }
 
 type university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter {
-  disabled(firstParam: String, secondParam: String): String
-  hidden(firstParam: String, secondParam: String): Boolean
+  disabled(firstParam: String): String
+  hidden(firstParam: String): Boolean
 }
 
 type university_admin_AdminMenu__adminAction__gqlv_action {
@@ -2225,8 +2225,8 @@ type university_dept_Departments {
 }
 
 type university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
-  disabled(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
-  hidden(deptHead: university_dept_DeptHead__gqlv_input, name: String): Boolean
+  disabled(name: String): String
+  hidden(name: String): Boolean
 }
 
 type university_dept_Departments__createDepartment__gqlv_action {
@@ -2243,8 +2243,8 @@ type university_dept_Departments__createDepartment__gqlv_action_params {
 }
 
 type university_dept_Departments__createDepartment__name__gqlv_action_parameter {
-  disabled(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
-  hidden(deptHead: university_dept_DeptHead__gqlv_input, name: String): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type university_dept_Departments__findAllDepartments__gqlv_action {
@@ -2267,8 +2267,8 @@ type university_dept_Departments__findByName__gqlv_action_params {
 }
 
 type university_dept_Departments__findByName__name__gqlv_action_parameter {
-  disabled(name: String): String
-  hidden(name: String): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type university_dept_DeptHead {
@@ -2280,8 +2280,8 @@ type university_dept_DeptHead {
 }
 
 type university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter {
-  disabled(department: university_dept_Department__gqlv_input): String
-  hidden(department: university_dept_Department__gqlv_input): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type university_dept_DeptHead__changeDepartment__gqlv_action {
@@ -2309,8 +2309,8 @@ type university_dept_DeptHead__changeName__gqlv_action_params {
 }
 
 type university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
-  disabled(newName: String): String
-  hidden(newName: String): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type university_dept_DeptHead__department__gqlv_property {
@@ -2360,8 +2360,8 @@ type university_dept_DeptHeads__findHeadByName__gqlv_action_params {
 }
 
 type university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter {
-  disabled(name: String): String
-  hidden(name: String): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type university_dept_Staff {
@@ -2399,8 +2399,8 @@ type university_dept_StaffMember__name__gqlv_property {
 }
 
 type university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
-  disabled(department: university_dept_Department__gqlv_input, name: String): String
-  hidden(department: university_dept_Department__gqlv_input, name: String): Boolean
+  disabled(name: String): String
+  hidden(name: String): Boolean
 }
 
 type university_dept_Staff__createStaffMember__gqlv_action {
@@ -2417,8 +2417,8 @@ type university_dept_Staff__createStaffMember__gqlv_action_params {
 }
 
 type university_dept_Staff__createStaffMember__name__gqlv_action_parameter {
-  disabled(department: university_dept_Department__gqlv_input, name: String): String
-  hidden(department: university_dept_Department__gqlv_input, name: String): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 type university_dept_Staff__findAllStaffMembers__gqlv_action {
@@ -2441,8 +2441,8 @@ type university_dept_Staff__findByName__gqlv_action_params {
 }
 
 type university_dept_Staff__findByName__name__gqlv_action_parameter {
-  disabled(name: String): String
-  hidden(name: String): Boolean
+  disabled: String
+  hidden: Boolean
 }
 
 input causeway_applib_DomainObjectList__gqlv_input {

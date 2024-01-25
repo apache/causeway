@@ -53,7 +53,7 @@ public class GqlvActionParamHidden {
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")
                 .type(TypeMapper.scalarTypeFor(boolean.class));
-        addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
+        addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         this.field = holder.addField(fieldBuilder.build());
     }
 
@@ -81,6 +81,8 @@ public class GqlvActionParamHidden {
 
     public interface Holder
             extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    ObjectActionProvider,
                     ObjectActionParameterProvider {
         GqlvActionParam.Holder getHolder();
     }

@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
@@ -135,12 +134,14 @@ public class GqlvAction
     static void addGqlArguments(
             final ObjectAction objectAction,
             final GraphQLFieldDefinition.Builder builder,
-            final TypeMapper.InputContext inputContext) {
+            final TypeMapper.InputContext inputContext,
+            final int upTo) {
 
         Can<ObjectActionParameter> parameters = objectAction.getParameters();
 
         if (parameters.isNotEmpty()) {
             builder.arguments(parameters.stream()
+                    .limit(upTo)
                     .map(OneToOneActionParameter.class::cast)   // we previously filter to ignore any actions that have collection parameters
                     .map(oneToOneActionParameter -> gqlArgumentFor(oneToOneActionParameter, inputContext))
                     .collect(Collectors.toList()));

@@ -26,6 +26,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
+
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -33,9 +35,6 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
-
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
 
 @Log4j2
 public class GqlvActionParamDisabled {
@@ -54,7 +53,7 @@ public class GqlvActionParamDisabled {
         val fieldBuilder = newFieldDefinition()
                 .name("disabled")
                 .type(TypeMapper.scalarTypeFor(String.class));
-        addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
+        addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         this.field = holder.addField(fieldBuilder.build());
     }
 
@@ -66,8 +65,7 @@ public class GqlvActionParamDisabled {
         );
     }
 
-    private String disabled(
-            final DataFetchingEnvironment dataFetchingEnvironment) {
+    private String disabled(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val evaluator = new Evaluator<String, ObjectActionParameter>("Disabled") {
             @Override
@@ -85,8 +83,6 @@ public class GqlvActionParamDisabled {
                     ObjectSpecificationProvider,
                     ObjectActionProvider,
                     ObjectActionParameterProvider {
-
         GqlvActionParam.Holder getHolder();
-
     }
 }

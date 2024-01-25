@@ -3,7 +3,7 @@
     createDepartment {
       params {
         name {
-          disabled(name: "")
+          disabled
         }
       }
       invokeNonIdempotent(name: "newbie") {

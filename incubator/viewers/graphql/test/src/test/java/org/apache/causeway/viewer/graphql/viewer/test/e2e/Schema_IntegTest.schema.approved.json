@@ -13559,25 +13559,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "leftConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Consumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "rightConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Consumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -13588,25 +13570,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "leftConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Consumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "rightConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Consumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -13635,15 +13599,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "rightConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Consumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -13657,15 +13612,6 @@
           "description" : null,
           "args" : [ {
             "name" : "leftConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Consumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "rightConsumer",
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
@@ -13913,16 +13859,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "leftMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -13933,16 +13870,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "leftMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -14068,16 +13996,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "rightMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -14088,16 +14007,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "rightMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -14256,25 +14166,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "leftMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "rightMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -14285,25 +14177,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "leftMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "rightMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -14332,15 +14206,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "rightMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -14354,15 +14219,6 @@
           "description" : null,
           "args" : [ {
             "name" : "leftMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "rightMapper",
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
@@ -14540,16 +14396,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "chainingFunction",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -14560,16 +14407,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "chainingFunction",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -14846,16 +14684,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "failureConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -14866,16 +14695,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "failureConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -15107,16 +14927,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "successConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -15127,16 +14938,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "successConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -15156,16 +14958,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "failureMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -15176,16 +14969,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "failureMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -15417,16 +15201,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -15437,16 +15212,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -15598,16 +15364,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Consumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -15618,16 +15375,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Consumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -15814,16 +15562,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "exceptionWrapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_BiFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -15834,16 +15573,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "exceptionWrapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_BiFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -16022,16 +15752,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -16042,16 +15763,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -16177,16 +15889,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -16197,16 +15900,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "arg0",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_Function__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -16393,16 +16087,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "exceptionWrapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_BiFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -16413,16 +16098,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "exceptionWrapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_function_BiFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -17222,25 +16898,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "failureConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "successConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -17251,25 +16909,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "failureConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "successConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -17437,15 +17077,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "successConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -17459,15 +17090,6 @@
           "description" : null,
           "args" : [ {
             "name" : "failureConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "successConsumer",
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
@@ -17691,16 +17313,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -17711,16 +17324,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -17846,16 +17450,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -17866,16 +17461,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -18001,16 +17587,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -18021,16 +17598,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -18217,16 +17785,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "exceptionConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -18237,16 +17796,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "exceptionConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -18478,16 +18028,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "valueConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -18498,16 +18039,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "valueConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -18633,16 +18165,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "valueConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -18653,16 +18176,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "valueConsumer",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -18841,16 +18355,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "recoveryMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -18861,16 +18366,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "recoveryMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -18890,16 +18386,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "failureMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -18910,16 +18397,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "failureMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -19151,16 +18629,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -19171,16 +18640,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -19306,16 +18766,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -19326,16 +18777,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -19461,16 +18903,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -19481,16 +18914,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -19510,25 +18934,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "failureMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -19539,25 +18945,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "failureMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -19725,15 +19113,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "successMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -19747,15 +19126,6 @@
           "description" : null,
           "args" : [ {
             "name" : "failureMapper",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "successMapper",
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
@@ -19783,16 +19153,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "fallback",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_concurrent_Callable__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -19803,16 +19164,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "fallback",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_concurrent_Callable__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -20028,16 +19380,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "callable",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_concurrent_Callable__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -20048,16 +19391,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "callable",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_concurrent_Callable__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -20289,16 +19623,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "runnable",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -20309,16 +19634,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "runnable",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -20444,16 +19760,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "next",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_concurrent_Callable__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -20464,16 +19771,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "next",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "java_util_concurrent_Callable__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -21502,34 +20800,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "firstParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "secondParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "thirdParameter",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -21540,34 +20811,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "firstParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "secondParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "thirdParameter",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -21768,24 +21012,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "secondParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "thirdParameter",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -21799,24 +21025,6 @@
           "description" : null,
           "args" : [ {
             "name" : "firstParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "secondParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "thirdParameter",
             "description" : null,
             "type" : {
               "kind" : "SCALAR",
@@ -21862,15 +21070,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "thirdParameter",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -21893,15 +21092,6 @@
             "defaultValue" : null
           }, {
             "name" : "secondParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "thirdParameter",
             "description" : null,
             "type" : {
               "kind" : "SCALAR",
@@ -21929,25 +21119,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "firstParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "secondParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -21958,25 +21130,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "firstParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "secondParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -22144,15 +21298,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "secondParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -22166,15 +21311,6 @@
           "description" : null,
           "args" : [ {
             "name" : "firstParam",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "secondParam",
             "description" : null,
             "type" : {
               "kind" : "SCALAR",
@@ -22702,15 +21838,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "deptHead",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_DeptHead__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -22728,15 +21855,6 @@
             "type" : {
               "kind" : "SCALAR",
               "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "deptHead",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_DeptHead__gqlv_input",
               "ofType" : null
             },
             "defaultValue" : null
@@ -22895,25 +22013,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "deptHead",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_DeptHead__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -22924,25 +22024,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "deptHead",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_DeptHead__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -23125,16 +22207,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -23145,16 +22218,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -23238,16 +22302,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "department",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_Department__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -23258,16 +22313,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "department",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_Department__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -23499,16 +22545,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "newName",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -23519,16 +22556,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "newName",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -23978,16 +23006,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -23998,16 +23017,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -24364,15 +23374,6 @@
               "ofType" : null
             },
             "defaultValue" : null
-          }, {
-            "name" : "department",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_Department__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
           } ],
           "type" : {
             "kind" : "SCALAR",
@@ -24390,15 +23391,6 @@
             "type" : {
               "kind" : "SCALAR",
               "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "department",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_Department__gqlv_input",
               "ofType" : null
             },
             "defaultValue" : null
@@ -24561,25 +23553,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "department",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_Department__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -24590,25 +23564,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "department",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "university_dept_Department__gqlv_input",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -24791,16 +23747,7 @@
         "fields" : [ {
           "name" : "hidden",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "Boolean",
@@ -24811,16 +23758,7 @@
         }, {
           "name" : "disabled",
           "description" : null,
-          "args" : [ {
-            "name" : "name",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",

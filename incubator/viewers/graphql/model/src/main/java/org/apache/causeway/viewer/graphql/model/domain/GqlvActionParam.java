@@ -18,18 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
@@ -42,6 +39,7 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     private final Context context;
+    @Getter private final int paramNum;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
@@ -54,10 +52,12 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
     public GqlvActionParam(
             final Holder holder,
             final ObjectActionParameter objectActionParameter,
-            final Context context) {
+            final Context context,
+            final int paramNum) {
         this.holder = holder;
         this.objectActionParameter = objectActionParameter;
         this.context = context;
+        this.paramNum = paramNum;
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter));
 
         this.hidden = new GqlvActionParamHidden(this, context);
@@ -106,6 +106,7 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
+
 
     public static interface Holder
             extends GqlvHolder,

@@ -18,12 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import org.springframework.lang.Nullable;
 
@@ -38,7 +34,6 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
@@ -71,7 +66,7 @@ public class GqlvActionInvoke {
             val fieldBuilder = newFieldDefinition()
                     .name(fieldNameForSemanticsOf(objectAction))
                     .type(type);
-            GqlvAction.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE);
+            GqlvAction.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
             fieldDefinition = fieldBuilder.build();
 
             holder.addField(fieldDefinition);
