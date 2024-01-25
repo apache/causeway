@@ -47,6 +47,7 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
     private final GraphQLObjectType gqlObjectType;
     private final BookmarkService bookmarkService;
 
+    private final GqlvActionParamHidden hidden;
     private final GqlvActionParamDisabled disabled;
 
     private final GraphQLFieldDefinition field;
@@ -63,6 +64,7 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getHolder().getHolder().getObjectSpecification(), objectActionParameter));
         this.bookmarkService = bookmarkService;
 
+        this.hidden = new GqlvActionParamHidden(this, codeRegistryBuilder, bookmarkService);
         this.disabled = new GqlvActionParamDisabled(this, codeRegistryBuilder, bookmarkService);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
@@ -85,6 +87,7 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
                 holder.coordinatesFor(field),
                 new Fetcher());
 
+        hidden.addDataFetcher();
         disabled.addDataFetcher();
     }
 

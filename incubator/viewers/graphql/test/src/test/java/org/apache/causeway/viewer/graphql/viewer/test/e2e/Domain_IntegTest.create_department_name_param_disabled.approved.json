@@ -3,7 +3,9 @@
     "university_dept_Departments" : {
       "createDepartment" : {
         "params" : {
-          "name" : null
+          "name" : {
+            "disabled" : null
+          }
         },
         "invokeNonIdempotent" : {
           "name" : {

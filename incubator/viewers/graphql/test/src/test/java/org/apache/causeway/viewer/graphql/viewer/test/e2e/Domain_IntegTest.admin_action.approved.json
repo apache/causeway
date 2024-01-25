@@ -2,7 +2,8 @@
   "data" : {
     "university_admin_AdminMenu" : {
       "adminAction" : {
-        "hidden" : true
+        "hidden" : true,
+        "disabled" : null
       }
     }
   }

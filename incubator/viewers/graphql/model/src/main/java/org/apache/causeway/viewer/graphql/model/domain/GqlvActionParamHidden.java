@@ -1,4 +1,4 @@
-/*
+ /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
  *  distributed with this work for additional information
@@ -25,6 +25,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
+
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -33,12 +35,9 @@ import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
-
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
 
 @Log4j2
-public class GqlvActionParamDisabled {
+public class GqlvActionParamHidden {
 
     private final GqlvActionParamDisabledHolder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
@@ -46,7 +45,7 @@ public class GqlvActionParamDisabled {
 
     private final GraphQLFieldDefinition field;
 
-    public GqlvActionParamDisabled(
+    public GqlvActionParamHidden(
             final GqlvActionParamDisabledHolder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService) {
@@ -54,8 +53,8 @@ public class GqlvActionParamDisabled {
         this.codeRegistryBuilder = codeRegistryBuilder;
 
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                .name("disabled")
-                .type(TypeMapper.scalarTypeFor(String.class));
+                .name("hidden")
+                .type(TypeMapper.scalarTypeFor(boolean.class));
         addGqlArguments(holder.getHolder().getHolder().getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
         this.field = holder.addField(fieldBuilder.build());
         this.bookmarkService = bookmarkService;
@@ -65,12 +64,11 @@ public class GqlvActionParamDisabled {
     public void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
-                this::disabled
+                this::hidden
         );
     }
 
-    private String disabled(
-            final DataFetchingEnvironment dataFetchingEnvironment) {
+    private boolean hidden(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         final ObjectAction objectAction = holder.getHolder().getHolder().getObjectAction();
 
@@ -81,7 +79,7 @@ public class GqlvActionParamDisabled {
         val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
-            return "Disabled";
+            return true;
         }
 
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
@@ -91,7 +89,7 @@ public class GqlvActionParamDisabled {
 
         val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
 
-        Consent usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
+        Consent visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+        return visible.isVetoed();
     }
 }

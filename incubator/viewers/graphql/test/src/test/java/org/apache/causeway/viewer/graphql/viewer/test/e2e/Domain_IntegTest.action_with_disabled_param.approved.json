@@ -2,6 +2,7 @@
   "data" : {
     "university_admin_AdminMenu" : {
       "actionWithDisabledParam" : {
+        "disabled" : null,
         "params" : {
           "firstParam" : {
             "disabled" : "yup, disabled!"

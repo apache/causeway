@@ -1,6 +1,7 @@
 {
   university_admin_AdminMenu {
     actionWithDisabledParam {
+      disabled
       params {
         firstParam {
           disabled
