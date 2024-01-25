@@ -19,10 +19,9 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 
@@ -35,13 +34,13 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
 
-    final GqlvAssociationGetHolder<T> holder;
+    final Holder<T> holder;
     final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     final SpecificationLoader specificationLoader;
     final GraphQLFieldDefinition field;
 
     public GqlvAssociationGet(
-            final GqlvAssociationGetHolder<T> holder,
+            final Holder<T> holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final SpecificationLoader specificationLoader) {
         this.holder = holder;
@@ -50,7 +49,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
         this.specificationLoader = specificationLoader;
     }
 
-    GraphQLFieldDefinition fieldDefinition(final GqlvAssociationGetHolder<T> holder) {
+    GraphQLFieldDefinition fieldDefinition(final Holder<T> holder) {
 
         GraphQLFieldDefinition fieldDefinition = null;
         GraphQLOutputType type = outputTypeFor(holder);
@@ -65,7 +64,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
         return fieldDefinition;
     }
 
-    abstract GraphQLOutputType outputTypeFor(GqlvAssociationGetHolder<T> holder);
+    abstract GraphQLOutputType outputTypeFor(Holder<T> holder);
 
     void addDataFetcher() {
 
@@ -109,4 +108,10 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
                 : null;
     }
 
+    public interface Holder<T extends ObjectAssociation> extends GqlvHolder {
+
+        ObjectSpecification getObjectSpecification();
+
+        T getObjectAssociation();
+    }
 }

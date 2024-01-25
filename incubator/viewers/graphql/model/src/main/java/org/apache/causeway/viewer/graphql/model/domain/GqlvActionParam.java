@@ -19,6 +19,8 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
@@ -34,9 +36,9 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvActionParam implements GqlvActionParamDisabledHolder {
+public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActionParamHidden.Holder {
 
-    @Getter private final GqlvActionParamHolder holder;
+    @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
@@ -50,7 +52,7 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
     private final GraphQLFieldDefinition field;
 
     public GqlvActionParam(
-            final GqlvActionParamHolder holder,
+            final Holder holder,
             final ObjectActionParameter objectActionParameter,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService
@@ -72,8 +74,17 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
                         .build());
     }
 
+    @Override
+    public ObjectSpecification getObjectSpecification() {
+        return holder.getObjectSpecification();
+    }
 
-    // @Override
+    @Override
+    public ObjectAction getObjectAction() {
+        return holder.getObjectAction();
+    }
+
+    @Override
     public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
         gqlObjectTypeBuilder.field(field);
         return field;
@@ -94,4 +105,13 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
+    public static interface Holder extends GqlvHolder {
+
+        ObjectSpecification getObjectSpecification();
+
+        ObjectAction getObjectAction();
+
+        GqlvActionParams.Holder getHolder();
+
+    }
 }

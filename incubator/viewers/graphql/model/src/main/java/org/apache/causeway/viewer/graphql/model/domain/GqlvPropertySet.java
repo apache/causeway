@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -37,13 +39,13 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 public class GqlvPropertySet {
 
-    final GqlvPropertySetHolder holder;
+    final Holder holder;
     final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     final SpecificationLoader specificationLoader;
     final GraphQLFieldDefinition field;
 
     public GqlvPropertySet(
-            final GqlvPropertySetHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final SpecificationLoader specificationLoader) {
         this.holder = holder;
@@ -52,7 +54,7 @@ public class GqlvPropertySet {
         this.specificationLoader = specificationLoader;
     }
 
-    GraphQLFieldDefinition fieldDefinition(final GqlvPropertySetHolder holder) {
+    GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         GraphQLFieldDefinition fieldDefinition = null;
         GraphQLOutputType type = outputTypeFor(holder);
@@ -68,7 +70,7 @@ public class GqlvPropertySet {
         return fieldDefinition;
     }
 
-    GraphQLOutputType outputTypeFor(GqlvPropertySetHolder holder) {
+    GraphQLOutputType outputTypeFor(Holder holder) {
         return TypeMapper.outputTypeFor(holder.getHolder().getObjectSpecification());   // setters return void, so we return the domain object instead
     }
 
@@ -120,4 +122,13 @@ public class GqlvPropertySet {
         return managedObject; // return the original object because setters return void
     }
 
+    public interface Holder extends GqlvHolder {
+
+        GqlvProperty.Holder getHolder();
+
+        ObjectSpecification getObjectSpecification();
+
+        OneToOneAssociation getOneToOneAssociation();
+
+    }
 }

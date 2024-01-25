@@ -19,13 +19,10 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import lombok.val;
-
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
@@ -34,7 +31,7 @@ import graphql.schema.GraphQLObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCollectionHolder> implements GqlvCollectionGetHolder, GqlvMemberHiddenHolder, GqlvMemberDisabledHolder {
+public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCollection.Holder> implements GqlvCollectionGet.Holder, GqlvMemberHidden.Holder, GqlvMemberDisabled.Holder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
@@ -44,7 +41,7 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
     private final BookmarkService bookmarkService;
 
     public GqlvCollection(
-            final GqlvCollectionHolder domainObject,
+            final Holder domainObject,
             final OneToManyAssociation oneToManyAssociation,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService
@@ -70,6 +67,10 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
         );
     }
 
+    @Override
+    public ObjectSpecification getObjectSpecification() {
+        return holder.getObjectSpecification();
+    }
 
     public OneToManyAssociation getOneToManyAssociation() {
         return getObjectAssociation();
@@ -94,5 +95,9 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
+    }
+
+    public interface Holder extends GqlvAssociation.Holder {
+
     }
 }

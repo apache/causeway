@@ -23,6 +23,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
@@ -39,14 +40,14 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 @Log4j2
 public class GqlvActionParamHidden {
 
-    private final GqlvActionParamDisabledHolder holder;
+    private final Holder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final BookmarkService bookmarkService;
 
     private final GraphQLFieldDefinition field;
 
     public GqlvActionParamHidden(
-            final GqlvActionParamDisabledHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService) {
         this.holder = holder;
@@ -91,5 +92,14 @@ public class GqlvActionParamHidden {
 
         Consent visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return visible.isVetoed();
+    }
+
+    public interface Holder extends GqlvHolder {
+
+        GqlvActionParam.Holder getHolder();
+
+        ObjectAction getObjectAction();
+
+        ObjectActionParameter getObjectActionParameter();
     }
 }

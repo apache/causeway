@@ -25,6 +25,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -42,12 +43,12 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 @Log4j2
 public class GqlvActionValidate {
 
-    private final GqlvActionValidateHolder holder;
+    private final Holder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
 
     public GqlvActionValidate(
-            final GqlvActionValidateHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
         this.holder = holder;
@@ -55,7 +56,7 @@ public class GqlvActionValidate {
         this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final GqlvActionValidateHolder holder) {
+    private static GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         val objectAction = holder.getObjectAction();
 
@@ -111,4 +112,9 @@ public class GqlvActionValidate {
         return consent.isVetoed() ? consent.getReasonAsString().orElse("Invalid") : null;
     }
 
+    public interface Holder extends GqlvHolder {
+
+        ObjectSpecification getObjectSpecification();
+        ObjectAction getObjectAction();
+    }
 }

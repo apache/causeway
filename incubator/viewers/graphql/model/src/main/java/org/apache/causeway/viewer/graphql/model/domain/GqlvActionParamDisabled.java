@@ -22,7 +22,9 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -40,14 +42,14 @@ import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlA
 @Log4j2
 public class GqlvActionParamDisabled {
 
-    private final GqlvActionParamDisabledHolder holder;
+    private final Holder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final BookmarkService bookmarkService;
 
     private final GraphQLFieldDefinition field;
 
     public GqlvActionParamDisabled(
-            final GqlvActionParamDisabledHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService) {
         this.holder = holder;
@@ -93,5 +95,14 @@ public class GqlvActionParamDisabled {
 
         Consent usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
+    }
+
+    public interface Holder extends GqlvHolder {
+
+        GqlvActionParam.Holder getHolder();
+
+        ObjectSpecification getObjectSpecification();
+        ObjectAction getObjectAction();
+        ObjectActionParameter getObjectActionParameter();
     }
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
@@ -29,7 +30,7 @@ import graphql.schema.GraphQLFieldDefinition;
 
 import lombok.Setter;
 
-public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMemberHolder> {
+public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Holder> {
 
     @Getter final H holder;
     @Getter private final T objectMember;
@@ -64,4 +65,9 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMemberHol
         return objectMember.getFeatureIdentifier().getFullIdentityString();
     }
 
+    public static interface Holder extends GqlvHolder {
+
+        ObjectSpecification getObjectSpecification();
+
+    }
 }

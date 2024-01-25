@@ -18,16 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
-public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvAssociationHolder> extends GqlvMember<T, H> {
+public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvAssociation.Holder> extends GqlvMember<T, H> {
 
     public GqlvAssociation(
             final H holder,
@@ -57,4 +54,8 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
         return getObjectMember();
     }
 
+    public interface Holder extends GqlvMember.Holder {
+
+        ObjectSpecification getObjectSpecification();
+    }
 }

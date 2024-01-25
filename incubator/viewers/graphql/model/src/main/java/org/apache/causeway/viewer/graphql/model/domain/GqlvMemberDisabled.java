@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -36,12 +37,12 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 @Log4j2
 public class GqlvMemberDisabled {
 
-    private final GqlvMemberDisabledHolder holder;
+    private final Holder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
 
     public GqlvMemberDisabled(
-            final GqlvMemberDisabledHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder
     ) {
         this.holder = holder;
@@ -49,7 +50,7 @@ public class GqlvMemberDisabled {
         this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final GqlvMemberDisabledHolder holder) {
+    private static GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         GraphQLFieldDefinition fieldDefinition =
                 newFieldDefinition()
@@ -89,4 +90,10 @@ public class GqlvMemberDisabled {
         return usable.getReasonAsString().orElse(null);
     }
 
+    public interface Holder extends GqlvHolder {
+
+        ObjectSpecification getObjectSpecification();
+
+        ObjectMember getObjectMember();
+    }
 }

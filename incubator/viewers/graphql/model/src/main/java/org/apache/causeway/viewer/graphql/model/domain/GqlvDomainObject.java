@@ -47,7 +47,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, GqlvCollectionHolder, GqlvMetaHolder {
+public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMetaHolder {
 
     @Getter private final ObjectSpecification objectSpecification;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;

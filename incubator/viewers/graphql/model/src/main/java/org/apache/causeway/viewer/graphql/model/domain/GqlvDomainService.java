@@ -18,11 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -30,11 +27,9 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
-import lombok.val;
 
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
@@ -48,7 +43,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainService implements GqlvActionHolder {
+public class GqlvDomainService implements GqlvAction.Holder {
 
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;

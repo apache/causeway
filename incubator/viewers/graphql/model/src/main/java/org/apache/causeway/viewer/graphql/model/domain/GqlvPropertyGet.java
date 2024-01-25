@@ -18,17 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -36,16 +33,21 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 public class GqlvPropertyGet  extends GqlvAssociationGet<OneToOneAssociation> {
 
     public GqlvPropertyGet(
-            final GqlvPropertyGetHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final SpecificationLoader specificationLoader) {
         super(holder, codeRegistryBuilder, specificationLoader);
     }
 
     @Override
-    GraphQLOutputType outputTypeFor(GqlvAssociationGetHolder<OneToOneAssociation> holder) {
+    GraphQLOutputType outputTypeFor(GqlvAssociationGet.Holder<OneToOneAssociation> holder) {
         val oneToOneAssociation = holder.getObjectAssociation();
         return TypeMapper.outputTypeFor(oneToOneAssociation);
     }
 
+    public interface Holder extends GqlvAssociationGet.Holder<OneToOneAssociation> {
+
+        @Override
+        OneToOneAssociation getObjectAssociation();
+    }
 }

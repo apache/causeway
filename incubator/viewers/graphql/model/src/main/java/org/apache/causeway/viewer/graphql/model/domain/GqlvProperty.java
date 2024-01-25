@@ -20,24 +20,23 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import graphql.schema.*;
 
-import lombok.val;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 public class GqlvProperty
-        extends GqlvAssociation<OneToOneAssociation, GqlvPropertyHolder>
-        implements GqlvMemberHiddenHolder,
-                   GqlvMemberDisabledHolder,
-                   GqlvPropertyGetHolder,
-                   GqlvPropertySetHolder,
-                   GqlvPropertyValidateHolder {
+        extends GqlvAssociation<OneToOneAssociation, GqlvProperty.Holder>
+        implements GqlvMemberHidden.Holder,
+        GqlvMemberDisabled.Holder,
+        GqlvPropertyGet.Holder,
+        GqlvPropertySet.Holder,
+        GqlvPropertyValidate.Holder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
@@ -49,7 +48,7 @@ public class GqlvProperty
     private final BookmarkService bookmarkService;
 
     public GqlvProperty(
-            final GqlvPropertyHolder holder,
+            final Holder holder,
             final OneToOneAssociation oneToOneAssociation,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService
@@ -94,6 +93,11 @@ public class GqlvProperty
     }
 
 
+    @Override
+    public ObjectSpecification getObjectSpecification() {
+        return holder.getObjectSpecification();
+    }
+
     public OneToOneAssociation getOneToOneAssociation() {
         return getObjectAssociation();
     }
@@ -120,5 +124,10 @@ public class GqlvProperty
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
+    }
+
+
+    public interface Holder extends GqlvAssociation.Holder {
+
     }
 }

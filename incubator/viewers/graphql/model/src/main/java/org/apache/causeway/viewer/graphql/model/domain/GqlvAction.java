@@ -43,12 +43,12 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
 public class GqlvAction
-        extends GqlvMember<ObjectAction, GqlvActionHolder>
-        implements  GqlvMemberHiddenHolder,
-                    GqlvMemberDisabledHolder,
-                    GqlvActionInvokeHolder,
-                    GqlvActionValidateHolder,
-                    GqlvActionParamsHolder {
+        extends GqlvMember<ObjectAction, GqlvAction.Holder>
+        implements GqlvMemberHidden.Holder,
+        GqlvMemberDisabled.Holder,
+        GqlvActionInvoke.Holder,
+        GqlvActionValidate.Holder,
+        GqlvActionParams.Holder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
@@ -63,7 +63,7 @@ public class GqlvAction
     private final BookmarkService bookmarkService;
 
     public GqlvAction(
-            final GqlvActionHolder holder,
+            final Holder holder,
             final ObjectAction objectAction,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService
@@ -159,6 +159,11 @@ public class GqlvAction
     }
 
     @Override
+    public ObjectSpecification getObjectSpecification() {
+        return holder.getObjectSpecification();
+    }
+
+    @Override
     public ObjectAction getObjectAction() {
         return getObjectMember();
     }
@@ -189,4 +194,6 @@ public class GqlvAction
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
+    public interface Holder extends GqlvMember.Holder {
+    }
 }

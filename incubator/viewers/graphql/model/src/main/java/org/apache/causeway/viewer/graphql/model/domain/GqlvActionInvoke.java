@@ -44,13 +44,13 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 @Log4j2
 public class GqlvActionInvoke {
 
-    private final GqlvActionInvokeHolder holder;
+    private final Holder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     private final GraphQLFieldDefinition field;
     private final BookmarkService bookmarkService;
 
     public GqlvActionInvoke(
-            final GqlvActionInvokeHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService) {
         this.holder = holder;
@@ -59,7 +59,7 @@ public class GqlvActionInvoke {
         this.bookmarkService = bookmarkService;
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final GqlvActionInvokeHolder holder) {
+    private static GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         val objectAction = holder.getObjectAction();
 
@@ -162,4 +162,10 @@ public class GqlvActionInvoke {
 
     }
 
+    public interface Holder extends GqlvHolder {
+
+        ObjectSpecification getObjectSpecification();
+
+        ObjectAction getObjectAction();
+    }
 }

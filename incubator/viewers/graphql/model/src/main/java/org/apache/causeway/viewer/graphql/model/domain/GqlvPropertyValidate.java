@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -38,13 +39,13 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 public class GqlvPropertyValidate {
 
-    final GqlvPropertyValidateHolder holder;
+    final Holder holder;
     final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     final SpecificationLoader specificationLoader;
     final GraphQLFieldDefinition field;
 
     public GqlvPropertyValidate(
-            final GqlvPropertyValidateHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final SpecificationLoader specificationLoader) {
         this.holder = holder;
@@ -53,7 +54,7 @@ public class GqlvPropertyValidate {
         this.specificationLoader = specificationLoader;
     }
 
-    GraphQLFieldDefinition fieldDefinition(final GqlvPropertyValidateHolder holder) {
+    GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         GraphQLFieldDefinition fieldDefinition = null;
         GraphQLOutputType type = outputTypeFor();
@@ -115,4 +116,12 @@ public class GqlvPropertyValidate {
         return consent.isVetoed() ? consent.getReasonAsString().orElse("invalid") : null;
     }
 
+    public interface Holder extends GqlvHolder {
+
+        ObjectSpecification getObjectSpecification();
+
+        OneToOneAssociation getOneToOneAssociation();
+
+        GqlvProperty.Holder getHolder();
+    }
 }

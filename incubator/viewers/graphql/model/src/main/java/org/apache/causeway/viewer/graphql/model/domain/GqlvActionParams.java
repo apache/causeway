@@ -19,33 +19,29 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvActionParams implements GqlvActionParamHolder {
+public class GqlvActionParams implements GqlvActionParam.Holder {
 
-    @Getter private final GqlvActionParamsHolder holder;
+    @Getter private final Holder holder;
     private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
@@ -60,7 +56,7 @@ public class GqlvActionParams implements GqlvActionParamHolder {
     private final Map<String, GqlvActionParam> params = new LinkedHashMap<>();
 
     public GqlvActionParams(
-            final GqlvActionParamsHolder holder,
+            final Holder holder,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService
             ) {
@@ -79,6 +75,16 @@ public class GqlvActionParams implements GqlvActionParamHolder {
                     .type(gqlObjectTypeBuilder)
                     .build())
                 : null;
+    }
+
+    @Override
+    public ObjectSpecification getObjectSpecification() {
+        return holder.getObjectSpecification();
+    }
+
+    @Override
+    public ObjectAction getObjectAction() {
+        return holder.getObjectAction();
     }
 
     public boolean hasParams() {
@@ -110,4 +116,12 @@ public class GqlvActionParams implements GqlvActionParamHolder {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
+    public interface Holder extends GqlvHolder {
+
+        ObjectSpecification getObjectSpecification();
+
+        ObjectAction getObjectAction();
+
+        GqlvAction.Holder getHolder();
+    }
 }
