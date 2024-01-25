@@ -56,7 +56,7 @@ public class GqlvActionParamHidden {
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")
                 .type(TypeMapper.scalarTypeFor(boolean.class));
-        addGqlArguments(holder.getHolder().getHolder().getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
+        addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
         this.field = holder.addField(fieldBuilder.build());
         this.bookmarkService = bookmarkService;
     }
@@ -71,7 +71,7 @@ public class GqlvActionParamHidden {
 
     private boolean hidden(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getHolder().getHolder().getObjectAction();
+        final ObjectAction objectAction = holder.getObjectAction();
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

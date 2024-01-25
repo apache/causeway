@@ -60,7 +60,7 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
         this.holder = holder;
         this.objectActionParameter = objectActionParameter;
         this.codeRegistryBuilder = codeRegistryBuilder;
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getHolder().getHolder().getObjectSpecification(), objectActionParameter));
+        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter));
         this.bookmarkService = bookmarkService;
 
         this.hidden = new GqlvActionParamHidden(this, codeRegistryBuilder, bookmarkService);

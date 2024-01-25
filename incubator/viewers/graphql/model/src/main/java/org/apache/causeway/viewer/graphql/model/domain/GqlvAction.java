@@ -45,13 +45,14 @@ import static graphql.schema.GraphQLObjectType.newObject;
 public class GqlvAction
         extends GqlvMember<ObjectAction, GqlvAction.Holder>
         implements GqlvMemberHidden.Holder,
-        GqlvMemberDisabled.Holder,
-        GqlvActionInvoke.Holder,
-        GqlvActionValidate.Holder,
-        GqlvActionParams.Holder {
+                   GqlvMemberDisabled.Holder,
+                   GqlvActionInvoke.Holder,
+                   GqlvActionValidate.Holder,
+                   GqlvActionParams.Holder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
+
     private final GqlvMemberHidden hidden;
     private final GqlvMemberDisabled disabled;
     private final GqlvActionValidate validate;

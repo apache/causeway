@@ -62,7 +62,7 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
             ) {
         this.holder = holder;
         this.codeRegistryBuilder = codeRegistryBuilder;
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamsTypeNameFor(holder.getHolder().getObjectSpecification(), holder.getObjectAction()));
+        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction()));
         this.bookmarkService = bookmarkService;
 
         holder.getObjectAction().getParameters().forEach(this::addParam);

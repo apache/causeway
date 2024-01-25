@@ -71,7 +71,7 @@ public class GqlvPropertySet {
     }
 
     GraphQLOutputType outputTypeFor(Holder holder) {
-        return TypeMapper.outputTypeFor(holder.getHolder().getObjectSpecification());   // setters return void, so we return the domain object instead
+        return TypeMapper.outputTypeFor(holder.getObjectSpecification());   // setters return void, so we return the domain object instead
     }
 
 

@@ -58,7 +58,7 @@ public class GqlvActionParamDisabled {
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("disabled")
                 .type(TypeMapper.scalarTypeFor(String.class));
-        addGqlArguments(holder.getHolder().getHolder().getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
+        addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
         this.field = holder.addField(fieldBuilder.build());
         this.bookmarkService = bookmarkService;
     }
@@ -74,7 +74,7 @@ public class GqlvActionParamDisabled {
     private String disabled(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getHolder().getHolder().getObjectAction();
+        final ObjectAction objectAction = holder.getObjectAction();
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
