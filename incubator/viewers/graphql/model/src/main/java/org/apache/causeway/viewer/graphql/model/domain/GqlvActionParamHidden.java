@@ -19,8 +19,10 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -69,35 +71,21 @@ public class GqlvActionParamHidden {
 
     private boolean hidden(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getObjectAction();
+        val evaluator = new Evaluator<>(true) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+            @Override
+            public Boolean evaluate(ActionInteractionHead head, ObjectActionParameter objectActionParameter, final Can<ManagedObject> argumentManagedObjects) {
+                Consent visible = objectActionParameter.isVisible(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+                return visible.isVetoed();
+            }
+        };
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = objectAction.getSpecificationLoader();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
-            return true;
-        }
-
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val actionInteractionHead = objectAction.interactionHead(managedObject);
-
-        val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
-
-        Consent visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return visible.isVetoed();
+        return GqlvActionParamDisabled.evaluate(holder, context, dataFetchingEnvironment, evaluator);
     }
 
-    public interface Holder extends GqlvHolder {
-
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectActionParameterProvider {
         GqlvActionParam.Holder getHolder();
-
-        ObjectAction getObjectAction();
-
-        ObjectActionParameter getObjectActionParameter();
     }
 }

@@ -77,6 +77,11 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
     }
 
     @Override
+    public ObjectAction getObjectMember() {
+        return getObjectAction();
+    }
+
+    @Override
     public ObjectAction getObjectAction() {
         return holder.getObjectAction();
     }
@@ -102,11 +107,10 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
-    public static interface Holder extends GqlvHolder {
-
-        ObjectSpecification getObjectSpecification();
-
-        ObjectAction getObjectAction();
+    public static interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    ObjectActionProvider {
 
         GqlvActionParams.Holder getHolder();
 

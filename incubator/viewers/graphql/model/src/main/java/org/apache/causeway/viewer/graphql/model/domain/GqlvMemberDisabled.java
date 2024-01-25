@@ -89,7 +89,9 @@ public class GqlvMemberDisabled {
         return usable.getReasonAsString().orElse(null);
     }
 
-    public interface Holder extends GqlvHolder {
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider{
 
         ObjectSpecification getObjectSpecification();
 

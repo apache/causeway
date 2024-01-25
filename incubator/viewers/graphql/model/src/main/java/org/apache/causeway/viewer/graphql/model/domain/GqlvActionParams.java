@@ -80,6 +80,11 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
     }
 
     @Override
+    public ObjectAction getObjectMember() {
+        return getObjectAction();
+    }
+
+    @Override
     public ObjectAction getObjectAction() {
         return holder.getObjectAction();
     }

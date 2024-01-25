@@ -119,13 +119,12 @@ public class GqlvPropertySet {
         return managedObject; // return the original object because setters return void
     }
 
-    public interface Holder extends GqlvHolder {
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    OneToOneAssociationProvider {
 
         GqlvProperty.Holder getHolder();
-
-        ObjectSpecification getObjectSpecification();
-
-        OneToOneAssociation getOneToOneAssociation();
 
     }
 }

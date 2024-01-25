@@ -105,10 +105,10 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
                 : null;
     }
 
-    public interface Holder<T extends ObjectAssociation> extends GqlvHolder {
+    public interface Holder<T extends ObjectAssociation>
+            extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    ObjectAssociationProvider<T> {
 
-        ObjectSpecification getObjectSpecification();
-
-        T getObjectAssociation();
     }
 }

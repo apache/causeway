@@ -111,11 +111,10 @@ public class GqlvPropertyValidate {
         return consent.isVetoed() ? consent.getReasonAsString().orElse("invalid") : null;
     }
 
-    public interface Holder extends GqlvHolder {
-
-        ObjectSpecification getObjectSpecification();
-
-        OneToOneAssociation getOneToOneAssociation();
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    OneToOneAssociationProvider {
 
         GqlvProperty.Holder getHolder();
     }

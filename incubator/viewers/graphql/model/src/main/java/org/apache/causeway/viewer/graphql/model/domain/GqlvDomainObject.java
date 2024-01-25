@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -34,7 +33,6 @@ import lombok.Getter;
 
 import graphql.Scalars;
 import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLObjectType;
@@ -47,7 +45,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMetaHolder {
+public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMeta.Holder {
 
     @Getter private final ObjectSpecification objectSpecification;
     private final Context context;

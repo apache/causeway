@@ -112,9 +112,10 @@ public class GqlvActionValidate {
         return consent.isVetoed() ? consent.getReasonAsString().orElse("Invalid") : null;
     }
 
-    public interface Holder extends GqlvHolder {
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    ObjectActionProvider {
 
-        ObjectSpecification getObjectSpecification();
-        ObjectAction getObjectAction();
     }
 }

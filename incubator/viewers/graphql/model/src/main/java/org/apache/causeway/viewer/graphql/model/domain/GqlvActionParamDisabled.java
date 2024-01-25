@@ -18,21 +18,20 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -54,7 +53,7 @@ public class GqlvActionParamDisabled {
         this.holder = holder;
         this.context = context;
 
-        GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+        val fieldBuilder = newFieldDefinition()
                 .name("disabled")
                 .type(TypeMapper.scalarTypeFor(String.class));
         addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
@@ -72,16 +71,28 @@ public class GqlvActionParamDisabled {
     private String disabled(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getObjectAction();
+        val evaluator = new Evaluator<>("Disabled") {
 
+            @Override
+            public String evaluate(ActionInteractionHead head, ObjectActionParameter objectActionParameter, final Can<ManagedObject> argumentManagedObjects) {
+                Consent usable = objectActionParameter.isUsable(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+                return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
+            }
+
+        };
+
+        return evaluate(holder, context, dataFetchingEnvironment, evaluator);
+    }
+
+    static <T> T evaluate(ObjectActionParameterProvider holder, Context context, DataFetchingEnvironment dataFetchingEnvironment, Evaluator<T> evaluator) {
+        final ObjectAction objectAction = holder.getObjectAction();
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
         val specificationLoader = objectAction.getSpecificationLoader();
         val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
-            // not expected
-            return "Disabled";
+            return evaluator.unexpected();
         }
 
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
@@ -89,18 +100,18 @@ public class GqlvActionParamDisabled {
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
 
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        final Can<ManagedObject> argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
-        Consent usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
+        return evaluator.evaluate(actionInteractionHead, objectActionParameter, argumentManagedObjects);
     }
 
-    public interface Holder extends GqlvHolder {
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    ObjectActionProvider,
+                    ObjectActionParameterProvider {
 
         GqlvActionParam.Holder getHolder();
 
-        ObjectSpecification getObjectSpecification();
-        ObjectAction getObjectAction();
-        ObjectActionParameter getObjectActionParameter();
     }
 }

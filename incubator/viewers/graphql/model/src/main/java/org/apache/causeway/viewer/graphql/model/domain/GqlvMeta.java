@@ -34,7 +34,6 @@ import lombok.val;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
@@ -49,7 +48,7 @@ public class GqlvMeta {
     static GraphQLFieldDefinition logicalTypeName = newFieldDefinition().name("logicalTypeName").type(nonNull(Scalars.GraphQLString)).build();
     static GraphQLFieldDefinition version = newFieldDefinition().name("version").type(Scalars.GraphQLString).build();
 
-    private final GqlvMetaHolder holder;
+    private final Holder holder;
 
     private final Context context;
     private final ObjectManager objectManager;
@@ -57,7 +56,7 @@ public class GqlvMeta {
     @Getter private final GraphQLFieldDefinition metaField;
 
     public GqlvMeta(
-            final GqlvMetaHolder holder,
+            final Holder holder,
             final Context context,
             final ObjectManager objectManager
     ) {
@@ -149,6 +148,12 @@ public class GqlvMeta {
                     .map(Object::toString)
                     .orElse(null);
         }
+
+    }
+
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider {
 
     }
 }
