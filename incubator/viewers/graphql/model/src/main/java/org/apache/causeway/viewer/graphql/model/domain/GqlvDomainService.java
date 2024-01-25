@@ -19,7 +19,9 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -59,44 +61,46 @@ public class GqlvDomainService implements GqlvActionHolder {
         return objectSpecification.getLogicalTypeName();
     }
 
-    private final List<GqlvAction> actions = new ArrayList<>();
+    private final Map<String, GqlvAction> actions = new LinkedHashMap<>();
 
+    /**
+     * Will be <code>null</code> if there are no actions.
+     */
     private GraphQLObjectType gqlObjectType;
 
     public GqlvDomainService(
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService
-    ) {
+            final BookmarkService bookmarkService) {
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
         this.codeRegistryBuilder = codeRegistryBuilder;
         this.bookmarkService = bookmarkService;
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
+
+        addActions();
+
+        if (hasActions()) {
+            gqlObjectType = gqlObjectTypeBuilder.build();
+            addDataFetchers();
+        }
     }
 
-    /**
-     * @return <code>true</code> if any (at least one) actions were added
-     */
-    public boolean addActions() {
+    public boolean hasActions() {
+        return !actions.isEmpty();
+    }
 
-        val anyActions = new AtomicBoolean(false);
+    private void addActions() {
         objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
-                .forEach(objectAction -> {
-                    // TODO: for now, we ignore any actions that have any collection parameters
-                    if (objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural)) {
-                        anyActions.set(true);
-                        addAction(objectAction);
-                    }
-                });
-
-        return anyActions.get();
+                // TODO: for now, we ignore any actions that have any collection parameters
+                .filter(oa -> oa.getParameters().stream().noneMatch(ObjectActionParameter::isPlural))
+                .forEach(this::addAction);
     }
 
-    void addAction(final ObjectAction objectAction) {
-        actions.add(new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+    private void addAction(final ObjectAction objectAction) {
+        actions.put(objectAction.getId(), new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
     }
 
 
@@ -106,14 +110,8 @@ public class GqlvDomainService implements GqlvActionHolder {
         return field;
     }
 
-
-    public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
-        gqlObjectType = gqlObjectTypeBuilder.build();
-        // TODO: unlike GqlvDomainObject, not sure where gqlObjectType is already registered
-    }
-
-    public void addDataFetchers() {
-        actions.forEach(GqlvAction::addDataFetcher);
+    void addDataFetchers() {
+        actions.forEach((id, gqlva) -> gqlva.addDataFetcher());
     }
 
     @Override
@@ -126,9 +124,13 @@ public class GqlvDomainService implements GqlvActionHolder {
     }
 
     public GraphQLFieldDefinition createTopLevelQueryField() {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(String.format(
+                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
+        }
         return newFieldDefinition()
                 .name(TypeNames.objectTypeNameFor(objectSpecification))
-                .type(gqlObjectTypeBuilder)
+                .type(gqlObjectType)
                 .build();
     }
 

@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -32,7 +31,6 @@ import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
-import lombok.val;
 
 import graphql.Scalars;
 import graphql.schema.FieldCoordinates;
@@ -61,7 +59,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
     private final SortedMap<String, GqlvProperty> properties = new TreeMap<>();
     private final SortedMap<String, GqlvCollection> collections = new TreeMap<>();
-    private final Map<String, GqlvAction> safeActions = new TreeMap<>();
+    private final Map<String, GqlvAction> actions = new TreeMap<>();
 
     private GraphQLObjectType gqlObjectType;
 
@@ -106,43 +104,24 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addProperty);
         objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
 
-        val anyActions = new AtomicBoolean(false);
+        // TODO: pay attention to deploymentType
         objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+                // TODO: for now, we ignore any actions that have any collection parameters
+                //  however, this is supportable in GraphQL, https://chat.openai.com/c/7ca721d5-865a-4765-9f90-5c28046516cd
+                .filter(objectAction -> objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural))
                 .forEach(objectAction -> {
-                    anyActions.set(true);
-                    addAction(objectAction);
+                    actions.put(objectAction.getId(), new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
                 });
-
-        anyActions.get();
     }
 
     private void addProperty(final OneToOneAssociation otoa) {
-        GqlvProperty property = new GqlvProperty(this, otoa, codeRegistryBuilder, bookmarkService);
-        if (property.hasFieldDefinition()) {
-            String propertyId = property.getId();
-            if (!properties.containsKey(propertyId)) {
-                properties.put(propertyId, property);
-            }
-        }
+        properties.put(otoa.getId(), new GqlvProperty(this, otoa, codeRegistryBuilder, bookmarkService));
     }
 
     private void addCollection(OneToManyAssociation otom) {
         GqlvCollection collection = new GqlvCollection(this, otom, codeRegistryBuilder, bookmarkService);
         if (collection.hasFieldDefinition()) {
-            String collectionId = collection.getId();
-            if (!collections.containsKey(collectionId)) {
-                collections.put(collectionId, collection);
-            }
-        }
-    }
-
-    private void addAction(final ObjectAction objectAction) {
-        String actionId = objectAction.getId();
-        if (!safeActions.containsKey(actionId)) {
-            // TODO: for now, we ignore any actions that have any collection parameters
-            if (objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural)) {
-                safeActions.put(actionId, new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
-            }
+            collections.put(otom.getId(), collection);
         }
     }
 
@@ -158,7 +137,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
         meta.addDataFetchers();
         properties.forEach((id, property) -> property.addDataFetcher());
         collections.forEach((id, collection) -> collection.addDataFetcher());
-        safeActions.forEach((id, action) -> action.addDataFetcher());
+        actions.forEach((id, action) -> action.addDataFetcher());
     }
 
 

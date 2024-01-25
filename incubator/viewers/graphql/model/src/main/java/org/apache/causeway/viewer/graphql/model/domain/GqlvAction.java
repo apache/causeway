@@ -64,14 +64,10 @@ public class GqlvAction
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
-        val field = newFieldDefinition()
-                        .name(objectAction.getId())
-                        .type(gqlObjectTypeBuilder)
-                        .build();
-
-        holder.addField(field);
-
-        setField(field);
+        setField(holder.addField(newFieldDefinition()
+                .name(objectAction.getId())
+                .type(gqlObjectTypeBuilder)
+                .build()));
     }
 
     @Override

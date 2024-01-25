@@ -23,10 +23,8 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -34,7 +32,6 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.id.HasLogicalType;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -160,7 +157,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
             case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                addDomainObjectAsGqlObjectType(objectSpec, codeRegistryBuilder);
+                new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, graphQLTypeRegistry);
 
                 break;
 
@@ -187,30 +184,18 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private void addDomainServiceToTopLevelQuery(
             final Object servicePojo,
             final ObjectSpecification objectSpec,
-            final GqlvTopLevelQuery topLevelQueryStructure,
+            final GqlvTopLevelQuery topLevelQuery,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
         val domainService = new GqlvDomainService(objectSpec, servicePojo, codeRegistryBuilder, bookmarkService);
 
-        boolean actionsAdded = domainService.addActions();
-        if (!actionsAdded) {
-            return;
+        boolean actionsAdded = domainService.hasActions();
+        if (actionsAdded) {
+            topLevelQuery.addFieldFor(domainService, codeRegistryBuilder);
         }
 
-        domainService.registerTypesInto(graphQLTypeRegistry);
-
-        domainService.addDataFetchers();
-
-        topLevelQueryStructure.addFieldFor(domainService, codeRegistryBuilder);
-    }
-
-
-    public void addDomainObjectAsGqlObjectType(
-            final ObjectSpecification objectSpec,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-
-        new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, graphQLTypeRegistry);
 
     }
+
 
 }
