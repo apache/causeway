@@ -63,7 +63,7 @@ public class JsonUtils {
     }
 
     @FunctionalInterface
-    public interface JsonCustomizer extends UnaryOperator<ObjectMapper> {}
+    public interface JacksonCustomizer extends UnaryOperator<ObjectMapper> {}
 
     // -- READING
 
@@ -74,7 +74,7 @@ public class JsonUtils {
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
             final @Nullable String stringUtf8,
-            final JsonUtils.JsonCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return tryRead(mappedType, DataSource.ofStringUtf8(stringUtf8), customizers);
     }
 
@@ -85,7 +85,7 @@ public class JsonUtils {
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
-            final JsonUtils.JsonCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
             return Try.call(()->createMapper(customizers).readValue(is, mappedType));
         });
@@ -98,7 +98,7 @@ public class JsonUtils {
     public <T> Try<List<T>> tryReadAsList(
             final @NonNull Class<T> elementType,
             final @NonNull DataSource source,
-            final JsonUtils.JsonCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
             return Try.call(()->{
                 val mapper = createMapper(customizers);
@@ -116,7 +116,7 @@ public class JsonUtils {
     public void write(
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
-            final JsonUtils.JsonCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
             Try.run(()->createMapper(customizers).writeValue(os, pojo)));
@@ -130,7 +130,7 @@ public class JsonUtils {
     @Nullable
     public static String toStringUtf8(
             final @Nullable Object pojo,
-            final JsonUtils.JsonCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return pojo!=null
                 ? createMapper(customizers).writeValueAsString(pojo)
                 : null;
@@ -156,15 +156,13 @@ public class JsonUtils {
     // -- MAPPER FACTORY
 
     private ObjectMapper createMapper(
-            final JsonUtils.JsonCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper();
-        for(JsonUtils.JsonCustomizer customizer : customizers) {
+        for(JsonUtils.JacksonCustomizer customizer : customizers) {
             mapper = Optional.ofNullable(customizer.apply(mapper))
                     .orElse(mapper);
         }
         return mapper;
     }
-
-
 
 }

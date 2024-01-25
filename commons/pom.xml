@@ -118,12 +118,14 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
-
+		<dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
         <dependency>
 		    <groupId>com.fasterxml.jackson.module</groupId>
 		    <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
 		</dependency>
-		
         <dependency>
 		    <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
 		    <artifactId>jackson-jakarta-rs-json-provider</artifactId>
@@ -215,6 +217,11 @@
 			<artifactId>hamcrest-library</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+            <groupId>com.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

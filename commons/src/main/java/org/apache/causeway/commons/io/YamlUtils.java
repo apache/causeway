@@ -30,6 +30,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 import org.springframework.lang.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
@@ -62,11 +65,12 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class YamlUtils {
 
+    /**
+     * @deprecated We rely on Jackson to parse YAML. Might also replace SnakeYaml with Jackson to write YAML.
+     */
+    @Deprecated
     @FunctionalInterface
     public interface YamlDumpCustomizer extends UnaryOperator<DumperOptions> {}
-
-    @FunctionalInterface
-    public interface YamlLoadCustomizer extends UnaryOperator<LoaderOptions> {}
 
     // -- READING
 
@@ -77,7 +81,7 @@ public class YamlUtils {
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
             final @Nullable String stringUtf8,
-            final YamlUtils.YamlLoadCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return tryRead(mappedType, DataSource.ofStringUtf8(stringUtf8), customizers);
     }
 
@@ -88,10 +92,10 @@ public class YamlUtils {
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
-            final YamlUtils.YamlLoadCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createMapper(mappedType, Can.ofArray(customizers), Can.empty())
-                    .load(is));
+            return Try.call(()->createJacksonMapperForYaml(customizers)
+                    .readValue(is, mappedType));
         });
     }
 
@@ -106,7 +110,7 @@ public class YamlUtils {
             final YamlUtils.YamlDumpCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
-            createMapper(pojo.getClass(), Can.empty(), Can.ofArray(customizers)).dump(pojo, new OutputStreamWriter(os)));
+            createMapper(pojo.getClass(), Can.ofArray(customizers)).dump(pojo, new OutputStreamWriter(os)));
     }
 
     /**
@@ -119,7 +123,7 @@ public class YamlUtils {
             final @Nullable Object pojo,
             final YamlUtils.YamlDumpCustomizer ... customizers) {
         return pojo!=null
-                ? createMapper(pojo.getClass(), Can.empty(), Can.ofArray(customizers)).dump(pojo)
+                ? createMapper(pojo.getClass(), Can.ofArray(customizers)).dump(pojo)
                 : null;
     }
 
@@ -134,11 +138,24 @@ public class YamlUtils {
         return opts;
     }
 
-    // -- MAPPER FACTORY
+    // -- MAPPER FACTORIES
+
+    /**
+     * SnakeYaml as of 2.2 does not support Java records. So we use Jackson instead.
+     */
+    private ObjectMapper createJacksonMapperForYaml(
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        var mapper = new ObjectMapper(new YAMLFactory());
+        for(JsonUtils.JacksonCustomizer customizer : customizers) {
+            mapper = Optional.ofNullable(customizer.apply(mapper))
+                    .orElse(mapper);
+        }
+        return mapper;
+    }
+
 
     private Yaml createMapper(
             final Class<?> mappedType,
-            final Can<YamlUtils.YamlLoadCustomizer> loadCustomizers,
             final Can<YamlUtils.YamlDumpCustomizer> dumpCustomizers) {
         var dumperOptions = new DumperOptions();
         dumperOptions.setIndent(2);
@@ -154,10 +171,6 @@ public class YamlUtils {
         presenter.addClassTag(mappedType, Tag.MAP);
 
         var loaderOptions = new LoaderOptions();
-        for(YamlUtils.YamlLoadCustomizer customizer : loadCustomizers) {
-            loaderOptions = Optional.ofNullable(customizer.apply(loaderOptions))
-                    .orElse(loaderOptions);
-        }
         var mapper = new Yaml(new Constructor(mappedType, loaderOptions), presenter, dumperOptions, loaderOptions);
         return mapper;
     }

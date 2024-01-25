@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.commons.io;
 
+import javax.xml.transform.TransformerFactory;
+
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -25,10 +27,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-//import javax.xml.transform.TransformerFactory;
-//
-//import org.apache.causeway.commons.io.JaxbUtils.JaxbOptions.JaxbOptionsBuilder;
-//import org.approvaltests.Approvals;
+import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.JaxbUtils.JaxbOptions.JaxbOptionsBuilder;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -109,50 +109,36 @@ class JaxbUtilsTest {
         }
     }
 
-    // commenting this out only because javac v11 fails to compile.  However, javac v20 handles it, so we can uncomment in the future.
-    // https://the-asf.slack.com/archives/CFC42LWBV/p1694771499860429
+    @Test
+    void toStringUtf8_with_no_options() {
+        val aXml = JaxbUtils.toStringUtf8(a);
+        Approvals.verify(aXml);
+    }
 
-//    @Test
-//    void toStringUtf8_with_no_options() {
-//
-//        val aXml = JaxbUtils.toStringUtf8(a);
-//
-//        System.out.println(aXml);
-//
-//        Approvals.verify(aXml);
-//    }
-//
-//    @Test
-//    void toStringUtf8_with_no_formatted_output() {
-//
-//        val aXml = JaxbUtils.toStringUtf8(a, opt -> {
-//            opt.formattedOutput(false);
-//            return opt;
-//        });
-//
-//        System.out.println(aXml);
-//
-//        Approvals.verify(aXml);
-//    }
-//
-//    @Test
-//    void toStringUtf8_with_indent_number_overridden() {
-//
-//        val aXml = JaxbUtils.toStringUtf8(a, new JaxbUtils.TransformerFactoryCustomizer() {
-//            @Override
-//            public void apply(TransformerFactory transformerFactory) {
-//                transformerFactory.setAttribute("indent-number", 2);
-//            }
-//
-//            @Override
-//            public JaxbOptionsBuilder apply(JaxbOptionsBuilder jaxbOptionsBuilder) {
-//                return jaxbOptionsBuilder;
-//            }
-//        });
-//
-//        System.out.println(aXml);
-//
-//        Approvals.verify(aXml);
-//    }
+    @Test
+    void toStringUtf8_with_no_formatted_output() {
+        val aXml = JaxbUtils.toStringUtf8(a, opt -> {
+            opt.formattedOutput(false);
+            return opt;
+        });
+        Approvals.verify(aXml);
+    }
+
+    @Test
+    void toStringUtf8_with_indent_number_overridden() {
+        val aXml = JaxbUtils.toStringUtf8(a, new JaxbUtils.TransformerFactoryCustomizer() {
+            @Override
+            public void apply(final TransformerFactory transformerFactory) {
+                transformerFactory.setAttribute("indent-number", 2);
+            }
+
+            @Override
+            public JaxbOptionsBuilder apply(final JaxbOptionsBuilder jaxbOptionsBuilder) {
+                return jaxbOptionsBuilder;
+            }
+
+        });
+        Approvals.verify(aXml);
+    }
 
 }
