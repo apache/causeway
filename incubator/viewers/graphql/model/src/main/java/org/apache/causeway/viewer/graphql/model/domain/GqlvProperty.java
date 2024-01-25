@@ -21,14 +21,10 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
+import graphql.schema.*;
 
 import lombok.val;
 
@@ -79,6 +75,22 @@ public class GqlvProperty
                     .build()
             )
         );
+    }
+
+    static void addGqlArgument(
+            final OneToOneAssociation oneToOneAssociation,
+            final GraphQLFieldDefinition.Builder builder,
+            final TypeMapper.InputContext inputContext) {
+        builder.argument(gqlArgumentFor(oneToOneAssociation, inputContext));
+    }
+
+    private static GraphQLArgument gqlArgumentFor(
+            final OneToOneAssociation oneToOneAssociation,
+            final TypeMapper.InputContext inputContext) {
+        return GraphQLArgument.newArgument()
+                .name(oneToOneAssociation.getId())
+                .type(TypeMapper.inputTypeFor(oneToOneAssociation, inputContext))
+                .build();
     }
 
 

@@ -28,6 +28,8 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.*;
 
+import org.apache.causeway.commons.internal.base._Strings;
+
 import org.springframework.lang.Nullable;
 
 @Named("university.admin.AdminMenu")
@@ -48,6 +50,26 @@ public class AdminMenu {
     }
     public String disableOtherAdminAction() {
         return "yup, disabled!";
+    }
+
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public void actionWithDisabledParam(String firstParam, String secondParam, String thirdParameter) {
+    }
+    public String disable0ActionWithDisabledParam() {
+        return "yup, disabled!";
+    }
+    public String disable2ActionWithDisabledParam(String firstParam, String secondParam) {
+        return _Strings.isNullOrEmpty(secondParam) ? null : "Disabled because secondParam is not empty";
+    }
+
+
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public void actionWithHiddenParam(String firstParam, String secondParam) {
+    }
+    public boolean hide0ActionWithHiddenParam() {
+        return true;
     }
 
 }

@@ -446,6 +446,12 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Either__accept__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Either__accept__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__accept__leftConsumer__gqlv_action_parameter"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__accept__rightConsumer__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Either__gqlv_input"
       }, {
         "name" : "org_apache_causeway_commons_functional_Either__gqlv_meta"
@@ -454,15 +460,33 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__mapLeft__leftMapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Either__mapRight__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Either__mapRight__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__mapRight__rightMapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Either__map__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__map__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__map__leftMapper__gqlv_action_parameter"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Either__map__rightMapper__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Either__right__gqlv_action"
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__chain__chainingFunction__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Railway__chain__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__chain__gqlv_action_params"
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway__failure__gqlv_property"
       }, {
@@ -470,37 +494,73 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway__gqlv_meta"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__failureConsumer__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action_params"
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess__successConsumer__gqlv_action_parameter"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__mapFailure__failureMapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action_params"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess__successMapper__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Railway__success__gqlv_property"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer"
       }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__arg0__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action_params"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta"
       }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__exceptionWrapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action_params"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction"
       }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__arg0__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose__arg0__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action_params"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta"
       }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__exceptionWrapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action_params"
       }, {
         "name" : "org_apache_causeway_commons_functional_ThrowingRunnable"
       }, {
@@ -520,15 +580,33 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Try"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__accept__failureConsumer__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__accept__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__accept__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__accept__successConsumer__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__failure__gqlv_property"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__successMapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__successMapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess__successMapper__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__gqlv_input"
       }, {
@@ -538,35 +616,89 @@
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__ifFailureFail__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__ifFailure__exceptionConsumer__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action_params"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__valueConsumer__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccess__valueConsumer__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__mapEmptyToFailure__gqlv_action"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess__recoveryMapper__gqlv_action_parameter"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailure__failureMapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action_params"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__successMapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__successMapper__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccess__successMapper__gqlv_action_parameter"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapToEither__failureMapper__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__mapToEither__successMapper__gqlv_action_parameter"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__orCall__fallback__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__orCall__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__orCall__gqlv_action_params"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__success__gqlv_property"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__thenCall__callable__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__thenCall__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__thenCall__gqlv_action_params"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__thenRun__gqlv_action"
       }, {
+        "name" : "org_apache_causeway_commons_functional_Try__thenRun__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__thenRun__runnable__gqlv_action_parameter"
+      }, {
         "name" : "org_apache_causeway_commons_functional_Try__then__gqlv_action"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__then__gqlv_action_params"
+      }, {
+        "name" : "org_apache_causeway_commons_functional_Try__then__next__gqlv_action_parameter"
       }, {
         "name" : "org_apache_causeway_commons_functional_Try__value__gqlv_property"
       }, {
@@ -606,6 +738,24 @@
       }, {
         "name" : "university_admin_AdminMenu"
       }, {
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter"
+      }, {
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__gqlv_action"
+      }, {
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params"
+      }, {
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter"
+      }, {
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter"
+      }, {
+        "name" : "university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter"
+      }, {
+        "name" : "university_admin_AdminMenu__actionWithHiddenParam__gqlv_action"
+      }, {
+        "name" : "university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params"
+      }, {
+        "name" : "university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter"
+      }, {
         "name" : "university_admin_AdminMenu__adminAction__gqlv_action"
       }, {
         "name" : "university_admin_AdminMenu__otherAdminAction__gqlv_action"
@@ -624,17 +774,35 @@
       }, {
         "name" : "university_dept_Departments"
       }, {
+        "name" : "university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter"
+      }, {
         "name" : "university_dept_Departments__createDepartment__gqlv_action"
+      }, {
+        "name" : "university_dept_Departments__createDepartment__gqlv_action_params"
+      }, {
+        "name" : "university_dept_Departments__createDepartment__name__gqlv_action_parameter"
       }, {
         "name" : "university_dept_Departments__findAllDepartments__gqlv_action"
       }, {
         "name" : "university_dept_Departments__findByName__gqlv_action"
       }, {
+        "name" : "university_dept_Departments__findByName__gqlv_action_params"
+      }, {
+        "name" : "university_dept_Departments__findByName__name__gqlv_action_parameter"
+      }, {
         "name" : "university_dept_DeptHead"
+      }, {
+        "name" : "university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter"
       }, {
         "name" : "university_dept_DeptHead__changeDepartment__gqlv_action"
       }, {
+        "name" : "university_dept_DeptHead__changeDepartment__gqlv_action_params"
+      }, {
         "name" : "university_dept_DeptHead__changeName__gqlv_action"
+      }, {
+        "name" : "university_dept_DeptHead__changeName__gqlv_action_params"
+      }, {
+        "name" : "university_dept_DeptHead__changeName__newName__gqlv_action_parameter"
       }, {
         "name" : "university_dept_DeptHead__department__gqlv_property"
       }, {
@@ -650,6 +818,10 @@
       }, {
         "name" : "university_dept_DeptHeads__findHeadByName__gqlv_action"
       }, {
+        "name" : "university_dept_DeptHeads__findHeadByName__gqlv_action_params"
+      }, {
+        "name" : "university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter"
+      }, {
         "name" : "university_dept_Staff"
       }, {
         "name" : "university_dept_StaffMember"
@@ -662,11 +834,21 @@
       }, {
         "name" : "university_dept_StaffMember__name__gqlv_property"
       }, {
+        "name" : "university_dept_Staff__createStaffMember__department__gqlv_action_parameter"
+      }, {
         "name" : "university_dept_Staff__createStaffMember__gqlv_action"
+      }, {
+        "name" : "university_dept_Staff__createStaffMember__gqlv_action_params"
+      }, {
+        "name" : "university_dept_Staff__createStaffMember__name__gqlv_action_parameter"
       }, {
         "name" : "university_dept_Staff__findAllStaffMembers__gqlv_action"
       }, {
         "name" : "university_dept_Staff__findByName__gqlv_action"
+      }, {
+        "name" : "university_dept_Staff__findByName__gqlv_action_params"
+      }, {
+        "name" : "university_dept_Staff__findByName__name__gqlv_action_parameter"
       } ]
     }
   }

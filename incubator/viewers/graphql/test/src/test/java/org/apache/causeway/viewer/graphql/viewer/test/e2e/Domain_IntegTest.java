@@ -248,7 +248,40 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Test
     @UseReporter(DiffReporter.class)
+    void create_department_name_param_disabled() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void admin_action() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void action_with_disabled_param() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void action_with_hidden_param() throws Exception {
 
         // when
         val response = submit();

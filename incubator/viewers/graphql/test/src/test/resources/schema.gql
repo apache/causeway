@@ -72,7 +72,7 @@ type causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
   get: String!
   hidden: Boolean
   set(elementTypeFqcn: String!): causeway_applib_DomainObjectList
-  validate(elementTypeFqcn: String!): String
+  validate(elementTypeFqcn: String): String
 }
 
 type causeway_applib_DomainObjectList__gqlv_meta {
@@ -90,7 +90,7 @@ type causeway_applib_DomainObjectList__title__gqlv_property {
   get: String!
   hidden: Boolean
   set(title: String!): causeway_applib_DomainObjectList
-  validate(title: String!): String
+  validate(title: String): String
 }
 
 type causeway_applib_FacetGroupNode {
@@ -110,7 +110,7 @@ type causeway_applib_FacetGroupNode__facets__gqlv_property {
   get: String!
   hidden: Boolean
   set(facets: String!): causeway_applib_FacetGroupNode
-  validate(facets: String!): String
+  validate(facets: String): String
 }
 
 type causeway_applib_FacetGroupNode__gqlv_meta {
@@ -122,7 +122,7 @@ type causeway_applib_FacetGroupNode__parentNode__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): causeway_applib_FacetGroupNode
-  validate(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): String
+  validate(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
 type causeway_applib_ParameterNode {
@@ -147,7 +147,7 @@ type causeway_applib_ParameterNode__parameter__gqlv_property {
   get: String!
   hidden: Boolean
   set(parameter: String!): causeway_applib_ParameterNode
-  validate(parameter: String!): String
+  validate(parameter: String): String
 }
 
 type causeway_applib_ParameterNode__parentNode__gqlv_property {
@@ -155,7 +155,7 @@ type causeway_applib_ParameterNode__parentNode__gqlv_property {
   get: causeway_applib_node_ActionNode!
   hidden: Boolean
   set(parentNode: causeway_applib_node_ActionNode__gqlv_input!): causeway_applib_ParameterNode
-  validate(parentNode: causeway_applib_node_ActionNode__gqlv_input!): String
+  validate(parentNode: causeway_applib_node_ActionNode__gqlv_input): String
 }
 
 type causeway_applib_PropertyNode {
@@ -182,7 +182,7 @@ type causeway_applib_PropertyNode__mixedIn__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(mixedIn: Boolean!): causeway_applib_PropertyNode
-  validate(mixedIn: Boolean!): String
+  validate(mixedIn: Boolean): String
 }
 
 type causeway_applib_PropertyNode__parentNode__gqlv_property {
@@ -190,7 +190,7 @@ type causeway_applib_PropertyNode__parentNode__gqlv_property {
   get: causeway_applib_TypeNode!
   hidden: Boolean
   set(parentNode: causeway_applib_TypeNode__gqlv_input!): causeway_applib_PropertyNode
-  validate(parentNode: causeway_applib_TypeNode__gqlv_input!): String
+  validate(parentNode: causeway_applib_TypeNode__gqlv_input): String
 }
 
 type causeway_applib_PropertyNode__property__gqlv_property {
@@ -198,7 +198,7 @@ type causeway_applib_PropertyNode__property__gqlv_property {
   get: String!
   hidden: Boolean
   set(property: String!): causeway_applib_PropertyNode
-  validate(property: String!): String
+  validate(property: String): String
 }
 
 type causeway_applib_PropertyNode__streamChildNodes__gqlv_action {
@@ -219,7 +219,7 @@ type causeway_applib_RoleMemento__description__gqlv_property {
   get: String!
   hidden: Boolean
   set(description: String!): causeway_applib_RoleMemento
-  validate(description: String!): String
+  validate(description: String): String
 }
 
 type causeway_applib_RoleMemento__gqlv_meta {
@@ -232,7 +232,7 @@ type causeway_applib_RoleMemento__name__gqlv_property {
   get: String!
   hidden: Boolean
   set(name: String!): causeway_applib_RoleMemento
-  validate(name: String!): String
+  validate(name: String): String
 }
 
 type causeway_applib_TypeNode {
@@ -252,7 +252,7 @@ type causeway_applib_TypeNode__domainClassDto__gqlv_property {
   get: causeway_schema_metamodel_v2_DomainClassDto!
   hidden: Boolean
   set(domainClassDto: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input!): causeway_applib_TypeNode
-  validate(domainClassDto: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input!): String
+  validate(domainClassDto: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): String
 }
 
 type causeway_applib_TypeNode__gqlv_meta {
@@ -264,7 +264,7 @@ type causeway_applib_TypeNode__parentNode__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): causeway_applib_TypeNode
-  validate(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): String
+  validate(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
 type causeway_applib_UserMemento {
@@ -287,7 +287,7 @@ type causeway_applib_UserMemento__authenticationCode__gqlv_property {
   get: String!
   hidden: Boolean
   set(authenticationCode: String!): causeway_applib_UserMemento
-  validate(authenticationCode: String!): String
+  validate(authenticationCode: String): String
 }
 
 type causeway_applib_UserMemento__authenticationSource__gqlv_property {
@@ -295,7 +295,7 @@ type causeway_applib_UserMemento__authenticationSource__gqlv_property {
   get: String!
   hidden: Boolean
   set(authenticationSource: String!): causeway_applib_UserMemento
-  validate(authenticationSource: String!): String
+  validate(authenticationSource: String): String
 }
 
 type causeway_applib_UserMemento__avatarUrl__gqlv_property {
@@ -316,7 +316,7 @@ type causeway_applib_UserMemento__impersonating__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(impersonating: Boolean!): causeway_applib_UserMemento
-  validate(impersonating: Boolean!): String
+  validate(impersonating: Boolean): String
 }
 
 type causeway_applib_UserMemento__languageLocale__gqlv_property {
@@ -340,7 +340,7 @@ type causeway_applib_UserMemento__name__gqlv_property {
   get: String!
   hidden: Boolean
   set(name: String!): causeway_applib_UserMemento
-  validate(name: String!): String
+  validate(name: String): String
 }
 
 type causeway_applib_UserMemento__numberFormatLocale__gqlv_property {
@@ -398,7 +398,7 @@ type causeway_applib_node_ActionNode__action__gqlv_property {
   get: String!
   hidden: Boolean
   set(action: String!): causeway_applib_node_ActionNode
-  validate(action: String!): String
+  validate(action: String): String
 }
 
 type causeway_applib_node_ActionNode__childNodes__gqlv_collection {
@@ -416,7 +416,7 @@ type causeway_applib_node_ActionNode__mixedIn__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(mixedIn: Boolean!): causeway_applib_node_ActionNode
-  validate(mixedIn: Boolean!): String
+  validate(mixedIn: Boolean): String
 }
 
 type causeway_applib_node_ActionNode__parentNode__gqlv_property {
@@ -424,7 +424,7 @@ type causeway_applib_node_ActionNode__parentNode__gqlv_property {
   get: causeway_applib_TypeNode!
   hidden: Boolean
   set(parentNode: causeway_applib_TypeNode__gqlv_input!): causeway_applib_node_ActionNode
-  validate(parentNode: causeway_applib_TypeNode__gqlv_input!): String
+  validate(parentNode: causeway_applib_TypeNode__gqlv_input): String
 }
 
 type causeway_applib_node_ActionNode__streamChildNodes__gqlv_action {
@@ -453,7 +453,7 @@ type causeway_applib_node_CollectionNode__collection__gqlv_property {
   get: String!
   hidden: Boolean
   set(collection: String!): causeway_applib_node_CollectionNode
-  validate(collection: String!): String
+  validate(collection: String): String
 }
 
 type causeway_applib_node_CollectionNode__gqlv_meta {
@@ -466,7 +466,7 @@ type causeway_applib_node_CollectionNode__mixedIn__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(mixedIn: Boolean!): causeway_applib_node_CollectionNode
-  validate(mixedIn: Boolean!): String
+  validate(mixedIn: Boolean): String
 }
 
 type causeway_applib_node_CollectionNode__parentNode__gqlv_property {
@@ -474,7 +474,7 @@ type causeway_applib_node_CollectionNode__parentNode__gqlv_property {
   get: causeway_applib_TypeNode!
   hidden: Boolean
   set(parentNode: causeway_applib_TypeNode__gqlv_input!): causeway_applib_node_CollectionNode
-  validate(parentNode: causeway_applib_TypeNode__gqlv_input!): String
+  validate(parentNode: causeway_applib_TypeNode__gqlv_input): String
 }
 
 type causeway_applib_node_CollectionNode__streamChildNodes__gqlv_action {
@@ -501,7 +501,7 @@ type causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property {
   get: String!
   hidden: Boolean
   set(facetAttr: String!): causeway_applib_node_FacetAttrNode
-  validate(facetAttr: String!): String
+  validate(facetAttr: String): String
 }
 
 type causeway_applib_node_FacetAttrNode__gqlv_meta {
@@ -514,7 +514,7 @@ type causeway_applib_node_FacetAttrNode__parentNode__gqlv_property {
   get: causeway_applib_node_FacetNode!
   hidden: Boolean
   set(parentNode: causeway_applib_node_FacetNode__gqlv_input!): causeway_applib_node_FacetAttrNode
-  validate(parentNode: causeway_applib_node_FacetNode__gqlv_input!): String
+  validate(parentNode: causeway_applib_node_FacetNode__gqlv_input): String
 }
 
 type causeway_applib_node_FacetNode {
@@ -535,7 +535,7 @@ type causeway_applib_node_FacetNode__facet__gqlv_property {
   get: String!
   hidden: Boolean
   set(facet: String!): causeway_applib_node_FacetNode
-  validate(facet: String!): String
+  validate(facet: String): String
 }
 
 type causeway_applib_node_FacetNode__gqlv_meta {
@@ -547,7 +547,7 @@ type causeway_applib_node_FacetNode__parentNode__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): causeway_applib_node_FacetNode
-  validate(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): String
+  validate(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
 type causeway_applib_node_FacetNode__shadowed__gqlv_property {
@@ -555,7 +555,7 @@ type causeway_applib_node_FacetNode__shadowed__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(shadowed: Boolean!): causeway_applib_node_FacetNode
-  validate(shadowed: Boolean!): String
+  validate(shadowed: Boolean): String
 }
 
 type causeway_conf_ConfigurationMenu {
@@ -585,7 +585,7 @@ type causeway_conf_ConfigurationProperty__key__gqlv_property {
   get: String!
   hidden: Boolean
   set(key: String!): causeway_conf_ConfigurationProperty
-  validate(key: String!): String
+  validate(key: String): String
 }
 
 type causeway_conf_ConfigurationProperty__value__gqlv_property {
@@ -593,7 +593,7 @@ type causeway_conf_ConfigurationProperty__value__gqlv_property {
   get: String!
   hidden: Boolean
   set(value: String!): causeway_conf_ConfigurationProperty
-  validate(value: String!): String
+  validate(value: String): String
 }
 
 type causeway_conf_ConfigurationViewmodel {
@@ -644,7 +644,7 @@ type causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property {
   get: String!
   hidden: Boolean
   set(memberName: String!): causeway_feat_ApplicationFeatureViewModel
-  validate(memberName: String!): String
+  validate(memberName: String): String
 }
 
 type causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property {
@@ -652,14 +652,14 @@ type causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property {
   get: String!
   hidden: Boolean
   set(namespaceName: String!): causeway_feat_ApplicationFeatureViewModel
-  validate(namespaceName: String!): String
+  validate(namespaceName: String): String
 }
 
 type causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationFeatureViewModel
-  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): String
+  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
 type causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property {
@@ -667,7 +667,7 @@ type causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property {
   get: String!
   hidden: Boolean
   set(typeSimpleName: String!): causeway_feat_ApplicationFeatureViewModel
-  validate(typeSimpleName: String!): String
+  validate(typeSimpleName: String): String
 }
 
 type causeway_feat_ApplicationNamespace {
@@ -694,7 +694,7 @@ type causeway_feat_ApplicationNamespace__memberName__gqlv_property {
   get: String!
   hidden: Boolean
   set(memberName: String!): causeway_feat_ApplicationNamespace
-  validate(memberName: String!): String
+  validate(memberName: String): String
 }
 
 type causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
@@ -702,14 +702,14 @@ type causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
   get: String!
   hidden: Boolean
   set(namespaceName: String!): causeway_feat_ApplicationNamespace
-  validate(namespaceName: String!): String
+  validate(namespaceName: String): String
 }
 
 type causeway_feat_ApplicationNamespace__parent__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationNamespace
-  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): String
+  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
 type causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
@@ -717,7 +717,7 @@ type causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
   get: String!
   hidden: Boolean
   set(typeSimpleName: String!): causeway_feat_ApplicationNamespace
-  validate(typeSimpleName: String!): String
+  validate(typeSimpleName: String): String
 }
 
 type causeway_feat_ApplicationType {
@@ -746,7 +746,7 @@ type causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
   get: String!
   hidden: Boolean
   set(actionSemantics: String!): causeway_feat_ApplicationTypeAction
-  validate(actionSemantics: String!): String
+  validate(actionSemantics: String): String
 }
 
 type causeway_feat_ApplicationTypeAction__gqlv_meta {
@@ -759,7 +759,7 @@ type causeway_feat_ApplicationTypeAction__memberName__gqlv_property {
   get: String!
   hidden: Boolean
   set(memberName: String!): causeway_feat_ApplicationTypeAction
-  validate(memberName: String!): String
+  validate(memberName: String): String
 }
 
 type causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
@@ -767,14 +767,14 @@ type causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
   get: String!
   hidden: Boolean
   set(namespaceName: String!): causeway_feat_ApplicationTypeAction
-  validate(namespaceName: String!): String
+  validate(namespaceName: String): String
 }
 
 type causeway_feat_ApplicationTypeAction__parent__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationTypeAction
-  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): String
+  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
 type causeway_feat_ApplicationTypeAction__returnType__gqlv_property {
@@ -782,7 +782,7 @@ type causeway_feat_ApplicationTypeAction__returnType__gqlv_property {
   get: String!
   hidden: Boolean
   set(returnType: String!): causeway_feat_ApplicationTypeAction
-  validate(returnType: String!): String
+  validate(returnType: String): String
 }
 
 type causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
@@ -790,7 +790,7 @@ type causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
   get: String!
   hidden: Boolean
   set(typeSimpleName: String!): causeway_feat_ApplicationTypeAction
-  validate(typeSimpleName: String!): String
+  validate(typeSimpleName: String): String
 }
 
 type causeway_feat_ApplicationTypeCollection {
@@ -808,7 +808,7 @@ type causeway_feat_ApplicationTypeCollection__derived__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(derived: Boolean!): causeway_feat_ApplicationTypeCollection
-  validate(derived: Boolean!): String
+  validate(derived: Boolean): String
 }
 
 type causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
@@ -816,7 +816,7 @@ type causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
   get: String!
   hidden: Boolean
   set(elementType: String!): causeway_feat_ApplicationTypeCollection
-  validate(elementType: String!): String
+  validate(elementType: String): String
 }
 
 type causeway_feat_ApplicationTypeCollection__gqlv_meta {
@@ -829,7 +829,7 @@ type causeway_feat_ApplicationTypeCollection__memberName__gqlv_property {
   get: String!
   hidden: Boolean
   set(memberName: String!): causeway_feat_ApplicationTypeCollection
-  validate(memberName: String!): String
+  validate(memberName: String): String
 }
 
 type causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property {
@@ -837,14 +837,14 @@ type causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property {
   get: String!
   hidden: Boolean
   set(namespaceName: String!): causeway_feat_ApplicationTypeCollection
-  validate(namespaceName: String!): String
+  validate(namespaceName: String): String
 }
 
 type causeway_feat_ApplicationTypeCollection__parent__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationTypeCollection
-  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): String
+  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
 type causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property {
@@ -852,7 +852,7 @@ type causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property {
   get: String!
   hidden: Boolean
   set(typeSimpleName: String!): causeway_feat_ApplicationTypeCollection
-  validate(typeSimpleName: String!): String
+  validate(typeSimpleName: String): String
 }
 
 type causeway_feat_ApplicationTypeMember {
@@ -873,7 +873,7 @@ type causeway_feat_ApplicationTypeMember__memberName__gqlv_property {
   get: String!
   hidden: Boolean
   set(memberName: String!): causeway_feat_ApplicationTypeMember
-  validate(memberName: String!): String
+  validate(memberName: String): String
 }
 
 type causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
@@ -881,14 +881,14 @@ type causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
   get: String!
   hidden: Boolean
   set(namespaceName: String!): causeway_feat_ApplicationTypeMember
-  validate(namespaceName: String!): String
+  validate(namespaceName: String): String
 }
 
 type causeway_feat_ApplicationTypeMember__parent__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationTypeMember
-  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): String
+  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
 type causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
@@ -896,7 +896,7 @@ type causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
   get: String!
   hidden: Boolean
   set(typeSimpleName: String!): causeway_feat_ApplicationTypeMember
-  validate(typeSimpleName: String!): String
+  validate(typeSimpleName: String): String
 }
 
 type causeway_feat_ApplicationTypeProperty {
@@ -916,7 +916,7 @@ type causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(derived: Boolean!): causeway_feat_ApplicationTypeProperty
-  validate(derived: Boolean!): String
+  validate(derived: Boolean): String
 }
 
 type causeway_feat_ApplicationTypeProperty__gqlv_meta {
@@ -937,7 +937,7 @@ type causeway_feat_ApplicationTypeProperty__memberName__gqlv_property {
   get: String!
   hidden: Boolean
   set(memberName: String!): causeway_feat_ApplicationTypeProperty
-  validate(memberName: String!): String
+  validate(memberName: String): String
 }
 
 type causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
@@ -945,14 +945,14 @@ type causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
   get: String!
   hidden: Boolean
   set(namespaceName: String!): causeway_feat_ApplicationTypeProperty
-  validate(namespaceName: String!): String
+  validate(namespaceName: String): String
 }
 
 type causeway_feat_ApplicationTypeProperty__parent__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationTypeProperty
-  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): String
+  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
 type causeway_feat_ApplicationTypeProperty__returnType__gqlv_property {
@@ -960,7 +960,7 @@ type causeway_feat_ApplicationTypeProperty__returnType__gqlv_property {
   get: String!
   hidden: Boolean
   set(returnType: String!): causeway_feat_ApplicationTypeProperty
-  validate(returnType: String!): String
+  validate(returnType: String): String
 }
 
 type causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property {
@@ -968,7 +968,7 @@ type causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property {
   get: String!
   hidden: Boolean
   set(typeSimpleName: String!): causeway_feat_ApplicationTypeProperty
-  validate(typeSimpleName: String!): String
+  validate(typeSimpleName: String): String
 }
 
 type causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property {
@@ -1001,7 +1001,7 @@ type causeway_feat_ApplicationType__memberName__gqlv_property {
   get: String!
   hidden: Boolean
   set(memberName: String!): causeway_feat_ApplicationType
-  validate(memberName: String!): String
+  validate(memberName: String): String
 }
 
 type causeway_feat_ApplicationType__namespaceName__gqlv_property {
@@ -1009,14 +1009,14 @@ type causeway_feat_ApplicationType__namespaceName__gqlv_property {
   get: String!
   hidden: Boolean
   set(namespaceName: String!): causeway_feat_ApplicationType
-  validate(namespaceName: String!): String
+  validate(namespaceName: String): String
 }
 
 type causeway_feat_ApplicationType__parent__gqlv_property {
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationType
-  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): String
+  validate(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
 type causeway_feat_ApplicationType__properties__gqlv_collection {
@@ -1030,7 +1030,7 @@ type causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
   get: String!
   hidden: Boolean
   set(typeSimpleName: String!): causeway_feat_ApplicationType
-  validate(typeSimpleName: String!): String
+  validate(typeSimpleName: String): String
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto {
@@ -1051,7 +1051,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property {
   get: String!
   hidden: Boolean
   set(actions: String!): causeway_schema_metamodel_v2_DomainClassDto
-  validate(actions: String!): String
+  validate(actions: String): String
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property {
@@ -1059,7 +1059,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property {
   get: String!
   hidden: Boolean
   set(annotations: String!): causeway_schema_metamodel_v2_DomainClassDto
-  validate(annotations: String!): String
+  validate(annotations: String): String
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property {
@@ -1067,7 +1067,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property {
   get: String!
   hidden: Boolean
   set(collections: String!): causeway_schema_metamodel_v2_DomainClassDto
-  validate(collections: String!): String
+  validate(collections: String): String
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
@@ -1075,7 +1075,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
   get: String!
   hidden: Boolean
   set(facets: String!): causeway_schema_metamodel_v2_DomainClassDto
-  validate(facets: String!): String
+  validate(facets: String): String
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta {
@@ -1088,7 +1088,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property {
   get: String!
   hidden: Boolean
   set(id: String!): causeway_schema_metamodel_v2_DomainClassDto
-  validate(id: String!): String
+  validate(id: String): String
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property {
@@ -1112,7 +1112,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property {
   get: String!
   hidden: Boolean
   set(properties: String!): causeway_schema_metamodel_v2_DomainClassDto
-  validate(properties: String!): String
+  validate(properties: String): String
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
@@ -1120,7 +1120,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(service: Boolean!): causeway_schema_metamodel_v2_DomainClassDto
-  validate(service: Boolean!): String
+  validate(service: Boolean): String
 }
 
 type causeway_security_LoginRedirect {
@@ -1156,7 +1156,7 @@ type causeway_testing_fixtures_FixtureResult__className__gqlv_property {
   get: String!
   hidden: Boolean
   set(className: String!): causeway_testing_fixtures_FixtureResult
-  validate(className: String!): String
+  validate(className: String): String
 }
 
 type causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_property {
@@ -1177,14 +1177,14 @@ type causeway_testing_fixtures_FixtureResult__key__gqlv_property {
   get: String!
   hidden: Boolean
   set(key: String!): causeway_testing_fixtures_FixtureResult
-  validate(key: String!): String
+  validate(key: String): String
 }
 
 type causeway_testing_fixtures_FixtureResult__object__gqlv_property {
   disabled: String
   hidden: Boolean
   set(object: String!): causeway_testing_fixtures_FixtureResult
-  validate(object: String!): String
+  validate(object: String): String
 }
 
 type java_lang_Runnable {
@@ -1273,7 +1273,21 @@ type org_apache_causeway_commons_functional_Either__accept__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(leftConsumer: java_util_function_Consumer__gqlv_input!, rightConsumer: java_util_function_Consumer__gqlv_input!): String
-  validate(leftConsumer: java_util_function_Consumer__gqlv_input!, rightConsumer: java_util_function_Consumer__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Either__accept__gqlv_action_params
+  validate(leftConsumer: java_util_function_Consumer__gqlv_input, rightConsumer: java_util_function_Consumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Either__accept__gqlv_action_params {
+  leftConsumer: org_apache_causeway_commons_functional_Either__accept__leftConsumer__gqlv_action_parameter
+  rightConsumer: org_apache_causeway_commons_functional_Either__accept__rightConsumer__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Either__accept__leftConsumer__gqlv_action_parameter {
+  disabled(leftConsumer: java_util_function_Consumer__gqlv_input, rightConsumer: java_util_function_Consumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Either__accept__rightConsumer__gqlv_action_parameter {
+  disabled(leftConsumer: java_util_function_Consumer__gqlv_input, rightConsumer: java_util_function_Consumer__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Either__gqlv_meta {
@@ -1292,21 +1306,53 @@ type org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(leftMapper: java_util_function_Function__gqlv_input!): org_apache_causeway_commons_functional_Either
-  validate(leftMapper: java_util_function_Function__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action_params
+  validate(leftMapper: java_util_function_Function__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action_params {
+  leftMapper: org_apache_causeway_commons_functional_Either__mapLeft__leftMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Either__mapLeft__leftMapper__gqlv_action_parameter {
+  disabled(leftMapper: java_util_function_Function__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Either__mapRight__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(rightMapper: java_util_function_Function__gqlv_input!): org_apache_causeway_commons_functional_Either
-  validate(rightMapper: java_util_function_Function__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Either__mapRight__gqlv_action_params
+  validate(rightMapper: java_util_function_Function__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Either__mapRight__gqlv_action_params {
+  rightMapper: org_apache_causeway_commons_functional_Either__mapRight__rightMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Either__mapRight__rightMapper__gqlv_action_parameter {
+  disabled(rightMapper: java_util_function_Function__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Either__map__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(leftMapper: java_util_function_Function__gqlv_input!, rightMapper: java_util_function_Function__gqlv_input!): org_apache_causeway_commons_functional_Either
-  validate(leftMapper: java_util_function_Function__gqlv_input!, rightMapper: java_util_function_Function__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Either__map__gqlv_action_params
+  validate(leftMapper: java_util_function_Function__gqlv_input, rightMapper: java_util_function_Function__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Either__map__gqlv_action_params {
+  leftMapper: org_apache_causeway_commons_functional_Either__map__leftMapper__gqlv_action_parameter
+  rightMapper: org_apache_causeway_commons_functional_Either__map__rightMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Either__map__leftMapper__gqlv_action_parameter {
+  disabled(leftMapper: java_util_function_Function__gqlv_input, rightMapper: java_util_function_Function__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Either__map__rightMapper__gqlv_action_parameter {
+  disabled(leftMapper: java_util_function_Function__gqlv_input, rightMapper: java_util_function_Function__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Either__right__gqlv_action {
@@ -1327,11 +1373,20 @@ type org_apache_causeway_commons_functional_Railway {
   success: org_apache_causeway_commons_functional_Railway__success__gqlv_property
 }
 
+type org_apache_causeway_commons_functional_Railway__chain__chainingFunction__gqlv_action_parameter {
+  disabled(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
 type org_apache_causeway_commons_functional_Railway__chain__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  validate(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Railway__chain__gqlv_action_params
+  validate(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Railway__chain__gqlv_action_params {
+  chainingFunction: org_apache_causeway_commons_functional_Railway__chain__chainingFunction__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_Railway__failure__gqlv_property {
@@ -1339,7 +1394,7 @@ type org_apache_causeway_commons_functional_Railway__failure__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(failure: Boolean!): org_apache_causeway_commons_functional_Railway
-  validate(failure: Boolean!): String
+  validate(failure: Boolean): String
 }
 
 type org_apache_causeway_commons_functional_Railway__gqlv_meta {
@@ -1347,32 +1402,68 @@ type org_apache_causeway_commons_functional_Railway__gqlv_meta {
   logicalTypeName: String!
 }
 
+type org_apache_causeway_commons_functional_Railway__ifFailure__failureConsumer__gqlv_action_parameter {
+  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
 type org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  validate(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action_params
+  validate(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action_params {
+  failureConsumer: org_apache_causeway_commons_functional_Railway__ifFailure__failureConsumer__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  validate(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action_params
+  validate(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action_params {
+  successConsumer: org_apache_causeway_commons_functional_Railway__ifSuccess__successConsumer__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Railway__ifSuccess__successConsumer__gqlv_action_parameter {
+  disabled(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Railway__mapFailure__failureMapper__gqlv_action_parameter {
+  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action_params
+  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action_params {
+  failureMapper: org_apache_causeway_commons_functional_Railway__mapFailure__failureMapper__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action_params
+  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action_params {
+  successMapper: org_apache_causeway_commons_functional_Railway__mapSuccess__successMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Railway__mapSuccess__successMapper__gqlv_action_parameter {
+  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Railway__success__gqlv_property {
@@ -1380,7 +1471,7 @@ type org_apache_causeway_commons_functional_Railway__success__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(success: Boolean!): org_apache_causeway_commons_functional_Railway
-  validate(success: Boolean!): String
+  validate(success: Boolean): String
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer {
@@ -1389,11 +1480,20 @@ type org_apache_causeway_commons_functional_ThrowingConsumer {
   throwing: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action
 }
 
+type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__arg0__gqlv_action_parameter {
+  disabled(arg0: java_util_function_Consumer__gqlv_input): String
+}
+
 type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(arg0: java_util_function_Consumer__gqlv_input!): java_util_function_Consumer
-  validate(arg0: java_util_function_Consumer__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action_params
+  validate(arg0: java_util_function_Consumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action_params {
+  arg0: org_apache_causeway_commons_functional_ThrowingConsumer__andThen__arg0__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta {
@@ -1401,11 +1501,20 @@ type org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta {
   logicalTypeName: String!
 }
 
+type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__exceptionWrapper__gqlv_action_parameter {
+  disabled(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
+}
+
 type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(exceptionWrapper: java_util_function_BiFunction__gqlv_input!): org_apache_causeway_commons_functional_ThrowingConsumer
-  validate(exceptionWrapper: java_util_function_BiFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action_params
+  validate(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action_params {
+  exceptionWrapper: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__exceptionWrapper__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction {
@@ -1415,18 +1524,36 @@ type org_apache_causeway_commons_functional_ThrowingFunction {
   throwing: org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action
 }
 
+type org_apache_causeway_commons_functional_ThrowingFunction__andThen__arg0__gqlv_action_parameter {
+  disabled(arg0: java_util_function_Function__gqlv_input): String
+}
+
 type org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(arg0: java_util_function_Function__gqlv_input!): java_util_function_Function
-  validate(arg0: java_util_function_Function__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action_params
+  validate(arg0: java_util_function_Function__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action_params {
+  arg0: org_apache_causeway_commons_functional_ThrowingFunction__andThen__arg0__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_ThrowingFunction__compose__arg0__gqlv_action_parameter {
+  disabled(arg0: java_util_function_Function__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(arg0: java_util_function_Function__gqlv_input!): java_util_function_Function
-  validate(arg0: java_util_function_Function__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action_params
+  validate(arg0: java_util_function_Function__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action_params {
+  arg0: org_apache_causeway_commons_functional_ThrowingFunction__compose__arg0__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta {
@@ -1434,11 +1561,20 @@ type org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta {
   logicalTypeName: String!
 }
 
+type org_apache_causeway_commons_functional_ThrowingFunction__throwing__exceptionWrapper__gqlv_action_parameter {
+  disabled(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
+}
+
 type org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(exceptionWrapper: java_util_function_BiFunction__gqlv_input!): org_apache_causeway_commons_functional_ThrowingFunction
-  validate(exceptionWrapper: java_util_function_BiFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action_params
+  validate(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action_params {
+  exceptionWrapper: org_apache_causeway_commons_functional_ThrowingFunction__throwing__exceptionWrapper__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable {
@@ -1517,11 +1653,25 @@ type org_apache_causeway_commons_functional_Try {
   value: org_apache_causeway_commons_functional_Try__value__gqlv_property
 }
 
+type org_apache_causeway_commons_functional_Try__accept__failureConsumer__gqlv_action_parameter {
+  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
 type org_apache_causeway_commons_functional_Try__accept__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__accept__gqlv_action_params
+  validate(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__accept__gqlv_action_params {
+  failureConsumer: org_apache_causeway_commons_functional_Try__accept__failureConsumer__gqlv_action_parameter
+  successConsumer: org_apache_causeway_commons_functional_Try__accept__successConsumer__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__accept__successConsumer__gqlv_action_parameter {
+  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__failure__gqlv_property {
@@ -1529,28 +1679,55 @@ type org_apache_causeway_commons_functional_Try__failure__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(failure: Boolean!): org_apache_causeway_commons_functional_Try
-  validate(failure: Boolean!): String
+  validate(failure: Boolean): String
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action_params
+  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action_params {
+  successMapper: org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__successMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__successMapper__gqlv_action_parameter {
+  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action_params
+  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action_params {
+  successMapper: org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__successMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__successMapper__gqlv_action_parameter {
+  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action_params
+  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action_params {
+  successMapper: org_apache_causeway_commons_functional_Try__flatMapSuccess__successMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__flatMapSuccess__successMapper__gqlv_action_parameter {
+  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__gqlv_meta {
@@ -1572,25 +1749,52 @@ type org_apache_causeway_commons_functional_Try__ifFailureFail__gqlv_action {
   validate: String
 }
 
+type org_apache_causeway_commons_functional_Try__ifFailure__exceptionConsumer__gqlv_action_parameter {
+  disabled(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
 type org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action_params
+  validate(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action_params {
+  exceptionConsumer: org_apache_causeway_commons_functional_Try__ifFailure__exceptionConsumer__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action_params
+  validate(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action_params {
+  valueConsumer: org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__valueConsumer__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__valueConsumer__gqlv_action_parameter {
+  disabled(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action_params
+  validate(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action_params {
+  valueConsumer: org_apache_causeway_commons_functional_Try__ifSuccess__valueConsumer__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__ifSuccess__valueConsumer__gqlv_action_parameter {
+  disabled(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__mapEmptyToFailure__gqlv_action {
@@ -1604,49 +1808,117 @@ type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_actio
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action_params
+  validate(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action_params {
+  recoveryMapper: org_apache_causeway_commons_functional_Try__mapFailureToSuccess__recoveryMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__recoveryMapper__gqlv_action_parameter {
+  disabled(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__mapFailure__failureMapper__gqlv_action_parameter {
+  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action_params
+  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action_params {
+  failureMapper: org_apache_causeway_commons_functional_Try__mapFailure__failureMapper__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action_params
+  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action_params {
+  successMapper: org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__successMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__successMapper__gqlv_action_parameter {
+  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action_params
+  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action_params {
+  successMapper: org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__successMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__successMapper__gqlv_action_parameter {
+  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action_params
+  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action_params {
+  successMapper: org_apache_causeway_commons_functional_Try__mapSuccess__successMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__mapSuccess__successMapper__gqlv_action_parameter {
+  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__mapToEither__failureMapper__gqlv_action_parameter {
+  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Either
-  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action_params
+  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action_params {
+  failureMapper: org_apache_causeway_commons_functional_Try__mapToEither__failureMapper__gqlv_action_parameter
+  successMapper: org_apache_causeway_commons_functional_Try__mapToEither__successMapper__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__mapToEither__successMapper__gqlv_action_parameter {
+  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__orCall__fallback__gqlv_action_parameter {
+  disabled(fallback: java_util_concurrent_Callable__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__orCall__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(fallback: java_util_concurrent_Callable__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(fallback: java_util_concurrent_Callable__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__orCall__gqlv_action_params
+  validate(fallback: java_util_concurrent_Callable__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__orCall__gqlv_action_params {
+  fallback: org_apache_causeway_commons_functional_Try__orCall__fallback__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_Try__success__gqlv_property {
@@ -1654,35 +1926,62 @@ type org_apache_causeway_commons_functional_Try__success__gqlv_property {
   get: Boolean!
   hidden: Boolean
   set(success: Boolean!): org_apache_causeway_commons_functional_Try
-  validate(success: Boolean!): String
+  validate(success: Boolean): String
+}
+
+type org_apache_causeway_commons_functional_Try__thenCall__callable__gqlv_action_parameter {
+  disabled(callable: java_util_concurrent_Callable__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__thenCall__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(callable: java_util_concurrent_Callable__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(callable: java_util_concurrent_Callable__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__thenCall__gqlv_action_params
+  validate(callable: java_util_concurrent_Callable__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__thenCall__gqlv_action_params {
+  callable: org_apache_causeway_commons_functional_Try__thenCall__callable__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_Try__thenRun__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__thenRun__gqlv_action_params
+  validate(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__thenRun__gqlv_action_params {
+  runnable: org_apache_causeway_commons_functional_Try__thenRun__runnable__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__thenRun__runnable__gqlv_action_parameter {
+  disabled(runnable: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__then__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(next: java_util_concurrent_Callable__gqlv_input!): org_apache_causeway_commons_functional_Try
-  validate(next: java_util_concurrent_Callable__gqlv_input!): String
+  params: org_apache_causeway_commons_functional_Try__then__gqlv_action_params
+  validate(next: java_util_concurrent_Callable__gqlv_input): String
+}
+
+type org_apache_causeway_commons_functional_Try__then__gqlv_action_params {
+  next: org_apache_causeway_commons_functional_Try__then__next__gqlv_action_parameter
+}
+
+type org_apache_causeway_commons_functional_Try__then__next__gqlv_action_parameter {
+  disabled(next: java_util_concurrent_Callable__gqlv_input): String
 }
 
 type org_apache_causeway_commons_functional_Try__value__gqlv_property {
   disabled: String
   hidden: Boolean
   set(value: String!): org_apache_causeway_commons_functional_Try
-  validate(value: String!): String
+  validate(value: String): String
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode {
@@ -1705,7 +2004,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_p
   disabled: String
   hidden: Boolean
   set(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): org_apache_causeway_core_metamodel_inspect_model_MMNode
-  validate(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): String
+  validate(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode {
@@ -1731,7 +2030,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_
   get: Boolean!
   hidden: Boolean
   set(mixedIn: Boolean!): org_apache_causeway_core_metamodel_inspect_model_MemberNode
-  validate(mixedIn: Boolean!): String
+  validate(mixedIn: Boolean): String
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property {
@@ -1739,7 +2038,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gq
   get: causeway_applib_TypeNode!
   hidden: Boolean
   set(parentNode: causeway_applib_TypeNode__gqlv_input!): org_apache_causeway_core_metamodel_inspect_model_MemberNode
-  validate(parentNode: causeway_applib_TypeNode__gqlv_input!): String
+  validate(parentNode: causeway_applib_TypeNode__gqlv_input): String
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNodes__gqlv_action {
@@ -1760,7 +2059,7 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__f
   get: String!
   hidden: Boolean
   set(friendlyName: String!): org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
-  validate(friendlyName: String!): String
+  validate(friendlyName: String): String
 }
 
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
@@ -1773,12 +2072,61 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__q
   get: String!
   hidden: Boolean
   set(qualifiedName: String!): org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
-  validate(qualifiedName: String!): String
+  validate(qualifiedName: String): String
 }
 
 type university_admin_AdminMenu {
+  actionWithDisabledParam: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action
+  actionWithHiddenParam: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action
   adminAction: university_admin_AdminMenu__adminAction__gqlv_action
   otherAdminAction: university_admin_AdminMenu__otherAdminAction__gqlv_action
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter {
+  disabled(firstParam: String, secondParam: String, thirdParameter: String): String
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent(firstParam: String!, secondParam: String!, thirdParameter: String!): String
+  params: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params
+  validate(firstParam: String, secondParam: String, thirdParameter: String): String
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params {
+  firstParam: university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter
+  secondParam: university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter
+  thirdParameter: university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter {
+  disabled(firstParam: String, secondParam: String, thirdParameter: String): String
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter {
+  disabled(firstParam: String, secondParam: String, thirdParameter: String): String
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter {
+  disabled(firstParam: String, secondParam: String): String
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent(firstParam: String!, secondParam: String!): String
+  params: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params
+  validate(firstParam: String, secondParam: String): String
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params {
+  firstParam: university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter
+  secondParam: university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter {
+  disabled(firstParam: String, secondParam: String): String
 }
 
 type university_admin_AdminMenu__adminAction__gqlv_action {
@@ -1821,7 +2169,7 @@ type university_dept_Department__name__gqlv_property {
   get: String!
   hidden: Boolean
   set(name: String!): university_dept_Department
-  validate(name: String!): String
+  validate(name: String): String
 }
 
 type university_dept_Department__staffMembers__gqlv_collection {
@@ -1836,11 +2184,25 @@ type university_dept_Departments {
   findByName: university_dept_Departments__findByName__gqlv_action
 }
 
+type university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
+  disabled(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
+}
+
 type university_dept_Departments__createDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(deptHead: university_dept_DeptHead__gqlv_input, name: String!): university_dept_Department
-  validate(deptHead: university_dept_DeptHead__gqlv_input, name: String!): String
+  params: university_dept_Departments__createDepartment__gqlv_action_params
+  validate(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
+}
+
+type university_dept_Departments__createDepartment__gqlv_action_params {
+  deptHead: university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter
+  name: university_dept_Departments__createDepartment__name__gqlv_action_parameter
+}
+
+type university_dept_Departments__createDepartment__name__gqlv_action_parameter {
+  disabled(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
 }
 
 type university_dept_Departments__findAllDepartments__gqlv_action {
@@ -1854,7 +2216,16 @@ type university_dept_Departments__findByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_Department
-  validate(name: String!): String
+  params: university_dept_Departments__findByName__gqlv_action_params
+  validate(name: String): String
+}
+
+type university_dept_Departments__findByName__gqlv_action_params {
+  name: university_dept_Departments__findByName__name__gqlv_action_parameter
+}
+
+type university_dept_Departments__findByName__name__gqlv_action_parameter {
+  disabled(name: String): String
 }
 
 type university_dept_DeptHead {
@@ -1865,18 +2236,36 @@ type university_dept_DeptHead {
   name: university_dept_DeptHead__name__gqlv_property
 }
 
+type university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter {
+  disabled(department: university_dept_Department__gqlv_input): String
+}
+
 type university_dept_DeptHead__changeDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(department: university_dept_Department__gqlv_input!): university_dept_DeptHead
-  validate(department: university_dept_Department__gqlv_input!): String
+  params: university_dept_DeptHead__changeDepartment__gqlv_action_params
+  validate(department: university_dept_Department__gqlv_input): String
+}
+
+type university_dept_DeptHead__changeDepartment__gqlv_action_params {
+  department: university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter
 }
 
 type university_dept_DeptHead__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(newName: String!): university_dept_DeptHead
-  validate(newName: String!): String
+  params: university_dept_DeptHead__changeName__gqlv_action_params
+  validate(newName: String): String
+}
+
+type university_dept_DeptHead__changeName__gqlv_action_params {
+  newName: university_dept_DeptHead__changeName__newName__gqlv_action_parameter
+}
+
+type university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
+  disabled(newName: String): String
 }
 
 type university_dept_DeptHead__department__gqlv_property {
@@ -1917,7 +2306,16 @@ type university_dept_DeptHeads__findHeadByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_DeptHead
-  validate(name: String!): String
+  params: university_dept_DeptHeads__findHeadByName__gqlv_action_params
+  validate(name: String): String
+}
+
+type university_dept_DeptHeads__findHeadByName__gqlv_action_params {
+  name: university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter
+}
+
+type university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter {
+  disabled(name: String): String
 }
 
 type university_dept_Staff {
@@ -1951,14 +2349,28 @@ type university_dept_StaffMember__name__gqlv_property {
   get: String!
   hidden: Boolean
   set(name: String!): university_dept_StaffMember
-  validate(name: String!): String
+  validate(name: String): String
+}
+
+type university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
+  disabled(department: university_dept_Department__gqlv_input, name: String): String
 }
 
 type university_dept_Staff__createStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(department: university_dept_Department__gqlv_input!, name: String!): university_dept_StaffMember
-  validate(department: university_dept_Department__gqlv_input!, name: String!): String
+  params: university_dept_Staff__createStaffMember__gqlv_action_params
+  validate(department: university_dept_Department__gqlv_input, name: String): String
+}
+
+type university_dept_Staff__createStaffMember__gqlv_action_params {
+  department: university_dept_Staff__createStaffMember__department__gqlv_action_parameter
+  name: university_dept_Staff__createStaffMember__name__gqlv_action_parameter
+}
+
+type university_dept_Staff__createStaffMember__name__gqlv_action_parameter {
+  disabled(department: university_dept_Department__gqlv_input, name: String): String
 }
 
 type university_dept_Staff__findAllStaffMembers__gqlv_action {
@@ -1972,7 +2384,16 @@ type university_dept_Staff__findByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_StaffMember
-  validate(name: String!): String
+  params: university_dept_Staff__findByName__gqlv_action_params
+  validate(name: String): String
+}
+
+type university_dept_Staff__findByName__gqlv_action_params {
+  name: university_dept_Staff__findByName__name__gqlv_action_parameter
+}
+
+type university_dept_Staff__findByName__name__gqlv_action_parameter {
+  disabled(name: String): String
 }
 
 input causeway_applib_DomainObjectList__gqlv_input {

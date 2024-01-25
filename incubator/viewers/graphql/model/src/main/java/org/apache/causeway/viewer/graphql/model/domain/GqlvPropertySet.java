@@ -18,18 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.services.wrapper.InvalidException;
-import org.apache.causeway.applib.services.wrapper.events.PropertyModifyEvent;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import graphql.schema.GraphQLArgument;
 
 import lombok.val;
 
@@ -67,7 +60,7 @@ public class GqlvPropertySet {
             val fieldBuilder = newFieldDefinition()
                     .name("set")
                     .type(type);
-            addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder);
+            GqlvProperty.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
             fieldDefinition = fieldBuilder.build();
 
             holder.addField(fieldDefinition);
@@ -77,20 +70,6 @@ public class GqlvPropertySet {
 
     GraphQLOutputType outputTypeFor(GqlvPropertySetHolder holder) {
         return TypeMapper.outputTypeFor(holder.getHolder().getObjectSpecification());   // setters return void, so we return the domain object instead
-    }
-
-    static void addGqlArgument(
-            final OneToOneAssociation oneToOneAssociation,
-            final GraphQLFieldDefinition.Builder builder) {
-
-        builder.argument(gqlArgumentFor(oneToOneAssociation));
-    }
-
-    private static GraphQLArgument gqlArgumentFor(final OneToOneAssociation oneToOneAssociation) {
-        return GraphQLArgument.newArgument()
-                .name(oneToOneAssociation.getId())
-                .type(TypeMapper.inputTypeFor(oneToOneAssociation))
-                .build();
     }
 
 

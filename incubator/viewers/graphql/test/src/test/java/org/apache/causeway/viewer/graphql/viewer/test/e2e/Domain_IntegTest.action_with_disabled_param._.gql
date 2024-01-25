@@ -1,0 +1,17 @@
+{
+  university_admin_AdminMenu {
+    actionWithDisabledParam {
+      params {
+        firstParam {
+          disabled
+        }
+        secondParam {
+          disabled
+        }
+        thirdParameter {
+          disabled(firstParam: null, secondParam: "not blank")
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  university_admin_AdminMenu {
+    actionWithHiddenParam {
+      params {
+        firstParam {
+          hidden
+        }
+        secondParam {
+          hidden
+        }
+      }
+    }
+  }
+}

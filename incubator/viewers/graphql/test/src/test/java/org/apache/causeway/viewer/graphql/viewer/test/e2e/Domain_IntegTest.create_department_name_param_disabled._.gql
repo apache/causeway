@@ -1,0 +1,16 @@
+{
+  university_dept_Departments {
+    createDepartment {
+      params {
+        name {
+          disabled(name: "")
+        }
+      }
+      invokeNonIdempotent(name: "newbie") {
+        name {
+          get
+        }
+      }
+    }
+  }
+}

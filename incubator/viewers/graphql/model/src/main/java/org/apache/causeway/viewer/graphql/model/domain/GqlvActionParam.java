@@ -19,13 +19,10 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -66,9 +63,8 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getHolder().getHolder().getObjectSpecification(), objectActionParameter));
         this.bookmarkService = bookmarkService;
 
-        this.disabled = new GqlvActionParamDisabled(this, codeRegistryBuilder );
+        this.disabled = new GqlvActionParamDisabled(this, codeRegistryBuilder, bookmarkService);
 
-        // TODO: add disabled etc
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
         this.field = holder.addField(newFieldDefinition()
@@ -89,7 +85,7 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
                 holder.coordinatesFor(field),
                 new Fetcher());
 
-        // TODO
+        disabled.addDataFetcher();
     }
 
     private class Fetcher implements DataFetcher<Object> {
@@ -105,7 +101,7 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
     }
 
 
-    // @Override
+    @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }

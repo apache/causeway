@@ -57,7 +57,7 @@ public class GqlvActionParams implements GqlvActionParamHolder {
      */
     private final GraphQLFieldDefinition field;
 
-    private final Map<String, ObjectActionParameter> params = new LinkedHashMap<>();
+    private final Map<String, GqlvActionParam> params = new LinkedHashMap<>();
 
     public GqlvActionParams(
             final GqlvActionParamsHolder holder,
@@ -86,7 +86,7 @@ public class GqlvActionParams implements GqlvActionParamHolder {
     }
 
     void addParam(ObjectActionParameter objectActionParameter) {
-        new GqlvActionParam(this, objectActionParameter, codeRegistryBuilder, bookmarkService);
+        params.put(objectActionParameter.getId(), new GqlvActionParam(this, objectActionParameter, codeRegistryBuilder, bookmarkService));
     }
 
 
@@ -101,7 +101,7 @@ public class GqlvActionParams implements GqlvActionParamHolder {
                 holder.coordinatesFor(field),
                 new Fetcher());
 
-        // TODO
+        params.forEach((id, param) -> param.addDataFetcher());
     }
 
     private class Fetcher implements DataFetcher<Object> {

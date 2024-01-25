@@ -1379,13 +1379,9 @@
             "name" : "elementTypeFqcn",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -1565,13 +1561,9 @@
             "name" : "title",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -1743,13 +1735,9 @@
             "name" : "facets",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -1883,13 +1871,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -2122,13 +2106,9 @@
             "name" : "parameter",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -2216,13 +2196,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_applib_node_ActionNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_applib_node_ActionNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -2477,13 +2453,9 @@
             "name" : "mixedIn",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -2571,13 +2543,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_applib_TypeNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_applib_TypeNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -2665,13 +2633,9 @@
             "name" : "property",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -2854,13 +2818,9 @@
             "name" : "description",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -3009,13 +2969,9 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -3187,13 +3143,9 @@
             "name" : "domainClassDto",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_schema_metamodel_v2_DomainClassDto__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_schema_metamodel_v2_DomainClassDto__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -3327,13 +3279,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -3562,13 +3510,9 @@
             "name" : "authenticationCode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -3656,13 +3600,9 @@
             "name" : "authenticationSource",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -3893,13 +3833,9 @@
             "name" : "impersonating",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -4151,13 +4087,9 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -4685,13 +4617,9 @@
             "name" : "action",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -4871,13 +4799,9 @@
             "name" : "mixedIn",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -4965,13 +4889,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_applib_TypeNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_applib_TypeNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -5218,13 +5138,9 @@
             "name" : "collection",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -5373,13 +5289,9 @@
             "name" : "mixedIn",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -5467,13 +5379,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_applib_TypeNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_applib_TypeNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -5698,13 +5606,9 @@
             "name" : "facetAttr",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -5853,13 +5757,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_applib_node_FacetNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_applib_node_FacetNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -6042,13 +5942,9 @@
             "name" : "facet",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -6182,13 +6078,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -6276,13 +6168,9 @@
             "name" : "shadowed",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -6546,13 +6434,9 @@
             "name" : "key",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -6640,13 +6524,9 @@
             "name" : "value",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -7111,13 +6991,9 @@
             "name" : "memberName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -7205,13 +7081,9 @@
             "name" : "namespaceName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -7284,13 +7156,9 @@
             "name" : "parent",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -7378,13 +7246,9 @@
             "name" : "typeSimpleName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -7639,13 +7503,9 @@
             "name" : "memberName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -7733,13 +7593,9 @@
             "name" : "namespaceName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -7812,13 +7668,9 @@
             "name" : "parent",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -7906,13 +7758,9 @@
             "name" : "typeSimpleName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -8183,13 +8031,9 @@
             "name" : "actionSemantics",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -8338,13 +8182,9 @@
             "name" : "memberName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -8432,13 +8272,9 @@
             "name" : "namespaceName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -8511,13 +8347,9 @@
             "name" : "parent",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -8605,13 +8437,9 @@
             "name" : "returnType",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -8699,13 +8527,9 @@
             "name" : "typeSimpleName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -8879,13 +8703,9 @@
             "name" : "derived",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -8973,13 +8793,9 @@
             "name" : "elementType",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -9128,13 +8944,9 @@
             "name" : "memberName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -9222,13 +9034,9 @@
             "name" : "namespaceName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -9301,13 +9109,9 @@
             "name" : "parent",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -9395,13 +9199,9 @@
             "name" : "typeSimpleName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -9614,13 +9414,9 @@
             "name" : "memberName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -9708,13 +9504,9 @@
             "name" : "namespaceName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -9787,13 +9579,9 @@
             "name" : "parent",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -9881,13 +9669,9 @@
             "name" : "typeSimpleName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -10083,13 +9867,9 @@
             "name" : "derived",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -10320,13 +10100,9 @@
             "name" : "memberName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -10414,13 +10190,9 @@
             "name" : "namespaceName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -10493,13 +10265,9 @@
             "name" : "parent",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -10587,13 +10355,9 @@
             "name" : "returnType",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -10681,13 +10445,9 @@
             "name" : "typeSimpleName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11010,13 +10770,9 @@
             "name" : "memberName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11104,13 +10860,9 @@
             "name" : "namespaceName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11183,13 +10935,9 @@
             "name" : "parent",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_feat_ApplicationFeatureViewModel__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11323,13 +11071,9 @@
             "name" : "typeSimpleName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11536,13 +11280,9 @@
             "name" : "actions",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11630,13 +11370,9 @@
             "name" : "annotations",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11724,13 +11460,9 @@
             "name" : "collections",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11818,13 +11550,9 @@
             "name" : "facets",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -11973,13 +11701,9 @@
             "name" : "id",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -12231,13 +11955,9 @@
             "name" : "properties",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -12325,13 +12045,9 @@
             "name" : "service",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -12637,13 +12353,9 @@
             "name" : "className",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -12874,13 +12586,9 @@
             "name" : "key",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -12953,13 +12661,9 @@
             "name" : "object",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -13742,26 +13446,18 @@
             "name" : "leftConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Consumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Consumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           }, {
             "name" : "rightConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Consumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Consumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -13799,6 +13495,124 @@
                 "name" : "java_util_function_Consumer__gqlv_input",
                 "ofType" : null
               }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__accept__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__accept__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "leftConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__accept__leftConsumer__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "rightConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__accept__rightConsumer__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__accept__leftConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "leftConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Consumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "rightConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Consumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__accept__rightConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "leftConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Consumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "rightConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Consumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -13961,13 +13775,9 @@
             "name" : "leftMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -13998,6 +13808,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Either",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__mapLeft__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "leftMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__mapLeft__leftMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__mapLeft__leftMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "leftMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -14040,13 +13910,9 @@
             "name" : "rightMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -14077,6 +13943,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Either",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__mapRight__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__mapRight__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "rightMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__mapRight__rightMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__mapRight__rightMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "rightMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -14119,26 +14045,18 @@
             "name" : "leftMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           }, {
             "name" : "rightMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -14182,6 +14100,124 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Either",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__map__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__map__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "leftMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__map__leftMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "rightMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Either__map__rightMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__map__leftMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "leftMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "rightMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Either__map__rightMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "leftMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "rightMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -14343,6 +14379,35 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__chain__chainingFunction__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "chainingFunction",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "org_apache_causeway_commons_functional_Railway__chain__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -14374,13 +14439,9 @@
             "name" : "chainingFunction",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -14411,6 +14472,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Railway",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__chain__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__chain__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "chainingFunction",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__chain__chainingFunction__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -14492,13 +14584,9 @@
             "name" : "failure",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -14577,6 +14665,35 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__failureConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -14608,13 +14725,9 @@
             "name" : "failureConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -14645,6 +14758,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Railway",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "failureConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__ifFailure__failureConsumer__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -14687,13 +14831,9 @@
             "name" : "successConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -14724,6 +14864,95 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Railway",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "successConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess__successConsumer__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__ifSuccess__successConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "successConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__mapFailure__failureMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -14766,13 +14995,9 @@
             "name" : "failureMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -14803,6 +15028,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Railway",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "failureMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__mapFailure__failureMapper__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -14845,13 +15101,9 @@
             "name" : "successMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -14882,6 +15134,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Railway",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "successMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess__successMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Railway__mapSuccess__successMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -14963,13 +15275,9 @@
             "name" : "success",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -15029,6 +15337,35 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__arg0__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "arg0",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Consumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -15060,13 +15397,9 @@
             "name" : "arg0",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Consumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Consumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -15097,6 +15430,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "java_util_function_Consumer",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "arg0",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__andThen__arg0__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -15169,6 +15533,35 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__exceptionWrapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "exceptionWrapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_BiFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -15200,13 +15593,9 @@
             "name" : "exceptionWrapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_BiFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_BiFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -15237,6 +15626,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_ThrowingConsumer",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "exceptionWrapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__throwing__exceptionWrapper__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -15301,6 +15721,35 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__arg0__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "arg0",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -15332,13 +15781,9 @@
             "name" : "arg0",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -15369,6 +15814,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "java_util_function_Function",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "arg0",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__andThen__arg0__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose__arg0__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "arg0",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -15411,13 +15916,9 @@
             "name" : "arg0",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_Function__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_Function__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -15448,6 +15949,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "java_util_function_Function",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "arg0",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__compose__arg0__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -15520,6 +16052,35 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__exceptionWrapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "exceptionWrapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_BiFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -15551,13 +16112,9 @@
             "name" : "exceptionWrapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_function_BiFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_function_BiFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -15588,6 +16145,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_ThrowingFunction",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "exceptionWrapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_ThrowingFunction__throwing__exceptionWrapper__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -16273,6 +16861,44 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__accept__failureConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "successConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "org_apache_causeway_commons_functional_Try__accept__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -16304,26 +16930,18 @@
             "name" : "failureConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           }, {
             "name" : "successConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -16367,6 +16985,86 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__accept__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__accept__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "failureConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__accept__failureConsumer__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "successConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__accept__successConsumer__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__accept__successConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "successConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -16448,13 +17146,9 @@
             "name" : "failure",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -16503,13 +17197,9 @@
             "name" : "successMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -16540,6 +17230,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "successMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__successMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__successMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -16582,13 +17332,9 @@
             "name" : "successMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -16619,6 +17365,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "successMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__successMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__successMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -16661,13 +17467,9 @@
             "name" : "successMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -16698,6 +17500,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "successMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess__successMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__flatMapSuccess__successMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -16876,6 +17738,35 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifFailure__exceptionConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "exceptionConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -16907,13 +17798,9 @@
             "name" : "exceptionConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -16944,6 +17831,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "exceptionConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__ifFailure__exceptionConsumer__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -16986,13 +17904,9 @@
             "name" : "valueConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17023,6 +17937,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "valueConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__valueConsumer__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__valueConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "valueConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17065,13 +18039,9 @@
             "name" : "valueConsumer",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17102,6 +18072,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "valueConsumer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__ifSuccess__valueConsumer__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__ifSuccess__valueConsumer__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "valueConsumer",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17197,13 +18227,9 @@
             "name" : "recoveryMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17234,6 +18260,95 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "recoveryMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess__recoveryMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailureToSuccess__recoveryMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "recoveryMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailure__failureMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17276,13 +18391,9 @@
             "name" : "failureMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17313,6 +18424,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "failureMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapFailure__failureMapper__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17355,13 +18497,9 @@
             "name" : "successMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17392,6 +18530,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "successMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__successMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__successMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17434,13 +18632,9 @@
             "name" : "successMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17471,6 +18665,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "successMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__successMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__successMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17513,13 +18767,9 @@
             "name" : "successMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17550,6 +18800,104 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "successMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapSuccess__successMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapSuccess__successMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapToEither__failureMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17592,26 +18940,18 @@
             "name" : "failureMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           }, {
             "name" : "successMapper",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17659,6 +18999,115 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "failureMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapToEither__failureMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "successMapper",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__mapToEither__successMapper__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__mapToEither__successMapper__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "failureMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "successMapper",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__orCall__fallback__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "fallback",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_concurrent_Callable__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
@@ -17697,13 +19146,9 @@
             "name" : "fallback",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_concurrent_Callable__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_concurrent_Callable__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17734,6 +19179,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__orCall__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__orCall__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "fallback",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__orCall__fallback__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17815,13 +19291,38 @@
             "name" : "success",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__thenCall__callable__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "callable",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_concurrent_Callable__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17870,13 +19371,9 @@
             "name" : "callable",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_concurrent_Callable__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_concurrent_Callable__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17907,6 +19404,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__thenCall__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__thenCall__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "callable",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__thenCall__callable__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -17949,13 +19477,9 @@
             "name" : "runnable",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -17986,6 +19510,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__thenRun__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__thenRun__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "runnable",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__thenRun__runnable__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__thenRun__runnable__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "runnable",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -18028,13 +19612,9 @@
             "name" : "next",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "java_util_concurrent_Callable__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_concurrent_Callable__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -18065,6 +19645,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "org_apache_causeway_commons_functional_Try",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__then__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__then__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "next",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "org_apache_causeway_commons_functional_Try__then__next__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "org_apache_causeway_commons_functional_Try__then__next__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "next",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "java_util_concurrent_Callable__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -18131,13 +19771,9 @@
             "name" : "value",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -18344,13 +19980,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -18594,13 +20226,9 @@
             "name" : "mixedIn",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "Boolean",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "Boolean",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -18688,13 +20316,9 @@
             "name" : "parentNode",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "causeway_applib_TypeNode__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "causeway_applib_TypeNode__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -18877,13 +20501,9 @@
             "name" : "friendlyName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -19032,13 +20652,9 @@
             "name" : "qualifiedName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -19070,12 +20686,562 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
+          "name" : "actionWithDisabledParam",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithDisabledParam__gqlv_action",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "actionWithHiddenParam",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithHiddenParam__gqlv_action",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
           "name" : "otherAdminAction",
           "description" : null,
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_admin_AdminMenu__otherAdminAction__gqlv_action",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "thirdParameter",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__gqlv_action",
+        "description" : null,
+        "fields" : [ {
+          "name" : "hidden",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Boolean",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "validate",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "thirdParameter",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "invokeNonIdempotent",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "SCALAR",
+                "name" : "String",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "SCALAR",
+                "name" : "String",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "thirdParameter",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "SCALAR",
+                "name" : "String",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "firstParam",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "secondParam",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "thirdParameter",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "thirdParameter",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "thirdParameter",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithHiddenParam__gqlv_action",
+        "description" : null,
+        "fields" : [ {
+          "name" : "hidden",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Boolean",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "validate",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "invokeNonIdempotent",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "SCALAR",
+                "name" : "String",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "SCALAR",
+                "name" : "String",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "firstParam",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "secondParam",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "firstParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "secondParam",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -19470,13 +21636,9 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -19582,6 +21744,44 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "name",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "deptHead",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "university_dept_DeptHead__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "university_dept_Departments__createDepartment__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -19613,13 +21813,9 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           }, {
@@ -19668,6 +21864,86 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_dept_Department",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Departments__createDepartment__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Departments__createDepartment__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "name",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Departments__createDepartment__name__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "deptHead",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Departments__createDepartment__name__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "name",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "deptHead",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "university_dept_DeptHead__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -19767,13 +22043,9 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -19804,6 +22076,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_dept_Department",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Departments__findByName__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Departments__findByName__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "name",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Departments__findByName__name__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Departments__findByName__name__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "name",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -19879,6 +22211,35 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "department",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "university_dept_Department__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
         "name" : "university_dept_DeptHead__changeDepartment__gqlv_action",
         "description" : null,
         "fields" : [ {
@@ -19910,13 +22271,9 @@
             "name" : "department",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "university_dept_Department__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "university_dept_Department__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -19947,6 +22304,37 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_dept_DeptHead",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHead__changeDepartment__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHead__changeDepartment__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "department",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -19989,13 +22377,9 @@
             "name" : "newName",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -20026,6 +22410,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_dept_DeptHead",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHead__changeName__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHead__changeName__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "newName",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHead__changeName__newName__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHead__changeName__newName__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "newName",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -20392,13 +22836,9 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -20429,6 +22869,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_dept_DeptHead",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHeads__findHeadByName__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHeads__findHeadByName__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "name",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "name",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -20748,13 +23248,47 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Staff__createStaffMember__department__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "name",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "department",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "university_dept_Department__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -20803,26 +23337,18 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           }, {
             "name" : "department",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "university_dept_Department__gqlv_input",
-                "ofType" : null
-              }
+              "kind" : "INPUT_OBJECT",
+              "name" : "university_dept_Department__gqlv_input",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -20866,6 +23392,86 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_dept_StaffMember",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Staff__createStaffMember__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Staff__createStaffMember__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "name",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Staff__createStaffMember__name__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "department",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Staff__createStaffMember__department__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Staff__createStaffMember__name__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "name",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "department",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "university_dept_Department__gqlv_input",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -20965,13 +23571,9 @@
             "name" : "name",
             "description" : null,
             "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "String",
-                "ofType" : null
-              }
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
             },
             "defaultValue" : null
           } ],
@@ -21002,6 +23604,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "university_dept_StaffMember",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "params",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Staff__findByName__gqlv_action_params",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Staff__findByName__gqlv_action_params",
+        "description" : null,
+        "fields" : [ {
+          "name" : "name",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_Staff__findByName__name__gqlv_action_parameter",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "university_dept_Staff__findByName__name__gqlv_action_parameter",
+        "description" : null,
+        "fields" : [ {
+          "name" : "disabled",
+          "description" : null,
+          "args" : [ {
+            "name" : "name",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,

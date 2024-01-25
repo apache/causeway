@@ -18,30 +18,21 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
@@ -78,7 +69,7 @@ public class GqlvActionInvoke {
             val fieldBuilder = newFieldDefinition()
                     .name(fieldNameForSemanticsOf(objectAction))
                     .type(type);
-            addGqlArguments(objectAction, fieldBuilder);
+            GqlvAction.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE);
             fieldDefinition = fieldBuilder.build();
 
             holder.addField(fieldDefinition);
@@ -133,27 +124,6 @@ public class GqlvActionInvoke {
         }
     }
 
-    static void addGqlArguments(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition.Builder builder) {
-
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
-
-        if (parameters.isNotEmpty()) {
-            builder.arguments(parameters.stream()
-                    .map(OneToOneActionParameter.class::cast)   // we previously filter to ignore any actions that have collection parameters
-                    .map(GqlvActionInvoke::gqlArgumentFor)
-                    .collect(Collectors.toList()));
-        }
-    }
-
-    private static GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
-        return GraphQLArgument.newArgument()
-                .name(oneToOneActionParameter.getId())
-                .type(TypeMapper.inputTypeFor(oneToOneActionParameter))
-                .build();
-    }
-
     public void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
@@ -178,45 +148,7 @@ public class GqlvActionInvoke {
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
-        Map<String, Object> argumentPojos = dataFetchingEnvironment.getArguments();
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
-        Can<ManagedObject> argumentManagedObjects = parameters
-                .map(oap -> {
-                    final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(oap.getId());
-                    switch (elementType.getBeanSort()) {
-
-                        case VALUE:
-                            return ManagedObject.adaptParameter(oap, argumentValue);
-
-                        case ENTITY:
-                        case VIEW_MODEL:
-                            //noinspection unchecked
-                            if (argumentValue == null) {
-                                return ManagedObject.empty(elementType);
-                            }
-                            String idValue = ((Map<String, String>) argumentValue).get("id");
-                            Class<?> paramClass = elementType.getCorrespondingClass();
-                            Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
-                            return bookmarkIfAny
-                                    .map(bookmarkService::lookup)
-                                    .filter(Optional::isPresent)
-                                    .map(Optional::get)
-                                    .map(pojo -> ManagedObject.adaptParameter(oap, pojo))
-                                    .orElse(ManagedObject.empty(elementType));
-
-                        case ABSTRACT:
-                        case COLLECTION:
-                        case MANAGED_BEAN_CONTRIBUTING:
-                        case VETOED:
-                        case MANAGED_BEAN_NOT_CONTRIBUTING:
-                        case MIXIN:
-                        case UNKNOWN:
-                        default:
-                            throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.getBeanSort()));
-                    }
-                });
+        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
 
         val consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {

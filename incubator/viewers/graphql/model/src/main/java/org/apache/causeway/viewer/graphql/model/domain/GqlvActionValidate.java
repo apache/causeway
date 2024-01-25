@@ -19,32 +19,23 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.consent.Consent;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
@@ -74,19 +65,13 @@ public class GqlvActionValidate {
             val fieldBuilder = newFieldDefinition()
                     .name("validate")
                     .type(type);
-            addGqlArguments(objectAction, fieldBuilder);
+
+            GqlvAction.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE);
             fieldDefinition = fieldBuilder.build();
 
             holder.addField(fieldDefinition);
         }
         return fieldDefinition;
-    }
-
-    static void addGqlArguments(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition.Builder builder) {
-
-        GqlvActionInvoke.addGqlArguments(objectAction, builder);
     }
 
     public void addDataFetcher() {

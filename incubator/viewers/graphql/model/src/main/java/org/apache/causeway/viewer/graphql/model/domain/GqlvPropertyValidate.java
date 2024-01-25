@@ -61,7 +61,9 @@ public class GqlvPropertyValidate {
             val fieldBuilder = newFieldDefinition()
                     .name("validate")
                     .type(type);
-            addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder);
+            final OneToOneAssociation oneToOneAssociation = holder.getOneToOneAssociation();
+
+            GqlvProperty.addGqlArgument(oneToOneAssociation, fieldBuilder, TypeMapper.InputContext.VALIDATE);
             fieldDefinition = fieldBuilder.build();
 
             holder.addField(fieldDefinition);
@@ -71,13 +73,6 @@ public class GqlvPropertyValidate {
 
     GraphQLOutputType outputTypeFor() {
         return TypeMapper.scalarTypeFor(String.class);
-    }
-
-    static void addGqlArgument(
-            final OneToOneAssociation oneToOneAssociation,
-            final GraphQLFieldDefinition.Builder builder) {
-
-        GqlvPropertySet.addGqlArgument(oneToOneAssociation, builder);
     }
 
     void addDataFetcher() {

@@ -1,0 +1,19 @@
+{
+  "data" : {
+    "university_admin_AdminMenu" : {
+      "actionWithDisabledParam" : {
+        "params" : {
+          "firstParam" : {
+            "disabled" : "yup, disabled!"
+          },
+          "secondParam" : {
+            "disabled" : null
+          },
+          "thirdParameter" : {
+            "disabled" : "Disabled because secondParam is not empty"
+          }
+        }
+      }
+    }
+  }
+}

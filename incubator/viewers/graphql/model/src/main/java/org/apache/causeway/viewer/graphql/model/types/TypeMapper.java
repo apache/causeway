@@ -32,7 +32,6 @@ import javax.ws.rs.NotSupportedException;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
@@ -130,8 +129,10 @@ public class TypeMapper {
         return null;
     }
 
-    public static GraphQLInputType inputTypeFor(final OneToOneFeature oneToOneFeature) {
-        return oneToOneFeature.isOptional()
+    public static GraphQLInputType inputTypeFor(
+            final OneToOneFeature oneToOneFeature,
+            final InputContext inputContext) {
+        return oneToOneFeature.isOptional() || inputContext.isOptionalAlwaysAllowed()
                 ? inputTypeFor_(oneToOneFeature)
                 : nonNull(inputTypeFor_(oneToOneFeature));
     }
@@ -155,4 +156,15 @@ public class TypeMapper {
         }
     }
 
+    public enum InputContext {
+        HIDE,
+        DISABLE,
+        VALIDATE,
+        INVOKE,
+        SET,
+        ;
+        boolean isOptionalAlwaysAllowed() {
+            return !(this == INVOKE || this == SET);
+        }
+    }
 }
