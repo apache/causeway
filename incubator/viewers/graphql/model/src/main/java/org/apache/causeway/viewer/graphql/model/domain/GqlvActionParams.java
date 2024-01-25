@@ -99,24 +99,13 @@ public class GqlvActionParams implements GqlvActionParamHolder {
     void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
-                new Fetcher());
+                new BookmarkedPojoFetcher(bookmarkService));
 
         params.forEach((id, param) -> param.addDataFetcher());
     }
 
-    private class Fetcher implements DataFetcher<Object> {
-        @Override
-        public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
 
-            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-            return bookmarkService.bookmarkFor(sourcePojo)
-                    .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
-                    .orElseThrow();
-        }
-    }
-
-    //@Override
+    @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }

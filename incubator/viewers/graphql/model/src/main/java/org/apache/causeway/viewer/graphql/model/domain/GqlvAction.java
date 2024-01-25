@@ -172,7 +172,7 @@ public class GqlvAction
     public void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
-                new Fetcher());
+                new BookmarkedPojoFetcher(bookmarkService));
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();
@@ -180,18 +180,6 @@ public class GqlvAction
         invoke.addDataFetcher();
         if (params != null) {
             params.addDataFetcher();
-        }
-    }
-
-    private class Fetcher implements DataFetcher<Object> {
-        @Override
-        public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
-
-            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-            return bookmarkService.bookmarkFor(sourcePojo)
-                    .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
-                    .orElseThrow();
         }
     }
 

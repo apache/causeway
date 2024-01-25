@@ -23,11 +23,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
@@ -85,22 +82,10 @@ public class GqlvActionParam implements GqlvActionParamDisabledHolder {
     public void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
-                new Fetcher());
+                new BookmarkedPojoFetcher(bookmarkService));
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();
-    }
-
-    private class Fetcher implements DataFetcher<Object> {
-        @Override
-        public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
-
-            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-            return bookmarkService.bookmarkFor(sourcePojo)
-                    .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
-                    .orElseThrow();
-        }
     }
 
 

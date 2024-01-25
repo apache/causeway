@@ -107,25 +107,13 @@ public class GqlvProperty
     public void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
-                new GqlvProperty.Fetcher());
+                new BookmarkedPojoFetcher(bookmarkService));
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();
         get.addDataFetcher();
         set.addDataFetcher();
         validate.addDataFetcher();
-    }
-
-    private class Fetcher implements DataFetcher<Object> {
-        @Override
-        public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
-
-            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-            return bookmarkService.bookmarkFor(sourcePojo)
-                    .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
-                    .orElseThrow();
-        }
     }
 
 

@@ -84,25 +84,12 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
     public void addDataFetcher() {
         codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
-                new GqlvCollection.Fetcher());
+                new BookmarkedPojoFetcher(bookmarkService));
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();
         get.addDataFetcher();
     }
-
-    private class Fetcher implements DataFetcher<Object> {
-        @Override
-        public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
-
-            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-            return bookmarkService.bookmarkFor(sourcePojo)
-                    .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
-                    .orElseThrow();
-        }
-    }
-
 
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
