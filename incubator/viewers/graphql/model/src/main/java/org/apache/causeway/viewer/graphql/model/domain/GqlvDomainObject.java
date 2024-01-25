@@ -71,7 +71,9 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
             final ObjectSpecification objectSpecification,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final BookmarkService bookmarkService,
-            final ObjectManager objectManager) {
+            final ObjectManager objectManager,
+            final GraphQLTypeRegistry graphQLTypeRegistry) {
+
         this.objectSpecification = objectSpecification;
         this.codeRegistryBuilder = codeRegistryBuilder;
         this.bookmarkService = bookmarkService;
@@ -80,8 +82,6 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
 
         this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
 
-
-        // input object type
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
         inputTypeBuilder
                 .field(newInputObjectField()
@@ -89,10 +89,20 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
                         .type(nonNull(Scalars.GraphQLID))
                         .build());
         gqlInputObjectType = inputTypeBuilder.build();
+
+        addMembers();
+
+        // register types
+        gqlObjectType = gqlObjectTypeBuilder.build();
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlObjectType);
+        meta.registerTypesInto(graphQLTypeRegistry);
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlInputObjectType);
+
+        addDataFetchers();
     }
 
 
-    public void addMembers() {
+    private void addMembers() {
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addProperty);
         objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
 
@@ -144,17 +154,7 @@ public class GqlvDomainObject implements GqlvActionHolder, GqlvPropertyHolder, G
     }
 
 
-    public void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
-
-        gqlObjectType = gqlObjectTypeBuilder.name(TypeNames.objectTypeNameFor(objectSpecification)).build();
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlObjectType);
-
-        meta.registerTypesInto(graphQLTypeRegistry);
-
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getGqlInputObjectType());
-    }
-
-    public void addDataFetchers() {
+    private void addDataFetchers() {
         meta.addDataFetchers();
         properties.forEach((id, property) -> property.addDataFetcher());
         collections.forEach((id, collection) -> collection.addDataFetcher());

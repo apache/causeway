@@ -209,10 +209,8 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final ObjectSpecification objectSpec,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        val domainObject = new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager);
-        domainObject.addMembers();
-        domainObject.registerTypesInto(graphQLTypeRegistry);
-        domainObject.addDataFetchers();
+        new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, graphQLTypeRegistry);
+
     }
 
 }
