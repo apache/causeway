@@ -22,6 +22,7 @@ import lombok.experimental.UtilityClass;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -42,6 +43,14 @@ public final class TypeNames {
 
     public static String actionTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
         return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action";
+    }
+
+    public static String actionParamsTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
+        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action_params";
+    }
+
+    public static String actionParamTypeNameFor(ObjectSpecification owningType, ObjectActionParameter objectActionParameter) {
+        return objectTypeNameFor(owningType) + "__" + objectActionParameter.getAction().getId() + "__" + objectActionParameter.getId() + "__gqlv_action_parameter";
     }
 
     public static String propertyTypeNameFor(ObjectSpecification owningType, OneToOneAssociation oneToOneAssociation) {

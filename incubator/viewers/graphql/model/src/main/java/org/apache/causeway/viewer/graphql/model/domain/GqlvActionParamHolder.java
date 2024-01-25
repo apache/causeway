@@ -18,9 +18,5 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-
-public interface GqlvActionValidateHolder extends GqlvHolder {
-
-    ObjectAction getObjectAction();
+public interface GqlvActionParamHolder extends GqlvHolder {
 }
