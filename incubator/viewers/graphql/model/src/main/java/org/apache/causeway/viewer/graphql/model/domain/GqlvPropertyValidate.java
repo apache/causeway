@@ -25,13 +25,11 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
 
@@ -40,18 +38,15 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 public class GqlvPropertyValidate {
 
     final Holder holder;
-    final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    final SpecificationLoader specificationLoader;
+    private final Context context;
     final GraphQLFieldDefinition field;
 
     public GqlvPropertyValidate(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader) {
+            final Context context) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
         this.field = fieldDefinition(holder);
-        this.specificationLoader = specificationLoader;
     }
 
     GraphQLFieldDefinition fieldDefinition(final Holder holder) {
@@ -86,7 +81,7 @@ public class GqlvPropertyValidate {
             case VALUE:
             case VIEW_MODEL:
             case ENTITY:
-                codeRegistryBuilder.dataFetcher(
+                context.codeRegistryBuilder.dataFetcher(
                         holder.coordinatesFor(field),
                         this::validate);
 
@@ -101,7 +96,7 @@ public class GqlvPropertyValidate {
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;

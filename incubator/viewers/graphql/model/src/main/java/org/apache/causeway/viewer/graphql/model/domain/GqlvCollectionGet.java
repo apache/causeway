@@ -34,9 +34,8 @@ public class GqlvCollectionGet extends GqlvAssociationGet<OneToManyAssociation> 
 
     public GqlvCollectionGet(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader) {
-        super(holder, codeRegistryBuilder, specificationLoader);
+            final Context context) {
+        super(holder, context);
     }
 
     @Override

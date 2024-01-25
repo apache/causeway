@@ -61,24 +61,21 @@ public class GqlvAction
      * Populated iif there are params for this action.
      */
     private final GqlvActionParams params;
-    private final BookmarkService bookmarkService;
 
     public GqlvAction(
             final Holder holder,
             final ObjectAction objectAction,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService
+            final Context context
             ) {
-        super(holder, objectAction, codeRegistryBuilder);
+        super(holder, objectAction, context);
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction));
-        this.bookmarkService = bookmarkService;
 
-        this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
-        this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
-        this.validate = new GqlvActionValidate(this, codeRegistryBuilder);
-        this.invoke = new GqlvActionInvoke(this, codeRegistryBuilder, bookmarkService);
-        val params = new GqlvActionParams(this, codeRegistryBuilder, bookmarkService);
+        this.hidden = new GqlvMemberHidden(this, context);
+        this.disabled = new GqlvMemberDisabled(this, context);
+        this.validate = new GqlvActionValidate(this, context);
+        this.invoke = new GqlvActionInvoke(this, context);
+        val params = new GqlvActionParams(this, context);
         this.params = params.hasParams() ? params : null;
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
@@ -176,9 +173,9 @@ public class GqlvAction
     }
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(bookmarkService));
+                new BookmarkedPojoFetcher(context.bookmarkService));
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();

@@ -45,24 +45,20 @@ public class GqlvProperty
     private final GqlvPropertyGet get;
     private final GqlvPropertySet set;
     private final GqlvPropertyValidate validate;
-    private final BookmarkService bookmarkService;
 
     public GqlvProperty(
             final Holder holder,
             final OneToOneAssociation oneToOneAssociation,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService
-    ) {
-        super(holder, oneToOneAssociation, codeRegistryBuilder);
+            final Context context) {
+        super(holder, oneToOneAssociation, context);
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(this.holder.getObjectSpecification(), oneToOneAssociation));
-        this.bookmarkService = bookmarkService;
 
-        this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
-        this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
-        this.get = new GqlvPropertyGet(this, codeRegistryBuilder, specificationLoader);
-        this.set = new GqlvPropertySet(this, codeRegistryBuilder, specificationLoader);
-        this.validate = new GqlvPropertyValidate(this, codeRegistryBuilder, specificationLoader);
+        this.hidden = new GqlvMemberHidden(this, context);
+        this.disabled = new GqlvMemberDisabled(this, context);
+        this.get = new GqlvPropertyGet(this, context);
+        this.set = new GqlvPropertySet(this, context);
+        this.validate = new GqlvPropertyValidate(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
@@ -109,9 +105,9 @@ public class GqlvProperty
     }
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(bookmarkService));
+                new BookmarkedPojoFetcher(context.bookmarkService));
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();

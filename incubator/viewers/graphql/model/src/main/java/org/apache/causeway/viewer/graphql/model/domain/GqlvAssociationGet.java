@@ -35,18 +35,15 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
 
     final Holder<T> holder;
-    final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    final SpecificationLoader specificationLoader;
+    final Context context;
     final GraphQLFieldDefinition field;
 
     public GqlvAssociationGet(
             final Holder<T> holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader) {
+            final Context context) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
         this.field = fieldDefinition(holder);
-        this.specificationLoader = specificationLoader;
     }
 
     GraphQLFieldDefinition fieldDefinition(final Holder<T> holder) {
@@ -78,7 +75,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
             case VIEW_MODEL:
             case ENTITY:
 
-                codeRegistryBuilder.dataFetcher(
+                context.codeRegistryBuilder.dataFetcher(
                         holder.coordinatesFor(field),
                         this::get);
 
@@ -94,7 +91,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;

@@ -29,18 +29,16 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
     public GqlvAssociation(
             final H holder,
             final T objectAssociation,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
-            ) {
-        this(holder, objectAssociation, null, codeRegistryBuilder);
+            final Context context) {
+        this(holder, objectAssociation, null, context);
     }
 
     public GqlvAssociation(
             final H holder,
             final T objectAssociation,
             final GraphQLFieldDefinition fieldDefinition,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
-            ) {
-        super(holder, objectAssociation, fieldDefinition, codeRegistryBuilder);
+            final Context context) {
+        super(holder, objectAssociation, fieldDefinition, context);
     }
 
     public boolean hasFieldDefinition() {

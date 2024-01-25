@@ -35,6 +35,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import org.apache.causeway.viewer.graphql.model.domain.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
@@ -145,11 +146,13 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final GqlvTopLevelQuery gqlvTopLevelQuery,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
+        Context context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader);
+
         switch (objectSpec.getBeanSort()) {
 
             case MANAGED_BEAN_CONTRIBUTING: // @DomainService
 
-                addDomainServiceToTopLevelQuery(objectSpec, gqlvTopLevelQuery, codeRegistryBuilder);
+                addDomainServiceToTopLevelQuery(objectSpec, gqlvTopLevelQuery, context);
                 break;
 
             case ABSTRACT:
@@ -157,7 +160,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
             case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                new GqlvDomainObject(objectSpec, codeRegistryBuilder, bookmarkService, objectManager, graphQLTypeRegistry);
+                new GqlvDomainObject(objectSpec, context, objectManager, graphQLTypeRegistry);
 
                 break;
 
@@ -174,24 +177,24 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     public void addDomainServiceToTopLevelQuery(
             final ObjectSpecification objectSpec,
             final GqlvTopLevelQuery topLevelQueryStructure,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+            final Context context) {
 
         serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
             .ifPresent(servicePojo ->
-                addDomainServiceToTopLevelQuery(servicePojo, objectSpec, topLevelQueryStructure, codeRegistryBuilder));
+                addDomainServiceToTopLevelQuery(servicePojo, objectSpec, topLevelQueryStructure, context));
     }
 
     private void addDomainServiceToTopLevelQuery(
             final Object servicePojo,
             final ObjectSpecification objectSpec,
             final GqlvTopLevelQuery topLevelQuery,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+            final Context context) {
 
-        val domainService = new GqlvDomainService(objectSpec, servicePojo, codeRegistryBuilder, bookmarkService);
+        val domainService = new GqlvDomainService(objectSpec, servicePojo, context);
 
         boolean actionsAdded = domainService.hasActions();
         if (actionsAdded) {
-            topLevelQuery.addFieldFor(domainService, codeRegistryBuilder);
+            topLevelQuery.addFieldFor(domainService, context.codeRegistryBuilder);
         }
 
 

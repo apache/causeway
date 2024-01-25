@@ -29,7 +29,6 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -38,15 +37,15 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 public class GqlvMemberDisabled {
 
     private final Holder holder;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final Context context;
     private final GraphQLFieldDefinition field;
 
     public GqlvMemberDisabled(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+            final Context context
     ) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
         this.field = fieldDefinition(holder);
     }
 
@@ -63,7 +62,7 @@ public class GqlvMemberDisabled {
     }
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
                 this::disabled
         );

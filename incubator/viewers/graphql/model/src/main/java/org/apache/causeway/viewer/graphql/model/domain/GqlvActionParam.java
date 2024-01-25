@@ -22,6 +22,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
@@ -40,11 +41,10 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
 
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final Context context;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
-    private final BookmarkService bookmarkService;
 
     private final GqlvActionParamHidden hidden;
     private final GqlvActionParamDisabled disabled;
@@ -54,17 +54,14 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
     public GqlvActionParam(
             final Holder holder,
             final ObjectActionParameter objectActionParameter,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService
-            ) {
+            final Context context) {
         this.holder = holder;
         this.objectActionParameter = objectActionParameter;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter));
-        this.bookmarkService = bookmarkService;
 
-        this.hidden = new GqlvActionParamHidden(this, codeRegistryBuilder, bookmarkService);
-        this.disabled = new GqlvActionParamDisabled(this, codeRegistryBuilder, bookmarkService);
+        this.hidden = new GqlvActionParamHidden(this, context);
+        this.disabled = new GqlvActionParamDisabled(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
@@ -91,9 +88,9 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
     }
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
-                new BookmarkedPojoFetcher(bookmarkService));
+                new BookmarkedPojoFetcher(context.bookmarkService));
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();

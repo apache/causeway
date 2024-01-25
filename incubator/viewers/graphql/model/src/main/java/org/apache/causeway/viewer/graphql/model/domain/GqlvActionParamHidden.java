@@ -24,6 +24,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
@@ -41,29 +42,26 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 public class GqlvActionParamHidden {
 
     private final Holder holder;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final BookmarkService bookmarkService;
+    private final Context context;
 
     private final GraphQLFieldDefinition field;
 
     public GqlvActionParamHidden(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService) {
+            final Context context) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
 
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")
                 .type(TypeMapper.scalarTypeFor(boolean.class));
         addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
         this.field = holder.addField(fieldBuilder.build());
-        this.bookmarkService = bookmarkService;
     }
 
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
                 this::hidden
         );
@@ -88,7 +86,7 @@ public class GqlvActionParamHidden {
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
 
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
+        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         Consent visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return visible.isVetoed();

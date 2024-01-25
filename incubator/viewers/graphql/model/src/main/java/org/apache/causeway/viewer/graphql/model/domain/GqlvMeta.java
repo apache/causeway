@@ -51,22 +51,19 @@ public class GqlvMeta {
 
     private final GqlvMetaHolder holder;
 
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final BookmarkService bookmarkService;
+    private final Context context;
     private final ObjectManager objectManager;
 
     @Getter private final GraphQLFieldDefinition metaField;
 
     public GqlvMeta(
             final GqlvMetaHolder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService,
+            final Context context,
             final ObjectManager objectManager
     ) {
         this.holder = holder;
 
-        this.codeRegistryBuilder = codeRegistryBuilder;
-        this.bookmarkService = bookmarkService;
+        this.context = context;
         this.objectManager = objectManager;
 
         // we can build the metafield and meta type eagerly because we know exactly which fields it has.
@@ -91,24 +88,23 @@ public class GqlvMeta {
 
     public void addDataFetchers() {
 
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getMetaField()),
-                (DataFetcher<Object>) environment -> {
-                    return bookmarkService.bookmarkFor(environment.getSource())
-                            .map(bookmark -> new Fetcher(bookmark, bookmarkService, objectManager))
-                            .orElseThrow();
-                });
+                (DataFetcher<Object>) environment ->
+                    context.bookmarkService.bookmarkFor(environment.getSource())
+                        .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, objectManager))
+                        .orElseThrow());
 
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 coordinates(getMetaType(), logicalTypeName),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().logicalTypeName());
 
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 coordinates(getMetaType(), id),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
 
         if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            codeRegistryBuilder.dataFetcher(
+            context.codeRegistryBuilder.dataFetcher(
                     coordinates(getMetaType(), version),
                     (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());
         }

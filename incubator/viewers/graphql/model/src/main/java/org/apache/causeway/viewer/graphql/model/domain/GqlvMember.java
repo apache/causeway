@@ -34,31 +34,29 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
 
     @Getter final H holder;
     @Getter private final T objectMember;
+
+    final Context context;
     @Getter @Setter(AccessLevel.PACKAGE)
     GraphQLFieldDefinition field;
-
-    final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    final SpecificationLoader specificationLoader;
 
     public GqlvMember(
             final H holder,
             final T objectMember,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+            final Context context
     ) {
-        this(holder, objectMember, null, codeRegistryBuilder);
+        this(holder, objectMember, null, context);
     }
 
     public GqlvMember(
             final H holder,
             final T objectMember,
             final GraphQLFieldDefinition field,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+            final Context context
     ) {
         this.holder = holder;
         this.objectMember = objectMember;
         this.field = field;
-        this.codeRegistryBuilder = codeRegistryBuilder;
-        this.specificationLoader = objectMember.getSpecificationLoader();
+        this.context = context;
     }
 
     public String getId() {

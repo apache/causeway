@@ -45,18 +45,15 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 public class GqlvActionInvoke {
 
     private final Holder holder;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final Context context;
     private final GraphQLFieldDefinition field;
-    private final BookmarkService bookmarkService;
 
     public GqlvActionInvoke(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService) {
+            final Context context) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
         this.field = fieldDefinition(holder);
-        this.bookmarkService = bookmarkService;
     }
 
     private static GraphQLFieldDefinition fieldDefinition(final Holder holder) {
@@ -125,7 +122,7 @@ public class GqlvActionInvoke {
     }
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
                 this::invoke
         );
@@ -148,7 +145,7 @@ public class GqlvActionInvoke {
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
+        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         val consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {

@@ -44,15 +44,15 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 public class GqlvActionValidate {
 
     private final Holder holder;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final Context context;
     private final GraphQLFieldDefinition field;
 
     public GqlvActionValidate(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder
+            final Context context
     ) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
         this.field = fieldDefinition(holder);
     }
 
@@ -76,7 +76,7 @@ public class GqlvActionValidate {
     }
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
                 this::validate
         );

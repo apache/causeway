@@ -22,6 +22,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
@@ -42,11 +43,10 @@ import static graphql.schema.GraphQLObjectType.newObject;
 public class GqlvActionParams implements GqlvActionParam.Holder {
 
     @Getter private final Holder holder;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    private final Context context;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
-    private final BookmarkService bookmarkService;
 
     /**
      * Populated iff {@link #hasParams()}
@@ -57,13 +57,10 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
 
     public GqlvActionParams(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService
-            ) {
+            final Context context) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction()));
-        this.bookmarkService = bookmarkService;
 
         holder.getObjectAction().getParameters().forEach(this::addParam);
 
@@ -92,7 +89,7 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
     }
 
     void addParam(ObjectActionParameter objectActionParameter) {
-        params.put(objectActionParameter.getId(), new GqlvActionParam(this, objectActionParameter, codeRegistryBuilder, bookmarkService));
+        params.put(objectActionParameter.getId(), new GqlvActionParam(this, objectActionParameter, context));
     }
 
 
@@ -103,9 +100,9 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
     }
 
     void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
-                new BookmarkedPojoFetcher(bookmarkService));
+                new BookmarkedPojoFetcher(context.bookmarkService));
 
         params.forEach((id, param) -> param.addDataFetcher());
     }

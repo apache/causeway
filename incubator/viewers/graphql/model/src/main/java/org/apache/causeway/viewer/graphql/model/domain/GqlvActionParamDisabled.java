@@ -25,6 +25,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -43,29 +44,26 @@ import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlA
 public class GqlvActionParamDisabled {
 
     private final Holder holder;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final BookmarkService bookmarkService;
+    private final Context context;
 
     private final GraphQLFieldDefinition field;
 
     public GqlvActionParamDisabled(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService) {
+            final Context context) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
 
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("disabled")
                 .type(TypeMapper.scalarTypeFor(String.class));
         addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE);
         this.field = holder.addField(fieldBuilder.build());
-        this.bookmarkService = bookmarkService;
     }
 
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(field),
                 this::disabled
         );
@@ -91,7 +89,7 @@ public class GqlvActionParamDisabled {
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
 
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
+        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         Consent usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;

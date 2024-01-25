@@ -38,22 +38,18 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
     private final GqlvMemberHidden hidden;
     private final GqlvMemberDisabled disabled;
     private final GqlvCollectionGet get;
-    private final BookmarkService bookmarkService;
 
     public GqlvCollection(
             final Holder domainObject,
             final OneToManyAssociation oneToManyAssociation,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService
-    ) {
-        super(domainObject, oneToManyAssociation, codeRegistryBuilder);
+            final Context context) {
+        super(domainObject, oneToManyAssociation, context);
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation));
-        this.bookmarkService = bookmarkService;
 
-        this.hidden = new GqlvMemberHidden(this, codeRegistryBuilder);
-        this.disabled = new GqlvMemberDisabled(this, codeRegistryBuilder);
-        this.get = new GqlvCollectionGet(this, codeRegistryBuilder, specificationLoader);
+        this.hidden = new GqlvMemberHidden(this, context);
+        this.disabled = new GqlvMemberDisabled(this, context);
+        this.get = new GqlvCollectionGet(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
@@ -83,9 +79,9 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
     }
 
     public void addDataFetcher() {
-        codeRegistryBuilder.dataFetcher(
+        context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(bookmarkService));
+                new BookmarkedPojoFetcher(context.bookmarkService));
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();

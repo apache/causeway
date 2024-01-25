@@ -40,18 +40,15 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 public class GqlvPropertySet {
 
     final Holder holder;
-    final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    final SpecificationLoader specificationLoader;
+    final Context context;
     final GraphQLFieldDefinition field;
 
     public GqlvPropertySet(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader) {
+            final Context context) {
         this.holder = holder;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+        this.context = context;
         this.field = fieldDefinition(holder);
-        this.specificationLoader = specificationLoader;
     }
 
     GraphQLFieldDefinition fieldDefinition(final Holder holder) {
@@ -85,7 +82,7 @@ public class GqlvPropertySet {
             case VALUE:
             case VIEW_MODEL:
             case ENTITY:
-                codeRegistryBuilder.dataFetcher(
+                context.codeRegistryBuilder.dataFetcher(
                         holder.coordinatesFor(field),
                         this::set);
 
@@ -100,7 +97,7 @@ public class GqlvPropertySet {
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;

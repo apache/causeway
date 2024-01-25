@@ -34,9 +34,8 @@ public class GqlvPropertyGet  extends GqlvAssociationGet<OneToOneAssociation> {
 
     public GqlvPropertyGet(
             final Holder holder,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final SpecificationLoader specificationLoader) {
-        super(holder, codeRegistryBuilder, specificationLoader);
+            final Context context) {
+        super(holder, context);
     }
 
     @Override

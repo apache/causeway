@@ -50,8 +50,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMetaHolder {
 
     @Getter private final ObjectSpecification objectSpecification;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final BookmarkService bookmarkService;
+    private final Context context;
 
     private final GqlvMeta meta;
 
@@ -67,18 +66,16 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
 
     public GqlvDomainObject(
             final ObjectSpecification objectSpecification,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService,
+            final Context context,
             final ObjectManager objectManager,
             final GraphQLTypeRegistry graphQLTypeRegistry) {
 
         this.objectSpecification = objectSpecification;
-        this.codeRegistryBuilder = codeRegistryBuilder;
-        this.bookmarkService = bookmarkService;
+        this.context = context;
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
-        this.meta = new GqlvMeta(this, codeRegistryBuilder, bookmarkService, objectManager);
+        this.meta = new GqlvMeta(this, context, objectManager);
 
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
         inputTypeBuilder
@@ -110,16 +107,16 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
                 //  however, this is supportable in GraphQL, https://chat.openai.com/c/7ca721d5-865a-4765-9f90-5c28046516cd
                 .filter(objectAction -> objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural))
                 .forEach(objectAction -> {
-                    actions.put(objectAction.getId(), new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+                    actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
                 });
     }
 
     private void addProperty(final OneToOneAssociation otoa) {
-        properties.put(otoa.getId(), new GqlvProperty(this, otoa, codeRegistryBuilder, bookmarkService));
+        properties.put(otoa.getId(), new GqlvProperty(this, otoa, context));
     }
 
     private void addCollection(OneToManyAssociation otom) {
-        GqlvCollection collection = new GqlvCollection(this, otom, codeRegistryBuilder, bookmarkService);
+        GqlvCollection collection = new GqlvCollection(this, otom, context);
         if (collection.hasFieldDefinition()) {
             collections.put(otom.getId(), collection);
         }

@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -32,7 +31,6 @@ import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 import lombok.Getter;
 
 import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
@@ -47,8 +45,7 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-    private final BookmarkService bookmarkService;
+    private final Context context;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
@@ -66,12 +63,10 @@ public class GqlvDomainService implements GqlvAction.Holder {
     public GqlvDomainService(
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BookmarkService bookmarkService) {
+            final Context context) {
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
-        this.codeRegistryBuilder = codeRegistryBuilder;
-        this.bookmarkService = bookmarkService;
+        this.context = context;
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
@@ -95,7 +90,7 @@ public class GqlvDomainService implements GqlvAction.Holder {
     }
 
     private void addAction(final ObjectAction objectAction) {
-        actions.put(objectAction.getId(), new GqlvAction(this, objectAction, codeRegistryBuilder, bookmarkService));
+        actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
     }
 
 
