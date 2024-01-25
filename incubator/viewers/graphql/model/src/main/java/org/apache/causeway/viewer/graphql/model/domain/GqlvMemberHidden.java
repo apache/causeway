@@ -25,6 +25,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import org.springframework.beans.factory.ObjectProvider;
+
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -34,14 +36,14 @@ import graphql.schema.GraphQLFieldDefinition;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
-public class GqlvMemberHidden {
+public class GqlvMemberHidden<T extends ObjectMember> {
 
-    private final Holder holder;
+    private final Holder<T> holder;
     private final Context context;
     private final GraphQLFieldDefinition field;
 
     public GqlvMemberHidden(
-            final Holder holder,
+            final Holder<T> holder,
             final Context context
     ) {
         this.holder = holder;
@@ -49,7 +51,7 @@ public class GqlvMemberHidden {
         this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final Holder holder) {
+    private static <T extends ObjectMember> GraphQLFieldDefinition fieldDefinition(final Holder<T> holder) {
 
         GraphQLFieldDefinition fieldDefinition =
                 newFieldDefinition()
@@ -71,28 +73,29 @@ public class GqlvMemberHidden {
     private boolean hidden(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val objectMember = holder.getObjectMember();
+        // TODO: introduce Evaluator
+
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = holder.getObjectMember().getSpecificationLoader();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return true;
         }
 
+        val objectMember = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val visibleConsent = objectMember.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         return visibleConsent.isVetoed();
     }
 
-    public interface Holder extends GqlvHolder {
+    public interface Holder<T extends ObjectMember>
+            extends GqlvHolder,
+                    ObjectSpecificationProvider,
+                    ObjectMemberProvider<T> {
 
-        ObjectSpecification getObjectSpecification();
-
-        ObjectMember getObjectMember();
     }
 }

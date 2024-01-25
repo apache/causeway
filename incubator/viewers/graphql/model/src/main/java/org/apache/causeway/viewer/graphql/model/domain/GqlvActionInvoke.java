@@ -135,7 +135,6 @@ public class GqlvActionInvoke {
 
     private Object invoke(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-
         val evaluator = new Evaluator<Object, ObjectAction>(null) {
             @Override
             public Object evaluate(ActionInteractionHead head, ObjectAction objectAction, final Can<ManagedObject> argumentManagedObjects) {

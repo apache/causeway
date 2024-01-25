@@ -34,14 +34,14 @@ import graphql.schema.GraphQLFieldDefinition;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
-public class GqlvMemberDisabled {
+public class GqlvMemberDisabled<T extends ObjectMember> {
 
-    private final Holder holder;
+    private final Holder<T> holder;
     private final Context context;
     private final GraphQLFieldDefinition field;
 
     public GqlvMemberDisabled(
-            final Holder holder,
+            final Holder<T> holder,
             final Context context
     ) {
         this.holder = holder;
@@ -71,30 +71,25 @@ public class GqlvMemberDisabled {
     private String disabled(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectMember objectMember = holder.getObjectMember();
-
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
         val specificationLoader = holder.getObjectMember().getSpecificationLoader();
         val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
-            // not expected
             return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
         }
 
+        val objectMember = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         return usable.getReasonAsString().orElse(null);
     }
 
-    public interface Holder
+    public interface Holder<T extends ObjectMember>
             extends GqlvHolder,
-                    ObjectSpecificationProvider{
-
-        ObjectSpecification getObjectSpecification();
-
-        ObjectMember getObjectMember();
+                    ObjectSpecificationProvider,
+                    ObjectMemberProvider<T> {
     }
 }

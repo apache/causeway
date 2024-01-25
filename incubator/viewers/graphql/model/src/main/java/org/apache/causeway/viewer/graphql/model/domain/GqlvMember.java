@@ -63,9 +63,9 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
         return objectMember.getFeatureIdentifier().getFullIdentityString();
     }
 
-    public static interface Holder extends GqlvHolder {
-
-        ObjectSpecification getObjectSpecification();
+    public interface Holder
+            extends GqlvHolder,
+                    ObjectSpecificationProvider{
 
     }
 }

@@ -45,8 +45,8 @@ import static graphql.schema.GraphQLObjectType.newObject;
 @Log4j2
 public class GqlvAction
         extends GqlvMember<ObjectAction, GqlvAction.Holder>
-        implements GqlvMemberHidden.Holder,
-                   GqlvMemberDisabled.Holder,
+        implements GqlvMemberHidden.Holder<ObjectAction>,
+                   GqlvMemberDisabled.Holder<ObjectAction>,
                    GqlvActionInvoke.Holder,
                    GqlvActionValidate.Holder,
                    GqlvActionParams.Holder {
@@ -54,8 +54,8 @@ public class GqlvAction
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
 
-    private final GqlvMemberHidden hidden;
-    private final GqlvMemberDisabled disabled;
+    private final GqlvMemberHidden<ObjectAction> hidden;
+    private final GqlvMemberDisabled<ObjectAction> disabled;
     private final GqlvActionValidate validate;
     private final GqlvActionInvoke invoke;
     /**
@@ -66,14 +66,13 @@ public class GqlvAction
     public GqlvAction(
             final Holder holder,
             final ObjectAction objectAction,
-            final Context context
-            ) {
+            final Context context) {
         super(holder, objectAction, context);
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction));
 
-        this.hidden = new GqlvMemberHidden(this, context);
-        this.disabled = new GqlvMemberDisabled(this, context);
+        this.hidden = new GqlvMemberHidden<>(this, context);
+        this.disabled = new GqlvMemberDisabled<>(this, context);
         this.validate = new GqlvActionValidate(this, context);
         this.invoke = new GqlvActionInvoke(this, context);
         val params = new GqlvActionParams(this, context);
@@ -158,10 +157,10 @@ public class GqlvAction
     }
 
     static <T> T evaluate(
-            ObjectActionProvider holder,
-            Context context,
-            DataFetchingEnvironment dataFetchingEnvironment,
-            Evaluator<T, ObjectAction> evaluator) {
+            final ObjectActionProvider holder,
+            final Context context,
+            final DataFetchingEnvironment dataFetchingEnvironment,
+            final Evaluator<T, ObjectAction> evaluator) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -180,10 +179,10 @@ public class GqlvAction
     }
 
     static <T> T evaluate(
-            ObjectActionParameterProvider holder,
-            Context context,
-            DataFetchingEnvironment dataFetchingEnvironment,
-            Evaluator<T, ObjectActionParameter> evaluator) {
+            final ObjectActionParameterProvider holder,
+            final Context context,
+            final DataFetchingEnvironment dataFetchingEnvironment,
+            final Evaluator<T, ObjectActionParameter> evaluator) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -199,7 +198,7 @@ public class GqlvAction
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
 
-        final Can<ManagedObject> argumentManagedObjects = argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         return evaluator.evaluate(actionInteractionHead, objectActionParameter, argumentManagedObjects);
     }

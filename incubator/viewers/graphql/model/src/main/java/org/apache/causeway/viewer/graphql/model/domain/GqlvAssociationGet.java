@@ -86,8 +86,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
 
     Object get(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val association = holder.getObjectAssociation();
-
+        // TODO: introduce evaluator
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
@@ -97,6 +96,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
             return null;
         }
 
+        val association = holder.getObjectAssociation();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 

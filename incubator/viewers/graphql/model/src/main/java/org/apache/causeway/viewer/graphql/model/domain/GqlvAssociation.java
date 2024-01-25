@@ -52,8 +52,7 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
         return getObjectMember();
     }
 
-    public interface Holder extends GqlvMember.Holder {
-
-        ObjectSpecification getObjectSpecification();
+    public interface Holder
+            extends GqlvMember.Holder {
     }
 }

@@ -32,16 +32,16 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 public class GqlvProperty
         extends GqlvAssociation<OneToOneAssociation, GqlvProperty.Holder>
-        implements GqlvMemberHidden.Holder,
-        GqlvMemberDisabled.Holder,
-        GqlvPropertyGet.Holder,
-        GqlvPropertySet.Holder,
-        GqlvPropertyValidate.Holder {
+        implements GqlvMemberHidden.Holder<OneToOneAssociation>,
+                   GqlvMemberDisabled.Holder<OneToOneAssociation>,
+                   GqlvPropertyGet.Holder,
+                   GqlvPropertySet.Holder,
+                   GqlvPropertyValidate.Holder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
-    private final GqlvMemberHidden hidden;
-    private final GqlvMemberDisabled disabled;
+    private final GqlvMemberHidden<OneToOneAssociation> hidden;
+    private final GqlvMemberDisabled<OneToOneAssociation> disabled;
     private final GqlvPropertyGet get;
     private final GqlvPropertySet set;
     private final GqlvPropertyValidate validate;
@@ -55,7 +55,7 @@ public class GqlvProperty
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(this.holder.getObjectSpecification(), oneToOneAssociation));
 
         this.hidden = new GqlvMemberHidden(this, context);
-        this.disabled = new GqlvMemberDisabled(this, context);
+        this.disabled = new GqlvMemberDisabled<>(this, context);
         this.get = new GqlvPropertyGet(this, context);
         this.set = new GqlvPropertySet(this, context);
         this.validate = new GqlvPropertyValidate(this, context);
@@ -123,7 +123,7 @@ public class GqlvProperty
     }
 
 
-    public interface Holder extends GqlvAssociation.Holder {
-
+    public interface Holder
+            extends GqlvAssociation.Holder {
     }
 }

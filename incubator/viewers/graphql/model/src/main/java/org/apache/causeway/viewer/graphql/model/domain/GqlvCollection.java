@@ -31,12 +31,16 @@ import graphql.schema.GraphQLObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCollection.Holder> implements GqlvCollectionGet.Holder, GqlvMemberHidden.Holder, GqlvMemberDisabled.Holder {
+public class GqlvCollection
+        extends GqlvAssociation<OneToManyAssociation, GqlvCollection.Holder>
+        implements GqlvCollectionGet.Holder,
+                   GqlvMemberHidden.Holder<OneToManyAssociation>,
+                   GqlvMemberDisabled.Holder<OneToManyAssociation> {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
-    private final GqlvMemberHidden hidden;
-    private final GqlvMemberDisabled disabled;
+    private final GqlvMemberHidden<OneToManyAssociation> hidden;
+    private final GqlvMemberDisabled<OneToManyAssociation> disabled;
     private final GqlvCollectionGet get;
 
     public GqlvCollection(
@@ -48,7 +52,7 @@ public class GqlvCollection extends GqlvAssociation<OneToManyAssociation, GqlvCo
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation));
 
         this.hidden = new GqlvMemberHidden(this, context);
-        this.disabled = new GqlvMemberDisabled(this, context);
+        this.disabled = new GqlvMemberDisabled<>(this, context);
         this.get = new GqlvCollectionGet(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();

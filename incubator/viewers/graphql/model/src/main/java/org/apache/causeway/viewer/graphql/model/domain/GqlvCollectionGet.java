@@ -44,7 +44,8 @@ public class GqlvCollectionGet extends GqlvAssociationGet<OneToManyAssociation> 
         return TypeMapper.listTypeForElementTypeOf(oneToManyAssociation);
     }
 
-    public interface Holder extends GqlvAssociationGet.Holder<OneToManyAssociation> {
-
+    public interface Holder
+            extends GqlvAssociationGet.Holder<OneToManyAssociation> {
+        OneToManyAssociation getOneToManyAssociation();
     }
 }
