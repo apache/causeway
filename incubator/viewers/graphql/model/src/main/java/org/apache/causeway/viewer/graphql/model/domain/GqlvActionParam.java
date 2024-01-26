@@ -40,11 +40,12 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
 public class GqlvActionParam
-        implements GqlvActionParamValidate.Holder,
-                   GqlvActionParamHidden.Holder,
+        implements GqlvActionParamHidden.Holder,
+                   GqlvActionParamDisabled.Holder,
                    GqlvActionParamChoices.Holder,
                    GqlvActionParamAutoComplete.Holder,
-                   GqlvActionParamDisabled.Holder {
+                   GqlvActionParamDefault.Holder,
+                   GqlvActionParamValidate.Holder {
 
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
@@ -55,10 +56,11 @@ public class GqlvActionParam
     private final GraphQLObjectType gqlObjectType;
 
     private final GqlvActionParamHidden hidden;
-    private final GqlvActionParamValidate disabled;
+    private final GqlvActionParamDisabled validate;
     private final GqlvActionParamChoices choices;
     private final GqlvActionParamAutoComplete autoComplete;
-    private final GqlvActionParamDisabled validate;
+    private final GqlvActionParamDefault default_;
+    private final GqlvActionParamValidate disabled;
 
     private final GraphQLFieldDefinition field;
 
@@ -79,6 +81,8 @@ public class GqlvActionParam
         this.choices = choices.hasChoices() ? choices : null;
         val autoComplete = new GqlvActionParamAutoComplete(this, context);
         this.autoComplete = autoComplete.hasAutoComplete() ? autoComplete : null;
+        val default_ = new GqlvActionParamDefault(this, context);
+        this.default_ = default_.hasDefault() ? default_ : null;
         this.validate = new GqlvActionParamDisabled(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
@@ -122,6 +126,9 @@ public class GqlvActionParam
         }
         if (autoComplete != null) {
             autoComplete.addDataFetcher();
+        }
+        if (default_ != null) {
+            default_.addDataFetcher();
         }
         validate.addDataFetcher();
     }

@@ -95,6 +95,8 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
     void afterEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
             staffMemberRepository.removeAll();
+            deptHeadRepository.findAll().forEach(x -> x.setDepartment(null));
+            departmentRepository.findAll().forEach(x -> x.setDeptHead(null));
             deptHeadRepository.removeAll();
             departmentRepository.removeAll();
         });
@@ -134,6 +136,14 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
     @Test
     @UseReporter(DiffReporter.class)
     void find_department_and_change_name_invalid() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void find_department_and_change_head_default() throws Exception {
 
         // when, then
         Approvals.verify(submit(), jsonOptions());

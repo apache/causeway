@@ -2267,6 +2267,7 @@ type university_dept_Department__changeDeptHead__gqlv_action_params {
 
 type university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter {
   autoComplete(search: String): [university_dept_DeptHead]
+  default: university_dept_DeptHead
   disabled(newDeptHead: university_dept_DeptHead__gqlv_input): String
   hidden: Boolean
   validity(newDeptHead: university_dept_DeptHead__gqlv_input): String
@@ -2285,6 +2286,7 @@ type university_dept_Department__changeName__gqlv_action_params {
 }
 
 type university_dept_Department__changeName__newName__gqlv_action_parameter {
+  default: String
   disabled(newName: String): String
   hidden: Boolean
   validity(newName: String): String
@@ -2434,6 +2436,7 @@ type university_dept_DeptHead__changeName__gqlv_action_params {
 }
 
 type university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
+  default: String
   disabled(newName: String): String
   hidden: Boolean
   validity(newName: String): String

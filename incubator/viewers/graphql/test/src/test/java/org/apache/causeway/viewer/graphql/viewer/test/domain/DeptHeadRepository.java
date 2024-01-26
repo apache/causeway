@@ -34,9 +34,11 @@ public class DeptHeadRepository {
     @Inject private RepositoryService repositoryService;
 
     public DeptHead create(final String name, @Nullable final Department department) {
-        DeptHead deptHead = new DeptHead();
-        deptHead.setName(name);
-        deptHead.setDepartment(department);
+        DeptHead deptHead = new DeptHead(name);
+        if (department != null) {
+            deptHead.setDepartment(department);
+            department.setDeptHead(deptHead);
+        }
         repositoryService.persistAndFlush(deptHead);
         return deptHead;
     }

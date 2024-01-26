@@ -42,6 +42,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import static org.apache.causeway.applib.annotation.Editing.ENABLED;
@@ -58,7 +59,12 @@ import static org.apache.causeway.applib.annotation.Optionality.MANDATORY;
         autoCompleteRepository = DeptHeadRepository.class,
         autoCompleteMethod = "findByNameContaining"
 )
+@NoArgsConstructor
 public class DeptHead implements Comparable<DeptHead> {
+
+    public DeptHead(String name) {
+        this.name = name;
+    }
 
     @Id
     @GeneratedValue

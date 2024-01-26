@@ -121,6 +121,12 @@ extends ObjectFeature, CurrentHolder {
     boolean hasAutoComplete();
 
     /**
+     * Where there is a default provided (eg <code>defaultXxx</code> supporting method
+     * for the parameter.
+     */
+    boolean hasDefaults();
+
+    /**
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from, based on the input search argument.
      */

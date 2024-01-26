@@ -161,6 +161,13 @@ implements
         return parentAction.getFacetedMethod().getParameters().getElseFail(parameterIndex);
     }
 
+    // -- Defaults
+
+    @Override
+    public boolean hasDefaults() {
+        return lookupNonFallbackFacet(ActionParameterDefaultsFacet.class).isPresent();
+    }
+
     // -- AutoComplete
 
     @Override

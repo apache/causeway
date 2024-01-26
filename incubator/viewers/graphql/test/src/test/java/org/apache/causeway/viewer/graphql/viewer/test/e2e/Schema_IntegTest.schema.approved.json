@@ -23050,6 +23050,17 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
+          "name" : "default",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "university_dept_DeptHead",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
           "name" : "disabled",
           "description" : null,
           "args" : [ {
@@ -23208,6 +23219,17 @@
             },
             "defaultValue" : null
           } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "default",
+          "description" : null,
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
@@ -24661,6 +24683,17 @@
             },
             "defaultValue" : null
           } ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "default",
+          "description" : null,
+          "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
