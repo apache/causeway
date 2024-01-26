@@ -21,8 +21,11 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -74,8 +77,7 @@ public class GqlvMemberDisabled<T extends ObjectMember> {
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = holder.getObjectMember().getSpecificationLoader();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
         }
@@ -89,7 +91,7 @@ public class GqlvMemberDisabled<T extends ObjectMember> {
 
     public interface Holder<T extends ObjectMember>
             extends GqlvHolder,
-                    ObjectSpecificationProvider,
-                    ObjectMemberProvider<T> {
+            ObjectSpecificationProvider,
+            ObjectMemberProvider<T> {
     }
 }

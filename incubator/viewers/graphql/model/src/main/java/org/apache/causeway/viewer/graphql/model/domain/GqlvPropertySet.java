@@ -18,18 +18,22 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
+import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
+import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
 
@@ -92,26 +96,35 @@ public class GqlvPropertySet {
 
     Object set(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val association = holder.getOneToOneAssociation();
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
-            // not expected
             return null;
         }
 
+        val association = holder.getOneToOneAssociation();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Object argumentValue = arguments.get(association.getId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(association, argumentValue);
 
-        Consent consent = association.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
-        if (consent.isVetoed()) {
-            throw new IllegalArgumentException(consent.getReasonAsString().orElse("Invalid"));
+        val visibleConsent = association.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (visibleConsent.isVetoed()) {
+            throw new HiddenException(association.getFeatureIdentifier());
+        }
+
+        val usableConsent = association.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (usableConsent.isVetoed()) {
+            throw new DisabledException(association.getFeatureIdentifier());
+        }
+
+        val validityConsent = association.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        if (validityConsent.isVetoed()) {
+            throw new InvalidException(validityConsent);
         }
 
         association.set(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
@@ -121,8 +134,8 @@ public class GqlvPropertySet {
 
     public interface Holder
             extends GqlvHolder,
-                    ObjectSpecificationProvider,
-                    OneToOneAssociationProvider {
+            ObjectSpecificationProvider,
+            OneToOneAssociationProvider {
 
         GqlvProperty.Holder getHolder();
 

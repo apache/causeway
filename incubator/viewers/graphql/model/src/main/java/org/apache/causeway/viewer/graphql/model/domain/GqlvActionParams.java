@@ -21,7 +21,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.model.util.TypeNames;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;

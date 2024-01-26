@@ -16,10 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain;
+package org.apache.causeway.viewer.graphql.model.exceptions;
 
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.applib.services.i18n.TranslatableString;
+import org.apache.causeway.core.metamodel.consent.Consent;
 
-public interface OneToOneAssociationProvider extends ObjectAssociationProvider<OneToOneAssociation> {
-    OneToOneAssociation getOneToOneAssociation();
+public class InvalidException extends InteractionException {
+    public InvalidException(Consent consent) {
+        super(consent.getReasonAsString().orElse("Invalid"));
+    }
+    public InvalidException(Identifier identifier) {
+        super(identifier);
+    }
+    public InvalidException(Identifier identifier, Throwable cause) {
+        super(identifier, cause);
+    }
 }

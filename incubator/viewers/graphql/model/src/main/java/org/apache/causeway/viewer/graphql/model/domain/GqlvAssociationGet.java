@@ -19,14 +19,15 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
 import lombok.val;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
 
@@ -107,8 +108,8 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
 
     public interface Holder<T extends ObjectAssociation>
             extends GqlvHolder,
-                    ObjectSpecificationProvider,
-                    ObjectAssociationProvider<T> {
+            ObjectSpecificationProvider,
+            ObjectAssociationProvider<T> {
 
     }
 }

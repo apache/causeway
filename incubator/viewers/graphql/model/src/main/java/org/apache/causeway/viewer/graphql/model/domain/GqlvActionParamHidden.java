@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
@@ -67,23 +68,31 @@ public class GqlvActionParamHidden {
 
     private boolean hidden(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val evaluator = new Evaluator<Boolean, ObjectActionParameter>(true) {
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-            @Override
-            public Boolean evaluate(ActionInteractionHead head, ObjectActionParameter objectActionParameter, final Can<ManagedObject> argumentManagedObjects) {
-                Consent visible = objectActionParameter.isVisible(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-                return visible.isVetoed();
-            }
-        };
+        val sourcePojoClass = sourcePojo.getClass();
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        if (objectSpecification == null) {
+            return true;
+        }
 
-        return GqlvAction.evaluate(holder, context, dataFetchingEnvironment, evaluator);
+        val objectAction = holder.getObjectAction();
+        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        val actionInteractionHead = objectAction.interactionHead(managedObject);
+
+        val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
+
+        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+
+        val visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+        return visible.isVetoed();
     }
 
     public interface Holder
             extends GqlvHolder,
-                    ObjectSpecificationProvider,
-                    ObjectActionProvider,
-                    ObjectActionParameterProvider {
+            ObjectSpecificationProvider,
+            ObjectActionProvider,
+            ObjectActionParameterProvider {
         GqlvActionParam.Holder getHolder();
     }
 }

@@ -26,8 +26,9 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import lombok.Getter;
 import lombok.val;
@@ -153,7 +154,7 @@ public class GqlvMeta {
 
     public interface Holder
             extends GqlvHolder,
-                    ObjectSpecificationProvider {
+            ObjectSpecificationProvider {
 
     }
 }

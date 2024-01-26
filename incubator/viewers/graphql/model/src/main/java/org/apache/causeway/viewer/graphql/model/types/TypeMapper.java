@@ -33,7 +33,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
-import org.apache.causeway.viewer.graphql.model.util.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
 import org.springframework.lang.Nullable;
 

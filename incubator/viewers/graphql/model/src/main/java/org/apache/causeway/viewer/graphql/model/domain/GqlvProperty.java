@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-import org.apache.causeway.viewer.graphql.model.util.TypeNames;
 
 import graphql.schema.*;
 
@@ -54,7 +53,7 @@ public class GqlvProperty
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(this.holder.getObjectSpecification(), oneToOneAssociation));
 
-        this.hidden = new GqlvMemberHidden(this, context);
+        this.hidden = new GqlvMemberHidden<>(this, context);
         this.disabled = new GqlvMemberDisabled<>(this, context);
         this.get = new GqlvPropertyGet(this, context);
         this.set = new GqlvPropertySet(this, context);

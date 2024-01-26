@@ -16,15 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain;
+package org.apache.causeway.viewer.graphql.model.exceptions;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 
-public interface ObjectActionParameterProvider extends ObjectActionProvider {
-    ObjectActionParameter getObjectActionParameter();
+public class HiddenException extends InteractionException {
 
-    /**
-     * 0-based
-     */
-    int getParamNum();
+    public HiddenException(Consent consent) {
+        super(consent.getReasonAsString().orElse("Hidden"));
+    }
+
+    public HiddenException(Identifier identifier) {
+        super(identifier);
+    }
+
+    public HiddenException(Identifier identifier, Throwable cause) {
+        super(identifier, cause);
+    }
 }

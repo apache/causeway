@@ -16,10 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain;
+package org.apache.causeway.viewer.graphql.model.fetcher;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 
-public interface ObjectMemberProvider<T extends ObjectMember> {
-    T getObjectMember();
+import lombok.val;
+
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+
+public class BookmarkedPojoFetcher implements DataFetcher<Object> {
+    private final BookmarkService bookmarkService;
+
+    public BookmarkedPojoFetcher(BookmarkService bookmarkService) {
+        this.bookmarkService = bookmarkService;
+    }
+
+    @Override
+    public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
+
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+
+        return bookmarkService.bookmarkFor(sourcePojo)
+                .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))
+                .orElseThrow();
+    }
 }

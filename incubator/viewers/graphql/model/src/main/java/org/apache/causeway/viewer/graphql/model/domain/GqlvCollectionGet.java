@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;

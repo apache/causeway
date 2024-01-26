@@ -21,7 +21,10 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.model.util.TypeNames;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -110,8 +113,8 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
 
     public static interface Holder
             extends GqlvHolder,
-                    ObjectSpecificationProvider,
-                    ObjectActionProvider {
+            ObjectSpecificationProvider,
+            ObjectActionProvider {
 
         GqlvActionParams.Holder getHolder();
 

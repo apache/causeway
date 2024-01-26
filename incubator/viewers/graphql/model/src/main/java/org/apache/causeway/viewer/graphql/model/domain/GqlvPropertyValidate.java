@@ -23,8 +23,11 @@ import java.util.Map;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -91,7 +94,6 @@ public class GqlvPropertyValidate {
 
     Object validate(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val association = holder.getOneToOneAssociation();
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -102,6 +104,7 @@ public class GqlvPropertyValidate {
             return null;
         }
 
+        val association = holder.getOneToOneAssociation();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
@@ -113,8 +116,8 @@ public class GqlvPropertyValidate {
 
     public interface Holder
             extends GqlvHolder,
-                    ObjectSpecificationProvider,
-                    OneToOneAssociationProvider {
+            ObjectSpecificationProvider,
+            OneToOneAssociationProvider {
 
         GqlvProperty.Holder getHolder();
     }

@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain;
+package org.apache.causeway.viewer.graphql.model.mmproviders;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-public interface ObjectAssociationProvider<T extends ObjectAssociation> extends ObjectMemberProvider<T> {
-    T getObjectAssociation();
+public interface ObjectActionProvider extends ObjectMemberProvider<ObjectAction> {
+    ObjectAction getObjectAction();
 }

@@ -21,11 +21,12 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import org.springframework.beans.factory.ObjectProvider;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -73,9 +74,6 @@ public class GqlvMemberHidden<T extends ObjectMember> {
     private boolean hidden(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        // TODO: introduce Evaluator
-
-
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
@@ -94,8 +92,7 @@ public class GqlvMemberHidden<T extends ObjectMember> {
 
     public interface Holder<T extends ObjectMember>
             extends GqlvHolder,
-                    ObjectSpecificationProvider,
-                    ObjectMemberProvider<T> {
-
+            ObjectSpecificationProvider,
+            ObjectMemberProvider<T> {
     }
 }

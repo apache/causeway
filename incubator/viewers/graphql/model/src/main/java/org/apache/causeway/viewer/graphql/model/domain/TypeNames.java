@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.util;
+package org.apache.causeway.viewer.graphql.model.domain;
 
 import lombok.experimental.UtilityClass;
 
