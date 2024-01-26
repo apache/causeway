@@ -103,7 +103,7 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
         objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 // TODO: for now, we ignore any actions that have any collection parameters
                 //  however, this is supportable in GraphQL, https://chat.openai.com/c/7ca721d5-865a-4765-9f90-5c28046516cd
-                .filter(objectAction -> objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural))
+                // .filter(objectAction -> objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural))
                 .forEach(objectAction -> {
                     actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
                 });

@@ -25,6 +25,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
@@ -141,8 +142,7 @@ public class GqlvAction
         val parameters = objectAction.getParameters();
         val arguments = parameters.stream()
                 .limit(upTo)
-                .map(OneToOneActionParameter.class::cast)   // TODO: remove - we previously filter to ignore any actions that have collection parameters
-                .map(oneToOneActionParameter -> gqlArgumentFor(oneToOneActionParameter, inputContext))
+                .map(objectActionParameter -> gqlArgumentFor(objectActionParameter, inputContext))
                 .collect(Collectors.toList());
         if (!arguments.isEmpty()) {
             builder.arguments(arguments);
@@ -157,12 +157,19 @@ public class GqlvAction
 
         val parameters = objectAction.getParameters();
         val arguments = parameters.get(paramNum).stream()
-                .map(OneToOneActionParameter.class::cast)   // TODO: remove - we previously filter to ignore any actions that have collection parameters
-                .map(oneToOneActionParameter -> gqlArgumentFor(oneToOneActionParameter, inputContext))
+                .map(objectActionParameter -> gqlArgumentFor(objectActionParameter, inputContext))
                 .collect(Collectors.toList());
         if (!arguments.isEmpty()) {
             builder.arguments(arguments);
         }
+    }
+
+    static GraphQLArgument gqlArgumentFor(
+            final ObjectActionParameter objectActionParameter,
+            final TypeMapper.InputContext inputContext) {
+        return objectActionParameter.isPlural()
+                ? gqlArgumentFor((OneToManyActionParameter) objectActionParameter, inputContext)
+                : gqlArgumentFor((OneToOneActionParameter) objectActionParameter, inputContext);
     }
 
     static GraphQLArgument gqlArgumentFor(
@@ -171,6 +178,15 @@ public class GqlvAction
         return GraphQLArgument.newArgument()
                 .name(oneToOneActionParameter.getId())
                 .type(TypeMapper.inputTypeFor(oneToOneActionParameter, inputContext))
+                .build();
+    }
+
+    static GraphQLArgument gqlArgumentFor(
+            final OneToManyActionParameter oneToManyActionParameter,
+            final TypeMapper.InputContext inputContext) {
+        return GraphQLArgument.newArgument()
+                .name(oneToManyActionParameter.getId())
+                .type(TypeMapper.inputTypeFor(oneToManyActionParameter, inputContext))
                 .build();
     }
 

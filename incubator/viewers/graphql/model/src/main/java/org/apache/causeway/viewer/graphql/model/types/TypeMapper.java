@@ -31,6 +31,7 @@ import javax.ws.rs.NotSupportedException;
 
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
@@ -149,7 +150,31 @@ public class TypeMapper {
                 return scalarTypeFor(elementType.getCorrespondingClass());
 
             case COLLECTION:
-                // TODO ...
+                throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
+            default:
+                // for now
+                return Scalars.GraphQLString;
+        }
+    }
+
+    public static GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused){
+        ObjectSpecification elementType = oneToManyActionParameter.getElementType();
+        return GraphQLList.list(TypeMapper.inputTypeFor_(elementType));
+    }
+
+    private static GraphQLInputType inputTypeFor_(final ObjectSpecification elementType){
+        switch (elementType.getBeanSort()) {
+            case ABSTRACT:
+            case ENTITY:
+            case VIEW_MODEL:
+                return typeRef(TypeNames.inputTypeNameFor(elementType));
+
+            case VALUE:
+                return scalarTypeFor(elementType.getCorrespondingClass());
+
+            case COLLECTION:
+                throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.getFullIdentifier()));
+
             default:
                 // for now
                 return Scalars.GraphQLString;

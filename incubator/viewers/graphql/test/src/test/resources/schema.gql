@@ -2228,6 +2228,7 @@ type university_admin_AdminMenu__otherAdminAction__gqlv_action {
 type university_dept_Department {
   _gql_meta: university_dept_Department__gqlv_meta
   addStaffMember: university_dept_Department__addStaffMember__gqlv_action
+  addStaffMembers: university_dept_Department__addStaffMembers__gqlv_action
   changeDeptHead: university_dept_Department__changeDeptHead__gqlv_action
   changeName: university_dept_Department__changeName__gqlv_action
   deptHead: university_dept_Department__deptHead__gqlv_property
@@ -2253,6 +2254,25 @@ type university_dept_Department__addStaffMember__staffMember__gqlv_action_parame
   disabled(staffMember: university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
   validity(staffMember: university_dept_StaffMember__gqlv_input): String
+}
+
+type university_dept_Department__addStaffMembers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(staffMembers: [university_dept_StaffMember__gqlv_input]): university_dept_Department
+  params: university_dept_Department__addStaffMembers__gqlv_action_params
+  validate(staffMembers: [university_dept_StaffMember__gqlv_input]): String
+}
+
+type university_dept_Department__addStaffMembers__gqlv_action_params {
+  staffMembers: university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter
+}
+
+type university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter {
+  choices: [university_dept_StaffMember]
+  disabled(staffMembers: [university_dept_StaffMember__gqlv_input]): String
+  hidden: Boolean
+  validity(staffMembers: [university_dept_StaffMember__gqlv_input]): String
 }
 
 type university_dept_Department__changeDeptHead__gqlv_action {
