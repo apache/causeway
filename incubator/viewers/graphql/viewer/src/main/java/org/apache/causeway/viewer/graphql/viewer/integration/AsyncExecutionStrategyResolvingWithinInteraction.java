@@ -18,16 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import javax.inject.Inject;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
+
+import org.apache.causeway.viewer.graphql.viewer.auth.UserMementoProvider;
 
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,8 @@ import graphql.execution.AsyncExecutionStrategy;
 import graphql.execution.ExecutionContext;
 import graphql.execution.ExecutionStrategyParameters;
 import graphql.execution.FieldValueInfo;
-import lombok.RequiredArgsConstructor;
+
+import lombok.val;
 
 @Service
 public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecutionStrategy {
@@ -48,23 +48,10 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
 
     public AsyncExecutionStrategyResolvingWithinInteraction(
             final InteractionService interactionService,
-            final CausewayConfiguration causewayConfiguration) {
+            final UserMementoProvider userMementoProvider) {
         this.interactionService = interactionService;
 
-        String fallbackUsername = causewayConfiguration.getViewer().getGqlv().getAuthentication().getFallback().getUsername();
-        List<String> fallbackRoles = causewayConfiguration.getViewer().getGqlv().getAuthentication().getFallback().getRoles();
-        userMemento = fallbackUsername != null
-                        ? UserMemento.builder()
-                            .name(fallbackUsername)
-                            .roles(Can.ofStream(
-                                    fallbackRoles.stream()
-                                                .map(roleName -> RoleMemento.builder()
-                                                                    .name(roleName)
-                                                                    .build()
-                                                )
-                                    )
-                            ).build()
-                        : null;
+        this.userMemento = userMementoProvider.userMemento();
     }
 
 
@@ -72,9 +59,6 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
     protected CompletableFuture<FieldValueInfo> resolveFieldWithInfo(
             final ExecutionContext executionContext,
             final ExecutionStrategyParameters parameters) {
-
-        // TODO: propagate identity from executionContext
-        // interactionService.openInteraction(InteractionContext.builder().user(UserMemento.builder().build()).build());
 
         if (userMemento != null) {
             return interactionService.call(

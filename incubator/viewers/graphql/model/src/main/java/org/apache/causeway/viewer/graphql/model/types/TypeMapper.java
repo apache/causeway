@@ -18,36 +18,30 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
-
-import graphql.Scalars;
 import graphql.schema.*;
 
-import lombok.experimental.UtilityClass;
-import lombok.val;
-
-import javax.annotation.Priority;
-import javax.ws.rs.NotSupportedException;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
-import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
-
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLTypeReference.typeRef;
 
 public interface TypeMapper {
+
+    @Configuration
+    class TypeMapperConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(TypeMapper.class)
+        public TypeMapper defaultTypeMapper(final CausewayConfiguration causewayConfiguration) {
+            return new TypeMapperDefault(causewayConfiguration);
+        }
+    }
 
     GraphQLScalarType scalarTypeFor(final Class<?> c);
 
@@ -86,4 +80,5 @@ public interface TypeMapper {
             return !(this == INVOKE || this == SET);
         }
     }
+
 }
