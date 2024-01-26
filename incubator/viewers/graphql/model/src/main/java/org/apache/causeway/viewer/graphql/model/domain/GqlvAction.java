@@ -35,6 +35,7 @@ import graphql.schema.*;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -138,14 +139,30 @@ public class GqlvAction
             final TypeMapper.InputContext inputContext,
             final int upTo) {
 
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
+        val parameters = objectAction.getParameters();
+        val arguments = parameters.stream()
+                .limit(upTo)
+                .map(OneToOneActionParameter.class::cast)   // TODO: remove - we previously filter to ignore any actions that have collection parameters
+                .map(oneToOneActionParameter -> gqlArgumentFor(oneToOneActionParameter, inputContext))
+                .collect(Collectors.toList());
+        if (!arguments.isEmpty()) {
+            builder.arguments(arguments);
+        }
+    }
 
-        if (parameters.isNotEmpty()) {
-            builder.arguments(parameters.stream()
-                    .limit(upTo)
-                    .map(OneToOneActionParameter.class::cast)   // we previously filter to ignore any actions that have collection parameters
-                    .map(oneToOneActionParameter -> gqlArgumentFor(oneToOneActionParameter, inputContext))
-                    .collect(Collectors.toList()));
+    static void addGqlArgument(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder builder,
+            final TypeMapper.InputContext inputContext,
+            final int paramNum) {
+
+        val parameters = objectAction.getParameters();
+        val arguments = parameters.get(paramNum).stream()
+                .map(OneToOneActionParameter.class::cast)   // TODO: remove - we previously filter to ignore any actions that have collection parameters
+                .map(oneToOneActionParameter -> gqlArgumentFor(oneToOneActionParameter, inputContext))
+                .collect(Collectors.toList());
+        if (!arguments.isEmpty()) {
+            builder.arguments(arguments);
         }
     }
 

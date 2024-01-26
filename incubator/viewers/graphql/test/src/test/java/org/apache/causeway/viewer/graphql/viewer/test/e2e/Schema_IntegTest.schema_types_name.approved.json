@@ -762,6 +762,18 @@
       }, {
         "name" : "university_dept_Department"
       }, {
+        "name" : "university_dept_Department__addStaffMember__gqlv_action"
+      }, {
+        "name" : "university_dept_Department__addStaffMember__gqlv_action_params"
+      }, {
+        "name" : "university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter"
+      }, {
+        "name" : "university_dept_Department__changeName__gqlv_action"
+      }, {
+        "name" : "university_dept_Department__changeName__gqlv_action_params"
+      }, {
+        "name" : "university_dept_Department__changeName__newName__gqlv_action_parameter"
+      }, {
         "name" : "university_dept_Department__deptHead__gqlv_property"
       }, {
         "name" : "university_dept_Department__gqlv_input"
@@ -769,6 +781,12 @@
         "name" : "university_dept_Department__gqlv_meta"
       }, {
         "name" : "university_dept_Department__name__gqlv_property"
+      }, {
+        "name" : "university_dept_Department__removeStaffMember__gqlv_action"
+      }, {
+        "name" : "university_dept_Department__removeStaffMember__gqlv_action_params"
+      }, {
+        "name" : "university_dept_Department__removeStaffMember__staffMember__gqlv_action_parameter"
       }, {
         "name" : "university_dept_Department__staffMembers__gqlv_collection"
       }, {

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -51,6 +52,12 @@ public class StaffMemberRepository {
                 filter(dept -> dept.getName().equals(name)).
                 findFirst().
                 orElse(null);
+    }
+
+    public List<StaffMember> findByNameMatching(final String name){
+        return findAll().stream().
+                filter(dept -> dept.getName().contains(name)).
+                collect(Collectors.toList());
     }
 
 }

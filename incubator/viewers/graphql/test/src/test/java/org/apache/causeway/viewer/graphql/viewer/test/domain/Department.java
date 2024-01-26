@@ -26,15 +26,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.val;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -61,6 +66,27 @@ public class Department implements Comparable<Department> {
 
     @Getter @Setter
     private String name;
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public class changeName {
+
+        public Department act(final String newName){
+            setName(newName);
+            return Department.this;
+        }
+
+        public String default0Act(){
+            return getName();
+        }
+
+        public String validate0Act(String name) {
+            if (name.contains("!")) {
+                return "Name cannot contain '!' character";
+            }
+            return null;
+        }
+    }
+
+
 
     @Getter @Setter
     @Property
@@ -74,6 +100,35 @@ public class Department implements Comparable<Department> {
     @OneToMany(mappedBy = "department")
     private Set<StaffMember> staffMembers = new TreeSet<>();
 
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(associateWith = "staffMembers")
+    public class addStaffMember {
+
+        public Department act(StaffMember staffMember) {
+            val department = Department.this;
+
+            department.getStaffMembers().add(staffMember);
+            staffMember.setDepartment(department);
+            return department;
+        }
+    }
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(associateWith = "staffMembers")
+    @RequiredArgsConstructor
+    public class removeStaffMember {
+
+        public Department act(StaffMember staffMember) {
+            val department = Department.this;
+
+            department.getStaffMembers().add(staffMember);
+            staffMember.setDepartment(department);
+            return department;
+        }
+        public Set<StaffMember> choices0Act() {
+            return Department.this.getStaffMembers();
+        }
+    }
 
     @Override
     public int compareTo(final Department o) {

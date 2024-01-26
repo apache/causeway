@@ -38,7 +38,7 @@ import org.apache.causeway.applib.annotation.Property;
 )
 @javax.inject.Named("university.dept.StaffMember")
 @NoArgsConstructor
-@DomainObject(nature = Nature.ENTITY)
+@DomainObject(nature = Nature.ENTITY, autoCompleteRepository = StaffMemberRepository.class, autoCompleteMethod = "findByNameMatching")
 public class StaffMember implements Comparable<StaffMember> {
 
     public StaffMember(String name, Department department) {
