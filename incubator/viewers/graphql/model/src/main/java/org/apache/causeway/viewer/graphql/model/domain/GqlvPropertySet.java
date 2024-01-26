@@ -137,7 +137,5 @@ public class GqlvPropertySet {
             ObjectSpecificationProvider,
             OneToOneAssociationProvider {
 
-        GqlvProperty.Holder getHolder();
-
     }
 }

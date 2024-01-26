@@ -108,11 +108,11 @@ public class GqlvActionInvoke {
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
-                ObjectSpecification objectSpecificationForElementWhenCollection = facet.elementSpec();
-                GraphQLType wrappedType = TypeMapper.outputTypeFor(objectSpecificationForElementWhenCollection);
+                val objectSpecificationOfCollectionElement = facet.elementSpec();
+                GraphQLType wrappedType = TypeMapper.outputTypeFor(objectSpecificationOfCollectionElement);
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
-                            objectSpecificationForElementWhenCollection.getFullIdentifier(),
+                            objectSpecificationOfCollectionElement.getFullIdentifier(),
                             objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
@@ -145,10 +145,6 @@ public class GqlvActionInvoke {
 
         val objectAction = holder.getObjectAction();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val actionInteractionHead = objectAction.interactionHead(managedObject);
-
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
-
 
         val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
@@ -160,19 +156,22 @@ public class GqlvActionInvoke {
             throw new DisabledException(objectAction.getFeatureIdentifier());
         }
 
-        val validityConsent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+        val head = objectAction.interactionHead(managedObject);
+        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+
+        val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
             throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
         }
 
-        val resultManagedObject = objectAction.execute(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+        val resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();
     }
 
     public interface Holder
             extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectActionProvider {
+                    ObjectSpecificationProvider,
+                    ObjectActionProvider {
 
     }
 }

@@ -33,11 +33,17 @@ import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
+import lombok.val;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
-public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActionParamHidden.Holder {
+public class GqlvActionParam
+        implements GqlvActionParamDisabled.Holder,
+                   GqlvActionParamHidden.Holder,
+                   GqlvActionParamChoices.Holder,
+                   GqlvActionParamValidate.Holder {
 
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
@@ -47,6 +53,7 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
 
+    private final GqlvActionParamChoices choices;
     private final GqlvActionParamHidden hidden;
     private final GqlvActionParamDisabled disabled;
 
@@ -65,6 +72,8 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
 
         this.hidden = new GqlvActionParamHidden(this, context);
         this.disabled = new GqlvActionParamDisabled(this, context);
+        val choices = new GqlvActionParamChoices(this, context);
+        this.choices = choices.hasChoices() ? choices : null;
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
@@ -102,6 +111,9 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
 
         hidden.addDataFetcher();
         disabled.addDataFetcher();
+        if (choices != null) {
+            choices.addDataFetcher();
+        }
     }
 
 
@@ -111,12 +123,10 @@ public class GqlvActionParam implements GqlvActionParamDisabled.Holder, GqlvActi
     }
 
 
-    public static interface Holder
+    public interface Holder
             extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectActionProvider {
-
-        GqlvActionParams.Holder getHolder();
+                    ObjectSpecificationProvider,
+                    ObjectActionProvider {
 
     }
 }

@@ -90,9 +90,8 @@ public class GqlvActionParamHidden {
 
     public interface Holder
             extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectActionProvider,
-            ObjectActionParameterProvider {
-        GqlvActionParam.Holder getHolder();
+                    ObjectSpecificationProvider,
+                    ObjectActionProvider,
+                    ObjectActionParameterProvider {
     }
 }

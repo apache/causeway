@@ -119,6 +119,5 @@ public class GqlvPropertyValidate {
             ObjectSpecificationProvider,
             OneToOneAssociationProvider {
 
-        GqlvProperty.Holder getHolder();
     }
 }

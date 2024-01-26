@@ -2262,6 +2262,7 @@ type university_dept_Department__removeStaffMember__gqlv_action_params {
 }
 
 type university_dept_Department__removeStaffMember__staffMember__gqlv_action_parameter {
+  choices: [university_dept_StaffMember]
   disabled: String
   hidden: Boolean
 }
@@ -2334,6 +2335,7 @@ type university_dept_DeptHead {
 }
 
 type university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter {
+  choices: [university_dept_Department]
   disabled: String
   hidden: Boolean
 }
@@ -2453,6 +2455,7 @@ type university_dept_StaffMember__name__gqlv_property {
 }
 
 type university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
+  choices(name: String): [university_dept_Department]
   disabled(name: String): String
   hidden(name: String): Boolean
 }
