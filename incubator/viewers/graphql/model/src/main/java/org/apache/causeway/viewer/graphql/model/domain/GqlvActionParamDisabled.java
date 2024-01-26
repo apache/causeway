@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -79,7 +81,7 @@ public class GqlvActionParamDisabled {
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         val usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
@@ -95,5 +97,10 @@ public class GqlvActionParamDisabled {
                 GraphQLFieldDefinition.Builder fieldBuilder,
                 TypeMapper.InputContext inputContext,
                 int i);
+
+        Can<ManagedObject> argumentManagedObjectsFor(
+                DataFetchingEnvironment dataFetchingEnvironment,
+                ObjectAction objectAction,
+                BookmarkService bookmarkService);
     }
 }

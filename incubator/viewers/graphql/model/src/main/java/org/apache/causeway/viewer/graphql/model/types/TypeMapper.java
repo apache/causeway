@@ -20,12 +20,15 @@ package org.apache.causeway.viewer.graphql.model.types;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import graphql.Scalars;
 import graphql.schema.*;
 
 import lombok.experimental.UtilityClass;
+import lombok.val;
 
 import javax.annotation.Priority;
 import javax.ws.rs.NotSupportedException;
@@ -190,6 +193,40 @@ public class TypeMapper {
                 // for now
                 return Scalars.GraphQLString;
         }
+    }
+
+    public Object adaptPojo(
+            final Object argumentValue,
+            final ObjectSpecification elementType) {
+        val elementClazz = elementType.getCorrespondingClass();
+
+        if (elementClazz.isEnum()) {
+            return Enum.valueOf((Class<Enum>) elementClazz, argumentValue.toString());
+        }
+
+        if (elementClazz == BigInteger.class) {
+            return BigInteger.valueOf((Integer) argumentValue);
+        }
+
+        if (elementClazz == BigDecimal.class) {
+            return BigDecimal.valueOf((Double) argumentValue);
+        }
+
+        if (elementClazz == LocalDate.class) {
+            String argumentStr = (String) argumentValue;
+            return LocalDate.parse(argumentStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+
+        if (elementClazz == org.joda.time.LocalDate.class) {
+            String argumentStr = (String) argumentValue;
+            return org.joda.time.LocalDate.parse(argumentStr, org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd"));
+        }
+
+        if (elementClazz == float.class || elementClazz == Float.class) {
+            return ((Double) argumentValue).floatValue();
+        }
+
+        return argumentValue;
     }
 
     public enum InputContext {

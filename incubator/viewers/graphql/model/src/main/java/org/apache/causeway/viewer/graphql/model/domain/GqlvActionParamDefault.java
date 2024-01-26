@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import java.util.Collections;
 
  import org.apache.causeway.applib.annotation.Where;
+ import org.apache.causeway.applib.services.bookmark.BookmarkService;
+ import org.apache.causeway.commons.collections.Can;
  import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
  import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
  import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -94,7 +96,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
          val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
          val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-         val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+         val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
          val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
@@ -115,5 +117,10 @@ package org.apache.causeway.viewer.graphql.model.domain;
                  GraphQLFieldDefinition.Builder fieldBuilder,
                  TypeMapper.InputContext inputContext,
                  int paramNum);
+
+         Can<ManagedObject> argumentManagedObjectsFor(
+                 DataFetchingEnvironment dataFetchingEnvironment,
+                 ObjectAction objectAction,
+                 BookmarkService bookmarkService);
      }
  }

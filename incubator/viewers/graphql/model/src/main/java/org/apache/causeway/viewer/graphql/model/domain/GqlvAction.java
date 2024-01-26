@@ -92,7 +92,7 @@ public class GqlvAction
                 .build());
     }
 
-    static Can<ManagedObject> argumentManagedObjectsFor(
+    public Can<ManagedObject> argumentManagedObjectsFor(
             final DataFetchingEnvironment dataFetchingEnvironment,
             final ObjectAction objectAction,
             final BookmarkService bookmarkService) {
@@ -140,7 +140,7 @@ public class GqlvAction
                 });
     }
 
-    private static ManagedObject adaptValue(
+    private ManagedObject adaptValue(
             final ObjectActionParameter oap,
             final Object argumentValue) {
 
@@ -149,43 +149,10 @@ public class GqlvAction
             return ManagedObject.empty(elementType);
         }
 
-        val argPojo = adaptPojo(argumentValue, elementType);
+        val argPojo = context.typeMapper.adaptPojo(argumentValue, elementType);
         return ManagedObject.adaptParameter(oap, argPojo);
     }
 
-    private static Object adaptPojo(
-            final Object argumentValue,
-            ObjectSpecification elementType) {
-        val elementClazz = elementType.getCorrespondingClass();
-
-        if (elementClazz.isEnum()) {
-            return Enum.valueOf((Class<Enum>) elementClazz, argumentValue.toString());
-        }
-
-        if (elementClazz == BigInteger.class) {
-            return BigInteger.valueOf((Integer) argumentValue);
-        }
-
-        if (elementClazz == BigDecimal.class) {
-            return BigDecimal.valueOf((Double) argumentValue);
-        }
-
-        if (elementClazz == LocalDate.class) {
-            String argumentStr = (String) argumentValue;
-            return LocalDate.parse(argumentStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
-
-        if (elementClazz == org.joda.time.LocalDate.class) {
-            String argumentStr = (String) argumentValue;
-            return org.joda.time.LocalDate.parse(argumentStr, org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd"));
-        }
-
-        if (elementClazz == float.class || elementClazz == Float.class) {
-            return ((Double) argumentValue).floatValue();
-        }
-
-        return argumentValue;
-    }
 
     private static Optional<Object> asPojo(
             final ObjectSpecification elementType,

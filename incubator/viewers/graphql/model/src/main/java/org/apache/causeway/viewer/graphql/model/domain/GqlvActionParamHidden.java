@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -81,7 +83,7 @@ public class GqlvActionParamHidden {
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
 
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         val visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return visible.isVetoed();
@@ -97,5 +99,10 @@ public class GqlvActionParamHidden {
                 GraphQLFieldDefinition.Builder fieldBuilder,
                 TypeMapper.InputContext inputContext,
                 int paramNum);
+
+        Can<ManagedObject> argumentManagedObjectsFor(
+                DataFetchingEnvironment dataFetchingEnvironment,
+                ObjectAction objectAction,
+                BookmarkService bookmarkService);
     }
 }

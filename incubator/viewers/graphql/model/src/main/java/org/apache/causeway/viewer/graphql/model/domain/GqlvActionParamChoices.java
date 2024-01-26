@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
@@ -99,7 +100,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
          val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
          val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-         val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+         val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
          val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
@@ -122,5 +123,10 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
                  GraphQLFieldDefinition.Builder fieldBuilder,
                  TypeMapper.InputContext inputContext,
                  int paramNum);
+
+         Can<ManagedObject> argumentManagedObjectsFor(
+                 DataFetchingEnvironment dataFetchingEnvironment,
+                 ObjectAction objectAction,
+                 BookmarkService bookmarkService);
      }
  }

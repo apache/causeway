@@ -19,6 +19,8 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
@@ -151,7 +153,7 @@ public class GqlvActionInvoke {
         }
 
         val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
@@ -172,5 +174,10 @@ public class GqlvActionInvoke {
                 final GraphQLFieldDefinition.Builder fieldBuilder,
                 final TypeMapper.InputContext inputContext,
                 final int parameterCount);
+
+        Can<ManagedObject> argumentManagedObjectsFor(
+                DataFetchingEnvironment dataFetchingEnvironment,
+                ObjectAction objectAction,
+                BookmarkService bookmarkService);
     }
 }
