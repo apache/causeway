@@ -1000,7 +1000,7 @@
         "name" : "causeway_applib_DomainObjectList",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -1604,7 +1604,7 @@
         "name" : "causeway_applib_FacetGroupNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -1914,7 +1914,7 @@
         "name" : "causeway_applib_ParameterNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -2239,7 +2239,7 @@
         "name" : "causeway_applib_PropertyNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -2729,7 +2729,7 @@
         "name" : "causeway_applib_RoleMemento",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -3012,7 +3012,7 @@
         "name" : "causeway_applib_TypeNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -3322,7 +3322,7 @@
         "name" : "causeway_applib_UserMemento",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -4519,7 +4519,7 @@
         "name" : "causeway_applib_node_ActionNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -5009,7 +5009,7 @@
         "name" : "causeway_applib_node_CollectionNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -5499,7 +5499,7 @@
         "name" : "causeway_applib_node_FacetAttrNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -5824,7 +5824,7 @@
         "name" : "causeway_applib_node_FacetNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -6308,7 +6308,7 @@
         "name" : "causeway_conf_ConfigurationProperty",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -6591,7 +6591,7 @@
         "name" : "causeway_conf_ConfigurationViewmodel",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -6843,7 +6843,7 @@
         "name" : "causeway_feat_ApplicationFeatureViewModel",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -7313,7 +7313,7 @@
         "name" : "causeway_feat_ApplicationNamespace",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -7825,7 +7825,7 @@
         "name" : "causeway_feat_ApplicationType",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -7922,7 +7922,7 @@
         "name" : "causeway_feat_ApplicationTypeAction",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -8618,7 +8618,7 @@
         "name" : "causeway_feat_ApplicationTypeCollection",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -9290,7 +9290,7 @@
         "name" : "causeway_feat_ApplicationTypeMember",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -9760,7 +9760,7 @@
         "name" : "causeway_feat_ApplicationTypeProperty",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -11162,7 +11162,7 @@
         "name" : "causeway_schema_metamodel_v2_DomainClassDto",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -12136,7 +12136,7 @@
         "name" : "causeway_security_LoginRedirect",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -12290,7 +12290,7 @@
         "name" : "causeway_testing_fixtures_FixtureResult",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -12752,7 +12752,7 @@
         "name" : "java_lang_Runnable",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -12833,7 +12833,7 @@
         "name" : "java_util_Map",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -12914,7 +12914,7 @@
         "name" : "java_util_SortedMap",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -12995,7 +12995,7 @@
         "name" : "java_util_concurrent_Callable",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -13076,7 +13076,7 @@
         "name" : "java_util_function_BiFunction",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -13157,7 +13157,7 @@
         "name" : "java_util_function_Consumer",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -13238,7 +13238,7 @@
         "name" : "java_util_function_Function",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -13319,7 +13319,7 @@
         "name" : "java_util_stream_Stream",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -13400,7 +13400,7 @@
         "name" : "org_apache_causeway_commons_functional_Either",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -14539,7 +14539,7 @@
         "name" : "org_apache_causeway_commons_functional_Railway",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -15707,7 +15707,7 @@
         "name" : "org_apache_causeway_commons_functional_ThrowingConsumer",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -16142,7 +16142,7 @@
         "name" : "org_apache_causeway_commons_functional_ThrowingFunction",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -16754,7 +16754,7 @@
         "name" : "org_apache_causeway_commons_functional_ThrowingRunnable",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -17155,7 +17155,7 @@
         "name" : "org_apache_causeway_commons_functional_Try",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -20947,7 +20947,7 @@
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -21156,7 +21156,7 @@
         "name" : "org_apache_causeway_core_metamodel_inspect_model_MemberNode",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -21545,7 +21545,7 @@
         "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -23543,7 +23543,7 @@
         "name" : "university_dept_Department",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -25494,7 +25494,7 @@
         "name" : "university_dept_DeptHead",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -26472,7 +26472,7 @@
         "name" : "university_dept_StaffMember",
         "description" : null,
         "fields" : [ {
-          "name" : "_gql_meta",
+          "name" : "_gqlv_meta",
           "description" : null,
           "args" : [ ],
           "type" : {

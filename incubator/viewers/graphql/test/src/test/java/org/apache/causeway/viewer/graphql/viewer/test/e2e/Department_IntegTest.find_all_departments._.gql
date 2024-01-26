@@ -5,7 +5,7 @@
         name {
           get
         }
-        _gql_meta {
+        _gqlv_meta {
           logicalTypeName
           version
         }

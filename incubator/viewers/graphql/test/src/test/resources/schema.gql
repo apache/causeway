@@ -35,7 +35,7 @@ type Query {
 }
 
 type causeway_applib_DomainObjectList {
-  _gql_meta: causeway_applib_DomainObjectList__gqlv_meta
+  _gqlv_meta: causeway_applib_DomainObjectList__gqlv_meta
   actionArguments: causeway_applib_DomainObjectList__actionArguments__gqlv_property
   actionId: causeway_applib_DomainObjectList__actionId__gqlv_property
   actionOwningFqcn: causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property
@@ -95,7 +95,7 @@ type causeway_applib_DomainObjectList__title__gqlv_property {
 }
 
 type causeway_applib_FacetGroupNode {
-  _gql_meta: causeway_applib_FacetGroupNode__gqlv_meta
+  _gqlv_meta: causeway_applib_FacetGroupNode__gqlv_meta
   childNodes: causeway_applib_FacetGroupNode__childNodes__gqlv_collection
   facets: causeway_applib_FacetGroupNode__facets__gqlv_property
   parentNode: causeway_applib_FacetGroupNode__parentNode__gqlv_property
@@ -127,7 +127,7 @@ type causeway_applib_FacetGroupNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_ParameterNode {
-  _gql_meta: causeway_applib_ParameterNode__gqlv_meta
+  _gqlv_meta: causeway_applib_ParameterNode__gqlv_meta
   childNodes: causeway_applib_ParameterNode__childNodes__gqlv_collection
   parameter: causeway_applib_ParameterNode__parameter__gqlv_property
   parentNode: causeway_applib_ParameterNode__parentNode__gqlv_property
@@ -160,7 +160,7 @@ type causeway_applib_ParameterNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_PropertyNode {
-  _gql_meta: causeway_applib_PropertyNode__gqlv_meta
+  _gqlv_meta: causeway_applib_PropertyNode__gqlv_meta
   childNodes: causeway_applib_PropertyNode__childNodes__gqlv_collection
   mixedIn: causeway_applib_PropertyNode__mixedIn__gqlv_property
   parentNode: causeway_applib_PropertyNode__parentNode__gqlv_property
@@ -210,7 +210,7 @@ type causeway_applib_PropertyNode__streamChildNodes__gqlv_action {
 }
 
 type causeway_applib_RoleMemento {
-  _gql_meta: causeway_applib_RoleMemento__gqlv_meta
+  _gqlv_meta: causeway_applib_RoleMemento__gqlv_meta
   description: causeway_applib_RoleMemento__description__gqlv_property
   name: causeway_applib_RoleMemento__name__gqlv_property
 }
@@ -237,7 +237,7 @@ type causeway_applib_RoleMemento__name__gqlv_property {
 }
 
 type causeway_applib_TypeNode {
-  _gql_meta: causeway_applib_TypeNode__gqlv_meta
+  _gqlv_meta: causeway_applib_TypeNode__gqlv_meta
   childNodes: causeway_applib_TypeNode__childNodes__gqlv_collection
   domainClassDto: causeway_applib_TypeNode__domainClassDto__gqlv_property
   parentNode: causeway_applib_TypeNode__parentNode__gqlv_property
@@ -269,7 +269,7 @@ type causeway_applib_TypeNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_UserMemento {
-  _gql_meta: causeway_applib_UserMemento__gqlv_meta
+  _gqlv_meta: causeway_applib_UserMemento__gqlv_meta
   authenticationCode: causeway_applib_UserMemento__authenticationCode__gqlv_property
   authenticationSource: causeway_applib_UserMemento__authenticationSource__gqlv_property
   avatarUrl: causeway_applib_UserMemento__avatarUrl__gqlv_property
@@ -387,7 +387,7 @@ type causeway_applib_UserMenu__me__gqlv_action {
 }
 
 type causeway_applib_node_ActionNode {
-  _gql_meta: causeway_applib_node_ActionNode__gqlv_meta
+  _gqlv_meta: causeway_applib_node_ActionNode__gqlv_meta
   action: causeway_applib_node_ActionNode__action__gqlv_property
   childNodes: causeway_applib_node_ActionNode__childNodes__gqlv_collection
   mixedIn: causeway_applib_node_ActionNode__mixedIn__gqlv_property
@@ -437,7 +437,7 @@ type causeway_applib_node_ActionNode__streamChildNodes__gqlv_action {
 }
 
 type causeway_applib_node_CollectionNode {
-  _gql_meta: causeway_applib_node_CollectionNode__gqlv_meta
+  _gqlv_meta: causeway_applib_node_CollectionNode__gqlv_meta
   childNodes: causeway_applib_node_CollectionNode__childNodes__gqlv_collection
   collection: causeway_applib_node_CollectionNode__collection__gqlv_property
   mixedIn: causeway_applib_node_CollectionNode__mixedIn__gqlv_property
@@ -487,7 +487,7 @@ type causeway_applib_node_CollectionNode__streamChildNodes__gqlv_action {
 }
 
 type causeway_applib_node_FacetAttrNode {
-  _gql_meta: causeway_applib_node_FacetAttrNode__gqlv_meta
+  _gqlv_meta: causeway_applib_node_FacetAttrNode__gqlv_meta
   childNodes: causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection
   facetAttr: causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property
   parentNode: causeway_applib_node_FacetAttrNode__parentNode__gqlv_property
@@ -520,7 +520,7 @@ type causeway_applib_node_FacetAttrNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_node_FacetNode {
-  _gql_meta: causeway_applib_node_FacetNode__gqlv_meta
+  _gqlv_meta: causeway_applib_node_FacetNode__gqlv_meta
   childNodes: causeway_applib_node_FacetNode__childNodes__gqlv_collection
   facet: causeway_applib_node_FacetNode__facet__gqlv_property
   parentNode: causeway_applib_node_FacetNode__parentNode__gqlv_property
@@ -572,7 +572,7 @@ type causeway_conf_ConfigurationMenu__configuration__gqlv_action {
 }
 
 type causeway_conf_ConfigurationProperty {
-  _gql_meta: causeway_conf_ConfigurationProperty__gqlv_meta
+  _gqlv_meta: causeway_conf_ConfigurationProperty__gqlv_meta
   key: causeway_conf_ConfigurationProperty__key__gqlv_property
   value: causeway_conf_ConfigurationProperty__value__gqlv_property
 }
@@ -599,7 +599,7 @@ type causeway_conf_ConfigurationProperty__value__gqlv_property {
 }
 
 type causeway_conf_ConfigurationViewmodel {
-  _gql_meta: causeway_conf_ConfigurationViewmodel__gqlv_meta
+  _gqlv_meta: causeway_conf_ConfigurationViewmodel__gqlv_meta
   environment: causeway_conf_ConfigurationViewmodel__environment__gqlv_collection
   primary: causeway_conf_ConfigurationViewmodel__primary__gqlv_collection
   secondary: causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection
@@ -629,7 +629,7 @@ type causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection {
 }
 
 type causeway_feat_ApplicationFeatureViewModel {
-  _gql_meta: causeway_feat_ApplicationFeatureViewModel__gqlv_meta
+  _gqlv_meta: causeway_feat_ApplicationFeatureViewModel__gqlv_meta
   memberName: causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property
   namespaceName: causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property
   parent: causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property
@@ -673,7 +673,7 @@ type causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationNamespace {
-  _gql_meta: causeway_feat_ApplicationNamespace__gqlv_meta
+  _gqlv_meta: causeway_feat_ApplicationNamespace__gqlv_meta
   contents: causeway_feat_ApplicationNamespace__contents__gqlv_collection
   memberName: causeway_feat_ApplicationNamespace__memberName__gqlv_property
   namespaceName: causeway_feat_ApplicationNamespace__namespaceName__gqlv_property
@@ -723,7 +723,7 @@ type causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationType {
-  _gql_meta: causeway_feat_ApplicationType__gqlv_meta
+  _gqlv_meta: causeway_feat_ApplicationType__gqlv_meta
   actions: causeway_feat_ApplicationType__actions__gqlv_collection
   collections: causeway_feat_ApplicationType__collections__gqlv_collection
   memberName: causeway_feat_ApplicationType__memberName__gqlv_property
@@ -734,7 +734,7 @@ type causeway_feat_ApplicationType {
 }
 
 type causeway_feat_ApplicationTypeAction {
-  _gql_meta: causeway_feat_ApplicationTypeAction__gqlv_meta
+  _gqlv_meta: causeway_feat_ApplicationTypeAction__gqlv_meta
   actionSemantics: causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property
   memberName: causeway_feat_ApplicationTypeAction__memberName__gqlv_property
   namespaceName: causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property
@@ -797,7 +797,7 @@ type causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeCollection {
-  _gql_meta: causeway_feat_ApplicationTypeCollection__gqlv_meta
+  _gqlv_meta: causeway_feat_ApplicationTypeCollection__gqlv_meta
   derived: causeway_feat_ApplicationTypeCollection__derived__gqlv_property
   elementType: causeway_feat_ApplicationTypeCollection__elementType__gqlv_property
   memberName: causeway_feat_ApplicationTypeCollection__memberName__gqlv_property
@@ -859,7 +859,7 @@ type causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeMember {
-  _gql_meta: causeway_feat_ApplicationTypeMember__gqlv_meta
+  _gqlv_meta: causeway_feat_ApplicationTypeMember__gqlv_meta
   memberName: causeway_feat_ApplicationTypeMember__memberName__gqlv_property
   namespaceName: causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property
   parent: causeway_feat_ApplicationTypeMember__parent__gqlv_property
@@ -903,7 +903,7 @@ type causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty {
-  _gql_meta: causeway_feat_ApplicationTypeProperty__gqlv_meta
+  _gqlv_meta: causeway_feat_ApplicationTypeProperty__gqlv_meta
   derived: causeway_feat_ApplicationTypeProperty__derived__gqlv_property
   maxLength: causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property
   memberName: causeway_feat_ApplicationTypeProperty__memberName__gqlv_property
@@ -1037,7 +1037,7 @@ type causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto {
-  _gql_meta: causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta
+  _gqlv_meta: causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta
   actions: causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property
   annotations: causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property
   collections: causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property
@@ -1127,7 +1127,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
 }
 
 type causeway_security_LoginRedirect {
-  _gql_meta: causeway_security_LoginRedirect__gqlv_meta
+  _gqlv_meta: causeway_security_LoginRedirect__gqlv_meta
 }
 
 type causeway_security_LoginRedirect__gqlv_meta {
@@ -1147,7 +1147,7 @@ type causeway_security_LogoutMenu__logout__gqlv_action {
 }
 
 type causeway_testing_fixtures_FixtureResult {
-  _gql_meta: causeway_testing_fixtures_FixtureResult__gqlv_meta
+  _gqlv_meta: causeway_testing_fixtures_FixtureResult__gqlv_meta
   className: causeway_testing_fixtures_FixtureResult__className__gqlv_property
   fixtureScriptClassName: causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_property
   key: causeway_testing_fixtures_FixtureResult__key__gqlv_property
@@ -1191,7 +1191,7 @@ type causeway_testing_fixtures_FixtureResult__object__gqlv_property {
 }
 
 type java_lang_Runnable {
-  _gql_meta: java_lang_Runnable__gqlv_meta
+  _gqlv_meta: java_lang_Runnable__gqlv_meta
 }
 
 type java_lang_Runnable__gqlv_meta {
@@ -1200,7 +1200,7 @@ type java_lang_Runnable__gqlv_meta {
 }
 
 type java_util_Map {
-  _gql_meta: java_util_Map__gqlv_meta
+  _gqlv_meta: java_util_Map__gqlv_meta
 }
 
 type java_util_Map__gqlv_meta {
@@ -1209,7 +1209,7 @@ type java_util_Map__gqlv_meta {
 }
 
 type java_util_SortedMap {
-  _gql_meta: java_util_SortedMap__gqlv_meta
+  _gqlv_meta: java_util_SortedMap__gqlv_meta
 }
 
 type java_util_SortedMap__gqlv_meta {
@@ -1218,7 +1218,7 @@ type java_util_SortedMap__gqlv_meta {
 }
 
 type java_util_concurrent_Callable {
-  _gql_meta: java_util_concurrent_Callable__gqlv_meta
+  _gqlv_meta: java_util_concurrent_Callable__gqlv_meta
 }
 
 type java_util_concurrent_Callable__gqlv_meta {
@@ -1227,7 +1227,7 @@ type java_util_concurrent_Callable__gqlv_meta {
 }
 
 type java_util_function_BiFunction {
-  _gql_meta: java_util_function_BiFunction__gqlv_meta
+  _gqlv_meta: java_util_function_BiFunction__gqlv_meta
 }
 
 type java_util_function_BiFunction__gqlv_meta {
@@ -1236,7 +1236,7 @@ type java_util_function_BiFunction__gqlv_meta {
 }
 
 type java_util_function_Consumer {
-  _gql_meta: java_util_function_Consumer__gqlv_meta
+  _gqlv_meta: java_util_function_Consumer__gqlv_meta
 }
 
 type java_util_function_Consumer__gqlv_meta {
@@ -1245,7 +1245,7 @@ type java_util_function_Consumer__gqlv_meta {
 }
 
 type java_util_function_Function {
-  _gql_meta: java_util_function_Function__gqlv_meta
+  _gqlv_meta: java_util_function_Function__gqlv_meta
 }
 
 type java_util_function_Function__gqlv_meta {
@@ -1254,7 +1254,7 @@ type java_util_function_Function__gqlv_meta {
 }
 
 type java_util_stream_Stream {
-  _gql_meta: java_util_stream_Stream__gqlv_meta
+  _gqlv_meta: java_util_stream_Stream__gqlv_meta
 }
 
 type java_util_stream_Stream__gqlv_meta {
@@ -1263,7 +1263,7 @@ type java_util_stream_Stream__gqlv_meta {
 }
 
 type org_apache_causeway_commons_functional_Either {
-  _gql_meta: org_apache_causeway_commons_functional_Either__gqlv_meta
+  _gqlv_meta: org_apache_causeway_commons_functional_Either__gqlv_meta
   accept: org_apache_causeway_commons_functional_Either__accept__gqlv_action
   left: org_apache_causeway_commons_functional_Either__left__gqlv_action
   map: org_apache_causeway_commons_functional_Either__map__gqlv_action
@@ -1378,7 +1378,7 @@ type org_apache_causeway_commons_functional_Either__right__gqlv_action {
 }
 
 type org_apache_causeway_commons_functional_Railway {
-  _gql_meta: org_apache_causeway_commons_functional_Railway__gqlv_meta
+  _gqlv_meta: org_apache_causeway_commons_functional_Railway__gqlv_meta
   chain: org_apache_causeway_commons_functional_Railway__chain__gqlv_action
   failure: org_apache_causeway_commons_functional_Railway__failure__gqlv_property
   ifFailure: org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action
@@ -1500,7 +1500,7 @@ type org_apache_causeway_commons_functional_Railway__success__gqlv_property {
 }
 
 type org_apache_causeway_commons_functional_ThrowingConsumer {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta
+  _gqlv_meta: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta
   andThen: org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action
   throwing: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action
 }
@@ -1547,7 +1547,7 @@ type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_act
 }
 
 type org_apache_causeway_commons_functional_ThrowingFunction {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta
+  _gqlv_meta: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta
   andThen: org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action
   compose: org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action
   throwing: org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action
@@ -1613,7 +1613,7 @@ type org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_act
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable {
-  _gql_meta: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_meta
+  _gqlv_meta: org_apache_causeway_commons_functional_ThrowingRunnable__gqlv_meta
   callUncatched: org_apache_causeway_commons_functional_ThrowingRunnable__callUncatched__gqlv_action
   run: org_apache_causeway_commons_functional_ThrowingRunnable__run__gqlv_action
   runUncatched: org_apache_causeway_commons_functional_ThrowingRunnable__runUncatched__gqlv_action
@@ -1662,7 +1662,7 @@ type org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable__gqlv_a
 }
 
 type org_apache_causeway_commons_functional_Try {
-  _gql_meta: org_apache_causeway_commons_functional_Try__gqlv_meta
+  _gqlv_meta: org_apache_causeway_commons_functional_Try__gqlv_meta
   accept: org_apache_causeway_commons_functional_Try__accept__gqlv_action
   failure: org_apache_causeway_commons_functional_Try__failure__gqlv_property
   flatMapSuccess: org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action
@@ -2058,7 +2058,7 @@ type org_apache_causeway_commons_functional_Try__value__gqlv_property {
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode {
-  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta
+  _gqlv_meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta
   childNodes: org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_collection
   parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property
 }
@@ -2081,7 +2081,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_p
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode {
-  _gql_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta
+  _gqlv_meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta
   childNodes: org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gqlv_collection
   mixedIn: org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property
   parentNode: org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property
@@ -2122,7 +2122,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__streamChildNod
 }
 
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
-  _gql_meta: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta
+  _gqlv_meta: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta
   friendlyName: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__gqlv_property
   qualifiedName: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__gqlv_property
 }
@@ -2711,7 +2711,7 @@ type university_calc_Calculator__plusJodaDays__numDays__gqlv_action_parameter {
 }
 
 type university_dept_Department {
-  _gql_meta: university_dept_Department__gqlv_meta
+  _gqlv_meta: university_dept_Department__gqlv_meta
   addStaffMember: university_dept_Department__addStaffMember__gqlv_action
   addStaffMembers: university_dept_Department__addStaffMembers__gqlv_action
   changeDeptHead: university_dept_Department__changeDeptHead__gqlv_action
@@ -2905,7 +2905,7 @@ type university_dept_Departments__findByName__name__gqlv_action_parameter {
 }
 
 type university_dept_DeptHead {
-  _gql_meta: university_dept_DeptHead__gqlv_meta
+  _gqlv_meta: university_dept_DeptHead__gqlv_meta
   changeDepartment: university_dept_DeptHead__changeDepartment__gqlv_action
   changeName: university_dept_DeptHead__changeName__gqlv_action
   department: university_dept_DeptHead__department__gqlv_property
@@ -3010,7 +3010,7 @@ type university_dept_Staff {
 }
 
 type university_dept_StaffMember {
-  _gql_meta: university_dept_StaffMember__gqlv_meta
+  _gqlv_meta: university_dept_StaffMember__gqlv_meta
   department: university_dept_StaffMember__department__gqlv_property
   grade: university_dept_StaffMember__grade__gqlv_property
   name: university_dept_StaffMember__name__gqlv_property

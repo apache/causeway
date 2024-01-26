@@ -123,7 +123,7 @@ public class Department_IntegTest extends Abstract_IntegTest {
 
         List<String> ids = new ArrayList<>();
         staffMembersNode.forEach(staffMemberNode -> {
-            String id = staffMemberNode.get("_gql_meta").get("id").asText();
+            String id = staffMemberNode.get("_gqlv_meta").get("id").asText();
             if (!_Strings.isNullOrEmpty(id)) {
                 ids.add(id);
             }

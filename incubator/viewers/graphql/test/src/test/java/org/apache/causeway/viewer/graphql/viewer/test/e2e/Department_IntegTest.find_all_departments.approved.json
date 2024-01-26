@@ -6,7 +6,7 @@
           "name" : {
             "get" : "Classics"
           },
-          "_gql_meta" : {
+          "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -14,7 +14,7 @@
           "name" : {
             "get" : "Physics"
           },
-          "_gql_meta" : {
+          "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -22,7 +22,7 @@
           "name" : {
             "get" : "Textiles"
           },
-          "_gql_meta" : {
+          "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -30,7 +30,7 @@
           "name" : {
             "get" : "Pathology"
           },
-          "_gql_meta" : {
+          "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -38,7 +38,7 @@
           "name" : {
             "get" : "Mathematics"
           },
-          "_gql_meta" : {
+          "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -46,7 +46,7 @@
           "name" : {
             "get" : "Civil Engineering"
           },
-          "_gql_meta" : {
+          "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }

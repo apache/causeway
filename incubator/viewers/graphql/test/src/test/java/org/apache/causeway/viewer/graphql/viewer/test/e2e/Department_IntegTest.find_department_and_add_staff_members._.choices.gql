@@ -6,7 +6,7 @@
           params {
             staffMembers {
               choices {
-                _gql_meta {
+                _gqlv_meta {
                   id
                 }
                 name {
