@@ -2226,6 +2226,7 @@ type university_admin_AdminMenu__otherAdminAction__gqlv_action {
 type university_dept_Department {
   _gql_meta: university_dept_Department__gqlv_meta
   addStaffMember: university_dept_Department__addStaffMember__gqlv_action
+  changeDeptHead: university_dept_Department__changeDeptHead__gqlv_action
   changeName: university_dept_Department__changeName__gqlv_action
   deptHead: university_dept_Department__deptHead__gqlv_property
   name: university_dept_Department__name__gqlv_property
@@ -2250,6 +2251,25 @@ type university_dept_Department__addStaffMember__staffMember__gqlv_action_parame
   disabled(staffMember: university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
   validity(staffMember: university_dept_StaffMember__gqlv_input): String
+}
+
+type university_dept_Department__changeDeptHead__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(newDeptHead: university_dept_DeptHead__gqlv_input!): university_dept_Department
+  params: university_dept_Department__changeDeptHead__gqlv_action_params
+  validate(newDeptHead: university_dept_DeptHead__gqlv_input): String
+}
+
+type university_dept_Department__changeDeptHead__gqlv_action_params {
+  newDeptHead: university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter
+}
+
+type university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter {
+  autoComplete(search: String): [university_dept_DeptHead]
+  disabled(newDeptHead: university_dept_DeptHead__gqlv_input): String
+  hidden: Boolean
+  validity(newDeptHead: university_dept_DeptHead__gqlv_input): String
 }
 
 type university_dept_Department__changeName__gqlv_action {

@@ -99,6 +99,25 @@ public class Department implements Comparable<Department> {
     private DeptHead deptHead;
 
 
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(associateWith = "deptHead")
+    public class changeDeptHead {
+        public Department act(DeptHead newDeptHead) {
+            setDeptHead(newDeptHead);
+            return Department.this;
+        }
+        public DeptHead default0Act() {
+            return getDeptHead();
+        }
+        public String validate0Act(DeptHead newDeptHead) {
+            if (newDeptHead == getDeptHead()) {
+                return "Same as current";
+            }
+            return null;
+        }
+    }
+
+
     @OneToMany(mappedBy = "department")
     private Set<StaffMember> staffMembers = new TreeSet<>();
 
