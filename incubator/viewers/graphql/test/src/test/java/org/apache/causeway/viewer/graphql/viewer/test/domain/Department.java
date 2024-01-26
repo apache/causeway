@@ -41,9 +41,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(
@@ -95,10 +99,14 @@ public class Department implements Comparable<Department> {
     private DeptHead deptHead;
 
 
-    @Getter @Setter
-    @Collection
     @OneToMany(mappedBy = "department")
     private Set<StaffMember> staffMembers = new TreeSet<>();
+
+    // because the ordering seems not to be deterministic?
+    @Collection
+    public List<StaffMember> getStaffMembers() {
+        return staffMembers.stream().sorted().collect(Collectors.toList());
+    }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "staffMembers")
@@ -107,7 +115,7 @@ public class Department implements Comparable<Department> {
         public Department act(StaffMember staffMember) {
             val department = Department.this;
 
-            department.getStaffMembers().add(staffMember);
+            department.staffMembers.add(staffMember);
             staffMember.setDepartment(department);
             return department;
         }
@@ -125,8 +133,12 @@ public class Department implements Comparable<Department> {
             staffMember.setDepartment(department);
             return department;
         }
-        public Set<StaffMember> choices0Act() {
-            return Department.this.getStaffMembers();
+        public List<StaffMember> choices0Act() {
+            val department = Department.this;
+            return department.getStaffMembers()
+                        .stream()
+                        .sorted(Comparator.comparing(StaffMember::getName))
+                        .collect(Collectors.toList());
         }
     }
 

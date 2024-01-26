@@ -2246,6 +2246,7 @@ type university_dept_Department__addStaffMember__gqlv_action_params {
 }
 
 type university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter {
+  autoComplete(search: String): [university_dept_StaffMember]
   disabled(staffMember: university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
   validity(staffMember: university_dept_StaffMember__gqlv_input): String
@@ -2323,6 +2324,7 @@ type university_dept_Departments {
 }
 
 type university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
+  autoComplete(name: String, search: String): [university_dept_DeptHead]
   disabled(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
   hidden(name: String): Boolean
   validity(deptHead: university_dept_DeptHead__gqlv_input): String

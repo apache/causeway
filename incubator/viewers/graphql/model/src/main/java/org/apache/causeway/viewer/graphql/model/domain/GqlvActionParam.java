@@ -43,6 +43,7 @@ public class GqlvActionParam
         implements GqlvActionParamValidate.Holder,
                    GqlvActionParamHidden.Holder,
                    GqlvActionParamChoices.Holder,
+                   GqlvActionParamAutoComplete.Holder,
                    GqlvActionParamDisabled.Holder {
 
     @Getter private final Holder holder;
@@ -53,10 +54,11 @@ public class GqlvActionParam
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
 
-    private final GqlvActionParamChoices choices;
     private final GqlvActionParamHidden hidden;
-    private final GqlvActionParamDisabled validate;
     private final GqlvActionParamValidate disabled;
+    private final GqlvActionParamChoices choices;
+    private final GqlvActionParamAutoComplete autoComplete;
+    private final GqlvActionParamDisabled validate;
 
     private final GraphQLFieldDefinition field;
 
@@ -75,6 +77,8 @@ public class GqlvActionParam
         this.disabled = new GqlvActionParamValidate(this, context);
         val choices = new GqlvActionParamChoices(this, context);
         this.choices = choices.hasChoices() ? choices : null;
+        val autoComplete = new GqlvActionParamAutoComplete(this, context);
+        this.autoComplete = autoComplete.hasAutoComplete() ? autoComplete : null;
         this.validate = new GqlvActionParamDisabled(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
@@ -115,6 +119,9 @@ public class GqlvActionParam
         disabled.addDataFetcher();
         if (choices != null) {
             choices.addDataFetcher();
+        }
+        if (autoComplete != null) {
+            autoComplete.addDataFetcher();
         }
         validate.addDataFetcher();
     }

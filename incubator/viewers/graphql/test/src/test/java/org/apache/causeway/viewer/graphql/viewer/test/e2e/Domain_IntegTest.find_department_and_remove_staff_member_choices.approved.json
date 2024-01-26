@@ -8,11 +8,11 @@
               "staffMember" : {
                 "choices" : [ {
                   "name" : {
-                    "get" : "Letitia Leadbetter"
+                    "get" : "Gerry Jones"
                   }
                 }, {
                   "name" : {
-                    "get" : "Gerry Jones"
+                    "get" : "Letitia Leadbetter"
                   }
                 } ]
               }
