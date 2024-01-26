@@ -2349,9 +2349,11 @@ public class CausewayConfiguration {
             private final MetaData metaData = new MetaData();
             @Data
             public static class MetaData {
-                private String idAttributeName = "__id";
-                private String logicalTypeNameAttributeName = "__type";
-                private String versionAttributeName = "__version";
+                /**
+                 * Note that field names <i>cannot</i> being with &quot;__&quot;, as that is reserved by the
+                 * underlying GraphQL implementation.
+                 */
+                private String fieldName = "_gqlv_meta";
             }
 
             private final TypeMapper typeMapper = new TypeMapper();

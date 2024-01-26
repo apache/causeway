@@ -23,6 +23,7 @@ import graphql.schema.GraphQLCodeRegistry;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -35,4 +36,5 @@ public class Context {
     public final BookmarkService bookmarkService;
     public final SpecificationLoader specificationLoader;
     public final TypeMapper typeMapper;
+    public final CausewayConfiguration causewayConfiguration;
 }

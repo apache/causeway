@@ -148,7 +148,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final GqlvTopLevelQuery gqlvTopLevelQuery,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        Context context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper);
+        Context context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, causewayConfiguration);
 
         switch (objectSpec.getBeanSort()) {
 
