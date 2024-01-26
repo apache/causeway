@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -34,7 +33,7 @@ public class StaffMemberRepository {
     @Inject private RepositoryService repositoryService;
 
     public StaffMember create(final String name, final Department department) {
-        StaffMember staffMember = new StaffMember(name, department);
+        StaffMember staffMember = new StaffMember(name, department, Grade.LECTURER);
         department.new addStaffMember().act(staffMember);
         repositoryService.persistAndFlush(staffMember);
         return staffMember;

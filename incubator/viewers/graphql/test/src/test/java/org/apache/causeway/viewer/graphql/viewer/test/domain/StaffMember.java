@@ -41,9 +41,13 @@ import org.apache.causeway.applib.annotation.Property;
 @DomainObject(nature = Nature.ENTITY, autoCompleteRepository = StaffMemberRepository.class, autoCompleteMethod = "findByNameMatching")
 public class StaffMember implements Comparable<StaffMember> {
 
-    public StaffMember(String name, Department department) {
+    public StaffMember(
+            final String name,
+            final Department department,
+            final Grade grade) {
         this.name = name;
         this.department = department;
+        this.grade = grade;
     }
 
     @Id
@@ -65,6 +69,12 @@ public class StaffMember implements Comparable<StaffMember> {
     @ManyToOne(optional = false)
     @JoinColumn(name = "department_id")
     private Department department;
+
+
+    @Getter @Setter
+    @Property
+    private Grade grade;
+
 
     @Override
     public int compareTo(final StaffMember o) {
