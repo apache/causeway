@@ -165,6 +165,15 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
         return submitRequest(httpRequest);
     }
 
+    protected String submit(String variant) throws Exception{
+        return submit(variant, Collections.emptyMap());
+    }
+
+    protected String submit(String variant, Map<String,String> replacements) throws Exception{
+        val httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
+        return submitRequest(httpRequest);
+    }
+
     @Value
     protected static class GqlBody {
         String query;

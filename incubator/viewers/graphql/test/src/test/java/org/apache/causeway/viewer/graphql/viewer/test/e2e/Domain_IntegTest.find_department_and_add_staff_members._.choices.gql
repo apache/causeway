@@ -1,0 +1,22 @@
+{
+  university_dept_Departments {
+    findByName {
+      invoke(name: "Classics") {
+        addStaffMembers {
+          params {
+            staffMembers {
+              choices {
+                _gql_meta {
+                  id
+                }
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

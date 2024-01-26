@@ -161,8 +161,9 @@ public class Department implements Comparable<Department> {
         public Department act(List<StaffMember> staffMembers) {
             val department = Department.this;
 
-            department.staffMembers.addAll(staffMembers);
             staffMembers.forEach(sm -> sm.setDepartment(department));
+            department.staffMembers.addAll(staffMembers);
+
             return department;
         }
         public List<StaffMember> choices0Act() {

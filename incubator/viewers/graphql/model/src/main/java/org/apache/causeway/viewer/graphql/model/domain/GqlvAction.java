@@ -36,7 +36,9 @@ import graphql.schema.*;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -101,23 +103,26 @@ public class GqlvAction
                     switch (elementType.getBeanSort()) {
 
                         case VALUE:
+                            // TODO: handle lists of values.
                             return ManagedObject.adaptParameter(oap, argumentValue);
 
                         case ENTITY:
                         case VIEW_MODEL:
-                            //noinspection unchecked
                             if (argumentValue == null) {
                                 return ManagedObject.empty(elementType);
                             }
-                            String idValue = ((Map<String, String>) argumentValue).get("id");
-                            Class<?> paramClass = elementType.getCorrespondingClass();
-                            Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
-                            return bookmarkIfAny
-                                    .map(bookmarkService::lookup)
-                                    .filter(Optional::isPresent)
-                                    .map(Optional::get)
-                                    .map(pojo -> ManagedObject.adaptParameter(oap, pojo))
-                                    .orElse(ManagedObject.empty(elementType));
+                            Object pojoOrPojoList;
+                            if (argumentValue instanceof List) {
+                                val argumentValueList = (List<Object>) argumentValue;
+                                pojoOrPojoList = argumentValueList.stream()
+                                        .map(value -> asPojo(oap.getElementType(), value, bookmarkService))
+                                        .filter(Optional::isPresent)
+                                        .map(Optional::get)
+                                        .collect(Collectors.toList());
+                            } else {
+                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, bookmarkService).orElse(null);
+                            }
+                            return ManagedObject.adaptParameter(oap, pojoOrPojoList);
 
                         case ABSTRACT:
                         case COLLECTION:
@@ -131,6 +136,31 @@ public class GqlvAction
                                     "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.getBeanSort()));
                     }
                 });
+    }
+
+    private static ManagedObject asDomainObject(
+            final ObjectSpecification elementType,
+            final ObjectActionParameter oap,
+            final Object argumentValueObj,
+            final BookmarkService bookmarkService) {
+        return asPojo(elementType, argumentValueObj, bookmarkService)
+                .map(pojo -> ManagedObject.adaptParameter(oap, pojo))
+                .orElse(ManagedObject.empty(elementType));
+    }
+
+    private static Optional<Object> asPojo(
+            final ObjectSpecification elementType,
+            final Object argumentValueObj,
+            final BookmarkService bookmarkService) {
+        val argumentValue = (Map<String, String>) argumentValueObj;
+        String idValue = argumentValue.get("id");
+        Class<?> paramClass = elementType.getCorrespondingClass();
+        Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
+        return bookmarkIfAny
+                .map(bookmarkService::lookup)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+;
     }
 
     static void addGqlArguments(

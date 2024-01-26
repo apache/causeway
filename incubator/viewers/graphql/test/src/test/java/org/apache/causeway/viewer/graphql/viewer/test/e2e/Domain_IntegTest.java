@@ -20,13 +20,16 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
 import lombok.val;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMember;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMemberRepository;
@@ -49,6 +52,9 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
 import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
@@ -86,7 +92,7 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
             staffMemberRepository.create("Letitia Leadbetter", classics);
             staffMemberRepository.create("Gerry Jones", classics);
             staffMemberRepository.create("Mervin Hughes", physics);
-            staffMemberRepository.create("John Gaffney", physics);
+            staffMemberRepository.create("John Gartner", physics);
             staffMemberRepository.create("Margaret Randall", physics);
 
         });
@@ -171,6 +177,35 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
         // when, then
         Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void find_department_and_add_staff_members() throws Exception {
+
+        // when, then
+        String submit = submit("choices");
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(submit);
+
+        JsonNode staffMembersNode = root.at("/data/university_dept_Departments/findByName/invoke/addStaffMembers/params/staffMembers/choices");
+
+        List<String> ids = new ArrayList<>();
+        staffMembersNode.forEach(staffMemberNode -> {
+            String id = staffMemberNode.get("_gql_meta").get("id").asText();
+            if (!_Strings.isNullOrEmpty(id)) {
+                ids.add(id);
+            }
+        });
+
+        Assertions.assertThat(ids).hasSize(3);
+
+        val replacements = _Maps.unmodifiable(
+                                "$staffMemberId1", ids.get(0),
+                                "$staffMemberId2", ids.get(1));
+
+        Approvals.verify(submit("invoke", replacements), jsonOptions());
     }
 
     @Test
