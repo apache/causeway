@@ -87,19 +87,19 @@ public class GqlvProperty
         );
     }
 
-    static void addGqlArgument(
+    public void addGqlArgument(
             final OneToOneAssociation oneToOneAssociation,
             final GraphQLFieldDefinition.Builder builder,
             final TypeMapper.InputContext inputContext) {
         builder.argument(gqlArgumentFor(oneToOneAssociation, inputContext));
     }
 
-    private static GraphQLArgument gqlArgumentFor(
+    private GraphQLArgument gqlArgumentFor(
             final OneToOneAssociation oneToOneAssociation,
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneAssociation.getId())
-                .type(TypeMapper.inputTypeFor(oneToOneAssociation, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToOneAssociation, inputContext))
                 .build();
     }
 

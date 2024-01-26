@@ -26,7 +26,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -49,19 +48,11 @@ public class GqlvMemberDisabled<T extends ObjectMember> {
     ) {
         this.holder = holder;
         this.context = context;
-        this.field = fieldDefinition(holder);
-    }
 
-    private static GraphQLFieldDefinition fieldDefinition(final Holder holder) {
-
-        GraphQLFieldDefinition fieldDefinition =
-                newFieldDefinition()
-                    .name("disabled")
-                    .type(TypeMapper.scalarTypeFor(String.class))
-                    .build();
-
-        holder.addField(fieldDefinition);
-        return fieldDefinition;
+        this.field = holder.addField(newFieldDefinition()
+                .name("disabled")
+                .type(this.context.typeMapper.scalarTypeFor(String.class))
+                .build());
     }
 
     public void addDataFetcher() {

@@ -43,6 +43,14 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
+    void add_integer_wrappers() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void add_doubles() throws Exception {
 
         // when, then
@@ -50,7 +58,14 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
     }
 
     @Test
-    @Disabled // not yet supported ... receives java.lang.Double
+    @UseReporter(DiffReporter.class)
+    void add_double_wrappers() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
     @UseReporter(DiffReporter.class)
     void add_floats() throws Exception {
 
@@ -59,7 +74,14 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
     }
 
     @Test
-    @Disabled // not yet supported ... receives java.lang.Integer
+    @UseReporter(DiffReporter.class)
+    void add_float_wrappers() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
     @UseReporter(DiffReporter.class)
     void add_big_integers() throws Exception {
 
@@ -68,7 +90,6 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
     }
 
     @Test
-    @Disabled // not yet supported ... receives java.lang.Double
     @UseReporter(DiffReporter.class)
     void add_big_decimals() throws Exception {
 
@@ -77,9 +98,16 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
     }
 
     @Test
-    @Disabled // not yet supported ... receives java.lang.String
     @UseReporter(DiffReporter.class)
     void plus_days() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void plus_joda_days() throws Exception {
 
         // when, then
         Approvals.verify(submit(), jsonOptions());
@@ -123,6 +151,24 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
     @Test
     @UseReporter(DiffReporter.class)
     void boolean_not() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void next_month() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void concat() throws Exception {
 
         // when, then
         Approvals.verify(submit(), jsonOptions());

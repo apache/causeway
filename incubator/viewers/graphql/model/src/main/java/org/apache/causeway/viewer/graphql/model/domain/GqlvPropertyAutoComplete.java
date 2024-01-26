@@ -64,10 +64,10 @@ public class GqlvPropertyAutoComplete {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
                     .name("autoComplete")
-                    .type(GraphQLList.list(TypeMapper.outputTypeFor(elementType)));
+                    .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
             fieldBuilder.argument(GraphQLArgument.newArgument()
                             .name(SEARCH_PARAM_NAME)
-                            .type(nonNull(TypeMapper.scalarTypeFor(String.class))))
+                            .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
                     .build();
             this.field = holder.addField(fieldBuilder.build());
         } else {

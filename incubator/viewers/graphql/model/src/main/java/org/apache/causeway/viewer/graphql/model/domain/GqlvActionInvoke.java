@@ -59,25 +59,19 @@ public class GqlvActionInvoke {
             final Context context) {
         this.holder = holder;
         this.context = context;
-        this.field = fieldDefinition(holder);
-    }
-
-    private static GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         val objectAction = holder.getObjectAction();
 
-        GraphQLFieldDefinition fieldDefinition = null;
         GraphQLOutputType type = typeFor(objectAction);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name(fieldNameForSemanticsOf(objectAction))
                     .type(type);
-            GqlvAction.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
-            fieldDefinition = fieldBuilder.build();
-
-            holder.addField(fieldDefinition);
+            holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
+            this.field = holder.addField(fieldBuilder.build());
+        } else {
+            this.field = null;
         }
-        return fieldDefinition;
     }
 
     private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
@@ -97,7 +91,7 @@ public class GqlvActionInvoke {
     }
 
     @Nullable
-    private static GraphQLOutputType typeFor(final ObjectAction objectAction){
+    private GraphQLOutputType typeFor(final ObjectAction objectAction){
         ObjectSpecification objectSpecification = objectAction.getReturnType();
         switch (objectSpecification.getBeanSort()){
 
@@ -109,7 +103,7 @@ public class GqlvActionInvoke {
                     return null;
                 }
                 val objectSpecificationOfCollectionElement = facet.elementSpec();
-                GraphQLType wrappedType = TypeMapper.outputTypeFor(objectSpecificationOfCollectionElement);
+                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement);
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
                             objectSpecificationOfCollectionElement.getFullIdentifier(),
@@ -122,7 +116,7 @@ public class GqlvActionInvoke {
             case ENTITY:
             case VIEW_MODEL:
             default:
-                return TypeMapper.outputTypeFor(objectSpecification);
+                return context.typeMapper.outputTypeFor(objectSpecification);
 
         }
     }
@@ -173,5 +167,10 @@ public class GqlvActionInvoke {
                     ObjectSpecificationProvider,
                     ObjectActionProvider {
 
+        void addGqlArguments(
+                final ObjectAction objectAction,
+                final GraphQLFieldDefinition.Builder fieldBuilder,
+                final TypeMapper.InputContext inputContext,
+                final int parameterCount);
     }
 }

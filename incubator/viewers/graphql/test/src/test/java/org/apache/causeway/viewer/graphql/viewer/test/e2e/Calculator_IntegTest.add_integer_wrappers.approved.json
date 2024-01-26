@@ -1,7 +1,7 @@
 {
   "data" : {
     "university_calc_Calculator" : {
-      "addBigIntegers" : {
+      "addIntegerWrappers" : {
         "invoke" : 3
       }
     }

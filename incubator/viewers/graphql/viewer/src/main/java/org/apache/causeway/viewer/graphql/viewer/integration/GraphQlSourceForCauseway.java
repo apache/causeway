@@ -38,6 +38,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
@@ -73,6 +74,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final ObjectManager objectManager;
     private final BookmarkService bookmarkService;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
+    private final TypeMapper typeMapper;
     private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
 
     @PostConstruct
@@ -146,7 +148,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final GqlvTopLevelQuery gqlvTopLevelQuery,
             final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-        Context context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader);
+        Context context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper);
 
         switch (objectSpec.getBeanSort()) {
 

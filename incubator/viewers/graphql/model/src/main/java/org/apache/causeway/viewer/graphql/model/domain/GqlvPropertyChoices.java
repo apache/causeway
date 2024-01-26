@@ -19,14 +19,10 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
@@ -34,16 +30,13 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.GraphQLList;
-
 import lombok.val;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLList;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvProperty.addGqlArgument;
 
 public class GqlvPropertyChoices {
 
@@ -65,8 +58,8 @@ public class GqlvPropertyChoices {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
                     .name("choices")
-                    .type(GraphQLList.list(TypeMapper.outputTypeFor(elementType)));
-            addGqlArgument(otoa, fieldBuilder, TypeMapper.InputContext.CHOICES);
+                    .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
+            holder.addGqlArgument(otoa, fieldBuilder, TypeMapper.InputContext.CHOICES);
             this.field = holder.addField(fieldBuilder.build());
         } else {
             this.field = null;
@@ -118,5 +111,6 @@ public class GqlvPropertyChoices {
             ObjectSpecificationProvider,
             OneToOneAssociationProvider {
 
+        void addGqlArgument(OneToOneAssociation otoa, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
     }
 }

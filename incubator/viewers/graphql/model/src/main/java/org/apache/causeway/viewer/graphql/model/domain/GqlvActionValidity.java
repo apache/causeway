@@ -58,18 +58,18 @@ public class GqlvActionValidity {
         this.field = fieldDefinition(holder);
     }
 
-    private static GraphQLFieldDefinition fieldDefinition(final Holder holder) {
+    private GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         val objectAction = holder.getObjectAction();
 
         GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLOutputType type = TypeMapper.scalarTypeFor(String.class);
+        GraphQLOutputType type = context.typeMapper.scalarTypeFor(String.class);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("validate")
                     .type(type);
 
-            GqlvAction.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
+            holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
             fieldDefinition = fieldBuilder.build();
 
             holder.addField(fieldDefinition);
@@ -119,5 +119,10 @@ public class GqlvActionValidity {
             ObjectSpecificationProvider,
             ObjectActionProvider {
 
+        void addGqlArguments(
+                ObjectAction objectAction,
+                GraphQLFieldDefinition.Builder fieldBuilder,
+                TypeMapper.InputContext inputContext,
+                int parameterCount);
     }
 }

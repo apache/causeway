@@ -22,6 +22,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
@@ -63,7 +64,7 @@ public class GqlvPropertySet {
             val fieldBuilder = newFieldDefinition()
                     .name("set")
                     .type(type);
-            GqlvProperty.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
+            holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
             fieldDefinition = fieldBuilder.build();
 
             holder.addField(fieldDefinition);
@@ -72,7 +73,7 @@ public class GqlvPropertySet {
     }
 
     GraphQLOutputType outputTypeFor(Holder holder) {
-        return TypeMapper.outputTypeFor(holder.getObjectSpecification());   // setters return void, so we return the domain object instead
+        return context.typeMapper.outputTypeFor(holder.getObjectSpecification());   // setters return void, so we return the domain object instead
     }
 
 
@@ -137,5 +138,6 @@ public class GqlvPropertySet {
             ObjectSpecificationProvider,
             OneToOneAssociationProvider {
 
+        void addGqlArgument(OneToOneAssociation oneToOneAssociation, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
     }
 }

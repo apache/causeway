@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
@@ -35,7 +36,6 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvProperty.addGqlArgument;
 
 public class GqlvPropertyValidate {
 
@@ -51,8 +51,8 @@ public class GqlvPropertyValidate {
 
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
-                .type(TypeMapper.scalarTypeFor(String.class));
-        addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
+                .type(context.typeMapper.scalarTypeFor(String.class));
+        holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
         this.field = holder.addField(fieldBuilder.build());
     }
@@ -100,5 +100,6 @@ public class GqlvPropertyValidate {
             ObjectSpecificationProvider,
             OneToOneAssociationProvider {
 
+        void addGqlArgument(OneToOneAssociation oneToOneAssociation, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
     }
 }

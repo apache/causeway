@@ -36,9 +36,12 @@ import graphql.schema.*;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -103,8 +106,7 @@ public class GqlvAction
                     switch (elementType.getBeanSort()) {
 
                         case VALUE:
-                            // TODO: handle lists of values.
-                            return ManagedObject.adaptParameter(oap, argumentValue);
+                            return adaptValue(oap, argumentValue);
 
                         case ENTITY:
                         case VIEW_MODEL:
@@ -138,14 +140,51 @@ public class GqlvAction
                 });
     }
 
-    private static ManagedObject asDomainObject(
-            final ObjectSpecification elementType,
+    private static ManagedObject adaptValue(
             final ObjectActionParameter oap,
-            final Object argumentValueObj,
-            final BookmarkService bookmarkService) {
-        return asPojo(elementType, argumentValueObj, bookmarkService)
-                .map(pojo -> ManagedObject.adaptParameter(oap, pojo))
-                .orElse(ManagedObject.empty(elementType));
+            final Object argumentValue) {
+
+        val elementType = oap.getElementType();
+        if (argumentValue == null) {
+            return ManagedObject.empty(elementType);
+        }
+
+        val argPojo = adaptPojo(argumentValue, elementType);
+        return ManagedObject.adaptParameter(oap, argPojo);
+    }
+
+    private static Object adaptPojo(
+            final Object argumentValue,
+            ObjectSpecification elementType) {
+        val elementClazz = elementType.getCorrespondingClass();
+
+        if (elementClazz.isEnum()) {
+            return Enum.valueOf((Class<Enum>) elementClazz, argumentValue.toString());
+        }
+
+        if (elementClazz == BigInteger.class) {
+            return BigInteger.valueOf((Integer) argumentValue);
+        }
+
+        if (elementClazz == BigDecimal.class) {
+            return BigDecimal.valueOf((Double) argumentValue);
+        }
+
+        if (elementClazz == LocalDate.class) {
+            String argumentStr = (String) argumentValue;
+            return LocalDate.parse(argumentStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+
+        if (elementClazz == org.joda.time.LocalDate.class) {
+            String argumentStr = (String) argumentValue;
+            return org.joda.time.LocalDate.parse(argumentStr, org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd"));
+        }
+
+        if (elementClazz == float.class || elementClazz == Float.class) {
+            return ((Double) argumentValue).floatValue();
+        }
+
+        return argumentValue;
     }
 
     private static Optional<Object> asPojo(
@@ -163,7 +202,7 @@ public class GqlvAction
 ;
     }
 
-    static void addGqlArguments(
+    public void addGqlArguments(
             final ObjectAction objectAction,
             final GraphQLFieldDefinition.Builder builder,
             final TypeMapper.InputContext inputContext,
@@ -179,7 +218,7 @@ public class GqlvAction
         }
     }
 
-    static void addGqlArgument(
+    public void addGqlArgument(
             final ObjectAction objectAction,
             final GraphQLFieldDefinition.Builder builder,
             final TypeMapper.InputContext inputContext,
@@ -194,7 +233,7 @@ public class GqlvAction
         }
     }
 
-    static GraphQLArgument gqlArgumentFor(
+    GraphQLArgument gqlArgumentFor(
             final ObjectActionParameter objectActionParameter,
             final TypeMapper.InputContext inputContext) {
         return objectActionParameter.isPlural()
@@ -202,21 +241,21 @@ public class GqlvAction
                 : gqlArgumentFor((OneToOneActionParameter) objectActionParameter, inputContext);
     }
 
-    static GraphQLArgument gqlArgumentFor(
+    GraphQLArgument gqlArgumentFor(
             final OneToOneActionParameter oneToOneActionParameter,
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneActionParameter.getId())
-                .type(TypeMapper.inputTypeFor(oneToOneActionParameter, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext))
                 .build();
     }
 
-    static GraphQLArgument gqlArgumentFor(
+    GraphQLArgument gqlArgumentFor(
             final OneToManyActionParameter oneToManyActionParameter,
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())
-                .type(TypeMapper.inputTypeFor(oneToManyActionParameter, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, inputContext))
                 .build();
     }
 

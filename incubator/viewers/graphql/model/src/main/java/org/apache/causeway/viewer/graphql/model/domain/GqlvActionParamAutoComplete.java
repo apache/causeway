@@ -27,6 +27,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
  import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
  import org.apache.causeway.core.metamodel.object.ManagedObject;
+ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  import org.apache.causeway.viewer.graphql.model.context.Context;
  import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
@@ -35,8 +36,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
  import static graphql.schema.GraphQLNonNull.nonNull;
-
- import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
 
  import graphql.schema.GraphQLArgument;
 
@@ -73,11 +72,11 @@ package org.apache.causeway.viewer.graphql.model.domain;
              val elementType = objectActionParameter.getElementType();
              val fieldBuilder = newFieldDefinition()
                      .name("autoComplete")
-                     .type(GraphQLList.list(TypeMapper.outputTypeFor(elementType)));
-             addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
+                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
+             holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
              fieldBuilder.argument(GraphQLArgument.newArgument()
                      .name(SEARCH_PARAM_NAME)
-                     .type(nonNull(TypeMapper.scalarTypeFor(String.class))))
+                     .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
                      .build();
              this.field = holder.addField(fieldBuilder.build());
          } else {
@@ -126,5 +125,11 @@ package org.apache.causeway.viewer.graphql.model.domain;
              ObjectActionProvider,
              ObjectActionParameterProvider {
          GqlvActionParam.Holder getHolder();
+
+         void addGqlArguments(
+                 ObjectAction objectAction,
+                 GraphQLFieldDefinition.Builder fieldBuilder,
+                 TypeMapper.InputContext inputContext,
+                 int paramNum);
      }
  }

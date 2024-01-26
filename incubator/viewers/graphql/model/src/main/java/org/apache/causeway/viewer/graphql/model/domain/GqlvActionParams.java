@@ -25,6 +25,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -124,10 +125,21 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
+    @Override
+    public void addGqlArguments(
+            ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
+        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum);
+    }
+
     public interface Holder
             extends GqlvHolder,
                     ObjectSpecificationProvider,
                     ObjectActionProvider {
 
+        void addGqlArguments(
+                ObjectAction objectAction,
+                GraphQLFieldDefinition.Builder fieldBuilder,
+                TypeMapper.InputContext inputContext,
+                int paramNum);
     }
 }

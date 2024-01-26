@@ -27,8 +27,10 @@ import graphql.schema.*;
 
 import lombok.experimental.UtilityClass;
 
+import javax.annotation.Priority;
 import javax.ws.rs.NotSupportedException;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
@@ -37,11 +39,13 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
 
-@UtilityClass
+@Component
+@Priority(PriorityPrecedence.LATE)
 public class TypeMapper {
 
     private static <K,V> Map.Entry<K,V> pair(K key, V value) {
@@ -72,11 +76,11 @@ public class TypeMapper {
             pair(Boolean.class, Scalars.GraphQLBoolean)
     );
 
-    public static GraphQLScalarType scalarTypeFor(final Class<?> c){
+    public GraphQLScalarType scalarTypeFor(final Class<?> c){
         return SCALAR_BY_CLASS.getOrDefault(c, Scalars.GraphQLString);
     }
 
-    public static GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature) {
+    public GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature) {
         ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
         switch (otoaObjectSpec.getBeanSort()) {
 
@@ -100,7 +104,7 @@ public class TypeMapper {
     }
 
     @Nullable
-    public static GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification){
+    public GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification){
 
         switch (objectSpecification.getBeanSort()){
             case ABSTRACT:
@@ -121,23 +125,23 @@ public class TypeMapper {
         }
     }
 
-    @Nullable public static GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation) {
+    @Nullable public GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation) {
         ObjectSpecification elementType = oneToManyAssociation.getElementType();
-        return TypeMapper.listTypeFor(elementType);
+        return listTypeFor(elementType);
     }
 
-    @Nullable public static GraphQLList listTypeFor(ObjectSpecification elementType) {
+    @Nullable public GraphQLList listTypeFor(ObjectSpecification elementType) {
         switch (elementType.getBeanSort()) {
             case VIEW_MODEL:
             case ENTITY:
                 return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType)));
             case VALUE:
-                return GraphQLList.list(TypeMapper.scalarTypeFor(elementType.getCorrespondingClass()));
+                return GraphQLList.list(scalarTypeFor(elementType.getCorrespondingClass()));
         }
         return null;
     }
 
-    public static GraphQLInputType inputTypeFor(
+    public GraphQLInputType inputTypeFor(
             final OneToOneFeature oneToOneFeature,
             final InputContext inputContext) {
         return oneToOneFeature.isOptional() || inputContext.isOptionalAlwaysAllowed()
@@ -145,7 +149,7 @@ public class TypeMapper {
                 : nonNull(inputTypeFor_(oneToOneFeature));
     }
 
-    private static GraphQLInputType inputTypeFor_(final OneToOneFeature oneToOneFeature){
+    private GraphQLInputType inputTypeFor_(final OneToOneFeature oneToOneFeature){
         ObjectSpecification elementType = oneToOneFeature.getElementType();
         switch (elementType.getBeanSort()) {
             case ABSTRACT:
@@ -164,12 +168,12 @@ public class TypeMapper {
         }
     }
 
-    public static GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused){
+    public GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused){
         ObjectSpecification elementType = oneToManyActionParameter.getElementType();
-        return GraphQLList.list(TypeMapper.inputTypeFor_(elementType));
+        return GraphQLList.list(inputTypeFor_(elementType));
     }
 
-    private static GraphQLInputType inputTypeFor_(final ObjectSpecification elementType){
+    private GraphQLInputType inputTypeFor_(final ObjectSpecification elementType){
         switch (elementType.getBeanSort()) {
             case ABSTRACT:
             case ENTITY:

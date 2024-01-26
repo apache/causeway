@@ -39,7 +39,7 @@ public class GqlvCollectionGet extends GqlvAssociationGet<OneToManyAssociation> 
     @Override
     GraphQLOutputType outputTypeFor(GqlvAssociationGet.Holder<OneToManyAssociation> holder) {
         val oneToManyAssociation = holder.getObjectAssociation();
-        return TypeMapper.listTypeForElementTypeOf(oneToManyAssociation);
+        return context.typeMapper.listTypeForElementTypeOf(oneToManyAssociation);
     }
 
     public interface Holder

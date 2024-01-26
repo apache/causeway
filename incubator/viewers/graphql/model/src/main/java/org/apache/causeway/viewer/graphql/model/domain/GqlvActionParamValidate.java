@@ -20,14 +20,13 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArgument;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -53,8 +52,8 @@ public class GqlvActionParamValidate {
 
         val fieldBuilder = newFieldDefinition()
                 .name("validity")
-                .type(TypeMapper.scalarTypeFor(String.class));
-        addGqlArgument(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
+                .type(context.typeMapper.scalarTypeFor(String.class));
+        holder.addGqlArgument(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         this.field = holder.addField(fieldBuilder.build());
     }
 
@@ -93,5 +92,6 @@ public class GqlvActionParamValidate {
                     ObjectSpecificationProvider,
                     ObjectActionProvider,
                     ObjectActionParameterProvider {
+        void addGqlArgument(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum);
     }
 }
