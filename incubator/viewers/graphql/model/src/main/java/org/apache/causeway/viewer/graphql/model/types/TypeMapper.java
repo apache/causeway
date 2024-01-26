@@ -53,14 +53,21 @@ public class TypeMapper {
     }
 
     private static final Map<Class<?>, GraphQLScalarType> SCALAR_BY_CLASS = _Maps.unmodifiableEntries(
+
             pair(int.class, Scalars.GraphQLInt),
             pair(Integer.class, Scalars.GraphQLInt),
             pair(Short.class, Scalars.GraphQLInt),
             pair(short.class, Scalars.GraphQLInt),
             pair(BigInteger.class, Scalars.GraphQLInt),
+
+            pair(float.class, Scalars.GraphQLFloat),
+            pair(Float.class, Scalars.GraphQLFloat),
+            pair(double.class, Scalars.GraphQLFloat),
+            pair(Double.class, Scalars.GraphQLFloat),
             pair(long.class, Scalars.GraphQLFloat),
             pair(Long.class, Scalars.GraphQLFloat),
             pair(BigDecimal.class, Scalars.GraphQLFloat),
+
             pair(boolean.class, Scalars.GraphQLBoolean),
             pair(Boolean.class, Scalars.GraphQLBoolean)
     );

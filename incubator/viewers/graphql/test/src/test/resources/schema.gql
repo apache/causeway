@@ -2227,32 +2227,233 @@ type university_admin_AdminMenu__otherAdminAction__gqlv_action {
 }
 
 type university_calc_Calculator {
-  add: university_calc_Calculator__add__gqlv_action
+  addBigDecimals: university_calc_Calculator__addBigDecimals__gqlv_action
+  addBigIntegers: university_calc_Calculator__addBigIntegers__gqlv_action
+  addDoubles: university_calc_Calculator__addDoubles__gqlv_action
+  addFloats: university_calc_Calculator__addFloats__gqlv_action
+  addIntegers: university_calc_Calculator__addIntegers__gqlv_action
+  and: university_calc_Calculator__and__gqlv_action
+  not: university_calc_Calculator__not__gqlv_action
+  or: university_calc_Calculator__or__gqlv_action
+  plusDays: university_calc_Calculator__plusDays__gqlv_action
 }
 
-type university_calc_Calculator__add__gqlv_action {
+type university_calc_Calculator__addBigDecimals__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float!): Float
+  params: university_calc_Calculator__addBigDecimals__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type university_calc_Calculator__addBigDecimals__gqlv_action_params {
+  x: university_calc_Calculator__addBigDecimals__x__gqlv_action_parameter
+  y: university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter
+}
+
+type university_calc_Calculator__addBigDecimals__x__gqlv_action_parameter {
+  disabled(x: Float): String
+  hidden: Boolean
+  validity(x: Float): String
+}
+
+type university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter {
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity(y: Float): String
+}
+
+type university_calc_Calculator__addBigIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Int!, y: Int!): Int
-  params: university_calc_Calculator__add__gqlv_action_params
+  params: university_calc_Calculator__addBigIntegers__gqlv_action_params
   validate(x: Int, y: Int): String
 }
 
-type university_calc_Calculator__add__gqlv_action_params {
-  x: university_calc_Calculator__add__x__gqlv_action_parameter
-  y: university_calc_Calculator__add__y__gqlv_action_parameter
+type university_calc_Calculator__addBigIntegers__gqlv_action_params {
+  x: university_calc_Calculator__addBigIntegers__x__gqlv_action_parameter
+  y: university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter
 }
 
-type university_calc_Calculator__add__x__gqlv_action_parameter {
+type university_calc_Calculator__addBigIntegers__x__gqlv_action_parameter {
   disabled(x: Int): String
   hidden: Boolean
   validity(x: Int): String
 }
 
-type university_calc_Calculator__add__y__gqlv_action_parameter {
+type university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter {
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
   validity(y: Int): String
+}
+
+type university_calc_Calculator__addDoubles__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float!): Float
+  params: university_calc_Calculator__addDoubles__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type university_calc_Calculator__addDoubles__gqlv_action_params {
+  x: university_calc_Calculator__addDoubles__x__gqlv_action_parameter
+  y: university_calc_Calculator__addDoubles__y__gqlv_action_parameter
+}
+
+type university_calc_Calculator__addDoubles__x__gqlv_action_parameter {
+  disabled(x: Float): String
+  hidden: Boolean
+  validity(x: Float): String
+}
+
+type university_calc_Calculator__addDoubles__y__gqlv_action_parameter {
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity(y: Float): String
+}
+
+type university_calc_Calculator__addFloats__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float!): Float
+  params: university_calc_Calculator__addFloats__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type university_calc_Calculator__addFloats__gqlv_action_params {
+  x: university_calc_Calculator__addFloats__x__gqlv_action_parameter
+  y: university_calc_Calculator__addFloats__y__gqlv_action_parameter
+}
+
+type university_calc_Calculator__addFloats__x__gqlv_action_parameter {
+  disabled(x: Float): String
+  hidden: Boolean
+  validity(x: Float): String
+}
+
+type university_calc_Calculator__addFloats__y__gqlv_action_parameter {
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity(y: Float): String
+}
+
+type university_calc_Calculator__addIntegers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Int!, y: Int!): Int
+  params: university_calc_Calculator__addIntegers__gqlv_action_params
+  validate(x: Int, y: Int): String
+}
+
+type university_calc_Calculator__addIntegers__gqlv_action_params {
+  x: university_calc_Calculator__addIntegers__x__gqlv_action_parameter
+  y: university_calc_Calculator__addIntegers__y__gqlv_action_parameter
+}
+
+type university_calc_Calculator__addIntegers__x__gqlv_action_parameter {
+  disabled(x: Int): String
+  hidden: Boolean
+  validity(x: Int): String
+}
+
+type university_calc_Calculator__addIntegers__y__gqlv_action_parameter {
+  disabled(x: Int, y: Int): String
+  hidden(x: Int): Boolean
+  validity(y: Int): String
+}
+
+type university_calc_Calculator__and__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!, y: Boolean!): Boolean
+  params: university_calc_Calculator__and__gqlv_action_params
+  validate(x: Boolean, y: Boolean): String
+}
+
+type university_calc_Calculator__and__gqlv_action_params {
+  x: university_calc_Calculator__and__x__gqlv_action_parameter
+  y: university_calc_Calculator__and__y__gqlv_action_parameter
+}
+
+type university_calc_Calculator__and__x__gqlv_action_parameter {
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity(x: Boolean): String
+}
+
+type university_calc_Calculator__and__y__gqlv_action_parameter {
+  disabled(x: Boolean, y: Boolean): String
+  hidden(x: Boolean): Boolean
+  validity(y: Boolean): String
+}
+
+type university_calc_Calculator__not__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!): Boolean
+  params: university_calc_Calculator__not__gqlv_action_params
+  validate(x: Boolean): String
+}
+
+type university_calc_Calculator__not__gqlv_action_params {
+  x: university_calc_Calculator__not__x__gqlv_action_parameter
+}
+
+type university_calc_Calculator__not__x__gqlv_action_parameter {
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity(x: Boolean): String
+}
+
+type university_calc_Calculator__or__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!, y: Boolean!): Boolean
+  params: university_calc_Calculator__or__gqlv_action_params
+  validate(x: Boolean, y: Boolean): String
+}
+
+type university_calc_Calculator__or__gqlv_action_params {
+  x: university_calc_Calculator__or__x__gqlv_action_parameter
+  y: university_calc_Calculator__or__y__gqlv_action_parameter
+}
+
+type university_calc_Calculator__or__x__gqlv_action_parameter {
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity(x: Boolean): String
+}
+
+type university_calc_Calculator__or__y__gqlv_action_parameter {
+  disabled(x: Boolean, y: Boolean): String
+  hidden(x: Boolean): Boolean
+  validity(y: Boolean): String
+}
+
+type university_calc_Calculator__plusDays__date__gqlv_action_parameter {
+  disabled(date: String): String
+  hidden: Boolean
+  validity(date: String): String
+}
+
+type university_calc_Calculator__plusDays__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(date: String!, numDays: Int!): String
+  params: university_calc_Calculator__plusDays__gqlv_action_params
+  validate(date: String, numDays: Int): String
+}
+
+type university_calc_Calculator__plusDays__gqlv_action_params {
+  date: university_calc_Calculator__plusDays__date__gqlv_action_parameter
+  numDays: university_calc_Calculator__plusDays__numDays__gqlv_action_parameter
+}
+
+type university_calc_Calculator__plusDays__numDays__gqlv_action_parameter {
+  disabled(date: String, numDays: Int): String
+  hidden(date: String): Boolean
+  validity(numDays: Int): String
 }
 
 type university_dept_Department {

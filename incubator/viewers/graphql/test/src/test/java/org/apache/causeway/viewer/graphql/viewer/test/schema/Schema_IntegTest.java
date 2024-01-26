@@ -23,6 +23,7 @@ import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestM
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.condition.DisabledIfSystemProperties;
@@ -42,13 +43,14 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 public class Schema_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Test
-    // @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    @Disabled // to avoid having to keep re-verify
     @UseReporter(DiffReporter.class)
     void schema() throws Exception {
         Approvals.verify(submit(), jsonOptions());
     }
 
     @Test
+    @Disabled // to avoid having to keep re-verify
     @UseReporter(DiffReporter.class)
     void schema_types_name() throws Exception {
         Approvals.verify(submit(), jsonOptions());

@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -34,10 +35,98 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void add_int() throws Exception {
+    void add_integers() throws Exception {
 
         // when, then
         Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void add_doubles() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @Disabled // not yet supported ... receives java.lang.Double
+    @UseReporter(DiffReporter.class)
+    void add_floats() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @Disabled // not yet supported ... receives java.lang.Integer
+    @UseReporter(DiffReporter.class)
+    void add_big_integers() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @Disabled // not yet supported ... receives java.lang.Double
+    @UseReporter(DiffReporter.class)
+    void add_big_decimals() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @Disabled // not yet supported ... receives java.lang.String
+    @UseReporter(DiffReporter.class)
+    void plus_days() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void boolean_and_1() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void boolean_and_2() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void boolean_or_1() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void boolean_or_2() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void boolean_not() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
     }
 
 
