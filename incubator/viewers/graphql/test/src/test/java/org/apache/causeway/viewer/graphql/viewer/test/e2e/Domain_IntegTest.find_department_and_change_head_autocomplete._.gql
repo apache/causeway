@@ -1,0 +1,19 @@
+{
+  university_dept_Departments {
+    findByName {
+      invoke(name: "Classics") {
+        changeDeptHead {
+          params {
+            newDeptHead {
+              autoComplete(search: "Ho") {
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

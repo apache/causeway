@@ -195,6 +195,14 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Test
     @UseReporter(DiffReporter.class)
+    void find_department_and_change_head_autocomplete() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void create_staff_member_with_department() throws Exception {
 
         final Bookmark bookmark =

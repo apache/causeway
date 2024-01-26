@@ -110,7 +110,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
          val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
-         val autoCompleteChoices = objectActionParameter.getAutoComplete(pendingArgs, dataFetchingEnvironment.getArgument(SEARCH_PARAM_NAME), InteractionInitiatedBy.USER);
+         String searchArg = dataFetchingEnvironment.getArgument(SEARCH_PARAM_NAME);
+         val autoCompleteChoices = objectActionParameter.getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
 
          return autoCompleteChoices.stream()
                     .map(ManagedObject::getPojo)
