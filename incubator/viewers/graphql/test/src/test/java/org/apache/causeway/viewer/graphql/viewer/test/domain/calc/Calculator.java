@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.viewer.test.domain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain.calc;
 
 import lombok.RequiredArgsConstructor;
 

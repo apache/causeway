@@ -16,50 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.domain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("university.dept.Staff")
-@DomainService(
-        nature=NatureOfService.VIEW)
+@Named("university.dept.DeptHeads")
+@DomainService(nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class Staff {
+public class DeptHeads {
 
-    final StaffMemberRepository staffMemberRepository;
+    final DeptHeadRepository deptHeadRepository;
 
-    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public StaffMember createStaffMember(
-            final String name,
-            final Department department
-    ){
-        return staffMemberRepository.create(name, department);
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<DeptHead> findAllHeads(){
+        return deptHeadRepository.findAll();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<StaffMember> findAllStaffMembers(){
-        return staffMemberRepository.findAll();
+    public DeptHead findHeadByName(final String name){
+        return deptHeadRepository.findByName(name);
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
-    public StaffMember findByName(final String name){
-        return staffMemberRepository.findByName(name);
-    }
 
 }

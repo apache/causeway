@@ -16,41 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.domain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
 @Repository
-public class DepartmentRepository {
+public class StaffMemberRepository {
 
     @Inject private RepositoryService repositoryService;
 
-    public Department create(final String name, @Nullable final DeptHead deptHead) {
-        Department department = new Department(name, deptHead);
-        repositoryService.persistAndFlush(department);
-        return department;
+    public StaffMember create(final String name, final Department department) {
+        StaffMember staffMember = new StaffMember(name, department, Grade.LECTURER);
+        department.new addStaffMember().act(staffMember);
+        repositoryService.persistAndFlush(staffMember);
+        return staffMember;
     }
 
-    public List<Department> findAll() {
-        return repositoryService.allInstances(Department.class);
+    public List<StaffMember> findAll() {
+        return repositoryService.allInstances(StaffMember.class);
     }
 
     public void removeAll(){
-        repositoryService.removeAll(Department.class);
+        repositoryService.removeAll(StaffMember.class);
     }
 
-    public Department findByName(final String name){
+    public StaffMember findByName(final String name){
         return findAll().stream().
                 filter(dept -> dept.getName().equals(name)).
                 findFirst().
                 orElse(null);
+    }
+
+    public List<StaffMember> findByNameMatching(final String name){
+        return findAll().stream().
+                filter(dept -> dept.getName().contains(name)).
+                collect(Collectors.toList());
     }
 
 }

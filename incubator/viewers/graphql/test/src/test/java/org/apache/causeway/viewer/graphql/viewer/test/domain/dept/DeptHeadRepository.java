@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.domain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.List;
 import java.util.stream.Collectors;

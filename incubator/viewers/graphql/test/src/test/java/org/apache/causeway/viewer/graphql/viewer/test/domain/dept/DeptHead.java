@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.domain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.Comparator;
 import java.util.List;
@@ -33,11 +33,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
@@ -46,7 +43,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import static org.apache.causeway.applib.annotation.Editing.ENABLED;
-import static org.apache.causeway.applib.annotation.Optionality.MANDATORY;
 
 @Entity
 @Table(

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
-import java.util.Optional;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
@@ -30,13 +28,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMember;
-
-import lombok.val;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise

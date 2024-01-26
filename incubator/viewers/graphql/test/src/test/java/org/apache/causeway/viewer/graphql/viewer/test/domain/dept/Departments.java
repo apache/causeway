@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.domain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -31,23 +33,31 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("university.dept.DeptHeads")
-@DomainService(nature=NatureOfService.VIEW)
+@Named("university.dept.Departments")
+@DomainService(
+        nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class DeptHeads {
+public class Departments {
 
-    final DeptHeadRepository deptHeadRepository;
+    final DepartmentRepository departmentRepository;
 
-    @Action(semantics = SemanticsOf.SAFE)
-    public List<DeptHead> findAllHeads(){
-        return deptHeadRepository.findAll();
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public Department createDepartment(
+            final String name,
+            @Nullable final DeptHead deptHead
+    ){
+        return departmentRepository.create(name, deptHead);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public DeptHead findHeadByName(final String name){
-        return deptHeadRepository.findByName(name);
+    public List<Department> findAllDepartments(){
+        return departmentRepository.findAll();
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    public Department findByName(final String name){
+        return departmentRepository.findByName(name);
+    }
 
 }

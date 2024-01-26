@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,12 +35,10 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMember;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
 
 import lombok.val;
 

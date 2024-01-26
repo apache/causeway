@@ -18,41 +18,21 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.approvaltests.Approvals;
-import org.approvaltests.reporters.DiffReporter;
-import org.approvaltests.reporters.UseReporter;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMember;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMemberRepository;
-
-import lombok.val;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DepartmentRepository;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHeadRepository;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMemberRepository;
 
 
 public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {

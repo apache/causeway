@@ -16,18 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.domain;
+package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.ActionLayout;
-
-import org.apache.causeway.applib.annotation.Where;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -37,31 +31,31 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("university.dept.Departments")
+@Named("university.dept.Staff")
 @DomainService(
         nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class Departments {
+public class Staff {
 
-    final DepartmentRepository departmentRepository;
+    final StaffMemberRepository staffMemberRepository;
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public Department createDepartment(
+    public StaffMember createStaffMember(
             final String name,
-            @Nullable final DeptHead deptHead
+            final Department department
     ){
-        return departmentRepository.create(name, deptHead);
+        return staffMemberRepository.create(name, department);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<Department> findAllDepartments(){
-        return departmentRepository.findAll();
+    public List<StaffMember> findAllStaffMembers(){
+        return staffMemberRepository.findAll();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Department findByName(final String name){
-        return departmentRepository.findByName(name);
+    public StaffMember findByName(final String name){
+        return staffMemberRepository.findByName(name);
     }
 
 }
