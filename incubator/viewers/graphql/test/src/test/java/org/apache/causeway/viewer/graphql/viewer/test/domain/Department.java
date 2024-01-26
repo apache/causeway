@@ -44,6 +44,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -151,6 +152,28 @@ public class Department implements Comparable<Department> {
             return department;
         }
     }
+
+    @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(associateWith = "staffMembers")
+    public class addStaffMembers {
+
+        public Department act(List<StaffMember> staffMembers) {
+            val department = Department.this;
+
+            department.staffMembers.addAll(staffMembers);
+            staffMembers.forEach(sm -> sm.setDepartment(department));
+            return department;
+        }
+        public List<StaffMember> choices0Act() {
+            val choices = new ArrayList<>(staffMemberRepository.findAll());
+            choices.removeAll(getStaffMembers());
+            return choices;
+        }
+
+        @Inject StaffMemberRepository staffMemberRepository;
+    }
+
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "staffMembers")
