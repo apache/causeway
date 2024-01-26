@@ -26,6 +26,8 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import graphql.schema.*;
 
+import lombok.val;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
@@ -35,6 +37,7 @@ public class GqlvProperty
                    GqlvMemberDisabled.Holder<OneToOneAssociation>,
                    GqlvPropertyGet.Holder,
                    GqlvPropertyChoices.Holder,
+                   GqlvPropertyAutoComplete.Holder,
                    GqlvPropertyValidate.Holder,
                    GqlvPropertySet.Holder {
 
@@ -47,6 +50,10 @@ public class GqlvProperty
      * Populated iff there are choices
      */
     private final GqlvPropertyChoices choices;
+    /**
+     * Populated iff there is an autoComplete
+     */
+    private final GqlvPropertyAutoComplete autoComplete;
     private final GqlvPropertyValidate validate;
     private final GqlvPropertySet set;
 
@@ -62,7 +69,10 @@ public class GqlvProperty
         this.disabled = new GqlvMemberDisabled<>(this, context);
         this.get = new GqlvPropertyGet(this, context);
         this.validate = new GqlvPropertyValidate(this, context);
-        this.choices = new GqlvPropertyChoices(this, context);
+        val choices = new GqlvPropertyChoices(this, context);
+        this.choices = choices.hasChoices() ? choices : null;
+        val autoComplete = new GqlvPropertyAutoComplete(this, context);
+        this.autoComplete = autoComplete.hasAutoComplete() ? autoComplete : null;
         this.set = new GqlvPropertySet(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
@@ -117,8 +127,14 @@ public class GqlvProperty
         hidden.addDataFetcher();
         disabled.addDataFetcher();
         get.addDataFetcher();
-        set.addDataFetcher();
+        if(choices != null) {
+            choices.addDataFetcher();
+        }
+        if(autoComplete != null) {
+            autoComplete.addDataFetcher();
+        }
         validate.addDataFetcher();
+        set.addDataFetcher();
     }
 
 

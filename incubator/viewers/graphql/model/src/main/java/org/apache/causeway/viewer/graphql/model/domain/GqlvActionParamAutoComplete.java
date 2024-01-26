@@ -34,6 +34,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
  import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+ import static graphql.schema.GraphQLNonNull.nonNull;
+
  import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
 
  import graphql.schema.GraphQLArgument;
@@ -75,7 +77,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
              addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
              fieldBuilder.argument(GraphQLArgument.newArgument()
                      .name(SEARCH_PARAM_NAME)
-                     .type(TypeMapper.scalarTypeFor(String.class)))
+                     .type(nonNull(TypeMapper.scalarTypeFor(String.class))))
                      .build();
              this.field = holder.addField(fieldBuilder.build());
          } else {
@@ -110,10 +112,10 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
          val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
-         String searchArg = dataFetchingEnvironment.getArgument(SEARCH_PARAM_NAME);
-         val autoCompleteChoices = objectActionParameter.getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
+         val searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
+         val autoCompleteManagedObjects = objectActionParameter.getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
 
-         return autoCompleteChoices.stream()
+         return autoCompleteManagedObjects.stream()
                     .map(ManagedObject::getPojo)
                     .collect(Collectors.toList());
      }

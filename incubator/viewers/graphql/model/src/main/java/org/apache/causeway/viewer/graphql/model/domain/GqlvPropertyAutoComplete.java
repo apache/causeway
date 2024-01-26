@@ -19,20 +19,19 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+
+import static graphql.schema.GraphQLNonNull.nonNull;
+
+import graphql.schema.GraphQLArgument;
 
 import graphql.schema.GraphQLList;
 
@@ -40,40 +39,43 @@ import lombok.val;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvProperty.addGqlArgument;
 
-public class GqlvPropertyChoices {
+public class GqlvPropertyAutoComplete {
 
-    final Holder holder;
+    private static final String SEARCH_PARAM_NAME = "search";
+
+    private final Holder holder;
     private final Context context;
     /**
      * Populated iff there are choices for this property
      */
     final GraphQLFieldDefinition field;
 
-    public GqlvPropertyChoices(
+    public GqlvPropertyAutoComplete(
             final Holder holder,
             final Context context) {
         this.holder = holder;
         this.context = context;
 
         val otoa = holder.getOneToOneAssociation();
-        if (otoa.hasChoices()) {
+        if (otoa.hasAutoComplete()) {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
-                    .name("choices")
+                    .name("autoComplete")
                     .type(GraphQLList.list(TypeMapper.outputTypeFor(elementType)));
-            addGqlArgument(otoa, fieldBuilder, TypeMapper.InputContext.CHOICES);
+            fieldBuilder.argument(GraphQLArgument.newArgument()
+                            .name(SEARCH_PARAM_NAME)
+                            .type(nonNull(TypeMapper.scalarTypeFor(String.class))))
+                    .build();
             this.field = holder.addField(fieldBuilder.build());
         } else {
             this.field = null;
         }
     }
 
-    boolean hasChoices() {
+    boolean hasAutoComplete() {
         return this.field != null;
     }
 
@@ -89,13 +91,13 @@ public class GqlvPropertyChoices {
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
                         holder.coordinatesFor(field),
-                        this::choices);
+                        this::autoComplete);
 
                 break;
         }
     }
 
-    List<Object> choices(final DataFetchingEnvironment dataFetchingEnvironment) {
+    List<Object> autoComplete(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -107,10 +109,12 @@ public class GqlvPropertyChoices {
         val association = holder.getOneToOneAssociation();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val choicesManagedObject = association.getChoices(managedObject, InteractionInitiatedBy.USER);
-        return choicesManagedObject.stream()
-                    .map(ManagedObject::getPojo)
-                    .collect(Collectors.toList());
+        val searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
+        val autoCompleteManagedObjects = association.getAutoComplete(managedObject, searchArg, InteractionInitiatedBy.USER);
+
+        return autoCompleteManagedObjects.stream()
+                .map(ManagedObject::getPojo)
+                .collect(Collectors.toList());
     }
 
     public interface Holder

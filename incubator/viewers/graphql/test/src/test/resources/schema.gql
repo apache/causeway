@@ -291,7 +291,7 @@ type causeway_applib_UserMemento__authenticationCode__gqlv_property {
 }
 
 type causeway_applib_UserMemento__authenticationSource__gqlv_property {
-  choices(authenticationSource: String): String
+  choices(authenticationSource: String): [String]
   disabled: String
   get: String!
   hidden: Boolean
@@ -743,7 +743,7 @@ type causeway_feat_ApplicationTypeAction {
 }
 
 type causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
-  choices(actionSemantics: String): String
+  choices(actionSemantics: String): [String]
   disabled: String
   get: String!
   hidden: Boolean
@@ -2249,7 +2249,7 @@ type university_dept_Department__addStaffMember__gqlv_action_params {
 }
 
 type university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter {
-  autoComplete(search: String): [university_dept_StaffMember]
+  autoComplete(search: String!): [university_dept_StaffMember]
   disabled(staffMember: university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
   validity(staffMember: university_dept_StaffMember__gqlv_input): String
@@ -2268,7 +2268,7 @@ type university_dept_Department__changeDeptHead__gqlv_action_params {
 }
 
 type university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter {
-  autoComplete(search: String): [university_dept_DeptHead]
+  autoComplete(search: String!): [university_dept_DeptHead]
   default: university_dept_DeptHead
   disabled(newDeptHead: university_dept_DeptHead__gqlv_input): String
   hidden: Boolean
@@ -2295,6 +2295,7 @@ type university_dept_Department__changeName__newName__gqlv_action_parameter {
 }
 
 type university_dept_Department__deptHead__gqlv_property {
+  autoComplete(search: String!): [university_dept_DeptHead]
   disabled: String
   get: university_dept_DeptHead
   hidden: Boolean
@@ -2348,7 +2349,7 @@ type university_dept_Departments {
 }
 
 type university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
-  autoComplete(name: String, search: String): [university_dept_DeptHead]
+  autoComplete(name: String, search: String!): [university_dept_DeptHead]
   disabled(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
   hidden(name: String): Boolean
   validity(deptHead: university_dept_DeptHead__gqlv_input): String
@@ -2445,7 +2446,7 @@ type university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
 }
 
 type university_dept_DeptHead__department__gqlv_property {
-  choices(department: university_dept_Department__gqlv_input): university_dept_Department
+  choices(department: university_dept_Department__gqlv_input): [university_dept_Department]
   disabled: String
   get: university_dept_Department
   hidden: Boolean
@@ -2510,7 +2511,7 @@ type university_dept_StaffMember {
 }
 
 type university_dept_StaffMember__department__gqlv_property {
-  choices(department: university_dept_Department__gqlv_input): university_dept_Department
+  choices(department: university_dept_Department__gqlv_input): [university_dept_Department]
   disabled: String
   get: university_dept_Department
   hidden: Boolean

@@ -1,0 +1,15 @@
+{
+  university_dept_Departments {
+    findByName {
+      invoke(name: "Classics") {
+        deptHead {
+          autoComplete(search: "XXX") {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}
