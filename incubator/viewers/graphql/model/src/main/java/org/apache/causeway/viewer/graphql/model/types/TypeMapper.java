@@ -47,189 +47,32 @@ import org.springframework.stereotype.Component;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
 
-@Component
-@Priority(PriorityPrecedence.LATE)
-public class TypeMapper {
+public interface TypeMapper {
 
-    private static <K,V> Map.Entry<K,V> pair(K key, V value) {
-        return new Map.Entry<K, V>() {
-            @Override public K getKey() {return key;}
-            @Override public V getValue() {return value;}
-            @Override public V setValue(V value) { throw new NotSupportedException("Immutable"); }
-        };
-    }
+    GraphQLScalarType scalarTypeFor(final Class<?> c);
 
-    private static final Map<Class<?>, GraphQLScalarType> SCALAR_BY_CLASS = _Maps.unmodifiableEntries(
-
-            pair(int.class, Scalars.GraphQLInt),
-            pair(Integer.class, Scalars.GraphQLInt),
-            pair(Short.class, Scalars.GraphQLInt),
-            pair(short.class, Scalars.GraphQLInt),
-            pair(BigInteger.class, Scalars.GraphQLInt),
-
-            pair(float.class, Scalars.GraphQLFloat),
-            pair(Float.class, Scalars.GraphQLFloat),
-            pair(double.class, Scalars.GraphQLFloat),
-            pair(Double.class, Scalars.GraphQLFloat),
-            pair(long.class, Scalars.GraphQLFloat),
-            pair(Long.class, Scalars.GraphQLFloat),
-            pair(BigDecimal.class, Scalars.GraphQLFloat),
-
-            pair(boolean.class, Scalars.GraphQLBoolean),
-            pair(Boolean.class, Scalars.GraphQLBoolean)
-    );
-
-    public GraphQLScalarType scalarTypeFor(final Class<?> c){
-        return SCALAR_BY_CLASS.getOrDefault(c, Scalars.GraphQLString);
-    }
-
-    public GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature) {
-        ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
-        switch (otoaObjectSpec.getBeanSort()) {
-
-            case VIEW_MODEL:
-            case ENTITY:
-
-                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec));
-                return oneToOneFeature.isOptional()
-                        ? fieldTypeRef
-                        : nonNull(fieldTypeRef);
-
-            case VALUE:
-
-                GraphQLScalarType scalarType = scalarTypeFor(otoaObjectSpec.getCorrespondingClass());
-
-                return oneToOneFeature.isOptional()
-                        ? scalarType
-                        : nonNull(scalarType);
-        }
-        return null;
-    }
+    GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature);
 
     @Nullable
-    public GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification){
+    GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification);
 
-        switch (objectSpecification.getBeanSort()){
-            case ABSTRACT:
-            case ENTITY:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.objectTypeNameFor(objectSpecification));
+    @Nullable
+    GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation);
 
-            case VALUE:
-                return scalarTypeFor(objectSpecification.getCorrespondingClass());
+    @Nullable
+    GraphQLList listTypeFor(ObjectSpecification elementType);
 
-            case COLLECTION:
-                // should be noop
-                return null;
-
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
-    }
-
-    @Nullable public GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation) {
-        ObjectSpecification elementType = oneToManyAssociation.getElementType();
-        return listTypeFor(elementType);
-    }
-
-    @Nullable public GraphQLList listTypeFor(ObjectSpecification elementType) {
-        switch (elementType.getBeanSort()) {
-            case VIEW_MODEL:
-            case ENTITY:
-                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType)));
-            case VALUE:
-                return GraphQLList.list(scalarTypeFor(elementType.getCorrespondingClass()));
-        }
-        return null;
-    }
-
-    public GraphQLInputType inputTypeFor(
+    GraphQLInputType inputTypeFor(
             final OneToOneFeature oneToOneFeature,
-            final InputContext inputContext) {
-        return oneToOneFeature.isOptional() || inputContext.isOptionalAlwaysAllowed()
-                ? inputTypeFor_(oneToOneFeature)
-                : nonNull(inputTypeFor_(oneToOneFeature));
-    }
+            final InputContext inputContext);
 
-    private GraphQLInputType inputTypeFor_(final OneToOneFeature oneToOneFeature){
-        ObjectSpecification elementType = oneToOneFeature.getElementType();
-        switch (elementType.getBeanSort()) {
-            case ABSTRACT:
-            case ENTITY:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementType));
+    GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused);
 
-            case VALUE:
-                return scalarTypeFor(elementType.getCorrespondingClass());
-
-            case COLLECTION:
-                throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
-    }
-
-    public GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused){
-        ObjectSpecification elementType = oneToManyActionParameter.getElementType();
-        return GraphQLList.list(inputTypeFor_(elementType));
-    }
-
-    private GraphQLInputType inputTypeFor_(final ObjectSpecification elementType){
-        switch (elementType.getBeanSort()) {
-            case ABSTRACT:
-            case ENTITY:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementType));
-
-            case VALUE:
-                return scalarTypeFor(elementType.getCorrespondingClass());
-
-            case COLLECTION:
-                throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.getFullIdentifier()));
-
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
-    }
-
-    public Object adaptPojo(
+    Object adaptPojo(
             final Object argumentValue,
-            final ObjectSpecification elementType) {
-        val elementClazz = elementType.getCorrespondingClass();
+            final ObjectSpecification elementType);
 
-        if (elementClazz.isEnum()) {
-            return Enum.valueOf((Class<Enum>) elementClazz, argumentValue.toString());
-        }
-
-        if (elementClazz == BigInteger.class) {
-            return BigInteger.valueOf((Integer) argumentValue);
-        }
-
-        if (elementClazz == BigDecimal.class) {
-            return BigDecimal.valueOf((Double) argumentValue);
-        }
-
-        if (elementClazz == LocalDate.class) {
-            String argumentStr = (String) argumentValue;
-            return LocalDate.parse(argumentStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
-
-        if (elementClazz == org.joda.time.LocalDate.class) {
-            String argumentStr = (String) argumentValue;
-            return org.joda.time.LocalDate.parse(argumentStr, org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd"));
-        }
-
-        if (elementClazz == float.class || elementClazz == Float.class) {
-            return ((Double) argumentValue).floatValue();
-        }
-
-        return argumentValue;
-    }
-
-    public enum InputContext {
+    enum InputContext {
         HIDE,
         DISABLE,
         VALIDATE,

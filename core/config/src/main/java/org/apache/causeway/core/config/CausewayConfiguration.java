@@ -231,7 +231,7 @@ public class CausewayConfiguration {
              * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be
              * configured. Yet EXPERIMENTAL.
              *
-             * @see org.springframework.security.web.csrf.CsrfFilter
+             * @see <code>org.springframework.security.web.csrf.CsrfFilter</code>
              * @see "https://www.baeldung.com/spring-security-registered-filters"
              */
             private boolean allowCsrfFilters = false;
@@ -2340,6 +2340,53 @@ public class CausewayConfiguration {
                  */
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }
+        }
+
+        private final Gqlv gqlv = new Gqlv();
+        @Data
+        public static class Gqlv {
+
+            private final MetaData metaData = new MetaData();
+            @Data
+            public static class MetaData {
+                private String idAttributeName = "__id";
+                private String logicalTypeNameAttributeName = "__type";
+                private String versionAttributeName = "__version";
+            }
+
+            private final TypeMapper typeMapper = new TypeMapper();
+            @Data
+            public static class TypeMapper {
+
+                /**
+                 * For both JDK8's {@link java.time.LocalDate} and JodaTime's {@link org.joda.time.LocalDate}
+                 */
+                private String localDateFormat = "yyyy-MM-dd";
+                /**
+                 * for JDK8's {@link java.time.ZonedDateTime} and JodaTime's {@link org.joda.time.DateTime}
+                 */
+                private String zonedDateTimeFormat = "yyyy-MM-dd HH:mm:ss z";
+
+            }
+
+            @Getter
+            private final Authentication authentication = new Authentication();
+            @Data
+            public static class Authentication {
+
+                @Getter
+                private final Fallback fallback = new Fallback();
+                @Data
+                public static class Fallback {
+
+                    /**
+                     * Used as the default username if not provided by other means.
+                     */
+                    private String username;
+                    private List<String> roles;
+                }
+            }
+
         }
 
         private final Restfulobjects restfulobjects = new Restfulobjects();

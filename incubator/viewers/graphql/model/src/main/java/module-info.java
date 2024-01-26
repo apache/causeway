@@ -13,4 +13,5 @@ module org.apache.causeway.incubator.viewer.graphql.model {
     requires spring.context;
     requires org.apache.causeway.core.metamodel;
     requires com.graphqljava;
+    requires spring.boot.autoconfigure;
 }
