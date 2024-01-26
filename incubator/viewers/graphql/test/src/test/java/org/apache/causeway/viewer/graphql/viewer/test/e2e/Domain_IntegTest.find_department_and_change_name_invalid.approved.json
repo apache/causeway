@@ -1,0 +1,13 @@
+{
+  "data" : {
+    "university_dept_Departments" : {
+      "findByName" : {
+        "invoke" : {
+          "changeName" : {
+            "validate" : "Name cannot contain '!' character"
+          }
+        }
+      }
+    }
+  }
+}
