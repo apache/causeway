@@ -768,6 +768,12 @@
       }, {
         "name" : "university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter"
       }, {
+        "name" : "university_dept_Department__addStaffMembers__gqlv_action"
+      }, {
+        "name" : "university_dept_Department__addStaffMembers__gqlv_action_params"
+      }, {
+        "name" : "university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter"
+      }, {
         "name" : "university_dept_Department__changeDeptHead__gqlv_action"
       }, {
         "name" : "university_dept_Department__changeDeptHead__gqlv_action_params"
