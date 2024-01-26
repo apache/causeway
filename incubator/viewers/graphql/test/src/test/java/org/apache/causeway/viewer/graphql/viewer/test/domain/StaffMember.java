@@ -72,7 +72,7 @@ public class StaffMember implements Comparable<StaffMember> {
 
 
     @Getter @Setter
-    @Property
+    @Property(editing = Editing.ENABLED)
     private Grade grade;
 
 

@@ -167,6 +167,14 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Test
     @UseReporter(DiffReporter.class)
+    void find_staff_member_by_name_and_edit_grade_choices() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void find_staff_member_by_name_and_edit() throws Exception {
 
         // given
