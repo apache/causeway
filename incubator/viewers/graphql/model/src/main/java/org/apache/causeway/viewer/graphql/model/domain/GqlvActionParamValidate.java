@@ -27,6 +27,8 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArgument;
+
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -34,9 +36,6 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArgument;
-
 
 @Log4j2
 public class GqlvActionParamValidate {
@@ -53,9 +52,9 @@ public class GqlvActionParamValidate {
         this.context = context;
 
         val fieldBuilder = newFieldDefinition()
-                .name("validate")
+                .name("validity")
                 .type(TypeMapper.scalarTypeFor(String.class));
-        addGqlArgument(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum()+1);
+        addGqlArgument(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         this.field = holder.addField(fieldBuilder.build());
     }
 
@@ -70,9 +69,11 @@ public class GqlvActionParamValidate {
     private String disabled(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+
+        val sourcePojoClass = sourcePojo.getClass();
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
-            return "Disabled";
+            return "Invalid";
         }
 
         val objectAction = holder.getObjectAction();
@@ -80,10 +81,11 @@ public class GqlvActionParamValidate {
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
+
         val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         val usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
+        return usable.isVetoed() ? usable.getReasonAsString().orElse("Invalid") : null;
     }
 
     public interface Holder

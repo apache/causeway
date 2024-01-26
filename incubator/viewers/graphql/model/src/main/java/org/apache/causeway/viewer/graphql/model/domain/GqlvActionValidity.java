@@ -43,13 +43,13 @@ import graphql.schema.GraphQLOutputType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
-public class GqlvActionValidate {
+public class GqlvActionValidity {
 
     private final Holder holder;
     private final Context context;
     private final GraphQLFieldDefinition field;
 
-    public GqlvActionValidate(
+    public GqlvActionValidity(
             final Holder holder,
             final Context context
     ) {

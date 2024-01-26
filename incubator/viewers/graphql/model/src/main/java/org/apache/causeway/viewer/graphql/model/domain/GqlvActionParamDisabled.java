@@ -27,8 +27,6 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
-
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -36,6 +34,9 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.addGqlArguments;
+
 
 @Log4j2
 public class GqlvActionParamDisabled {
@@ -54,7 +55,7 @@ public class GqlvActionParamDisabled {
         val fieldBuilder = newFieldDefinition()
                 .name("disabled")
                 .type(TypeMapper.scalarTypeFor(String.class));
-        addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
+        addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum()+1);
         this.field = holder.addField(fieldBuilder.build());
     }
 
@@ -69,9 +70,7 @@ public class GqlvActionParamDisabled {
     private String disabled(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
         if (objectSpecification == null) {
             return "Disabled";
         }
@@ -81,7 +80,6 @@ public class GqlvActionParamDisabled {
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-
         val argumentManagedObjects = GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
 
         val usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);

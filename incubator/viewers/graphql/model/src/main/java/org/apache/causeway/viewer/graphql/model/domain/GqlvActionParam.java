@@ -40,10 +40,10 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 @Log4j2
 public class GqlvActionParam
-        implements GqlvActionParamDisabled.Holder,
+        implements GqlvActionParamValidate.Holder,
                    GqlvActionParamHidden.Holder,
                    GqlvActionParamChoices.Holder,
-                   GqlvActionParamValidate.Holder {
+                   GqlvActionParamDisabled.Holder {
 
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
@@ -55,7 +55,8 @@ public class GqlvActionParam
 
     private final GqlvActionParamChoices choices;
     private final GqlvActionParamHidden hidden;
-    private final GqlvActionParamDisabled disabled;
+    private final GqlvActionParamDisabled validate;
+    private final GqlvActionParamValidate disabled;
 
     private final GraphQLFieldDefinition field;
 
@@ -71,9 +72,10 @@ public class GqlvActionParam
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter));
 
         this.hidden = new GqlvActionParamHidden(this, context);
-        this.disabled = new GqlvActionParamDisabled(this, context);
+        this.disabled = new GqlvActionParamValidate(this, context);
         val choices = new GqlvActionParamChoices(this, context);
         this.choices = choices.hasChoices() ? choices : null;
+        this.validate = new GqlvActionParamDisabled(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
@@ -114,6 +116,7 @@ public class GqlvActionParam
         if (choices != null) {
             choices.addDataFetcher();
         }
+        validate.addDataFetcher();
     }
 
 

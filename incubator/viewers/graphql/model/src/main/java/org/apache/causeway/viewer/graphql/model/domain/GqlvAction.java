@@ -35,7 +35,6 @@ import graphql.schema.*;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,7 +48,7 @@ public class GqlvAction
         implements GqlvMemberHidden.Holder<ObjectAction>,
                    GqlvMemberDisabled.Holder<ObjectAction>,
                    GqlvActionInvoke.Holder,
-                   GqlvActionValidate.Holder,
+                   GqlvActionValidity.Holder,
                    GqlvActionParams.Holder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
@@ -57,7 +56,7 @@ public class GqlvAction
 
     private final GqlvMemberHidden<ObjectAction> hidden;
     private final GqlvMemberDisabled<ObjectAction> disabled;
-    private final GqlvActionValidate validate;
+    private final GqlvActionValidity validate;
     private final GqlvActionInvoke invoke;
     /**
      * Populated iif there are params for this action.
@@ -74,7 +73,7 @@ public class GqlvAction
 
         this.hidden = new GqlvMemberHidden<>(this, context);
         this.disabled = new GqlvMemberDisabled<>(this, context);
-        this.validate = new GqlvActionValidate(this, context);
+        this.validate = new GqlvActionValidity(this, context);
         this.invoke = new GqlvActionInvoke(this, context);
         val params = new GqlvActionParams(this, context);
         this.params = params.hasParams() ? params : null;

@@ -321,6 +321,14 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
 
     @Test
     @UseReporter(DiffReporter.class)
+    void find_depthead_and_change_name_invoke_invalid() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void find_depthead_and_change_name() throws Exception {
 
         // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
