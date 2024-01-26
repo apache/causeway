@@ -18,28 +18,17 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
-import lombok.val;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMember;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMemberRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -47,67 +36,19 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.Department;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHead;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.DeptHeadRepository;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMember;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
-import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
+import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @ActiveProfiles("test")
-public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
-
-    @Inject DepartmentRepository departmentRepository;
-    @Inject DeptHeadRepository deptHeadRepository;
-    @Inject StaffMemberRepository staffMemberRepository;
-    @Inject BookmarkService bookmarkService;
-
-    @BeforeEach
-    void beforeEach(){
-        transactionService.runTransactional(Propagation.REQUIRED, () -> {
-
-            // departments
-            Department classics = departmentRepository.create("Classics", null);
-            Department physics = departmentRepository.create("Physics", null); // no head.
-            Department textiles = departmentRepository.create("Textiles", null);
-            Department pathology = departmentRepository.create("Pathology", null);
-            Department mathematics = departmentRepository.create("Mathematics", null);
-            Department civilEngineering = departmentRepository.create("Civil Engineering", null);
-
-            // heads
-            deptHeadRepository.create("Dr. Barney Jones", classics);
-            deptHeadRepository.create("Prof. Dicky Horwich", textiles);
-            deptHeadRepository.create("Dr. Susan Hopwood", pathology);
-            deptHeadRepository.create("Dr. Helen Johansen", mathematics);
-            deptHeadRepository.create("Dr. George Harwood", civilEngineering);
-
-            // staff
-            staffMemberRepository.create("Letitia Leadbetter", classics);
-            staffMemberRepository.create("Gerry Jones", classics);
-            staffMemberRepository.create("Mervin Hughes", physics);
-            staffMemberRepository.create("John Gartner", physics);
-            staffMemberRepository.create("Margaret Randall", physics);
-
-        });
-    }
-    @AfterEach
-    void afterEach(){
-        transactionService.runTransactional(Propagation.REQUIRED, () -> {
-            staffMemberRepository.removeAll();
-            deptHeadRepository.findAll().forEach(x -> x.setDepartment(null));
-            departmentRepository.findAll().forEach(x -> x.setDeptHead(null));
-            deptHeadRepository.removeAll();
-            departmentRepository.removeAll();
-        });
-    }
-
+public class Domain_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
@@ -174,6 +115,14 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
     @Test
     @UseReporter(DiffReporter.class)
     void find_staff_member_by_name_and_edit_grade_choices() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void calculator_add_int() throws Exception {
 
         // when, then
         Approvals.verify(submit(), jsonOptions());
@@ -334,50 +283,6 @@ public class Domain_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAb
     @Test
     @UseReporter(DiffReporter.class)
     void create_department_name_param_disabled() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void admin_action() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void action_with_disabled_param() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void action_with_hidden_param() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void other_admin_action() throws Exception {
 
         // when
         val response = submit();

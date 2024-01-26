@@ -1,0 +1,7 @@
+{
+  university_calc_Calculator {
+    add {
+      invoke(x: 1, y: 2)
+    }
+  }
+}

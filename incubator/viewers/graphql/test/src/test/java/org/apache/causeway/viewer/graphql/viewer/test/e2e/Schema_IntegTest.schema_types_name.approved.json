@@ -760,6 +760,16 @@
       }, {
         "name" : "university_admin_AdminMenu__otherAdminAction__gqlv_action"
       }, {
+        "name" : "university_calc_Calculator"
+      }, {
+        "name" : "university_calc_Calculator__add__gqlv_action"
+      }, {
+        "name" : "university_calc_Calculator__add__gqlv_action_params"
+      }, {
+        "name" : "university_calc_Calculator__add__x__gqlv_action_parameter"
+      }, {
+        "name" : "university_calc_Calculator__add__y__gqlv_action_parameter"
+      }, {
         "name" : "university_dept_Department"
       }, {
         "name" : "university_dept_Department__addStaffMember__gqlv_action"
