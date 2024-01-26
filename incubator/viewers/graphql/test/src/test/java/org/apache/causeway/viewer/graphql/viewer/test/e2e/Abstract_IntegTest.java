@@ -55,9 +55,7 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.StaffMemberReposito
 import lombok.val;
 
 
-//NOT USING @Transactional since we are running server within same transaction otherwise
-@ActiveProfiles("test")
-public class Abstract_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
+public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Inject DepartmentRepository departmentRepository;
     @Inject DeptHeadRepository deptHeadRepository;

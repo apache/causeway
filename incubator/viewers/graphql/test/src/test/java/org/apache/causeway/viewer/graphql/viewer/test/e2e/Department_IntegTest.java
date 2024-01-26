@@ -48,7 +48,7 @@ import lombok.val;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @ActiveProfiles("test")
-public class Domain_IntegTest extends Abstract_IntegTest {
+public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
@@ -114,22 +114,6 @@ public class Domain_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void find_staff_member_by_name_and_edit_grade_choices() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void calculator_add_int() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
     void find_department_and_add_staff_members() throws Exception {
 
         // when, then
@@ -151,64 +135,10 @@ public class Domain_IntegTest extends Abstract_IntegTest {
         Assertions.assertThat(ids).hasSize(3);
 
         val replacements = _Maps.unmodifiable(
-                                "$staffMemberId1", ids.get(0),
-                                "$staffMemberId2", ids.get(1));
+                "$staffMemberId1", ids.get(0),
+                "$staffMemberId2", ids.get(1));
 
         Approvals.verify(submit("invoke", replacements), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_staff_member_by_name_and_edit() throws Exception {
-
-        // given
-        final Optional<Bookmark> bookmarkIfAny =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> {
-                            StaffMember pojo = staffMemberRepository.findByName("Gerry Jones");
-                            return bookmarkService.bookmarkFor(pojo);
-                        }
-                ).valueAsNullableElseFail();
-
-        assertThat(bookmarkIfAny).isPresent();
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-
-        // and in the database...
-        final Optional<StaffMember> staffMemberIfAny =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> bookmarkService.lookup(bookmarkIfAny.get(), StaffMember.class)
-                ).valueAsNullableElseFail();
-
-        assertThat(staffMemberIfAny).isPresent();
-        assertThat(staffMemberIfAny.get()).extracting(StaffMember::getName).isEqualTo("Gerald Johns");
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void staff_member_name_validate() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void staff_member_name_edit_invalid() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_by_name() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
     }
 
     @Test
@@ -217,26 +147,6 @@ public class Domain_IntegTest extends Abstract_IntegTest {
 
         // when, then
         Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void create_staff_member_with_department() throws Exception {
-
-        final Bookmark bookmark =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> {
-                            Department department = departmentRepository.findByName("Classics");
-                            return bookmarkService.bookmarkFor(department).orElseThrow();
-                        }
-                ).valueAsNonNullElseFail();
-
-        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-
     }
 
     @Test
@@ -291,23 +201,6 @@ public class Domain_IntegTest extends Abstract_IntegTest {
         Approvals.verify(response, jsonOptions());
     }
 
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name_invalid() throws Exception {
-
-        String response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name_invoke_invalid() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
 
     @Test
     @UseReporter(DiffReporter.class)
@@ -317,23 +210,5 @@ public class Domain_IntegTest extends Abstract_IntegTest {
         Approvals.verify(submit(), jsonOptions());
     }
 
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name() throws Exception {
-
-        // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
-        String response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-
-        // and also in the database
-        DeptHead deptHeadAfter = transactionService.callTransactional(
-                Propagation.REQUIRED,
-                () -> deptHeadRepository.findByName("Prof. Richard Horwich")
-        ).valueAsNullableElseFail();
-
-        assertThat(deptHeadAfter).isNotNull();
-    }
 
 }
