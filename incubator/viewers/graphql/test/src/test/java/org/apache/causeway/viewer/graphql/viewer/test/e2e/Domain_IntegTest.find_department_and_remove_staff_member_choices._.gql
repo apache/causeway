@@ -1,0 +1,19 @@
+{
+  university_dept_Departments {
+    findByName {
+      invoke(name: "Classics") {
+        removeStaffMember {
+          params {
+            staffMember {
+              choices {
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

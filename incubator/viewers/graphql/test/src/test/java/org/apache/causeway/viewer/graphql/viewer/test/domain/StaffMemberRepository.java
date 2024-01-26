@@ -35,6 +35,7 @@ public class StaffMemberRepository {
 
     public StaffMember create(final String name, final Department department) {
         StaffMember staffMember = new StaffMember(name, department);
+        department.new addStaffMember().act(staffMember);
         repositoryService.persistAndFlush(staffMember);
         return staffMember;
     }
