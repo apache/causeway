@@ -75,10 +75,15 @@ public class DeptHead implements Comparable<DeptHead> {
     private String name;
 
     @Getter @Setter
-    @Property
+    @Property(editing = ENABLED)
     @OneToOne(optional = true)
     @JoinColumn(name = "department_id")
     private Department department;
+
+    public List<Department> choicesDepartment() {
+        return departmentRepository.findAll();
+    }
+
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)

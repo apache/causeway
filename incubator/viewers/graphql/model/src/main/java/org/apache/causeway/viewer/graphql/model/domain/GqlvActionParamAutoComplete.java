@@ -72,7 +72,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
              val fieldBuilder = newFieldDefinition()
                      .name("autoComplete")
                      .type(GraphQLList.list(TypeMapper.outputTypeFor(elementType)));
-             addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
+             addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
              fieldBuilder.argument(GraphQLArgument.newArgument()
                      .name(SEARCH_PARAM_NAME)
                      .type(TypeMapper.scalarTypeFor(String.class)))

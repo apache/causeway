@@ -160,6 +160,9 @@ public class TypeMapper {
         HIDE,
         DISABLE,
         VALIDATE,
+        CHOICES,
+        AUTOCOMPLETE,
+        DEFAULT,
         INVOKE,
         SET,
         ;

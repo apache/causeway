@@ -34,16 +34,21 @@ public class GqlvProperty
         implements GqlvMemberHidden.Holder<OneToOneAssociation>,
                    GqlvMemberDisabled.Holder<OneToOneAssociation>,
                    GqlvPropertyGet.Holder,
-                   GqlvPropertySet.Holder,
-                   GqlvPropertyValidate.Holder {
+                   GqlvPropertyChoices.Holder,
+                   GqlvPropertyValidate.Holder,
+                   GqlvPropertySet.Holder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;
     private final GqlvPropertyGet get;
-    private final GqlvPropertySet set;
+    /**
+     * Populated iff there are choices
+     */
+    private final GqlvPropertyChoices choices;
     private final GqlvPropertyValidate validate;
+    private final GqlvPropertySet set;
 
     public GqlvProperty(
             final Holder holder,
@@ -56,8 +61,9 @@ public class GqlvProperty
         this.hidden = new GqlvMemberHidden<>(this, context);
         this.disabled = new GqlvMemberDisabled<>(this, context);
         this.get = new GqlvPropertyGet(this, context);
-        this.set = new GqlvPropertySet(this, context);
         this.validate = new GqlvPropertyValidate(this, context);
+        this.choices = new GqlvPropertyChoices(this, context);
+        this.set = new GqlvPropertySet(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 

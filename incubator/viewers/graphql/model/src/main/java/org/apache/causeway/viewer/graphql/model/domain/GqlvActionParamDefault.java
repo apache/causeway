@@ -65,7 +65,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
              val fieldBuilder = newFieldDefinition()
                      .name("default")
                      .type(TypeMapper.outputTypeFor(elementType));
-             addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
+             addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DEFAULT, holder.getParamNum());
              this.field = holder.addField(fieldBuilder.build());
          } else {
              this.field = null;

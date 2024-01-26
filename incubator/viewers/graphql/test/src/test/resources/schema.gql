@@ -291,6 +291,7 @@ type causeway_applib_UserMemento__authenticationCode__gqlv_property {
 }
 
 type causeway_applib_UserMemento__authenticationSource__gqlv_property {
+  choices(authenticationSource: String): String
   disabled: String
   get: String!
   hidden: Boolean
@@ -742,6 +743,7 @@ type causeway_feat_ApplicationTypeAction {
 }
 
 type causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
+  choices(actionSemantics: String): String
   disabled: String
   get: String!
   hidden: Boolean
@@ -2443,6 +2445,7 @@ type university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
 }
 
 type university_dept_DeptHead__department__gqlv_property {
+  choices(department: university_dept_Department__gqlv_input): university_dept_Department
   disabled: String
   get: university_dept_Department
   hidden: Boolean
@@ -2507,6 +2510,7 @@ type university_dept_StaffMember {
 }
 
 type university_dept_StaffMember__department__gqlv_property {
+  choices(department: university_dept_Department__gqlv_input): university_dept_Department
   disabled: String
   get: university_dept_Department
   hidden: Boolean

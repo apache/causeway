@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain;
 
+import javax.inject.Inject;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,12 +26,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -58,6 +61,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
 public class Department implements Comparable<Department> {
+
 
     public Department(String name, DeptHead deptHead) {
         this.name = name;
@@ -93,10 +97,18 @@ public class Department implements Comparable<Department> {
 
 
     @Getter @Setter
-    @Property
+    @Property(editing = Editing.ENABLED) // yes, I know: this duplicates the functionality of changeDeptHead action
     @OneToOne(optional = true)
     @JoinColumn(name = "deptHead_id")
     private DeptHead deptHead;
+
+    // overriding the default via @DomainObject to filter out the current dept head.
+    public List<DeptHead> autoCompleteDeptHead(String search) {
+        return deptHeadRepository.findByNameContaining(search)
+                .stream()
+                .filter(x -> x != getDeptHead())
+                .collect(Collectors.toList());
+    }
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
@@ -165,4 +177,7 @@ public class Department implements Comparable<Department> {
     public int compareTo(final Department o) {
         return Comparator.comparing(Department::getName).compare(this, o);
     }
+
+    @Inject @Transient private DeptHeadRepository deptHeadRepository;
+
 }

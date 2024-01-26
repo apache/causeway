@@ -57,8 +57,17 @@ public class GqlvActionParam
 
     private final GqlvActionParamHidden hidden;
     private final GqlvActionParamDisabled validate;
+    /**
+     * Populated iff there are choices for this param
+     */
     private final GqlvActionParamChoices choices;
+    /**
+     * Populated iff there is an autocomplete for this param
+     */
     private final GqlvActionParamAutoComplete autoComplete;
+    /**
+     * Populated iff there is a default for this param
+     */
     private final GqlvActionParamDefault default_;
     private final GqlvActionParamValidate disabled;
 

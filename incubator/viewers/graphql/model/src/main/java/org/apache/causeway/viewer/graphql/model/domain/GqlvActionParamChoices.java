@@ -70,7 +70,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
              val fieldBuilder = newFieldDefinition()
                      .name("choices")
                      .type(GraphQLList.list(TypeMapper.outputTypeFor(elementType)));
-             addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
+             addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.CHOICES, holder.getParamNum());
              this.field = holder.addField(fieldBuilder.build());
          } else {
              this.field = null;
