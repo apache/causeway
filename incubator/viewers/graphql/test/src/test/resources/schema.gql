@@ -2507,6 +2507,7 @@ type university_dept_Staff {
 type university_dept_StaffMember {
   _gql_meta: university_dept_StaffMember__gqlv_meta
   department: university_dept_StaffMember__department__gqlv_property
+  grade: university_dept_StaffMember__grade__gqlv_property
   name: university_dept_StaffMember__name__gqlv_property
 }
 
@@ -2523,6 +2524,15 @@ type university_dept_StaffMember__gqlv_meta {
   id: String!
   logicalTypeName: String!
   version: String
+}
+
+type university_dept_StaffMember__grade__gqlv_property {
+  choices(grade: String): [String]
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(grade: String!): university_dept_StaffMember
+  validate(grade: String): String
 }
 
 type university_dept_StaffMember__name__gqlv_property {

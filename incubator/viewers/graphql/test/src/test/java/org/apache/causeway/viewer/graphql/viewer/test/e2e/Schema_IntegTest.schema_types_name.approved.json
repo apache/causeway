@@ -856,6 +856,8 @@
       }, {
         "name" : "university_dept_StaffMember__gqlv_meta"
       }, {
+        "name" : "university_dept_StaffMember__grade__gqlv_property"
+      }, {
         "name" : "university_dept_StaffMember__name__gqlv_property"
       }, {
         "name" : "university_dept_Staff__createStaffMember__department__gqlv_action_parameter"
