@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -28,6 +29,7 @@ import org.apache.causeway.viewer.graphql.applib.CausewayModuleIncViewerGraphqlA
         // Modules
         CausewayModuleIncViewerGraphqlApplib.class
 })
+@ComponentScan
 public class CausewayModuleIncViewerGraphqlModel {
 }
 

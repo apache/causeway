@@ -1,0 +1,15 @@
+{
+  university_dept_Staff {
+    findByName {
+      invoke(name: "Gerry Jones") {
+        name {
+          set(name: "Gerry!") {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}

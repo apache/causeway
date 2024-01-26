@@ -24,33 +24,50 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.incubator.viewer</groupId>
+		<groupId>org.apache.causeway.viewer</groupId>
 		<artifactId>causeway-viewer-graphql</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-graphql-test</artifactId>
-	<name>Apache Causeway Inc - Viewer GraphQL (Test)</name>
+	<name>Apache Causeway Viewer - GraphQL (Test)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.graphql.test</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/incubator/viewer/graphql/test</git-plugin.propertiesDir>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
+
+        <java.version>17</java.version>
     </properties>
 
-	<build>
+    <build>
 		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
 			<testResource>
 				<directory>src/test/java</directory>
 				<filtering>false</filtering>
 			</testResource>
 		</testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.incubator.viewer</groupId>
+			<groupId>org.apache.causeway.viewer</groupId>
 			<artifactId>causeway-viewer-graphql-viewer</artifactId>
 		</dependency>
 
@@ -76,7 +93,19 @@
 			<artifactId>causeway-testing-fixtures-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+        <dependency>
+            <groupId>org.apache.causeway.testing</groupId>
+            <artifactId>causeway-testing-integtestsupport-applib</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
@@ -97,8 +126,21 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test-autoconfigure</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-	</dependencies>
+
+        <dependency>
+            <groupId>org.springframework.graphql</groupId>
+            <artifactId>spring-graphql-test</artifactId>
+            <version>1.2.4</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
 
 </project>

@@ -1,0 +1,7 @@
+{
+  university_calc_Calculator {
+    addDoubles {
+      invoke(x: 1.1, y: 2.2)
+    }
+  }
+}

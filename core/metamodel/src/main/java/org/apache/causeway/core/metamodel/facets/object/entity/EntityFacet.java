@@ -152,6 +152,8 @@ public interface EntityFacet extends Facet {
 
     EntityState getEntityState(Object pojo);
 
+    Object versionOf(Object pojo);
+
     /**
      * Whether given method originates from byte code mangling.
      * @param method

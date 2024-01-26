@@ -1,0 +1,12 @@
+{
+  university_dept_Staff {
+    findByName {
+      invoke(name: "Gerry Jones") {
+        grade {
+          disabled
+          choices
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "data" : {
+    "university_dept_Staff" : {
+      "findByName" : {
+        "invoke" : {
+          "name" : {
+            "validate" : "Name cannot contain '!' character"
+          }
+        }
+      }
+    }
+  }
+}

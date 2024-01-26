@@ -1,0 +1,11 @@
+{
+  university_dept_Staff {
+    findByName {
+      invoke(name: "Gerry Jones") {
+        name {
+          validate(name: "Gerry!")
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  university_dept_DeptHeads {
+    findHeadByName {
+      invoke(name: "Dr. Barney Jones") {
+        name {
+          get
+        }
+        department {
+          get {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}

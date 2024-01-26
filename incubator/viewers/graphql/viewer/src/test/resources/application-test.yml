@@ -2,3 +2,7 @@ causeway:
   persistence:
     schema:
       auto-create-schemas: "demo"
+
+server:
+  error:
+    include-stacktrace: always

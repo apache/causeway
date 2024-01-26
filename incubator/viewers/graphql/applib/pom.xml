@@ -24,13 +24,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.incubator.viewer</groupId>
+		<groupId>org.apache.causeway.viewer</groupId>
 		<artifactId>causeway-viewer-graphql</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-graphql-applib</artifactId>
-	<name>Apache Causeway Inc - Viewer GraphQL (Applib)</name>
+	<name>Apache Causeway Viewer - GraphQL (Applib)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.graphql.applib</jar-plugin.automaticModuleName>

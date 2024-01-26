@@ -23,7 +23,10 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceUnitUtil;
+
+import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.lang.Nullable;
@@ -241,6 +244,17 @@ public class JpaEntityFacet
 
         return _JpaEntityStateUtil.getEntityState(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
     }
+
+    @Override
+    public Object versionOf(Object pojo) {
+        if (getEntityState(pojo).isAttached()) {
+            if (pojo instanceof HasVersion) {
+                return ((HasVersion<?>)pojo).getVersion();
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public boolean isProxyEnhancement(final Method method) {

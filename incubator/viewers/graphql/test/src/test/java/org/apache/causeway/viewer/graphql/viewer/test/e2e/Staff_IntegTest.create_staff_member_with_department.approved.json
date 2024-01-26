@@ -1,0 +1,20 @@
+{
+  "data" : {
+    "university_dept_Staff" : {
+      "createStaffMember" : {
+        "invokeNonIdempotent" : {
+          "name" : {
+            "get" : "Dr. Georgina McGovern"
+          },
+          "department" : {
+            "get" : {
+              "name" : {
+                "get" : "Classics"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

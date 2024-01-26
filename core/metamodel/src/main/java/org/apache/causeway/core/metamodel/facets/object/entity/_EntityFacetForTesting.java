@@ -97,6 +97,11 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
+    public Object versionOf(Object pojo) {
+        return _Exceptions.unsupportedOperation();
+    }
+
+    @Override
     public boolean isProxyEnhancement(final Method method) {
         throw _Exceptions.unsupportedOperation();
     }
