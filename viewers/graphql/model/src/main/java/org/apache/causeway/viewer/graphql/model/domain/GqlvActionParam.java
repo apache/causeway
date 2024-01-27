@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
+
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -31,18 +34,12 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import graphql.schema.DataFetchingEnvironment;
-
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
-
+import lombok.Getter;
 import lombok.val;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionParam

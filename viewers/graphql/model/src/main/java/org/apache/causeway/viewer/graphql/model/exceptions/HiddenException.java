@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.graphql.model.exceptions;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 
 public class HiddenException extends InteractionException {
 

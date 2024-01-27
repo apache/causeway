@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,13 +32,10 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
-
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import lombok.val;
 
 public class GqlvPropertyChoices {
 

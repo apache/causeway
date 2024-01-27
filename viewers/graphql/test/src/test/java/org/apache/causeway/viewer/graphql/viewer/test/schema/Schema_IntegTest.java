@@ -18,25 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import org.junit.jupiter.api.condition.DisabledIfSystemProperties;
-
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
-
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
-import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
-import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
-
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
 
 
 @ActiveProfiles("test")

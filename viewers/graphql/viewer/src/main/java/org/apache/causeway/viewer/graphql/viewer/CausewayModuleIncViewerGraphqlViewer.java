@@ -18,13 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.viewer;
 
-import graphql.ExceptionWhileDataFetching;
-import graphql.GraphQLError;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.graphql.GraphQlAutoConfiguration;
 import org.springframework.boot.autoconfigure.graphql.GraphQlCorsProperties;

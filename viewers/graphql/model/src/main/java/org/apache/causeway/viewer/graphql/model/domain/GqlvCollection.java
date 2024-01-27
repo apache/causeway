@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
+
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -26,9 +29,6 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
 
 public class GqlvCollection
         extends GqlvAssociation<OneToManyAssociation, GqlvCollection.Holder>

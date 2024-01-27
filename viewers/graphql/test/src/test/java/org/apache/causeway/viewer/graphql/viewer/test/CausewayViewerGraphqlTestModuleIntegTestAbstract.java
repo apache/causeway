@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test;
 
-import lombok.Value;
-import lombok.val;
-
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -33,13 +30,8 @@ import java.util.Map;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.internal.resources._Resources;
-
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
-import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.approvaltests.core.Options;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +39,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
@@ -61,18 +52,24 @@ import org.springframework.graphql.test.tester.HttpGraphQlTester;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.viewer.graphql.viewer.CausewayModuleIncViewerGraphqlViewer;
+import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
+import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
+
+import lombok.Value;
+import lombok.val;
 
 @SpringBootTest(
         classes = {

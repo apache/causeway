@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import lombok.experimental.UtilityClass;
-
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class TypeNames {
