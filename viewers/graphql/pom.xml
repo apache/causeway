@@ -24,25 +24,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-
-		<!--
-		the other incubator viewers use this as their parent.
-		However, this then means that it's difficult to setup a mvn profile that will just build the graphql
-		viewer without the other incubating viewers.
-
-		As the causeway-incubator module doesn't do much for us, we'll just skip and use the causeway-core as our module
-		(that'll be the ultimate parent one day anyway).
-
-		<groupId>org.apache.causeway.incubator</groupId>
-		<artifactId>causeway-incubator</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
-		-->
-
 		<groupId>org.apache.causeway.core</groupId>
 		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../../../core/pom.xml</relativePath>
+		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.causeway.viewer</groupId>
@@ -51,43 +36,8 @@
 
 	<packaging>pom</packaging>
 
-	<properties>
-		<graphql-java.version>19.2</graphql-java.version>
-	</properties>
-
 	<dependencyManagement>
 		<dependencies>
-
-			<dependency>
-				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-graphql-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-graphql-model</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-graphql-viewer</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.testing</groupId>
-				<artifactId>causeway-testing-fixtures-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-websocket</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
 			<dependency>
 				<groupId>javax.activation</groupId>
 				<artifactId>activation</artifactId>
