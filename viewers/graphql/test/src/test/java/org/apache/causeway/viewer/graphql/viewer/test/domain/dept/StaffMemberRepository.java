@@ -23,11 +23,10 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.value.Blob;
-
 import org.springframework.stereotype.Repository;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.value.Blob;
 
 @Repository
 public class StaffMemberRepository {

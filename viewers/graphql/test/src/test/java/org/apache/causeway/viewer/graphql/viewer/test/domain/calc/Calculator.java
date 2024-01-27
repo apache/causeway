@@ -1,11 +1,8 @@
 package org.apache.causeway.viewer.graphql.viewer.test.domain.calc;
 
-import lombok.RequiredArgsConstructor;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -18,6 +15,8 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import lombok.RequiredArgsConstructor;
 
 @Named("university.calc.Calculator")
 @DomainService(nature= NatureOfService.VIEW)

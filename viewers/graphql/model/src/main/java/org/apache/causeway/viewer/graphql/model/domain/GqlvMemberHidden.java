@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -27,13 +29,10 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvMemberHidden<T extends ObjectMember> {

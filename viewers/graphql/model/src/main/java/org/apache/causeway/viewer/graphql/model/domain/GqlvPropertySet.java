@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import java.util.Map;
+
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -32,15 +35,10 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
-
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
-
-import java.util.Map;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import lombok.val;
 
 public class GqlvPropertySet {
 

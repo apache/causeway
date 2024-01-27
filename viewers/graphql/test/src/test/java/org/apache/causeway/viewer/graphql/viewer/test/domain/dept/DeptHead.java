@@ -38,11 +38,11 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import static org.apache.causeway.applib.annotation.Editing.ENABLED;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import static org.apache.causeway.applib.annotation.Editing.ENABLED;
 
 @Entity
 @Table(

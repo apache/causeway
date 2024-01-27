@@ -19,8 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.exceptions;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.core.metamodel.consent.Consent;
 
 public class InvalidException extends InteractionException {

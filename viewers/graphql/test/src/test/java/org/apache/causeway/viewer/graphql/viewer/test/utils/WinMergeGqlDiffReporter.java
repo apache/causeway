@@ -2,11 +2,11 @@ package org.apache.causeway.viewer.graphql.viewer.test.utils;
 
 import java.util.List;
 
+import com.spun.util.ArrayUtils;
+
 import org.approvaltests.reporters.DiffInfo;
 import org.approvaltests.reporters.DiffPrograms;
 import org.approvaltests.reporters.GenericDiffReporter;
-
-import com.spun.util.ArrayUtils;
 
 public class WinMergeGqlDiffReporter extends GenericDiffReporter {
 

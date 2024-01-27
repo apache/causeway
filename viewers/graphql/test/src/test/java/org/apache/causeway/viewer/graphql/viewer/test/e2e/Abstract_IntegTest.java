@@ -18,30 +18,26 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
-import lombok.SneakyThrows;
-import lombok.val;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.value.Blob;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHeadRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMemberRepository;
+
+import lombok.SneakyThrows;
+import lombok.val;
 
 
 public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {

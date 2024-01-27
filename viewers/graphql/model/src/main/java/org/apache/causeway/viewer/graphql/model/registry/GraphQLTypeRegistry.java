@@ -18,18 +18,17 @@
  */
 package org.apache.causeway.viewer.graphql.model.registry;
 
-import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLNamedType;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLType;
-
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
+
+import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLNamedType;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLType;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Just a simple wrapper around the set of discovered {@link GraphQLType}s.

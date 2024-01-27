@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
-import static graphql.schema.FieldCoordinates.coordinates;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -29,27 +25,24 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.id.HasLogicalType;
-
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
-import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.id.HasLogicalType;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
 
 import graphql.GraphQL;
 import graphql.execution.DataFetcherExceptionHandler;
@@ -57,9 +50,7 @@ import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
-
 import graphql.schema.GraphQLType;
-
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
