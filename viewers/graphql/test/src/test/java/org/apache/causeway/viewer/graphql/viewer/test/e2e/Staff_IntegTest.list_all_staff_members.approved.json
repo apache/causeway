@@ -4,33 +4,13 @@
       "findAllStaffMembers" : {
         "invoke" : [ {
           "name" : {
-            "get" : "Letitia Leadbetter"
-          },
-          "grade" : {
-            "get" : "LECTURER"
-          },
-          "photo" : {
-            "get" : "StaffMember-photo-Foo.pdf [application/pdf]: 80261 bytes"
-          }
-        }, {
-          "name" : {
             "get" : "Gerry Jones"
           },
           "grade" : {
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : "StaffMember-photo-Bar.pdf [application/pdf]: 80970 bytes"
-          }
-        }, {
-          "name" : {
-            "get" : "Mervin Hughes"
-          },
-          "grade" : {
-            "get" : "LECTURER"
-          },
-          "photo" : {
-            "get" : "StaffMember-photo-Fizz.pdf [application/pdf]: 79681 bytes"
+            "get" : "StaffMember-photo-Bar.pdf [application/pdf]: 47488 bytes"
           }
         }, {
           "name" : {
@@ -44,6 +24,16 @@
           }
         }, {
           "name" : {
+            "get" : "Letitia Leadbetter"
+          },
+          "grade" : {
+            "get" : "LECTURER"
+          },
+          "photo" : {
+            "get" : "StaffMember-photo-Foo.pdf [application/pdf]: 47185 bytes"
+          }
+        }, {
+          "name" : {
             "get" : "Margaret Randall"
           },
           "grade" : {
@@ -51,6 +41,16 @@
           },
           "photo" : {
             "get" : null
+          }
+        }, {
+          "name" : {
+            "get" : "Mervin Hughes"
+          },
+          "grade" : {
+            "get" : "LECTURER"
+          },
+          "photo" : {
+            "get" : "StaffMember-photo-Fizz.pdf [application/pdf]: 46833 bytes"
           }
         } ]
       }

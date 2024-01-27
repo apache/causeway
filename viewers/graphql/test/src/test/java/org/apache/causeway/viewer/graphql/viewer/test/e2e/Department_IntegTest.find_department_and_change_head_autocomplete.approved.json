@@ -8,11 +8,11 @@
               "newDeptHead" : {
                 "autoComplete" : [ {
                   "name" : {
-                    "get" : "Prof. Dicky Horwich"
+                    "get" : "Dr. Susan Hopwood"
                   }
                 }, {
                   "name" : {
-                    "get" : "Dr. Susan Hopwood"
+                    "get" : "Prof. Dicky Horwich"
                   }
                 } ]
               }
