@@ -1,0 +1,21 @@
+{
+  "data" : {
+    "university_dept_Departments" : {
+      "findByName" : {
+        "invoke" : {
+          "deptHead" : {
+            "autoComplete" : [ {
+              "name" : {
+                "get" : "Dr. Susan Hopwood"
+              }
+            }, {
+              "name" : {
+                "get" : "Prof. Dicky Horwich"
+              }
+            } ]
+          }
+        }
+      }
+    }
+  }
+}

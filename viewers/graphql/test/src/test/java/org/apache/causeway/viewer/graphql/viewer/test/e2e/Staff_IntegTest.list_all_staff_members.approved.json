@@ -1,0 +1,59 @@
+{
+  "data" : {
+    "university_dept_Staff" : {
+      "findAllStaffMembers" : {
+        "invoke" : [ {
+          "name" : {
+            "get" : "Gerry Jones"
+          },
+          "grade" : {
+            "get" : "LECTURER"
+          },
+          "photo" : {
+            "get" : "StaffMember-photo-Bar.pdf [application/pdf]: 47488 bytes"
+          }
+        }, {
+          "name" : {
+            "get" : "John Gartner"
+          },
+          "grade" : {
+            "get" : "LECTURER"
+          },
+          "photo" : {
+            "get" : null
+          }
+        }, {
+          "name" : {
+            "get" : "Letitia Leadbetter"
+          },
+          "grade" : {
+            "get" : "LECTURER"
+          },
+          "photo" : {
+            "get" : "StaffMember-photo-Foo.pdf [application/pdf]: 47185 bytes"
+          }
+        }, {
+          "name" : {
+            "get" : "Margaret Randall"
+          },
+          "grade" : {
+            "get" : "LECTURER"
+          },
+          "photo" : {
+            "get" : null
+          }
+        }, {
+          "name" : {
+            "get" : "Mervin Hughes"
+          },
+          "grade" : {
+            "get" : "LECTURER"
+          },
+          "photo" : {
+            "get" : "StaffMember-photo-Fizz.pdf [application/pdf]: 46833 bytes"
+          }
+        } ]
+      }
+    }
+  }
+}

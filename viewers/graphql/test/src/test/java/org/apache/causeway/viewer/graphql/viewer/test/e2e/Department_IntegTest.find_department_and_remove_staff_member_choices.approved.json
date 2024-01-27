@@ -1,0 +1,25 @@
+{
+  "data" : {
+    "university_dept_Departments" : {
+      "findByName" : {
+        "invoke" : {
+          "removeStaffMember" : {
+            "params" : {
+              "staffMember" : {
+                "choices" : [ {
+                  "name" : {
+                    "get" : "Gerry Jones"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Letitia Leadbetter"
+                  }
+                } ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

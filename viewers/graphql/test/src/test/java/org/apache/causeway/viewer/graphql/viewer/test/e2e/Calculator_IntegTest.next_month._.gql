@@ -1,0 +1,7 @@
+{
+  university_calc_Calculator {
+    nextMonth {
+      invoke(month: "JUNE")
+    }
+  }
+}

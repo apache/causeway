@@ -306,6 +306,7 @@
 		<module>../viewers/commons</module>
 		<module>../viewers/restfulobjects</module>
 		<module>../viewers/wicket</module>
+		<module>../viewers/graphql</module>
 
 		<module>../persistence/commons</module>
 		<module>../persistence/jdo</module>

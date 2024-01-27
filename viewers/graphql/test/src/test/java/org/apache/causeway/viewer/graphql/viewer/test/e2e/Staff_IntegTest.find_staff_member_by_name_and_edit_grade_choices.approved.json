@@ -1,0 +1,14 @@
+{
+  "data" : {
+    "university_dept_Staff" : {
+      "findByName" : {
+        "invoke" : {
+          "grade" : {
+            "disabled" : null,
+            "choices" : [ "PROFESSOR", "READER", "SENIOR_LECTURER", "LECTURER", "RESEARCH_ASSISTANT" ]
+          }
+        }
+      }
+    }
+  }
+}

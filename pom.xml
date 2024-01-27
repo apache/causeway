@@ -232,19 +232,6 @@
 			<modules>
 				<module>incubator/clients/kroviz</module>
 				<module>incubator/extensions/core/commandreplay</module>
-				<module>incubator/viewers/graphql</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-incubator-graphql</id>
-			<activation>
-				<property>
-					<name>module-incubator-graphql</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/viewers/graphql</module>
 			</modules>
 		</profile>
 

@@ -1,0 +1,15 @@
+{
+  university_dept_Departments {
+    findAllDepartments {
+      invoke {
+        name {
+          get
+        }
+        _gqlv_meta {
+          logicalTypeName
+          version
+        }
+      }
+    }
+  }
+}

@@ -44,6 +44,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
+import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -241,6 +242,17 @@ public class JpaEntityFacet
 
         return _JpaEntityStateUtil.getEntityState(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
     }
+
+    @Override
+    public Object versionOf(final Object pojo) {
+        if (getEntityState(pojo).isAttached()) {
+            if (pojo instanceof HasVersion) {
+                return ((HasVersion<?>)pojo).getVersion();
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public boolean isProxyEnhancement(final Method method) {

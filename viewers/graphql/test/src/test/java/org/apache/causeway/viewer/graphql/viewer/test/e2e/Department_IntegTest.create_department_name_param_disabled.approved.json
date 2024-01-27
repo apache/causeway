@@ -1,0 +1,18 @@
+{
+  "data" : {
+    "university_dept_Departments" : {
+      "createDepartment" : {
+        "params" : {
+          "name" : {
+            "disabled" : null
+          }
+        },
+        "invokeNonIdempotent" : {
+          "name" : {
+            "get" : "newbie"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  university_dept_Staff {
+    createStaffMember {
+      invokeNonIdempotent(name: "Dr. Georgina McGovern", department: { id: "$departmentId"}) {
+        name {
+          get
+        }
+        department {
+          get {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}

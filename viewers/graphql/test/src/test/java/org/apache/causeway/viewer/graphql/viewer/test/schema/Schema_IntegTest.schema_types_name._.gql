@@ -1,0 +1,7 @@
+{
+  __schema {
+    types {
+      name
+    }
+  }
+}

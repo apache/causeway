@@ -1,0 +1,13 @@
+{
+  university_dept_Departments {
+    createDepartment {
+      hidden
+      disabled
+      invokeNonIdempotent(name: "newbie") {
+        name {
+          get
+        }
+      }
+    }
+  }
+}

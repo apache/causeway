@@ -217,7 +217,7 @@
 
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
-				<artifactId>causeway-viewer-graphql</artifactId>
+				<artifactId>causeway-viewer-graphql-viewer</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -235,7 +235,6 @@
 	<modules>
  		<module>clients/kroviz</module>
  		<module>extensions/core/commandreplay</module>
-		<module>viewers/graphql</module>
 	</modules>
 
 </project>

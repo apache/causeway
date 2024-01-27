@@ -1,0 +1,21 @@
+{
+  "data" : {
+    "university_dept_Departments" : {
+      "findByName" : {
+        "invoke" : {
+          "changeDeptHead" : {
+            "params" : {
+              "newDeptHead" : {
+                "default" : {
+                  "name" : {
+                    "get" : "Dr. Barney Jones"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
