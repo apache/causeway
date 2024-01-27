@@ -18,13 +18,22 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
+import lombok.SneakyThrows;
+import lombok.val;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
 import javax.inject.Inject;
+
+import org.apache.causeway.applib.value.Blob;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -62,14 +71,20 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
             deptHeadRepository.create("Dr. George Harwood", civilEngineering);
 
             // staff
-            staffMemberRepository.create("Letitia Leadbetter", classics);
-            staffMemberRepository.create("Gerry Jones", classics);
-            staffMemberRepository.create("Mervin Hughes", physics);
+            staffMemberRepository.create("Letitia Leadbetter", classics, asBlob("Foo.pdf"));
+            staffMemberRepository.create("Gerry Jones", classics, asBlob("Bar.pdf"));
+            staffMemberRepository.create("Mervin Hughes", physics, asBlob("Fizz.pdf"));
             staffMemberRepository.create("John Gartner", physics);
             staffMemberRepository.create("Margaret Randall", physics);
 
         });
     }
+
+    private Blob asBlob(String fileName) {
+        val bytes = toBytes(fileName);
+        return new Blob(fileName, "application/pdf", bytes);
+    }
+
     @AfterEach
     void afterEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
@@ -79,6 +94,21 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
             deptHeadRepository.removeAll();
             departmentRepository.removeAll();
         });
+    }
+
+    @SneakyThrows
+    private byte[] toBytes(String fileName){
+        InputStream inputStream = new ClassPathResource(fileName, getClass()).getInputStream();
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        int nRead;
+        byte[] data = new byte[16384];
+
+        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+
+        return buffer.toByteArray();
     }
 
 

@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.value.Blob;
+
 import org.springframework.stereotype.Repository;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -33,7 +35,11 @@ public class StaffMemberRepository {
     @Inject private RepositoryService repositoryService;
 
     public StaffMember create(final String name, final Department department) {
+        return create(name, department, null);
+    }
+    public StaffMember create(final String name, final Department department, final Blob photo) {
         StaffMember staffMember = new StaffMember(name, department, Grade.LECTURER);
+        staffMember.setPhoto(photo);
         department.new addStaffMember().act(staffMember);
         repositoryService.persistAndFlush(staffMember);
         return staffMember;

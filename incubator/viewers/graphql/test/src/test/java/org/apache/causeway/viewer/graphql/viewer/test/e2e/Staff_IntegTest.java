@@ -44,6 +44,14 @@ public class Staff_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
+    void list_all_staff_members() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void find_staff_member_by_name_and_edit_grade_choices() throws Exception {
 
         // when, then

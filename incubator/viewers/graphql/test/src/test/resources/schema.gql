@@ -3014,6 +3014,7 @@ type university_dept_StaffMember {
   department: university_dept_StaffMember__department__gqlv_property
   grade: university_dept_StaffMember__grade__gqlv_property
   name: university_dept_StaffMember__name__gqlv_property
+  photo: university_dept_StaffMember__photo__gqlv_property
 }
 
 type university_dept_StaffMember__department__gqlv_property {
@@ -3046,6 +3047,14 @@ type university_dept_StaffMember__name__gqlv_property {
   hidden: Boolean
   set(name: String!): university_dept_StaffMember
   validate(name: String): String
+}
+
+type university_dept_StaffMember__photo__gqlv_property {
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(photo: String): university_dept_StaffMember
+  validate(photo: String): String
 }
 
 type university_dept_Staff__createStaffMember__department__gqlv_action_parameter {

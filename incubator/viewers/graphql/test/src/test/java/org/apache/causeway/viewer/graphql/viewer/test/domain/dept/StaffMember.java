@@ -29,7 +29,11 @@ import javax.persistence.*;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.persistence.jpa.applib.types.BlobJpaEmbeddable;
 
 @Entity
 @Table(
@@ -74,6 +78,27 @@ public class StaffMember implements Comparable<StaffMember> {
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
     private Grade grade;
+
+
+    @AttributeOverrides({
+            @AttributeOverride(name="name",    column=@Column(name="photo_name")),
+            @AttributeOverride(name="mimeType",column=@Column(name="photo_mimeType")),
+            @AttributeOverride(name="bytes",   column=@Column(name="photo_bytes"))
+    })
+    @Embedded
+    private BlobJpaEmbeddable photo;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "content", sequence = "1")
+    public Blob getPhoto() {
+        return BlobJpaEmbeddable.toBlob(photo);
+    }
+    public void setPhoto(final Blob photo) {
+        this.photo = BlobJpaEmbeddable.fromBlob(photo);
+    }
+
+
+
 
 
     @Override
