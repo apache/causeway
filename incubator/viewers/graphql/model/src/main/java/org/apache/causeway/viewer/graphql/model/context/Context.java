@@ -22,8 +22,13 @@ import graphql.schema.GraphQLCodeRegistry;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.EnumSet;
+
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -37,4 +42,12 @@ public class Context {
     public final SpecificationLoader specificationLoader;
     public final TypeMapper typeMapper;
     public final CausewayConfiguration causewayConfiguration;
+    public final CausewaySystemEnvironment causewaySystemEnvironment;
+
+    public ImmutableEnumSet<ActionScope> getActionScope() {
+        return causewaySystemEnvironment.getDeploymentType().isProduction()
+                ? ActionScope.PRODUCTION_ONLY
+                : ActionScope.ANY;
+    }
+
 }

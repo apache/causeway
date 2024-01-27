@@ -96,17 +96,24 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
 
 
     private void addMembers() {
+
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addProperty);
         objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
 
         // TODO: pay attention to deploymentType
-        objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+        objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 // TODO: for now, we ignore any actions that have any collection parameters
                 //  however, this is supportable in GraphQL, https://chat.openai.com/c/7ca721d5-865a-4765-9f90-5c28046516cd
                 // .filter(objectAction -> objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural))
                 .forEach(objectAction -> {
                     actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
                 });
+    }
+
+    private ActionScope determineActionScope() {
+        return context.causewaySystemEnvironment.getDeploymentType().isProduction()
+                ? ActionScope.PRODUCTION
+                : ActionScope.PROTOTYPE;
     }
 
     private void addProperty(final OneToOneAssociation otoa) {

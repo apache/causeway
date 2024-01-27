@@ -83,9 +83,7 @@ public class GqlvDomainService implements GqlvAction.Holder {
     }
 
     private void addActions() {
-        objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
-                // TODO: for now, we ignore any actions that have any collection parameters
-                .filter(oa -> oa.getParameters().stream().noneMatch(ObjectActionParameter::isPlural))
+        objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .forEach(this::addAction);
     }
 
