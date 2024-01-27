@@ -46,7 +46,9 @@ public class StaffMemberRepository {
     }
 
     public List<StaffMember> findAll() {
-        return repositoryService.allInstances(StaffMember.class);
+        return repositoryService.allInstances(StaffMember.class).stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public void removeAll(){
@@ -54,16 +56,18 @@ public class StaffMemberRepository {
     }
 
     public StaffMember findByName(final String name){
-        return findAll().stream().
-                filter(dept -> dept.getName().equals(name)).
-                findFirst().
-                orElse(null);
+        return findAll().stream()
+                .filter(dept -> dept.getName().equals(name))
+                .sorted()
+                .findFirst()
+                .orElse(null);
     }
 
     public List<StaffMember> findByNameMatching(final String name){
-        return findAll().stream().
-                filter(dept -> dept.getName().contains(name)).
-                collect(Collectors.toList());
+        return findAll().stream()
+                .filter(dept -> dept.getName().contains(name))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
 }

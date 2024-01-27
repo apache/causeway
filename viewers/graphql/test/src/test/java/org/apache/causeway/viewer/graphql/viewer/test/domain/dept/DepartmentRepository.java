@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -39,7 +40,9 @@ public class DepartmentRepository {
     }
 
     public List<Department> findAll() {
-        return repositoryService.allInstances(Department.class);
+        return repositoryService.allInstances(Department.class).stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public void removeAll(){
@@ -47,10 +50,11 @@ public class DepartmentRepository {
     }
 
     public Department findByName(final String name){
-        return findAll().stream().
-                filter(dept -> dept.getName().equals(name)).
-                findFirst().
-                orElse(null);
+        return findAll().stream()
+                .filter(dept -> dept.getName().equals(name))
+                .sorted()
+                .findFirst()
+                .orElse(null);
     }
 
 }

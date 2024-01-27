@@ -44,7 +44,9 @@ public class DeptHeadRepository {
     }
 
     public List<DeptHead> findAll() {
-        return repositoryService.allInstances(DeptHead.class);
+        return repositoryService.allInstances(DeptHead.class).stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public void removeAll(){
@@ -52,16 +54,18 @@ public class DeptHeadRepository {
     }
 
     public DeptHead findByName(final String name){
-        return findAll().stream().
-                filter(deptHead -> deptHead.getName().equals(name)).
-                findFirst().
-                orElse(null);
+        return findAll().stream()
+                .filter(deptHead -> deptHead.getName().equals(name))
+                .sorted()
+                .findFirst()
+                .orElse(null);
     }
 
     public List<DeptHead> findByNameContaining(final String name){
-        return findAll().stream().
-                filter(deptHead -> deptHead.getName().contains(name)).
-                collect(Collectors.toList());
+        return findAll().stream()
+                .filter(deptHead -> deptHead.getName().contains(name))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
 }
