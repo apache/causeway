@@ -10,7 +10,7 @@
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : "Foo.pdf [application/pdf]: 80261 bytes"
+            "get" : "StaffMember-photo-Foo.pdf [application/pdf]: 80261 bytes"
           }
         }, {
           "name" : {
@@ -20,7 +20,7 @@
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : "Bar.pdf [application/pdf]: 80970 bytes"
+            "get" : "StaffMember-photo-Bar.pdf [application/pdf]: 80970 bytes"
           }
         }, {
           "name" : {
@@ -30,7 +30,7 @@
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : "Fizz.pdf [application/pdf]: 79681 bytes"
+            "get" : "StaffMember-photo-Fizz.pdf [application/pdf]: 79681 bytes"
           }
         }, {
           "name" : {

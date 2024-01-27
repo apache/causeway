@@ -71,9 +71,9 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
             deptHeadRepository.create("Dr. George Harwood", civilEngineering);
 
             // staff
-            staffMemberRepository.create("Letitia Leadbetter", classics, asBlob("Foo.pdf"));
-            staffMemberRepository.create("Gerry Jones", classics, asBlob("Bar.pdf"));
-            staffMemberRepository.create("Mervin Hughes", physics, asBlob("Fizz.pdf"));
+            staffMemberRepository.create("Letitia Leadbetter", classics, asBlob("StaffMember-photo-Foo.pdf"));
+            staffMemberRepository.create("Gerry Jones", classics, asBlob("StaffMember-photo-Bar.pdf"));
+            staffMemberRepository.create("Mervin Hughes", physics, asBlob("StaffMember-photo-Fizz.pdf"));
             staffMemberRepository.create("John Gartner", physics);
             staffMemberRepository.create("Margaret Randall", physics);
 

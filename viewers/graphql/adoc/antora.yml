@@ -15,5 +15,9 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-name: incubator
+name: gqlv
+title: "GraphQL Viewer"
 version: latest
+start_page: ROOT:about.adoc
+nav:
+  - modules/ROOT/nav.adoc
