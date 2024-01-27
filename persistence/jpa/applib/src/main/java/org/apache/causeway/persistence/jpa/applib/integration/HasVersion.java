@@ -18,35 +18,6 @@
  */
 package org.apache.causeway.persistence.jpa.applib.integration;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.persistence.PostLoad;
-import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
-import javax.persistence.PostUpdate;
-import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
-import javax.persistence.PreUpdate;
-
-import org.eclipse.persistence.sessions.UnitOfWork;
-import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
-import org.eclipse.persistence.sessions.changesets.ObjectChangeSet;
-
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmEntityUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
-import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
-
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 /**
  * For domain entities to implement, in order to surface their version programmatically.
  */

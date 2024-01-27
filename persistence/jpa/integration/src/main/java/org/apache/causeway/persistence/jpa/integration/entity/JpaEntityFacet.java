@@ -23,10 +23,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 import javax.persistence.PersistenceUnitUtil;
-
-import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.lang.Nullable;
@@ -47,6 +44,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
+import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -246,7 +244,7 @@ public class JpaEntityFacet
     }
 
     @Override
-    public Object versionOf(Object pojo) {
+    public Object versionOf(final Object pojo) {
         if (getEntityState(pojo).isAttached()) {
             if (pojo instanceof HasVersion) {
                 return ((HasVersion<?>)pojo).getVersion();
