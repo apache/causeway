@@ -52,25 +52,12 @@
 		<dependency>
 			<groupId>org.springframework.graphql</groupId>
 			<artifactId>spring-graphql</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>com.graphql-java</groupId>
-					<artifactId>graphql-java</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
-
-		<dependency>
-			<!-- override spring, for security and bug-fixes -->
-			<groupId>com.graphql-java</groupId>
-			<artifactId>graphql-java</artifactId>
-		</dependency>
-
 
 		<!-- TEST DEPENDENCIES -->
 

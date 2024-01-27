@@ -104,9 +104,6 @@ public class YamlUtils {
     /**
      * Writes given {@code pojo} to given {@link DataSink}.
      */
-    /**
-     * Writes given {@code pojo} to given {@link DataSink}.
-     */
     public void write(
             final @Nullable Object pojo,
             final @NonNull DataSink sink,

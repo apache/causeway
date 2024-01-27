@@ -10,6 +10,9 @@ directive @include(
     if: Boolean!
   ) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
 
+"Indicates an Input Object is a OneOf Input Object."
+directive @oneOf on INPUT_OBJECT
+
 "Directs the executor to skip this field or fragment when the `if` argument is true."
 directive @skip(
     "Skipped when true."
@@ -1226,15 +1229,6 @@ type java_util_concurrent_Callable__gqlv_meta {
   logicalTypeName: String!
 }
 
-type java_util_function_BiFunction {
-  _gqlv_meta: java_util_function_BiFunction__gqlv_meta
-}
-
-type java_util_function_BiFunction__gqlv_meta {
-  id: String!
-  logicalTypeName: String!
-}
-
 type java_util_function_Consumer {
   _gqlv_meta: java_util_function_Consumer__gqlv_meta
 }
@@ -1379,31 +1373,8 @@ type org_apache_causeway_commons_functional_Either__right__gqlv_action {
 
 type org_apache_causeway_commons_functional_Railway {
   _gqlv_meta: org_apache_causeway_commons_functional_Railway__gqlv_meta
-  chain: org_apache_causeway_commons_functional_Railway__chain__gqlv_action
   failure: org_apache_causeway_commons_functional_Railway__failure__gqlv_property
-  ifFailure: org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action
-  ifSuccess: org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action
-  mapFailure: org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action
-  mapSuccess: org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action
   success: org_apache_causeway_commons_functional_Railway__success__gqlv_property
-}
-
-type org_apache_causeway_commons_functional_Railway__chain__chainingFunction__gqlv_action_parameter {
-  disabled(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Railway__chain__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  params: org_apache_causeway_commons_functional_Railway__chain__gqlv_action_params
-  validate(chainingFunction: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Railway__chain__gqlv_action_params {
-  chainingFunction: org_apache_causeway_commons_functional_Railway__chain__chainingFunction__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_Railway__failure__gqlv_property {
@@ -1419,197 +1390,12 @@ type org_apache_causeway_commons_functional_Railway__gqlv_meta {
   logicalTypeName: String!
 }
 
-type org_apache_causeway_commons_functional_Railway__ifFailure__failureConsumer__gqlv_action_parameter {
-  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  params: org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action_params
-  validate(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Railway__ifFailure__gqlv_action_params {
-  failureConsumer: org_apache_causeway_commons_functional_Railway__ifFailure__failureConsumer__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  params: org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action_params
-  validate(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Railway__ifSuccess__gqlv_action_params {
-  successConsumer: org_apache_causeway_commons_functional_Railway__ifSuccess__successConsumer__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Railway__ifSuccess__successConsumer__gqlv_action_parameter {
-  disabled(successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Railway__mapFailure__failureMapper__gqlv_action_parameter {
-  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  params: org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action_params
-  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Railway__mapFailure__gqlv_action_params {
-  failureMapper: org_apache_causeway_commons_functional_Railway__mapFailure__failureMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Railway
-  params: org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action_params
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Railway__mapSuccess__gqlv_action_params {
-  successMapper: org_apache_causeway_commons_functional_Railway__mapSuccess__successMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Railway__mapSuccess__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
 type org_apache_causeway_commons_functional_Railway__success__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
   set(success: Boolean!): org_apache_causeway_commons_functional_Railway
   validate(success: Boolean): String
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer {
-  _gqlv_meta: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta
-  andThen: org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action
-  throwing: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__arg0__gqlv_action_parameter {
-  disabled(arg0: java_util_function_Consumer__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(arg0: java_util_function_Consumer__gqlv_input!): java_util_function_Consumer
-  params: org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action_params
-  validate(arg0: java_util_function_Consumer__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer__andThen__gqlv_action_params {
-  arg0: org_apache_causeway_commons_functional_ThrowingConsumer__andThen__arg0__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_meta {
-  id: String!
-  logicalTypeName: String!
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__exceptionWrapper__gqlv_action_parameter {
-  disabled(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(exceptionWrapper: java_util_function_BiFunction__gqlv_input!): org_apache_causeway_commons_functional_ThrowingConsumer
-  params: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action_params
-  validate(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_ThrowingConsumer__throwing__gqlv_action_params {
-  exceptionWrapper: org_apache_causeway_commons_functional_ThrowingConsumer__throwing__exceptionWrapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction {
-  _gqlv_meta: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta
-  andThen: org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action
-  compose: org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action
-  throwing: org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__andThen__arg0__gqlv_action_parameter {
-  disabled(arg0: java_util_function_Function__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(arg0: java_util_function_Function__gqlv_input!): java_util_function_Function
-  params: org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action_params
-  validate(arg0: java_util_function_Function__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__andThen__gqlv_action_params {
-  arg0: org_apache_causeway_commons_functional_ThrowingFunction__andThen__arg0__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__compose__arg0__gqlv_action_parameter {
-  disabled(arg0: java_util_function_Function__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(arg0: java_util_function_Function__gqlv_input!): java_util_function_Function
-  params: org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action_params
-  validate(arg0: java_util_function_Function__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__compose__gqlv_action_params {
-  arg0: org_apache_causeway_commons_functional_ThrowingFunction__compose__arg0__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__gqlv_meta {
-  id: String!
-  logicalTypeName: String!
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__throwing__exceptionWrapper__gqlv_action_parameter {
-  disabled(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(exceptionWrapper: java_util_function_BiFunction__gqlv_input!): org_apache_causeway_commons_functional_ThrowingFunction
-  params: org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action_params
-  validate(exceptionWrapper: java_util_function_BiFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_ThrowingFunction__throwing__gqlv_action_params {
-  exceptionWrapper: org_apache_causeway_commons_functional_ThrowingFunction__throwing__exceptionWrapper__gqlv_action_parameter
 }
 
 type org_apache_causeway_commons_functional_ThrowingRunnable {
@@ -1663,23 +1449,10 @@ type org_apache_causeway_commons_functional_ThrowingRunnable__toRunnable__gqlv_a
 
 type org_apache_causeway_commons_functional_Try {
   _gqlv_meta: org_apache_causeway_commons_functional_Try__gqlv_meta
-  accept: org_apache_causeway_commons_functional_Try__accept__gqlv_action
   failure: org_apache_causeway_commons_functional_Try__failure__gqlv_property
-  flatMapSuccess: org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action
-  flatMapSuccessAsNullable: org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action
-  flatMapSuccessWhenPresent: org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action
   ifAbsentFail: org_apache_causeway_commons_functional_Try__ifAbsentFail__gqlv_action
-  ifFailure: org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action
   ifFailureFail: org_apache_causeway_commons_functional_Try__ifFailureFail__gqlv_action
-  ifSuccess: org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action
-  ifSuccessAsNullable: org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action
   mapEmptyToFailure: org_apache_causeway_commons_functional_Try__mapEmptyToFailure__gqlv_action
-  mapFailure: org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action
-  mapFailureToSuccess: org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action
-  mapSuccess: org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action
-  mapSuccessAsNullable: org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action
-  mapSuccessWhenPresent: org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action
-  mapToEither: org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action
   orCall: org_apache_causeway_commons_functional_Try__orCall__gqlv_action
   success: org_apache_causeway_commons_functional_Try__success__gqlv_property
   then: org_apache_causeway_commons_functional_Try__then__gqlv_action
@@ -1688,91 +1461,12 @@ type org_apache_causeway_commons_functional_Try {
   value: org_apache_causeway_commons_functional_Try__value__gqlv_property
 }
 
-type org_apache_causeway_commons_functional_Try__accept__failureConsumer__gqlv_action_parameter {
-  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__accept__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__accept__gqlv_action_params
-  validate(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__accept__gqlv_action_params {
-  failureConsumer: org_apache_causeway_commons_functional_Try__accept__failureConsumer__gqlv_action_parameter
-  successConsumer: org_apache_causeway_commons_functional_Try__accept__successConsumer__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__accept__successConsumer__gqlv_action_parameter {
-  disabled(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input, successConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden(failureConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): Boolean
-  validity: String
-}
-
 type org_apache_causeway_commons_functional_Try__failure__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
   set(failure: Boolean!): org_apache_causeway_commons_functional_Try
   validate(failure: Boolean): String
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action_params
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__gqlv_action_params {
-  successMapper: org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__successMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccessAsNullable__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action_params
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__gqlv_action_params {
-  successMapper: org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__successMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccessWhenPresent__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action_params
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccess__gqlv_action_params {
-  successMapper: org_apache_causeway_commons_functional_Try__flatMapSuccess__successMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__flatMapSuccess__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
 }
 
 type org_apache_causeway_commons_functional_Try__gqlv_meta {
@@ -1794,180 +1488,11 @@ type org_apache_causeway_commons_functional_Try__ifFailureFail__gqlv_action {
   validate: String
 }
 
-type org_apache_causeway_commons_functional_Try__ifFailure__exceptionConsumer__gqlv_action_parameter {
-  disabled(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action_params
-  validate(exceptionConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__ifFailure__gqlv_action_params {
-  exceptionConsumer: org_apache_causeway_commons_functional_Try__ifFailure__exceptionConsumer__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action_params
-  validate(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__gqlv_action_params {
-  valueConsumer: org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__valueConsumer__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__ifSuccessAsNullable__valueConsumer__gqlv_action_parameter {
-  disabled(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action_params
-  validate(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__ifSuccess__gqlv_action_params {
-  valueConsumer: org_apache_causeway_commons_functional_Try__ifSuccess__valueConsumer__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__ifSuccess__valueConsumer__gqlv_action_parameter {
-  disabled(valueConsumer: org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
 type org_apache_causeway_commons_functional_Try__mapEmptyToFailure__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent: org_apache_causeway_commons_functional_Try
   validate: String
-}
-
-type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action_params
-  validate(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__gqlv_action_params {
-  recoveryMapper: org_apache_causeway_commons_functional_Try__mapFailureToSuccess__recoveryMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__mapFailureToSuccess__recoveryMapper__gqlv_action_parameter {
-  disabled(recoveryMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__mapFailure__failureMapper__gqlv_action_parameter {
-  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action_params
-  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__mapFailure__gqlv_action_params {
-  failureMapper: org_apache_causeway_commons_functional_Try__mapFailure__failureMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action_params
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__gqlv_action_params {
-  successMapper: org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__successMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccessAsNullable__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action_params
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__gqlv_action_params {
-  successMapper: org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__successMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccessWhenPresent__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Try
-  params: org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action_params
-  validate(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccess__gqlv_action_params {
-  successMapper: org_apache_causeway_commons_functional_Try__mapSuccess__successMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__mapSuccess__successMapper__gqlv_action_parameter {
-  disabled(successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__mapToEither__failureMapper__gqlv_action_parameter {
-  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden: Boolean
-  validity: String
-}
-
-type org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invokeNonIdempotent(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input!): org_apache_causeway_commons_functional_Either
-  params: org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action_params
-  validate(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-}
-
-type org_apache_causeway_commons_functional_Try__mapToEither__gqlv_action_params {
-  failureMapper: org_apache_causeway_commons_functional_Try__mapToEither__failureMapper__gqlv_action_parameter
-  successMapper: org_apache_causeway_commons_functional_Try__mapToEither__successMapper__gqlv_action_parameter
-}
-
-type org_apache_causeway_commons_functional_Try__mapToEither__successMapper__gqlv_action_parameter {
-  disabled(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input, successMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): String
-  hidden(failureMapper: org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input): Boolean
-  validity: String
 }
 
 type org_apache_causeway_commons_functional_Try__orCall__fallback__gqlv_action_parameter {
@@ -3216,10 +2741,6 @@ input java_util_concurrent_Callable__gqlv_input {
   id: ID!
 }
 
-input java_util_function_BiFunction__gqlv_input {
-  id: ID!
-}
-
 input java_util_function_Consumer__gqlv_input {
   id: ID!
 }
@@ -3237,14 +2758,6 @@ input org_apache_causeway_commons_functional_Either__gqlv_input {
 }
 
 input org_apache_causeway_commons_functional_Railway__gqlv_input {
-  id: ID!
-}
-
-input org_apache_causeway_commons_functional_ThrowingConsumer__gqlv_input {
-  id: ID!
-}
-
-input org_apache_causeway_commons_functional_ThrowingFunction__gqlv_input {
   id: ID!
 }
 

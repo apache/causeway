@@ -141,7 +141,6 @@
 				<module>antora</module>
 
 				<!-- incubator, without kroviz -->
-				<module>incubator/viewers/graphql</module>
 				<module>incubator/extensions/core/commandreplay</module>
 
 				<module>regressiontests</module>
@@ -176,7 +175,6 @@
 				<module>antora</module>
 
 				<!-- incubator, without kroviz -->
-				<module>incubator/viewers/graphql</module>
 				<module>incubator/extensions/core/commandreplay</module>
 
 				<module>regressiontests</module>

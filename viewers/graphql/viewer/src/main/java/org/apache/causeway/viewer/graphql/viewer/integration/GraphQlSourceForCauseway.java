@@ -45,9 +45,7 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
 
 import graphql.GraphQL;
-import graphql.execution.DataFetcherExceptionHandler;
-import graphql.execution.DataFetcherExceptionHandlerParameters;
-import graphql.execution.DataFetcherExceptionHandlerResult;
+import graphql.execution.SimpleDataFetcherExceptionHandler;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
@@ -83,12 +81,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         if (graphQL == null) {
             graphQL = GraphQL.newGraphQL(schema())
 //                .instrumentation(new TracingInstrumentation())
-                    .defaultDataFetcherExceptionHandler(new DataFetcherExceptionHandler() {
-                        @Override
-                        public DataFetcherExceptionHandlerResult onException(DataFetcherExceptionHandlerParameters handlerParameters) {
-                            return DataFetcherExceptionHandler.super.onException(handlerParameters);
-                        }
-                    })
+                    .defaultDataFetcherExceptionHandler(new SimpleDataFetcherExceptionHandler())
                     .queryExecutionStrategy(executionStrategy)
                     .build();
         }
