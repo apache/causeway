@@ -8,33 +8,32 @@ Provides supporting functionality for querying xref:refguide:extensions:index/co
 [source,java]
 .CommandLogEntryRepository.java
 ----
-class CommandLogEntryRepository<C> {
-  Class<C> getEntityClass()
-  C createEntryAndPersist(Command command, UUID parentInteractionIdIfAny, ExecuteIn executeIn)
-  Optional<C> findByInteractionId(UUID interactionId)
-  List<C> findByParent(CommandLogEntry parent)
-  List<C> findByParentInteractionId(UUID parentInteractionId)
-  List<C> findByFromAndTo(LocalDate from, LocalDate to)
-  List<C> findCurrent()
-  List<C> findCompleted()
-  List<C> findByTargetAndFromAndTo(Bookmark target, LocalDate from, LocalDate to)
-  List<C> findMostRecent()
-  List<C> findMostRecent(int limit)
-  List<C> findRecentByUsername(String username)
-  List<C> findRecentByTarget(Bookmark target)
-  List<C> findRecentByTargetOrResult(Bookmark targetOrResult)
-  List<C> findSince(UUID interactionId, Integer batchSize)     // <.>
-  List<C> findBackgroundAndNotYetStarted()     // <.>
-  List<C> findRecentBackgroundByTarget(Bookmark target)
-  Optional<C> findMostRecentReplayed()     // <.>
-  Optional<C> findMostRecentCompleted()     // <.>
-  List<C> findNotYetReplayed()
-  C saveForReplay(CommandDto dto)
-  List<C> saveForReplay(CommandsDto commandsDto)
-  void persist(C commandLogEntry)
+interface CommandLogEntryRepository {
+  CommandLogEntry createEntryAndPersist(Command command, UUID parentInteractionIdIfAny, ExecuteIn executeIn)
+  Optional<CommandLogEntry> findByInteractionId(UUID interactionId)
+  List<CommandLogEntry> findByParent(CommandLogEntry parent)
+  List<CommandLogEntry> findByParentInteractionId(UUID parentInteractionId)
+  List<CommandLogEntry> findByFromAndTo(LocalDate from, LocalDate to)
+  List<CommandLogEntry> findCurrent()
+  List<CommandLogEntry> findCompleted()
+  List<CommandLogEntry> findByTargetAndFromAndTo(Bookmark target, LocalDate from, LocalDate to)
+  List<CommandLogEntry> findMostRecent()
+  List<CommandLogEntry> findMostRecent(int limit)
+  List<CommandLogEntry> findRecentByUsername(String username)
+  List<CommandLogEntry> findRecentByTarget(Bookmark target)
+  List<CommandLogEntry> findRecentByTargetOrResult(Bookmark targetOrResult)
+  List<CommandLogEntry> findSince(UUID interactionId, Integer batchSize)     // <.>
+  List<CommandLogEntry> findBackgroundAndNotYetStarted()     // <.>
+  List<CommandLogEntry> findRecentBackgroundByTarget(Bookmark target)
+  Optional<CommandLogEntry> findMostRecentReplayed()     // <.>
+  Optional<CommandLogEntry> findMostRecentCompleted()     // <.>
+  List<CommandLogEntry> findNotYetReplayed()
+  CommandLogEntry saveForReplay(CommandDto dto)
+  List<CommandLogEntry> saveForReplay(CommandsDto commandsDto)
+  void persist(CommandLogEntry commandLogEntry)
   void truncateLog()
-  List<C> findCommandsOnPrimaryElseFail(UUID interactionId, Integer batchSize)
-  List<C> findAll()     // <.>
+  List<CommandLogEntry> findCommandsOnPrimaryElseFail(UUID interactionId, Integer batchSize)
+  List<CommandLogEntry> findAll()     // <.>
   void removeAll()     // <.>
 }
 ----

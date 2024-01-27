@@ -72,7 +72,7 @@ public class GqlvMeta {
         if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             metaTypeBuilder.field(version);
         }
-        metaField = newFieldDefinition().name(context.causewayConfiguration.getViewer().getGqlv().getMetaData().getFieldName()).type(metaTypeBuilder.build()).build();
+        metaField = newFieldDefinition().name(context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName()).type(metaTypeBuilder.build()).build();
 
         holder.addField(metaField);
     }

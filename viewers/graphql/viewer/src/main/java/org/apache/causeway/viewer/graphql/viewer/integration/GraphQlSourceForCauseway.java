@@ -41,7 +41,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
 
 import graphql.GraphQL;

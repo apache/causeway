@@ -31,11 +31,18 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.ws.rs.NotSupportedException;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
+
+import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+
 import org.joda.time.DateTime;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -53,6 +60,16 @@ import lombok.val;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TypeMapperDefault implements TypeMapper {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(TypeMapper.class)
+        public TypeMapper defaultTypeMapper(final CausewayConfiguration causewayConfiguration) {
+            return new TypeMapperDefault(causewayConfiguration);
+        }
+    }
 
     @SuppressWarnings("CdiInjectInspection")
     @Inject private final CausewayConfiguration causewayConfiguration;
@@ -218,7 +235,7 @@ public class TypeMapperDefault implements TypeMapper {
             return BigDecimal.valueOf((Double) argumentValue);
         }
 
-        val typeMapperConfig = causewayConfiguration.getViewer().getGqlv().getTypeMapper();
+        val typeMapperConfig = causewayConfiguration.getViewer().getGraphql().getTypeMapper();
         if (elementClazz == LocalDate.class) {
             String argumentStr = (String) argumentValue;
             return LocalDate.parse(argumentStr, DateTimeFormatter.ofPattern(typeMapperConfig.getLocalDateFormat()));

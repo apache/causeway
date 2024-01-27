@@ -25,6 +25,6 @@ import org.springframework.context.annotation.Import;
 @Import({
         // Modules
 })
-public class CausewayModuleIncViewerGraphqlApplib {
+public class CausewayModuleViewerGraphqlApplib {
 }
 

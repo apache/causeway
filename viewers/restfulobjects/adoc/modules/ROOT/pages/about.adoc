@@ -10,6 +10,11 @@ Most significant of these is enhanced content negotiation support, making it eas
 
 This component guide discuss features, configuration and also how to extend the Restful Objects viewer.
 
+== See also
+
+As well as this viewer, Apache Causeway also provides the xref:gqlv::about.adoc[], which performs the same function, but using GraphQL instead of REST.
+
+
 
 
 

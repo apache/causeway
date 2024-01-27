@@ -16,27 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.auth;
+package org.apache.causeway.viewer.graphql.model;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.viewer.graphql.applib.CausewayModuleViewerGraphqlApplib;
 
-public interface UserMementoProvider {
-
-    UserMemento userMemento();
-
-    @Configuration
-    class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(UserMementoProvider.class)
-        public UserMementoProvider defaultIdentityProvider(final CausewayConfiguration causewayConfiguration) {
-            return new UserMementoProviderDefault(causewayConfiguration);
-        }
-    }
-
+@Configuration
+@Import({
+        // Modules
+        CausewayModuleViewerGraphqlApplib.class
+})
+@ComponentScan
+public class CausewayModuleViewerGraphqlModel {
 }
+

@@ -125,6 +125,13 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
+    prefix = "causeway.persistence.commons"
+    name = "Core Persistence Commons"
+    properties: []
+    searchOrder = 100
+}}
+
+groups+= new PropertyGroup() {{
     prefix = "causeway.security.shiro"
     name = "Shiro Security Implementation"
     properties: []
@@ -152,8 +159,14 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
+    prefix = "causeway.viewer.graphql"
+    name = "GraphQL API"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
     prefix = "causeway.viewer.restfulobjects"
-    name = "Restful Objects Viewer"
+    name = "REST API (Restful Objects Viewer)"
     searchOrder = 501
 }}
 

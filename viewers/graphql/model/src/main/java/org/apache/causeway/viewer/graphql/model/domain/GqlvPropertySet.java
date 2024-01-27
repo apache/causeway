@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;

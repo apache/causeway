@@ -2342,9 +2342,52 @@ public class CausewayConfiguration {
             }
         }
 
-        private final Gqlv gqlv = new Gqlv();
+        private final Graphql graphql = new Graphql();
         @Data
-        public static class Gqlv {
+        public static class Graphql {
+
+            public enum ApiVariant {
+                /**
+                 * Exposes only a Query API, of properties, collections and safe (query-onl) actions.
+                 * Any actions that mutate the state of the system (in other words are idempotent or non-idempotent)
+                 * are excluded from the API, as is the ability to set properties.
+                 */
+                QUERY_ONLY,
+                /**
+                 * Exposes only a Query API, but relaxes the rule that system state may not be changed by also including
+                 * idempotent and non-idempotent actions as part of the &quot;query&quot; API.  Modifiable properties
+                 * can also be set.
+                 *
+                 * <p>
+                 *     <b>IMPORTANT</b>: be aware that the resultant API is not compliant with the rules of the
+                 *     GraphQL spec; in particular, it violates <a href="https://spec.graphql.org/June2018/#sec-Language.Operations">2.3 Operations</a> which states:
+                 *     &quot;query – [is] a read‐only fetch.&quot;
+                 * </p>
+                 */
+                QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT,
+                /**
+                 * Exposes an API with Query for query/safe separate queries and field access, with mutating (idempotent
+                 * and non-idempotent) actions instead surfaced as Mutations, as per the
+                 * <a href="https://spec.graphql.org/June2018/#sec-Language.Operations">GraphQL spec</a>.
+                 *
+                 * <p>
+                 * <b>NOTE</b>: this is not currently implemented.
+                 * </p>
+                 */
+                QUERY_AND_MUTATIONS,
+                ;
+            }
+
+            /**
+             * Which variant of API to expose: {@link ApiVariant#QUERY_ONLY} (which suppresses any actions that mutate the state of the
+             * system), or alternatively as {@link ApiVariant#QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT} (which does expose actions that mutate the system but within a query, and so is not spec-compliant), or
+             * as {@link ApiVariant#QUERY_AND_MUTATIONS} (which also exposes actions that mutate the system but as mutations, and so <i>is</i> spec-compliant.
+             *
+             * <p>
+             *     <b>NOTE:</b> {@link ApiVariant#QUERY_AND_MUTATIONS} is not currently implemented.
+             * </p>
+             */
+            private ApiVariant apiVariant = ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
 
             private final MetaData metaData = new MetaData();
             @Data
@@ -2368,7 +2411,6 @@ public class CausewayConfiguration {
                  * for JDK8's {@link java.time.ZonedDateTime} and JodaTime's {@link org.joda.time.DateTime}
                  */
                 private String zonedDateTimeFormat = "yyyy-MM-dd HH:mm:ss z";
-
             }
 
             @Getter
@@ -2382,9 +2424,13 @@ public class CausewayConfiguration {
                 public static class Fallback {
 
                     /**
-                     * Used as the default username if not provided by other means.
+                     * Used as the default username (if not provided by other means).
                      */
                     private String username;
+
+                    /**
+                     * Used as the set of roles for the default {@link #getUsername() username} (if not provided by other means).
+                     */
                     private List<String> roles;
                 }
             }

@@ -48,15 +48,6 @@ email.override.to
 
 
 |
-[[causeway.core.runtime-services.email.port]]
-causeway.core.runtime-services. +
-email.port
-
-|  587
-| The port to use for sending email.
-
-
-|
 [[causeway.core.runtime-services.email.sender.address]]
 causeway.core.runtime-services. +
 email.sender.address
@@ -70,57 +61,6 @@ This configuration property is mandatory (for the default implementation of the 
 
 
 |
-[[causeway.core.runtime-services.email.sender.hostname]]
-causeway.core.runtime-services. +
-email.sender.hostname
-
-| 
-| Specifies the host running the SMTP service.
-
-If not specified, then the value used depends upon the email implementation. The default implementation will use the ``host`` system property.
-
-
-|
-[[causeway.core.runtime-services.email.sender.password]]
-causeway.core.runtime-services. +
-email.sender.password
-
-| 
-| Specifies the password (corresponding to the username to connect to the SMTP service.
-
-This configuration property is mandatory (for the default implementation of the ``EmailService``, at least).
-
-
-|
-[[causeway.core.runtime-services.email.sender.username]]
-causeway.core.runtime-services. +
-email.sender.username
-
-| 
-| Specifies the username to use to connect to the SMTP service.
-
-If not specified, then the sender's address will be used instead.
-
-
-|
-[[causeway.core.runtime-services.email.socket-connection-timeout]]
-causeway.core.runtime-services. +
-email.socket-connection-timeout
-
-|  2000
-| The maximum number of millseconds to wait to obtain a socket connection before timing out.
-
-
-|
-[[causeway.core.runtime-services.email.socket-timeout]]
-causeway.core.runtime-services. +
-email.socket-timeout
-
-|  2000
-| The maximum number of millseconds to wait to obtain a socket before timing out.
-
-
-|
 [[causeway.core.runtime-services.email.throw-exception-on-fail]]
 causeway.core.runtime-services. +
 email.throw-exception-on-fail
@@ -130,35 +70,12 @@ email.throw-exception-on-fail
 
 
 |
-[[causeway.core.runtime-services.email.tls.enabled]]
-causeway.core.runtime-services. +
-email.tls.enabled
-
-|  true
-| Whether TLS encryption should be started (that is, ``STARTTLS``).
-
-
-|
 [[causeway.core.runtime-services.exception-recognizer.dae.disable]]
 causeway.core.runtime-services. +
 exception-recognizer.dae.disable
 
 | 
 | Whether the ``ExceptionRecognizer`` implementation for Spring's DataAccessException - which attempts to sanitize any exceptions arising from object stores - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
-
-
-|
-[[causeway.core.runtime-services.repository-service.disable-auto-flush]]
-causeway.core.runtime-services. +
-repository-service. +
-disable-auto-flush
-
-| 
-| Normally any queries are automatically preceded by flushing pending executions.
-
-This key allows this behaviour to be disabled.
-
-NOTE: this key is redundant for JPA/EclipseLink, which supports its own auto-flush using https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABDHEEB[eclipselink.persistence-context.flush-mode]
 
 
 |
@@ -187,6 +104,79 @@ translation.resource-location
 If \{@code null} uses \{@code servletContext.getResource("/WEB-INF/")}.
 
 Replaces the former Servlet context parameter 'causeway.config.dir';
+
+
+|
+[[causeway.core.runtime-services.email.port]]
+causeway.core.runtime-services. +
+email.port
+
+|  587
+| null
+
+
+|
+[[causeway.core.runtime-services.email.sender.hostname]]
+causeway.core.runtime-services. +
+email.sender.hostname
+
+| 
+| null
+
+
+|
+[[causeway.core.runtime-services.email.sender.password]]
+causeway.core.runtime-services. +
+email.sender.password
+
+| 
+| null
+
+
+|
+[[causeway.core.runtime-services.email.sender.username]]
+causeway.core.runtime-services. +
+email.sender.username
+
+| 
+| null
+
+
+|
+[[causeway.core.runtime-services.email.socket-connection-timeout]]
+causeway.core.runtime-services. +
+email.socket-connection-timeout
+
+|  2000
+| null
+
+
+|
+[[causeway.core.runtime-services.email.socket-timeout]]
+causeway.core.runtime-services. +
+email.socket-timeout
+
+|  2000
+| null
+
+
+|
+[[causeway.core.runtime-services.email.tls.enabled]]
+causeway.core.runtime-services. +
+email.tls.enabled
+
+|  true
+| null
+
+
+|
+[[causeway.core.runtime-services.repository-service.disable-auto-flush]]
+causeway.core.runtime-services. +
+repository-service. +
+disable-auto-flush
+
+| 
+| null
 
 
 

@@ -41,11 +41,34 @@
 
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-applib</artifactId>
+			<artifactId>causeway-core-metamodel</artifactId>
 		</dependency>
 
+        <dependency>
+            <groupId>org.springframework.graphql</groupId>
+            <artifactId>spring-graphql</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.graphql-java</groupId>
+                    <artifactId>graphql-java</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <dependency>
+            <!-- override spring, for security and bug-fixes -->
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java</artifactId>
+        </dependency>
+
+
+
+        <!-- TEST DEPENDENCIES -->
 
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>

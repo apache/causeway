@@ -1,0 +1,71 @@
+= Setup and Configuration
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+This section describes how to include the GraphQL viewer's module and set its configuration properties.
+
+
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[leveloffset=+1]
+
+
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleViewerGraphQlViewer.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+== Configuration Properties
+
+The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/causeway.viewer.graphql.adoc[section] for the GraphQL viewer.
+
+
+
+
+=== SPI
+=== Standard
+
+Standard configuration properties:
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.username[causeway.viewer.graphql.authentication.fallback.username] and xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.roles[causeway.viewer.graphql.authentication.fallback.roles]
++
+Are used by the default implementation of xref:refguide:viewer:index/graphql/applib/auth/UserMementoProvider.adoc[], to provide a statically defined user as the executor of the API.
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.meta-data.field-name[causeway.viewer.graphql.meta-data.field-name]
++
+Defines the field name of the "meta data" structure used to expose the id, logical type name and (for entities) the version of a domain object.
++
+The default value for this config property is "_gqlv_meta".
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.type-mapper.local-date-format[causeway.viewer.graphql.type-mapper.local-date-format] and xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.type-mapper.zoned-date-time-format[causeway.viewer.graphql.type-mapper.zoned-date-time-format]
++
+GraphQL does not have a built-in date datatype, and so dates must be represented as strings.
+These configuration properties define the format of such strings.
++
+The defaults are:
++
+** "yyyy-MM-dd"
++
+for local date
+** "yyyy-MM-dd HH:mm:ss z"
++
+for (zoned) date time.
+
++
+These are used by the default implementation of xref:refguide:viewer:index/graphql/applib/types/TypeMapper.adoc[].
+
+
+
+

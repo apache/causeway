@@ -10,8 +10,52 @@ Similar to a _Runnable_ , except that it can also throw a checked _Exception_ .
 ----
 interface ThrowingRunnable {
   void run()
-  Callable<Void> toCallable(ThrowingRunnable runnable)
-  Try<Void> resultOf(ThrowingRunnable runnable)
+  void runUncatched()     // <.>
+  Void callUncatched()     // <.>
+  Runnable toRunnable()     // <.>
+  Callable<Void> toCallable()     // <.>
 }
 ----
 
+<.> xref:#runUncatched_[runUncatched()]
++
+--
+Does *not* silently swallow, wrap into RuntimeException, or otherwise modify any exceptions of the wrapped _#run()_ method.
+--
+<.> xref:#callUncatched_[callUncatched()]
++
+--
+Does *not* silently swallow, wrap into RuntimeException, or otherwise modify any exceptions of the wrapped _#run()_ method.
+--
+<.> xref:#toRunnable_[toRunnable()]
++
+--
+The resulting _Runnable_ does *not* silently swallow, wrap into RuntimeException, or otherwise modify any exceptions of the wrapped _#run()_ method.
+--
+<.> xref:#toCallable_[toCallable()]
++
+--
+The resulting _Callable_ does *not* silently swallow, wrap into RuntimeException, or otherwise modify any exceptions of the wrapped _#run()_ method.
+--
+
+== Members
+
+[#runUncatched_]
+=== runUncatched()
+
+Does *not* silently swallow, wrap into RuntimeException, or otherwise modify any exceptions of the wrapped _#run()_ method.
+
+[#callUncatched_]
+=== callUncatched()
+
+Does *not* silently swallow, wrap into RuntimeException, or otherwise modify any exceptions of the wrapped _#run()_ method.
+
+[#toRunnable_]
+=== toRunnable()
+
+The resulting _Runnable_ does *not* silently swallow, wrap into RuntimeException, or otherwise modify any exceptions of the wrapped _#run()_ method.
+
+[#toCallable_]
+=== toCallable()
+
+The resulting _Callable_ does *not* silently swallow, wrap into RuntimeException, or otherwise modify any exceptions of the wrapped _#run()_ method.

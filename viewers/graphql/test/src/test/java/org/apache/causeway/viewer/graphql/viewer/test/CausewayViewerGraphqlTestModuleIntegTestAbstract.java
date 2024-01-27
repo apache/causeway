@@ -61,7 +61,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.graphql.viewer.CausewayModuleIncViewerGraphqlViewer;
+import org.apache.causeway.viewer.graphql.viewer.CausewayModuleViewerGraphqlViewer;
 import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
@@ -96,7 +96,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
             CausewayModuleSecurityBypass.class,
             CausewayModulePersistenceJpaEclipselink.class,
             CausewayModuleTestingFixturesApplib.class,
-            CausewayModuleIncViewerGraphqlViewer.class,
+            CausewayModuleViewerGraphqlViewer.class,
 
             UniversityModule.class
     })

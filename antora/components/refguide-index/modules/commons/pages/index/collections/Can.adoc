@@ -7,7 +7,7 @@ Java's _Optional_ , can be seen as a holder of element(s), that is restricted to
 
 Same idiomatic convention applies: References to xref:refguide:commons:index/collections/Can.adoc[Can] should never be initialized to _null_ .
 
- *IMPORTANT:* A xref:refguide:commons:index/collections/Can.adoc[Can] must not contain _null_ elements. If you need to use store null, then use a different data structure, for example a regular _java.util.List java.util.List_ .
+ *IMPORTANT:* A xref:refguide:commons:index/collections/Can.adoc[Can] must not contain _null_ elements. If you need to store _null_ , then use a different data structure, for example a regular _java.util.List java.util.List_ .
 
 == API
 

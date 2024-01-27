@@ -33,7 +33,14 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
-import lombok.Getter;
+
+import lombok.val;
+
+import static graphql.schema.FieldCoordinates.coordinates;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
+
+import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -80,7 +87,12 @@ public class GqlvDomainService implements GqlvAction.Holder {
     }
 
     private void addActions() {
+
+        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                .filter(x -> x.getSemantics().isSafeInNature() ||
+                             variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT)
                 .forEach(this::addAction);
     }
 
