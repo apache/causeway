@@ -21,7 +21,6 @@ package org.apache.causeway.commons.io;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.lang.reflect.RecordComponent;
 import java.util.LinkedHashMap;
@@ -32,6 +31,7 @@ import java.util.function.UnaryOperator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 
 import org.springframework.lang.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
@@ -94,7 +94,7 @@ public class YamlUtils {
             final @NonNull DataSource source,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createJacksonMapperForYaml(customizers)
+            return Try.call(()->createJacksonReader(customizers)
                     .readValue(is, mappedType));
         });
     }
@@ -104,13 +104,16 @@ public class YamlUtils {
     /**
      * Writes given {@code pojo} to given {@link DataSink}.
      */
+    /**
+     * Writes given {@code pojo} to given {@link DataSink}.
+     */
     public void write(
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
-            final YamlUtils.YamlDumpCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
-            createMapper(pojo.getClass(), Can.ofArray(customizers)).dump(pojo, new OutputStreamWriter(os)));
+            Try.run(()->createJacksonWriter(customizers).writeValue(os, pojo)));
     }
 
     /**
@@ -121,12 +124,11 @@ public class YamlUtils {
     @Nullable
     public static String toStringUtf8(
             final @Nullable Object pojo,
-            final YamlUtils.YamlDumpCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return pojo!=null
-                ? createMapper(pojo.getClass(), Can.ofArray(customizers)).dump(pojo)
+                ? createJacksonWriter(customizers).writeValueAsString(pojo)
                 : null;
     }
-
     // -- CUSTOMIZERS
 
     /**
@@ -143,9 +145,10 @@ public class YamlUtils {
     /**
      * SnakeYaml as of 2.2 does not support Java records. So we use Jackson instead.
      */
-    private ObjectMapper createJacksonMapperForYaml(
+    private ObjectMapper createJacksonReader(
             final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper(new YAMLFactory());
+        mapper = JsonUtils.readingJavaTimeSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
             mapper = Optional.ofNullable(customizer.apply(mapper))
                     .orElse(mapper);
@@ -153,8 +156,23 @@ public class YamlUtils {
         return mapper;
     }
 
+    /**
+     * Use Jackson to write YAML.
+     */
+    private ObjectMapper createJacksonWriter(
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        var mapper = new ObjectMapper(new YAMLFactory()
+                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
+        mapper = JsonUtils.writingJavaTimeSupport(mapper);
+        for(JsonUtils.JacksonCustomizer customizer : customizers) {
+            mapper = Optional.ofNullable(customizer.apply(mapper))
+                    .orElse(mapper);
+        }
+        return mapper;
+    }
 
-    private Yaml createMapper(
+    @Deprecated
+    private Yaml createMapperLegacy(
             final Class<?> mappedType,
             final Can<YamlUtils.YamlDumpCustomizer> dumpCustomizers) {
         var dumperOptions = new DumperOptions();

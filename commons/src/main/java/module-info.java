@@ -77,6 +77,7 @@ module org.apache.causeway.commons {
     requires jakarta.annotation;
     requires com.sun.xml.bind;
     requires com.fasterxml.jackson.dataformat.yaml;
+    requires com.fasterxml.jackson.datatype.jsr310;
 
     // JAXB JUnit test
     opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;

@@ -38,22 +38,37 @@ class JsonUtilsTest {
     }
 
     @Test
-    void toStringUtf8_with_no_options() {
-        val json = JsonUtils.toStringUtf8(person);
+    void toStringUtf8_indentedOutput() {
+        val json = JsonUtils.toStringUtf8(person, JsonUtils::indentedOutput);
         Approvals.verify(json);
     }
 
     @Test
     void parseRecord() {
-        var json = """
+        var jsonTemplate =
+                """
                 {
-                    "name":"sven",
+                    "name": "sven",
+                    "java8Time": {
+                        "localTime" : "${localTime}",
+                        "localDate" : "${localDate}",
+                        "localDateTime" : "${localDateTime}",
+                        "offsetTime" : "${offsetTime}",
+                        "offsetDateTime" : "${offsetDateTime}",
+                        "zonedDateTime" : "${zonedDateTime}"
+                    },
                     "address": {
                         "zip":1234,
                         "street":"backerstreet"
                     }
                 }
                 """;
+
+        var json = person.java8Time().interpolator().applyTo(jsonTemplate);
+
+        //debug
+        //System.err.printf("%s%n", json);
+
         var person = JsonUtils.tryRead(Person.class, json)
                 .valueAsNonNullElseFail();
         assertEquals(this.person, person);

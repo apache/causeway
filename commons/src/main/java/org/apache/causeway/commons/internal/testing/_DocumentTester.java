@@ -48,4 +48,10 @@ public class _DocumentTester {
         _Assert.assertEquals(mapper.readTree(json1), mapper.readTree(json2));
     }
 
+    public void assertYamlEqualsIgnoreOrder(final @NonNull String yaml1, final @NonNull String yaml2) {
+        // TODO not implemented yet
+        System.err.printf("WARNING: %s.assertYamlEqualsIgnoreOrder(...) not implemened%n",
+                _DocumentTester.class.getSimpleName());
+    }
+
 }

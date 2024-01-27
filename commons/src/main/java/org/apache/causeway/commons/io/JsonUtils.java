@@ -24,8 +24,10 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 
 import org.springframework.lang.Nullable;
@@ -87,7 +89,7 @@ public class JsonUtils {
             final @NonNull DataSource source,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createMapper(customizers).readValue(is, mappedType));
+            return Try.call(()->createJacksonReader(customizers).readValue(is, mappedType));
         });
     }
 
@@ -101,7 +103,7 @@ public class JsonUtils {
             final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
             return Try.call(()->{
-                val mapper = createMapper(customizers);
+                val mapper = createJacksonReader(customizers);
                 val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
                 return mapper.readValue(is, listFactory);
             });
@@ -119,7 +121,7 @@ public class JsonUtils {
             final JsonUtils.JacksonCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
-            Try.run(()->createMapper(customizers).writeValue(os, pojo)));
+            Try.run(()->createJacksonWriter(customizers).writeValue(os, pojo)));
     }
 
     /**
@@ -132,7 +134,7 @@ public class JsonUtils {
             final @Nullable Object pojo,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return pojo!=null
-                ? createMapper(customizers).writeValueAsString(pojo)
+                ? createJacksonWriter(customizers).writeValueAsString(pojo)
                 : null;
     }
 
@@ -153,11 +155,37 @@ public class JsonUtils {
         return mapper.registerModule(new JakartaXmlBindAnnotationModule());
     }
 
+    /** add support for reading java.time (ISO) */
+    public ObjectMapper readingJavaTimeSupport(final ObjectMapper mapper) {
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper;
+    }
+
+    /** add support for writing java.time (ISO) */
+    public ObjectMapper writingJavaTimeSupport(final ObjectMapper mapper) {
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return mapper;
+    }
+
     // -- MAPPER FACTORY
 
-    private ObjectMapper createMapper(
+    private ObjectMapper createJacksonReader(
             final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper();
+        mapper = readingJavaTimeSupport(mapper);
+        for(JsonUtils.JacksonCustomizer customizer : customizers) {
+            mapper = Optional.ofNullable(customizer.apply(mapper))
+                    .orElse(mapper);
+        }
+        return mapper;
+    }
+
+    private ObjectMapper createJacksonWriter(
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        var mapper = new ObjectMapper();
+        mapper = writingJavaTimeSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
             mapper = Optional.ofNullable(customizer.apply(mapper))
                     .orElse(mapper);

@@ -38,17 +38,30 @@ class YamlUtilsTest {
     }
 
     @Test
-    void toStringUtf8_with_no_options() {
+    void toStringUtf8() {
         val yaml = YamlUtils.toStringUtf8(person);
         Approvals.verify(yaml);
     }
 
     @Test
     void parseRecord() {
-        var yaml = """
+        var yamlTemplate = """
                 name: sven
                 address: {street: backerstreet, zip: 1234}
+                java8Time:
+                  localTime: ${localTime}
+                  localDate: ${localDate}
+                  localDateTime: ${localDateTime}
+                  offsetTime: ${offsetTime}
+                  offsetDateTime: ${offsetDateTime}
+                  zonedDateTime: ${zonedDateTime}
                 """;
+
+        var yaml = person.java8Time().interpolator().applyTo(yamlTemplate);
+
+        // debug
+        //System.err.printf("%s%n", yaml);
+
         var person = YamlUtils.tryRead(Person.class, yaml)
                 .valueAsNonNullElseFail();
         assertEquals(this.person, person);
