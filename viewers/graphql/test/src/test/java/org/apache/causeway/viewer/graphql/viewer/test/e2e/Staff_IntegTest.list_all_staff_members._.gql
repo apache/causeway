@@ -1,0 +1,17 @@
+{
+  university_dept_Staff {
+    findAllStaffMembers {
+      invoke {
+        name {
+          get
+        }
+        grade {
+          get
+        }
+        photo {
+          get
+        }
+      }
+    }
+  }
+}

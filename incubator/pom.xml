@@ -234,7 +234,6 @@
 
 	<modules>
  		<module>extensions/core/commandreplay</module>
-		<module>viewers/graphql</module>
 	</modules>
 
 </project>

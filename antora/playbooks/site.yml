@@ -170,9 +170,6 @@ content:
 #   - url: .
 #     start_path: incubator/extensions/core/commandreplay/adoc # incubator
 #     branches: HEAD
-    - url: .
-      start_path: incubator/viewers/graphql/adoc # incubator
-      branches: HEAD
 
 # mavendeps
     - url: .
@@ -270,6 +267,9 @@ content:
       branches: HEAD
 
 # viewers
+    - url: .
+      start_path: viewers/graphql/adoc
+      branches: HEAD
     - url: .
       start_path: viewers/restfulobjects/adoc # vro
       branches: HEAD
