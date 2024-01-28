@@ -19,20 +19,15 @@
 package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 
 import org.springframework.lang.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.DumperOptions.LineBreak;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.nodes.Tag;
-import org.yaml.snakeyaml.representer.Representer;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 
 import lombok.NonNull;
@@ -47,12 +42,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class YamlUtils {
 
-    @FunctionalInterface
-    public interface YamlDumpCustomizer extends UnaryOperator<DumperOptions> {}
-
-    @FunctionalInterface
-    public interface YamlLoadCustomizer extends UnaryOperator<LoaderOptions> {}
-
     // -- READING
 
     /**
@@ -62,7 +51,7 @@ public class YamlUtils {
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
             final @Nullable String stringUtf8,
-            final YamlUtils.YamlLoadCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return tryRead(mappedType, DataSource.ofStringUtf8(stringUtf8), customizers);
     }
 
@@ -73,10 +62,10 @@ public class YamlUtils {
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
-            final YamlUtils.YamlLoadCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createMapper(mappedType, Can.ofArray(customizers), Can.empty())
-                    .load(is));
+            return Try.call(()->createJacksonReader(customizers)
+                    .readValue(is, mappedType));
         });
     }
 
@@ -88,10 +77,10 @@ public class YamlUtils {
     public void write(
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
-            final YamlUtils.YamlDumpCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
-            createMapper(pojo.getClass(), Can.empty(), Can.ofArray(customizers)).dump(pojo, new OutputStreamWriter(os)));
+            Try.run(()->createJacksonWriter(customizers).writeValue(os, pojo)));
     }
 
     /**
@@ -102,12 +91,11 @@ public class YamlUtils {
     @Nullable
     public static String toStringUtf8(
             final @Nullable Object pojo,
-            final YamlUtils.YamlDumpCustomizer ... customizers) {
+            final JsonUtils.JacksonCustomizer ... customizers) {
         return pojo!=null
-                ? createMapper(pojo.getClass(), Can.empty(), Can.ofArray(customizers)).dump(pojo)
+                ? createJacksonWriter(customizers).writeValueAsString(pojo)
                 : null;
     }
-
     // -- CUSTOMIZERS
 
     /**
@@ -119,31 +107,36 @@ public class YamlUtils {
         return opts;
     }
 
-    // -- MAPPER FACTORY
+    // -- MAPPER FACTORIES
 
-    private Yaml createMapper(
-            final Class<?> mappedType,
-            final Can<YamlUtils.YamlLoadCustomizer> loadCustomizers,
-            final Can<YamlUtils.YamlDumpCustomizer> dumpCustomizers) {
-        var dumperOptions = new DumperOptions();
-        dumperOptions.setIndent(2);
-        dumperOptions.setLineBreak(LineBreak.UNIX); // fixated for consistency
-        //options.setPrettyFlow(true);
-        //options.setDefaultFlowStyle(FlowStyle.BLOCK);
-        for(YamlUtils.YamlDumpCustomizer customizer : dumpCustomizers) {
-            dumperOptions = Optional.ofNullable(customizer.apply(dumperOptions))
-                    .orElse(dumperOptions);
+    /**
+     * SnakeYaml as of 2.2 does not support Java records. So we use Jackson instead.
+     */
+    private ObjectMapper createJacksonReader(
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        var mapper = new ObjectMapper(new YAMLFactory());
+        mapper = JsonUtils.readingJavaTimeSupport(mapper);
+        mapper = JsonUtils.readingCanSupport(mapper);
+        for(JsonUtils.JacksonCustomizer customizer : customizers) {
+            mapper = Optional.ofNullable(customizer.apply(mapper))
+                    .orElse(mapper);
         }
-        
-        var presenter = new Representer(dumperOptions);
-        presenter.addClassTag(mappedType, Tag.MAP);
+        return mapper;
+    }
 
-        var loaderOptions = new LoaderOptions();
-        for(YamlUtils.YamlLoadCustomizer customizer : loadCustomizers) {
-            loaderOptions = Optional.ofNullable(customizer.apply(loaderOptions))
-                    .orElse(loaderOptions);
+    /**
+     * Use Jackson to write YAML.
+     */
+    private ObjectMapper createJacksonWriter(
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        var mapper = new ObjectMapper(new YAMLFactory()
+                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
+        mapper = JsonUtils.writingJavaTimeSupport(mapper);
+        mapper = JsonUtils.writingCanSupport(mapper);
+        for(JsonUtils.JacksonCustomizer customizer : customizers) {
+            mapper = Optional.ofNullable(customizer.apply(mapper))
+                    .orElse(mapper);
         }
-        var mapper = new Yaml(new Constructor(mappedType, loaderOptions), presenter, dumperOptions, loaderOptions);
         return mapper;
     }
 

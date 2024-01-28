@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.internal.testing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
@@ -46,6 +47,12 @@ public class _DocumentTester {
     public void assertJsonEqualsIgnoreOrder(final @NonNull String json1, final @NonNull String json2) {
         var mapper = new ObjectMapper();
         _Assert.assertEquals(mapper.readTree(json1), mapper.readTree(json2));
+    }
+
+    @SneakyThrows
+    public void assertYamlEqualsIgnoreOrder(final @NonNull String yaml1, final @NonNull String yaml2) {
+        var mapper = new ObjectMapper(new YAMLFactory());
+        _Assert.assertEquals(mapper.readTree(yaml1), mapper.readTree(yaml2));
     }
 
 }

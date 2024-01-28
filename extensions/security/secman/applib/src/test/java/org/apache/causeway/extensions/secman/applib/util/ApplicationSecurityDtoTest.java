@@ -20,10 +20,8 @@ package org.apache.causeway.extensions.secman.applib.util;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.commons.io.DataSource;
-import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.val;
 
@@ -48,9 +46,7 @@ class ApplicationSecurityDtoTest {
 
         val yamlAfterRoundtrip = dto.toYaml();
 
-        assertEquals(
-                TextUtils.readLines(yamlBeforeRoundtrip),
-                TextUtils.readLines(yamlAfterRoundtrip));
+        _DocumentTester.assertYamlEqualsIgnoreOrder(yamlBeforeRoundtrip, yamlAfterRoundtrip);
     }
 
 }
