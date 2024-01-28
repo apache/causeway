@@ -50,6 +50,7 @@ import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.HashUtils;
 import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
 import org.apache.causeway.commons.io.ZipUtils;
+import org.apache.causeway.commons.io.ZipUtils.ZipOptions;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -254,7 +255,11 @@ public final class Blob implements NamedWithMimeType {
     }
 
     public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {
-        return ZipUtils.firstZipEntry(asDataSource()) // assuming first entry is the one we want
+        return unZip(resultingMimeType, ZipOptions.builder().build());
+    }
+
+    public Blob unZip(final @NonNull CommonMimeType resultingMimeType, final @NonNull ZipOptions zipOptions) {
+        return ZipUtils.firstZipEntry(asDataSource(), zipOptions) // assuming first entry is the one we want
                 .map(zipEntryDataSource->Blob.of(
                         zipEntryDataSource.zipEntry().getName(),
                         resultingMimeType,
