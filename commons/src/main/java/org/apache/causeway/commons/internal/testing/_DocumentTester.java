@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.internal.testing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
@@ -48,10 +49,10 @@ public class _DocumentTester {
         _Assert.assertEquals(mapper.readTree(json1), mapper.readTree(json2));
     }
 
+    @SneakyThrows
     public void assertYamlEqualsIgnoreOrder(final @NonNull String yaml1, final @NonNull String yaml2) {
-        // TODO not implemented yet
-        System.err.printf("WARNING: %s.assertYamlEqualsIgnoreOrder(...) not implemened%n",
-                _DocumentTester.class.getSimpleName());
+        var mapper = new ObjectMapper(new YAMLFactory());
+        _Assert.assertEquals(mapper.readTree(yaml1), mapper.readTree(yaml2));
     }
 
 }
