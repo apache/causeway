@@ -15,11 +15,15 @@ The xref:security:ROOT:about.adoc[Security Guide] describes the security archite
 
 == Viewers
 
-The framework provides two viewers that will automatically render the domain objects in your application into the presentation layer:
+The framework provides three viewers that will automatically render the domain objects in your application into the presentation layer:
 
 * xref:vw:ROOT:about.adoc[Web UI (Wicket)]
 +
 Provides a human-usable UI, implemented using https://wicket.apache.org[Apache Wicket], and styled using Bootstrap.
+
+* xref:gqlv:ROOT:about.adoc[GraphQL API]
++
+Presents your domain objects using link:https://graphql.org/[GraphQL], both queries and mutations.
 
 * xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
 +
