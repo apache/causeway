@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.GraphQLOutputType;
+
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import lombok.val;
-
-import graphql.schema.GraphQLOutputType;
 import lombok.val;
 
 public class GqlvCollectionGet extends GqlvAssociationGet<OneToManyAssociation> {

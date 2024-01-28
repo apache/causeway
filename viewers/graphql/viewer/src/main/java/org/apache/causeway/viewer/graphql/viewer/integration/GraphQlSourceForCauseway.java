@@ -37,12 +37,15 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import graphql.GraphQL;
 import graphql.execution.DataFetcherExceptionHandler;
@@ -51,8 +54,6 @@ import graphql.execution.DataFetcherExceptionHandlerResult;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

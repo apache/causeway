@@ -20,8 +20,6 @@ package org.apache.causeway.viewer.graphql.model.context;
 
 import graphql.schema.GraphQLCodeRegistry;
 
-import lombok.RequiredArgsConstructor;
-
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -30,7 +28,6 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 
-import graphql.schema.GraphQLCodeRegistry;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

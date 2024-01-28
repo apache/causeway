@@ -23,9 +23,10 @@ import java.util.concurrent.CompletableFuture;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.user.UserMemento;
-
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
+
+import lombok.val;
 
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.execution.ExecutionContext;

@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLTypeReference.typeRef;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -31,9 +28,15 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.ws.rs.NotSupportedException;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
+import graphql.Scalars;
+import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLScalarType;
+import graphql.schema.GraphQLTypeReference;
 
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+import static graphql.schema.GraphQLNonNull.nonNull;
+import static graphql.schema.GraphQLTypeReference.typeRef;
 
 import org.joda.time.DateTime;
 
@@ -43,18 +46,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
+import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
-import graphql.Scalars;
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLScalarType;
-import graphql.schema.GraphQLTypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
