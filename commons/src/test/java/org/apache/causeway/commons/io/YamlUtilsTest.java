@@ -48,6 +48,11 @@ class YamlUtilsTest {
         var yamlTemplate = """
                 name: sven
                 address: {street: backerstreet, zip: 1234}
+                additionalAddresses:
+                - zip: 23
+                  street: "brownstreet"
+                - zip: 34
+                  street: "bluestreet"
                 java8Time:
                   localTime: ${localTime}
                   localDate: ${localDate}

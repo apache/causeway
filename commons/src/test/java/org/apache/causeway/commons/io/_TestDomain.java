@@ -30,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 
 import lombok.experimental.UtilityClass;
@@ -40,6 +41,7 @@ class _TestDomain {
     public static record Person(
             String name,
             Address address,
+            Can<Address> additionalAddresses,
             Java8Time java8Time) {
     }
 
@@ -88,6 +90,8 @@ class _TestDomain {
 
     Person samplePerson() {
         return new Person("sven", new Address(1234, "backerstreet"),
+                Can.of(new Address(23, "brownstreet"),
+                        new Address(34, "bluestreet")),
                 new Java8Time(
                         LocalTime.of(17, 33, 45),
                         LocalDate.of(2007, 11, 21),

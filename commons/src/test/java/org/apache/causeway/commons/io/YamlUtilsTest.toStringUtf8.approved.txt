@@ -2,6 +2,11 @@ name: "sven"
 address:
   zip: 1234
   street: "backerstreet"
+additionalAddresses:
+- zip: 23
+  street: "brownstreet"
+- zip: 34
+  street: "bluestreet"
 java8Time:
   localTime: "17:33:45"
   localDate: "2007-11-21"

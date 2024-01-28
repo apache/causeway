@@ -18,21 +18,34 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.context._Context;
 
 import lombok.NonNull;
@@ -104,8 +117,8 @@ public class JsonUtils {
         return source.tryReadAll((final InputStream is)->{
             return Try.call(()->{
                 val mapper = createJacksonReader(customizers);
-                val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-                return mapper.readValue(is, listFactory);
+                val collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
+                return mapper.readValue(is, collectionType);
             });
         });
     }
@@ -169,12 +182,61 @@ public class JsonUtils {
         return mapper;
     }
 
+    // -- CAN SUPPORT
+
+    static class CanDeserializer extends JsonDeserializer<Can<?>> implements ContextualDeserializer {
+        private Class<?> elementType;
+        public CanDeserializer(final @NonNull Class<?> elementType) {
+            this.elementType = elementType;
+        }
+        @Override
+        public JsonDeserializer<?> createContextual(final DeserializationContext ctxt, final BeanProperty beanProperty) throws JsonMappingException {
+            var type = ctxt.getContextualType() != null
+                ? ctxt.getContextualType()
+                : beanProperty!=null
+                    ? beanProperty.getMember().getType()
+                    : null;
+            var elementType = type!=null && type.containedTypeCount()==1
+                    ? type.containedType(0).getRawClass()
+                    : Object.class;
+            return new CanDeserializer(elementType);
+        }
+        @Override
+        public Can<?> deserialize(
+                final JsonParser p, final DeserializationContext ctxt) throws IOException {
+            val listType = ctxt.getTypeFactory().constructCollectionType(List.class, elementType);
+            var list = ctxt.readValue(p, listType);
+            return Can.ofCollection(_Casts.uncheckedCast(list));
+        }
+    }
+    /** add support for reading Can<T> */
+    public ObjectMapper readingCanSupport(final ObjectMapper mapper) {
+        mapper.registerModule(new SimpleModule().addDeserializer(Can.class, new CanDeserializer(Object.class)));
+        return mapper;
+    }
+
+    static class CanSerializer extends StdSerializer<Can<?>> {
+        private static final long serialVersionUID = 1L;
+        protected CanSerializer() { super(Can.class, false); }
+        @Override
+        public void serialize(final Can<?> value, final JsonGenerator gen,
+                final SerializerProvider provider) throws IOException {
+            gen.writeObject(value.toList());
+        }
+    }
+    /** add support for writing Can<T> */
+    public ObjectMapper writingCanSupport(final ObjectMapper mapper) {
+        mapper.registerModule(new SimpleModule().addSerializer(new CanSerializer()));
+        return mapper;
+    }
+
     // -- MAPPER FACTORY
 
     private ObjectMapper createJacksonReader(
             final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper();
         mapper = readingJavaTimeSupport(mapper);
+        mapper = readingCanSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
             mapper = Optional.ofNullable(customizer.apply(mapper))
                     .orElse(mapper);
@@ -186,6 +248,7 @@ public class JsonUtils {
             final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper();
         mapper = writingJavaTimeSupport(mapper);
+        mapper = writingCanSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
             mapper = Optional.ofNullable(customizer.apply(mapper))
                     .orElse(mapper);

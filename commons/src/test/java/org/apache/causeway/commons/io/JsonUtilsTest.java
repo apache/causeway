@@ -60,7 +60,14 @@ class JsonUtilsTest {
                     "address": {
                         "zip":1234,
                         "street":"backerstreet"
-                    }
+                    },
+                    "additionalAddresses" : [ {
+                        "zip" : 23,
+                        "street" : "brownstreet"
+                    }, {
+                        "zip" : 34,
+                        "street" : "bluestreet"
+                    } ]
                 }
                 """;
 
