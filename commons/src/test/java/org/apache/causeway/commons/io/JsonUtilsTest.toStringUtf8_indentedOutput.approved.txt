@@ -1,0 +1,22 @@
+{
+  "name" : "sven",
+  "address" : {
+    "zip" : 1234,
+    "street" : "backerstreet"
+  },
+  "additionalAddresses" : [ {
+    "zip" : 23,
+    "street" : "brownstreet"
+  }, {
+    "zip" : 34,
+    "street" : "bluestreet"
+  } ],
+  "java8Time" : {
+    "localTime" : "17:33:45",
+    "localDate" : "2007-11-21",
+    "localDateTime" : "2007-11-21T17:33:45",
+    "offsetTime" : "17:33:45-02:00",
+    "offsetDateTime" : "2007-11-21T17:33:45-02:00",
+    "zonedDateTime" : "2007-11-21T17:33:45+01:00"
+  }
+}
