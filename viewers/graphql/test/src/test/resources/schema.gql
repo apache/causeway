@@ -2850,7 +2850,7 @@ type university_dept_Department__staffMembers__gqlv_collection {
 type university_dept_Departments {
   createDepartment: university_dept_Departments__createDepartment__gqlv_action
   findAllDepartments: university_dept_Departments__findAllDepartments__gqlv_action
-  findByName: university_dept_Departments__findByName__gqlv_action
+  findDepartmentByName: university_dept_Departments__findDepartmentByName__gqlv_action
 }
 
 type university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
@@ -2886,19 +2886,19 @@ type university_dept_Departments__findAllDepartments__gqlv_action {
   validate: String
 }
 
-type university_dept_Departments__findByName__gqlv_action {
+type university_dept_Departments__findDepartmentByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_Department
-  params: university_dept_Departments__findByName__gqlv_action_params
+  params: university_dept_Departments__findDepartmentByName__gqlv_action_params
   validate(name: String): String
 }
 
-type university_dept_Departments__findByName__gqlv_action_params {
-  name: university_dept_Departments__findByName__name__gqlv_action_parameter
+type university_dept_Departments__findDepartmentByName__gqlv_action_params {
+  name: university_dept_Departments__findDepartmentByName__name__gqlv_action_parameter
 }
 
-type university_dept_Departments__findByName__name__gqlv_action_parameter {
+type university_dept_Departments__findDepartmentByName__name__gqlv_action_parameter {
   disabled(name: String): String
   hidden: Boolean
   validity: String
@@ -3006,7 +3006,7 @@ type university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter {
 type university_dept_Staff {
   createStaffMember: university_dept_Staff__createStaffMember__gqlv_action
   findAllStaffMembers: university_dept_Staff__findAllStaffMembers__gqlv_action
-  findByName: university_dept_Staff__findByName__gqlv_action
+  findStaffMemberByName: university_dept_Staff__findStaffMemberByName__gqlv_action
 }
 
 type university_dept_StaffMember {
@@ -3090,19 +3090,19 @@ type university_dept_Staff__findAllStaffMembers__gqlv_action {
   validate: String
 }
 
-type university_dept_Staff__findByName__gqlv_action {
+type university_dept_Staff__findStaffMemberByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_StaffMember
-  params: university_dept_Staff__findByName__gqlv_action_params
+  params: university_dept_Staff__findStaffMemberByName__gqlv_action_params
   validate(name: String): String
 }
 
-type university_dept_Staff__findByName__gqlv_action_params {
-  name: university_dept_Staff__findByName__name__gqlv_action_parameter
+type university_dept_Staff__findStaffMemberByName__gqlv_action_params {
+  name: university_dept_Staff__findStaffMemberByName__name__gqlv_action_parameter
 }
 
-type university_dept_Staff__findByName__name__gqlv_action_parameter {
+type university_dept_Staff__findStaffMemberByName__name__gqlv_action_parameter {
   disabled(name: String): String
   hidden: Boolean
   validity: String

@@ -1,6 +1,6 @@
 {
   university_dept_Departments {
-    findByName {
+    findDepartmentByName {
       invoke(name: "Classics") {
         changeDeptHead {
           params {

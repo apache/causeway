@@ -56,7 +56,7 @@ public class Departments {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Department findByName(final String name){
+    public Department findDepartmentByName(final String name){
         return departmentRepository.findByName(name);
     }
 

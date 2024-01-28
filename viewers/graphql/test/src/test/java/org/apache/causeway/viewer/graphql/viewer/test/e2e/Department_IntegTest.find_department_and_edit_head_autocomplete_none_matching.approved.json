@@ -1,7 +1,7 @@
 {
   "data" : {
     "university_dept_Departments" : {
-      "findByName" : {
+      "findDepartmentByName" : {
         "invoke" : {
           "deptHead" : {
             "autoComplete" : [ ]
