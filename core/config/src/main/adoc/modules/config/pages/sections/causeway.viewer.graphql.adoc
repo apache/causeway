@@ -1,0 +1,73 @@
+= GraphQL API
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/causeway.viewer.graphql~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[causeway.viewer.graphql.api-variant]]
+causeway.viewer.graphql. +
+api-variant
+
+| 
+| Which variant of API to expose: ``ApiVariant#QUERY_ONLY`` (which suppresses any actions that mutate the state of the system), or alternatively as ``ApiVariant#QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT`` (which does expose actions that mutate the system but within a query, and so is not spec-compliant), or as ``ApiVariant#QUERY_AND_MUTATIONS`` (which also exposes actions that mutate the system but as mutations, and so _is_ spec-compliant.
+
+*NOTE:* ``ApiVariant#QUERY_AND_MUTATIONS`` is not currently implemented.
+
+
+|
+[[causeway.viewer.graphql.authentication.fallback.roles]]
+causeway.viewer.graphql. +
+authentication.fallback.roles
+
+| 
+| Used as the set of roles for the default username (if not provided by other means).
+
+
+|
+[[causeway.viewer.graphql.authentication.fallback.username]]
+causeway.viewer.graphql. +
+authentication.fallback.username
+
+| 
+| Used as the default username (if not provided by other means).
+
+
+|
+[[causeway.viewer.graphql.meta-data.field-name]]
+causeway.viewer.graphql.meta-data. +
+field-name
+
+|  _gqlv_meta
+| Note that field names _cannot_ being with "__", as that is reserved by the underlying GraphQL implementation.
+
+
+|
+[[causeway.viewer.graphql.type-mapper.local-date-format]]
+causeway.viewer.graphql. +
+type-mapper.local-date-format
+
+|  yyyy-MM-dd
+| For both JDK8's ``LocalDate`` and JodaTime's ``LocalDate``
+
+
+|
+[[causeway.viewer.graphql.type-mapper.zoned-date-time-format]]
+causeway.viewer.graphql. +
+type-mapper.zoned-date-time-format
+
+|  yyyy-MM-dd HH:mm:ss z
+| for JDK8's ``ZonedDateTime`` and JodaTime's ``DateTime``
+
+
+
+|===
+
+include::../section-hooks/causeway.viewer.graphql~post.adoc[]

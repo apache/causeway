@@ -293,6 +293,18 @@ Typically the regular user role (as per ``role-name``, default value of ``causew
 
 
 |
+[[causeway.extensions.secman.fixture-scripts.abstract-role-and-permissions-fixture-script.unknown-feature-id-checking-policy]]
+causeway.extensions.secman. +
+fixture-scripts. +
+abstract-role-and-permissions- +
+fixture-script. +
+unknown-feature-id-checking-policy
+
+| 
+| Whether to check if every featureId passed in exists or not.
+
+
+|
 [[causeway.extensions.secman.permissions-evaluation-policy]]
 causeway.extensions.secman. +
 permissions-evaluation-policy
@@ -301,6 +313,28 @@ permissions-evaluation-policy
 | If there are conflicting (allow vs veto) permissions at the same scope, then this policy determines whether to prefer to allow the permission or to veto it.
 
 This is only used an implementation of secman's ``PermissionsEvaluationService`` SPI has not been provided explicitly.
+
+
+|
+[[causeway.extensions.secman.seed.a-d-m-i-n-a-d-d-i-t-i-o-n-a-l-n-a-m-e-s-p-a-c-e-p-e-r-m-i-s-s-i-o-n-s]]
+causeway.extensions.secman.seed. +
+a-d-m-i-n-a-d-d-i-t-i-o-n-a-l-n-a- +
+m-e-s-p-a-c-e-p-e-r-m-i-s-s-i-o-n- +
+s
+
+| 
+| null
+
+
+|
+[[causeway.extensions.secman.seed.a-d-m-i-n-s-t-i-c-k-y-n-a-m-e-s-p-a-c-e-p-e-r-m-i-s-s-i-o-n-s-d-e-f-a-u-l-t]]
+causeway.extensions.secman.seed. +
+a-d-m-i-n-s-t-i-c-k-y-n-a-m-e-s-p- +
+a-c-e-p-e-r-m-i-s-s-i-o-n-s-d-e-f- +
+a-u-l-t
+
+| 
+| null
 
 
 |

@@ -13,6 +13,7 @@
 ** Viewers
 
 *** xref:vw:ROOT:about.adoc[Web UI (Wicket)]
+*** xref:gqlv:ROOT:about.adoc[GraphQL API]
 *** xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
 
 ** Persistence

@@ -10,13 +10,34 @@ Can be used to create diagrams (e.g. Plantuml)
 ----
 class ObjectGraph {
   ObjectGraph create(ObjectGraph.Factory factory)
-  ObjectGraph transform(ObjectGraph.Transformer transfomer)
+  ObjectGraph transform(ObjectGraph.Transformer transfomer)     // <.>
   String render(ObjectGraph.Renderer renderer)
+  DataSource asDiagramDslSource(ObjectGraph.Renderer renderer)
+  void writeDiagramDsl(ObjectGraph.Renderer renderer, DataSink sink)
+  void writeDiagramDsl(ObjectGraph.Renderer renderer, File destinationDslFile)
+  ObjectGraph copy()     // <.>
+  GraphKernel kernel(ImmutableEnumSet<GraphCharacteristic> characteristics)     // <.>
   Map<String, List<ObjectGraph.Object>> objectsGroupedByPackage()     // <.>
   Map<String, ObjectGraph.Object> objectById()     // <.>
+  ObjectGraph subGraph(int[] objectIndexes)     // <.>
 }
 ----
 
+<.> xref:#transform_ObjectGraph_Transformer[transform(ObjectGraph_Transformer)]
++
+--
+Passes a (deep clone) copy of this xref:refguide:applib:index/services/metamodel/objgraph/ObjectGraph.adoc[ObjectGraph] to given _Transformer_ and returns a transformed xref:refguide:applib:index/services/metamodel/objgraph/ObjectGraph.adoc[ObjectGraph] .
+--
+<.> xref:#copy_[copy()]
++
+--
+Returns a (deep clone) copy of this xref:refguide:applib:index/services/metamodel/objgraph/ObjectGraph.adoc[ObjectGraph] .
+--
+<.> xref:#kernel_ImmutableEnumSet[kernel(ImmutableEnumSet)]
++
+--
+Returns a _GraphKernel_ of given characteristics.
+--
 <.> xref:#objectsGroupedByPackage_[objectsGroupedByPackage()]
 +
 --
@@ -27,8 +48,30 @@ Returns objects grouped by package (as list-multimap).
 --
 Returns a _Map_ from object.id to _Object ObjectGraph.Object_
 --
+<.> xref:#subGraph_int[subGraph(int)]
++
+--
+Returns a sub-graph comprised only of object nodes as picked per zero based indexes _int[]_ .
+--
 
 == Members
+
+[#transform_ObjectGraph_Transformer]
+=== transform(ObjectGraph_Transformer)
+
+Passes a (deep clone) copy of this xref:refguide:applib:index/services/metamodel/objgraph/ObjectGraph.adoc[ObjectGraph] to given _Transformer_ and returns a transformed xref:refguide:applib:index/services/metamodel/objgraph/ObjectGraph.adoc[ObjectGraph] .
+
+Hence transformers are not required to create defensive copies.
+
+[#copy_]
+=== copy()
+
+Returns a (deep clone) copy of this xref:refguide:applib:index/services/metamodel/objgraph/ObjectGraph.adoc[ObjectGraph] .
+
+[#kernel_ImmutableEnumSet]
+=== kernel(ImmutableEnumSet)
+
+Returns a _GraphKernel_ of given characteristics.
 
 [#objectsGroupedByPackage_]
 === objectsGroupedByPackage()
@@ -39,3 +82,8 @@ Returns objects grouped by package (as list-multimap).
 === objectById()
 
 Returns a _Map_ from object.id to _Object ObjectGraph.Object_
+
+[#subGraph_int]
+=== subGraph(int)
+
+Returns a sub-graph comprised only of object nodes as picked per zero based indexes _int[]_ .

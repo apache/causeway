@@ -12,6 +12,7 @@ The service is xref:refguide:applib:index/annotation/TransactionScope.adoc[Trans
 ----
 class EntityChangeTrackerDefault {
   int getOrder()
+  void init()
   void destroy()
   Set<PropertyChangeRecord> snapshotPropertyChangeRecords()
   void beforeCompletion()

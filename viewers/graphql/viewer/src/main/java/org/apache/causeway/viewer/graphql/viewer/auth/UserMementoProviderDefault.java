@@ -20,30 +20,50 @@ package org.apache.causeway.viewer.graphql.viewer.auth;
 
 import jakarta.inject.Inject;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import graphql.execution.ExecutionContext;
+import graphql.execution.ExecutionStrategyParameters;
+
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserMementoProviderDefault implements UserMementoProvider {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(UserMementoProvider.class)
+        public UserMementoProvider defaultIdentityProvider(final CausewayConfiguration causewayConfiguration) {
+            return new UserMementoProviderDefault(causewayConfiguration);
+        }
+    }
 
     @SuppressWarnings("CdiInjectInspection")
     @Inject private final CausewayConfiguration causewayConfiguration;
 
 
     @Override
-    public UserMemento userMemento() {
+    public UserMemento userMemento(
+            final ExecutionContext executionContext,
+            final ExecutionStrategyParameters parameters) {
 
-        val fallbackUsername = causewayConfiguration.getViewer().getGqlv().getAuthentication().getFallback().getUsername();
+        val fallbackUsername = causewayConfiguration.getViewer().getGraphql().getAuthentication().getFallback().getUsername();
         if (fallbackUsername == null) {
             return null;
         }
 
-        val fallbackRoles = causewayConfiguration.getViewer().getGqlv().getAuthentication().getFallback().getRoles();
+        val fallbackRoles = causewayConfiguration.getViewer().getGraphql().getAuthentication().getFallback().getRoles();
         val roles = Can.ofStream(fallbackRoles.stream().map(roleName -> RoleMemento.builder().name(roleName).build()));
         return UserMemento.builder()
                 .name(fallbackUsername)

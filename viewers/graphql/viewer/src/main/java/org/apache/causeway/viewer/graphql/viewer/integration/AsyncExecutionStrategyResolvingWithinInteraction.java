@@ -24,8 +24,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.viewer.graphql.viewer.auth.UserMementoProvider;
+import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
+
+import lombok.val;
 
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.execution.ExecutionContext;
@@ -37,14 +38,14 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
 
     private final InteractionService interactionService;
 
-    private final UserMemento userMemento;
+    private final UserMementoProvider userMementoProvider;
 
     public AsyncExecutionStrategyResolvingWithinInteraction(
             final InteractionService interactionService,
             final UserMementoProvider userMementoProvider) {
-        this.interactionService = interactionService;
 
-        this.userMemento = userMementoProvider.userMemento();
+        this.interactionService = interactionService;
+        this.userMementoProvider = userMementoProvider;
     }
 
 
@@ -52,6 +53,8 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
     protected CompletableFuture<FieldValueInfo> resolveFieldWithInfo(
             final ExecutionContext executionContext,
             final ExecutionStrategyParameters parameters) {
+
+        val userMemento = userMementoProvider.userMemento(executionContext, parameters);
 
         if (userMemento != null) {
             return interactionService.call(

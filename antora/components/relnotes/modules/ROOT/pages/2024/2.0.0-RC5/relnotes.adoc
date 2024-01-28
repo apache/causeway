@@ -6,3 +6,15 @@
 
 
 NOTE: Not yet released.
+
+[#the-graphql-viewer-causeway-3676]
+== The GraphQL viewer (CAUSEWAY-3676)
+
+The GraphQL viewer is a brand new viewer which automatically exposes your domain object model as a GraphQL API.
+
+Built using link:https://spring.io/projects/spring-graphql[Spring for GraphQL], it provides a GraphQL API
+
+It is important to know that the generated API (in this first release) deliberately -conformant to one of the rueles
+
+The documentation can be found xref:gqlv:ROOT:about.adoc[here].
+See also link:https://issues.apache.org/jira/browse/CAUSEWAY-3676[CAUSEWAY-3676].

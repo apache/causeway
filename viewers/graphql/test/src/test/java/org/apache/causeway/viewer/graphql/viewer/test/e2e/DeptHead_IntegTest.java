@@ -22,10 +22,11 @@ import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
 

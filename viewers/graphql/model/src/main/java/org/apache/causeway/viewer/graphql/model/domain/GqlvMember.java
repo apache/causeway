@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import graphql.schema.GraphQLFieldDefinition;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

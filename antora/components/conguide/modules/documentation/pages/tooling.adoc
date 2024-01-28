@@ -31,7 +31,7 @@ This can be found at xref:core:_overview:about.adoc[].
 For more on the CLI, see xref:tooling:tooling-cli:about.adoc[tooling CLI] docs.
 You could also inspect the `preview.sh` script (and the various scripts it calls in turn) to see how we use the CLI in practice.
 
-* the `causeway-toolikng-metaprog` module (in tooling/metaprog`) contains a set of test classes that are used to generate classes and files for the various datatypes showcased in the link:https://github.com/apache/causeway-app-referenceapp[reference app].
+* the `causeway-tooling-metaprog` module (in tooling/metaprog`) contains a set of test classes that are used to generate classes and files for the various datatypes showcased in the link:https://github.com/apache/causeway-app-referenceapp[reference app].
 +
 To use, locate the `ValueTypeGenTemplateTest` class.
 

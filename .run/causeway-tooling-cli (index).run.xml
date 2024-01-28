@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="causeway-tooling-cli (index)" type="Application" factoryName="Application">
-    <option name="ALTERNATIVE_JRE_PATH" value="C:\Program Files\OpenJDK\openjdk-11.0.7_10" />
+    <option name="ALTERNATIVE_JRE_PATH" value="azul-21" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="org.apache.causeway.tooling.cli.Cli" />
     <module name="causeway-tooling-cli" />

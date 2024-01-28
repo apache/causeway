@@ -8,16 +8,15 @@ Provides supporting functionality for querying and persisting xref:refguide:exte
 [source,java]
 .ExecutionOutboxEntryRepository.java
 ----
-class ExecutionOutboxEntryRepository<E> {
+interface ExecutionOutboxEntryRepository {
   public final static String LOGICAL_TYPE_NAME;
-  Class<E> getEntityClass()
-  E createEntryAndPersist(Execution execution)
-  Optional<E> findByInteractionIdAndSequence(UUID interactionId, int sequence)
-  List<E> findOldest()
+  ExecutionOutboxEntry createEntryAndPersist(Execution execution)
+  Optional<ExecutionOutboxEntry> findByInteractionIdAndSequence(UUID interactionId, int sequence)
+  List<ExecutionOutboxEntry> findOldest()
   ExecutionOutboxEntry upsert(UUID interactionId, int sequence, ExecutionOutboxEntryType executionType, Timestamp startedAt, String username, Bookmark target, String logicalMemberIdentifier, String xml)
   ExecutionOutboxEntry upsert(UUID interactionId, int sequence, ExecutionOutboxEntryType executionType, Timestamp startedAt, String username, Bookmark target, String logicalMemberIdentifier, InteractionDto interactionDto)
   boolean deleteByInteractionIdAndSequence(UUID interactionId, int sequence)
-  List<E> findAll()     // <.>
+  List<ExecutionOutboxEntry> findAll()     // <.>
   void removeAll()     // <.>
 }
 ----

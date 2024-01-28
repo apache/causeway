@@ -18,19 +18,21 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
-
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
+
 import lombok.val;
 
 public class GqlvProperty
@@ -57,6 +59,9 @@ public class GqlvProperty
      */
     private final GqlvPropertyAutoComplete autoComplete;
     private final GqlvPropertyValidate validate;
+    /**
+     * Populated iff the API variant allows for it.
+     */
     private final GqlvPropertySet set;
 
     public GqlvProperty(
@@ -75,7 +80,14 @@ public class GqlvProperty
         this.choices = choices.hasChoices() ? choices : null;
         val autoComplete = new GqlvPropertyAutoComplete(this, context);
         this.autoComplete = autoComplete.hasAutoComplete() ? autoComplete : null;
-        this.set = new GqlvPropertySet(this, context);
+
+        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        if (variant == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
+            this.set = new GqlvPropertySet(this, context);
+        } else {
+            this.set = null;
+        }
+
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
@@ -136,7 +148,9 @@ public class GqlvProperty
             autoComplete.addDataFetcher();
         }
         validate.addDataFetcher();
-        set.addDataFetcher();
+        if (set != null) {
+            set.addDataFetcher();
+        }
     }
 
 

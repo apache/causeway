@@ -34,6 +34,7 @@ commands:
       Core: org.apache.causeway.core.*
 
       Persistence: org.apache.causeway.persistence
+      "Persistence Commons": "org.apache.causeway.persistence:causeway-persistence-commons.*"
       JDO: "org.apache.causeway.persistence:causeway-persistence-jdo.*"
       JPA: "org.apache.causeway.persistence:causeway-persistence-jpa.*"
 
@@ -45,6 +46,7 @@ commands:
 
       Viewer: org.apache.causeway.viewer
       "Viewer Commons": "org.apache.causeway.viewer:causeway-viewer-commons.*"
+      GraphQL: "org.apache.causeway.viewer:causeway-viewer-graphql.*"
       "Restful Objects": "org.apache.causeway.viewer:causeway-viewer-restfulobjects.*"
       Wicket: "org.apache.causeway.viewer:causeway-viewer-wicket.*"
 
@@ -77,7 +79,7 @@ commands:
 
       Incubator: org.apache.causeway.incubator
       "Kroviz Client": "org.apache.causeway.incubator.clients:causeway-client-kroviz.*"
-      "GraphQL Viewer": "org.apache.causeway.incubator.viewer:causeway-viewer-graphql.*"
+      "Command Replay": "org.apache.causeway.incubator.extensions:causeway-extensions-commandreplay.*"
 
   index:
 

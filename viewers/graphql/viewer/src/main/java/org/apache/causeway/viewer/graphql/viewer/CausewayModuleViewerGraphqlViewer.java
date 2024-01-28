@@ -31,14 +31,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.graphql.execution.BatchLoaderRegistry;
 import org.springframework.graphql.execution.DefaultBatchLoaderRegistry;
 
-import org.apache.causeway.viewer.graphql.model.CausewayModuleIncViewerGraphqlModel;
+import org.apache.causeway.viewer.graphql.model.CausewayModuleViewerGraphqlModel;
 
 @Configuration
 @Import({
         // @Service's
 
         // Modules
-        CausewayModuleIncViewerGraphqlModel.class,
+        CausewayModuleViewerGraphqlModel.class,
 
         // autoconfigurations
         GraphQlAutoConfiguration.class,
@@ -48,7 +48,7 @@ import org.apache.causeway.viewer.graphql.model.CausewayModuleIncViewerGraphqlMo
         GraphQlProperties.class, GraphQlCorsProperties.class
 })
 @ComponentScan
-public class CausewayModuleIncViewerGraphqlViewer {
+public class CausewayModuleViewerGraphqlViewer {
 
     @Bean
     @ConditionalOnMissingBean

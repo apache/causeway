@@ -18,14 +18,20 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import graphql.Scalars;
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLObjectType;
+
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
-
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -36,12 +42,10 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
-import graphql.Scalars;
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLObjectType;
+import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
+
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
@@ -101,11 +105,11 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addProperty);
         objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
 
-        // TODO: pay attention to deploymentType
+        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                // TODO: for now, we ignore any actions that have any collection parameters
-                //  however, this is supportable in GraphQL, https://chat.openai.com/c/7ca721d5-865a-4765-9f90-5c28046516cd
-                // .filter(objectAction -> objectAction.getParameters().stream().noneMatch(ObjectActionParameter::isPlural))
+                .filter(x -> x.getSemantics().isSafeInNature() ||
+                             variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT)
                 .forEach(objectAction -> {
                     actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
                 });

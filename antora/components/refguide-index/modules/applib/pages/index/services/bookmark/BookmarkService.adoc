@@ -10,6 +10,7 @@ This service provides a serializable 'bookmark' for any entity, and conversely t
 ----
 interface BookmarkService {
   Optional<Bookmark> bookmarkFor(Object domainObject)     // <.>
+  List<Bookmark> bookmarksFor(Object domainObject)     // <.>
   Optional<Bookmark> bookmarkFor(Class<?> type, String identifier)     // <.>
   Optional<Object> lookup(BookmarkHolder bookmarkHolder)     // <.>
   Optional<Object> lookup(Bookmark bookmark)     // <.>
@@ -22,6 +23,11 @@ interface BookmarkService {
 +
 --
 Optionally returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object, based on whether can create a bookmark for it.
+--
+<.> xref:#bookmarksFor_Object[bookmarksFor(Object)]
++
+--
+Returns all possible xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] s for the provided domain object, taking into account any aliases defined as per _DomainObject#aliased()_ or _DomainService#aliased()_ .
 --
 <.> xref:#bookmarkFor_Class_String[bookmarkFor(Class, String)]
 +
@@ -53,6 +59,11 @@ As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:appli
 Optionally returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object, based on whether can create a bookmark for it.
 
  *Note* : Not every domain object is bookmark-able: only entities, view models and services (NOT values or collections)
+
+[#bookmarksFor_Object]
+=== bookmarksFor(Object)
+
+Returns all possible xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] s for the provided domain object, taking into account any aliases defined as per _DomainObject#aliased()_ or _DomainService#aliased()_ .
 
 [#bookmarkFor_Class_String]
 === bookmarkFor(Class, String)

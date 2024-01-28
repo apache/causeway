@@ -128,9 +128,9 @@ Type: pom
 Directory: /mavendeps/webapp
 ----
 |Defines a module that can be almost used as a single dependency for running
-an Apache Causeway webapp (Wicket, Restful Objects, GraphQL and Shiro security).
+an Apache Causeway webapp (Wicket, Restful Objects and GraphQL viewers).
 
-Note: Also requires a persistence provider.
+However, it does NOT include any security module or persistence provider or extensions.
 
 .Dependencies
 ****
@@ -138,6 +138,9 @@ org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.core:causeway-core-security:jar:<managed> +
 org.apache.causeway.core:causeway-schema:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-graphql-viewer:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-viewer:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 org.springframework.boot:spring-boot-starter-tomcat:jar:<managed> +
 org.springframework.boot:spring-boot-starter-web:jar:<managed> +
 ****
@@ -407,7 +410,6 @@ com.github.javafaker:javafaker:jar:<managed> +
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-org.projectlombok:lombok:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -1331,7 +1333,6 @@ o.a.i.core.runtimeservices.publish.LifecycleCallbackNotifier +
 o.a.i.core.runtimeservices.publish.ObjectLifecyclePublisherDefault +
 o.a.i.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault +
 o.a.i.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException +
-o.a.i.core.runtimeservices.repository.RepositoryServiceDefault +
 o.a.i.core.runtimeservices.routing.RoutingServiceDefault +
 o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault +
 o.a.i.core.runtimeservices.serializing.SerializingAdapterDefault +
@@ -1351,11 +1352,13 @@ o.a.i.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault +
 
 .Dependencies
 ****
+com.sun.mail:jakarta.mail:jar:<managed> +
 jakarta.mail:jakarta.mail-api:jar:<managed> +
 org.apache.causeway.core:causeway-core-codegen-bytebuddy:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.hsqldb:hsqldb:jar:<managed> +
+org.springframework:spring-context-support:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -1481,11 +1484,13 @@ xref:refguide:schema:index/CausewayModuleSchema.adoc[CausewayModuleSchema]
 
 == Persistence
 
-[plantuml,Persistence,svg]
+=== Persistence Commons
+
+[plantuml,Persistence Commons,svg]
 ----
 @startuml
 set separator none
-title Persistence - Containers
+title Persistence Commons - Containers
 
 left to right direction
 
@@ -1498,26 +1503,26 @@ skinparam {
 
 hide stereotype
 
-skinparam rectangle<<Persistence.ApacheCausewayPersistenceCommons>> {
+skinparam rectangle<<PersistenceCommons.ApacheCausewayPersistenceCommons>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Persistence>> {
+skinparam rectangle<<PersistenceCommons>> {
   BorderColor #9a9a9a
   FontColor #9a9a9a
   shadowing false
 }
 
-rectangle "Persistence\n<size:10>[Software System]</size>" <<Persistence>> {
-  rectangle "==Apache Causeway Persistence - Commons\n<size:10>[Container: packaging: jar]</size>" <<Persistence.ApacheCausewayPersistenceCommons>> as Persistence.ApacheCausewayPersistenceCommons
+rectangle "Persistence Commons\n<size:10>[Software System]</size>" <<PersistenceCommons>> {
+  rectangle "==Apache Causeway Persistence - Commons\n<size:10>[Container: packaging: jar]</size>" <<PersistenceCommons.ApacheCausewayPersistenceCommons>> as PersistenceCommons.ApacheCausewayPersistenceCommons
 }
 
 @enduml
 ----
 
-.Projects/Modules (Persistence)
+.Projects/Modules (Persistence Commons)
 [cols="3a,5a", options="header"]
 |===
 |Coordinates |Description 
@@ -1536,6 +1541,8 @@ Directory: /persistence/commons
 ****
 o.a.i.persistence.commons.integration.changetracking.EntityChangeTrackerDefault +
 o.a.i.persistence.commons.integration.changetracking.PreAndPostValueEvaluatorServiceDefault +
+o.a.i.persistence.commons.integration.repository.RepositoryServiceDefault +
+o.a.i.persistence.commons.integration.version.EntityVersionAccessorDefault +
 ****
 
 .Dependencies
@@ -2472,6 +2479,185 @@ org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
 ****
 |===
 
+=== GraphQL
+
+[plantuml,GraphQL,svg]
+----
+@startuml
+set separator none
+title GraphQL - Containers
+
+left to right direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<GraphQL.ApacheCausewayViewerGraphQL>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<GraphQL.ApacheCausewayViewerGraphQLApplib>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<GraphQL.ApacheCausewayViewerGraphQLModel>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<GraphQL.ApacheCausewayViewerGraphQLTest>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<GraphQL.ApacheCausewayViewerGraphQLViewer>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<GraphQL>> {
+  BorderColor #9a9a9a
+  FontColor #9a9a9a
+  shadowing false
+}
+
+rectangle "GraphQL\n<size:10>[Software System]</size>" <<GraphQL>> {
+  rectangle "==Apache Causeway Viewer - GraphQL\n<size:10>[Container: packaging: pom]</size>" <<GraphQL.ApacheCausewayViewerGraphQL>> as GraphQL.ApacheCausewayViewerGraphQL
+  rectangle "==Apache Causeway Viewer - GraphQL (Applib)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLApplib>> as GraphQL.ApacheCausewayViewerGraphQLApplib
+  rectangle "==Apache Causeway Viewer - GraphQL (Model)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLModel>> as GraphQL.ApacheCausewayViewerGraphQLModel
+  rectangle "==Apache Causeway Viewer - GraphQL (Test)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLTest>> as GraphQL.ApacheCausewayViewerGraphQLTest
+  rectangle "==Apache Causeway Viewer - GraphQL (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLViewer>> as GraphQL.ApacheCausewayViewerGraphQLViewer
+}
+
+GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLViewer : "<color:#707070>"
+GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLApplib : "<color:#707070>"
+GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLModel : "<color:#707070>"
+GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLTest : "<color:#707070>"
+@enduml
+----
+
+.Projects/Modules (GraphQL)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Causeway Viewer - GraphQL
+[source,yaml]
+----
+Group: org.apache.causeway.viewer
+Artifact: causeway-viewer-graphql
+Type: pom
+Directory: /viewers/graphql
+----
+|
+
+|Apache Causeway Viewer - GraphQL (Applib)
+[source,yaml]
+----
+Group: org.apache.causeway.viewer
+Artifact: causeway-viewer-graphql-applib
+Type: jar
+Directory: /viewers/graphql/applib
+----
+|.Dependencies
+****
+com.graphql-java:graphql-java:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
+org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
+org.springframework.boot:spring-boot-autoconfigure:jar:<managed> +
+org.springframework.graphql:spring-graphql:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:viewer:index/graphql/applib/auth/UserMementoProvider.adoc[UserMementoProvider], xref:refguide:viewer:index/graphql/applib/types/TypeMapper.adoc[TypeMapper]
+****
+
+|Apache Causeway Viewer - GraphQL (Model)
+[source,yaml]
+----
+Group: org.apache.causeway.viewer
+Artifact: causeway-viewer-graphql-model
+Type: jar
+Directory: /viewers/graphql/model
+----
+|.Components
+****
+o.a.i.viewer.graphql.model.registry.GraphQLTypeRegistry +
+****
+
+.Dependencies
+****
+com.graphql-java:graphql-java:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-graphql-applib:jar:<managed> +
+org.springframework.boot:spring-boot-autoconfigure:jar:<managed> +
+org.springframework.graphql:spring-graphql:jar:<managed> +
+****
+
+|Apache Causeway Viewer - GraphQL (Test)
+[source,yaml]
+----
+Group: org.apache.causeway.viewer
+Artifact: causeway-viewer-graphql-test
+Type: jar
+Directory: /viewers/graphql/test
+----
+|.Dependencies
+****
+com.approvaltests:approvaltests:jar:<managed> +
+com.h2database:h2:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
+org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-graphql-viewer:jar:<managed> +
+org.springframework:spring-context-support:jar:<managed> +
+org.springframework.boot:spring-boot-test-autoconfigure:jar:<managed> +
+org.springframework.graphql:spring-graphql-test:jar:1.2.4 +
+****
+
+|Apache Causeway Viewer - GraphQL (Viewer)
+[source,yaml]
+----
+Group: org.apache.causeway.viewer
+Artifact: causeway-viewer-graphql-viewer
+Type: jar
+Directory: /viewers/graphql/viewer
+----
+|.Components
+****
+o.a.i.viewer.graphql.viewer.integration.AsyncExecutionStrategyResolvingWithinInteraction +
+o.a.i.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway +
+o.a.i.viewer.graphql.viewer.integration.GraphQlSourceForCauseway +
+****
+
+.Dependencies
+****
+org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-graphql-model:jar:<managed> +
+org.assertj:assertj-core:jar:<managed> +
+org.junit.jupiter:junit-jupiter-api:jar:<managed> +
+org.springframework.boot:spring-boot-starter-websocket:jar:<managed> +
+****
+|===
+
 === Restful Objects
 
 [plantuml,Restful Objects,svg]
@@ -2880,14 +3066,7 @@ Artifact: causeway-viewer-wicket-ui
 Type: jar
 Directory: /viewers/wicket/ui
 ----
-|.Components
-****
-o.a.i.viewer.wicket.ui.app.logout.LogoutHandlerWkt +
-o.a.i.viewer.wicket.ui.components.collectioncontents.export.CollectionContentsAsExportFactory +
-o.a.i.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupportDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 com.google.guava:guava:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
@@ -2944,22 +3123,7 @@ Artifact: causeway-viewer-wicket-viewer
 Type: jar
 Directory: /viewers/wicket/viewer
 ----
-|.Components
-****
-o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault +
-o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageClassListDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault +
-o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
-o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
-o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
-o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
-o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
-o.a.i.viewer.wicket.viewer.wicketapp.CausewayWicketApplication$ServiceInjectorHolder +
-****
-
-.Dependencies
+|.Dependencies
 ****
 commons-io:commons-io:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
@@ -4212,12 +4376,13 @@ o.a.i.extensions.audittrail.applib.spiimpl.EntityPropertyChangeSubscriberForAudi
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[AuditTrailMenu], xref:refguide:extensions:index/audittrail/applib/contributions/HasInteractionId_auditTrailEntries.adoc[HasInteractionId_auditTrailEntries], xref:refguide:extensions:index/audittrail/applib/contributions/Object_recentAuditTrailEntries.adoc[Object_recentAuditTrailEntries], xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntry.adoc[AuditTrailEntry], xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntryRepository.adoc[AuditTrailEntryRepository], xref:refguide:extensions:index/audittrail/applib/spiimpl/EntityPropertyChangeSubscriberForAuditTrail.adoc[EntityPropertyChangeSubscriberForAuditTrail]
+xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[AuditTrailMenu], xref:refguide:extensions:index/audittrail/applib/contributions/HasInteractionId_auditTrailEntries.adoc[HasInteractionId_auditTrailEntries], xref:refguide:extensions:index/audittrail/applib/contributions/Object_createdByCommand.adoc[Object_createdByCommand], xref:refguide:extensions:index/audittrail/applib/contributions/Object_recentAuditTrailEntries.adoc[Object_recentAuditTrailEntries], xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntry.adoc[AuditTrailEntry], xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntryRepository.adoc[AuditTrailEntryRepository], xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntryRepositoryAbstract.adoc[AuditTrailEntryRepositoryAbstract], xref:refguide:extensions:index/audittrail/applib/spiimpl/EntityPropertyChangeSubscriberForAuditTrail.adoc[EntityPropertyChangeSubscriberForAuditTrail]
 ****
 
 |Apache Causeway Ext - Audit Trail Persistence (using JDO)
@@ -4487,6 +4652,7 @@ o.a.i.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotationFactory$Reg
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-pdfjs-applib:jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-commons:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 ****
 
@@ -4814,7 +4980,7 @@ org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<manage
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/sessionlog/applib/app/SessionLogMenu.adoc[SessionLogMenu], xref:refguide:extensions:index/sessionlog/applib/contributions/HasUsername_recentSessionsForUser.adoc[HasUsername_recentSessionsForUser], xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntry.adoc[SessionLogEntry], xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntryRepository.adoc[SessionLogEntryRepository], xref:refguide:extensions:index/sessionlog/applib/spiimpl/SessionLogServiceInitializer.adoc[SessionLogServiceInitializer], xref:refguide:extensions:index/sessionlog/applib/spiimpl/SessionSubscriberForSessionLog.adoc[SessionSubscriberForSessionLog]
+xref:refguide:extensions:index/sessionlog/applib/app/SessionLogMenu.adoc[SessionLogMenu], xref:refguide:extensions:index/sessionlog/applib/contributions/HasUsername_recentSessionsForUser.adoc[HasUsername_recentSessionsForUser], xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntry.adoc[SessionLogEntry], xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntryRepository.adoc[SessionLogEntryRepository], xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntryRepositoryAbstract.adoc[SessionLogEntryRepositoryAbstract], xref:refguide:extensions:index/sessionlog/applib/spiimpl/SessionLogServiceInitializer.adoc[SessionLogServiceInitializer], xref:refguide:extensions:index/sessionlog/applib/spiimpl/SessionSubscriberForSessionLog.adoc[SessionSubscriberForSessionLog]
 ****
 
 |Apache Causeway Ext - Session Log Persistence (using JDO)
@@ -5251,7 +5417,7 @@ org.quartz-scheduler:quartz:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/commandlog/applib/app/CommandLogMenu.adoc[CommandLogMenu], xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteractionId_commandLogEntry], xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[HasUsername_recentCommandsByUser], xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands], xref:refguide:extensions:index/commandlog/applib/contributions/T_recentBackgroundCommands.adoc[T_recentBackgroundCommands], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepository.adoc[CommandLogEntryRepository], xref:refguide:extensions:index/commandlog/applib/dom/ExecuteIn.adoc[ExecuteIn], xref:refguide:extensions:index/commandlog/applib/dom/ReplayState.adoc[ReplayState], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_childCommands.adoc[CommandLogEntry_childCommands], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_openResultObject.adoc[CommandLogEntry_openResultObject], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_siblingCommands.adoc[CommandLogEntry_siblingCommands], xref:refguide:extensions:index/commandlog/applib/fakescheduler/FakeScheduler.adoc[FakeScheduler], xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[RunBackgroundCommandsJob], xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[CommandSubscriberForCommandLog]
+xref:refguide:extensions:index/commandlog/applib/app/CommandLogMenu.adoc[CommandLogMenu], xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteractionId_commandLogEntry], xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[HasUsername_recentCommandsByUser], xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands], xref:refguide:extensions:index/commandlog/applib/contributions/T_recentBackgroundCommands.adoc[T_recentBackgroundCommands], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepository.adoc[CommandLogEntryRepository], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepositoryAbstract.adoc[CommandLogEntryRepositoryAbstract], xref:refguide:extensions:index/commandlog/applib/dom/ExecuteIn.adoc[ExecuteIn], xref:refguide:extensions:index/commandlog/applib/dom/ReplayState.adoc[ReplayState], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_childCommands.adoc[CommandLogEntry_childCommands], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_openResultObject.adoc[CommandLogEntry_openResultObject], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_siblingCommands.adoc[CommandLogEntry_siblingCommands], xref:refguide:extensions:index/commandlog/applib/fakescheduler/FakeScheduler.adoc[FakeScheduler], xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[RunBackgroundCommandsJob], xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[CommandSubscriberForCommandLog]
 ****
 
 |Apache Causeway Ext - Command Log Implementation (JDO)
@@ -5507,7 +5673,7 @@ org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/executionlog/applib/CausewayModuleExtExecutionLogApplib.adoc[CausewayModuleExtExecutionLogApplib], xref:refguide:extensions:index/executionlog/applib/app/ExecutionLogMenu.adoc[ExecutionLogMenu], xref:refguide:extensions:index/executionlog/applib/contributions/HasInteractionId_executionLogEntries.adoc[HasInteractionId_executionLogEntries], xref:refguide:extensions:index/executionlog/applib/contributions/HasUsername_recentExecutionsByUser.adoc[HasUsername_recentExecutionsByUser], xref:refguide:extensions:index/executionlog/applib/contributions/Object_recentExecutions.adoc[Object_recentExecutions], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[ExecutionLogEntry], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryRepository.adoc[ExecutionLogEntryRepository], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryType.adoc[ExecutionLogEntryType], xref:refguide:extensions:index/executionlog/applib/dom/mixins/ExecutionLogEntry_siblingExecutions.adoc[ExecutionLogEntry_siblingExecutions], xref:refguide:extensions:index/executionlog/applib/spiimpl/ExecutionSubscriberForExecutionLog.adoc[ExecutionSubscriberForExecutionLog]
+xref:refguide:extensions:index/executionlog/applib/CausewayModuleExtExecutionLogApplib.adoc[CausewayModuleExtExecutionLogApplib], xref:refguide:extensions:index/executionlog/applib/app/ExecutionLogMenu.adoc[ExecutionLogMenu], xref:refguide:extensions:index/executionlog/applib/contributions/HasInteractionId_executionLogEntries.adoc[HasInteractionId_executionLogEntries], xref:refguide:extensions:index/executionlog/applib/contributions/HasUsername_recentExecutionsByUser.adoc[HasUsername_recentExecutionsByUser], xref:refguide:extensions:index/executionlog/applib/contributions/Object_recentExecutions.adoc[Object_recentExecutions], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[ExecutionLogEntry], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryRepository.adoc[ExecutionLogEntryRepository], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryRepositoryAbstract.adoc[ExecutionLogEntryRepositoryAbstract], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryType.adoc[ExecutionLogEntryType], xref:refguide:extensions:index/executionlog/applib/dom/mixins/ExecutionLogEntry_siblingExecutions.adoc[ExecutionLogEntry_siblingExecutions], xref:refguide:extensions:index/executionlog/applib/spiimpl/ExecutionSubscriberForExecutionLog.adoc[ExecutionSubscriberForExecutionLog]
 ****
 
 |Apache Causeway Ext - Execution Log Implementation (JDO)
@@ -5679,7 +5845,7 @@ org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/executionoutbox/applib/CausewayModuleExtExecutionOutboxApplib.adoc[CausewayModuleExtExecutionOutboxApplib], xref:refguide:extensions:index/executionoutbox/applib/app/ExecutionOutboxMenu.adoc[ExecutionOutboxMenu], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntry.adoc[ExecutionOutboxEntry], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryRepository.adoc[ExecutionOutboxEntryRepository], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryType.adoc[ExecutionOutboxEntryType], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxEvents.adoc[OutboxEvents], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxRestApi.adoc[OutboxRestApi], xref:refguide:extensions:index/executionoutbox/applib/spiimpl/ContentMappingServiceForOutboxEvents.adoc[ContentMappingServiceForOutboxEvents]
+xref:refguide:extensions:index/executionoutbox/applib/CausewayModuleExtExecutionOutboxApplib.adoc[CausewayModuleExtExecutionOutboxApplib], xref:refguide:extensions:index/executionoutbox/applib/app/ExecutionOutboxMenu.adoc[ExecutionOutboxMenu], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntry.adoc[ExecutionOutboxEntry], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryRepository.adoc[ExecutionOutboxEntryRepository], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryRepositoryAbstract.adoc[ExecutionOutboxEntryRepositoryAbstract], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryType.adoc[ExecutionOutboxEntryType], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxEvents.adoc[OutboxEvents], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxRestApi.adoc[OutboxRestApi], xref:refguide:extensions:index/executionoutbox/applib/spiimpl/ContentMappingServiceForOutboxEvents.adoc[ContentMappingServiceForOutboxEvents]
 ****
 
 |Apache Causeway Ext - Execution Outbox Implementation (JDO)
@@ -6524,7 +6690,31 @@ Artifact: causeway-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testdomain.jdo.JdoInventoryDao +
+o.a.i.testdomain.jdo.JdoTestFixtures +
+o.a.i.testdomain.jpa.JpaInventoryDao +
+o.a.i.testdomain.jpa.JpaTestFixtures +
+o.a.i.testdomain.jpa.springdata.EmployeeRepository +
+o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
+o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
+o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
+o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
+o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
+o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
+o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
+o.a.i.testdomain.util.kv.KVStoreForTesting +
+o.a.i.testdomain.util.rest.RestEndpointService +
+o.a.i.testdomain.wrapperfactory.CounterRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +
@@ -6532,6 +6722,7 @@ org.apache.causeway.extensions:causeway-extensions-secman-integration:jar:<manag
 org.apache.causeway.extensions:causeway-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sse-metamodel:jar:<managed> +
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
+org.apache.causeway.persistence:causeway-persistence-commons:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
 org.apache.causeway.security:causeway-security-shiro:jar:<managed> +
@@ -6638,6 +6829,8 @@ Directory: /regressiontests/stable-config
 ----
 |.Dependencies
 ****
+com.icegreen:greenmail-junit5:jar:1.6.15 +
+org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.regressiontests:causeway-regressiontests-stable:jar:<managed> +
 ****
 
@@ -6925,13 +7118,13 @@ Directory: /incubator
 
 === Kroviz Client
 
-=== GraphQL Viewer
+=== Command Replay
 
-[plantuml,GraphQL Viewer,svg]
+[plantuml,Command Replay,svg]
 ----
 @startuml
 set separator none
-title GraphQL Viewer - Containers
+title Command Replay - Containers
 
 left to right direction
 
@@ -6944,199 +7137,47 @@ skinparam {
 
 hide stereotype
 
-skinparam rectangle<<GraphQLViewer.ApacheCausewayIncViewerGraphQL>> {
+skinparam rectangle<<CommandReplay.ApacheCausewayIncCoreCommandReplay>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<GraphQLViewer.ApacheCausewayIncViewerGraphQLApplib>> {
+skinparam rectangle<<CommandReplay.ApacheCausewayIncCoreCommandReplayforPrimary>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<GraphQLViewer.ApacheCausewayIncViewerGraphQLModel>> {
+skinparam rectangle<<CommandReplay.ApacheCausewayIncCoreCommandReplayforSecondary>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<GraphQLViewer.ApacheCausewayIncViewerGraphQLTest>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<GraphQLViewer.ApacheCausewayIncViewerGraphQLViewer>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<GraphQLViewer>> {
+skinparam rectangle<<CommandReplay>> {
   BorderColor #9a9a9a
   FontColor #9a9a9a
   shadowing false
 }
 
-rectangle "GraphQL Viewer\n<size:10>[Software System]</size>" <<GraphQLViewer>> {
-  rectangle "==Apache Causeway Inc - Viewer GraphQL\n<size:10>[Container: packaging: pom]</size>" <<GraphQLViewer.ApacheCausewayIncViewerGraphQL>> as GraphQLViewer.ApacheCausewayIncViewerGraphQL
-  rectangle "==Apache Causeway Inc - Viewer GraphQL (Applib)\n<size:10>[Container: packaging: jar]</size>" <<GraphQLViewer.ApacheCausewayIncViewerGraphQLApplib>> as GraphQLViewer.ApacheCausewayIncViewerGraphQLApplib
-  rectangle "==Apache Causeway Inc - Viewer GraphQL (Model)\n<size:10>[Container: packaging: jar]</size>" <<GraphQLViewer.ApacheCausewayIncViewerGraphQLModel>> as GraphQLViewer.ApacheCausewayIncViewerGraphQLModel
-  rectangle "==Apache Causeway Inc - Viewer GraphQL (Test)\n<size:10>[Container: packaging: jar]</size>" <<GraphQLViewer.ApacheCausewayIncViewerGraphQLTest>> as GraphQLViewer.ApacheCausewayIncViewerGraphQLTest
-  rectangle "==Apache Causeway Inc - Viewer GraphQL (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<GraphQLViewer.ApacheCausewayIncViewerGraphQLViewer>> as GraphQLViewer.ApacheCausewayIncViewerGraphQLViewer
+rectangle "Command Replay\n<size:10>[Software System]</size>" <<CommandReplay>> {
+  rectangle "==Apache Causeway Inc - Core Command Replay\n<size:10>[Container: packaging: pom]</size>" <<CommandReplay.ApacheCausewayIncCoreCommandReplay>> as CommandReplay.ApacheCausewayIncCoreCommandReplay
+  rectangle "==Apache Causeway Inc - Core Command Replay for Primary\n<size:10>[Container: packaging: jar]</size>" <<CommandReplay.ApacheCausewayIncCoreCommandReplayforPrimary>> as CommandReplay.ApacheCausewayIncCoreCommandReplayforPrimary
+  rectangle "==Apache Causeway Inc - Core Command Replay for Secondary\n<size:10>[Container: packaging: jar]</size>" <<CommandReplay.ApacheCausewayIncCoreCommandReplayforSecondary>> as CommandReplay.ApacheCausewayIncCoreCommandReplayforSecondary
 }
 
-GraphQLViewer.ApacheCausewayIncViewerGraphQL .[#707070,thickness=2].> GraphQLViewer.ApacheCausewayIncViewerGraphQLViewer : "<color:#707070>"
-GraphQLViewer.ApacheCausewayIncViewerGraphQL .[#707070,thickness=2].> GraphQLViewer.ApacheCausewayIncViewerGraphQLApplib : "<color:#707070>"
-GraphQLViewer.ApacheCausewayIncViewerGraphQL .[#707070,thickness=2].> GraphQLViewer.ApacheCausewayIncViewerGraphQLModel : "<color:#707070>"
-GraphQLViewer.ApacheCausewayIncViewerGraphQL .[#707070,thickness=2].> GraphQLViewer.ApacheCausewayIncViewerGraphQLTest : "<color:#707070>"
+CommandReplay.ApacheCausewayIncCoreCommandReplay .[#707070,thickness=2].> CommandReplay.ApacheCausewayIncCoreCommandReplayforPrimary : "<color:#707070>"
+CommandReplay.ApacheCausewayIncCoreCommandReplay .[#707070,thickness=2].> CommandReplay.ApacheCausewayIncCoreCommandReplayforSecondary : "<color:#707070>"
 @enduml
 ----
 
-.Projects/Modules (GraphQL Viewer)
+.Projects/Modules (Command Replay)
 [cols="3a,5a", options="header"]
 |===
 |Coordinates |Description 
 
-|Apache Causeway Inc - Viewer GraphQL
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-graphql
-Type: pom
-Directory: /incubator/viewers/graphql
-----
-|
-
-|Apache Causeway Inc - Viewer GraphQL (Applib)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-graphql-applib
-Type: jar
-Directory: /incubator/viewers/graphql/applib
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-****
-
-|Apache Causeway Inc - Viewer GraphQL (Model)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-graphql-model
-Type: jar
-Directory: /incubator/viewers/graphql/model
-----
-|.Dependencies
-****
-com.graphql-java:graphql-java:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.incubator.viewer:causeway-viewer-graphql-applib:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
-org.springframework.graphql:spring-graphql:jar:<managed> +
-****
-
-|Apache Causeway Inc - Viewer GraphQL (Test)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-graphql-test
-Type: jar
-Directory: /incubator/viewers/graphql/test
-----
-|.Dependencies
-****
-com.approvaltests:approvaltests:jar:<managed> +
-com.h2database:h2:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
-org.apache.causeway.incubator.viewer:causeway-viewer-graphql-viewer:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
-****
-
-|Apache Causeway Inc - Viewer GraphQL (Viewer)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-graphql-viewer
-Type: jar
-Directory: /incubator/viewers/graphql/viewer
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
-org.apache.causeway.incubator.viewer:causeway-viewer-graphql-model:jar:<managed> +
-org.springframework.boot:spring-boot-starter-websocket:jar:<managed> +
-****
-|===
-
-== Other
-
-[plantuml,Other,svg]
-----
-@startuml
-set separator none
-title Other - Containers
-
-left to right direction
-
-skinparam {
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
-
-hide stereotype
-
-skinparam rectangle<<Other.ApacheCausewayExtCommandReplay>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Other.ApacheCausewayExtCommandReplayforPrimary>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Other.ApacheCausewayExtCommandReplayforSecondary>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Other>> {
-  BorderColor #9a9a9a
-  FontColor #9a9a9a
-  shadowing false
-}
-
-rectangle "Other\n<size:10>[Software System]</size>" <<Other>> {
-  rectangle "==Apache Causeway Ext - Command Replay\n<size:10>[Container: packaging: pom]</size>" <<Other.ApacheCausewayExtCommandReplay>> as Other.ApacheCausewayExtCommandReplay
-  rectangle "==Apache Causeway Ext - Command Replay for Primary\n<size:10>[Container: packaging: jar]</size>" <<Other.ApacheCausewayExtCommandReplayforPrimary>> as Other.ApacheCausewayExtCommandReplayforPrimary
-  rectangle "==Apache Causeway Ext - Command Replay for Secondary\n<size:10>[Container: packaging: jar]</size>" <<Other.ApacheCausewayExtCommandReplayforSecondary>> as Other.ApacheCausewayExtCommandReplayforSecondary
-}
-
-Other.ApacheCausewayExtCommandReplay .[#707070,thickness=2].> Other.ApacheCausewayExtCommandReplayforPrimary : "<color:#707070>"
-Other.ApacheCausewayExtCommandReplay .[#707070,thickness=2].> Other.ApacheCausewayExtCommandReplayforSecondary : "<color:#707070>"
-@enduml
-----
-
-.Projects/Modules (Other)
-[cols="3a,5a", options="header"]
-|===
-|Coordinates |Description 
-
-|Apache Causeway Ext - Command Replay
+|Apache Causeway Inc - Core Command Replay
 [source,yaml]
 ----
 Group: org.apache.causeway.incubator.extensions
@@ -7146,7 +7187,7 @@ Directory: /incubator/extensions/core/commandreplay
 ----
 |Replays commands to secondary system
 
-|Apache Causeway Ext - Command Replay for Primary
+|Apache Causeway Inc - Core Command Replay for Primary
 [source,yaml]
 ----
 Group: org.apache.causeway.incubator.extensions
@@ -7155,6 +7196,12 @@ Type: jar
 Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
+
+.Components
+****
+o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
+o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
+****
 
 .Dependencies
 ****
@@ -7170,7 +7217,7 @@ org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 xref:refguide:extensions:index/commandreplay/primary/CausewayModuleExtCommandReplayPrimary.adoc[CausewayModuleExtCommandReplayPrimary], xref:refguide:extensions:index/commandreplay/primary/config/PrimaryConfig.adoc[PrimaryConfig], xref:refguide:extensions:index/commandreplay/primary/mixins/Object_openOnSecondary.adoc[Object_openOnSecondary], xref:refguide:extensions:index/commandreplay/primary/restapi/CommandRetrievalOnPrimaryService.adoc[CommandRetrievalOnPrimaryService], xref:refguide:extensions:index/commandreplay/primary/ui/CommandReplayOnPrimaryService.adoc[CommandReplayOnPrimaryService]
 ****
 
-|Apache Causeway Ext - Command Replay for Secondary
+|Apache Causeway Inc - Core Command Replay for Secondary
 [source,yaml]
 ----
 Group: org.apache.causeway.incubator.extensions
@@ -7180,6 +7227,16 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
+
+.Components
+****
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
+o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
+o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
+o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
+****
 
 .Dependencies
 ****

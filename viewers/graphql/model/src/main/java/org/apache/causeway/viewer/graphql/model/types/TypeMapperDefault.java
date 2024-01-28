@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
+import static graphql.schema.GraphQLNonNull.nonNull;
+import static graphql.schema.GraphQLTypeReference.typeRef;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -25,29 +28,23 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotSupportedException;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-
 import org.joda.time.DateTime;
-
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
+import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLInputType;
@@ -55,21 +52,30 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLTypeReference;
-
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLTypeReference.typeRef;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TypeMapperDefault implements TypeMapper {
 
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(TypeMapper.class)
+        public TypeMapper defaultTypeMapper(final CausewayConfiguration causewayConfiguration) {
+            return new TypeMapperDefault(causewayConfiguration);
+        }
+    }
+
     @SuppressWarnings("CdiInjectInspection")
     @Inject private final CausewayConfiguration causewayConfiguration;
 
-    private static <K,V> Map.Entry<K,V> pair(K key, V value) {
+    private static <K,V> Map.Entry<K,V> pair(final K key, final V value) {
         return new Map.Entry<K, V>() {
             @Override public K getKey() {return key;}
             @Override public V getValue() {return value;}
-            @Override public V setValue(V value) { throw new NotSupportedException("Immutable"); }
+            @Override public V setValue(final V value) { throw new NotSupportedException("Immutable"); }
         };
     }
 
@@ -93,10 +99,12 @@ public class TypeMapperDefault implements TypeMapper {
             pair(Boolean.class, Scalars.GraphQLBoolean)
     );
 
+    @Override
     public GraphQLScalarType scalarTypeFor(final Class<?> c){
         return SCALAR_BY_CLASS.getOrDefault(c, Scalars.GraphQLString);
     }
 
+    @Override
     public GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature) {
         ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
         switch (otoaObjectSpec.getBeanSort()) {
@@ -120,6 +128,7 @@ public class TypeMapperDefault implements TypeMapper {
         return null;
     }
 
+    @Override
     @Nullable
     public GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification){
 
@@ -142,12 +151,14 @@ public class TypeMapperDefault implements TypeMapper {
         }
     }
 
-    @Nullable public GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation) {
+    @Override
+    @Nullable public GraphQLList listTypeForElementTypeOf(final OneToManyAssociation oneToManyAssociation) {
         ObjectSpecification elementType = oneToManyAssociation.getElementType();
         return listTypeFor(elementType);
     }
 
-    @Nullable public GraphQLList listTypeFor(ObjectSpecification elementType) {
+    @Override
+    @Nullable public GraphQLList listTypeFor(final ObjectSpecification elementType) {
         switch (elementType.getBeanSort()) {
             case VIEW_MODEL:
             case ENTITY:
@@ -158,6 +169,7 @@ public class TypeMapperDefault implements TypeMapper {
         return null;
     }
 
+    @Override
     public GraphQLInputType inputTypeFor(
             final OneToOneFeature oneToOneFeature,
             final InputContext inputContext) {
@@ -185,6 +197,7 @@ public class TypeMapperDefault implements TypeMapper {
         }
     }
 
+    @Override
     public GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused){
         ObjectSpecification elementType = oneToManyActionParameter.getElementType();
         return GraphQLList.list(inputTypeFor_(elementType));
@@ -209,6 +222,7 @@ public class TypeMapperDefault implements TypeMapper {
         }
     }
 
+    @Override
     public Object adaptPojo(
             final Object argumentValue,
             final ObjectSpecification elementType) {
@@ -226,7 +240,7 @@ public class TypeMapperDefault implements TypeMapper {
             return BigDecimal.valueOf((Double) argumentValue);
         }
 
-        val typeMapperConfig = causewayConfiguration.getViewer().getGqlv().getTypeMapper();
+        val typeMapperConfig = causewayConfiguration.getViewer().getGraphql().getTypeMapper();
         if (elementClazz == LocalDate.class) {
             String argumentStr = (String) argumentValue;
             return LocalDate.parse(argumentStr, DateTimeFormatter.ofPattern(typeMapperConfig.getLocalDateFormat()));

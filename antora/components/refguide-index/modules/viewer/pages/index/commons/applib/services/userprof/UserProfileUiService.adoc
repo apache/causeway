@@ -27,3 +27,7 @@ A UI model to represent the currently logged in user.
 === userProfile()
 
 A UI model to represent the currently logged in user.
+
+include::hooks/UserProfileUiService_010-implementation.adoc[]
+
+include::hooks/UserProfileUiService_020-examples-and-usage.adoc[]

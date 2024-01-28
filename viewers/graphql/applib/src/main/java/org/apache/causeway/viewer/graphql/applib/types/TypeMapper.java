@@ -16,35 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.types;
+package org.apache.causeway.viewer.graphql.applib.types;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
-
+import graphql.ExperimentalApi;
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLScalarType;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
+
+/**
+ * SPI to map framework's own datatypes to GraphQL's types.
+ *
+ * <p>
+ *     The framework provides a default implementation (as a fallback) that supports most of the common data types.
+ * </p>
+ *
+ * <p>
+ *     <b>NOTE</b>: this API is considered experimental/beta and may change in the future.
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
+@ExperimentalApi
 public interface TypeMapper {
-
-    @Configuration
-    class TypeMapperConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(TypeMapper.class)
-        public TypeMapper defaultTypeMapper(final CausewayConfiguration causewayConfiguration) {
-            return new TypeMapperDefault(causewayConfiguration);
-        }
-    }
 
     GraphQLScalarType scalarTypeFor(final Class<?> c);
 
@@ -79,7 +80,7 @@ public interface TypeMapper {
         INVOKE,
         SET,
         ;
-        boolean isOptionalAlwaysAllowed() {
+        public boolean isOptionalAlwaysAllowed() {
             return !(this == INVOKE || this == SET);
         }
     }
