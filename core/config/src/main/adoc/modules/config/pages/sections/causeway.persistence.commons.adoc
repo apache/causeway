@@ -1,0 +1,45 @@
+= Core Persistence Commons
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/causeway.persistence.commons~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[causeway.persistence.commons.entity-change-tracker.suppress-auto-flush]]
+causeway.persistence.commons. +
+entity-change-tracker. +
+suppress-auto-flush
+
+|  true
+| Normally any query submitted to ``RepositoryService#allMatches(Query)`` will trigger a flush first, unless auto-flush has been disabled.
+
+However, this auto-flush behaviour can be troublesome if the query occurs as a side-effect of the evaluation of a derived property, whose value in turn is enlisted by an implementation of a subscriber (in particular ``EntityPropertyChangeSubscriber``) which captures the value of all properties (both persisted and derived). However, this behaviour can (at least under JDO), result in a ``ConcurrentModificationException``.
+
+By default, ``EntityChangeTracker`` will therefore temporarily suppress any auto-flushing while this is ongoing. The purpose of this configuration property is to never suppress, ie always autoflush.
+
+
+|
+[[causeway.persistence.commons.repository-service.disable-auto-flush]]
+causeway.persistence.commons. +
+repository-service. +
+disable-auto-flush
+
+| 
+| Normally any queries are automatically preceded by flushing pending executions.
+
+This key allows this behaviour to be disabled.
+
+NOTE: this key is redundant for JPA/EclipseLink, which supports its own auto-flush using https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABDHEEB[eclipselink.persistence-context.flush-mode]
+
+
+
+|===
+
+include::../section-hooks/causeway.persistence.commons~post.adoc[]

@@ -18,28 +18,29 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+ import java.util.Collections;
+
+ import graphql.schema.DataFetchingEnvironment;
+ import graphql.schema.GraphQLFieldDefinition;
+
  import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import java.util.Collections;
+ import org.apache.causeway.applib.annotation.Where;
+ import org.apache.causeway.applib.services.bookmark.BookmarkService;
+ import org.apache.causeway.commons.collections.Can;
+ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
+ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+ import org.apache.causeway.core.metamodel.object.ManagedObject;
+ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+ import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+ import org.apache.causeway.viewer.graphql.model.context.Context;
+ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
+ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
+ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+ import lombok.val;
+ import lombok.extern.log4j.Log4j2;
 
  @Log4j2
  public class GqlvActionParamDefault {

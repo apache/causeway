@@ -36,9 +36,9 @@
 	<name>Apache Causeway Maven Deps - Webapp</name>
 	<description>
         Defines a module that can be almost used as a single dependency for running
-        an Apache Causeway webapp (Wicket, Restful Objects, GraphQL and Shiro security).
+        an Apache Causeway webapp (Wicket, Restful Objects and GraphQL viewers).
 
-        Note: Also requires a persistence provider.
+        However, it does NOT include any security module or persistence provider or extensions.
     </description>
 
 	<dependencies>
@@ -88,6 +88,21 @@
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-runtimeservices</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-graphql-viewer</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-wicket-viewer</artifactId>
 		</dependency>
 
         <!--

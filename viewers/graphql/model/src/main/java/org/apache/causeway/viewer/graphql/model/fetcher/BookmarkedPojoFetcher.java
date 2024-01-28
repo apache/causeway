@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.fetcher;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+
 import lombok.val;
 
 public class BookmarkedPojoFetcher implements DataFetcher<Object> {

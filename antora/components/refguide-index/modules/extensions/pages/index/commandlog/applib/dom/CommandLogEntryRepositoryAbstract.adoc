@@ -1,0 +1,109 @@
+= CommandLogEntryRepositoryAbstract
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides supporting functionality for querying xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] entities.
+
+== API
+
+[source,java]
+.CommandLogEntryRepositoryAbstract.java
+----
+class CommandLogEntryRepositoryAbstract<C> {
+  Class<C> getEntityClass()
+  C createEntryAndPersist(Command command, UUID parentInteractionIdIfAny, ExecuteIn executeIn)
+  Optional<CommandLogEntry> findByInteractionId(UUID interactionId)
+  List<CommandLogEntry> findByParent(CommandLogEntry parent)
+  List<CommandLogEntry> findByParentInteractionId(UUID parentInteractionId)
+  List<CommandLogEntry> findByFromAndTo(LocalDate from, LocalDate to)
+  List<CommandLogEntry> findCurrent()
+  List<CommandLogEntry> findCompleted()
+  List<CommandLogEntry> findByTargetAndFromAndTo(Bookmark target, LocalDate from, LocalDate to)
+  List<CommandLogEntry> findMostRecent()
+  List<CommandLogEntry> findMostRecent(int limit)
+  List<CommandLogEntry> findRecentByUsername(String username)
+  List<CommandLogEntry> findRecentByTarget(Bookmark target)
+  List<CommandLogEntry> findRecentByTargetOrResult(Bookmark targetOrResult)
+  List<CommandLogEntry> findSince(UUID interactionId, Integer batchSize)     // <.>
+  List<CommandLogEntry> findBackgroundAndNotYetStarted()     // <.>
+  List<CommandLogEntry> findRecentBackgroundByTarget(Bookmark target)
+  Optional<CommandLogEntry> findMostRecentReplayed()     // <.>
+  Optional<CommandLogEntry> findMostRecentCompleted()     // <.>
+  List<CommandLogEntry> findNotYetReplayed()
+  C saveForReplay(CommandDto dto)
+  List<CommandLogEntry> saveForReplay(CommandsDto commandsDto)
+  void persist(CommandLogEntry commandLogEntry)
+  void truncateLog()
+  List<CommandLogEntry> findCommandsOnPrimaryElseFail(UUID interactionId, Integer batchSize)
+  List<CommandLogEntry> findAll()     // <.>
+  void removeAll()     // <.>
+}
+----
+
+<.> xref:#findSince_UUID_Integer[findSince(UUID, Integer)]
++
+--
+Intended to support the replay of commands on a secondary instance of the application. This finder returns all (completed) xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s started after the command with the specified interactionId. The number of commands returned can be limited so that they can be applied in batches. If the provided interactionId is null, then only a single xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] is returned. This is intended to support the case when the secondary does not yet have any xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s replicated. In practice this is unlikely; typically we expect that the secondary will be set up to run against a copy of the primary instance's DB (restored from a backup), in which case there will already be a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] representing the current high water mark on the secondary system. If the interactionId is not null but the corresponding xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] is not found, then `null` is returned. In the replay scenario the caller will probably interpret this as an error because it means that the high water mark on the secondary is inaccurate, referring to a non-existent xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] on the primary.
+--
+<.> xref:#findBackgroundAndNotYetStarted_[findBackgroundAndNotYetStarted()]
++
+--
+Returns any persisted commands that have not yet started.
+--
+<.> xref:#findMostRecentReplayed_[findMostRecentReplayed()]
++
+--
+The most recent replayed command previously replicated from primary to secondary.
+--
+<.> xref:#findMostRecentCompleted_[findMostRecentCompleted()]
++
+--
+The most recent completed command, as queried on the secondary.
+--
+<.> xref:#findAll_[findAll()]
++
+--
+intended for testing purposes only
+--
+<.> xref:#removeAll_[removeAll()]
++
+--
+intended for testing purposes only
+--
+
+== Members
+
+[#findSince_UUID_Integer]
+=== findSince(UUID, Integer)
+
+Intended to support the replay of commands on a secondary instance of the application. This finder returns all (completed) xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s started after the command with the specified interactionId. The number of commands returned can be limited so that they can be applied in batches. If the provided interactionId is null, then only a single xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] is returned. This is intended to support the case when the secondary does not yet have any xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s replicated. In practice this is unlikely; typically we expect that the secondary will be set up to run against a copy of the primary instance's DB (restored from a backup), in which case there will already be a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] representing the current high water mark on the secondary system. If the interactionId is not null but the corresponding xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] is not found, then `null` is returned. In the replay scenario the caller will probably interpret this as an error because it means that the high water mark on the secondary is inaccurate, referring to a non-existent xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] on the primary.
+
+[#findBackgroundAndNotYetStarted_]
+=== findBackgroundAndNotYetStarted()
+
+Returns any persisted commands that have not yet started.
+
+This is to support the notion of background commands (the same as their implementation in v1) whereby a custom executor service for _org.apache.causeway.applib.services.wrapper.WrapperFactory_ would "execute" a xref:refguide:applib:index/services/command/Command.adoc[Command] simply by persisting it as a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] , so that a quartz or similar background job could execute the xref:refguide:applib:index/services/command/Command.adoc[Command] at some point later.
+
+[#findMostRecentReplayed_]
+=== findMostRecentReplayed()
+
+The most recent replayed command previously replicated from primary to secondary.
+
+This should always exist except for the very first times (after restored the prod DB to secondary).
+
+[#findMostRecentCompleted_]
+=== findMostRecentCompleted()
+
+The most recent completed command, as queried on the secondary.
+
+After a restart following the production database being restored from primary to secondary, would correspond to the last command run on primary before the production database was restored to the secondary.
+
+[#findAll_]
+=== findAll()
+
+intended for testing purposes only
+
+[#removeAll_]
+=== removeAll()
+
+intended for testing purposes only

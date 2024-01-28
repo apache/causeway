@@ -52,3 +52,24 @@ Changes:
 
 For more details, see link:https://issues.apache.org/jira/browse/CAUSEWAY-3675[CAUSEWAY-3675].
 
+
+== Mavendeps webapp module and the GraphQL viewer (CAUSEWAY-3676)
+
+The GraphQL viewer is a brand new viewer, automatically exposing your domain object model as a GraphQL API.
+For more on this new feature, see the corresponding xref:relnotes::2024/2.0.0-RC5/relnotes.adoc#the-graphql-viewer-causeway-3676[release notes].
+
+As part of this work, the `org.apache.causeway.mavendeps:causeway-mavendeps-webapp` convenience module has been updated.
+It now references all 3 viewers (Wicket, Restful and GraphQL) as a one-stop shop for bringing in viewers.
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.mavendeps</groupId>
+	<artifactId>causeway-mavendeps-webapp</artifactId>
+</dependency>
+----
+
+It is still necessary to add in the persistence and security modules.
+
+For more details, see link:https://issues.apache.org/jira/browse/CAUSEWAY-3676[CAUSEWAY-3676].

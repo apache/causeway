@@ -195,17 +195,17 @@
         </div>
 
         <div class="col-lg-6 content">
-          <h3><b>Apache Causeway™ enables domain-driven application development by automatically generating a UI for your Spring Boot™ apps.  That means:</b></h3>
+          <h3><b>Apache Causeway™ enables domain-driven application development by dynamically generating a UI and API for your Spring Boot™ apps.  That means:</b></h3>
 
           <ul>
             <li><i class="ion-android-checkmark-circle"></i><span><b>Productivity</b> - your app is mostly business logic, with costly UI code eliminated.</span></li>
             <li><i class="ion-android-checkmark-circle"></i><span><b>Discovery</b> - you can work hand-in-hand with your business domain experts, to understand the problem space and to explore and then select a solution within the solution space.</span></li>
             <li><i class="ion-android-checkmark-circle"></i><span><b>Ease of Use</b> - your business users will find the app easy to learn, with the business concepts front and center</span></li>
-            <li><i class="ion-android-checkmark-circle"></i><span><b>Simple Integration</b> - you can integrate easily with other systems, through domain events published automatically for async integration, and with an automatically provided REST API for sync integration.</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span><b>Simple Integration</b> - you can integrate easily with other systems using the dynamically provided <a href="https://graphql.org/">GraphQL</a> and <a href="https://en.wikipedia.org/wiki/REST">RESTful</a> APIs, or by through the automatically published domain events for async communication.</span></li>
             <li><i class="ion-android-checkmark-circle"></i><span><b>Clean Architecture</b> - you will find it easy to maintain a clear separation of concerns within your app's internal architecture</span></li>
           </ul>
 
-          <p>And because Apache Causeway™ is <b>open source</b>, running on top of Spring Boot™, you won't be locked into a vendor nor even the framework; the clean separation of concerns means you could even lift-n-shift your domain logic to run on some other framework if need be.</p>
+          <p>And because Apache Causeway™ is <b>open source</b>, running on top of Spring Boot™, you won't be locked into a vendor nor even the framework; the clean separation of concerns means you could even lift-n-shift the domain logic of your app to run elsewhere if need be.</p>
         </div>
       </div>
 
@@ -445,22 +445,32 @@
 
         <div class="col-lg-4">
           <div class="box wow fadeInUp">
-            <h2>UI &amp; REST &ldquo;for free&rdquo;</h2>
-            <p class="description">Apache Causeway™ dynamically builds both a generic user interface and also a rich hypermedia REST API directly from the underlying domain objects. This makes for extremely rapid prototyping and a short feedback cycle, perfect for agile development. The UI can also be extended for specific use cases, and can be themed using Bootstrap.</p>
+            <h2>UI &amp; APIs &ldquo;for free&rdquo;</h2>
+            <p class="description">Apache Causeway™ dynamically builds a generic user interface for end-users, and also
+                a complete <a href="https://graphql.org/">GraphQL</a> API and a rich hypermedia
+                <a href="https://en.wikipedia.org/wiki/REST">RESTful API</a>, with both behaviour and structure inferred
+                from the underlying domain objects.
+                This makes for extremely rapid prototyping and a short feedback cycle, perfect for agile development.
+                The UI is themed using Bootstrap.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
           <div class="box wow fadeInUp" data-wow-delay="0.1s">
             <h2>Domain-Driven</h2>
-            <p class="description">The core of an Apache Causeway™ application are the domain objects, either persisted entities or view models. Business rules can be associated directly with domain objects, or can be factored out into separate services. Apache Causeway performs dependency injection everywhere to ensure that the application remains decoupled and testable.</p>
+            <p class="description">The core of an Apache Causeway™ application are the domain objects, either persisted
+                entities or view models.
+                Business rules can be associated directly with domain objects, or can be factored out into separate services.
+                Apache Causeway performs dependency injection everywhere to ensure that the application remains decoupled and testable.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
           <div class="box wow fadeInUp" data-wow-delay="0.1s">
             <h2>Add-ons</h2>
-            <p class="description">Apache Causeway™ includes a large number of add-on modules for security, auditing, command profiling, mail merge and other cross-cutting concerns. It also has a number of UI extensions for maps, calendars etc. All are open source and designed for out-of-the-box use or to modify as you require.</p>
+            <p class="description">Apache Causeway™ includes a large number of add-on modules for security, auditing,
+                command profiling, mail merge and other cross-cutting concerns. It also has a number of UI extensions
+                for maps, calendars etc. All are open source and designed for out-of-the-box use or for you to modify as required.</p>
           </div>
         </div>
 
@@ -475,63 +485,108 @@
   <section id="services">
     <div class="container">
       <div class="section-header">
-        <h2>Built with</h2>
-        <p>Apache Causeway™ is built on top of industry leading open source products, all licensed with business-friendly Apache Software License v2.0 or MIT.</p>
+        <h2>Standing on the shoulders of giants</h2>
+        <p>Apache Causeway™ is built on top of industry leading open source products, all licensed with the business-friendly licenses of either Apache™ Software License v2.0 or MIT.</p>
       </div>
 
       <div class="row">
 
         <div class="col-lg-4">
-          <div class="box wow fadeInLeft" data-wow-delay="0.1s">
-            <div class="pic">
-              <!--<img src="_/img/home/built-with/spring-boot-logo.png" height="105px" alt="">-->
-              <a href="https://spring.io/projects/spring-boot">Spring Boot</a></div>
-            <p class="description">... to create stand-alone, production-grade Spring based Applications.</p>
+          <div class="box wow fadeInLeft" data-wow-delay="0.1s" style="min-height: 400px;">
+            <div class="pic" style="height: 105px;">
+              <a href="https://spring.io/projects/spring-boot">
+                <img src="_/img/home/built-with/spring-2.svg" width="300px" alt="Spring Boot™" style="margin-left: -30px;"/>
+              </a>
+            </div>
+            <p class="description">Spring Boot™ is the de&nbsp;facto way to create stand-alone, production-grade Spring™-based applications.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
-          <div class="box wow fadeInLeft">
-            <div class="pic">
-              <!--<img src="_/img/home/built-with/apache-wicket.png" height="80px" alt="">-->
-              <a href="https://wicket.apache.org">Apache Wicket™<a/></div>
-            <p class="description">... is an open source Java component oriented web application framework that powers thousands of web applications and web sites.</p>
+            <div class="box wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+              <div class="pic" style="height: 105px;">
+                <a href="https://wicket.apache.org">
+                  <img src="_/img/home/built-with/apache-wicket.svg" width="300px" alt="Apache Wicket™" style="margin-left: -30px;"/>
+                </a>
+            </div>
+            <p class="description">Apache Wicket™ is an open source Java™ component oriented web application framework that powers thousands of web applications and websites.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
-          <div class="box wow fadeInRight">
-            <div class="pic">
-              <!--<img src="_/img/home/built-with/resteasy_logo_600x.gif" height="105px" alt="">-->
-              <a href="https://resteasy.github.io">RESTEasy</a></div>
-            <p class="description">... a portable implementation of the JAX-RS specification for RESTful APIs</p>
+            <div class="box wow fadeInRight" data-wow-delay="0.1s" style="min-height: 400px;">
+            <div class="pic" style="height: 105px;">
+              <a href="https://getbootstrap.com/">
+                <img src="_/img/home/built-with/bootstrap-logo.svg" height="95px" alt="Bootstrap™" style="margin-left: -30px;"/>
+              </a>
+            </div>
+            <p class="description">Bootstrap™ is a powerful, extensible, and feature-packed frontend toolkit.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
-          <div class="box wow fadeInLeft" data-wow-delay="0.1s">
-            <div class="pic">
-              <!--<img src="_/img/home/built-with/EclipseLink.png" width="300px" height="105px" alt="">-->
-              <a href="https://www.eclipse.org/eclipselink/">EclipseLink</a></div>
-              <p class="description">... the reference implementation for JPA, a comprehensive open-source Java persistence solution addressing relational, XML, and database web services.</p>
+            <div class="box wow fadeInLeft" data-wow-delay="0.2s" style="min-height: 400px;">
+            <div class="pic" style="height: 105px;">
+              <a href="https://www.graphql-java.com/">
+                <img src="_/img/home/built-with/graphql-java.png" height="105px" alt="GraphQL Java™" style="margin-left: -30px;"/>
+              </a>
+            </div>
+            <p class="description">GraphQL Java is the Java™ implementation of the <a href="https://spec.graphql.org/">GraphQL specification</a>.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
-          <div class="box wow fadeInLeft" data-wow-delay="0.2s">
-            <div class="pic">
-              <!--<img src="_/img/home/built-with/datanucleus-logo.png" width="300px" alt="">-->
-              <a href="https://www.datanucleus.org">DataNucleus AccessPlatform</a></div>
-              <p class="description">... the reference implementation for JDO, provides persistence and retrieval of data to a range of datastores using a range of APIs, with a range of query languages.</p>
+            <div class="box wow fadeInUp" data-wow-delay="0.2s" style="min-height: 400px;">
+            <div class="pic" style="height: 105px;">
+              <a href="https://resteasy.dev">
+                <img src="_/img/home/built-with/resteasy_logo_600x.gif" height="105px" alt="RESTEasy™" style="margin-left: -30px;"/>
+              </a>
+            </div>
+            <p class="description">RESTEasy™ is an implementation of the <a href="https://github.com/eclipse-ee4j/jaxrs-api">Jakarta™ RESTful Web Services</a> specification for building RESTful Web Services and RESTful Java applications.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
-          <div class="box wow fadeInLeft" data-wow-delay="0.2s">
-            <div class="pic">
-              <!--<img src="_/img/home/built-with/byte-buddy.png" height="105px" alt="">-->
-              <a href="https://bytebuddy.net">Byte Buddy</a></div>
-              <p class="description">... a code generation and manipulation library for creating and modifying Java classes during the runtime of a Java application.</p>
+            <div class="box wow fadeInRight" data-wow-delay="0.2s" style="min-height: 400px;">
+            <div class="pic" style="height: 105px;">
+              <a href="https://bytebuddy.net">
+                <img src="_/img/home/built-with/byte-buddy.png" height="105px" alt="Byte Buddy™" style="margin-left: -30px;"/>
+              </a>
+            </div>
+            <p class="description">ByteBuddy™ is a code generation and manipulation library for creating and modifying Java™ classes during the runtime of a Java™ application.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="box wow fadeInLeft" data-wow-delay="0.3s" style="min-height: 400px;">
+            <div class="pic" style="height: 105px;">
+              <a href="https://www.eclipse.org/eclipselink/">
+                <img src="_/img/home/built-with/EclipseLink.png" width="300px" height="105px" alt="EclipseLink™" style="margin-left: -30px;"/>
+              </a>
+            </div>
+            <p class="description">EclipseLink™ is the reference implementation for JPA and a comprehensive open-source Java™ persistence solution addressing relational, XML, and database web services.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="box wow fadeInUp" data-wow-delay="0.3s" style="min-height: 400px;">
+            <div class="pic" style="height: 105px;">
+              <a href="https://www.datanucleus.org">
+                  <img src="_/img/home/built-with/datanucleus-logo.png" width="300px" alt="DataNucleus AccessPlatform™" style="margin-left: -30px;"/>
+              </a>
+            </div>
+            <p class="description">DataNucleus™ is the reference implementation for <a href="https://db.apache.org/jdo/">JDO</a>, provides persistence and retrieval of data to a range of datastores using a range of APIs, with a range of query languages.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="box wow fadeInRight" data-wow-delay="0.3s" style="min-height: 400px;">
+            <div class="pic" style="height: 105px;">
+              <a href="https://projectlombok.org/">
+                  <img src="_/img/home/built-with/project-lombok.png" height="105px" alt="Project Lombok" style="margin-left: -30px;">
+              </a>
+            </div>
+            <p class="description">Project Lombok™ is a library that automatically plugs into your editor and build tools, spicing up your Java™.</p>
           </div>
         </div>
 
@@ -695,7 +750,7 @@ docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>
 
       <div class="col-md-8">
         <div class="copyright">
-          Copyright ©2010~2023  The Apache Software Foundation, licensed under the Apache License, v2.0.
+          Copyright ©2010~2024  The Apache Software Foundation, licensed under the Apache License, v2.0.
           Apache, the Apache feather logo, Apache Causeway™, and the Apache Causeway project logo are all trademarks of The Apache Software Foundation.
         </div>
       </div>

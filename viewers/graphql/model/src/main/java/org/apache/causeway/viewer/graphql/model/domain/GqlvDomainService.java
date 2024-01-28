@@ -18,22 +18,26 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
+
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
+import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
+
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -80,7 +84,12 @@ public class GqlvDomainService implements GqlvAction.Holder {
     }
 
     private void addActions() {
+
+        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                .filter(x -> x.getSemantics().isSafeInNature() ||
+                             variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT)
                 .forEach(this::addAction);
     }
 

@@ -1,4 +1,0 @@
-
-* xref:incubator:graphql:about.adoc[GraphQL]
-** xref:incubator:graphql:devnotes.adoc[Development Environment]
-

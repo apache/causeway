@@ -83,6 +83,7 @@ _Security_
 _Viewers_
 
 * xref:vw:ROOT:about.adoc[Web UI (Wicket)]
+* xref:gqlv:ROOT:about.adoc[GraphQL API]
 * xref:vro:ROOT:about.adoc[REST API (Restful{nbsp}Objects)]
 
 _Persistence_

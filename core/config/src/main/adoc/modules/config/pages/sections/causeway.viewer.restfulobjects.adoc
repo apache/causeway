@@ -1,4 +1,4 @@
-= Restful Objects Viewer
+= REST API (Restful Objects Viewer)
 :page-role: -toc -narrow
 
 

@@ -25,6 +25,7 @@ interface DataSource {
   DataSource map(ThrowingFunction<InputStream, InputStream> inputStreamMapper)     // <.>
   Try<Void> tryReadAndWrite(DataSink dataSink, int bufferSize)     // <.>
   void pipe(DataSink dataSink, int bufferSize)     // <.>
+  void pipe(DataSink dataSink)     // <.>
   DataSource empty()     // <.>
   DataSource ofInputStreamSupplier(ThrowingSupplier<InputStream> inputStreamSupplier)     // <.>
   DataSource ofInputStreamEagerly(InputStream inputStream)     // <.>
@@ -91,6 +92,11 @@ Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc
 +
 --
 Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc[DataSource] and writing to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using given bufferSize for the underlying byte data junks.
+--
+<.> xref:#pipe_DataSink[pipe(DataSink)]
++
+--
+Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc[DataSource] and writing to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using default bufferSize of 16k for the underlying byte data junks.
 --
 <.> xref:#empty_[empty()]
 +
@@ -204,6 +210,13 @@ Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc
 === pipe(DataSink, int)
 
 Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc[DataSource] and writing to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using given bufferSize for the underlying byte data junks.
+
+Throws if the write failed.
+
+[#pipe_DataSink]
+=== pipe(DataSink)
+
+Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc[DataSource] and writing to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using default bufferSize of 16k for the underlying byte data junks.
 
 Throws if the write failed.
 

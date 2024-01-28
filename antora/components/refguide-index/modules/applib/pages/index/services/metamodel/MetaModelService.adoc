@@ -10,6 +10,8 @@ This service provides a formal API into the framework's metamodel.
 ----
 interface MetaModelService {
   Optional<LogicalType> lookupLogicalTypeByName(String logicalTypeName)     // <.>
+  Can<LogicalType> logicalTypeAndAliasesFor(LogicalType logicalType)     // <.>
+  Can<LogicalType> logicalTypeAndAliasesFor(String logicalTypeName)     // <.>
   Optional<LogicalType> lookupLogicalTypeByClass(Class<?> domainType)     // <.>
   void rebuild(Class<?> domainType)     // <.>
   DomainModel getDomainModel()     // <.>
@@ -25,6 +27,16 @@ interface MetaModelService {
 +
 --
 Provides a lookup by logicalTypeName of a domain class' object type, corresponding to _Named#value()_ or _DomainService#aliased()_ or _DomainObject#aliased()_ . Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
+--
+<.> xref:#logicalTypeAndAliasesFor_LogicalType[logicalTypeAndAliasesFor(LogicalType)]
++
+--
+Assuming that the xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] passed in actually represents a domain type, then returns it along with any aliases defined as per _DomainService#aliased()_ or _DomainObject#aliased()_ .
+--
+<.> xref:#logicalTypeAndAliasesFor_String[logicalTypeAndAliasesFor(String)]
++
+--
+Returns the xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] of a domain class' object type, corresponding to _Named#value()_ , along with any aliases defined as per _DomainService#aliased()_ or _DomainObject#aliased()_ .
 --
 <.> xref:#lookupLogicalTypeByClass_Class[lookupLogicalTypeByClass(Class)]
 +
@@ -73,6 +85,20 @@ Can be used to create object relation diagrams (e.g. Plantuml).
 === lookupLogicalTypeByName(String)
 
 Provides a lookup by logicalTypeName of a domain class' object type, corresponding to _Named#value()_ or _DomainService#aliased()_ or _DomainObject#aliased()_ . Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
+
+[#logicalTypeAndAliasesFor_LogicalType]
+=== logicalTypeAndAliasesFor(LogicalType)
+
+Assuming that the xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] passed in actually represents a domain type, then returns it along with any aliases defined as per _DomainService#aliased()_ or _DomainObject#aliased()_ .
+
+If there is no such domain type, then an empty xref:refguide:commons:index/collections/Can.adoc[Can] will be returned.
+
+[#logicalTypeAndAliasesFor_String]
+=== logicalTypeAndAliasesFor(String)
+
+Returns the xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] of a domain class' object type, corresponding to _Named#value()_ , along with any aliases defined as per _DomainService#aliased()_ or _DomainObject#aliased()_ .
+
+If there is no such domain type, then an empty xref:refguide:commons:index/collections/Can.adoc[Can] will be returned.
 
 [#lookupLogicalTypeByClass_Class]
 === lookupLogicalTypeByClass(Class)

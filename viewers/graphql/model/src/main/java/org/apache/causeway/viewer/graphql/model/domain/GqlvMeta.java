@@ -18,13 +18,18 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.Objects;
+import java.util.Optional;
+
+import graphql.Scalars;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
+
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
-
-import java.util.Objects;
-import java.util.Optional;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -35,10 +40,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
-import graphql.Scalars;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 import lombok.Getter;
 import lombok.val;
 
@@ -72,7 +73,7 @@ public class GqlvMeta {
         if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             metaTypeBuilder.field(version);
         }
-        metaField = newFieldDefinition().name(context.causewayConfiguration.getViewer().getGqlv().getMetaData().getFieldName()).type(metaTypeBuilder.build()).build();
+        metaField = newFieldDefinition().name(context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName()).type(metaTypeBuilder.build()).build();
 
         holder.addField(metaField);
     }

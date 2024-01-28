@@ -8,19 +8,19 @@ Provides supporting functionality for querying xref:refguide:extensions:index/se
 [source,java]
 .SessionLogEntryRepository.java
 ----
-class SessionLogEntryRepository<E> {
+interface SessionLogEntryRepository {
   void logoutAllSessions(Timestamp logoutTimestamp)
   SessionLogEntry create(String username, UUID sessionGuid, String httpSessionId, SessionSubscriber.CausedBy causedBy, Timestamp timestamp)
-  Optional<E> findBySessionGuid(UUID sessionGuid)
-  Optional<E> findByHttpSessionId(String httpSessionId)
-  List<E> findByUsername(String username)
-  List<E> findByUsernameAndFromAndTo(String username, LocalDate from, LocalDate to)
-  List<E> findByFromAndTo(LocalDate from, LocalDate to)
-  List<E> findByUsernameAndStrictlyBefore(String username, Timestamp from)
-  List<E> findByUsernameAndStrictlyAfter(String username, Timestamp from)
-  List<E> findActiveSessions()
-  List<E> findRecentByUsername(String username)
-  List<E> findAll()     // <.>
+  Optional<SessionLogEntry> findBySessionGuid(UUID sessionGuid)
+  Optional<SessionLogEntry> findByHttpSessionId(String httpSessionId)
+  List<SessionLogEntry> findByUsername(String username)
+  List<SessionLogEntry> findByUsernameAndFromAndTo(String username, LocalDate from, LocalDate to)
+  List<SessionLogEntry> findByFromAndTo(LocalDate from, LocalDate to)
+  List<SessionLogEntry> findByUsernameAndStrictlyBefore(String username, Timestamp from)
+  List<SessionLogEntry> findByUsernameAndStrictlyAfter(String username, Timestamp from)
+  List<SessionLogEntry> findActiveSessions()
+  List<SessionLogEntry> findRecentByUsername(String username)
+  List<SessionLogEntry> findAll()     // <.>
   void removeAll()     // <.>
 }
 ----

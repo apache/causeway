@@ -8,24 +8,23 @@ Provides supporting functionality for querying and persisting xref:refguide:exte
 [source,java]
 .ExecutionLogEntryRepository.java
 ----
-class ExecutionLogEntryRepository<E> {
-  Class<E> getEntityClass()
-  E createEntryAndPersist(Execution execution)
-  List<E> findByInteractionId(UUID interactionId)
-  Optional<E> findByInteractionIdAndSequence(UUID interactionId, int sequence)
-  List<E> findByFromAndTo(LocalDate from, LocalDate to)
-  List<E> findMostRecent()
-  List<E> findMostRecent(int limit)
-  List<E> findByTarget(Bookmark target)
-  List<E> findByTargetAndTimestampAfter(Bookmark target, Timestamp timestamp)
-  List<E> findByTargetAndTimestampBefore(Bookmark target, Timestamp timestamp)
-  List<E> findByTargetAndTimestampBetween(Bookmark target, Timestamp timestampFrom, Timestamp timestampTo)
-  List<E> findByTimestampAfter(Timestamp timestamp)
-  List<E> findByTimestampBefore(Timestamp timestamp)
-  List<E> findByTimestampBetween(Timestamp timestampFrom, Timestamp timestampTo)
-  List<E> findRecentByUsername(String username)
-  List<E> findRecentByTarget(Bookmark target)
-  List<E> findAll()     // <.>
+interface ExecutionLogEntryRepository {
+  ExecutionLogEntry createEntryAndPersist(Execution execution)
+  List<ExecutionLogEntry> findByInteractionId(UUID interactionId)
+  Optional<ExecutionLogEntry> findByInteractionIdAndSequence(UUID interactionId, int sequence)
+  List<ExecutionLogEntry> findByFromAndTo(LocalDate from, LocalDate to)
+  List<ExecutionLogEntry> findMostRecent()
+  List<ExecutionLogEntry> findMostRecent(int limit)
+  List<ExecutionLogEntry> findByTarget(Bookmark target)
+  List<ExecutionLogEntry> findByTargetAndTimestampAfter(Bookmark target, Timestamp timestamp)
+  List<ExecutionLogEntry> findByTargetAndTimestampBefore(Bookmark target, Timestamp timestamp)
+  List<ExecutionLogEntry> findByTargetAndTimestampBetween(Bookmark target, Timestamp timestampFrom, Timestamp timestampTo)
+  List<ExecutionLogEntry> findByTimestampAfter(Timestamp timestamp)
+  List<ExecutionLogEntry> findByTimestampBefore(Timestamp timestamp)
+  List<ExecutionLogEntry> findByTimestampBetween(Timestamp timestampFrom, Timestamp timestampTo)
+  List<ExecutionLogEntry> findRecentByUsername(String username)
+  List<ExecutionLogEntry> findRecentByTarget(Bookmark target)
+  List<ExecutionLogEntry> findAll()     // <.>
   void removeAll()     // <.>
 }
 ----

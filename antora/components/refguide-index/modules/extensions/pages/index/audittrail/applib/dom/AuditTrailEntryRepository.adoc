@@ -8,21 +8,20 @@ Provides supporting functionality for querying xref:refguide:extensions:index/au
 [source,java]
 .AuditTrailEntryRepository.java
 ----
-class AuditTrailEntryRepository<E> {
-  Class<E> getEntityClass()
+interface AuditTrailEntryRepository {
   AuditTrailEntry createFor(EntityPropertyChange change)
-  Optional<E> findFirstByTarget(Bookmark target)
-  List<E> findRecentByTarget(Bookmark target)
-  List<E> findRecentByTargetAndPropertyId(Bookmark target, String propertyId)
-  List<E> findByInteractionId(UUID interactionId)
-  List<E> findByTargetAndFromAndTo(Bookmark target, LocalDate from, LocalDate to)
-  List<E> findByFromAndTo(LocalDate from, LocalDate to)
-  List<E> findMostRecent()
-  List<E> findMostRecent(int limit)
-  List<E> findByUsernameAndFromAndTo(String username, LocalDate from, LocalDate to)
-  List<E> findByUsernameAndTargetAndFromAndTo(String username, Bookmark target, LocalDate from, LocalDate to)
-  List<E> findRecentByUsername(String username)
-  List<? extends AuditTrailEntry> findAll()     // <.>
+  Optional<AuditTrailEntry> findFirstByTarget(Bookmark target)
+  List<AuditTrailEntry> findRecentByTarget(Bookmark target)
+  List<AuditTrailEntry> findRecentByTargetAndPropertyId(Bookmark target, String propertyId)
+  List<AuditTrailEntry> findByInteractionId(UUID interactionId)
+  List<AuditTrailEntry> findByTargetAndFromAndTo(Bookmark target, LocalDate from, LocalDate to)
+  List<AuditTrailEntry> findByFromAndTo(LocalDate from, LocalDate to)
+  List<AuditTrailEntry> findMostRecent()
+  List<AuditTrailEntry> findMostRecent(int limit)
+  List<AuditTrailEntry> findByUsernameAndFromAndTo(String username, LocalDate from, LocalDate to)
+  List<AuditTrailEntry> findByUsernameAndTargetAndFromAndTo(String username, Bookmark target, LocalDate from, LocalDate to)
+  List<AuditTrailEntry> findRecentByUsername(String username)
+  List<AuditTrailEntry> findAll()     // <.>
   void removeAll()     // <.>
 }
 ----

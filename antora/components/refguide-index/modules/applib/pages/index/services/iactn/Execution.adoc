@@ -13,6 +13,7 @@ The xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] has 
 class Execution<T, E> {
   void setParent(Execution<?, ?> parent)     // <.>
   List<Execution<?, ?>> getChildren()     // <.>
+  E getEvent()
   void setEvent(E event)     // <.>
   Timestamp start(ClockService clockService, MetricsService metricsService)
   void setCompletedAt(Timestamp completedAt, MetricsService metricsService)     // <.>

@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-
-import graphql.schema.GraphQLFieldDefinition;
 
 public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvAssociation.Holder> extends GqlvMember<T, H> {
 
