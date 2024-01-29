@@ -119,7 +119,7 @@ public class Department_IntegTest extends Abstract_IntegTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(submit);
 
-        JsonNode staffMembersNode = root.at("/data/university_dept_Departments/findByName/invoke/addStaffMembers/params/staffMembers/choices");
+        JsonNode staffMembersNode = root.at("/data/university_dept_Departments/findDepartmentByName/invoke/addStaffMembers/params/staffMembers/choices");
 
         List<String> ids = new ArrayList<>();
         staffMembersNode.forEach(staffMemberNode -> {
