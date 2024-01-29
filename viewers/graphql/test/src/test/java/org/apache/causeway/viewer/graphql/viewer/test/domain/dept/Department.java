@@ -151,7 +151,6 @@ public class Department implements Comparable<Department> {
         }
     }
 
-    @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "staffMembers")
     public class addStaffMembers {

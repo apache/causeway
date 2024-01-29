@@ -115,6 +115,7 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
                 });
     }
 
+    @SuppressWarnings("unused")
     private ActionScope determineActionScope() {
         return context.causewaySystemEnvironment.getDeploymentType().isProduction()
                 ? ActionScope.PRODUCTION

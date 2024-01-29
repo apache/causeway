@@ -70,7 +70,6 @@ public class TypeMapperDefault implements TypeMapper {
         }
     }
 
-    @SuppressWarnings("CdiInjectInspection")
     @Inject private final CausewayConfiguration causewayConfiguration;
 
     private static <K,V> Map.Entry<K,V> pair(K key, V value) {

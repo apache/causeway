@@ -49,7 +49,6 @@ public class UserMementoProviderDefault implements UserMementoProvider {
         }
     }
 
-    @SuppressWarnings("CdiInjectInspection")
     @Inject private final CausewayConfiguration causewayConfiguration;
 
 
