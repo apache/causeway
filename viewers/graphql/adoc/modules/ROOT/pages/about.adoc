@@ -4,10 +4,107 @@
 
 The GraphQL viewer automatically exposes an Apache Causeway domain object model as a link:https://graphql.org/[graphql] API.
 It is implemented using link:https://spring.io/projects/spring-graphql[Spring GraphQL] project, which in turn is built on top of link:https://www.graphql-java.com/[GraphQL Java].
+This also means that it automatically provides the link:https://github.com/graphql/graphiql[GraphiQL] interactive query tool.
+
+== Example
+
+How the viewer works is probably most easily explained by an example.
+The diagram below shows a simple domain footnote:[in fact, this is the domain used by the GraphQL viewer's own tests].
+
+image::test-domain.drawio.png[width=600]
+
+To list all Departments:
+
+[source,graphql]
+----
+{
+  university_dept_Departments {
+    findAllDepartments {
+      invoke {                  #<.>
+        name {
+          get                   #<.>
+        }
+        staffMembers {
+          get {                 #<.>
+            name {
+              get               #<.>
+            }
+            _gqlv_meta {
+              id                #<.>
+              logicalTypeName   #<5>
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+<.> invokes the action, returning a list of ``Department``s
+<.> gets (accesses) the `name` property of each returned `Department`
+<.> also gets (accesses) the `staffMembers` collection of each returned `Department`, returning a list of ``StaffMember``s
+<.> gets the `name` prperty for each returned `StaffMember`
+<.> returns the internal id and logicalTypeName of each `StaffMember`.
+Together, these make up the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object.
+
+As well as accessing properties and collections and invoking (safe) actions, the GraphQL viewer also allows access to the usual supporting semantics.
+For example:
+
+[source,graphql]
+----
+{
+  university_dept_Departments {
+    findAllDepartments {
+      disabled          #<.>
+      invoke {
+        name {
+          hidden        #<.>
+        }
+      }
+    }
+  }
+}
+----
+<.> whether this action is disabled
+<.> whether the property of the resultant object is hidden
+
+Similarly, there are fields for:
+
+* `validate` - is the proposed action parameter valid?
+* `disable` - is the action or action parameter disabled?
+* `choices` - for an action parameter, are their choices?
+* `autoComplete` - for an action parameter, is there an auto-complete?
+* `default` - for an action parameter, is there a default value?
+
+
+=== Support for "mutating" queries
+
+According to the link:https://spec.graphql.org/June2018/#sec-Language.Operations[GraphQL specification], queries should be read-only; they must not change the state of the system.
+
+The GraphQL viewer (optionally) relaxes this rule, allowing actions to be invoked that _do_ change the state of the system, and -- indeed -- allowing properties to be modified.
+This is done through these additional fields:
+
+* `invokeIdempotent` - to invoke an action whose action semantics are idempotent
++
+As specified by xref:refguide:applib:index/annotation/Action.adoc#semantics[@Action#semantics].
+* `invokeNonIdempotent` - to invoke an action whose action semantics are non-idempotent
+* `set` - to modify a property.
+
+
+It also means that the above fields for supporting methods also apply to properties:
+
+* `validate` - is the proposed value of the property valid?
+* `disable` - is the property disabled?
+* `choices` - for a property, are their choices?
+* `autoComplete` - for a property , is there an auto-complete?
+
+
+This relaxed mode is enabled by default, but if you want read-only queries then there is a configuration property, see xref:setup-and-configuration.adoc[].
+
+IMPORTANT: GraphQL mutations are currently not yet implemented, and so there is not yet any spec-compliant way to mutate the state of the system.
 
 
 == See also
 
 As well as this viewer, Apache Causeway also provides the xref:vro::about.adoc[], which performs the same function, but using REST instead of GraphQL.
-
 

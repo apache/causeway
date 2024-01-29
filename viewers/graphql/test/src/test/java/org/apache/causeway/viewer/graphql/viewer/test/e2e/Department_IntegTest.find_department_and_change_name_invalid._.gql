@@ -1,6 +1,6 @@
 {
   university_dept_Departments {
-    findByName {
+    findDepartmentByName {
       invoke(name: "Classics") {
         changeName {
           validate(newName: "A Funny Thing Happened on the Way to the Forum !")

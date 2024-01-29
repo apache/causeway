@@ -54,7 +54,7 @@ public class Staff {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public StaffMember findByName(final String name){
+    public StaffMember findStaffMemberByName(final String name){
         return staffMemberRepository.findByName(name);
     }
 

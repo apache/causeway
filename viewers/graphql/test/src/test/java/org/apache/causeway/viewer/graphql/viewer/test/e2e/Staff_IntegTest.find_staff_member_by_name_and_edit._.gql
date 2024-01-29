@@ -1,6 +1,6 @@
 {
   university_dept_Staff {
-    findByName {
+    findStaffMemberByName {
       invoke(name: "Gerry Jones") {
         name {
           set(name: "Gerald Johns") {

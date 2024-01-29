@@ -72,6 +72,7 @@ public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIn
         Files.write(Paths.get(targetFile1.getPath()), submit.getBytes());
     }
 
+    @SuppressWarnings("unused")
     private Options gqlSchemaOptions() {
         return new Options()
                 .withScrubber(this::unixLineEndings)

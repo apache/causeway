@@ -1,7 +1,7 @@
 {
   "data" : {
     "university_dept_Staff" : {
-      "findByName" : {
+      "findStaffMemberByName" : {
         "invoke" : {
           "name" : {
             "validate" : "Name cannot contain '!' character"
