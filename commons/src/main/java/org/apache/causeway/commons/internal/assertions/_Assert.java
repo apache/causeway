@@ -293,7 +293,7 @@ public final class _Assert {
                     String.valueOf(delta));
         }
         if((Double.doubleToLongBits(a) != Double.doubleToLongBits(b))
-                || Math.abs(a - b) <= delta) {
+                || Math.abs(a - b) > delta) {
             throw _Exceptions.assertionError(
                     "%snumbers %s and %s are not equal within delta %s",
                     _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
