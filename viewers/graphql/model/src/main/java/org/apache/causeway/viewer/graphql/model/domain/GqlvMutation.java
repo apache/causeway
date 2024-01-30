@@ -18,62 +18,74 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.*;
+import java.util.ArrayList;
 
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import org.springframework.lang.Nullable;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvMutation {
 
     private final Holder holder;
+    private final ObjectSpecification objectSpec;
+    private final ObjectAction objectAction;
     private final Context context;
     private final GraphQLFieldDefinition field;
     private String argumentName;
 
     public GqlvMutation(
             final Holder holder,
-            final Context context) {
+            final ObjectSpecification objectSpec,
+            final ObjectAction objectAction,
+        final Context context) {
         this.holder = holder;
+        this.objectSpec = objectSpec;
+        this.objectAction = objectAction;
         this.context = context;
 
         this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
-
-        val objectSpec = holder.getObjectSpecification();
-        val objectAction = holder.getObjectAction();
 
         GraphQLOutputType type = typeFor(objectAction);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name(fieldName(objectSpec, objectAction))
                     .type(type);
-            holder.addGqlArguments(fieldBuilder, TypeMapper.InputContext.INVOKE);
+            addGqlArguments(fieldBuilder);
             this.field = holder.addField(fieldBuilder.build());
         } else {
             this.field = null;
         }
     }
 
-    private static String fieldName(ObjectSpecification objectSpecification, ObjectAction objectAction) {
+    private static String fieldName(
+            final ObjectSpecification objectSpecification,
+            final ObjectAction objectAction) {
         return TypeNames.objectTypeNameFor(objectSpecification) + "__" + objectAction.getId();
     }
 
@@ -117,21 +129,18 @@ public class GqlvMutation {
 
     private Object invoke(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val objectSpecification = holder.getObjectSpecification();
-        val objectAction = holder.getObjectAction();
-
-        val isService = objectSpecification.getBeanSort().isManagedBeanContributing();
+        val isService = objectSpec.getBeanSort().isManagedBeanContributing();
 
         Object sourcePojo;
         if (isService) {
-            sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpecification.getCorrespondingClass());
+            sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.getCorrespondingClass());
         } else {
             Object target = dataFetchingEnvironment.getArgument(argumentName);
-            sourcePojo = GqlvAction.asPojo(objectSpecification, target, context.bookmarkService)
+            sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService)
                     .orElseThrow(); // TODO: better error handling if no such object found.
         }
 
-        ManagedObject managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        ManagedObject managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
         val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
@@ -144,7 +153,7 @@ public class GqlvMutation {
         }
 
         val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = argumentManagedObjectsFor(dataFetchingEnvironment, objectAction);
 
         val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
@@ -155,18 +164,64 @@ public class GqlvMutation {
         return resultManagedObject.getPojo();
     }
 
-    public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
-                    ObjectActionProvider {
 
-        void addGqlArguments(
-                final GraphQLFieldDefinition.Builder fieldBuilder,
-                final TypeMapper.InputContext inputContext);
+    // TODO: adapted from GqlvAction - rationalize?
+    private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
-        Can<ManagedObject> argumentManagedObjectsFor(
-                final DataFetchingEnvironment dataFetchingEnvironment,
-                final ObjectAction objectAction,
-                final BookmarkService bookmarkService);
+        val arguments = new ArrayList<GraphQLArgument>();
+        val argName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+
+        // add target (if not a service)
+        if (! objectSpec.getBeanSort().isManagedBeanContributing()) {
+            arguments.add(
+                    GraphQLArgument.newArgument()
+                            .name(argName)
+                            .type(context.typeMapper.inputTypeFor(objectSpec))
+                            .build()
+            );
+        }
+
+        val parameters = objectAction.getParameters();
+        parameters.stream()
+                .map(this::gqlArgumentFor)
+                .forEach(arguments::add);
+
+        if (!arguments.isEmpty()) {
+            fieldBuilder.arguments(arguments);
+        }
     }
+
+    // adapted from GqlvAction
+    GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
+        return objectActionParameter.isPlural()
+                ? gqlArgumentFor((OneToManyActionParameter) objectActionParameter)
+                : gqlArgumentFor((OneToOneActionParameter) objectActionParameter);
+    }
+
+    // adapted from GqlvAction
+    GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
+        return GraphQLArgument.newArgument()
+                .name(oneToOneActionParameter.getId())
+                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, TypeMapper.InputContext.INVOKE))
+                .build();
+    }
+
+    // adapted from GqlvAction
+    GraphQLArgument gqlArgumentFor(final OneToManyActionParameter oneToManyActionParameter) {
+        return GraphQLArgument.newArgument()
+                .name(oneToManyActionParameter.getId())
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter))
+                .build();
+    }
+
+    private Can<ManagedObject> argumentManagedObjectsFor(
+            final DataFetchingEnvironment dataFetchingEnvironment,
+            final ObjectAction objectAction) {
+        return GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
+    }
+
+    public interface Holder
+            extends GqlvHolder {
+    }
+
 }

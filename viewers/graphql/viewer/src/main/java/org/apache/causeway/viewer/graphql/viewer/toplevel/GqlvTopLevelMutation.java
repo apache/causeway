@@ -3,32 +3,20 @@ package org.apache.causeway.viewer.graphql.viewer.toplevel;
 import java.util.ArrayList;
 import java.util.List;
 
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAction;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvMutation;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvHolder;
 
 import lombok.Getter;
-import lombok.val;
 
-public class GqlvTopLevelMutation implements GqlvHolder {
+public class GqlvTopLevelMutation implements GqlvMutation.Holder {
 
     private final Context context;
 
@@ -68,25 +56,9 @@ public class GqlvTopLevelMutation implements GqlvHolder {
         return gqlObjectType;
     }
 
-//    public void addFieldFor(
-//            final GqlvDomainService domainService,
-//            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-//
-//        GraphQLFieldDefinition topLevelQueryField = domainService.createTopLevelQueryField();
-//        gqlObjectBuilder.field(topLevelQueryField);
-//
-//        codeRegistryBuilder.dataFetcher(
-//                // TODO: it would be nice to make these typesafe...
-//                FieldCoordinates.coordinates("Mutation", topLevelQueryField.getName()),
-//                (DataFetcher<Object>) environment -> domainService.getServicePojo());
-//
-//    }
-
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
-        // TODO: kinda ugly the responsibilities here
-        val holder = new GqlvMutationHolder(this, objectSpec, objectAction, context);
-        actions.add(new GqlvMutation(holder, context));
+        actions.add(new GqlvMutation(this, objectSpec, objectAction, context));
     }
 
     @Override
@@ -103,98 +75,7 @@ public class GqlvTopLevelMutation implements GqlvHolder {
     public void addDataFetchers() {
         actions.forEach(GqlvMutation::addDataFetcher);
     }
-}
 
-class GqlvMutationHolder implements GqlvMutation.Holder {
-
-    private final GqlvTopLevelMutation gqlvTopLevelMutation;
-    private final ObjectSpecification objectSpec;
-    private final ObjectAction objectAction;
-    private final Context context;
-
-    public GqlvMutationHolder(
-            final GqlvTopLevelMutation gqlvTopLevelMutation,
-            final ObjectSpecification objectSpec,
-            final ObjectAction objectAction,
-            final Context context) {
-        this.objectSpec = objectSpec;
-        this.objectAction = objectAction;
-        this.gqlvTopLevelMutation = gqlvTopLevelMutation;
-        this.context = context;
-    }
-
-    @Override public ObjectAction getObjectAction() {return objectAction;}
-    @Override public ObjectAction getObjectMember() {return objectAction;}
-    @Override public ObjectSpecification getObjectSpecification() {return objectSpec;}
-
-    // TODO: adapted from GqlvAction
-    @Override
-    public void addGqlArguments(
-            final GraphQLFieldDefinition.Builder fieldBuilder,
-            final TypeMapper.InputContext inputContext) {
-
-        val arguments = new ArrayList<GraphQLArgument>();
-        val argName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
-
-        // add target (if not a service)
-        if (! objectSpec.getBeanSort().isManagedBeanContributing()) {
-            arguments.add(
-                GraphQLArgument.newArgument()
-                        .name(argName)
-                        .type(context.typeMapper.inputTypeFor(objectSpec))
-                        .build()
-            );
-        }
-
-        val parameters = objectAction.getParameters();
-        parameters.stream()
-                .map(this::gqlArgumentFor)
-                .forEach(arguments::add);
-
-        if (!arguments.isEmpty()) {
-            fieldBuilder.arguments(arguments);
-        }
-    }
-
-    // adapted from GqlvAction
-    GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
-        return objectActionParameter.isPlural()
-                ? gqlArgumentFor((OneToManyActionParameter) objectActionParameter)
-                : gqlArgumentFor((OneToOneActionParameter) objectActionParameter);
-    }
-
-    // adapted from GqlvAction
-    GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
-        return GraphQLArgument.newArgument()
-                .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, TypeMapper.InputContext.INVOKE))
-                .build();
-    }
-
-    // TODO: copied from GqlvAction
-    GraphQLArgument gqlArgumentFor(final OneToManyActionParameter oneToManyActionParameter) {
-        return GraphQLArgument.newArgument()
-                .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter))
-                .build();
-    }
-
-    @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(
-            final DataFetchingEnvironment dataFetchingEnvironment,
-            final ObjectAction objectAction,
-            final BookmarkService bookmarkService) {
-        return GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
-    }
-
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition fieldDefinition) {
-        return gqlvTopLevelMutation.addField(fieldDefinition);
-    }
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return gqlvTopLevelMutation.coordinatesFor(fieldDefinition);
-    }
 
 }
+
