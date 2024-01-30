@@ -1,5 +1,8 @@
 mutation {
-  university_dept_Department__changeName(_gqlv_target: {id : "$departmentId"}, newName: "Classics and Ancient History") {
+  university_dept_Department__changeName(
+      _gqlv_target: {id : "$departmentId"},
+      newName: "Classics and Ancient History"
+  ) {
     name {
       get
     }

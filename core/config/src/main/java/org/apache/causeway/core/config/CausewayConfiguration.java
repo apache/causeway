@@ -2354,8 +2354,14 @@ public class CausewayConfiguration {
                  */
                 QUERY_ONLY,
                 /**
+                 * Exposes an API with Query for query/safe separate queries and field access, with mutating (idempotent
+                 * and non-idempotent) actions and property setters instead surfaced as Mutations, as per the
+                 * <a href="https://spec.graphql.org/June2018/#sec-Language.Operations">GraphQL spec</a>.
+                 */
+                QUERY_AND_MUTATIONS,
+                /**
                  * Exposes only a Query API, but relaxes the rule that system state may not be changed by also including
-                 * idempotent and non-idempotent actions as part of the &quot;query&quot; API.  Modifiable properties
+                 * idempotent and non-idempotent actions as part of the schema.  Modifiable properties
                  * can also be set.
                  *
                  * <p>
@@ -2365,29 +2371,16 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT,
-                /**
-                 * Exposes an API with Query for query/safe separate queries and field access, with mutating (idempotent
-                 * and non-idempotent) actions instead surfaced as Mutations, as per the
-                 * <a href="https://spec.graphql.org/June2018/#sec-Language.Operations">GraphQL spec</a>.
-                 *
-                 * <p>
-                 * <b>NOTE</b>: this is not currently implemented.
-                 * </p>
-                 */
-                QUERY_AND_MUTATIONS,
                 ;
             }
 
             /**
              * Which variant of API to expose: {@link ApiVariant#QUERY_ONLY} (which suppresses any actions that mutate the state of the
-             * system), or alternatively as {@link ApiVariant#QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT} (which does expose actions that mutate the system but within a query, and so is not spec-compliant), or
-             * as {@link ApiVariant#QUERY_AND_MUTATIONS} (which also exposes actions that mutate the system but as mutations, and so <i>is</i> spec-compliant.
-             *
-             * <p>
-             *     <b>NOTE:</b> {@link ApiVariant#QUERY_AND_MUTATIONS} is not currently implemented.
-             * </p>
+             * system), or as {@link ApiVariant#QUERY_AND_MUTATIONS} (which additionally exposes actions that mutate the system as mutations)
+             * or alternatively as {@link ApiVariant#QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT}, a query-only schema that relaxes the read-only rule
+             * by exposing actions that mutate the system; it is therefore not compliant with the GraphQL spec),
              */
-            private ApiVariant apiVariant = ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
+            private ApiVariant apiVariant = ApiVariant.QUERY_AND_MUTATIONS;
 
             private final MetaData metaData = new MetaData();
             @Data

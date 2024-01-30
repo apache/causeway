@@ -76,7 +76,10 @@ import lombok.val;
         classes = {
                 CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
         },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "causeway.viewer.graphql.api-variant=QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT"
+        }
 )
 @AutoConfigureHttpGraphQlTester
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
 
@@ -138,6 +139,10 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 objectSpec.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                         .filter(x -> ! x.getSemantics().isSafeInNature())
                         .forEach(objectAction -> topLevelMutation.addAction(objectSpec, objectAction));
+                objectSpec.streamProperties(MixedIn.INCLUDED)
+                        .filter(property -> ! property.isAlwaysHidden())
+                        .filter(property -> property.containsFacet(PropertySetterFacet.class))
+                        .forEach(property -> topLevelMutation.addProperty(objectSpec, property));
 
             });
             topLevelMutation.buildMutationType();

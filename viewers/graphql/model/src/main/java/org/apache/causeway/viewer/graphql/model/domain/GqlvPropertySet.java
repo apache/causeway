@@ -96,7 +96,6 @@ public class GqlvPropertySet {
 
     Object set(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
