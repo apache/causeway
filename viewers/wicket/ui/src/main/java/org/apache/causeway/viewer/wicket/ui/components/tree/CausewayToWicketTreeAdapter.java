@@ -38,6 +38,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -91,8 +92,9 @@ class CausewayToWicketTreeAdapter {
                     wrappingTreeAdapter.mementify(treeNode.getValue(), treeNode.getPositionAsPath()),
                     wrappingTreeAdapter);
 
-            val treeExpansionModel = _TreeExpansionModel.of(
-                    treeNode.getTreeState().getExpandedNodePaths());
+            val treeState = treeNode.getTreeState();
+
+            val treeExpansionModel = _TreeExpansionModel.of(treeState);
 
             return new DomainObjectTree(id,
                     treeModelTreeProvider,
@@ -114,6 +116,9 @@ class CausewayToWicketTreeAdapter {
             final _TreeNodeMemento treeModel = node.getObject();
             final Component entityIconAndTitle = new EntityIconAndTitlePanel(
                     id, treeModel.asObjectAdapterModel());
+            if(treeExpansionModel().isSelected(treeModel.getTreePath())) {
+                Wkt.cssAppend(entityIconAndTitle, "tree-node-selected");
+            }
             return entityIconAndTitle;
         }
 
@@ -161,9 +166,7 @@ class CausewayToWicketTreeAdapter {
             };
 
             node.setOutputMarkupId(true);
-
             return node;
-
         }
 
         /**

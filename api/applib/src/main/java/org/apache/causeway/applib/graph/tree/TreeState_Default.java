@@ -21,14 +21,23 @@ package org.apache.causeway.applib.graph.tree;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.ToString;
+
+@ToString
 class TreeState_Default implements TreeState {
     private static final long serialVersionUID = 7971539034663543462L;
 
     private final Set<TreePath> expandedNodes = new HashSet<>();
+    private final Set<TreePath> selectedNodes = new HashSet<>();
 
     @Override
     public Set<TreePath> getExpandedNodePaths() {
         return expandedNodes;
+    }
+
+    @Override
+    public Set<TreePath> getSelectedNodePaths() {
+        return selectedNodes;
     }
 
 }

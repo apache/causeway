@@ -81,6 +81,10 @@
   margin-left: 18px;
 }
 
+.tree-theme-bootstrap .tree-node-selected {
+  background-color: var(--tree-node-selected-bg-color, lightgrey);
+}
+
 /* tabletree */
 
 .tree-theme-bootstrap table {

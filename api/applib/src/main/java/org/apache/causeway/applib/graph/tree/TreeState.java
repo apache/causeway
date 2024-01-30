@@ -31,5 +31,6 @@ public interface TreeState extends Serializable {
     }
 
     public Set<TreePath> getExpandedNodePaths();
+    public Set<TreePath> getSelectedNodePaths();
 
 }

@@ -188,6 +188,45 @@ public class TreeNode<T> implements Vertex<T> {
         _NullSafe.stream(treePaths).forEach(expandedPaths::remove);
     }
 
+    // -- SELECTION
+
+    /**
+     * Clears all selection markers.
+     * @see #select(TreePath...)  
+     */
+    @Programmatic
+    public void clearSelection() {
+        getTreeState().getSelectedNodePaths().clear();
+    }
+
+    /**
+     * Whether node that corresponds to given {@link TreePath} has a selection markers.
+     * @see #select(TreePath...)
+     */
+    @Programmatic
+    public boolean isSelected(final TreePath treePath) {
+        final Set<TreePath> selectedPaths = getTreeState().getSelectedNodePaths();
+        return selectedPaths.contains(treePath);
+    }
+
+    /**
+     * Select nodes by their corresponding {@link TreePath}, that is, activate their selection marker.
+     * <p>
+     * With the <i>Wicket Viewer</i> corresponds to expressing CSS class {@code tree-node-selected} 
+     * on the rendered tree node, which has default bg-color {@code lightgrey}. Color can be customized
+     * by setting CSS var {@code--tree-node-selected-bg-color}
+     * <pre>
+     * .tree-theme-bootstrap .tree-node-selected {
+     *     background-color: var(--tree-node-selected-bg-color, lightgrey);
+     * }
+     * </pre>  
+     */
+    @Programmatic
+    public void select(final TreePath ... treePaths) {
+        final Set<TreePath> selectedPaths = getTreeState().getSelectedNodePaths();
+        _NullSafe.stream(treePaths).forEach(selectedPaths::add);
+    }
+
     // -- CONSTRUCTION
 
     /**
