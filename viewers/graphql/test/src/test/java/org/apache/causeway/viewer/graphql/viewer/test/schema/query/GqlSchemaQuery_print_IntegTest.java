@@ -20,12 +20,14 @@ package org.apache.causeway.viewer.graphql.viewer.test.schema.query;
 
 import org.junit.jupiter.api.Order;
 
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.viewer.graphql.viewer.test.schema.AbstractGqlSchema_print_IntegTest;
 
 @Order(0)
 @Transactional
+@DirtiesContext
 public class GqlSchemaQuery_print_IntegTest extends AbstractGqlSchema_print_IntegTest {
 
 }

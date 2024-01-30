@@ -26,6 +26,7 @@ import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import lombok.val;
@@ -34,6 +35,7 @@ import lombok.val;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(20)
 @ActiveProfiles("test")
+@DirtiesContext
 public class Admin_IntegTest extends Abstract_IntegTest {
 
     @Test
