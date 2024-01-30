@@ -23,6 +23,7 @@ import java.util.Comparator;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
 
 import org.springframework.graphql.execution.GraphQlSource;
@@ -102,13 +103,15 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         }
 
         val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
+        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, causewayConfiguration, causewaySystemEnvironment);
 
         // add to the top-level query type and (dependent on configuration) the top-level mutation type also
         val topLevelQuery = new GqlvTopLevelQuery(serviceRegistry, codeRegistryBuilder);
         val topLevelMutation =
                 causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
-                    new GqlvTopLevelMutation(serviceRegistry, codeRegistryBuilder)
+                    new GqlvTopLevelMutation(context)
                     : null;
+
 
         val objectSpecifications = specificationLoader.snapshotSpecifications()
                 .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
@@ -117,8 +120,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .toList();
 
         // add to top-level query
-        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, causewayConfiguration, causewaySystemEnvironment);
-
         objectSpecifications.forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
@@ -129,6 +130,19 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         });
         topLevelQuery.buildQueryType();
 
+        // add top-level mutation (if application configuration requires it)
+        if (topLevelMutation != null) {
+            objectSpecifications.forEach(objectSpec -> {
+                objectSpec.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                        .filter(x -> ! x.getSemantics().isSafeInNature())
+                        .forEach(objectAction -> topLevelMutation.addAction(objectSpec, objectAction));
+
+            });
+            topLevelMutation.buildMutationType();
+            topLevelMutation.addFetchers();
+        }
+
+        // add remaining domain objects
         objectSpecifications.forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
 
@@ -141,17 +155,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                     gqlvDomainObject.addDataFetchers();
 
                     break;
-
             }
         });
 
-        if (topLevelMutation != null) {
-            objectSpecifications.forEach(objectSpec -> {
-
-            });
-            topLevelMutation.buildMutationType();
-            topLevelMutation.addFetchers();
-        }
 
 
         // finalize the fetcher/mutator code that's been registered
@@ -163,7 +169,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
                 .codeRegistry(codeRegistry);
         if (topLevelMutation != null) {
-            schemaBuilder.mutation(topLevelMutation.getObjectType());
+            schemaBuilder.mutation(topLevelMutation.getGqlObjectType());
         }
         return schemaBuilder
                 .build();

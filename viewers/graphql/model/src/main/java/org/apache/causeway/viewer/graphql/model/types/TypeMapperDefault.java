@@ -100,10 +100,12 @@ public class TypeMapperDefault implements TypeMapper {
             pair(Boolean.class, Scalars.GraphQLBoolean)
     );
 
+    @Override
     public GraphQLScalarType scalarTypeFor(final Class<?> c){
         return SCALAR_BY_CLASS.getOrDefault(c, Scalars.GraphQLString);
     }
 
+    @Override
     public GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature) {
         ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
         switch (otoaObjectSpec.getBeanSort()) {
@@ -127,6 +129,7 @@ public class TypeMapperDefault implements TypeMapper {
         return null;
     }
 
+    @Override
     @Nullable
     public GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification){
 
@@ -149,11 +152,13 @@ public class TypeMapperDefault implements TypeMapper {
         }
     }
 
+    @Override
     @Nullable public GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation) {
         ObjectSpecification elementType = oneToManyAssociation.getElementType();
         return listTypeFor(elementType);
     }
 
+    @Override
     @Nullable public GraphQLList listTypeFor(ObjectSpecification elementType) {
         switch (elementType.getBeanSort()) {
             case VIEW_MODEL:
@@ -165,6 +170,7 @@ public class TypeMapperDefault implements TypeMapper {
         return null;
     }
 
+    @Override
     public GraphQLInputType inputTypeFor(
             final OneToOneFeature oneToOneFeature,
             final InputContext inputContext) {
@@ -192,12 +198,14 @@ public class TypeMapperDefault implements TypeMapper {
         }
     }
 
+    @Override
     public GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused){
         ObjectSpecification elementType = oneToManyActionParameter.getElementType();
-        return GraphQLList.list(inputTypeFor_(elementType));
+        return GraphQLList.list(inputTypeFor(elementType));
     }
 
-    private GraphQLInputType inputTypeFor_(final ObjectSpecification elementType){
+    @Override
+    public GraphQLInputType inputTypeFor(final ObjectSpecification elementType){
         switch (elementType.getBeanSort()) {
             case ABSTRACT:
             case ENTITY:
@@ -216,6 +224,7 @@ public class TypeMapperDefault implements TypeMapper {
         }
     }
 
+    @Override
     public Object adaptPojo(
             final Object argumentValue,
             final ObjectSpecification elementType) {

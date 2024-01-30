@@ -66,6 +66,8 @@ public interface TypeMapper {
 
     GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused);
 
+    GraphQLInputType inputTypeFor(final ObjectSpecification elementType);
+
     Object adaptPojo(
             final Object argumentValue,
             final ObjectSpecification elementType);
