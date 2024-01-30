@@ -121,16 +121,16 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         objectSpecifications.forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
-
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
-
                     serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                        .ifPresent(servicePojo ->
-                        {
-                            topLevelQuery.addDomainServiceTo(objectSpec, servicePojo, context);
-
-                        });
+                        .ifPresent(servicePojo -> topLevelQuery.addDomainServiceTo(objectSpec, servicePojo, context));
                     break;
+            }
+        });
+        topLevelQuery.buildQueryType();
+
+        objectSpecifications.forEach(objectSpec -> {
+            switch (objectSpec.getBeanSort()) {
 
                 case ABSTRACT:
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
@@ -142,19 +142,13 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
                     break;
 
-                case MANAGED_BEAN_NOT_CONTRIBUTING: // a @Service or @Component ... ignore
-                case MIXIN:
-                case VALUE:
-                case COLLECTION:
-                case VETOED:
-                case UNKNOWN:
-                    break;
             }
         });
-        topLevelQuery.buildQueryType();
 
         if (topLevelMutation != null) {
+            objectSpecifications.forEach(objectSpec -> {
 
+            });
             topLevelMutation.buildMutationType();
             topLevelMutation.addFetchers();
         }
