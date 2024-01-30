@@ -1,7 +1,0 @@
-mutation {
-  invokeIdempotent(newName: "Foo", target: {id: 123}) {
-    name {
-      get
-    }
-  }
-}

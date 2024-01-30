@@ -1,14 +1,12 @@
 package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -24,7 +22,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAction;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvActionInvokeMutating;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvMutation;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvHolder;
 
 import lombok.Getter;
@@ -42,7 +40,7 @@ public class GqlvTopLevelMutation implements GqlvHolder {
      */
     private GraphQLObjectType gqlObjectType;
 
-    private final Map<String, GqlvActionInvokeMutating> actions = new LinkedHashMap<String, GqlvActionInvokeMutating>();
+    private final List<GqlvMutation> actions = new ArrayList<>();
 
     public GqlvTopLevelMutation(final Context context) {
         this.context = context;
@@ -87,8 +85,8 @@ public class GqlvTopLevelMutation implements GqlvHolder {
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
         // TODO: kinda ugly the responsibilities here
-        val holder = new GqlvActionInvokeMutatingHolder(this, objectSpec, objectAction, context);
-        actions.put(objectAction.getId(), new GqlvActionInvokeMutating(holder, context));
+        val holder = new GqlvMutationHolder(this, objectSpec, objectAction, context);
+        actions.add(new GqlvMutation(holder, context));
     }
 
     @Override
@@ -102,19 +100,19 @@ public class GqlvTopLevelMutation implements GqlvHolder {
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
-    public void addFetchers() {
-
+    public void addDataFetchers() {
+        actions.forEach(GqlvMutation::addDataFetcher);
     }
 }
 
-class GqlvActionInvokeMutatingHolder implements GqlvActionInvokeMutating.Holder {
+class GqlvMutationHolder implements GqlvMutation.Holder {
 
     private final GqlvTopLevelMutation gqlvTopLevelMutation;
     private final ObjectSpecification objectSpec;
     private final ObjectAction objectAction;
     private final Context context;
 
-    public GqlvActionInvokeMutatingHolder(
+    public GqlvMutationHolder(
             final GqlvTopLevelMutation gqlvTopLevelMutation,
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction,
@@ -135,50 +133,49 @@ class GqlvActionInvokeMutatingHolder implements GqlvActionInvokeMutating.Holder 
             final GraphQLFieldDefinition.Builder fieldBuilder,
             final TypeMapper.InputContext inputContext) {
 
+        val arguments = new ArrayList<GraphQLArgument>();
+        val argName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+
         // add target (if not a service)
-        if (!objectSpec.getBeanSort().isManagedBeanContributing()) {
-            GraphQLInputType graphQLInputType = context.typeMapper.inputTypeFor(objectSpec);
-            fieldBuilder.argument(GraphQLArgument.newArgument()
-                    .name("target")
-                    .type(graphQLInputType)
-                    .build());
+        if (! objectSpec.getBeanSort().isManagedBeanContributing()) {
+            arguments.add(
+                GraphQLArgument.newArgument()
+                        .name(argName)
+                        .type(context.typeMapper.inputTypeFor(objectSpec))
+                        .build()
+            );
         }
 
         val parameters = objectAction.getParameters();
-        val arguments = parameters.stream()
-                .map(objectActionParameter -> gqlArgumentFor(objectActionParameter, inputContext))
-                .collect(Collectors.toList());
+        parameters.stream()
+                .map(this::gqlArgumentFor)
+                .forEach(arguments::add);
+
         if (!arguments.isEmpty()) {
             fieldBuilder.arguments(arguments);
         }
     }
 
-    // TODO: copied from GqlvAction
-    GraphQLArgument gqlArgumentFor(
-            final ObjectActionParameter objectActionParameter,
-            final TypeMapper.InputContext inputContext) {
+    // adapted from GqlvAction
+    GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
         return objectActionParameter.isPlural()
-                ? gqlArgumentFor((OneToManyActionParameter) objectActionParameter, inputContext)
-                : gqlArgumentFor((OneToOneActionParameter) objectActionParameter, inputContext);
+                ? gqlArgumentFor((OneToManyActionParameter) objectActionParameter)
+                : gqlArgumentFor((OneToOneActionParameter) objectActionParameter);
     }
 
-    // TODO: copied from GqlvAction
-    GraphQLArgument gqlArgumentFor(
-            final OneToOneActionParameter oneToOneActionParameter,
-            final TypeMapper.InputContext inputContext) {
+    // adapted from GqlvAction
+    GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, TypeMapper.InputContext.INVOKE))
                 .build();
     }
 
     // TODO: copied from GqlvAction
-    GraphQLArgument gqlArgumentFor(
-            final OneToManyActionParameter oneToManyActionParameter,
-            final TypeMapper.InputContext inputContext) {
+    GraphQLArgument gqlArgumentFor(final OneToManyActionParameter oneToManyActionParameter) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter))
                 .build();
     }
 

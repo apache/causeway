@@ -16,13 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;

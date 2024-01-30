@@ -100,6 +100,13 @@ public class GqlvAction
         return argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }
 
+    /**
+     *
+     * @param dataFetchingEnvironment
+     * @param objectAction
+     * @param context
+     * @return
+     */
     public static Can<ManagedObject> argumentManagedObjectsFor(
             final DataFetchingEnvironment dataFetchingEnvironment,
             final ObjectAction objectAction,
@@ -162,7 +169,7 @@ public class GqlvAction
     }
 
 
-    private static Optional<Object> asPojo(
+    static Optional<Object> asPojo(
             final ObjectSpecification elementType,
             final Object argumentValueObj,
             final BookmarkService bookmarkService) {
@@ -215,7 +222,7 @@ public class GqlvAction
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter))
                 .build();
     }
 

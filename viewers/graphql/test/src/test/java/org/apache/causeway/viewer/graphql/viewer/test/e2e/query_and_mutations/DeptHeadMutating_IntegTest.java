@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.query_and_mutations;
 
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
+import java.util.Optional;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
@@ -32,9 +30,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import lombok.val;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
@@ -53,7 +55,7 @@ public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name() throws Exception {
+    void create_department() throws Exception {
 
         // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
         String response = submit();
@@ -61,6 +63,26 @@ public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
         // then payload
         Approvals.verify(response, jsonOptions());
 
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void change_department_name() throws Exception {
+
+        final Bookmark bookmark =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> {
+                            Department department = departmentRepository.findByName("Classics");
+                            Optional<Bookmark> bookmark1 = bookmarkService.bookmarkFor(department);
+                            return bookmark1.orElseThrow();
+                        }
+                ).valueAsNonNullElseFail();
+
+        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
     }
 
 }

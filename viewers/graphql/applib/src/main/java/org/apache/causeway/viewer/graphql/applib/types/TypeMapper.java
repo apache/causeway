@@ -64,7 +64,7 @@ public interface TypeMapper {
             final OneToOneFeature oneToOneFeature,
             final InputContext inputContext);
 
-    GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused);
+    GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter);
 
     GraphQLInputType inputTypeFor(final ObjectSpecification elementType);
 

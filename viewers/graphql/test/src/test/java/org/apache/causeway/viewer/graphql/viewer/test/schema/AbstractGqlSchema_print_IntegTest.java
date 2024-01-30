@@ -25,9 +25,10 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import graphql.schema.idl.SchemaPrinter;
+
 import org.approvaltests.core.Options;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -42,25 +43,22 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertNotN
 
 import lombok.val;
 
-import graphql.schema.idl.SchemaPrinter;
-
-@Order(10)
 @Transactional
-public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
+public abstract class AbstractGqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private GraphQlSourceForCauseway graphQlSourceForCauseway;
 
     @BeforeEach
-    void beforeEach() {
+    protected void beforeEach() {
         assertNotNull(causewaySystemEnvironment);
         assertNotNull(specificationLoader);
         assertNotNull(graphQlSourceForCauseway);
     }
 
     @Test
-    void schema() throws Exception {
+    protected void schema() throws Exception {
 
         val graphQL = graphQlSourceForCauseway.graphQl();
         val graphQLSchema = graphQL.getGraphQLSchema();

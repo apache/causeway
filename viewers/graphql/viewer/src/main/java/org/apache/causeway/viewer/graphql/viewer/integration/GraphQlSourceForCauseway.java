@@ -23,6 +23,7 @@ import java.util.Comparator;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
 
@@ -103,7 +104,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         }
 
         val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
-        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, causewayConfiguration, causewaySystemEnvironment);
+        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment);
 
         // add to the top-level query type and (dependent on configuration) the top-level mutation type also
         val topLevelQuery = new GqlvTopLevelQuery(serviceRegistry, codeRegistryBuilder);
@@ -114,6 +115,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
 
         val objectSpecifications = specificationLoader.snapshotSpecifications()
+                .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
                 .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
                 .filter(x -> x.isEntityOrViewModelOrAbstract() || x.getBeanSort().isManagedBeanContributing())
                 .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
@@ -139,7 +141,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
             });
             topLevelMutation.buildMutationType();
-            topLevelMutation.addFetchers();
+            topLevelMutation.addDataFetchers();
         }
 
         // add remaining domain objects

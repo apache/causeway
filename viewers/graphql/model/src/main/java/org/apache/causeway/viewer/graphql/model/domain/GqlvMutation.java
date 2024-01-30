@@ -35,7 +35,6 @@ import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
@@ -44,24 +43,28 @@ import org.springframework.lang.Nullable;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
-public class GqlvActionInvokeMutating {
+public class GqlvMutation {
 
     private final Holder holder;
     private final Context context;
     private final GraphQLFieldDefinition field;
+    private String argumentName;
 
-    public GqlvActionInvokeMutating(
+    public GqlvMutation(
             final Holder holder,
             final Context context) {
         this.holder = holder;
         this.context = context;
 
+        this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+
+        val objectSpec = holder.getObjectSpecification();
         val objectAction = holder.getObjectAction();
 
         GraphQLOutputType type = typeFor(objectAction);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
-                    .name(fieldNameForSemanticsOf(objectAction))
+                    .name(fieldName(objectSpec, objectAction))
                     .type(type);
             holder.addGqlArguments(fieldBuilder, TypeMapper.InputContext.INVOKE);
             this.field = holder.addField(fieldBuilder.build());
@@ -70,20 +73,8 @@ public class GqlvActionInvokeMutating {
         }
     }
 
-    private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
-        switch (objectAction.getSemantics()) {
-            case SAFE_AND_REQUEST_CACHEABLE:
-            case SAFE:
-                return "invoke";
-            case IDEMPOTENT:
-            case IDEMPOTENT_ARE_YOU_SURE:
-                return "invokeIdempotent";
-            case NON_IDEMPOTENT:
-            case NON_IDEMPOTENT_ARE_YOU_SURE:
-            case NOT_SPECIFIED:
-            default:
-                return "invokeNonIdempotent";
-        }
+    private static String fieldName(ObjectSpecification objectSpecification, ObjectAction objectAction) {
+        return TypeNames.objectTypeNameFor(objectSpecification) + "__" + objectAction.getId();
     }
 
     @Nullable
@@ -126,15 +117,21 @@ public class GqlvActionInvokeMutating {
 
     private Object invoke(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        val objectSpecification = holder.getObjectSpecification();
+        val objectAction = holder.getObjectAction();
 
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
-            return null;
+        val isService = objectSpecification.getBeanSort().isManagedBeanContributing();
+
+        Object sourcePojo;
+        if (isService) {
+            sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpecification.getCorrespondingClass());
+        } else {
+            Object target = dataFetchingEnvironment.getArgument(argumentName);
+            sourcePojo = GqlvAction.asPojo(objectSpecification, target, context.bookmarkService)
+                    .orElseThrow(); // TODO: better error handling if no such object found.
         }
 
-        val objectAction = holder.getObjectAction();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        ManagedObject managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
@@ -168,8 +165,8 @@ public class GqlvActionInvokeMutating {
                 final TypeMapper.InputContext inputContext);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
-                ObjectAction objectAction,
-                BookmarkService bookmarkService);
+                final DataFetchingEnvironment dataFetchingEnvironment,
+                final ObjectAction objectAction,
+                final BookmarkService bookmarkService);
     }
 }

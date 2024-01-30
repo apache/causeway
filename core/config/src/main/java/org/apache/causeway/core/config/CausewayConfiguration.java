@@ -2399,6 +2399,15 @@ public class CausewayConfiguration {
                 private String fieldName = "_gqlv_meta";
             }
 
+            private final Mutation mutation = new Mutation();
+            @Data
+            public static class Mutation {
+                /**
+                 * The name of the synthetic argument of mutators representing the target domain object.
+                 */
+                private String targetArgName = "_gqlv_target";
+            }
+
             private final TypeMapper typeMapper = new TypeMapper();
             @Data
             public static class TypeMapper {
