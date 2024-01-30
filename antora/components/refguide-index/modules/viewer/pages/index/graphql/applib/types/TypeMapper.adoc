@@ -19,7 +19,8 @@ interface TypeMapper {
   GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation)
   GraphQLList listTypeFor(ObjectSpecification elementType)
   GraphQLInputType inputTypeFor(OneToOneFeature oneToOneFeature, InputContext inputContext)
-  GraphQLList inputTypeFor(OneToManyActionParameter oneToManyActionParameter, InputContext inputContextUnused)
+  GraphQLList inputTypeFor(OneToManyActionParameter oneToManyActionParameter)
+  GraphQLInputType inputTypeFor(ObjectSpecification elementType)
   Object adaptPojo(Object argumentValue, ObjectSpecification elementType)
 }
 ----

@@ -9,38 +9,42 @@ Utilities to convert from and to JSON format.
 .JsonUtils.java
 ----
 class JsonUtils {
-  Try<T> tryRead(Class<T> mappedType, String stringUtf8, JsonUtils.JsonCustomizer... customizers)     // <.>
-  Try<T> tryRead(Class<T> mappedType, DataSource source, JsonUtils.JsonCustomizer... customizers)     // <.>
-  Try<List<T>> tryReadAsList(Class<T> elementType, DataSource source, JsonUtils.JsonCustomizer... customizers)     // <.>
-  void write(Object pojo, DataSink sink, JsonUtils.JsonCustomizer... customizers)     // <.>
-  String toStringUtf8(Object pojo, JsonUtils.JsonCustomizer... customizers)     // <.>
+  Try<T> tryRead(Class<T> mappedType, String stringUtf8, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<T> tryRead(Class<T> mappedType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<List<T>> tryReadAsList(Class<T> elementType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  void write(Object pojo, DataSink sink, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  String toStringUtf8(Object pojo, JsonUtils.JacksonCustomizer... customizers)     // <.>
   ObjectMapper indentedOutput(ObjectMapper mapper)     // <.>
   ObjectMapper onlyIncludeNonNull(ObjectMapper mapper)     // <.>
   ObjectMapper jaxbAnnotationSupport(ObjectMapper mapper)     // <.>
+  ObjectMapper readingJavaTimeSupport(ObjectMapper mapper)     // <.>
+  ObjectMapper writingJavaTimeSupport(ObjectMapper mapper)     // <.>
+  ObjectMapper readingCanSupport(ObjectMapper mapper)     // <.>
+  ObjectMapper writingCanSupport(ObjectMapper mapper)     // <.>
 }
 ----
 
-<.> xref:#tryRead_Class_String_JsonUtils_JsonCustomizer[tryRead(Class, String, JsonUtils_JsonCustomizer)]
+<.> xref:#tryRead_Class_String_JsonUtils_JacksonCustomizer[tryRead(Class, String, JsonUtils_JacksonCustomizer)]
 +
 --
 Tries to deserialize JSON content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
 --
-<.> xref:#tryRead_Class_DataSource_JsonUtils_JsonCustomizer[tryRead(Class, DataSource, JsonUtils_JsonCustomizer)]
+<.> xref:#tryRead_Class_DataSource_JsonUtils_JacksonCustomizer[tryRead(Class, DataSource, JsonUtils_JacksonCustomizer)]
 +
 --
 Tries to deserialize JSON content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _mappedType_ .
 --
-<.> xref:#tryReadAsList_Class_DataSource_JsonUtils_JsonCustomizer[tryReadAsList(Class, DataSource, JsonUtils_JsonCustomizer)]
+<.> xref:#tryReadAsList_Class_DataSource_JsonUtils_JacksonCustomizer[tryReadAsList(Class, DataSource, JsonUtils_JacksonCustomizer)]
 +
 --
 Tries to deserialize JSON content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
 --
-<.> xref:#write_Object_DataSink_JsonUtils_JsonCustomizer[write(Object, DataSink, JsonUtils_JsonCustomizer)]
+<.> xref:#write_Object_DataSink_JsonUtils_JacksonCustomizer[write(Object, DataSink, JsonUtils_JacksonCustomizer)]
 +
 --
 Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
 --
-<.> xref:#toStringUtf8_Object_JsonUtils_JsonCustomizer[toStringUtf8(Object, JsonUtils_JsonCustomizer)]
+<.> xref:#toStringUtf8_Object_JsonUtils_JacksonCustomizer[toStringUtf8(Object, JsonUtils_JacksonCustomizer)]
 +
 --
 Converts given _pojo_ to an UTF8 encoded _String_ .
@@ -60,31 +64,51 @@ only properties with non-null values are to be included
 --
 add support for JAXB annotations
 --
+<.> xref:#readingJavaTimeSupport_ObjectMapper[readingJavaTimeSupport(ObjectMapper)]
++
+--
+add support for reading java.time (ISO)
+--
+<.> xref:#writingJavaTimeSupport_ObjectMapper[writingJavaTimeSupport(ObjectMapper)]
++
+--
+add support for writing java.time (ISO)
+--
+<.> xref:#readingCanSupport_ObjectMapper[readingCanSupport(ObjectMapper)]
++
+--
+add support for reading Can
+--
+<.> xref:#writingCanSupport_ObjectMapper[writingCanSupport(ObjectMapper)]
++
+--
+add support for writing Can
+--
 
 == Members
 
-[#tryRead_Class_String_JsonUtils_JsonCustomizer]
-=== tryRead(Class, String, JsonUtils_JsonCustomizer)
+[#tryRead_Class_String_JsonUtils_JacksonCustomizer]
+=== tryRead(Class, String, JsonUtils_JacksonCustomizer)
 
 Tries to deserialize JSON content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
 
-[#tryRead_Class_DataSource_JsonUtils_JsonCustomizer]
-=== tryRead(Class, DataSource, JsonUtils_JsonCustomizer)
+[#tryRead_Class_DataSource_JsonUtils_JacksonCustomizer]
+=== tryRead(Class, DataSource, JsonUtils_JacksonCustomizer)
 
 Tries to deserialize JSON content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _mappedType_ .
 
-[#tryReadAsList_Class_DataSource_JsonUtils_JsonCustomizer]
-=== tryReadAsList(Class, DataSource, JsonUtils_JsonCustomizer)
+[#tryReadAsList_Class_DataSource_JsonUtils_JacksonCustomizer]
+=== tryReadAsList(Class, DataSource, JsonUtils_JacksonCustomizer)
 
 Tries to deserialize JSON content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
 
-[#write_Object_DataSink_JsonUtils_JsonCustomizer]
-=== write(Object, DataSink, JsonUtils_JsonCustomizer)
+[#write_Object_DataSink_JsonUtils_JacksonCustomizer]
+=== write(Object, DataSink, JsonUtils_JacksonCustomizer)
 
 Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
 
-[#toStringUtf8_Object_JsonUtils_JsonCustomizer]
-=== toStringUtf8(Object, JsonUtils_JsonCustomizer)
+[#toStringUtf8_Object_JsonUtils_JacksonCustomizer]
+=== toStringUtf8(Object, JsonUtils_JacksonCustomizer)
 
 Converts given _pojo_ to an UTF8 encoded _String_ .
 
@@ -102,3 +126,23 @@ only properties with non-null values are to be included
 === jaxbAnnotationSupport(ObjectMapper)
 
 add support for JAXB annotations
+
+[#readingJavaTimeSupport_ObjectMapper]
+=== readingJavaTimeSupport(ObjectMapper)
+
+add support for reading java.time (ISO)
+
+[#writingJavaTimeSupport_ObjectMapper]
+=== writingJavaTimeSupport(ObjectMapper)
+
+add support for writing java.time (ISO)
+
+[#readingCanSupport_ObjectMapper]
+=== readingCanSupport(ObjectMapper)
+
+add support for reading Can
+
+[#writingCanSupport_ObjectMapper]
+=== writingCanSupport(ObjectMapper)
+
+add support for writing Can

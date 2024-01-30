@@ -26,6 +26,9 @@ class TreeNode<T> {
   void expand(TreePath... treePaths)     // <.>
   void expand()     // <.>
   void collapse(TreePath... treePaths)     // <.>
+  void clearSelection()     // <.>
+  boolean isSelected(TreePath treePath)     // <.>
+  void select(TreePath... treePaths)     // <.>
   TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass)     // <.>
   Iterator<TreeNode<T>> iteratorHierarchyUp()
   Stream<TreeNode<T>> streamHierarchyUp()
@@ -53,6 +56,21 @@ Expands this node and all its parents.
 --
 Removes _treePaths_ from the set of expanded nodes, as held by this tree's shared state object.
 --
+<.> xref:#clearSelection_[clearSelection()]
++
+--
+Clears all selection markers.
+--
+<.> xref:#isSelected_TreePath[isSelected(TreePath)]
++
+--
+Whether node that corresponds to given xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] has a selection marker.
+--
+<.> xref:#select_TreePath[select(TreePath)]
++
+--
+Select nodes by their corresponding xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] , that is, activate their selection marker.
+--
 <.> xref:#lazy_T_Class[lazy(T, Class)]
 +
 --
@@ -79,6 +97,30 @@ Expands this node and all its parents.
 === collapse(TreePath)
 
 Removes _treePaths_ from the set of expanded nodes, as held by this tree's shared state object.
+
+[#clearSelection_]
+=== clearSelection()
+
+Clears all selection markers.
+
+[#isSelected_TreePath]
+=== isSelected(TreePath)
+
+Whether node that corresponds to given xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] has a selection marker.
+
+[#select_TreePath]
+=== select(TreePath)
+
+Select nodes by their corresponding xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] , that is, activate their selection marker.
+
+With the _Wicket Viewer_ corresponds to expressing CSS class _tree-node-selected_ on the rendered tree node, which has default bg-color _lightgrey_ . Color can be customized by setting CSS var __
+
+----
+
+.tree-theme-bootstrap .tree-node-selected {
+    background-color: var(--tree-node-selected-bg-color, lightgrey);
+}
+----
 
 [#lazy_T_Class]
 === lazy(T, Class)

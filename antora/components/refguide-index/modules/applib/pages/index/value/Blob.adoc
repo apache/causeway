@@ -31,6 +31,7 @@ class Blob {
   Blob zip()     // <.>
   Blob zip(String zipEntryNameIfAny)     // <.>
   Blob unZip(CommonMimeType resultingMimeType)
+  Blob unZip(CommonMimeType resultingMimeType, ZipOptions zipOptions)
   Try<HashUtils.Hash> tryHash(HashAlgorithm hashAlgorithm)
   Try<HashUtils.Hash> tryMd5()
   String md5Hex()
