@@ -200,7 +200,7 @@ public class TreeNode<T> implements Vertex<T> {
     }
 
     /**
-     * Whether node that corresponds to given {@link TreePath} has a selection markers.
+     * Whether node that corresponds to given {@link TreePath} has a selection marker.
      * @see #select(TreePath...)
      */
     @Programmatic
