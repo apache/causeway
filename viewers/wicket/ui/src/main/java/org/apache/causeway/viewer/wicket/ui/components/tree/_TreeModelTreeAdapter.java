@@ -94,10 +94,10 @@ implements
                 .map(newPojoToTreeModelMapper(treeModel));
     }
 
-    _TreeNodeMemento mementify(final @NonNull Object pojo, final TreePath treePath) {
+    _TreeNodeMemento mementify(final @NonNull Object pojo, final @NonNull TreePath treePath) {
         return new _TreeNodeMemento(
-                ManagedObject.adaptSingular(getSpecificationLoader(), pojo).getBookmark().orElseThrow(),
-                treePath);
+                treePath,
+                ManagedObject.adaptSingular(getSpecificationLoader(), pojo).getBookmark().orElseThrow());
     }
     private @Nullable Object demementify(final _TreeNodeMemento model) {
         Objects.requireNonNull(model);

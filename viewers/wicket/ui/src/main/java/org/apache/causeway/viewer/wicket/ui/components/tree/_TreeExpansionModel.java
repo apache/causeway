@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.graph.tree.TreePath;
+import org.apache.causeway.applib.graph.tree.TreeState;
 
 /**
  * Wicket's model for collapse/expand state
@@ -32,8 +33,18 @@ class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
     private static final long serialVersionUID = 648152234030889164L;
 
     public static _TreeExpansionModel of(
-            final Set<TreePath> expandedTreePaths) {
-        return new _TreeExpansionModel( expandedTreePaths);
+            final TreeState treeState) {
+        return new _TreeExpansionModel(treeState);
+    }
+
+    private final TreeState treeState;
+    private final Set<_TreeNodeMemento> expandedNodes;
+    private _TreeExpansionModel(
+            final TreeState treeState) {
+        this.treeState = treeState;
+        this.expandedNodes = treeState.getExpandedNodePaths().stream()
+                .map(tPath->new _TreeNodeMemento(tPath))
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -41,7 +52,7 @@ class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
      * @param t
      */
     public void onExpand(final _TreeNodeMemento t) {
-        expandedTreePaths.add(t.getTreePath());
+        treeState.getExpandedNodePaths().add(t.getTreePath());
     }
 
     /**
@@ -49,23 +60,15 @@ class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
      * @param t
      */
     public void onCollapse(final _TreeNodeMemento t) {
-        expandedTreePaths.remove(t.getTreePath());
+        treeState.getExpandedNodePaths().remove(t.getTreePath());
     }
 
     public boolean contains(final TreePath treePath) {
-        return expandedTreePaths.contains(treePath);
+        return treeState.getExpandedNodePaths().contains(treePath);
     }
 
-    private final Set<TreePath> expandedTreePaths;
-    private final Set<_TreeNodeMemento> expandedNodes;
-
-    private _TreeExpansionModel(
-            final Set<TreePath> expandedTreePaths) {
-
-        this.expandedTreePaths = expandedTreePaths;
-        this.expandedNodes = expandedTreePaths.stream()
-                .map(tPath->new _TreeNodeMemento(tPath))
-                .collect(Collectors.toSet());
+    public boolean isSelected(final TreePath treePath){
+        return treeState.getSelectedNodePaths().contains(treePath);
     }
 
     @Override
@@ -75,9 +78,7 @@ class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
 
     @Override
     public String toString() {
-        return "{" + expandedTreePaths.stream()
-        .map(TreePath::toString)
-        .collect(Collectors.joining(", ")) + "}";
+        return treeState.toString();
     }
 
 }

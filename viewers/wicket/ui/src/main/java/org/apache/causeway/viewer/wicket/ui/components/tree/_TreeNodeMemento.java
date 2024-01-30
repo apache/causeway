@@ -43,13 +43,13 @@ class _TreeNodeMemento implements Serializable {
     @Getter private final TreePath treePath;
     private final int hashCode;
 
-    public _TreeNodeMemento(final TreePath treePath) {
+    public _TreeNodeMemento(final @NonNull TreePath treePath) {
         this.bookmark = null;
         this.treePath = treePath;
         this.hashCode = Objects.hash(0, treePath.hashCode());
     }
 
-    public _TreeNodeMemento(final @NonNull Bookmark bookmark, final @NonNull TreePath treePath) {
+    public _TreeNodeMemento(final @NonNull TreePath treePath, final @NonNull Bookmark bookmark) {
         this.bookmark = bookmark;
         this.treePath = treePath;
         this.hashCode = Objects.hash(bookmark.hashCode(), treePath.hashCode());
