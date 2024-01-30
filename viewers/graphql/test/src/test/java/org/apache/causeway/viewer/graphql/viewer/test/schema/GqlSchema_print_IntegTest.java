@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.approvaltests.core.Options;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,7 @@ import lombok.val;
 
 import graphql.schema.idl.SchemaPrinter;
 
+@Order(10)
 @Transactional
 public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 

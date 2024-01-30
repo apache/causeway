@@ -28,6 +28,7 @@ import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -44,6 +45,7 @@ import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
+@Order(40)
 @ActiveProfiles("test")
 public class Department_IntegTest extends Abstract_IntegTest {
 

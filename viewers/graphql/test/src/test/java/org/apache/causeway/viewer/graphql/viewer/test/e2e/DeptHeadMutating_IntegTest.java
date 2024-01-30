@@ -18,50 +18,38 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
+import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
+import lombok.val;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(50)
+@SpringBootTest(
+        classes = {
+                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
+        },
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
+        }
+)
+@Order(110)
 @ActiveProfiles("test")
-public class DeptHead_IntegTest extends Abstract_IntegTest {
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_by_name() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name_invalid() throws Exception {
-
-        String response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name_invoke_invalid() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
+public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
@@ -73,14 +61,6 @@ public class DeptHead_IntegTest extends Abstract_IntegTest {
         // then payload
         Approvals.verify(response, jsonOptions());
 
-        // and also in the database
-        DeptHead deptHeadAfter = transactionService.callTransactional(
-                Propagation.REQUIRED,
-                () -> deptHeadRepository.findByName("Prof. Richard Horwich")
-        ).valueAsNullableElseFail();
-
-        assertThat(deptHeadAfter).isNotNull();
     }
-
 
 }

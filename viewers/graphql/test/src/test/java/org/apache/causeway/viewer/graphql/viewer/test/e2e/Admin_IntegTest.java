@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.test.context.ActiveProfiles;
@@ -29,6 +30,7 @@ import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
+@Order(20)
 @ActiveProfiles("test")
 public class Admin_IntegTest extends Abstract_IntegTest {
 
