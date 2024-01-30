@@ -18,33 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.schema.query;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
-import org.apache.causeway.viewer.graphql.viewer.test.schema.AbstractGqlSchema_print_IntegTest;
-
-import org.approvaltests.core.Options;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.causeway.commons.io.TextUtils;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
-
-import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
-
-import lombok.val;
-
-import graphql.schema.idl.SchemaPrinter;
+import org.apache.causeway.viewer.graphql.viewer.test.schema.AbstractGqlSchema_print_IntegTest;
 
 @Order(0)
 @Transactional
