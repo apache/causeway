@@ -12,11 +12,11 @@ import static graphql.schema.GraphQLObjectType.newObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvMutation;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForAction;
 
 import lombok.Getter;
 
-public class GqlvTopLevelMutation implements GqlvMutation.Holder {
+public class GqlvTopLevelMutation implements GqlvMutationForAction.Holder {
 
     private final Context context;
 
@@ -28,7 +28,7 @@ public class GqlvTopLevelMutation implements GqlvMutation.Holder {
      */
     private GraphQLObjectType gqlObjectType;
 
-    private final List<GqlvMutation> actions = new ArrayList<>();
+    private final List<GqlvMutationForAction> actions = new ArrayList<>();
 
     public GqlvTopLevelMutation(final Context context) {
         this.context = context;
@@ -58,7 +58,7 @@ public class GqlvTopLevelMutation implements GqlvMutation.Holder {
 
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
-        actions.add(new GqlvMutation(this, objectSpec, objectAction, context));
+        actions.add(new GqlvMutationForAction(this, objectSpec, objectAction, context));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class GqlvTopLevelMutation implements GqlvMutation.Holder {
     }
 
     public void addDataFetchers() {
-        actions.forEach(GqlvMutation::addDataFetcher);
+        actions.forEach(GqlvMutationForAction::addDataFetcher);
     }
 
 

@@ -50,7 +50,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvMutation {
+public class GqlvMutationForAction {
 
     private final Holder holder;
     private final ObjectSpecification objectSpec;
@@ -59,7 +59,7 @@ public class GqlvMutation {
     private final GraphQLFieldDefinition field;
     private String argumentName;
 
-    public GqlvMutation(
+    public GqlvMutationForAction(
             final Holder holder,
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction,
