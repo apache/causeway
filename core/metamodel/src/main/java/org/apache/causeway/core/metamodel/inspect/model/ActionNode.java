@@ -29,6 +29,7 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
@@ -68,6 +69,7 @@ public class ActionNode extends MemberNode {
         return title;
     }
 
+    @Programmatic
     @Override
     public Stream<MMNode> streamChildNodes() {
 
