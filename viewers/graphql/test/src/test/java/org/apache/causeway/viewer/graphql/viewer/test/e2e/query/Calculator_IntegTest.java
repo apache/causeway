@@ -26,12 +26,14 @@ import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(30)
 @ActiveProfiles("test")
+@DirtiesContext
 public class Calculator_IntegTest extends Abstract_IntegTest {
 
     @Test

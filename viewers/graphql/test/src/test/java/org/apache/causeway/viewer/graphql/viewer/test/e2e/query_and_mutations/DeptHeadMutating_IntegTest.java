@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -51,6 +52,7 @@ import lombok.val;
 )
 @Order(110)
 @ActiveProfiles("test")
+@DirtiesContext
 public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
 
     @Test
