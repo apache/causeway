@@ -89,14 +89,13 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
         gqlInputObjectType = inputTypeBuilder.build();
 
         addMembers();
+    }
 
-        // register types
+    public void addTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
         gqlObjectType = gqlObjectTypeBuilder.build();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlObjectType);
         meta.registerTypesInto(graphQLTypeRegistry);
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlInputObjectType);
-
-        addDataFetchers();
     }
 
 
@@ -141,7 +140,7 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
     }
 
 
-    private void addDataFetchers() {
+    public void addDataFetchers() {
         meta.addDataFetchers();
         properties.forEach((id, property) -> property.addDataFetcher());
         collections.forEach((id, collection) -> collection.addDataFetcher());

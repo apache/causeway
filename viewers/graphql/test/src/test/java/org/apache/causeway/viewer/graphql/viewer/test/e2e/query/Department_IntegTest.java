@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +24,13 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -44,6 +47,7 @@ import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
+@Order(40)
 @ActiveProfiles("test")
 public class Department_IntegTest extends Abstract_IntegTest {
 

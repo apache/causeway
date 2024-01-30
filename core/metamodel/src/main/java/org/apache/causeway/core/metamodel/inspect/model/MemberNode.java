@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.schema.metamodel.v2.Member;
 import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
 
@@ -59,6 +60,7 @@ public abstract class MemberNode extends MMNode {
     @Getter @Setter @Accessors(makeFinal = true)
     private TypeNode parentNode;
 
+    @Programmatic
     @Override
     public Stream<MMNode> streamChildNodes() {
         return Stream.of(
