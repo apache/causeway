@@ -26,7 +26,6 @@ type Query {
   causeway_applib_UserMenu: causeway_applib_UserMenu
   causeway_conf_ConfigurationMenu: causeway_conf_ConfigurationMenu
   causeway_security_LogoutMenu: causeway_security_LogoutMenu
-  numServices: Int
   university_admin_AdminMenu: university_admin_AdminMenu
   university_calc_Calculator: university_calc_Calculator
   university_dept_Departments: university_dept_Departments

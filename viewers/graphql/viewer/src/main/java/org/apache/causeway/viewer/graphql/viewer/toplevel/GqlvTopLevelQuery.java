@@ -1,6 +1,8 @@
 package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 
 import lombok.Getter;
@@ -11,6 +13,8 @@ import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
+
+import lombok.val;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -23,7 +27,6 @@ public class GqlvTopLevelQuery {
 
     @Getter final GraphQLObjectType.Builder queryBuilder;
 
-    @Getter private GraphQLFieldDefinition numServicesField;
 
     /**
      * Built using {@link #buildQueryType()}
@@ -38,11 +41,6 @@ public class GqlvTopLevelQuery {
         this.codeRegistryBuilder = codeRegistryBuilder;
         queryBuilder = newObject().name("Query");
 
-        numServicesField = newFieldDefinition()
-                .name("numServices")
-                .type(Scalars.GraphQLInt)
-                .build();
-        queryBuilder.field(numServicesField);
     }
 
 
@@ -79,11 +77,13 @@ public class GqlvTopLevelQuery {
 
     }
 
-    public void addFetchers() {
-        codeRegistryBuilder
-            .dataFetcher(
-                coordinates(getQueryType(), getNumServicesField()),
-                (DataFetcher<Object>) environment -> this.serviceRegistry.streamRegisteredBeans().count());
+    public void addDomainServiceTo(ObjectSpecification objectSpec, Object servicePojo, Context context) {
+        val domainService = new GqlvDomainService(objectSpec, servicePojo, context);
+
+        boolean actionsAdded = domainService.hasActions();
+        if (actionsAdded) {
+            addFieldFor(domainService, context.codeRegistryBuilder);
+        }
     }
 
 }
