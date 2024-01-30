@@ -16,17 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
+
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.test.context.ActiveProfiles;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
+@Order(30)
 @ActiveProfiles("test")
 public class Calculator_IntegTest extends Abstract_IntegTest {
 

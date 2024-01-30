@@ -97,6 +97,20 @@ public class GqlvAction
             final ObjectAction objectAction,
             final BookmarkService bookmarkService) {
 
+        return argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
+    }
+
+    /**
+     *
+     * @param dataFetchingEnvironment
+     * @param objectAction
+     * @param context
+     * @return
+     */
+    public static Can<ManagedObject> argumentManagedObjectsFor(
+            final DataFetchingEnvironment dataFetchingEnvironment,
+            final ObjectAction objectAction,
+            final Context context) {
         Map<String, Object> argumentPojos = dataFetchingEnvironment.getArguments();
         Can<ObjectActionParameter> parameters = objectAction.getParameters();
         return parameters
@@ -106,7 +120,7 @@ public class GqlvAction
                     switch (elementType.getBeanSort()) {
 
                         case VALUE:
-                            return adaptValue(oap, argumentValue);
+                            return adaptValue(oap, argumentValue, context);
 
                         case ENTITY:
                         case VIEW_MODEL:
@@ -117,12 +131,12 @@ public class GqlvAction
                             if (argumentValue instanceof List) {
                                 val argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
-                                        .map(value -> asPojo(oap.getElementType(), value, bookmarkService))
+                                        .map(value -> asPojo(oap.getElementType(), value, context.bookmarkService))
                                         .filter(Optional::isPresent)
                                         .map(Optional::get)
                                         .collect(Collectors.toList());
                             } else {
-                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, bookmarkService).orElse(null);
+                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, context.bookmarkService).orElse(null);
                             }
                             return ManagedObject.adaptParameter(oap, pojoOrPojoList);
 
@@ -140,21 +154,22 @@ public class GqlvAction
                 });
     }
 
-    private ManagedObject adaptValue(
+    private static ManagedObject adaptValue(
             final ObjectActionParameter oap,
-            final Object argumentValue) {
+            final Object argumentValue,
+            final Context context1) {
 
         val elementType = oap.getElementType();
         if (argumentValue == null) {
             return ManagedObject.empty(elementType);
         }
 
-        val argPojo = context.typeMapper.adaptPojo(argumentValue, elementType);
+        val argPojo = context1.typeMapper.adaptPojo(argumentValue, elementType);
         return ManagedObject.adaptParameter(oap, argPojo);
     }
 
 
-    private static Optional<Object> asPojo(
+    static Optional<Object> asPojo(
             final ObjectSpecification elementType,
             final Object argumentValueObj,
             final BookmarkService bookmarkService) {
@@ -185,21 +200,6 @@ public class GqlvAction
         }
     }
 
-    public void addGqlArgument(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition.Builder builder,
-            final TypeMapper.InputContext inputContext,
-            final int paramNum) {
-
-        val parameters = objectAction.getParameters();
-        val arguments = parameters.get(paramNum).stream()
-                .map(objectActionParameter -> gqlArgumentFor(objectActionParameter, inputContext))
-                .collect(Collectors.toList());
-        if (!arguments.isEmpty()) {
-            builder.arguments(arguments);
-        }
-    }
-
     GraphQLArgument gqlArgumentFor(
             final ObjectActionParameter objectActionParameter,
             final TypeMapper.InputContext inputContext) {
@@ -222,7 +222,7 @@ public class GqlvAction
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter))
                 .build();
     }
 

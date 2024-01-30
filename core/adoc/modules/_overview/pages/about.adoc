@@ -840,6 +840,8 @@ Directory: /commons
 ****
 com.approvaltests:approvaltests:jar:<managed> +
 com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
+com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:<managed> +
+com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:<managed> +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 com.fasterxml.woodstox:woodstox-core:jar:<managed> +
 com.sun.xml.bind:jaxb-impl:jar:<managed> +
@@ -2620,6 +2622,8 @@ Directory: /viewers/graphql/test
 |.Dependencies
 ****
 com.approvaltests:approvaltests:jar:<managed> +
+com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:jar:<managed> +
+com.github.vertical-blank:sql-formatter:jar:<managed> +
 com.h2database:h2:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
@@ -3066,7 +3070,14 @@ Artifact: causeway-viewer-wicket-ui
 Type: jar
 Directory: /viewers/wicket/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.wicket.ui.app.logout.LogoutHandlerWkt +
+o.a.i.viewer.wicket.ui.components.collectioncontents.export.CollectionContentsAsExportFactory +
+o.a.i.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupportDefault +
+****
+
+.Dependencies
 ****
 com.google.guava:guava:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
@@ -3123,7 +3134,22 @@ Artifact: causeway-viewer-wicket-viewer
 Type: jar
 Directory: /viewers/wicket/viewer
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault +
+o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault +
+o.a.i.viewer.wicket.viewer.registries.pages.PageClassListDefault +
+o.a.i.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault +
+o.a.i.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault +
+o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
+o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
+o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
+o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
+o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
+o.a.i.viewer.wicket.viewer.wicketapp.CausewayWicketApplication$ServiceInjectorHolder +
+****
+
+.Dependencies
 ****
 commons-io:commons-io:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +

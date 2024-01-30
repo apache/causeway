@@ -1,0 +1,10 @@
+mutation {
+  university_dept_Departments__createDepartment(
+      name: "Geophysics",
+      deptHead: null
+  ) {
+    name {
+      get
+    }
+  }
+}

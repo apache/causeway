@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "university_dept_Departments__createDepartment" : {
+      "name" : {
+        "get" : "Geophysics"
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@
 interface TreeState {
   TreeState rootCollapsed()
   Set<TreePath> getExpandedNodePaths()
+  Set<TreePath> getSelectedNodePaths()
 }
 ----
 

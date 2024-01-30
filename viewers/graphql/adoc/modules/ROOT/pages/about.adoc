@@ -13,7 +13,13 @@ The diagram below shows a simple domain footnote:[in fact, this is the domain us
 
 image::test-domain.drawio.png[width=600]
 
-To list all Departments:
+GraphQL distinguishes queries and mutations, so let's look at each.
+
+NOTE: GraphQL also defines the notion of subscriptions; the GraphQL viewer currently has no support for these.
+
+=== Queries
+
+To list all Departments, we can submit this query:
 
 [source,graphql]
 ----
@@ -68,7 +74,7 @@ For example:
 <.> whether this action is disabled
 <.> whether the property of the resultant object is hidden
 
-Similarly, there are fields for:
+Similarly, there are fields for action parameters:
 
 * `validate` - is the proposed action parameter valid?
 * `disable` - is the action or action parameter disabled?
@@ -76,8 +82,82 @@ Similarly, there are fields for:
 * `autoComplete` - for an action parameter, is there an auto-complete?
 * `default` - for an action parameter, is there a default value?
 
+There are also similar fields for properties:
 
-=== Support for "mutating" queries
+* `validate` - is the proposed value of the property valid?
+* `disable` - is the property disabled?
+* `choices` - for a property, are their choices?
+* `autoComplete` - for a property , is there an auto-complete?
+
+
+The next section explains how use mutations to change the state of the system.
+
+=== Mutations
+
+Actions that mutate the state of the system (with idempotent or non-idempotent xref:refguide:applib:index/annotation/Action.adoc#semantics[@Action#semantics]) are exposed as mutations.
+Editable properties are also exposed as mutations.
+
+IF the action is on a domain service, then the target is implicit; but if the action is on a domain object -- and also for properties -- then the target domain object must be specified.
+
+For example, to invoke a mutating action on a domain service:
+
+[source,graphql]
+----
+mutation {
+  university_dept_Departments__createDepartment(  #<.>
+      name: "Geophysics",
+      deptHead: null
+  ) {
+    name {
+      get
+    }
+  }
+}
+----
+<.> derived from the logical type name of the domain service, and the action Id.
+
+For example, to invoke a mutating action on a domain object:
+
+[source,graphql]
+----
+mutation {
+  university_dept_Department__changeName(     # <.>
+      _gqlv_target: {id : "1"},               # <.>
+      newName: "Classics and Ancient History"
+  ) {
+    name {
+      get
+    }
+  }
+}
+----
+<.> derived from the logical type name of the domain object, and the action Id.
+<.> the `_gqlv_target` specifies the target object
+
+
+Or, to set a property on a domain object:
+
+[source,graphql]
+----
+mutation {
+  university_dept_StaffMember__name(    #<.>
+      _gqlv_target: {id: "1"},          #<.>
+      name: "Jonathon Gartner"
+  ) {
+    name {                              #<.>
+      get
+    }
+  }
+}
+----
+<.> derived from the logical type name of the domain object, and the property Id.
+<.> the `_gqlv_target` specifies the target object
+<.> property setters are `void`, so as a convenience the mutator instead returns the target object.
+
+
+
+
+=== Mutations using Queries
 
 According to the link:https://spec.graphql.org/June2018/#sec-Language.Operations[GraphQL specification], queries should be read-only; they must not change the state of the system.
 
@@ -91,17 +171,79 @@ As specified by xref:refguide:applib:index/annotation/Action.adoc#semantics[@Act
 * `set` - to modify a property.
 
 
-It also means that the above fields for supporting methods also apply to properties:
+For example, to invoke an action on a domain service
 
-* `validate` - is the proposed value of the property valid?
-* `disable` - is the property disabled?
-* `choices` - for a property, are their choices?
-* `autoComplete` - for a property , is there an auto-complete?
+[source,graphql]
+----
+{
+  university_dept_Staff {
+    createStaffMember {
+      invokeNonIdempotent(
+        name: "Dr. Georgina McGovern",
+        department: { id: "1"}
+    ) {
+        name {
+          get
+        }
+        department {
+          get {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+----
+
+Or, to find a domain object and then invoke a mutating action on it:
+
+[source,graphql]
+----
+{
+  university_dept_DeptHeads {
+    findHeadByName {
+      invoke(name: "Prof. Dicky Horwich") {
+        changeName {
+          invokeIdempotent(newName: "Prof. Richard Horwich") {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+Or, similarly to find a domain object and then set a property afterwards:
+
+[source,graphql]
+----
+{
+  university_dept_Staff {
+    findStaffMemberByName {
+      invoke(name: "Gerry Jones") {
+        name {
+          set(name: "Gerald Johns") {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
 
 
-This relaxed mode is enabled by default, but if you want read-only queries then there is a configuration property, see xref:setup-and-configuration.adoc[].
+This relaxed mode is specified using a configuration property, see xref:setup-and-configuration.adoc[].
 
-IMPORTANT: GraphQL mutations are currently not yet implemented, and so there is not yet any spec-compliant way to mutate the state of the system.
 
 
 == See also

@@ -197,12 +197,13 @@ public class TypeMapperDefault implements TypeMapper {
     }
 
     @Override
-    public GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, final InputContext inputContextUnused){
+    public GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter){
         ObjectSpecification elementType = oneToManyActionParameter.getElementType();
-        return GraphQLList.list(inputTypeFor_(elementType));
+        return GraphQLList.list(inputTypeFor(elementType));
     }
 
-    private GraphQLInputType inputTypeFor_(final ObjectSpecification elementType){
+    @Override
+    public GraphQLInputType inputTypeFor(final ObjectSpecification elementType){
         switch (elementType.getBeanSort()) {
             case ABSTRACT:
             case ENTITY:

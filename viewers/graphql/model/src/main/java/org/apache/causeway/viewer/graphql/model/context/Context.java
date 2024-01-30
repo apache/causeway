@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.graphql.model.context;
 import graphql.schema.GraphQLCodeRegistry;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
@@ -36,6 +37,7 @@ public class Context {
     public final BookmarkService bookmarkService;
     public final SpecificationLoader specificationLoader;
     public final TypeMapper typeMapper;
+    public final ServiceRegistry serviceRegistry;
     public final CausewayConfiguration causewayConfiguration;
     public final CausewaySystemEnvironment causewaySystemEnvironment;
 

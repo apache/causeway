@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "university_dept_StaffMember__name" : {
+      "name" : {
+        "get" : "Jonathon Gartner"
+      }
+    }
+  }
+}

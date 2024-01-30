@@ -43,13 +43,13 @@ import lombok.val;
 
 public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
-    @Inject DepartmentRepository departmentRepository;
-    @Inject DeptHeadRepository deptHeadRepository;
-    @Inject StaffMemberRepository staffMemberRepository;
-    @Inject BookmarkService bookmarkService;
+    @Inject protected DepartmentRepository departmentRepository;
+    @Inject protected DeptHeadRepository deptHeadRepository;
+    @Inject protected StaffMemberRepository staffMemberRepository;
+    @Inject protected BookmarkService bookmarkService;
 
     @BeforeEach
-    void beforeEach(){
+    protected void beforeEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
 
             // departments
@@ -77,13 +77,13 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
         });
     }
 
-    private Blob asBlob(String fileName) {
+    protected Blob asBlob(String fileName) {
         val bytes = toBytes(fileName);
         return new Blob(fileName, "application/pdf", bytes);
     }
 
     @AfterEach
-    void afterEach(){
+    protected void afterEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
             staffMemberRepository.removeAll();
             deptHeadRepository.findAll().forEach(x -> x.setDepartment(null));
@@ -95,7 +95,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
 
     @SneakyThrows
     private byte[] toBytes(String fileName){
-        InputStream inputStream = new ClassPathResource(fileName, getClass()).getInputStream();
+        InputStream inputStream = new ClassPathResource(fileName, Abstract_IntegTest.class).getInputStream();
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         int nRead;
