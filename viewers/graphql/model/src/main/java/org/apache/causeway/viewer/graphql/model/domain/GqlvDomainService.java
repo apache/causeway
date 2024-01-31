@@ -30,12 +30,14 @@ import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -88,7 +90,11 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
     private void addActions() {
 
+        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||
+                        apiVariant != CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_ONLY    // the other variants have an entry for all actions.
+                )
                 .forEach(this::addAction);
     }
 
