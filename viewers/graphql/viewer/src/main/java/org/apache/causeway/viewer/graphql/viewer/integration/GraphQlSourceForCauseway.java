@@ -108,7 +108,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment);
 
         // add to the top-level query type and (dependent on configuration) the top-level mutation type also
-        val topLevelQuery = new GqlvTopLevelQuery(serviceRegistry, codeRegistryBuilder);
+        val topLevelQuery = new GqlvTopLevelQuery();
         val topLevelMutation =
                 causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
                     new GqlvTopLevelMutation(context)
@@ -127,7 +127,10 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             switch (objectSpec.getBeanSort()) {
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                        .ifPresent(servicePojo -> topLevelQuery.addDomainServiceTo(objectSpec, servicePojo, context));
+                        .ifPresent(servicePojo -> {
+                            topLevelQuery.addDomainService(objectSpec, servicePojo, context);
+                            topLevelQuery.addDataFetchers();
+                        });
                     break;
             }
         });

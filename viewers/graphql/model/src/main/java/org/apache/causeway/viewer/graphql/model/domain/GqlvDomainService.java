@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import graphql.schema.DataFetcher;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
@@ -34,21 +35,21 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
-
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
 public class GqlvDomainService implements GqlvAction.Holder {
 
+    private final Holder holder;
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
     private final Context context;
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+
+    @Getter private GraphQLFieldDefinition field;
 
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
@@ -62,9 +63,11 @@ public class GqlvDomainService implements GqlvAction.Holder {
     private GraphQLObjectType gqlObjectType;
 
     public GqlvDomainService(
+            final GqlvDomainService.Holder holder,
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
+        this.holder = holder;
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
         this.context = context;
@@ -75,7 +78,7 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
         if (hasActions()) {
             gqlObjectType = gqlObjectTypeBuilder.build();
-            addDataFetchers();
+            addFieldFor(holder);
         }
     }
 
@@ -100,10 +103,6 @@ public class GqlvDomainService implements GqlvAction.Holder {
         return field;
     }
 
-    void addDataFetchers() {
-        actions.forEach((id, gqlva) -> gqlva.addDataFetcher());
-    }
-
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
         if (gqlObjectType == null) {
@@ -113,20 +112,31 @@ public class GqlvDomainService implements GqlvAction.Holder {
         return coordinates(gqlObjectType, fieldDefinition);
     }
 
-    public GraphQLFieldDefinition createTopLevelQueryField() {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
-        }
-        return newFieldDefinition()
+    public void addFieldFor(Holder holder) {
+        holder.addField(this.field = newFieldDefinition()
                 .name(TypeNames.objectTypeNameFor(objectSpecification))
                 .type(gqlObjectType)
-                .build();
+                .build());
     }
+
+    public void addDataFetchers() {
+        context.codeRegistryBuilder.dataFetcher(
+                holder.coordinatesFor(getField()),
+                (DataFetcher<Object>) environment -> getServicePojo());
+        if (hasActions()) {
+            actions.forEach((id, gqlva) -> gqlva.addDataFetcher());
+        }
+    }
+
 
     @Override
     public String toString() {
         return objectSpecification.getLogicalTypeName();
     }
 
+
+
+    public interface Holder
+            extends GqlvHolder {
+    }
 }

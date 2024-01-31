@@ -70,6 +70,7 @@ type Query {
   causeway_applib_UserMenu: causeway_applib_UserMenu
   causeway_conf_ConfigurationMenu: causeway_conf_ConfigurationMenu
   causeway_security_LogoutMenu: causeway_security_LogoutMenu
+  university_admin_AdminMenu: university_admin_AdminMenu
   university_calc_Calculator: university_calc_Calculator
   university_dept_Departments: university_dept_Departments
   university_dept_DeptHeads: university_dept_DeptHeads
@@ -1270,6 +1271,80 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__q
   validate(qualifiedName: String): String
 }
 
+type university_admin_AdminMenu {
+  actionWithDisabledParam: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action
+  actionWithHiddenParam: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action
+  adminAction: university_admin_AdminMenu__adminAction__gqlv_action
+  otherAdminAction: university_admin_AdminMenu__otherAdminAction__gqlv_action
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter {
+  disabled(firstParam: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params
+  validate(firstParam: String, secondParam: String, thirdParameter: String): String
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params {
+  firstParam: university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter
+  secondParam: university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter
+  thirdParameter: university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter {
+  disabled(firstParam: String, secondParam: String): String
+  hidden(firstParam: String): Boolean
+  validity: String
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter {
+  disabled(firstParam: String, secondParam: String, thirdParameter: String): String
+  hidden(firstParam: String, secondParam: String): Boolean
+  validity: String
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter {
+  disabled(firstParam: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params
+  validate(firstParam: String, secondParam: String): String
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params {
+  firstParam: university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter
+  secondParam: university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter {
+  disabled(firstParam: String, secondParam: String): String
+  hidden(firstParam: String): Boolean
+  validity: String
+}
+
+type university_admin_AdminMenu__adminAction__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  validate: String
+}
+
+type university_admin_AdminMenu__otherAdminAction__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  validate: String
+}
+
 type university_calc_Calculator {
   addBigDecimals: university_calc_Calculator__addBigDecimals__gqlv_action
   addBigIntegers: university_calc_Calculator__addBigIntegers__gqlv_action
@@ -1756,9 +1831,87 @@ type university_calc_Calculator__plusJodaDays__numDays__gqlv_action_parameter {
 
 type university_dept_Department {
   _gqlv_meta: university_dept_Department__gqlv_meta
+  addStaffMember: university_dept_Department__addStaffMember__gqlv_action
+  addStaffMembers: university_dept_Department__addStaffMembers__gqlv_action
+  changeDeptHead: university_dept_Department__changeDeptHead__gqlv_action
+  changeName: university_dept_Department__changeName__gqlv_action
   deptHead: university_dept_Department__deptHead__gqlv_property
   name: university_dept_Department__name__gqlv_property
+  removeStaffMember: university_dept_Department__removeStaffMember__gqlv_action
   staffMembers: university_dept_Department__staffMembers__gqlv_collection
+}
+
+type university_dept_Department__addStaffMember__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_Department__addStaffMember__gqlv_action_params
+  validate(staffMember: university_dept_StaffMember__gqlv_input): String
+}
+
+type university_dept_Department__addStaffMember__gqlv_action_params {
+  staffMember: university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter
+}
+
+type university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter {
+  autoComplete(search: String!): [university_dept_StaffMember]
+  disabled(staffMember: university_dept_StaffMember__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_dept_Department__addStaffMembers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_Department__addStaffMembers__gqlv_action_params
+  validate(staffMembers: [university_dept_StaffMember__gqlv_input]): String
+}
+
+type university_dept_Department__addStaffMembers__gqlv_action_params {
+  staffMembers: university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter
+}
+
+type university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter {
+  choices: [university_dept_StaffMember]
+  disabled(staffMembers: [university_dept_StaffMember__gqlv_input]): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_dept_Department__changeDeptHead__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_Department__changeDeptHead__gqlv_action_params
+  validate(newDeptHead: university_dept_DeptHead__gqlv_input): String
+}
+
+type university_dept_Department__changeDeptHead__gqlv_action_params {
+  newDeptHead: university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter
+}
+
+type university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter {
+  autoComplete(search: String!): [university_dept_DeptHead]
+  default: university_dept_DeptHead
+  disabled(newDeptHead: university_dept_DeptHead__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_dept_Department__changeName__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_Department__changeName__gqlv_action_params
+  validate(newName: String): String
+}
+
+type university_dept_Department__changeName__gqlv_action_params {
+  newName: university_dept_Department__changeName__newName__gqlv_action_parameter
+}
+
+type university_dept_Department__changeName__newName__gqlv_action_parameter {
+  default: String
+  disabled(newName: String): String
+  hidden: Boolean
+  validity: String
 }
 
 type university_dept_Department__deptHead__gqlv_property {
@@ -1782,6 +1935,24 @@ type university_dept_Department__name__gqlv_property {
   validate(name: String): String
 }
 
+type university_dept_Department__removeStaffMember__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_Department__removeStaffMember__gqlv_action_params
+  validate(staffMember: university_dept_StaffMember__gqlv_input): String
+}
+
+type university_dept_Department__removeStaffMember__gqlv_action_params {
+  staffMember: university_dept_Department__removeStaffMember__staffMember__gqlv_action_parameter
+}
+
+type university_dept_Department__removeStaffMember__staffMember__gqlv_action_parameter {
+  choices: [university_dept_StaffMember]
+  disabled(staffMember: university_dept_StaffMember__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
 type university_dept_Department__staffMembers__gqlv_collection {
   disabled: String
   get: [university_dept_StaffMember]
@@ -1789,8 +1960,34 @@ type university_dept_Department__staffMembers__gqlv_collection {
 }
 
 type university_dept_Departments {
+  createDepartment: university_dept_Departments__createDepartment__gqlv_action
   findAllDepartments: university_dept_Departments__findAllDepartments__gqlv_action
   findDepartmentByName: university_dept_Departments__findDepartmentByName__gqlv_action
+}
+
+type university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
+  autoComplete(name: String, search: String!): [university_dept_DeptHead]
+  disabled(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
+  hidden(name: String): Boolean
+  validity: String
+}
+
+type university_dept_Departments__createDepartment__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_Departments__createDepartment__gqlv_action_params
+  validate(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
+}
+
+type university_dept_Departments__createDepartment__gqlv_action_params {
+  deptHead: university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter
+  name: university_dept_Departments__createDepartment__name__gqlv_action_parameter
+}
+
+type university_dept_Departments__createDepartment__name__gqlv_action_parameter {
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
 }
 
 type university_dept_Departments__findAllDepartments__gqlv_action {
@@ -1820,8 +2017,46 @@ type university_dept_Departments__findDepartmentByName__name__gqlv_action_parame
 
 type university_dept_DeptHead {
   _gqlv_meta: university_dept_DeptHead__gqlv_meta
+  changeDepartment: university_dept_DeptHead__changeDepartment__gqlv_action
+  changeName: university_dept_DeptHead__changeName__gqlv_action
   department: university_dept_DeptHead__department__gqlv_property
   name: university_dept_DeptHead__name__gqlv_property
+}
+
+type university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter {
+  choices: [university_dept_Department]
+  disabled(department: university_dept_Department__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_dept_DeptHead__changeDepartment__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_DeptHead__changeDepartment__gqlv_action_params
+  validate(department: university_dept_Department__gqlv_input): String
+}
+
+type university_dept_DeptHead__changeDepartment__gqlv_action_params {
+  department: university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter
+}
+
+type university_dept_DeptHead__changeName__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_DeptHead__changeName__gqlv_action_params
+  validate(newName: String): String
+}
+
+type university_dept_DeptHead__changeName__gqlv_action_params {
+  newName: university_dept_DeptHead__changeName__newName__gqlv_action_parameter
+}
+
+type university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
+  default: String
+  disabled(newName: String): String
+  hidden: Boolean
+  validity: String
 }
 
 type university_dept_DeptHead__department__gqlv_property {
@@ -1876,6 +2111,7 @@ type university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter {
 }
 
 type university_dept_Staff {
+  createStaffMember: university_dept_Staff__createStaffMember__gqlv_action
   findAllStaffMembers: university_dept_Staff__findAllStaffMembers__gqlv_action
   findStaffMemberByName: university_dept_Staff__findStaffMemberByName__gqlv_action
 }
@@ -1922,6 +2158,31 @@ type university_dept_StaffMember__photo__gqlv_property {
   get: String
   hidden: Boolean
   validate(photo: String): String
+}
+
+type university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
+  choices(name: String): [university_dept_Department]
+  disabled(department: university_dept_Department__gqlv_input, name: String): String
+  hidden(name: String): Boolean
+  validity: String
+}
+
+type university_dept_Staff__createStaffMember__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  params: university_dept_Staff__createStaffMember__gqlv_action_params
+  validate(department: university_dept_Department__gqlv_input, name: String): String
+}
+
+type university_dept_Staff__createStaffMember__gqlv_action_params {
+  department: university_dept_Staff__createStaffMember__department__gqlv_action_parameter
+  name: university_dept_Staff__createStaffMember__name__gqlv_action_parameter
+}
+
+type university_dept_Staff__createStaffMember__name__gqlv_action_parameter {
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
 }
 
 type university_dept_Staff__findAllStaffMembers__gqlv_action {

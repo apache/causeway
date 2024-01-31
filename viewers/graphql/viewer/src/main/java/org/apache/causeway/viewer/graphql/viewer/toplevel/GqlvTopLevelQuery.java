@@ -1,26 +1,24 @@
 package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
+
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 import lombok.Getter;
-import lombok.val;
 
-public class GqlvTopLevelQuery {
-
-    private final ServiceRegistry serviceRegistry;
-    private final GraphQLCodeRegistry.Builder codeRegistryBuilder;
-
+public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
     @Getter final GraphQLObjectType.Builder queryBuilder;
+
+    private final List<GqlvDomainService> domainServices = new ArrayList<>();
 
 
     /**
@@ -29,13 +27,8 @@ public class GqlvTopLevelQuery {
     private GraphQLObjectType queryType;
 
 
-    public GqlvTopLevelQuery(
-            final ServiceRegistry serviceRegistry,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-        this.serviceRegistry = serviceRegistry;
-        this.codeRegistryBuilder = codeRegistryBuilder;
+    public GqlvTopLevelQuery() {
         queryBuilder = newObject().name("Query");
-
     }
 
 
@@ -58,27 +51,30 @@ public class GqlvTopLevelQuery {
         return queryType;
     }
 
-    public void addFieldFor(
-            final GqlvDomainService domainService,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-
-        GraphQLFieldDefinition topLevelQueryField = domainService.createTopLevelQueryField();
-        queryBuilder.field(topLevelQueryField);
-
-        codeRegistryBuilder.dataFetcher(
-                // TODO: it would be nice to make these typesafe...
-                FieldCoordinates.coordinates("Query", topLevelQueryField.getName()),
-                (DataFetcher<Object>) environment -> domainService.getServicePojo());
-
+    public void addDomainService(ObjectSpecification objectSpec, Object servicePojo, Context context) {
+        domainServices.add(new GqlvDomainService(this, objectSpec, servicePojo, context));
     }
 
-    public void addDomainServiceTo(final ObjectSpecification objectSpec, final Object servicePojo, final Context context) {
-        val domainService = new GqlvDomainService(objectSpec, servicePojo, context);
 
-        boolean actionsAdded = domainService.hasActions();
-        if (actionsAdded) {
-            addFieldFor(domainService, context.codeRegistryBuilder);
-        }
+    @Override
+    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
+        return FieldCoordinates.coordinates("Query", fieldDefinition.getName());
     }
+
+    @Override
+    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        queryBuilder.field(field);
+        return field;
+    }
+
+    public void addDataFetchers() {
+        domainServices.forEach(domainService -> {
+            boolean actionsAdded = domainService.hasActions();
+            if (actionsAdded) {
+                domainService.addDataFetchers();
+            }
+        });
+    }
+
 
 }

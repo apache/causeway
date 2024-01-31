@@ -87,4 +87,24 @@ public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
         Approvals.verify(response, jsonOptions());
     }
 
+    @Test
+    @UseReporter(DiffReporter.class)
+    void change_department_name_visibility() throws Exception {
+
+        final Bookmark bookmark =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> {
+                            Department department = departmentRepository.findByName("Classics");
+                            Optional<Bookmark> bookmark1 = bookmarkService.bookmarkFor(department);
+                            return bookmark1.orElseThrow();
+                        }
+                ).valueAsNonNullElseFail();
+
+        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
 }
