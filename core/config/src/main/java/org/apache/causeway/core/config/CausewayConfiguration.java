@@ -2392,6 +2392,20 @@ public class CausewayConfiguration {
                 private String fieldName = "_gqlv_meta";
             }
 
+            private final Lookup lookup = new Lookup();
+            @Data
+            public static class Lookup {
+                /**
+                 * Lookup field prefix
+                 */
+                private String fieldNamePrefix = "_gqlv_lookup__";
+                /**
+                 * Lookup field suffix
+                 */
+                private String fieldNameSuffix = "";
+                private String argument = "object";
+            }
+
             private final Mutation mutation = new Mutation();
             @Data
             public static class Mutation {

@@ -179,7 +179,7 @@ public class GqlvAction
     }
 
 
-    static Optional<Object> asPojo(
+    public static Optional<Object> asPojo(
             final ObjectSpecification elementType,
             final Object argumentValueObj,
             final BookmarkService bookmarkService) {
@@ -190,8 +190,7 @@ public class GqlvAction
         return bookmarkIfAny
                 .map(bookmarkService::lookup)
                 .filter(Optional::isPresent)
-                .map(Optional::get)
-;
+                .map(Optional::get);
     }
 
     public void addGqlArguments(

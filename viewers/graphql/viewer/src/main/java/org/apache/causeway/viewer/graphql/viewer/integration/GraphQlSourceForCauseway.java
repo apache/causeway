@@ -19,12 +19,15 @@
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
 
@@ -107,14 +110,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
         val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment);
 
-        // add to the top-level query type and (dependent on configuration) the top-level mutation type also
-        val topLevelQuery = new GqlvTopLevelQuery();
-        val topLevelMutation =
-                causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
-                    new GqlvTopLevelMutation(context)
-                    : null;
-
-
         val objectSpecifications = specificationLoader.snapshotSpecifications()
                 .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
                 .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
@@ -122,7 +117,35 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
                 .toList();
 
-        // add to top-level query
+        // top-level query type and (dependent on configuration) the top-level mutation type
+        val topLevelQuery = new GqlvTopLevelQuery(context);
+        val topLevelMutation =
+                causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
+                        new GqlvTopLevelMutation(context)
+                        : null;
+
+
+        // domain objects
+        val domainObjects = new LinkedHashMap<ObjectSpecification, GqlvDomainObject>();
+        objectSpecifications.forEach(objectSpec -> {
+            switch (objectSpec.getBeanSort()) {
+
+                case ABSTRACT:
+                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
+                case ENTITY:     // @DomainObject(nature=ENTITY)
+
+                    val domainObject = new GqlvDomainObject(objectSpec, context, objectManager, graphQLTypeRegistry);
+                    domainObject.addTypesInto(graphQLTypeRegistry);
+                    domainObject.addDataFetchers();
+
+                    domainObjects.put(objectSpec, domainObject);
+
+                    break;
+            }
+        });
+
+
+        // add services to top-level query
         objectSpecifications.forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
@@ -134,6 +157,12 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                     break;
             }
         });
+
+        // add lookup to top-level query
+        domainObjects.forEach((objectSpec, domainObject) -> {
+            topLevelQuery.addLookupFor(objectSpec, domainObject);
+        });
+
         topLevelQuery.buildQueryType();
 
         // add top-level mutation (if application configuration requires it)
@@ -152,21 +181,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             topLevelMutation.addDataFetchers();
         }
 
-        // add remaining domain objects
-        objectSpecifications.forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-
-                case ABSTRACT:
-                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:     // @DomainObject(nature=ENTITY)
-
-                    val gqlvDomainObject = new GqlvDomainObject(objectSpec, context, objectManager, graphQLTypeRegistry);
-                    gqlvDomainObject.addTypesInto(graphQLTypeRegistry);
-                    gqlvDomainObject.addDataFetchers();
-
-                    break;
-            }
-        });
 
 
 

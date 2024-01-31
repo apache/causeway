@@ -53,23 +53,11 @@ import lombok.val;
 @Order(110)
 @ActiveProfiles("test")
 @DirtiesContext
-public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
+public class DepartmentMutating_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void create_department() throws Exception {
-
-        // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
-        String response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void change_department_name() throws Exception {
+    void change_department_name_visibility() throws Exception {
 
         final Bookmark bookmark =
                 transactionService.callTransactional(
