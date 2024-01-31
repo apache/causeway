@@ -85,11 +85,7 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
     private void addActions() {
 
-        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                .filter(x -> x.getSemantics().isSafeInNature() ||
-                             variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT)
                 .forEach(this::addAction);
     }
 

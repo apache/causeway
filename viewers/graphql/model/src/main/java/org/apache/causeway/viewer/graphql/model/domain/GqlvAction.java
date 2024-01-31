@@ -32,11 +32,14 @@ import graphql.schema.GraphQLObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
+import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
@@ -63,6 +66,9 @@ public class GqlvAction
     private final GqlvMemberHidden<ObjectAction> hidden;
     private final GqlvMemberDisabled<ObjectAction> disabled;
     private final GqlvActionValidity validate;
+    /**
+     * Populated iff the API variant allows for it.
+     */
     private final GqlvActionInvoke invoke;
     /**
      * Populated iif there are params for this action.
@@ -80,7 +86,11 @@ public class GqlvAction
         this.hidden = new GqlvMemberHidden<>(this, context);
         this.disabled = new GqlvMemberDisabled<>(this, context);
         this.validate = new GqlvActionValidity(this, context);
-        this.invoke = new GqlvActionInvoke(this, context);
+
+        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        this.invoke = objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT
+                ? new GqlvActionInvoke(this, context)
+                : null;
         val params = new GqlvActionParams(this, context);
         this.params = params.hasParams() ? params : null;
 
@@ -157,14 +167,14 @@ public class GqlvAction
     private static ManagedObject adaptValue(
             final ObjectActionParameter oap,
             final Object argumentValue,
-            final Context context1) {
+            final Context context) {
 
         val elementType = oap.getElementType();
         if (argumentValue == null) {
             return ManagedObject.empty(elementType);
         }
 
-        val argPojo = context1.typeMapper.adaptPojo(argumentValue, elementType);
+        val argPojo = context.typeMapper.adaptPojo(argumentValue, elementType);
         return ManagedObject.adaptParameter(oap, argPojo);
     }
 
@@ -250,7 +260,9 @@ public class GqlvAction
         hidden.addDataFetcher();
         disabled.addDataFetcher();
         validate.addDataFetcher();
-        invoke.addDataFetcher();
+        if (invoke != null) {
+            invoke.addDataFetcher();
+        }
         if (params != null) {
             params.addDataFetcher();
         }
