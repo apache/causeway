@@ -18,14 +18,7 @@
  */
 package org.apache.causeway.commons.io;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
 import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.lang.reflect.RecordComponent;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
@@ -37,24 +30,11 @@ import org.springframework.lang.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.error.YAMLException;
-import org.yaml.snakeyaml.introspector.BeanAccess;
-import org.yaml.snakeyaml.introspector.MethodProperty;
-import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.introspector.PropertyUtils;
-import org.yaml.snakeyaml.nodes.Tag;
-import org.yaml.snakeyaml.representer.Representer;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
-import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -65,12 +45,10 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class YamlUtils {
 
-    /**
-     * @deprecated We rely on Jackson to parse YAML. Might also replace SnakeYaml with Jackson to write YAML.
-     */
-    @Deprecated
     @FunctionalInterface
     public interface YamlDumpCustomizer extends UnaryOperator<DumperOptions> {}
+    @FunctionalInterface
+    public interface YamlLoadCustomizer extends UnaryOperator<LoaderOptions> {}
 
     // -- READING
 
@@ -94,7 +72,34 @@ public class YamlUtils {
             final @NonNull DataSource source,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createJacksonReader(customizers)
+            return Try.call(()->createJacksonReader(Optional.empty(), customizers)
+                    .readValue(is, mappedType));
+        });
+    }
+
+    /**
+     * Tries to deserialize YAML content from given UTF8 encoded {@link String}
+     * into an instance of given {@code mappedType}.
+     */
+    public <T> Try<T> tryReadCustomized(
+            final @NonNull Class<T> mappedType,
+            final @Nullable String stringUtf8,
+            final @NonNull YamlLoadCustomizer loadCustomizer,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        return tryReadCustomized(mappedType, DataSource.ofStringUtf8(stringUtf8), loadCustomizer, customizers);
+    }
+
+    /**
+     * Tries to deserialize YAML content from given {@link DataSource} into an instance of
+     * given {@code requiredType}.
+     */
+    public <T> Try<T> tryReadCustomized(
+            final @NonNull Class<T> mappedType,
+            final @NonNull DataSource source,
+            final @NonNull YamlLoadCustomizer loadCustomizer,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        return source.tryReadAll((final InputStream is)->{
+            return Try.call(()->createJacksonReader(Optional.of(loadCustomizer), customizers)
                     .readValue(is, mappedType));
         });
     }
@@ -110,7 +115,7 @@ public class YamlUtils {
             final JsonUtils.JacksonCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
-            Try.run(()->createJacksonWriter(customizers).writeValue(os, pojo)));
+            Try.run(()->createJacksonWriter(Optional.empty(), customizers).writeValue(os, pojo)));
     }
 
     /**
@@ -123,9 +128,38 @@ public class YamlUtils {
             final @Nullable Object pojo,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return pojo!=null
-                ? createJacksonWriter(customizers).writeValueAsString(pojo)
+                ? createJacksonWriter(Optional.empty(), customizers).writeValueAsString(pojo)
                 : null;
     }
+
+    /**
+     * Writes given {@code pojo} to given {@link DataSink}.
+     */
+    public void writeCustomized(
+            final @Nullable Object pojo,
+            final @NonNull DataSink sink,
+            final @NonNull YamlDumpCustomizer dumpCustomizer,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        if(pojo==null) return;
+        sink.writeAll(os->
+            Try.run(()->createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValue(os, pojo)));
+    }
+
+    /**
+     * Converts given {@code pojo} to an UTF8 encoded {@link String}.
+     * @return <code>null</code> if pojo is <code>null</code>
+     */
+    @SneakyThrows
+    @Nullable
+    public static String toStringUtf8Customized(
+            final @Nullable Object pojo,
+            final @NonNull YamlDumpCustomizer dumpCustomizer,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        return pojo!=null
+                ? createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValueAsString(pojo)
+                : null;
+    }
+
     // -- CUSTOMIZERS
 
     /**
@@ -141,10 +175,17 @@ public class YamlUtils {
 
     /**
      * SnakeYaml as of 2.2 does not support Java records. So we use Jackson instead.
+     * @param loadCustomizer
      */
     private ObjectMapper createJacksonReader(
+            final Optional<YamlLoadCustomizer> loadCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        var mapper = new ObjectMapper(new YAMLFactory());
+        var yamlFactory = YAMLFactory.builder()
+                .loaderOptions(loadCustomizer
+                        .map(YamlUtils::createLoaderOptions)
+                        .orElseGet(YamlUtils::createLoaderOptions))
+                .build();
+        var mapper = new ObjectMapper(yamlFactory);
         mapper = JsonUtils.readingJavaTimeSupport(mapper);
         mapper = JsonUtils.readingCanSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
@@ -158,9 +199,15 @@ public class YamlUtils {
      * Use Jackson to write YAML.
      */
     private ObjectMapper createJacksonWriter(
+            final Optional<YamlDumpCustomizer> dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        var mapper = new ObjectMapper(new YAMLFactory()
-                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
+        var yamlFactory = YAMLFactory.builder()
+                .dumperOptions(dumpCustomizer
+                        .map(YamlUtils::createDumperOptions)
+                        .orElseGet(YamlUtils::createDumperOptions))
+                .build()
+                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
+        var mapper = new ObjectMapper(yamlFactory);
         mapper = JsonUtils.writingJavaTimeSupport(mapper);
         mapper = JsonUtils.writingCanSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
@@ -170,10 +217,7 @@ public class YamlUtils {
         return mapper;
     }
 
-    @Deprecated
-    private Yaml createMapperLegacy(
-            final Class<?> mappedType,
-            final Can<YamlUtils.YamlDumpCustomizer> dumpCustomizers) {
+    private DumperOptions createDumperOptions(final YamlDumpCustomizer ... dumpCustomizers) {
         var dumperOptions = new DumperOptions();
         dumperOptions.setIndent(2);
         dumperOptions.setLineBreak(LineBreak.UNIX); // fixated for consistency
@@ -183,102 +227,16 @@ public class YamlUtils {
             dumperOptions = Optional.ofNullable(customizer.apply(dumperOptions))
                     .orElse(dumperOptions);
         }
-        var presenter = new Representer(dumperOptions);
-        presenter.setPropertyUtils(new PropertyUtils2());
-        presenter.addClassTag(mappedType, Tag.MAP);
+        return dumperOptions;
+    }
 
+    private LoaderOptions createLoaderOptions(final YamlLoadCustomizer ... loadCustomizers) {
         var loaderOptions = new LoaderOptions();
-        var mapper = new Yaml(new Constructor(mappedType, loaderOptions), presenter, dumperOptions, loaderOptions);
-        return mapper;
-    }
-
-    // -- REPRESENTING RECORD TYPES
-
-    static class PropertyUtils2 extends PropertyUtils {
-
-        @Override
-        protected Map<String, Property> getPropertiesMap(final Class<?> type, final BeanAccess bAccess) {
-            if(type==Class.class) {
-                setAllowReadOnlyProperties(true);
-                try {
-                    val properties = new LinkedHashMap<String, Property>();
-                    val propertyDescriptor = new PropertyDescriptor("name", className(), null);
-                    properties.put("name", new MethodProperty(propertyDescriptor));
-                    return properties;
-                } catch (IntrospectionException e) {
-                    throw new YAMLException(e);
-                }
-            }
-            if(type.isRecord()) {
-                setAllowReadOnlyProperties(true);
-                try {
-                    val properties = new LinkedHashMap<String, Property>();
-                    for(RecordComponent rc: type.getRecordComponents()) {
-                        val propertyDescriptor = new PropertyDescriptor(rc.getName(), rc.getAccessor(), null);
-                        properties.put(rc.getName(), new MethodProperty(propertyDescriptor));
-                    }
-                    return postProcessMap(properties);
-                } catch (IntrospectionException e) {
-                    throw new YAMLException(e);
-                }
-            }
-            val map = super.getPropertiesMap(type, bAccess);
-            return postProcessMap(map);
+        for(YamlUtils.YamlLoadCustomizer customizer : loadCustomizers) {
+            loaderOptions = Optional.ofNullable(customizer.apply(loaderOptions))
+                    .orElse(loaderOptions);
         }
-
-        private Map<String, Property> postProcessMap(final Map<String, Property> map) {
-            //debug
-            //System.err.printf("%s map: %s%n", type.getName(), map);
-            map.replaceAll((k, v)->
-                Can.class.isAssignableFrom(v.getType())
-                    && v instanceof MethodProperty // no field support yet
-                    ? MethodPropertyFromCanToList.wrap((MethodProperty)v)
-                    : v);
-            return map;
-        }
-
-        @Getter(lazy = true) @Accessors(fluent=true)
-        private final static Method className = lookupClassName();
-        @SneakyThrows
-        private static Method lookupClassName() {
-            return Class.class.getMethod("getName");
-        }
-
-        @Getter(lazy = true) @Accessors(fluent=true)
-        private final static Method canToList = lookupCanToList();
-        @SneakyThrows
-        private static Method lookupCanToList() {
-            return Can.class.getMethod("toList");
-        }
-
-    }
-
-    /** Wraps any {@link MethodProperty} that represent a {@link Can} type
-     * and acts as a {@link List} representing MethodProperty facade instead. */
-    static class MethodPropertyFromCanToList extends MethodProperty {
-
-        @SneakyThrows
-        static MethodPropertyFromCanToList wrap(final MethodProperty wrappedMethodProperty) {
-            return new MethodPropertyFromCanToList(
-                    wrappedMethodProperty,
-                    new PropertyDescriptor(wrappedMethodProperty.getName(), null, null));
-        }
-
-        final MethodProperty wrappedMethodProperty;
-
-        MethodPropertyFromCanToList(
-                final MethodProperty wrappedMethodProperty,
-                final PropertyDescriptor property) {
-            super(property);
-            this.wrappedMethodProperty = wrappedMethodProperty;
-        }
-
-        @Override public Object get(final Object object) {
-            return ((Can<?>)wrappedMethodProperty.get(object)).toList();
-        }
-        @Override public Class<?> getType() { return List.class; }
-        @Override public boolean isReadable() { return true; }
-
+        return loaderOptions;
     }
 
 }
