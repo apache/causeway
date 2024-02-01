@@ -249,6 +249,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         if(iterable==null) {
             return empty();
         }
+        // Can implements Iterable, hence there is a potential shortcut, assuming un-modifaiablitity.
+        if(iterable instanceof Can) {
+            return (Can<T>)iterable;
+        }
 
         val nonNullElements = new ArrayList<T>();
         iterable.forEach(element->{
