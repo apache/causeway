@@ -21,15 +21,23 @@ package org.apache.causeway.core.metamodel.tabular.simple;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -55,7 +63,7 @@ public class DataTable implements Serializable {
 
     /**
      * Returns an empty {@link DataTable} for given domain object type.
-     * It can be populated later on using {@link DataTable#setDataElements(Can)}.
+     * It can be populated later on using {@link DataTable#setDataElements(Iterable)}.
      */
     public static DataTable forDomainType(final Class<?> domainType) {
         val elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
@@ -64,7 +72,7 @@ public class DataTable implements Serializable {
 
     /**
      * Returns an empty {@link DataTable} for given domain object type.
-     * It can be populated later on using {@link DataTable#setDataElements(Can)}.
+     * It can be populated later on using {@link DataTable#setDataElements(Iterable)}.
      */
     public DataTable(
             final @NonNull ObjectSpecification elementType) {
@@ -79,7 +87,7 @@ public class DataTable implements Serializable {
 
     /**
      * Returns an empty {@link DataTable} for given domain object type.
-     * It can be populated later on using {@link DataTable#setDataElements(Can)}.
+     * It can be populated later on using {@link DataTable#setDataElements(Iterable)}.
      */
     public DataTable(
             final @NonNull ObjectSpecification elementType,
@@ -104,13 +112,6 @@ public class DataTable implements Serializable {
         setDataElements(dataElements);
     }
 
-    // -- POPULATE
-
-    public void setDataElements(final Can<ManagedObject> dataElements) {
-        this.dataRows = dataElements
-                .map(domainObject->new DataRow(this, domainObject));
-    }
-
     /**
      * Unique within application scope, can act as an id.
      */
@@ -128,6 +129,101 @@ public class DataTable implements Serializable {
     public Stream<ManagedObject> streamDataElements() {
         return dataRows.stream()
             .map(DataRow::getRowElement);
+    }
+
+    // -- CONCATENATION (ADD ROWS)
+
+    /**
+     * Adds all data-elements from the other table to this table.
+     */
+    public DataTable addDataElementsFrom(final @Nullable DataTable otherTable) {
+        if(otherTable==null) return this;
+        { // sanity check
+            val thisType = otherTable.getElementType().getCorrespondingClass();
+            val otherType = this.getElementType().getCorrespondingClass();
+            _Assert.assertEquals(thisType, otherType, ()->
+                    String.format("Other tables's element-type %s must match the this table's element-type %s.",
+                            otherType,
+                            thisType));
+        }
+        if(otherTable.dataRows.isNotEmpty()) {
+            this.dataRows = this.dataRows.addAll(otherTable.dataRows);
+        }
+        return this;
+    }
+
+    // -- POPULATE
+
+    /**
+     * Sets the data-elements of this table, which make up the rows of this table.
+     */
+    public DataTable setDataElements(final @Nullable Iterable<ManagedObject> dataElements) {
+        this.dataRows = Can.ofIterable(dataElements)
+                .map(domainObject->new DataRow(this, domainObject));
+        return this;
+    }
+    /**
+     * Sets the data-elements of this table from given pojos, that are adapted to {@link ManagedObject}(s).
+     * @see #setDataElements(Iterable)
+     */
+    public void setDataElementPojos(final @Nullable Iterable<?> dataElementPojos) {
+        var dataElements = _NullSafe.stream(dataElementPojos)
+                .map(objectManager()::adapt)
+                .collect(Can.toCan());
+        setDataElements(dataElements);
+    }
+
+    /**
+     * Populates this table from the underlying (default) persistence layer.
+     * @see #setDataElements(Iterable)
+     */
+    public DataTable populateEntities() {
+        val query = Query.allInstances(elementType.getCorrespondingClass());
+        return populateEntities(query);
+    }
+
+    /**
+     * Populates this table from the underlying (default) persistence layer,
+     * using given {@link Query} to refine the result.
+     * @see #setDataElements(Iterable)
+     */
+    public DataTable populateEntities(final Query<?> query) {
+        { // sanity check
+            val requestType = query.getResultType();
+            val resultType = getElementType().getCorrespondingClass();
+            _Assert.assertEquals(requestType, resultType, ()->
+                    String.format("Query's result-type %s must match the table's element-type %s.",
+                            requestType,
+                            resultType));
+        }
+        val queryRequest = ObjectBulkLoader.Request.of(getElementType(), query);
+        val allMatching = getElementType().getObjectManager().queryObjects(queryRequest);
+        return setDataElements(allMatching);
+    }
+
+    // -- TRAVERSAL
+
+    public static interface CellVisitor {
+        default void onRowEnter(final DataRow row) {};
+        default void onRowLeave(final DataRow row) {};
+        void onCell(DataColumn column, Can<ManagedObject> cellValues);
+    }
+
+    public DataTable visit(final CellVisitor visitor) {
+        return visit(visitor, _Predicates.alwaysTrue());
+    }
+    public DataTable visit(final CellVisitor visitor, final Predicate<DataColumn> columnFilter) {
+        var columnsOfInterest = getDataColumns().filter(columnFilter);
+        if(columnsOfInterest.isNotEmpty()) {
+            getDataRows().forEach(row->{
+                visitor.onRowEnter(row);
+                columnsOfInterest.forEach(col->{
+                    visitor.onCell(col, row.getCellElements(col, InteractionInitiatedBy.PASS_THROUGH));
+                });
+                visitor.onRowLeave(row);
+            });
+        }
+        return this;
     }
 
     // -- SERIALIZATION PROXY
@@ -163,6 +259,12 @@ public class DataTable implements Serializable {
             dataTable.tableFriendlyName = tableFriendlyName;
             return dataTable;
         }
+    }
+
+    // -- HELPER
+
+    private ObjectManager objectManager() {
+        return getElementType().getObjectManager();
     }
 
 }
