@@ -466,6 +466,14 @@ public final class ProgrammingModelConstants {
         UNKNONW_SORT_WITH_ACTION("${type}: is a (concrete) but UNKNOWN sort, yet has ${actionCount} actions: ${actions}"),
         ACTION_METHOD_OVERLOADING_NOT_ALLOWED("Action method overloading is not allowed, "
                 + "yet ${type} has action(s) that have a the same member name: ${overloadedNames}"),
+        ACTION_METHOD_RETURNING_TRANSIENT_ENTITY_NOT_ALLOWED("Action methods are not allowed to return transient entities, "
+                + "yet ${type} has action ${memberId}, which did return a transient entity of type ${returnTypeSpec}. "
+                + "To correct this issue either persist the entity within above method before returning it, "
+                + "or don't have the method invocation managed by the framework, e.g. "
+                + "mark the method @Programmatic."),
+        ACTION_METHOD_RETURNING_NON_BOOKMARKABLE_OBJECT_NOT_ALLOWED("Action methods are not allowed to return objects, "
+                + "for which no bookmark can be created, "
+                + "yet ${type} has action ${memberId}, which did return such an object of type ${returnTypeSpec}."),
         PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE("${paramId} has no choices nor autoComplete, "
                 + "yet represents a domain-object or is a plural."),
         PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION("${type}#${member}: "
@@ -509,6 +517,9 @@ public final class ProgrammingModelConstants {
                 vars.put(name, ""+value);
                 return this;
             }
+            /**
+             * Populates 'type' and 'member' keys (for template variable resolution).
+             */
             public ViolationBuilder addVariablesFor(final Identifier featureIdentifier) {
                 addVariable("type", featureIdentifier.getLogicalType().getClassName());
                 addVariable("member", featureIdentifier.getMemberLogicalName());

@@ -44,6 +44,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
@@ -184,8 +185,16 @@ implements MemberExecutorService {
             return true;
         })
         .ifPresent(scalarNonEmpty->{
-            _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->String.format(
-                    "bookmark required for non-empty scalars %s", scalarNonEmpty.getSpecification()));
+            _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->{
+                var returnTypeSpec = scalarNonEmpty.getSpecification();
+                var violation = returnTypeSpec.isEntity()
+                        ? Violation.ACTION_METHOD_RETURNING_TRANSIENT_ENTITY_NOT_ALLOWED
+                        : Violation.ACTION_METHOD_RETURNING_NON_BOOKMARKABLE_OBJECT_NOT_ALLOWED;
+                return violation.builder()
+                    .addVariablesFor(actionId)
+                    .addVariable("returnTypeSpec", returnTypeSpec.toString())
+                    .buildMessage();
+            });
         });
 
         // sync DTO with result
