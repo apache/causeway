@@ -100,7 +100,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <cucumber.version>7.15.0</cucumber.version>
 
-        <datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
+        <datanucleus-api-jdo.version>6.0.2</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
         <datanucleus-core.version>6.0.6</datanucleus-core.version>
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
