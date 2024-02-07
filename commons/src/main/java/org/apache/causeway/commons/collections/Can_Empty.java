@@ -213,6 +213,11 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> subCan(final int startInclusive) {
+        return Can.empty();
+    }
+
+    @Override
     public Can<T> subCan(final int startInclusive, final int endExclusive) {
         return Can.empty();
     }

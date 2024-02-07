@@ -311,11 +311,19 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> subCan(final int startInclusive) {
+        return pickByIndex(IntStream.range(startInclusive, size()));
+    }
+
+    @Override
     public Can<T> subCan(final int startInclusive, final int endExclusive) {
-        if (startInclusive >= endExclusive) {
+        final int upperBoundExclusive = endExclusive < 0
+                ? size() + endExclusive
+                : endExclusive;
+        if (startInclusive >= upperBoundExclusive) {
             return Can.empty();
         }
-        return pickByIndex(IntStream.range(startInclusive, endExclusive));
+        return pickByIndex(IntStream.range(startInclusive, upperBoundExclusive));
     }
 
     @Override

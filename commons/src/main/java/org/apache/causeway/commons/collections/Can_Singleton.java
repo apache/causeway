@@ -283,6 +283,13 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> subCan(final int startInclusive) {
+        return startInclusive <= 0
+                ? this
+                : Can.empty();
+    }
+
+    @Override
     public Can<T> subCan(final int startInclusive, final int endExclusive) {
         if (startInclusive >= endExclusive) {
             return Can.empty();
