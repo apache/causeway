@@ -72,13 +72,22 @@ public interface Can<T>
 extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
-     * Will only ever return an empty Optional, if the elementIndex is out of bounds.
+     * Will (only ever) return an empty {@link Optional}, if the elementIndex is out of bounds.
      * @param elementIndex
      * @return optionally this Can's element with index {@code elementIndex},
      * based on whether this index is within bounds
      */
     Optional<T> get(int elementIndex);
 
+    /**
+     * Shortcut for {@code get(this.size() - 1 - (-offset))} 
+     * @param offset - expected zero or negative (zero returning the last element)
+     * @see #get(int)
+     */
+    default Optional<T> getRelativeToLast(int offset) {
+        return get(size() - 1 + offset);
+    }
+    
     /**
      * Shortcut to {@code get(elementIndex).orElseThrow(...)}
      * <p>
@@ -92,6 +101,15 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         return get(elementIndex)
                 .orElseThrow(()->new NoSuchElementException(
                         "no element with elementIndex = " + elementIndex));
+    }
+    
+    /**
+     * Shortcut for {@code getElseFail(this.size() - 1 - (-offset))} 
+     * @param offset - expected zero or negative (zero returning the last element)
+     * @see #getElseFail(int)
+     */
+    default T getRelativeToLastElseFail(final int offset) {
+        return getElseFail(size() - 1 + offset);
     }
 
     /**
@@ -589,14 +607,13 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns a sub-{@link Can} that is made of elements from this {@link Can},
-     * when selected by those indices,
-     * that result from given range {@code [startInclusive, endExclusive]}.
+     * when selected by indices from given range {@code [startInclusive, endExclusive)}.
      * <p>
      * Out of bounds picking is simply ignored.
      *
      * @param startInclusive the (inclusive) initial index
      * @param endExclusive the exclusive upper bound index
-     *      - if negative is interpreted as {@code this.size - abs(endExclusive)}
+     *      - if negative is interpreted as {@code this.size() - abs(endExclusive)}
      */
     Can<T> subCan(int startInclusive, int endExclusive);
 
