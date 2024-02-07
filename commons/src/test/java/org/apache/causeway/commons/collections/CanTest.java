@@ -303,6 +303,91 @@ class CanTest {
                 subCans.getElseFail(2));
     }
 
+    // -- SUB-CAN 1 ARG
+
+    @Test
+    void subCan_singleArg_emptyCan() {
+        final Can<Integer> origin = Can.empty();
+        assertEquals(origin, origin.subCan(-1));
+        assertEquals(origin, origin.subCan(0));
+        assertEquals(origin, origin.subCan(1));
+    }
+
+    @Test
+    void subCan_singleArg_singleCan() {
+        final Can<Integer> origin = Can.of(9);
+        assertEquals(origin, origin.subCan(-1));
+        assertEquals(origin, origin.subCan(0));
+        assertEquals(Can.empty(), origin.subCan(1));
+        assertEquals(Can.empty(), origin.subCan(2));
+    }
+
+    @Test
+    void subCan_singleArg_multiCan() {
+        final Can<Integer> origin = Can.of(1, 2, 3);
+        assertEquals(origin, origin.subCan(-1));
+        assertEquals(origin, origin.subCan(0));
+        assertEquals(Can.of(2, 3), origin.subCan(1));
+        assertEquals(Can.of(3), origin.subCan(2));
+        assertEquals(Can.empty(), origin.subCan(3));
+        assertEquals(Can.empty(), origin.subCan(4));
+    }
+
+    // -- SUB-CAN 2 ARGS
+
+    @Test
+    void subCan_biArg_emptyCan() {
+        final Can<Integer> origin = Can.empty();
+        // negative end index semantics
+        assertEquals(origin, origin.subCan(-1, -1));
+        assertEquals(origin, origin.subCan(0, -1));
+        assertEquals(origin, origin.subCan(1, -1));
+        // ignore upper index overflow - same expectations as single arg call
+        assertEquals(origin, origin.subCan(-1, 1));
+        assertEquals(origin, origin.subCan(0, 1));
+        assertEquals(origin, origin.subCan(1, 1));
+    }
+
+    @Test
+    void subCan_biArg_singleCan() {
+        final Can<Integer> origin = Can.of(9);
+        assertEquals(Can.empty(), origin.subCan(-1, 0));
+        assertEquals(Can.empty(), origin.subCan(0, 0));
+        assertEquals(Can.empty(), origin.subCan(1, 0));
+        // negative end index semantics
+        assertEquals(Can.empty(), origin.subCan(-1, -1));
+        assertEquals(Can.empty(), origin.subCan(0, -1));
+        assertEquals(Can.empty(), origin.subCan(1, -1));
+        // ignore upper index overflow - same expectations as single arg call
+        assertEquals(origin, origin.subCan(-1, 2));
+        assertEquals(origin, origin.subCan(0, 2));
+        assertEquals(Can.empty(), origin.subCan(1, 2));
+        assertEquals(Can.empty(), origin.subCan(2, 2));
+    }
+
+    @Test
+    void subCan_biArg_multiCan() {
+        final Can<Integer> origin = Can.of(1, 2, 3);
+        assertEquals(Can.of(1, 2), origin.subCan(-1, 2));
+        assertEquals(Can.of(1, 2), origin.subCan(0, 2));
+        assertEquals(Can.of(2), origin.subCan(1, 2));
+        assertEquals(Can.empty(), origin.subCan(2, 2));
+        assertEquals(Can.empty(), origin.subCan(3, 2));
+        // negative end index semantics
+        assertEquals(Can.of(1, 2), origin.subCan(-1, -1));
+        assertEquals(Can.of(1, 2), origin.subCan(0, -1));
+        assertEquals(Can.of(2), origin.subCan(1, -1));
+        assertEquals(Can.empty(), origin.subCan(2, -1));
+        assertEquals(Can.empty(), origin.subCan(3, -1));
+        // ignore upper index overflow - same expectations as single arg call
+        assertEquals(origin, origin.subCan(-1, 4));
+        assertEquals(origin, origin.subCan(0, 4));
+        assertEquals(Can.of(2, 3), origin.subCan(1, 4));
+        assertEquals(Can.of(3), origin.subCan(2, 4));
+        assertEquals(Can.empty(), origin.subCan(3, 4));
+        assertEquals(Can.empty(), origin.subCan(4, 4));
+    }
+
 
     // -- HEPER
 

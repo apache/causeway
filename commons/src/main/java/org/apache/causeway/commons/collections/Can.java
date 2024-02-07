@@ -579,13 +579,24 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns a sub-{@link Can} that is made of elements from this {@link Can},
+     * starting with indices from {@code startInclusive}.
+     * <p>
+     * Out of bounds picking is simply ignored.
+     *
+     * @param startInclusive the (inclusive) initial index
+     */
+    Can<T> subCan(int startInclusive);
+
+    /**
+     * Returns a sub-{@link Can} that is made of elements from this {@link Can},
      * when selected by those indices,
-     * that result from given range {@code[startInclusive, endExclusive)}.
+     * that result from given range {@code [startInclusive, endExclusive]}.
      * <p>
      * Out of bounds picking is simply ignored.
      *
      * @param startInclusive the (inclusive) initial index
      * @param endExclusive the exclusive upper bound index
+     *      - if negative is interpreted as {@code this.size - abs(endExclusive)}
      */
     Can<T> subCan(int startInclusive, int endExclusive);
 
