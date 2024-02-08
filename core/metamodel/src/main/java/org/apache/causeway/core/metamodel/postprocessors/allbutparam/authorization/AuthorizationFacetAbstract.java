@@ -81,7 +81,7 @@ implements AuthorizationFacet {
                         getInteractionService().currentInteractionContextElseFail(),
                         ic.getIdentifier())
                 ? null
-                : "Not authorized to edit";
+                : AuthorizationFacet.formatNotAuthorizedToEdit(ic.getIdentifier());
 
         if(disables!=null && log.isDebugEnabled()) {
             log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);
@@ -89,6 +89,5 @@ implements AuthorizationFacet {
 
         return Optional.ofNullable(disables).map(VetoReason::explicit);
     }
-
 
 }

@@ -34,6 +34,8 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -90,7 +92,10 @@ class ActionInteractionTest_notUsingAllowSafeSemantics extends InteractionTestAb
                 .checkVisibility()
                 .checkUsability();
         val veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
-        assertEquals("Not authorized to edit", veto.getReasonAsString().orElse(null));
+        val actionId = actionInteraction.getMetamodel().map(ObjectAction::getFeatureIdentifier).orElse(null);
+        assertEquals(
+                AuthorizationFacet.formatNotAuthorizedToEdit(actionId), 
+                veto.getReasonAsString().orElse(null));
     }
 
     @Test
@@ -99,7 +104,10 @@ class ActionInteractionTest_notUsingAllowSafeSemantics extends InteractionTestAb
                 .checkVisibility()
                 .checkUsability();
         val veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
-        assertEquals("Not authorized to edit", veto.getReasonAsString().orElse(null));
+        val actionId = actionInteraction.getMetamodel().map(ObjectAction::getFeatureIdentifier).orElse(null);
+        assertEquals(
+                AuthorizationFacet.formatNotAuthorizedToEdit(actionId), 
+                veto.getReasonAsString().orElse(null));
     }
 
 }
