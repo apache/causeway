@@ -86,8 +86,7 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
     
     public static String formatNotAuthorizedToEdit(final @Nullable Identifier identifier) {
         return identifier!=null
-                ? String.format("Not authorized to edit feature: %s",
-                        identifier.getLogicalType().getLogicalTypeSimpleName())
+                ? String.format("Not authorized to edit feature: %s", identifier.getLogicalIdentityString("#"))
                 : "Not authorized to edit";
     }
 
