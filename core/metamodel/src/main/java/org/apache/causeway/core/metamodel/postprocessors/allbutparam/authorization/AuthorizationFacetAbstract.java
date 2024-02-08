@@ -87,7 +87,7 @@ implements AuthorizationFacet {
             log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);
         }
 
-        return Optional.ofNullable(disables).map(VetoReason::explicit);
+        return Optional.ofNullable(disables).map(VetoReason::unauthorized);
     }
 
 }
