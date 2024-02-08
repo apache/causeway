@@ -39,14 +39,45 @@ public interface Consent {
     public static class VetoReason implements Serializable {
         private static final long serialVersionUID = 1L;
         /**
+         * Introduced to help pick a winner when merging 2 {@link VetoReason}(s).
+         * <p>
+         * PROGRAMMING_MODEL always wins over SECURITY.
+         */
+        public enum VetoOriging {
+            /**
+             * Veto originates from security mechanism.
+             * <p>
+             * In other words: the user is not authorized to either view or change the feature.
+             */
+            SECURITY,
+            /**
+             * Veto originates from programming model, either implicit or explicit see {@link UiHint}.
+             */
+            PROGRAMMING_MODEL;
+            public boolean isSecurity() { return this==SECURITY; }
+            public boolean isProgrammingModel() { return this==PROGRAMMING_MODEL; }
+            /** reduce to max ordinal */
+            static VetoOriging reduceToMaxOrdinal(final VetoOriging a, final VetoOriging b) {
+                return b.ordinal()>a.ordinal() ? b : a;
+            }
+        }
+        /**
          * Introduced to help decide whether or not to display a 'ban' icon
          * in the UI, with a tooltip showing the disabled reason.
          */
         public enum UiHint {
             /**
-             * When prototyping, icon rendering can be suppressed via config option.
+             * Reason is <b>implicit</b> by programming model,
+             * reason text is generic and rather of interest to the developer
+             * than the end-user.
+             * <p>
+             * Show only when prototyping. However, when prototyping, can be suppressed via config option.
              */
             NO_ICON_UNLESS_PROTOTYPING,
+            /**
+             * Reason is <b>explicit</b> either by programming model or authentication mechanism,
+             * reason text is designated to reach the end-user.
+             */
             SHOW_BAN_ICON;
             public boolean isNoIconUnlessPrototying() { return this==NO_ICON_UNLESS_PROTOTYPING; }
             public boolean isShowBanIcon() { return this==SHOW_BAN_ICON; }
@@ -55,28 +86,57 @@ public interface Consent {
                 return b.ordinal()>a.ordinal() ? b : a;
             }
         }
+        private final VetoOriging vetoOriging;
         private final UiHint uiHint;
         private final @NonNull String string;
-        public static VetoReason explicit(final String reason) {
+        private static VetoReason of(
+                final @NonNull VetoOriging vetoOriging,
+                final @NonNull UiHint uiHint,
+                final String reason) {
             _Assert.assertTrue(_Strings.isNotEmpty(reason));
-            return new VetoReason(UiHint.SHOW_BAN_ICON, reason);
+            return new VetoReason(vetoOriging, uiHint, reason);
+        }
+        public static VetoReason unauthorized(final String reason) {
+            return of(VetoOriging.SECURITY, UiHint.SHOW_BAN_ICON, reason);
+        }
+        public static VetoReason explicit(final String reason) {
+            return of(VetoOriging.PROGRAMMING_MODEL, UiHint.SHOW_BAN_ICON, reason);
         }
         private static VetoReason inferred(final String reason) {
-            _Assert.assertTrue(_Strings.isNotEmpty(reason));
-            return new VetoReason(UiHint.NO_ICON_UNLESS_PROTOTYPING, reason);
+            return of(VetoOriging.PROGRAMMING_MODEL, UiHint.NO_ICON_UNLESS_PROTOTYPING, reason);
         }
         public Optional<VetoReason> toOptional() {
             return Optional.of(this);
         }
+        /**
+         * {@code Pi}: origin=PROGRAMMING_MODEL, nature=implicit (NO_ICON_UNLESS_PROTOTYPING)<br>
+         * {@code Pe}: origin=PROGRAMMING_MODEL, nature=explicit (SHOW_BAN_ICON)<br>
+         * {@code S(e)}: origin=SECURITY, nature=explicit (SHOW_BAN_ICON)<br>
+         * <p>
+         * {@code Pi ৹ Pi := pick any or concat}<br>
+         * {@code Pe ৹ Pe := pick any or concat}<br>
+         * {@code S(e) ৹ S(e) := pick any or concat}<br>
+         * <br>
+         * {@code Pi ৹ Pe := Pe}<br>
+         * {@code Pi ৹ S(e) := Pi}<br>
+         * {@code Pe ৹ S(e) := Pe}<br>
+         * In other words: winner picking is driven by <i>origin</i> first and <i>nature</i> second.
+         */
         public VetoReason reduce(final VetoReason other) {
+            // arbitrarily shifting left by 4 so reserving some room for more UiHint enum values
+            final int thisScore = (this.vetoOriging.ordinal()<<4)  + this.uiHint.ordinal();
+            final int otherScore = (other.vetoOriging.ordinal()<<4)  + other.uiHint.ordinal();
+
             final List<String> mergedText = new ArrayList<>(2);
-            switch(_Ints.compare(this.uiHint.ordinal(), other.uiHint.ordinal())) {
-            case -1: mergedText.add(other.string); break;
-            case 0:  mergedText.add(this.string); mergedText.add(other.string); break;
-            case 1:  mergedText.add(this.string); break;
+            final List<UiHint> winnerUiHint = new ArrayList<>(1);
+            switch(_Ints.compare(thisScore, otherScore)) {
+            case -1: winnerUiHint.add(other.uiHint); mergedText.add(other.string); break;
+            case 0:  winnerUiHint.add(this.uiHint); mergedText.add(this.string); mergedText.add(other.string); break;
+            case 1:  winnerUiHint.add(this.uiHint); mergedText.add(this.string); break;
             }
             return new VetoReason(
-                    UiHint.reduceToMaxOrdinal(this.uiHint, other.uiHint),
+                    VetoOriging.reduceToMaxOrdinal(this.vetoOriging, other.vetoOriging),
+                    winnerUiHint.get(0),
                     mergedText.stream().collect(Collectors.joining("; ")));
         }
         // -- PREDEFINED REASONS
