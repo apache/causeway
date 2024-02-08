@@ -131,7 +131,7 @@ public class InteractionResult {
      * If {@link #isNotVetoing()}, then returns <tt>Optional.empty()</tt>.
      */
     public Optional<Consent.VetoReason> getReason() {
-        return reasonBuf.stream().reduce(Consent.VetoReason::concatenate);
+        return reasonBuf.stream().reduce(Consent.VetoReason::reduce);
     }
 
     @Override
