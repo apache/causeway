@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
@@ -42,12 +41,11 @@ import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  *  Adds inline prompt logic.
@@ -256,11 +254,11 @@ extends ScalarPanelAbstract {
                     //XXX Future extension
                     break;
                 case DISABLED_REASON:
-                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-ban", "");
+                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-ban veto-reason-icon", "");
                     break;
                 case DISABLED_REASON_PROTOTYPING:
-                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-text-slash icon-prototyping",
-                            " Note: This icon only appears in prototyping mode.");
+                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-text-slash veto-reason-icon prototyping",
+                            " Note: This icon only appears in prototyping mode (unless disabled via config option).");
                     break;
                 case CLEAR_FIELD:
                     addClearFieldButton(buttonContainer);
