@@ -395,4 +395,18 @@ public class _Ints {
         return sb.toString();
     }
 
+    /**
+     * Compares two {@code int} values numerically.
+     * @param  x the first {@code int} to compare
+     * @param  y the second {@code int} to compare
+     * @return the value {@code 0} if {@code x == y};
+     *         {@code -1} if {@code x < y}; and
+     *         {@code 1} if {@code x > y}
+     * @apiNote copy of {@link Integer#compress(int, int)}
+     *      because their java-doc states that return values -1, +1 are not guaranteed.
+     */
+    public static int compare(final int x, final int y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
+
 }

@@ -19,10 +19,14 @@
 package org.apache.causeway.core.metamodel.consent;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 
 import lombok.NonNull;
@@ -38,21 +42,42 @@ public interface Consent {
          * Introduced to help decide whether or not to display a 'ban' icon
          * in the UI, with a tooltip showing the disabled reason.
          */
-        private final boolean showInUi;
+        public enum UiHint {
+            /**
+             * When prototyping, icon rendering can be suppressed via config option.
+             */
+            NO_ICON_UNLESS_PROTOTYPING,
+            SHOW_BAN_ICON;
+            public boolean isNoIconUnlessPrototying() { return this==NO_ICON_UNLESS_PROTOTYPING; }
+            public boolean isShowBanIcon() { return this==SHOW_BAN_ICON; }
+            /** reduce to max ordinal */
+            static UiHint reduceToMaxOrdinal(final UiHint a, final UiHint b) {
+                return b.ordinal()>a.ordinal() ? b : a;
+            }
+        }
+        private final UiHint uiHint;
         private final @NonNull String string;
         public static VetoReason explicit(final String reason) {
             _Assert.assertTrue(_Strings.isNotEmpty(reason));
-            return new VetoReason(true, reason);
+            return new VetoReason(UiHint.SHOW_BAN_ICON, reason);
         }
         private static VetoReason inferred(final String reason) {
             _Assert.assertTrue(_Strings.isNotEmpty(reason));
-            return new VetoReason(false, reason);
+            return new VetoReason(UiHint.NO_ICON_UNLESS_PROTOTYPING, reason);
         }
         public Optional<VetoReason> toOptional() {
             return Optional.of(this);
         }
-        public VetoReason concatenate(final VetoReason other) {
-            return new VetoReason(this.showInUi || other.showInUi, this.string + "; " + other.string);
+        public VetoReason reduce(final VetoReason other) {
+            final List<String> mergedText = new ArrayList<>(2);
+            switch(_Ints.compare(this.uiHint.ordinal(), other.uiHint.ordinal())) {
+            case -1: mergedText.add(other.string); break;
+            case 0:  mergedText.add(this.string); mergedText.add(other.string); break;
+            case 1:  mergedText.add(this.string); break;
+            }
+            return new VetoReason(
+                    UiHint.reduceToMaxOrdinal(this.uiHint, other.uiHint),
+                    mergedText.stream().collect(Collectors.joining("; ")));
         }
         // -- PREDEFINED REASONS
         public static VetoReason editingObjectDisabledReasonNotGiven() {

@@ -37,12 +37,14 @@ enum ScalarPanelAdditionalButton {
                 final ScalarModel scalarModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
-            return renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
+            var precondition = renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION;
+            return precondition
                     && scalarModel.disabledReason()
-                    .map(InteractionVeto::getVetoConsent)
-                    .flatMap(Consent::getReason)
-                    .map(VetoReason::showInUi)
-                    .orElse(false);
+                        .map(InteractionVeto::getVetoConsent)
+                        .flatMap(Consent::getReason)
+                        .map(VetoReason::uiHint)
+                        .map(VetoReason.UiHint::isShowBanIcon)
+                        .orElse(false);
         }
     },
     DISABLED_REASON_PROTOTYPING {
@@ -51,14 +53,18 @@ enum ScalarPanelAdditionalButton {
                 final ScalarModel scalarModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
-            return scalarModel.getSystemEnvironment().isPrototyping()
-                    && scalarModel.getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled()
-                    && renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
+            var precondition = renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
+                    && scalarModel.getSystemEnvironment().isPrototyping()
+                    && scalarModel.getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled();
+            return precondition
                     && scalarModel.disabledReason()
-                    .map(InteractionVeto::getVetoConsent)
-                    .flatMap(Consent::getReason)
-                    .map(vetoReason->!vetoReason.showInUi())
-                    .orElse(false);
+                        .map(InteractionVeto::getVetoConsent)
+                        .flatMap(Consent::getReason)
+                        .map(VetoReason::uiHint)
+                        // opposite of logic in DISABLED_REASON above,
+                        // because DISABLED_REASON_PROTOTYPING should only ever activate when DISABLED_REASON is not active
+                        .map(VetoReason.UiHint::isNoIconUnlessPrototying)
+                        .orElse(false);
         }
     },
     CLEAR_FIELD {
