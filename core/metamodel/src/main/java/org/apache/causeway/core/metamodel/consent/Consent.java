@@ -119,7 +119,7 @@ public interface Consent {
          * <br>
          * {@code Pi ৹ Pe := Pe}<br>
          * {@code Pi ৹ S(e) := Pi}<br>
-         * {@code Pe ৹ S(e) := Pi}<br>
+         * {@code Pe ৹ S(e) := Pe}<br>
          * In other words: winner picking is driven by <i>origin</i> first and <i>nature</i> second.
          */
         public VetoReason reduce(final VetoReason other) {
