@@ -605,8 +605,19 @@ div.additionalLinkList {
 
 }
 
-.icon-prototyping {
-    color: silver;
+/* veto reason fa-icon rendering */
+
+.veto-reason-icon {
+    color: rgba(127, 127, 127, 0.5);
+}
+.btn:hover > .veto-reason-icon {
+    color: rgba(127, 127, 127, 1);
+}
+.veto-reason-icon .prototyping {
+    color: rgba(127, 127, 255, 0.5);
+}
+.btn:hover > .veto-reason-icon .prototyping {
+    color: rgba(127, 127, 255, 1);
 }
 
 /* dropdown-menu: distinguished rendering for disabled menu-items

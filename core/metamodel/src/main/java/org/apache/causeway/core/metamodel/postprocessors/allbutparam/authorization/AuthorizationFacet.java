@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.ActionVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.CollectionVisibilityContext;
@@ -79,6 +82,13 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                                 vc.getInitiatedBy(),
                                 vc.getWhere())) != null)
                 .orElse(false);
+    }
+    
+    public static String formatNotAuthorizedToEdit(final @Nullable Identifier identifier) {
+        return identifier!=null
+                ? String.format("Not authorized to edit feature: %s",
+                        identifier.getLogicalType().getLogicalTypeSimpleName())
+                : "Not authorized to edit";
     }
 
 }

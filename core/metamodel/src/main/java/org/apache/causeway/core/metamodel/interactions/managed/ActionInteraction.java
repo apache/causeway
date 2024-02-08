@@ -103,6 +103,10 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
      */
     @Getter
     private final Optional<ObjectAction> metamodel;
+    
+    public final Optional<Identifier> getFeatureIdentifier() {
+        return metamodel.map(ObjectAction::getFeatureIdentifier);
+    }
 
     public ActionInteraction checkSemanticConstraint(@NonNull final SemanticConstraint semanticConstraint) {
 
