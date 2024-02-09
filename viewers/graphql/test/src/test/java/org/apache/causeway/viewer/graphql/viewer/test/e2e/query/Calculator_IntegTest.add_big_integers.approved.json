@@ -2,7 +2,7 @@
   "data" : {
     "university_calc_Calculator" : {
       "addBigIntegers" : {
-        "invoke" : 3
+        "invoke" : "3"
       }
     }
   }
