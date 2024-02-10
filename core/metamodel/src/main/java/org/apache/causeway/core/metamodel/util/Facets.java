@@ -36,7 +36,6 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -365,7 +364,7 @@ public final class Facets {
                 .stream()
                 .map(TableDecoratorFacet::value)
                 .map(decoratorClass -> {
-                    val decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass, _Constants.emptyObjects);
+                    val decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass);
                     return facetHolders[0].injectServicesInto(decorator);
                 })
                 .findFirst();

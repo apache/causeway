@@ -22,6 +22,8 @@ import org.hamcrest.Description;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
+import org.apache.causeway.commons.internal.factory._InstanceUtil;
+
 /**
  * @since 2.0 {@index}
  */
@@ -47,14 +49,14 @@ public final class CausewayActions {
         return new Action(){
 
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
                 description.appendText("new transient instance");
             }
 
             @Override
-            public Object invoke(Invocation invocation) throws Throwable {
-                Class<?> cls = (Class<?>) invocation.getParameter(0);
-                return cls.newInstance();
+            public Object invoke(final Invocation invocation) throws Throwable {
+                var cls = (Class<?>) invocation.getParameter(0);
+                return _InstanceUtil.createInstance(cls);
             }
         };
     }

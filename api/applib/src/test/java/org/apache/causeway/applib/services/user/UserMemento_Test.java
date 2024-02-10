@@ -24,6 +24,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static org.apache.causeway.commons.internal.resources._Resources.url;
+
 import lombok.val;
 
 class UserMemento_Test {
@@ -93,7 +95,7 @@ class UserMemento_Test {
         void user_and_roles_and_avatarUrl_preserved_and_real_name_set() throws MalformedURLException {
             // copy
             val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND")
-                    .withAvatarUrl(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+                    .withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
 
             // when
             val userMemento2 = userMemento.withRealName("Fred Flintstone");
@@ -106,7 +108,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
             Assertions.assertThat(userMemento2.getRealName()).isEqualTo("Fred Flintstone");
 
             // then original unchanged
@@ -114,7 +116,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
             Assertions.assertThat(userMemento.getRealName()).isNull();
         }
     }
@@ -129,7 +131,7 @@ class UserMemento_Test {
             val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
 
             // when
-            val userMemento2 = userMemento.withAvatarUrl(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            val userMemento2 = userMemento.withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -139,7 +141,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
 
             // then original unchanged
             Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
@@ -156,7 +158,7 @@ class UserMemento_Test {
             val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND").withRealName("Fred Flintstone");
 
             // when
-            val userMemento2 = userMemento.withAvatarUrl(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            val userMemento2 = userMemento.withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -166,7 +168,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
             Assertions.assertThat(userMemento2.getRealName()).isEqualTo("Fred Flintstone");
 
             // then original unchanged
@@ -265,7 +267,7 @@ class UserMemento_Test {
             val userMemento = UserMemento.ofName("fredflintstone")
                     .withRoleAdded("CAVEMAN")
                     .withRoleAdded("HUSBAND")
-                    .withAvatarUrl(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"))
+                    .withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"))
                     .withRealName("Fred Flintstone")
                     .withMultiTenancyToken("/USA/Bedrock")
                     ;
@@ -275,7 +277,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
             Assertions.assertThat(userMemento.getRealName()).isEqualTo("Fred Flintstone");
             Assertions.assertThat(userMemento.isImpersonating()).isFalse();
 
@@ -290,7 +292,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
             Assertions.assertThat(userMemento2.getRealName()).isEqualTo("Fred Flintstone");
             Assertions.assertThat(userMemento2.isImpersonating()).isTrue();
             Assertions.assertThat(userMemento2.getMultiTenancyToken()).isEqualTo("/USA/Bedrock");
@@ -300,7 +302,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
             Assertions.assertThat(userMemento.getRealName()).isEqualTo("Fred Flintstone");
             Assertions.assertThat(userMemento.isImpersonating()).isFalse();
             Assertions.assertThat(userMemento.getMultiTenancyToken()).isEqualTo("/USA/Bedrock");

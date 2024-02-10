@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.objectmanager;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
-import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -101,7 +100,7 @@ interface ObjectCreator {
 
             try {
 
-                val newInstance = _InstanceUtil.createInstance(type, _Constants.emptyObjects);
+                val newInstance = _InstanceUtil.createInstance(type);
                 return newInstance;
 
             } catch (Exception  e) {

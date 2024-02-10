@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.Priority;
@@ -34,11 +33,10 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.hardening._Hardening;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 @Component
 @Named("causeway.metamodel.value.URLValueSemantics")
@@ -73,8 +71,8 @@ implements
 
     private java.net.URL parseUrlElseNull(final String url) {
         try {
-            return new java.net.URL(url);
-        } catch (MalformedURLException e) {
+            return _Resources.url(url);
+        } catch (Exception e) {
             return null; // ignore
         }
     }
@@ -107,11 +105,7 @@ implements
 
     @Override
     public java.net.URL parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
-            return null;
-        }
-        return _Hardening.toUrlWithXssGuard(input).orElse(null);
+        return _Resources.url(_Strings.blankToNullOrTrim(text));
     }
 
     @Override
@@ -128,9 +122,9 @@ implements
     @Override
     public Can<URL> getExamples() {
         return Can.of(
-                new URL("https://maps.google.com"),
-                new URL("https://en.wikipedia.org/wiki/Domain-driven_design")
-        );
+                "https://maps.google.com",
+                "https://en.wikipedia.org/wiki/Domain-driven_design")
+        .map(_Resources::url);
     }
 
 }

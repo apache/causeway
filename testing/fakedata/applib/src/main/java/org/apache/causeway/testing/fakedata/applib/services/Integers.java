@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
-import org.apache.commons.lang3.RandomUtils;
-
 /**
  * Returns random <code>int</code>eger values, optionally constrained within a range,
  *
@@ -33,8 +31,8 @@ public class Integers extends AbstractRandomValueGenerator {
 
     public int any() {
         return fake.booleans().coinFlip()
-                ?   RandomUtils.nextInt()
-                : - RandomUtils.nextInt();
+                ?   random().nextInt()
+                : - random().nextInt();
 
     }
 

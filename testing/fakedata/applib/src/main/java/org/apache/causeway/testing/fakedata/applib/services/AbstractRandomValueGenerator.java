@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * @since 2.0 {@index}
  */
@@ -27,6 +29,10 @@ abstract class AbstractRandomValueGenerator {
 
     AbstractRandomValueGenerator(final FakeDataService fake) {
         this.fake = fake;
+    }
+
+    protected static ThreadLocalRandom random() {
+        return ThreadLocalRandom.current();
     }
 
 }

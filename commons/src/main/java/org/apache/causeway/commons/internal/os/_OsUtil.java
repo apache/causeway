@@ -139,7 +139,7 @@ public class _OsUtil {
         default:
             throw _Exceptions.unsupportedOperation("OS " + os + " not (yet) supported");
         }
-        rt.exec(cmd);
+        rt.exec(new String[]{cmd});
     }
 
     /**

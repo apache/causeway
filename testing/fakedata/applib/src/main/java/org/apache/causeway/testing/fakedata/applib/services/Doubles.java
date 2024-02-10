@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
-import org.apache.commons.lang3.RandomUtils;
-
 /**
  * Returns random <code>double</code> values, optionally constrained within a range,
  *
@@ -33,11 +31,12 @@ public class Doubles extends AbstractRandomValueGenerator {
 
     public double any() {
         return fake.booleans().coinFlip()
-                ?  RandomUtils.nextDouble() * Double.MAX_VALUE
-                : -RandomUtils.nextDouble() * Double.MAX_VALUE;
+                ?  random().nextDouble() * Double.MAX_VALUE
+                : -random().nextDouble() * Double.MAX_VALUE;
     }
 
     public double upTo(final double max) {
-        return RandomUtils.nextDouble() * max;
+        return random().nextDouble() * max;
     }
+
 }

@@ -20,6 +20,7 @@ package org.apache.causeway.commons.internal.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -49,6 +50,24 @@ import lombok.val;
  * @since 2.0
  */
 public final class _Resources {
+
+    // -- URL UTILITY
+
+    /**
+     * Returns {@code null} for {@code null}. Throws on invalid input.
+     * @implNote XSS detection has potential for false positives
+     */
+    @SneakyThrows
+    public static URL url(final @Nullable String url) {
+        if(url == null) {
+            return null;
+        }
+        // simple guard against XSS attacks like javascript:alert(document)
+        if(_Strings.condenseWhitespaces(url.toLowerCase(), "").contains("javascript:")) {
+            throw new IllegalArgumentException("Not parseable as an URL ('" + url + "').");
+        }
+        return new URI(url).toURL();
+    }
 
     // -- CLASS PATH RESOURCE LOADING
 
@@ -165,8 +184,5 @@ public final class _Resources {
         }
         return name;
     }
-
-
-
 
 }

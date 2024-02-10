@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
-import org.apache.commons.lang3.RandomUtils;
-
 /**
  * Returns random <code>float</code> values, optionally constrained within a range,
  *
@@ -33,11 +31,11 @@ public class Floats extends AbstractRandomValueGenerator {
 
     public float any() {
         return fake.booleans().coinFlip()
-                ?  RandomUtils.nextFloat() * Float.MAX_VALUE
-                : -RandomUtils.nextFloat() * Float.MAX_VALUE;
+                ?  random().nextFloat() * Float.MAX_VALUE
+                : -random().nextFloat() * Float.MAX_VALUE;
     }
 
     public float upTo(final float max) {
-        return RandomUtils.nextFloat() * max;
+        return random().nextFloat() * max;
     }
 }

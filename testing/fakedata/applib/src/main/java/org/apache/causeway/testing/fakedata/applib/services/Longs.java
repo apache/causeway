@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
-import org.apache.commons.lang3.RandomUtils;
-
 /**
  * Returns random <code>long</code> values, optionally constrained within a range,
  *
@@ -33,8 +31,8 @@ public class Longs extends AbstractRandomValueGenerator {
 
     public long any() {
         return fake.booleans().coinFlip()
-                ?   RandomUtils.nextLong()
-                : - RandomUtils.nextLong();
+                ?   random().nextLong()
+                : - random().nextLong();
     }
 
     public long upTo(final long upTo) {

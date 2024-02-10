@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
-import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.apache.causeway.commons.internal.resources._Resources;
 
 /**
  * Returns random but well-formed {@link URL}s.
@@ -33,13 +34,8 @@ public class Urls extends AbstractRandomValueGenerator {
     }
 
     public URL any() {
-        try {
-            final String protocol = fake.booleans().coinFlip() ? "http" : "https:";
-            final String url = fake.comms().url();
-            return new URL(String.format("%s://%s", protocol, url));
-        } catch (MalformedURLException e) {
-            // not expected
-            throw new RuntimeException(e);
-        }
+        final String protocol = fake.booleans().coinFlip() ? "http" : "https:";
+        final String url = fake.comms().url();
+        return _Resources.url(String.format("%s://%s", protocol, url));
     }
 }

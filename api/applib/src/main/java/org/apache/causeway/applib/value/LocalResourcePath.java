@@ -29,8 +29,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.commons.internal.base._Blackhole;
-import org.apache.causeway.commons.internal.hardening._Hardening;
+import org.apache.causeway.commons.internal.resources._Resources;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -124,9 +123,10 @@ public final class LocalResourcePath implements Serializable {
         }
         try {
             // path syntax check
-            _Blackhole.consume(_Hardening.toUrlWithXssGuard("http://localhost/"+path));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(String.format("the given local path has an invalid syntax: '%s'", path), e);
+            _Resources.url("http://localhost/"+path);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    String.format("the given local path has an invalid syntax: '%s'", path), e);
         }
     }
 
