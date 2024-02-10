@@ -202,7 +202,7 @@ public class _Probe {
 
     public static String currentThreadId() {
         val ct = Thread.currentThread();
-        return String.format("Thread[%s (%d)])", ct.getName(), ct.getId());
+        return String.format("Thread[%s (%d)])", ct.getName(), ct.threadId());
     }
 
     public static void sysOut(final String format, final Object... args) {

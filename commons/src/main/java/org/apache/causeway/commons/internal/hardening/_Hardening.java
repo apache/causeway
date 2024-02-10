@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.commons.internal.hardening;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Optional;
-
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.lang.Nullable;
@@ -34,27 +30,6 @@ import org.apache.causeway.commons.internal.base._Strings;
  * Introduced as a consequence of CAUSEWAY-3077.
  */
 public class _Hardening {
-
-    // -- XSS GUARDS
-
-    /**
-     * @throws IllegalArgumentException - when an XSS attack is encountered, or the URL is not parseable
-     * @implNote unfortunately has potential for false positives; but shall do for now
-     */
-    public static Optional<URL> toUrlWithXssGuard(final @Nullable String untrustedUrl) {
-        if(_Strings.isEmpty(untrustedUrl)) {
-            return Optional.empty();
-        }
-        if(_Strings.condenseWhitespaces(untrustedUrl.toLowerCase(), "").contains("javascript:")) {
-            // simple guard against XSS attacks like javascript:alert(document)
-            throw new IllegalArgumentException("Not parseable as an URL ('" + untrustedUrl + "').");
-        }
-        try {
-            return Optional.of(new java.net.URL(untrustedUrl));
-        } catch (final MalformedURLException ex) {
-            throw new IllegalArgumentException("Not parseable as an URL ('" + untrustedUrl + "').", ex);
-        }
-    }
 
     /**
      * @see "https://jsoup.org/cookbook/cleaning-html/safelist-sanitizer"

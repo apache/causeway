@@ -19,7 +19,7 @@
 package org.apache.causeway.tooling.projectmodel.maven;
 
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -62,7 +62,7 @@ public class SimpleModelResolver implements ModelResolver {
     }
 
     @Override
-    public ModelSource resolveModel(String groupId, String artifactId, String version)
+    public ModelSource resolveModel(final String groupId, final String artifactId, final String version)
             throws UnresolvableModelException {
 
         val key = String.format("%s:%s:%s", groupId, artifactId, version);
@@ -83,13 +83,14 @@ public class SimpleModelResolver implements ModelResolver {
             for(val entry : repositories.entrySet()) {
                 val repo = entry.getValue();
 
-                val pomUrl = new URL(String.format("%s/%s/%s/%s/%s-%s.pom",
+                val pomUrl = new URI(String.format("%s/%s/%s/%s/%s-%s.pom",
                         repo.getUrl(),
                         groupId.replace('.', '/'),
                         artifactId,
                         version,
                         artifactId,
-                        version));
+                        version))
+                    .toURL();
 
                 try {
                     val urlConn = pomUrl.openConnection();
@@ -111,13 +112,13 @@ public class SimpleModelResolver implements ModelResolver {
     }
 
     @Override
-    public ModelSource resolveModel(Parent parent) throws UnresolvableModelException {
+    public ModelSource resolveModel(final Parent parent) throws UnresolvableModelException {
         log.info("resolveModel-parent");
         return resolveModel(parent.getGroupId(), parent.getArtifactId(), parent.getVersion());
     }
 
     @Override
-    public ModelSource resolveModel(Dependency dependency) throws UnresolvableModelException {
+    public ModelSource resolveModel(final Dependency dependency) throws UnresolvableModelException {
         log.info("resolveModel-dependency");
         return resolveModel(
                 dependency.getGroupId(),
@@ -126,13 +127,13 @@ public class SimpleModelResolver implements ModelResolver {
     }
 
     @Override
-    public void addRepository(Repository repository) throws InvalidRepositoryException {
+    public void addRepository(final Repository repository) throws InvalidRepositoryException {
         log.info("adding repository {}", repository.getUrl());
         repositories.put(repository.getId(), repository);
     }
 
     @Override
-    public void addRepository(Repository repository, boolean replace) throws InvalidRepositoryException {
+    public void addRepository(final Repository repository, final boolean replace) throws InvalidRepositoryException {
         addRepository(repository);
     }
 
@@ -142,7 +143,7 @@ public class SimpleModelResolver implements ModelResolver {
     }
 
 
-    public Model lookupCatalogForSubmoduleOf(Model mavenProj, String realtivePath) {
+    public Model lookupCatalogForSubmoduleOf(final Model mavenProj, final String realtivePath) {
 
         final String localPath;
         try {

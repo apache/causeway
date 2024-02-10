@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.ext.RuntimeDelegate;
 
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -115,12 +116,15 @@ public abstract class Parser<T> {
 
     public static Parser<CacheControl> forCacheControl() {
         return new Parser<CacheControl>() {
+
             @Override
             public CacheControl valueOf(final String str) {
                 if (str == null) {
                     return null;
                 }
-                final CacheControl cacheControl = CacheControl.valueOf(str);
+                CacheControl cacheControl =
+                        RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
+                        .fromString(str);
                 // workaround for bug in CacheControl's equals() method
                 cacheControl.getCacheExtension();
                 cacheControl.getNoCacheFields();
@@ -129,7 +133,8 @@ public abstract class Parser<T> {
 
             @Override
             public String asString(final CacheControl cacheControl) {
-                return cacheControl.toString();
+                return RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
+                        .toString(cacheControl);
             }
         };
     }

@@ -20,6 +20,8 @@ package org.apache.causeway.testing.unittestsupport.applib.soap;
 
 import java.util.function.Supplier;
 
+import org.apache.causeway.commons.internal.factory._InstanceUtil;
+
 public class SoapEndpointSpec {
 
     static SoapEndpointSpec asSoapEndpointSpec(final Class<?> input) {
@@ -61,7 +63,7 @@ public class SoapEndpointSpec {
     /**
      * Populated when published if not otherwise.
      */
-    void setEndpointAddress(String endpointAddress) {
+    void setEndpointAddress(final String endpointAddress) {
         this.endpointAddress = endpointAddress;
     }
 
@@ -74,11 +76,7 @@ public class SoapEndpointSpec {
 
         @Override
         public Object get() {
-            try {
-                return endpointClass.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+            return _InstanceUtil.createInstance(endpointClass);
         }
     }
 

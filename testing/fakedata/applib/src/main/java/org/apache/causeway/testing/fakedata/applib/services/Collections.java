@@ -154,7 +154,7 @@ public class Collections extends AbstractRandomValueGenerator {
         return find(() -> anyOf(elements), except);
     }
 
-    public <T> T anyOf(final T... elements) {
+    public <T> T anyOf(@SuppressWarnings("unchecked") final T... elements) {
         final int randomIdx = fake.ints().upTo(elements.length);
         return elements[randomIdx];
     }

@@ -49,11 +49,11 @@ public class CausewayLocaleInitializer {
         final int pos = localeSpec.indexOf('_');
         Locale locale;
         if (pos == -1) {
-            locale = new Locale(localeSpec, "");
+            locale = Locale.of(localeSpec);
         } else {
             final String language = localeSpec.substring(0, pos);
             final String country = localeSpec.substring(pos + 1);
-            locale = new Locale(language, country);
+            locale = Locale.of(language, country);
         }
         return locale;
     }

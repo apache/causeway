@@ -35,7 +35,6 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithNever_sadCase {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @SuppressWarnings("unused")
     @Never
     @Mock
     private Collaborator collaborator;
