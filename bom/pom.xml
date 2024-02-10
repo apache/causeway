@@ -2614,8 +2614,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 <supplementalModelArtifact>org.apache.causeway:supplemental-model:1.0</supplementalModelArtifact>
                             </supplementalModelArtifacts>
 
-                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-
                              <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
                             <supplementalModels>
                                 <supplementalModel>supplemental-models.xml</supplementalModel>
@@ -2786,7 +2784,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-deploy-plugin</artifactId>
                         <configuration>
-                            <updateReleaseInfo>true</updateReleaseInfo>
+								<!-- invalid config <updateReleaseInfo>true</updateReleaseInfo> -->
                         </configuration>
                     </plugin>
                     <plugin>
@@ -2940,47 +2938,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				</plugins>
 			</build>
 		</profile>
-        <profile>
-            <id>only-eclipse</id>
-            <activation>
-                <property>
-                    <name>m2e.version</name>
-                </property>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <!--  Disable execution of some plugins in m2e (https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html)  -->
-                        <plugin>
-                            <groupId>org.eclipse.m2e</groupId>
-                            <artifactId>lifecycle-mapping</artifactId>
-                            <version>1.0.0</version>
-                            <!--  as this is an artificial artifact only use in a profile (https://bugs.eclipse.org/bugs/show_bug.cgi?id=367870#c18)  -->
-                            <configuration>
-                                <lifecycleMappingMetadata>
-                                    <pluginExecutions>
-                                        <pluginExecution>
-                                            <!--  no native m2e support yet (https://issues.apache.org/jira/browse/MRRESOURCES-85)  -->
-                                            <pluginExecutionFilter>
-                                                <groupId>org.apache.maven.plugins</groupId>
-                                                <artifactId>maven-remote-resources-plugin</artifactId>
-                                                <versionRange>[0,1.8.0)</versionRange>
-                                                <goals>
-                                                    <goal>process</goal>
-                                                </goals>
-                                            </pluginExecutionFilter>
-                                            <action>
-                                                <ignore/>
-                                            </action>
-                                        </pluginExecution>
-                                    </pluginExecutions>
-                                </lifecycleMappingMetadata>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
         <profile>
             <id>enforce-output-timestamp-property</id>
             <activation>
