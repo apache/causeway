@@ -52,6 +52,7 @@
 		<module>model</module>
 		<module>viewer</module>
 		<module>test</module>
+		<module>testsupport</module>
 	</modules>
 
 </project>

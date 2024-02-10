@@ -29,54 +29,47 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-viewer-graphql-viewer</artifactId>
-	<name>Apache Causeway Viewer - GraphQL (Viewer)</name>
+	<artifactId>causeway-viewer-graphql-testsupport</artifactId>
+	<name>Apache Causeway Viewer - GraphQL (Test Support)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.graphql.viewer</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/viewer</git-plugin.propertiesDir>
-	</properties>
+		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.graphql.testsupport</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/testsupport</git-plugin.propertiesDir>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
 
-	<build>
+        <java.version>17</java.version>
+
+        <datasource-proxy-spring-boot-starter.version>1.8.1</datasource-proxy-spring-boot-starter.version>
+        <sql-formatter.version>2.0.4</sql-formatter.version>
+
+    </properties>
+
+    <build>
 		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
 			<testResource>
 				<directory>src/test/java</directory>
 				<filtering>false</filtering>
 			</testResource>
 		</testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
+
 	<dependencies>
-
-		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-graphql-model</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-webapp</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-websocket</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 
