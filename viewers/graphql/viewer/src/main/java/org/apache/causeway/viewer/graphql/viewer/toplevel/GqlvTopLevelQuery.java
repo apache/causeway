@@ -45,23 +45,30 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
         this.context = context;
         queryBuilder = newObject().name("Query");
 
-        val objectSpecifications = context.objectSpecifications();
-
 
         // add services to top-level query
-        objectSpecifications.forEach(objectSpec -> {
+        context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo -> {
                                 addDomainService(objectSpec, servicePojo, context);
-                                addDataFetchers();
                             });
                     break;
             }
         });
 
-
+        // add services to top-level query
+        context.objectSpecifications().forEach(objectSpec -> {
+            switch (objectSpec.getBeanSort()) {
+                case MANAGED_BEAN_CONTRIBUTING: // @DomainService
+                    context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
+                            .ifPresent(servicePojo -> {
+                                addDataFetchers();
+                            });
+                    break;
+            }
+        });
     }
 
 

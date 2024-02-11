@@ -109,13 +109,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
         val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment);
 
-        // top-level query type and (dependent on configuration) the top-level mutation type
-        val topLevelQuery = new GqlvTopLevelQuery(context);
-
         // domain objects
-        val objectSpecifications = context.objectSpecifications();
         val domainObjects = new LinkedHashMap<ObjectSpecification, GqlvDomainObject>();
-        objectSpecifications.forEach(objectSpec -> {
+        context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
 
                 case ABSTRACT:
@@ -132,8 +128,12 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             }
         });
 
+        // top-level query type and (dependent on configuration) the top-level mutation type
+        val topLevelQuery = new GqlvTopLevelQuery(context);
+
         // add lookup to top-level query
         domainObjects.forEach(topLevelQuery::addLookupFor);
+
         topLevelQuery.buildQueryType();
 
         val topLevelMutation =

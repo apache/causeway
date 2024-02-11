@@ -60,7 +60,6 @@ public class GqlvTopLevelMutation
         buildMutationType();
 
         addDataFetchers();
-
     }
 
 
