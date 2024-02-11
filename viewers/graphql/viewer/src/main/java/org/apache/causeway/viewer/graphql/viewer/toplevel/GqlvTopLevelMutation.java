@@ -1,6 +1,7 @@
 package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import graphql.schema.FieldCoordinates;
@@ -9,7 +10,11 @@ import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLObjectType.newObject;
 
+import org.apache.causeway.applib.id.HasLogicalType;
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -17,6 +22,7 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForAction;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForProperty;
 
 import lombok.Getter;
+import lombok.val;
 
 public class GqlvTopLevelMutation
                 implements GqlvMutationForAction.Holder, GqlvMutationForProperty.Holder {
@@ -37,6 +43,23 @@ public class GqlvTopLevelMutation
     public GqlvTopLevelMutation(final Context context) {
         this.context = context;
         gqlObjectTypeBuilder = newObject().name("Mutation");
+
+        val objectSpecifications = context.objectSpecifications();
+
+        objectSpecifications.forEach(objectSpec -> {
+            objectSpec.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                    .filter(x -> ! x.getSemantics().isSafeInNature())
+                    .forEach(objectAction -> addAction(objectSpec, objectAction));
+            objectSpec.streamProperties(MixedIn.INCLUDED)
+                    .filter(property -> ! property.isAlwaysHidden())
+                    .filter(property -> property.containsFacet(PropertySetterFacet.class))
+                    .forEach(property -> addProperty(objectSpec, property));
+
+        });
+
+        buildMutationType();
+
+        addDataFetchers();
 
     }
 

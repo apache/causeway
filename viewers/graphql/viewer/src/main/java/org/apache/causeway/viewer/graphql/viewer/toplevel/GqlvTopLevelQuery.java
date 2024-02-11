@@ -1,6 +1,8 @@
 package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import graphql.schema.DataFetcher;
@@ -13,6 +15,8 @@ import graphql.schema.GraphQLObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
+import org.apache.causeway.applib.id.HasLogicalType;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAction;
@@ -40,6 +44,24 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
     public GqlvTopLevelQuery(Context context) {
         this.context = context;
         queryBuilder = newObject().name("Query");
+
+        val objectSpecifications = context.objectSpecifications();
+
+
+        // add services to top-level query
+        objectSpecifications.forEach(objectSpec -> {
+            switch (objectSpec.getBeanSort()) {
+                case MANAGED_BEAN_CONTRIBUTING: // @DomainService
+                    context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
+                            .ifPresent(servicePojo -> {
+                                addDomainService(objectSpec, servicePojo, context);
+                                addDataFetchers();
+                            });
+                    break;
+            }
+        });
+
+
     }
 
 
