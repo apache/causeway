@@ -18,22 +18,18 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -111,6 +107,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         // domain objects
         val domainObjects = new LinkedHashMap<ObjectSpecification, GqlvDomainObject>();
+        val domainObjectList = new ArrayList<GqlvDomainObject>();
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
 
@@ -122,6 +119,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                     domainObject.addTypesInto(graphQLTypeRegistry);
                     domainObject.addDataFetchers();
 
+                    domainObjectList.add(domainObject);
                     domainObjects.put(objectSpec, domainObject);
 
                     break;
@@ -129,7 +127,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         });
 
         // top-level query type and (dependent on configuration) the top-level mutation type
-        val topLevelQuery = new GqlvTopLevelQuery(context, domainObjects);
+        val topLevelQuery = new GqlvTopLevelQuery(context, domainObjectList);
 
 
         val topLevelMutation =
@@ -143,7 +141,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         // build the schema
         val schemaBuilder = GraphQLSchema.newSchema()
-                .query(topLevelQuery.getQueryType())
+                .query(topLevelQuery.getObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
                 .codeRegistry(codeRegistry);
         if (topLevelMutation != null) {

@@ -24,10 +24,12 @@ import java.util.TreeMap;
 
 import graphql.Scalars;
 import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLObjectType;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
@@ -89,6 +91,23 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
         gqlInputObjectType = inputTypeBuilder.build();
 
         addMembers();
+    }
+
+    public GraphQLFieldDefinition getField() {
+        val lookupConfig = this.context.causewayConfiguration.getViewer().getGraphql().getLookup();
+        ObjectSpecification objectSpec = getObjectSpecification();
+        return newFieldDefinition()
+                .name(String.format("%s%s%s",
+                        lookupConfig.getFieldNamePrefix(),          // eg "_gqlv_lookup__"
+                        TypeNames.objectTypeNameFor(objectSpec),
+                        lookupConfig.getFieldNameSuffix())          // eg ""
+                )
+                .type(this.context.typeMapper.outputTypeFor(objectSpec))
+                .argument(GraphQLArgument.newArgument()
+                        .name(lookupConfig.getArgument())   // eg "object"
+                        .type(getGqlInputObjectType())
+                        .build())
+                .build();
     }
 
     public void addTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {

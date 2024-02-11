@@ -2,10 +2,8 @@ package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
@@ -30,17 +28,18 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final Context context;
+    private final List<GqlvDomainObject> domainObjects;
 
 
-    @Getter private final GraphQLObjectType queryType;
+    @Getter private final GraphQLObjectType objectType;
 
 
     public GqlvTopLevelQuery(
             final Context context,
-            final Map<ObjectSpecification, GqlvDomainObject> domainObjects) {
+            final List<GqlvDomainObject> domainObjects) {
         this.context = context;
+        this.domainObjects = domainObjects;
         this.objectTypeBuilder = newObject().name("Query");
-
 
         // add services to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
@@ -67,9 +66,12 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
         });
 
         // add lookup to top-level query
-        domainObjects.forEach(this::addLookupFor);
+        for (GqlvDomainObject domainObject : this.domainObjects) {
+            addField(domainObject.getField());
+        }
 
-        queryType = objectTypeBuilder.build();
+
+        objectType = objectTypeBuilder.build();
     }
 
 
@@ -96,36 +98,18 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
                 domainService.addDataFetchers();
             }
         });
-    }
 
-    public void addLookupFor(
-            final ObjectSpecification objectSpec,
-            final GqlvDomainObject domainObject) {
-        val lookupConfig = context.causewayConfiguration.getViewer().getGraphql().getLookup();
-        val field = newFieldDefinition()
-                        .name(String.format("%s%s%s",
-                                lookupConfig.getFieldNamePrefix(),          // eg "_gqlv_lookup__"
-                                TypeNames.objectTypeNameFor(objectSpec),
-                                lookupConfig.getFieldNameSuffix())          // eg ""
-                        )
-                        .type(context.typeMapper.outputTypeFor(objectSpec))
-                        .argument(GraphQLArgument.newArgument()
-                                        .name(lookupConfig.getArgument())   // eg "object"
-                                        .type(domainObject.getGqlInputObjectType())
-                                        .build())
-                        .build();
-        addField(field);
+        domainObjects.forEach(domainObject -> {
+            ObjectSpecification objectSpec = domainObject.getObjectSpecification();
+            this.context.codeRegistryBuilder.dataFetcher(
+                    coordinatesFor(domainObject.getField()),
+                    (DataFetcher<Object>) environment -> {
+                        Object target = environment.getArgument("object");
+                        return GqlvAction.asPojo(objectSpec, target, this.context.bookmarkService)
+                                .orElse(null);
+                    });
+        });
 
-        context.codeRegistryBuilder.dataFetcher(
-                coordinatesFor(field),
-                (DataFetcher<Object>) environment -> lookup(objectSpec, environment));
-
-    }
-
-    private Object lookup(ObjectSpecification objectSpec, DataFetchingEnvironment dataFetchingEnvironment) {
-        Object target = dataFetchingEnvironment.getArgument("object");
-        return GqlvAction.asPojo(objectSpec, target, context.bookmarkService)
-                .orElse(null);
     }
 
 
