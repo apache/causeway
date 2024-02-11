@@ -129,12 +129,8 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         });
 
         // top-level query type and (dependent on configuration) the top-level mutation type
-        val topLevelQuery = new GqlvTopLevelQuery(context);
+        val topLevelQuery = new GqlvTopLevelQuery(context, domainObjects);
 
-        // add lookup to top-level query
-        domainObjects.forEach(topLevelQuery::addLookupFor);
-
-        topLevelQuery.buildQueryType();
 
         val topLevelMutation =
                 causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?

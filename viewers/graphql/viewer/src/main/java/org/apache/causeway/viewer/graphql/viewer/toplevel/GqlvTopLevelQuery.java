@@ -1,9 +1,8 @@
 package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
@@ -15,8 +14,6 @@ import graphql.schema.GraphQLObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import org.apache.causeway.applib.id.HasLogicalType;
-import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAction;
@@ -29,21 +26,20 @@ import lombok.val;
 
 public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
 
-    @Getter final GraphQLObjectType.Builder queryBuilder;
+    final GraphQLObjectType.Builder objectTypeBuilder;
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final Context context;
 
 
-    /**
-     * Built using {@link #buildQueryType()}
-     */
-    private GraphQLObjectType queryType;
+    @Getter private final GraphQLObjectType queryType;
 
 
-    public GqlvTopLevelQuery(Context context) {
+    public GqlvTopLevelQuery(
+            final Context context,
+            final Map<ObjectSpecification, GqlvDomainObject> domainObjects) {
         this.context = context;
-        queryBuilder = newObject().name("Query");
+        this.objectTypeBuilder = newObject().name("Query");
 
 
         // add services to top-level query
@@ -69,27 +65,13 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
                     break;
             }
         });
+
+        // add lookup to top-level query
+        domainObjects.forEach(this::addLookupFor);
+
+        queryType = objectTypeBuilder.build();
     }
 
-
-
-    public GraphQLObjectType buildQueryType() {
-        if (queryType != null) {
-            throw new IllegalStateException("QueryType has already been built");
-        }
-        return queryType = queryBuilder.build();
-    }
-
-    /**
-     *
-     * @see #buildQueryType()
-     */
-    public GraphQLObjectType getQueryType() {
-        if (queryType == null) {
-            throw new IllegalStateException("QueryType has not yet been built");
-        }
-        return queryType;
-    }
 
     public void addDomainService(ObjectSpecification objectSpec, Object servicePojo, Context context) {
         domainServices.add(new GqlvDomainService(this, objectSpec, servicePojo, context));
@@ -103,7 +85,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder {
 
     @Override
     public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        queryBuilder.field(field);
+        objectTypeBuilder.field(field);
         return field;
     }
 
