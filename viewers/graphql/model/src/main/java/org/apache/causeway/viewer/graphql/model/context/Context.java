@@ -27,9 +27,11 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class Context {
+
     public final GraphQLCodeRegistry.Builder codeRegistryBuilder;
     public final BookmarkService bookmarkService;
     public final SpecificationLoader specificationLoader;
@@ -46,6 +49,8 @@ public class Context {
     public final ServiceRegistry serviceRegistry;
     public final CausewayConfiguration causewayConfiguration;
     public final CausewaySystemEnvironment causewaySystemEnvironment;
+    public final ObjectManager objectManager;
+    public final GraphQLTypeRegistry graphQLTypeRegistry;
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()

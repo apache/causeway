@@ -36,7 +36,6 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -54,8 +53,9 @@ import lombok.val;
 public class GqlvDomainObject
         implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMeta.Holder {
 
-    private final Holder holder;
     @Getter private final ObjectSpecification objectSpecification;
+
+    private final Holder holder;
     private final Context context;
 
     @Getter
@@ -69,16 +69,14 @@ public class GqlvDomainObject
     private final SortedMap<String, GqlvCollection> collections = new TreeMap<>();
     private final Map<String, GqlvAction> actions = new TreeMap<>();
 
-    private GraphQLObjectType gqlObjectType;
+    private GraphQLObjectType objectType;
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
     public GqlvDomainObject(
             final GqlvDomainObject.Holder holder,
             final ObjectSpecification objectSpecification,
-            final Context context,
-            final ObjectManager objectManager,
-            final GraphQLTypeRegistry graphQLTypeRegistry) {
+            final Context context) {
         this.holder = holder;
 
         this.objectSpecification = objectSpecification;
@@ -86,7 +84,7 @@ public class GqlvDomainObject
 
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
-        this.meta = new GqlvMeta(this, context, objectManager);
+        this.meta = new GqlvMeta(this, context);
 
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
         inputTypeBuilder
@@ -100,10 +98,10 @@ public class GqlvDomainObject
 
         addMembers();
 
-        gqlObjectType = gqlObjectTypeBuilder.build();
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlObjectType);
-        meta.registerTypesInto(graphQLTypeRegistry);
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlInputObjectType);
+        objectType = gqlObjectTypeBuilder.build();
+
+        context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(objectType);
+        context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlInputObjectType);
 
     }
 
@@ -183,7 +181,7 @@ public class GqlvDomainObject
 
     @Override
     public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
+        return FieldCoordinates.coordinates(objectType, fieldDefinition);
     }
 
 

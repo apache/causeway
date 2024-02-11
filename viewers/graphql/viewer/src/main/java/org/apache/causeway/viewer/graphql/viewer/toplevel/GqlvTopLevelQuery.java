@@ -9,15 +9,12 @@ import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
-import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
 import lombok.Getter;
-import lombok.val;
 
 public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainObject.Holder {
 
@@ -28,14 +25,9 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
-    private final Context context;
 
-    public GqlvTopLevelQuery(
-            final Context context,
-            final ObjectManager objectManager,
-            final GraphQLTypeRegistry graphQLTypeRegistry) {
+    public GqlvTopLevelQuery(final Context context) {
 
-        this.context = context;
         this.objectTypeBuilder = newObject().name(OBJECT_TYPE_NAME);
 
         context.objectSpecifications().forEach(objectSpec -> {
@@ -45,7 +37,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(new GqlvDomainObject(this, objectSpec, context, objectManager, graphQLTypeRegistry));
+                    domainObjects.add(new GqlvDomainObject(this, objectSpec, context));
 
                     break;
             }
