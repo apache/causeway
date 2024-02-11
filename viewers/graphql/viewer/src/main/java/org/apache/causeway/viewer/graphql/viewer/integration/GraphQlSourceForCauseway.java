@@ -19,12 +19,10 @@
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
 
 import org.springframework.graphql.execution.GraphQlSource;
@@ -105,49 +103,28 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
         val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment);
 
-        // domain objects
-        val domainObjects = new LinkedHashMap<ObjectSpecification, GqlvDomainObject>();
-        val domainObjectList = new ArrayList<GqlvDomainObject>();
-        context.objectSpecifications().forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-
-                case ABSTRACT:
-                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:     // @DomainObject(nature=ENTITY)
-
-                    val domainObject = new GqlvDomainObject(objectSpec, context, objectManager, graphQLTypeRegistry);
-                    domainObject.addTypesInto(graphQLTypeRegistry);
-                    domainObject.addDataFetchers();
-
-                    domainObjectList.add(domainObject);
-                    domainObjects.put(objectSpec, domainObject);
-
-                    break;
-            }
-        });
-
-        // top-level query type and (dependent on configuration) the top-level mutation type
-        val topLevelQuery = new GqlvTopLevelQuery(context, domainObjectList);
-
-
+        // top-level query and mutation type
+        val topLevelQuery = new GqlvTopLevelQuery(context, objectManager, graphQLTypeRegistry);
         val topLevelMutation =
                 causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
                         new GqlvTopLevelMutation(context)
                         : null;
 
+        // add the data fetchers
+        topLevelQuery.addDataFetchers();
+        if (topLevelMutation != null) {
+            topLevelMutation.addDataFetchers();
+        }
 
-        // finalize the fetcher/mutator code that's been registered
+        // finalize the fetcher/mutator code that's been added
         val codeRegistry = codeRegistryBuilder.build();
 
         // build the schema
-        val schemaBuilder = GraphQLSchema.newSchema()
+        return GraphQLSchema.newSchema()
                 .query(topLevelQuery.getObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
-                .codeRegistry(codeRegistry);
-        if (topLevelMutation != null) {
-            schemaBuilder.mutation(topLevelMutation.getGqlObjectType());
-        }
-        return schemaBuilder
+                .codeRegistry(codeRegistry)
+                .mutation(topLevelMutation != null ? topLevelMutation.getObjectType() : null)
                 .build();
     }
 

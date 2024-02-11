@@ -23,6 +23,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import graphql.Scalars;
+import graphql.schema.DataFetcher;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
@@ -44,18 +45,21 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
-import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
-
 import lombok.Getter;
 import lombok.val;
 
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMeta.Holder {
+public class GqlvDomainObject
+        implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMeta.Holder {
 
+    private final Holder holder;
     @Getter private final ObjectSpecification objectSpecification;
     private final Context context;
+
+    @Getter
+    private final GraphQLFieldDefinition lookupField;
 
     private final GqlvMeta meta;
 
@@ -70,10 +74,12 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
     public GqlvDomainObject(
+            final GqlvDomainObject.Holder holder,
             final ObjectSpecification objectSpecification,
             final Context context,
             final ObjectManager objectManager,
             final GraphQLTypeRegistry graphQLTypeRegistry) {
+        this.holder = holder;
 
         this.objectSpecification = objectSpecification;
         this.context = context;
@@ -90,32 +96,35 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
                         .build());
         gqlInputObjectType = inputTypeBuilder.build();
 
+        this.lookupField = buildFieldDefinition(gqlInputObjectType);
+
         addMembers();
-    }
 
-    public GraphQLFieldDefinition getField() {
-        val lookupConfig = this.context.causewayConfiguration.getViewer().getGraphql().getLookup();
-        ObjectSpecification objectSpec = getObjectSpecification();
-        return newFieldDefinition()
-                .name(String.format("%s%s%s",
-                        lookupConfig.getFieldNamePrefix(),          // eg "_gqlv_lookup__"
-                        TypeNames.objectTypeNameFor(objectSpec),
-                        lookupConfig.getFieldNameSuffix())          // eg ""
-                )
-                .type(this.context.typeMapper.outputTypeFor(objectSpec))
-                .argument(GraphQLArgument.newArgument()
-                        .name(lookupConfig.getArgument())   // eg "object"
-                        .type(getGqlInputObjectType())
-                        .build())
-                .build();
-    }
-
-    public void addTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
         gqlObjectType = gqlObjectTypeBuilder.build();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlObjectType);
         meta.registerTypesInto(graphQLTypeRegistry);
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlInputObjectType);
+
     }
+
+    private GraphQLFieldDefinition buildFieldDefinition(GraphQLInputObjectType gqlInputObjectType) {
+        val lookupConfig = this.context.causewayConfiguration.getViewer().getGraphql().getLookup();
+        val objectSpec = getObjectSpecification();
+        val fieldName = String.format("%s%s%s",
+                lookupConfig.getFieldNamePrefix(),          // eg "_gqlv_lookup__"
+                TypeNames.objectTypeNameFor(objectSpec),
+                lookupConfig.getFieldNameSuffix());
+
+        return newFieldDefinition()
+                .name(fieldName)
+                .type(this.context.typeMapper.outputTypeFor(objectSpec))
+                .argument(GraphQLArgument.newArgument()
+                        .name(lookupConfig.getArgument())   // eg "object"
+                        .type(gqlInputObjectType)
+                        .build())
+                .build();
+    }
+
 
 
     private void addMembers() {
@@ -156,6 +165,15 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
 
 
     public void addDataFetchers() {
+
+        this.context.codeRegistryBuilder.dataFetcher(
+                holder.coordinatesFor(getLookupField()),
+                (DataFetcher<Object>) environment -> {
+                    Object target = environment.getArgument("object");
+                    return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService)
+                            .orElse(null);
+                });
+
         meta.addDataFetchers();
         properties.forEach((id, property) -> property.addDataFetcher());
         collections.forEach((id, collection) -> collection.addDataFetcher());
@@ -165,10 +183,6 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
 
     @Override
     public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", objectSpecification.getLogicalTypeName()));
-        }
         return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
@@ -176,6 +190,9 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
     @Override
     public String toString() {
         return objectSpecification.getLogicalTypeName();
+    }
+
+    public interface Holder extends GqlvHolder {
     }
 
 }

@@ -1,7 +1,6 @@
 package org.apache.causeway.viewer.graphql.viewer.toplevel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import graphql.schema.FieldCoordinates;
@@ -10,8 +9,6 @@ import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import org.apache.causeway.applib.id.HasLogicalType;
-import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -29,13 +26,10 @@ public class GqlvTopLevelMutation
 
     private final Context context;
 
-    @Getter final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
-
-    /**
-     * Built using {@link #buildMutationType()}
-     */
-    private GraphQLObjectType gqlObjectType;
+    @Getter
+    private final GraphQLObjectType objectType;
 
     private final List<GqlvMutationForAction> actions = new ArrayList<>();
     private final List<GqlvMutationForProperty> properties = new ArrayList<>();
@@ -57,29 +51,7 @@ public class GqlvTopLevelMutation
 
         });
 
-        buildMutationType();
-
-        addDataFetchers();
-    }
-
-
-
-    public GraphQLObjectType buildMutationType() {
-        if (gqlObjectType != null) {
-            throw new IllegalStateException("Mutation type has already been built");
-        }
-        return gqlObjectType = gqlObjectTypeBuilder.build();
-    }
-
-    /**
-     *
-     * @see #buildMutationType()
-     */
-    public GraphQLObjectType getGqlObjectType() {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException("Mutation type has not yet been built");
-        }
-        return gqlObjectType;
+        objectType = gqlObjectTypeBuilder.build();
     }
 
 
@@ -99,7 +71,7 @@ public class GqlvTopLevelMutation
 
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
+        return FieldCoordinates.coordinates(objectType, fieldDefinition);
     }
 
     public void addDataFetchers() {
