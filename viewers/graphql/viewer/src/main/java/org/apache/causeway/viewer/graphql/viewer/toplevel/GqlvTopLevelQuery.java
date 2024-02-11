@@ -9,7 +9,6 @@ import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
@@ -49,23 +48,18 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo -> {
-                                addDomainService(objectSpec, servicePojo, context);
+                                domainServices.add(new GqlvDomainService(this, objectSpec, servicePojo, context));
                             });
                     break;
             }
         });
 
-        // add lookup to top-level query
+        // add domain object lookup to top-level query
         for (GqlvDomainObject domainObject : this.domainObjects) {
             addField(domainObject.getLookupField());
         }
 
         objectType = objectTypeBuilder.build();
-    }
-
-
-    public void addDomainService(ObjectSpecification objectSpec, Object servicePojo, Context context) {
-        domainServices.add(new GqlvDomainService(this, objectSpec, servicePojo, context));
     }
 
 
