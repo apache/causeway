@@ -39,6 +39,33 @@ authentication.fallback.username
 
 
 |
+[[causeway.viewer.graphql.lookup.argument]]
+causeway.viewer.graphql.lookup. +
+argument
+
+|  object
+| null
+
+
+|
+[[causeway.viewer.graphql.lookup.field-name-prefix]]
+causeway.viewer.graphql.lookup. +
+field-name-prefix
+
+|  _gqlv_lookup__
+| Lookup field prefix
+
+
+|
+[[causeway.viewer.graphql.lookup.field-name-suffix]]
+causeway.viewer.graphql.lookup. +
+field-name-suffix
+
+| 
+| Lookup field suffix
+
+
+|
 [[causeway.viewer.graphql.meta-data.field-name]]
 causeway.viewer.graphql.meta-data. +
 field-name
@@ -57,18 +84,20 @@ target-arg-name
 
 
 |
-[[causeway.viewer.graphql.type-mapper.local-date-format]]
+[[causeway.viewer.graphql.scalar-marshaller.local-date-format]]
 causeway.viewer.graphql. +
-type-mapper.local-date-format
+scalar-marshaller. +
+local-date-format
 
 |  yyyy-MM-dd
 | For both JDK8's ``LocalDate`` and JodaTime's ``LocalDate``
 
 
 |
-[[causeway.viewer.graphql.type-mapper.zoned-date-time-format]]
+[[causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format]]
 causeway.viewer.graphql. +
-type-mapper.zoned-date-time-format
+scalar-marshaller. +
+zoned-date-time-format
 
 |  yyyy-MM-dd HH:mm:ss z
 | for JDK8's ``ZonedDateTime`` and JodaTime's ``DateTime``

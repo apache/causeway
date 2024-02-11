@@ -104,11 +104,7 @@ public class GqlvDomainObject implements GqlvAction.Holder, GqlvProperty.Holder,
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addProperty);
         objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
 
-        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                .filter(x -> x.getSemantics().isSafeInNature() ||
-                             variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT)
                 .forEach(objectAction -> {
                     actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
                 });

@@ -32,7 +32,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
  import org.apache.causeway.core.metamodel.object.ManagedObject;
  import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
- import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
  import org.apache.causeway.viewer.graphql.model.context.Context;
  import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;

@@ -1,0 +1,51 @@
+= SPI Services
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+The GraphQL viewer defines a couple of services that are intended to act as SPI hooks for more sophisticated implementations.
+The viewer does provide default implementations.
+
+== UserMementoProvider
+
+The xref:refguide:viewer:index/graphql/applib/auth/UserMementoProvider.adoc[] SPI is used to obtain the xref:refguide:applib:index/services/user/UserMemento.adoc[] -- in other words the identity -- of the client executing the API.
+
+The default (fallback) implementation simply uses a hard-coded value taken from the configuration:
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.username[causeway.viewer.graphql.authentication.fallback.username]
++
+The username of the client assumed to be making the GraphQL call.
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.roles[causeway.viewer.graphql.authentication.fallback.roles]
++
+Corresponding roles.
+May or may not be used, depending upon the security configuration.
+(For example, if xref:security:secman:about.adoc[] is in use, then the roles are defined by SecMan itself and this config property is ignored).
+
+In a production app, you might instead want to infer the client identity by hooking into the HTTP request parameters.
+See the Spring documentation on link:https://docs.spring.io/spring-graphql/reference/security.html[securing the GraphQL endpoint] and link:https://docs.spring.io/spring-graphql/reference/request-execution.html#execution.context[Context Propagation] for more details.
+
+
+== ScalarMarshaller
+
+The xref:refguide:viewer:index/graphql/applib/marshallers/ScalarMarshaller.adoc[] SPI provides an extension point for the marshalling of a given scalar value (eg an `int` or a `date`) between its Java and GraphQL datatype.
+The framework provides a number of default implementations, and these use a number of configuration properties:
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.local-date-format[causeway.viewer.graphql.scalar-marshaller.local-date-format].
++
+GraphQL does not have a built-in date datatype, and so must be represented as strings.
+This configuration property define the format of such a string for a local date.
++
+The default for local dates is "yyyy-MM-dd"
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format[causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format]
++
+GraphQL does not have a built-in date/time datatype, and so must be represented as strings.
+This configuration property define the format of such a string for a zoned date time.
++
+The default for a zoned date time is "yyyy-MM-dd HH:mm:ss z".
+
+The default implementations can be overridden if necessary by providing an equivalent implementation with an earlier `@Priority`.
+Additional scalar datatypes can be supporting by providing additional implementations.
+
+
