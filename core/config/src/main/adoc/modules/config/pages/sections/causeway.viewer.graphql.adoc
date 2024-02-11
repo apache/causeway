@@ -39,6 +39,33 @@ authentication.fallback.username
 
 
 |
+[[causeway.viewer.graphql.lookup.argument]]
+causeway.viewer.graphql.lookup. +
+argument
+
+|  object
+| null
+
+
+|
+[[causeway.viewer.graphql.lookup.field-name-prefix]]
+causeway.viewer.graphql.lookup. +
+field-name-prefix
+
+|  _gqlv_lookup__
+| Lookup field prefix
+
+
+|
+[[causeway.viewer.graphql.lookup.field-name-suffix]]
+causeway.viewer.graphql.lookup. +
+field-name-suffix
+
+| 
+| Lookup field suffix
+
+
+|
 [[causeway.viewer.graphql.meta-data.field-name]]
 causeway.viewer.graphql.meta-data. +
 field-name

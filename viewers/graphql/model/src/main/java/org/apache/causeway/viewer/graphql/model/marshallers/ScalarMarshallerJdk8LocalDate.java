@@ -39,17 +39,17 @@ import org.springframework.stereotype.Component;
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerJdk8LocalDate extends ScalarMarshallerAbstract<LocalDate> {
 
-    private final CausewayConfiguration.Viewer.Graphql.TypeMapper typeMapperConfig;
+    private final CausewayConfiguration.Viewer.Graphql.ScalarMarshaller scalarMarshallerConfig;
 
     @Inject
     public ScalarMarshallerJdk8LocalDate(final CausewayConfiguration causewayConfiguration) {
         super(LocalDate.class, Scalars.GraphQLString, causewayConfiguration);
-        typeMapperConfig = causewayConfiguration.getViewer().getGraphql().getTypeMapper();
+        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
     }
 
     @Override
     public LocalDate unmarshal(Object graphValue, Class<?> targetType) {
         String argumentStr = (String) graphValue;
-        return LocalDate.parse(argumentStr, DateTimeFormatter.ofPattern(typeMapperConfig.getLocalDateFormat()));
+        return LocalDate.parse(argumentStr, DateTimeFormatter.ofPattern(scalarMarshallerConfig.getLocalDateFormat()));
     }
 }

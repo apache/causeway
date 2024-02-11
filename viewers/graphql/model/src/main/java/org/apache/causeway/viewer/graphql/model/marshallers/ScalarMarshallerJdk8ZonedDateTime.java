@@ -38,17 +38,17 @@ import org.springframework.stereotype.Component;
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerJdk8ZonedDateTime extends ScalarMarshallerAbstract<ZonedDateTime> {
 
-    private final CausewayConfiguration.Viewer.Graphql.TypeMapper typeMapperConfig;
+    private final CausewayConfiguration.Viewer.Graphql.ScalarMarshaller scalarMarshallerConfig;
 
     @Inject
     public ScalarMarshallerJdk8ZonedDateTime(final CausewayConfiguration causewayConfiguration) {
         super(ZonedDateTime.class, Scalars.GraphQLString, causewayConfiguration);
-        typeMapperConfig = causewayConfiguration.getViewer().getGraphql().getTypeMapper();
+        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
     }
 
     @Override
     public ZonedDateTime unmarshal(Object graphValue, Class<?> targetType) {
         String argumentStr = (String) graphValue;
-        return ZonedDateTime.parse(argumentStr, DateTimeFormatter.ofPattern(typeMapperConfig.getZonedDateTimeFormat()));
+        return ZonedDateTime.parse(argumentStr, DateTimeFormatter.ofPattern(scalarMarshallerConfig.getZonedDateTimeFormat()));
     }
 }

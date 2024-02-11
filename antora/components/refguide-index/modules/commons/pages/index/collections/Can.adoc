@@ -16,7 +16,9 @@ Same idiomatic convention applies: References to xref:refguide:commons:index/col
 ----
 interface Can<T> {
   Optional<T> get(int elementIndex)     // <.>
+  Optional<T> getRelativeToLast(int offset)     // <.>
   T getElseFail(int elementIndex)     // <.>
+  T getRelativeToLastElseFail(int offset)     // <.>
   int compareTo(Can<T> o)     // <.>
   Optional<T> getFirst()     // <.>
   T getFirstElseFail()     // <.>
@@ -54,6 +56,7 @@ interface Can<T> {
   Can<T> remove(T element)
   Can<T> pickByIndex(int... indices)     // <.>
   Can<T> pickByIndex(IntStream intStream)     // <.>
+  Can<T> subCan(int startInclusive)     // <.>
   Can<T> subCan(int startInclusive, int endExclusive)     // <.>
   Can<Can<T>> partitionInnerBound(int maxInnerSize)     // <.>
   Can<Can<T>> partitionOuterBound(int outerSizeYield)     // <.>
@@ -79,12 +82,22 @@ interface Can<T> {
 <.> xref:#get_int[get(int)]
 +
 --
-Will only ever return an empty Optional, if the elementIndex is out of bounds.
+Will (only ever) return an empty _Optional_ , if the elementIndex is out of bounds.
+--
+<.> xref:#getRelativeToLast_int[getRelativeToLast(int)]
++
+--
+Shortcut for _get(this.size() - 1 - (-offset))_
 --
 <.> xref:#getElseFail_int[getElseFail(int)]
 +
 --
 Shortcut to _get(elementIndex).orElseThrow(...)_
+--
+<.> xref:#getRelativeToLastElseFail_int[getRelativeToLastElseFail(int)]
++
+--
+Shortcut for _getElseFail(this.size() - 1 - (-offset))_
 --
 <.> xref:#compareTo_Can[compareTo(Can)]
 +
@@ -228,10 +241,15 @@ Given _n_ indices, returns an equivalent of(where nulls are being ignored)
 --
 Returns a xref:refguide:commons:index/collections/Can.adoc[Can] that is made of the elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , picked by index using the given _IntStream_ (in the order of picking).
 --
+<.> xref:#subCan_int[subCan(int)]
++
+--
+Returns a sub- xref:refguide:commons:index/collections/Can.adoc[Can] that is made of elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , starting with indices from _startInclusive_ .
+--
 <.> xref:#subCan_int_int[subCan(int, int)]
 +
 --
-Returns a sub- xref:refguide:commons:index/collections/Can.adoc[Can] that is made of elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , when selected by those indices, that result from given range _endExclusive)_ .
+Returns a sub- xref:refguide:commons:index/collections/Can.adoc[Can] that is made of elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , when selected by indices from given range _[startInclusive, endExclusive)_ .
 --
 <.> xref:#partitionInnerBound_int[partitionInnerBound(int)]
 +
@@ -272,7 +290,12 @@ Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elem
 [#get_int]
 === get(int)
 
-Will only ever return an empty Optional, if the elementIndex is out of bounds.
+Will (only ever) return an empty _Optional_ , if the elementIndex is out of bounds.
+
+[#getRelativeToLast_int]
+=== getRelativeToLast(int)
+
+Shortcut for _get(this.size() - 1 - (-offset))_
 
 [#getElseFail_int]
 === getElseFail(int)
@@ -280,6 +303,11 @@ Will only ever return an empty Optional, if the elementIndex is out of bounds.
 Shortcut to _get(elementIndex).orElseThrow(...)_
 
 Will only ever throw, if the elementIndex is out of bounds.
+
+[#getRelativeToLastElseFail_int]
+=== getRelativeToLastElseFail(int)
+
+Shortcut for _getElseFail(this.size() - 1 - (-offset))_
 
 [#compareTo_Can]
 === compareTo(Can)
@@ -459,10 +487,17 @@ Returns a xref:refguide:commons:index/collections/Can.adoc[Can] that is made of 
 
 Out of bounds picking is simply ignored.
 
+[#subCan_int]
+=== subCan(int)
+
+Returns a sub- xref:refguide:commons:index/collections/Can.adoc[Can] that is made of elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , starting with indices from _startInclusive_ .
+
+Out of bounds picking is simply ignored.
+
 [#subCan_int_int]
 === subCan(int, int)
 
-Returns a sub- xref:refguide:commons:index/collections/Can.adoc[Can] that is made of elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , when selected by those indices, that result from given range _endExclusive)_ .
+Returns a sub- xref:refguide:commons:index/collections/Can.adoc[Can] that is made of elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , when selected by indices from given range _[startInclusive, endExclusive)_ .
 
 Out of bounds picking is simply ignored.
 

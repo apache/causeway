@@ -13,27 +13,33 @@ class DataTable {
   DataTable(ObjectSpecification elementType, Can<? extends ObjectAssociation> dataColumns)     // <.>
   DataTable(ObjectSpecification elementType, String tableFriendlyName, Can<? extends ObjectAssociation> dataColumns, Can<ManagedObject> dataElements)
   DataTable forDomainType(Class<?> domainType)     // <.>
-  void setDataElements(Can<ManagedObject> dataElements)
   String getLogicalName()     // <.>
   int getElementCount()     // <.>
   Stream<ManagedObject> streamDataElements()
+  DataTable addDataElementsFrom(DataTable otherTable)     // <.>
+  DataTable setDataElements(Iterable<ManagedObject> dataElements)     // <.>
+  void setDataElementPojos(Iterable<?> dataElementPojos)     // <.>
+  DataTable populateEntities()     // <.>
+  DataTable populateEntities(Query<?> query)     // <.>
+  DataTable visit(CellVisitor visitor)
+  DataTable visit(CellVisitor visitor, Predicate<DataColumn> columnFilter)
 }
 ----
 
 <.> xref:#DataTable_ObjectSpecification[DataTable(ObjectSpecification)]
 +
 --
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
 --
 <.> xref:#DataTable_ObjectSpecification_Can[DataTable(ObjectSpecification, Can)]
 +
 --
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
 --
 <.> xref:#forDomainType_Class[forDomainType(Class)]
 +
 --
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
 --
 <.> xref:#getLogicalName_[getLogicalName()]
 +
@@ -45,23 +51,48 @@ Unique within application scope, can act as an id.
 --
 Count data rows.
 --
+<.> xref:#addDataElementsFrom_DataTable[addDataElementsFrom(DataTable)]
++
+--
+Adds all data-elements from the other table to this table.
+--
+<.> xref:#setDataElements_Iterable[setDataElements(Iterable)]
++
+--
+Sets the data-elements of this table, which make up the rows of this table.
+--
+<.> xref:#setDataElementPojos_Iterable[setDataElementPojos(Iterable)]
++
+--
+Sets the data-elements of this table from given pojos, that are adapted to xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] (s).
+--
+<.> xref:#populateEntities_[populateEntities()]
++
+--
+Populates this table from the underlying (default) persistence layer.
+--
+<.> xref:#populateEntities_Query[populateEntities(Query)]
++
+--
+Populates this table from the underlying (default) persistence layer, using given xref:refguide:applib:index/query/Query.adoc[Query] to refine the result.
+--
 
 == Members
 
 [#DataTable_ObjectSpecification]
 === DataTable(ObjectSpecification)
 
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
 
 [#DataTable_ObjectSpecification_Can]
 === DataTable(ObjectSpecification, Can)
 
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
 
 [#forDomainType_Class]
 === forDomainType(Class)
 
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Can)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
 
 [#getLogicalName_]
 === getLogicalName()
@@ -72,3 +103,28 @@ Unique within application scope, can act as an id.
 === getElementCount()
 
 Count data rows.
+
+[#addDataElementsFrom_DataTable]
+=== addDataElementsFrom(DataTable)
+
+Adds all data-elements from the other table to this table.
+
+[#setDataElements_Iterable]
+=== setDataElements(Iterable)
+
+Sets the data-elements of this table, which make up the rows of this table.
+
+[#setDataElementPojos_Iterable]
+=== setDataElementPojos(Iterable)
+
+Sets the data-elements of this table from given pojos, that are adapted to xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] (s).
+
+[#populateEntities_]
+=== populateEntities()
+
+Populates this table from the underlying (default) persistence layer.
+
+[#populateEntities_Query]
+=== populateEntities(Query)
+
+Populates this table from the underlying (default) persistence layer, using given xref:refguide:applib:index/query/Query.adoc[Query] to refine the result.

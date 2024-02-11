@@ -37,17 +37,17 @@ import org.springframework.stereotype.Component;
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerJodaDateTime extends ScalarMarshallerAbstract<DateTime> {
 
-    private final CausewayConfiguration.Viewer.Graphql.TypeMapper typeMapperConfig;
+    private final CausewayConfiguration.Viewer.Graphql.ScalarMarshaller scalarMarshallerConfig;
 
     @Inject
     public ScalarMarshallerJodaDateTime(final CausewayConfiguration causewayConfiguration) {
         super(DateTime.class, Scalars.GraphQLString, causewayConfiguration);
-        typeMapperConfig = causewayConfiguration.getViewer().getGraphql().getTypeMapper();
+        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
     }
 
     @Override
     public DateTime unmarshal(Object graphValue, Class<?> targetType) {
         String argumentStr = (String) graphValue;
-        return DateTime.parse(argumentStr, org.joda.time.format.DateTimeFormat.forPattern(typeMapperConfig.getLocalDateFormat()));
+        return DateTime.parse(argumentStr, org.joda.time.format.DateTimeFormat.forPattern(scalarMarshallerConfig.getLocalDateFormat()));
     }
 }

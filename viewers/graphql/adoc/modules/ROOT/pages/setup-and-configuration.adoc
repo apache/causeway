@@ -71,20 +71,21 @@ May or may not be used, depending upon the security configuration.
 
 
 
-=== TypeMapper
+=== ScalarMarshaller
 
-The purpose of the xref:refguide:viewer:index/graphql/applib/types/TypeMapper.adoc[] SPI is to provide an extension point for the marshalling of datatypes.
+The purpose of the xref:refguide:viewer:index/graphql/applib/marshallers/ScalarMarshaller.adoc[] SPI is to provide an extension point for the marshalling of scalar values.
 
-The default implementation uses a number of configuration properties:
+Each marshaller is responsible for marshalling a given scalar between its Java and GraphQL datatype.
+The framework provides a number of default implementations; these use a number of configuration properties:
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.type-mapper.local-date-format[causeway.viewer.graphql.type-mapper.local-date-format].
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.local-date-format[causeway.viewer.graphql.scalar-marshaller.local-date-format].
 +
 GraphQL does not have a built-in date datatype, and so must be represented as strings.
 This configuration property define the format of such a string for a local date.
 +
 The default for local dates is "yyyy-MM-dd"
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.type-mapper.zoned-date-time-format[causeway.viewer.graphql.type-mapper.zoned-date-time-format]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format[causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format]
 +
 GraphQL does not have a built-in date/time datatype, and so must be represented as strings.
 This configuration property define the format of such a string for a zoned date time.
@@ -92,7 +93,8 @@ This configuration property define the format of such a string for a zoned date 
 The default for a zoned date time is "yyyy-MM-dd HH:mm:ss z".
 
 
-The default implementation does cover the most common data types, so it may not be necessary to override this implementation; but the option is there if required.
+The default implementations can be overridden if necessary by providing an equivalent implementation with an earlier `@Priority`.
+Additional scalar datatypes can be supporting by providing additional implementations.
 
 
 
