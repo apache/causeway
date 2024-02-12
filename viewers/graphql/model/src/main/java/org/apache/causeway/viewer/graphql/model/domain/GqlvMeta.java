@@ -44,10 +44,10 @@ import lombok.val;
 
 public class GqlvMeta extends GqlvAbstractCustom {
 
-    static GraphQLFieldDefinition id = newFieldDefinition().name("id").type(nonNull(Scalars.GraphQLString)).build();
     static GraphQLFieldDefinition logicalTypeName = newFieldDefinition().name("logicalTypeName").type(nonNull(Scalars.GraphQLString)).build();
     static GraphQLFieldDefinition version = newFieldDefinition().name("version").type(Scalars.GraphQLString).build();
 
+    private final GqlvMetaId metaId;
     private final Holder holder;
 
     public GqlvMeta(
@@ -58,8 +58,9 @@ public class GqlvMeta extends GqlvAbstractCustom {
 
         this.holder = holder;
 
+        metaId = new GqlvMetaId(context);
+        addChildField(metaId.getField());
 
-        addChildField(id);
         addChildField(logicalTypeName);
         if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             addChildField(version);
@@ -71,13 +72,14 @@ public class GqlvMeta extends GqlvAbstractCustom {
 
     @Override
     protected void addDataFetchersForChildren() {
+        metaId.addDataFetcher(this);
+//        context.codeRegistryBuilder.dataFetcher(
+//                coordinates(getGqlObjectType(), metaId.getField()),
+//                (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
+
         context.codeRegistryBuilder.dataFetcher(
                 coordinates(getGqlObjectType(), logicalTypeName),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().logicalTypeName());
-
-        context.codeRegistryBuilder.dataFetcher(
-                coordinates(getGqlObjectType(), id),
-                (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
 
         if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             context.codeRegistryBuilder.dataFetcher(
