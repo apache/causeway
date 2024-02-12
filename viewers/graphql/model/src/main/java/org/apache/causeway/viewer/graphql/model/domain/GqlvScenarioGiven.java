@@ -27,7 +27,7 @@ public class GqlvScenarioGiven
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(new GqlvDomainObject(objectSpec, context));
+                    domainObjects.add(GqlvDomainObject.of(objectSpec, context));
 
                     break;
             }

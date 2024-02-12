@@ -73,7 +73,7 @@ public class GqlvDomainObject
         return domainObjectBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(spec, context));
     }
 
-    public GqlvDomainObject(
+    private GqlvDomainObject(
             final ObjectSpecification objectSpecification,
             final Context context) {
         super(TypeNames.objectTypeNameFor(objectSpecification), context);

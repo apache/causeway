@@ -1,11 +1,9 @@
 package org.apache.causeway.viewer.graphql.model.toplevel;
 
-import graphql.schema.GraphQLObjectType;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static graphql.schema.GraphQLObjectType.newObject;
+import graphql.schema.GraphQLObjectType;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
@@ -21,7 +19,7 @@ public class GqlvTopLevelQuery
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
-//    private final GqlvScenario scenario;
+    private final GqlvScenario scenario;
 
     public GqlvTopLevelQuery(final Context context) {
         super("Query", context);
@@ -33,7 +31,7 @@ public class GqlvTopLevelQuery
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(new GqlvDomainObject(objectSpec, context));
+                    domainObjects.add(GqlvDomainObject.of(objectSpec, context));
 
                     break;
             }
@@ -58,8 +56,8 @@ public class GqlvTopLevelQuery
             addChildField(domainObject.getLookupField());
         }
 
-//        scenario = new GqlvScenario(this, context);
-//        addChildField(scenario.getField());
+        scenario = new GqlvScenario(context);
+        addChildField(scenario.getField());
 
         buildObjectType();
     }
@@ -81,6 +79,6 @@ public class GqlvTopLevelQuery
 
         domainObjects.forEach(domainObject -> domainObject.addDataFetchers(this));
 
-//        scenario.addDataFetchers(this);
+        scenario.addDataFetchers(this);
     }
 }
