@@ -9,16 +9,18 @@ import graphql.schema.DataFetchingEnvironment;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-public class GqlvScenarioGiven
+public class GqlvScenarioStep
         extends GqlvAbstractCustom
         implements Parent {
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
-    public GqlvScenarioGiven(
+    public GqlvScenarioStep(
+            final String typeName,
+            final String fieldName,
             final Context context) {
-        super("Given", context);
+        super(typeName, context);
 
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
@@ -49,7 +51,7 @@ public class GqlvScenarioGiven
             addChildField(domainObject.getField());
         }
 
-        buildObjectTypeAndField("Given");
+        buildObjectTypeAndField(fieldName);
     }
 
 
@@ -68,6 +70,5 @@ public class GqlvScenarioGiven
     protected DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
         return environment;
     }
-
 
 }

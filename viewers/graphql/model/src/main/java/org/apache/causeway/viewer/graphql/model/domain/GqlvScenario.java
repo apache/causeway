@@ -34,7 +34,7 @@ public class GqlvScenario
     public static final String KEY_SCENARIO_NAME = String.format("%s#%s", GqlvScenario.class.getName(), "name");
 
     private final GqlvScenarioName scenarioName;
-    private final GqlvScenarioGiven scenarioGiven;
+    private final GqlvScenarioStep scenarioGiven;
 
     public GqlvScenario(
             final Context context) {
@@ -42,7 +42,7 @@ public class GqlvScenario
 
         this.scenarioName = new GqlvScenarioName(context);
         addChildField(scenarioName.getField());
-        this.scenarioGiven = new GqlvScenarioGiven(context);
+        this.scenarioGiven = new GqlvScenarioStep("Given", "Given", context);
         addChildField(scenarioGiven.getField());
 
         buildObjectType();
