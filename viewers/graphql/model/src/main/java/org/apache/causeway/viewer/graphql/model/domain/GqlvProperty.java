@@ -64,7 +64,7 @@ public class GqlvProperty
             final Holder holder,
             final OneToOneAssociation oneToOneAssociation,
             final Context context) {
-        super(holder, oneToOneAssociation, newObject().name(TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation)), context);
+        super(holder, oneToOneAssociation, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
         addChildField(hidden.getField());

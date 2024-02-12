@@ -17,15 +17,13 @@ public class GqlvTopLevelQuery
         extends GqlvAbstractCustom
         implements GqlvDomainService.Holder, GqlvDomainObject.Holder, GqlvScenario.Holder {
 
-    private static final String OBJECT_TYPE_NAME = "Query";
-
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
 //    private final GqlvScenario scenario;
 
     public GqlvTopLevelQuery(final Context context) {
-        super(newObject().name(OBJECT_TYPE_NAME), context);
+        super("Query", context);
 
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
@@ -60,7 +58,7 @@ public class GqlvTopLevelQuery
         }
 
 //        scenario = new GqlvScenario(this, context);
-//        addField(scenario.getField());
+//        addChildField(scenario.getField());
 
         buildObjectType();
     }

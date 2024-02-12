@@ -27,7 +27,7 @@ public class GqlvTopLevelMutation
     private final List<GqlvMutationForProperty> properties = new ArrayList<>();
 
     public GqlvTopLevelMutation(final Context context) {
-        super(newObject().name("Mutation"), context);
+        super("Mutation", context);
 
         val objectSpecifications = context.objectSpecifications();
 

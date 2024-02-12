@@ -55,7 +55,7 @@ public class GqlvActionParams
     public GqlvActionParams(
             final Holder holder,
             final Context context) {
-        super(newObject().name(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction())), context);
+        super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction()), context);
         this.holder = holder;
 
         val idx = new AtomicInteger(0);

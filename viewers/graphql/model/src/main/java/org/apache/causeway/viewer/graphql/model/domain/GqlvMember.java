@@ -37,10 +37,10 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
     public GqlvMember(
             final H holder,
             final T objectMember,
-            final GraphQLObjectType.Builder gqlObjectTypeBuilder,
+            final String typeName,
             final Context context
     ) {
-        super(gqlObjectTypeBuilder, context);
+        super(typeName, context);
         this.holder = holder;
         this.objectMember = objectMember;
     }

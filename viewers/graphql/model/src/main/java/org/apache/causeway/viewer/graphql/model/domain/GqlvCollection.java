@@ -40,7 +40,7 @@ public class GqlvCollection
             final Holder holder,
             final OneToManyAssociation oneToManyAssociation,
             final Context context) {
-        super(holder, oneToManyAssociation, newObject().name(TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation)), context);
+        super(holder, oneToManyAssociation, TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
         addChildField(hidden.getField());

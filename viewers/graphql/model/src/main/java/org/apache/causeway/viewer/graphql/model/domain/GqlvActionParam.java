@@ -75,7 +75,7 @@ public class GqlvActionParam
             final ObjectActionParameter objectActionParameter,
             final Context context,
             final int paramNum) {
-        super(newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter)), context);
+        super(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter), context);
         this.holder = holder;
         this.objectActionParameter = objectActionParameter;
         this.paramNum = paramNum;

@@ -59,7 +59,7 @@ public class GqlvDomainService
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
-        super(newObject().name(TypeNames.objectTypeNameFor(objectSpecification)), context);
+        super(TypeNames.objectTypeNameFor(objectSpecification), context);
         this.holder = holder;
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;

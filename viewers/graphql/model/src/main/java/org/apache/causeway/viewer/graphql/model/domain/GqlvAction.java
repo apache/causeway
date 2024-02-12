@@ -73,7 +73,7 @@ public class GqlvAction
             final Holder holder,
             final ObjectAction objectAction,
             final Context context) {
-        super(holder, objectAction, newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction)), context);
+        super(holder, objectAction, TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
         addChildField(hidden.getField());

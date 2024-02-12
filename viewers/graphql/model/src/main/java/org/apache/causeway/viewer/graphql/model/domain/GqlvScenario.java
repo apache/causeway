@@ -46,7 +46,7 @@ public class GqlvScenario
     public GqlvScenario(
             final GqlvScenario.Holder holder,
             final Context context) {
-        super(newObject().name("Scenario"), context);
+        super("Scenario", context);
         this.holder = holder;
 
         this.scenarioPojo = context.serviceRegistry.lookupService(Scenario.class).orElseThrow();

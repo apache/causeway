@@ -29,9 +29,9 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
     public GqlvAssociation(
             final H holder,
             final T objectAssociation,
-            final GraphQLObjectType.Builder gqlObjectTypeBuilder,
+            final String typeName,
             final Context context) {
-        super(holder, objectAssociation, gqlObjectTypeBuilder, context);
+        super(holder, objectAssociation, typeName, context);
     }
 
 

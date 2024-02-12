@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.graphql.model.registry;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import graphql.schema.GraphQLInputObjectType;
@@ -108,6 +109,16 @@ public class GraphQLTypeRegistry {
                 .filter(o -> o.getClass().isAssignableFrom(cls))
                 .map(cls::cast)
                 .anyMatch(ot -> ot.getName().equals(typeToAdd.getName()));
+    }
+
+    public <T extends GraphQLNamedType> Optional<T> lookup(
+            final String typeName,
+            final Class<T> cls) {
+        return graphQLTypes.stream()
+                .filter(o -> o.getClass().isAssignableFrom(cls))
+                .map(cls::cast)
+                .filter(ot -> ot.getName().equals(typeName))
+                .findFirst();
     }
 
 

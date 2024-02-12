@@ -52,7 +52,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
             final Holder holder,
             final Context context
     ) {
-        super(newObject().name(TypeNames.metaTypeNameFor(holder.getObjectSpecification())), context);
+        super(TypeNames.metaTypeNameFor(holder.getObjectSpecification()), context);
 
         this.holder = holder;
 

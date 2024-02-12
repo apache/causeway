@@ -13,8 +13,6 @@ public class GqlvScenarioGiven
         extends GqlvAbstractCustom
         implements GqlvDomainService.Holder, GqlvDomainObject.Holder {
 
-    private static final String OBJECT_TYPE_NAME = "Given";
-
     private final Holder holder;
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
@@ -23,7 +21,7 @@ public class GqlvScenarioGiven
     public GqlvScenarioGiven(
             final GqlvScenarioGiven.Holder holder,
             final Context context) {
-        super(newObject().name(OBJECT_TYPE_NAME), context);
+        super("Given", context);
 
         this.holder = holder;
 

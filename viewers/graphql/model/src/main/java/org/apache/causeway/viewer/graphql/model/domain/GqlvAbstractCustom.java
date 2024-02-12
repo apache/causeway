@@ -31,9 +31,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
 
+import java.util.Optional;
+
 public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHolder {
 
     protected final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+    private final String typeName;
 
     @Getter(AccessLevel.PROTECTED)
     private GraphQLObjectType gqlObjectType;
@@ -42,22 +45,45 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHol
             final GraphQLObjectType.Builder gqlObjectTypeBuilder,
             final Context context) {
         super(context);
+        typeName = null; // TODO - remove this constructor
 
         this.gqlObjectTypeBuilder = gqlObjectTypeBuilder;
     }
 
-    protected final GraphQLFieldDefinition addChildField(GraphQLFieldDefinition childField) {
-        if (this.gqlObjectType != null) {
-            throw new IllegalStateException("GqlObjectType has already been created");
+    protected GqlvAbstractCustom(
+            final String typeName,
+            final Context context) {
+        super(context);
+        this.typeName = typeName;
+        Optional<GraphQLObjectType> typeIfAny =
+                context.graphQLTypeRegistry.lookup(typeName, GraphQLObjectType.class);
+        if(typeIfAny.isPresent()) {
+            this.gqlObjectType = typeIfAny.get();
+            this.gqlObjectTypeBuilder = null;
+        } else {
+            this.gqlObjectTypeBuilder = newObject().name(typeName);
+        }
+    }
+
+    public boolean isBuilt() {
+        return gqlObjectType != null;
+    }
+
+    protected final void addChildField(GraphQLFieldDefinition childField) {
+        if (isBuilt()) {
+            return;
         }
 
         if (childField != null) {
             gqlObjectTypeBuilder.field(childField);
         }
-        return childField;
     }
 
     protected void buildObjectTypeAndField(String fieldName) {
+        if (isBuilt()) {
+            return;
+        }
+
         val graphQLObjectType = buildObjectType();
 
         setField(newFieldDefinition()
@@ -67,12 +93,18 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHol
     }
 
     protected final GraphQLObjectType buildObjectType() {
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
-        context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(this.gqlObjectType);
+        if (!isBuilt()) {
+            this.gqlObjectType = gqlObjectTypeBuilder.build();
+            context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(this.gqlObjectType);
+        }
         return this.gqlObjectType;
     }
 
     public final FieldCoordinates coordinatesFor(final GraphQLFieldDefinition field) {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(
+                    String.format("GQL Object Type for '%s' not yet built", typeName));
+        }
         return FieldCoordinates.coordinates(gqlObjectType, field);
     }
 
