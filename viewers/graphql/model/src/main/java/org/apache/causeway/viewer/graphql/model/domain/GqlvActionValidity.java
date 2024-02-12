@@ -71,11 +71,11 @@ public class GqlvActionValidity extends GqlvAbstract {
     public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                this::validate
+                this::fetchData
         );
     }
 
-    private Object validate(final DataFetchingEnvironment dataFetchingEnvironment) {
+    private Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         final ObjectAction objectAction = holder.getObjectAction();
 

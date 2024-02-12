@@ -25,6 +25,7 @@ import java.util.TreeMap;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
@@ -159,16 +160,18 @@ public class GqlvDomainObject
 
         this.context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getLookupField()),
-                (DataFetcher<Object>) environment -> {
-                    Object target = environment.getArgument("object");
-                    return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService)
-                            .orElse(null);
-                });
+                this::fetchData);
 
         meta.addDataFetchers(this);
         properties.forEach((id, property) -> property.addDataFetcher(this));
         collections.forEach((id, collection) -> collection.addDataFetcher(this));
         actions.forEach((id, action) -> action.addDataFetcher(this));
+    }
+
+    private Object fetchData(DataFetchingEnvironment environment) {
+        Object target = environment.getArgument("object");
+        return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService)
+                .orElse(null);
     }
 
 

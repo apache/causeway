@@ -77,13 +77,13 @@ public class GqlvPropertyChoices extends GqlvAbstract {
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
                         parent.coordinatesFor(getField()),
-                        this::choices);
+                        this::fetchData);
 
                 break;
         }
     }
 
-    List<Object> choices(final DataFetchingEnvironment dataFetchingEnvironment) {
+    List<Object> fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

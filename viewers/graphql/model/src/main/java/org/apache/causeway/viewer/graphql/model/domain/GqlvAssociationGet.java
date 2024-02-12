@@ -69,14 +69,14 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
 
                 context.codeRegistryBuilder.dataFetcher(
                         parent.coordinatesFor(getField()),
-                        this::get);
+                        this::fetchData);
 
                 break;
 
         }
     }
 
-    Object get(final DataFetchingEnvironment dataFetchingEnvironment) {
+    Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         // TODO: introduce evaluator
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);

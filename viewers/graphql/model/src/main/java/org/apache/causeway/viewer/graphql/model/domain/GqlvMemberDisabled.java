@@ -55,11 +55,11 @@ public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
     public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                this::disabled
+                this::fetchData
         );
     }
 
-    private String disabled(
+    private String fetchData(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);

@@ -79,13 +79,13 @@ public class GqlvPropertySet extends GqlvAbstract {
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
                         parent.coordinatesFor(getField()),
-                        this::set);
+                        this::fetchData);
 
                 break;
         }
     }
 
-    Object set(final DataFetchingEnvironment dataFetchingEnvironment) {
+    Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

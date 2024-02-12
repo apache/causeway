@@ -60,7 +60,7 @@ public class GqlvScenarioGiven
     public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment -> environment);
+                GqlvScenarioGiven::fetchData);
 
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
@@ -70,6 +70,10 @@ public class GqlvScenarioGiven
         });
 
         domainObjects.forEach(domainObject -> domainObject.addDataFetchers(this));
+    }
+
+    private static DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
+        return environment;
     }
 
 

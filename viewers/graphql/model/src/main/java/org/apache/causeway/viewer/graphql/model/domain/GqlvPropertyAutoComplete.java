@@ -81,13 +81,13 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
                         parent.coordinatesFor(getField()),
-                        this::autoComplete);
+                        this::fetchData);
 
                 break;
         }
     }
 
-    List<Object> autoComplete(final DataFetchingEnvironment dataFetchingEnvironment) {
+    List<Object> fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

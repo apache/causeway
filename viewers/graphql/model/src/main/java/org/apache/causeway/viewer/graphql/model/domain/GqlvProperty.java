@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 
@@ -27,6 +28,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
@@ -135,7 +137,7 @@ public class GqlvProperty
     public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(context.bookmarkService));
+                this::fetchData);
 
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
@@ -150,6 +152,10 @@ public class GqlvProperty
         if (set != null) {
             set.addDataFetcher(this);
         }
+    }
+
+    private Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 
 

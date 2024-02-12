@@ -118,11 +118,11 @@ public class GqlvMutationForAction extends GqlvAbstract {
     public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                this::invoke
+                this::fetchData
         );
     }
 
-    private Object invoke(final DataFetchingEnvironment dataFetchingEnvironment) {
+    private Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val isService = objectSpec.getBeanSort().isManagedBeanContributing();
 

@@ -70,7 +70,7 @@ As well as setting the above configuration options, it's also neceesary to run t
 +
 [source,bash]
 ----
-mvn dependency:get -DgroupId=org.springframework -DartifactId=spring-instrument -Dversion=XXX
+mvn dependency:fetchData -DgroupId=org.springframework -DartifactId=spring-instrument -Dversion=XXX
 ----
 =
 changing "XXX" to the value that `${spring-framework.version}` resolves to, from the Causeway parent `pom.xml`.

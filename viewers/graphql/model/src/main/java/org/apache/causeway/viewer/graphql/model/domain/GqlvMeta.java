@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.FieldCoordinates.coordinates;
@@ -36,6 +37,7 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
 import lombok.val;
@@ -72,10 +74,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
 
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment ->
-                    context.bookmarkService.bookmarkFor(environment.getSource())
-                        .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
-                        .orElseThrow());
+                this::fetchData);
 
         context.codeRegistryBuilder.dataFetcher(
                 coordinates(getGqlObjectType(), logicalTypeName),
@@ -91,6 +90,18 @@ public class GqlvMeta extends GqlvAbstractCustom {
                     (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());
         }
     }
+
+    private Fetcher fetchData(DataFetchingEnvironment environment) {
+        return context.bookmarkService.bookmarkFor(environment.getSource())
+                .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
+                .orElseThrow();
+    }
+
+    // TODO: probably equivalent of:
+//    private Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+//        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+//    }
+
 
 
     /**

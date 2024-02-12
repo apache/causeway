@@ -81,11 +81,11 @@ package org.apache.causeway.viewer.graphql.model.domain;
      public void addDataFetcher(Parent parent) {
          context.codeRegistryBuilder.dataFetcher(
                  parent.coordinatesFor(getField()),
-                 this::choices
+                 this::fetchData
          );
      }
 
-     private List<Object> choices(final DataFetchingEnvironment dataFetchingEnvironment) {
+     private List<Object> fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
          val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
          val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());

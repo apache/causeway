@@ -67,14 +67,16 @@ public class GqlvScenario
     public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment -> {
-                    String scenarioName = environment.getArgument("name");
-                    environment.getGraphQlContext().put(KEY_SCENARIO_NAME, scenarioName);
-                    return environment;
-                });
+                this::fetchData);
 
         scenarioName.addDataFetchers(this);
         scenarioGiven.addDataFetchers(this);
+    }
+
+    private DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
+        String scenarioName = environment.getArgument("name");
+        environment.getGraphQlContext().put(KEY_SCENARIO_NAME, scenarioName);
+        return environment;
     }
 
 }

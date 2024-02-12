@@ -55,11 +55,11 @@ public class GqlvMemberHidden<T extends ObjectMember> extends GqlvAbstract {
     public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                this::hidden
+                this::fetchData
         );
     }
 
-    private boolean hidden(
+    private boolean fetchData(
             final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);

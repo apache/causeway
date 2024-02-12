@@ -61,11 +61,11 @@ public class GqlvActionParamDisabled extends GqlvAbstract {
     public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                this::disabled
+                this::fetchData
         );
     }
 
-    private String disabled(final DataFetchingEnvironment dataFetchingEnvironment) {
+    private String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());

@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
@@ -97,11 +98,15 @@ public class GqlvActionParams
     void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(context.bookmarkService));
+                this::fetchData);
 
         params.forEach((id, param) -> param.addDataFetcher(this));
     }
 
+
+    private Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+    }
 
     @Override
     public void addGqlArguments(

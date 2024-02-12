@@ -29,6 +29,8 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import lombok.Getter;
 import lombok.val;
 
@@ -90,10 +92,14 @@ public class GqlvDomainService
     public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment -> getServicePojo());
+                this::fetchData);
         if (hasActions()) {
             actions.forEach((id, gqlva) -> gqlva.addDataFetcher(this));
         }
+    }
+
+    private Object fetchData(DataFetchingEnvironment environment) {
+        return getServicePojo();
     }
 
 

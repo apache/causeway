@@ -64,13 +64,13 @@ public class GqlvPropertyValidate extends GqlvAbstract {
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
                         parent.coordinatesFor(getField()),
-                        this::validate);
+                        this::fetchData);
 
                 break;
         }
     }
 
-    Object validate(final DataFetchingEnvironment dataFetchingEnvironment) {
+    Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

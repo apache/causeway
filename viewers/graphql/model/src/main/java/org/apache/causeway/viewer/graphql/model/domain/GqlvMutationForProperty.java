@@ -86,13 +86,13 @@ public class GqlvMutationForProperty extends GqlvAbstract {
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
                         parent.coordinatesFor(getField()),
-                        this::set);
+                        this::fetchData);
 
                 break;
         }
     }
 
-    private Object set(final DataFetchingEnvironment dataFetchingEnvironment) {
+    private Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
 
         Object target = dataFetchingEnvironment.getArgument(argumentName);

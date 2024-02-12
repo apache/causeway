@@ -60,11 +60,11 @@ public class GqlvActionParamHidden extends GqlvAbstract {
     public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                this::hidden
+                this::fetchData
         );
     }
 
-    private boolean hidden(final DataFetchingEnvironment dataFetchingEnvironment) {
+    private boolean fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
