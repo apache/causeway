@@ -27,8 +27,6 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import graphql.schema.GraphQLOutputType;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
@@ -40,9 +38,6 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHol
     @Getter(AccessLevel.PROTECTED)
     private GraphQLObjectType gqlObjectType;
 
-    @Getter
-    protected GraphQLFieldDefinition field;
-
     protected GqlvAbstractCustom(
             final GraphQLObjectType.Builder gqlObjectTypeBuilder,
             final Context context) {
@@ -51,18 +46,7 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHol
         this.gqlObjectTypeBuilder = gqlObjectTypeBuilder;
     }
 
-    protected final GraphQLFieldDefinition field(GraphQLFieldDefinition field) {
-        if (this.gqlObjectType != null) {
-            throw new IllegalStateException("GqlObjectType has already been created");
-        }
-
-        if (field != null) {
-            gqlObjectTypeBuilder.field(field);
-        }
-        return field;
-    }
-
-    protected final GraphQLFieldDefinition addField(GraphQLFieldDefinition childField) {
+    protected final GraphQLFieldDefinition addChildField(GraphQLFieldDefinition childField) {
         if (this.gqlObjectType != null) {
             throw new IllegalStateException("GqlObjectType has already been created");
         }

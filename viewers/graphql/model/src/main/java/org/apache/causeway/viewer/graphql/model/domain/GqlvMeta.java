@@ -59,10 +59,10 @@ public class GqlvMeta extends GqlvAbstractCustom {
         this.holder = holder;
 
 
-        field(id);
-        field(logicalTypeName);
+        addChildField(id);
+        addChildField(logicalTypeName);
         if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            field(version);
+            addChildField(version);
         }
 
         val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();

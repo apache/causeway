@@ -18,16 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 
 public abstract class GqlvAbstract {
@@ -41,9 +37,13 @@ public abstract class GqlvAbstract {
         this.context = context;
     }
 
-    protected final GraphQLFieldDefinition setField(GraphQLFieldDefinition field) {
+    protected final GraphQLFieldDefinition setField(final GraphQLFieldDefinition field) {
         this.field = field;
         return field;
+    }
+
+    public boolean isFieldDefined() {
+        return getField() != null;
     }
 
 }

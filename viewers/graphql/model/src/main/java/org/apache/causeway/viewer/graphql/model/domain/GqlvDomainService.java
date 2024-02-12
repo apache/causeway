@@ -42,17 +42,13 @@ import lombok.val;
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainService implements GqlvAction.Holder {
+public class GqlvDomainService
+        extends GqlvAbstractCustom
+        implements GqlvAction.Holder {
 
     private final Holder holder;
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
-    private final Context context;
-
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-
-    @Getter private final GraphQLFieldDefinition field;
-
 
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
@@ -60,32 +56,19 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
     private final Map<String, GqlvAction> actions = new LinkedHashMap<>();
 
-    /**
-     * Will be <code>null</code> if there are no actions.
-     */
-    private GraphQLObjectType gqlObjectType;
-
     public GqlvDomainService(
             final GqlvDomainService.Holder holder,
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
+        super(newObject().name(TypeNames.objectTypeNameFor(objectSpecification)), context);
         this.holder = holder;
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
-        this.context = context;
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         addActions();
         if (hasActions()) {
-            gqlObjectType = gqlObjectTypeBuilder.build();
-            this.field = newFieldDefinition()
-                    .name(TypeNames.objectTypeNameFor(this.objectSpecification))
-                    .type(gqlObjectType)
-                    .build();
-        } else {
-            this.field = null;
+            buildObjectTypeAndSetFieldName(TypeNames.objectTypeNameFor(this.objectSpecification));
         }
     }
 
@@ -115,15 +98,6 @@ public class GqlvDomainService implements GqlvAction.Holder {
             gqlObjectTypeBuilder.field(field);
         }
         return field;
-    }
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
-        }
-        return coordinates(gqlObjectType, fieldDefinition);
     }
 
     public void addDataFetchers() {

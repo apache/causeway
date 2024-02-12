@@ -45,7 +45,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
- import lombok.Getter;
  import lombok.val;
  import lombok.extern.log4j.Log4j2;
 
@@ -55,11 +54,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
      private static final String SEARCH_PARAM_NAME = "search";
 
      private final Holder holder;
-
-     /**
-      * Populated iff there is an autocomplete for this parameter.
-      */
-     @Getter private final GraphQLFieldDefinition field;
 
      public GqlvActionParamAutoComplete(
              final Holder holder,
@@ -78,19 +72,15 @@ package org.apache.causeway.viewer.graphql.model.domain;
                      .name(SEARCH_PARAM_NAME)
                      .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
                      .build();
-             this.field = fieldBuilder.build();
+             setField(fieldBuilder.build());
          } else {
-             this.field = null;
+             setField(null);
          }
-     }
-
-     boolean hasAutoComplete() {
-         return field != null;
      }
 
      public void addDataFetcher() {
          context.codeRegistryBuilder.dataFetcher(
-                 holder.coordinatesFor(field),
+                 holder.coordinatesFor(getField()),
                  this::choices
          );
      }

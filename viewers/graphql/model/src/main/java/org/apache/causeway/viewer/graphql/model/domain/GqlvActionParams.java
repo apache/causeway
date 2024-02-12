@@ -89,14 +89,14 @@ public class GqlvActionParams
 
     void addParam(ObjectActionParameter objectActionParameter, int paramNum) {
         GqlvActionParam gqlvActionParam = new GqlvActionParam(this, objectActionParameter, context, paramNum);
-        addField(gqlvActionParam.getField());
+        addChildField(gqlvActionParam.getField());
         params.put(objectActionParameter.getId(), gqlvActionParam);
     }
 
 
     void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
+                holder.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
         params.forEach((id, param) -> param.addDataFetcher());

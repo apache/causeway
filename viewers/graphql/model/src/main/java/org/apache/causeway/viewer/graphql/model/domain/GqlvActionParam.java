@@ -19,9 +19,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -56,8 +54,6 @@ public class GqlvActionParam
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
-    private final GraphQLObjectType gqlObjectType;
-
     private final GqlvActionParamHidden hidden;
     private final GqlvActionParamDisabled disabled;
     /**
@@ -74,8 +70,6 @@ public class GqlvActionParam
     private final GqlvActionParamDefault default_;
     private final GqlvActionParamValidate validate;
 
-    @Getter private final GraphQLFieldDefinition field;
-
     public GqlvActionParam(
             final Holder holder,
             final ObjectActionParameter objectActionParameter,
@@ -87,43 +81,38 @@ public class GqlvActionParam
         this.paramNum = paramNum;
 
         this.hidden = new GqlvActionParamHidden(this, context);
-        addField(hidden.getField());
+        addChildField(hidden.getField());
         this.disabled = new GqlvActionParamDisabled(this, context);
-        addField(disabled.getField());
+        addChildField(disabled.getField());
 
         val choices = new GqlvActionParamChoices(this, context);
-        addField(choices.getField());
-        if (choices.hasChoices()) {
+        addChildField(choices.getField());
+        if (choices.isFieldDefined()) {
             this.choices = choices;
         } else {
             this.choices = null;
         }
 
         val autoComplete = new GqlvActionParamAutoComplete(this, context);
-        addField(autoComplete.getField());
-        if (autoComplete.hasAutoComplete()) {
+        addChildField(autoComplete.getField());
+        if (autoComplete.isFieldDefined()) {
             this.autoComplete = autoComplete;
         } else {
             this.autoComplete = null;
         }
 
         val default_ = new GqlvActionParamDefault(this, context);
-        addField(default_.getField());
-        if (default_.hasDefault()) {
+        addChildField(default_.getField());
+        if (default_.isFieldDefined()) {
             this.default_ = default_;
         } else {
             this.default_ = null;
         }
 
         this.validate = new GqlvActionParamValidate(this, context);
-        addField(validate.getField());
+        addChildField(validate.getField());
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
-
-        this.field = newFieldDefinition()
-                        .name(objectActionParameter.getId())
-                        .type(gqlObjectTypeBuilder)
-                        .build();
+        buildObjectTypeAndSetFieldName(objectActionParameter.getId());
     }
 
     @Override
@@ -143,7 +132,7 @@ public class GqlvActionParam
 
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
+                holder.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
         hidden.addDataFetcher();
@@ -162,11 +151,6 @@ public class GqlvActionParam
 
 
     @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
-    }
-
-    @Override
     public void addGqlArguments(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
         holder.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum);
     }
@@ -178,7 +162,7 @@ public class GqlvActionParam
 
     @Override
     public void addGqlArgument(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
-
+        // TODO: what lives here?
     }
 
 

@@ -24,7 +24,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 
@@ -77,20 +76,20 @@ public class GqlvAction
         super(holder, objectAction, newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction)), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
-        addField(hidden.getField());
+        addChildField(hidden.getField());
 
         this.disabled = new GqlvMemberDisabled<>(this, context);
-        addField(disabled.getField());
+        addChildField(disabled.getField());
 
         this.validate = new GqlvActionValidity(this, context);
-        addField(validate.getField());
+        addChildField(validate.getField());
 
         val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         if (objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
             this.invoke = new GqlvActionInvoke(this, context);
             GraphQLFieldDefinition invokeField = this.invoke.getField();
             if (invokeField != null) {
-                addField(invokeField);
+                addChildField(invokeField);
             }
         } else {
             this.invoke = null;
@@ -98,7 +97,7 @@ public class GqlvAction
         val params = new GqlvActionParams(this, context);
         if (params.hasParams()) {
             this.params = params;
-            addField(params.getField());
+            addChildField(params.getField());
         } else {
             this.params = null;
         }

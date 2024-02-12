@@ -44,8 +44,6 @@ public class GqlvActionParamHidden extends GqlvAbstract {
 
     private final Holder holder;
 
-    @Getter private final GraphQLFieldDefinition field;
-
     public GqlvActionParamHidden(
             final Holder holder,
             final Context context) {
@@ -56,13 +54,13 @@ public class GqlvActionParamHidden extends GqlvAbstract {
                 .name("hidden")
                 .type(context.typeMapper.scalarTypeFor(boolean.class));
         holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
-        this.field = fieldBuilder.build();
+        setField(fieldBuilder.build());
     }
 
 
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
+                holder.coordinatesFor(getField()),
                 this::hidden
         );
     }

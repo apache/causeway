@@ -26,7 +26,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
-    private final GqlvScenario scenario;
+//    private final GqlvScenario scenario;
 
     public GqlvTopLevelQuery(final Context context) {
 
@@ -64,8 +64,8 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
             addField(domainObject.getLookupField());
         }
 
-        scenario = new GqlvScenario(this, context);
-        addField(scenario.getField());
+//        scenario = new GqlvScenario(this, context);
+//        addField(scenario.getField());
 
         objectType = gqlObjectTypeBuilder.build();
     }
@@ -95,7 +95,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
 
         domainObjects.forEach(GqlvDomainObject::addDataFetchers);
 
-        scenario.addDataFetchers();
+//        scenario.addDataFetchers();
     }
 
 }

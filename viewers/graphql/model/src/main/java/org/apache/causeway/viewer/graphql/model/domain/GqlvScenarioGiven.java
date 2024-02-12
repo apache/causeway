@@ -1,11 +1,5 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +45,7 @@ public class GqlvScenarioGiven
                 context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                         .ifPresent(servicePojo -> {
                             GqlvDomainService gqlvDomainService = new GqlvDomainService(this, objectSpec, servicePojo, context);
-                            addField(gqlvDomainService.getField());
+                            addChildField(gqlvDomainService.getField());
                             domainServices.add(gqlvDomainService);
                         });
             }
@@ -59,7 +53,7 @@ public class GqlvScenarioGiven
 
         // add domain object lookup to top-level query
         for (GqlvDomainObject domainObject : this.domainObjects) {
-            addField(domainObject.getLookupField());
+            addChildField(domainObject.getLookupField());
         }
 
 

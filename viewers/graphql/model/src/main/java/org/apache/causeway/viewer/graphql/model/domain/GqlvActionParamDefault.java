@@ -39,7 +39,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
- import lombok.Getter;
  import lombok.val;
  import lombok.extern.log4j.Log4j2;
 
@@ -47,11 +46,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
  public class GqlvActionParamDefault extends GqlvAbstract {
 
      private final Holder holder;
-
-     /**
-      * Populated iff there are choices for this parameter.
-      */
-     @Getter private final GraphQLFieldDefinition field;
 
      public GqlvActionParamDefault(
              final Holder holder,
@@ -67,19 +61,15 @@ package org.apache.causeway.viewer.graphql.model.domain;
                      .name("default")
                      .type(context.typeMapper.outputTypeFor(elementType));
              holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DEFAULT, holder.getParamNum());
-             this.field = fieldBuilder.build();
+             setField(fieldBuilder.build());
          } else {
-             this.field = null;
+             setField(null);
          }
-     }
-
-     boolean hasDefault() {
-         return field != null;
      }
 
      public void addDataFetcher() {
          context.codeRegistryBuilder.dataFetcher(
-                 holder.coordinatesFor(field),
+                 holder.coordinatesFor(getField()),
                  this::default_
          );
      }

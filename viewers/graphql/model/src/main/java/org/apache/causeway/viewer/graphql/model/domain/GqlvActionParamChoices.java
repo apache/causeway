@@ -52,11 +52,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
      private final Holder holder;
 
-     /**
-      * Populated iff there are choices for this parameter.
-      */
-     @Getter private final GraphQLFieldDefinition field;
-
      public GqlvActionParamChoices(
              final Holder holder,
              final Context context) {
@@ -70,19 +65,15 @@ package org.apache.causeway.viewer.graphql.model.domain;
                      .name("choices")
                      .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
              holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.CHOICES, holder.getParamNum());
-             this.field = fieldBuilder.build();
+             setField(fieldBuilder.build());
          } else {
-             this.field = null;
+             setField(null);
          }
-     }
-
-     boolean hasChoices() {
-         return field != null;
      }
 
      public void addDataFetcher() {
          context.codeRegistryBuilder.dataFetcher(
-                 holder.coordinatesFor(field),
+                 holder.coordinatesFor(getField()),
                  this::choices
          );
      }

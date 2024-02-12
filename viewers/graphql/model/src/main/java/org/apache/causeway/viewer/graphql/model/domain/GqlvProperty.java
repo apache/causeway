@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -69,20 +67,20 @@ public class GqlvProperty
         super(holder, oneToOneAssociation, newObject().name(TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation)), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
-        addField(hidden.getField());
+        addChildField(hidden.getField());
 
         this.disabled = new GqlvMemberDisabled<>(this, context);
-        addField(disabled.getField());
+        addChildField(disabled.getField());
 
         this.get = new GqlvPropertyGet(this, context);
-        addField(get.getField());
+        addChildField(get.getField());
 
         this.validate = new GqlvPropertyValidate(this, context);
-        addField(this.validate.getField());
+        addChildField(this.validate.getField());
 
         val choices = new GqlvPropertyChoices(this, context);
         if (choices.hasChoices()) {
-            addField(choices.getField());
+            addChildField(choices.getField());
             this.choices = choices;
         } else {
             this.choices = null;
@@ -90,7 +88,7 @@ public class GqlvProperty
 
         val autoComplete = new GqlvPropertyAutoComplete(this, context);
         if (autoComplete.hasAutoComplete()) {
-            addField(autoComplete.getField());
+            addChildField(autoComplete.getField());
             this.autoComplete = autoComplete;
         } else {
             this.autoComplete = null;
@@ -99,7 +97,7 @@ public class GqlvProperty
         val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         if (variant == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
             this.set = new GqlvPropertySet(this, context);
-            addField(set.getField());
+            addChildField(set.getField());
         } else {
             this.set = null;
         }

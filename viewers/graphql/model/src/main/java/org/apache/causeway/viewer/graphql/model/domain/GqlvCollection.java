@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
@@ -47,11 +43,13 @@ public class GqlvCollection
         super(holder, oneToManyAssociation, newObject().name(TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation)), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
-        addField(hidden.getField());
+        addChildField(hidden.getField());
+
         this.disabled = new GqlvMemberDisabled<>(this, context);
-        addField(disabled.getField());
+        addChildField(disabled.getField());
+
         this.get = new GqlvCollectionGet(this, context);
-        addField(get.getField());
+        addChildField(get.getField());
 
         buildObjectTypeAndSetFieldName(oneToManyAssociation.getId());
     }

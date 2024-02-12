@@ -20,20 +20,14 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
-
-import graphql.schema.GraphQLScalarType;
-
-import lombok.Getter;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -58,9 +52,9 @@ public class GqlvScenario
         this.scenarioPojo = context.serviceRegistry.lookupService(Scenario.class).orElseThrow();
 
         this.scenarioName = new GqlvScenarioName(this, context);
-        addField(scenarioName.getField());
+        addChildField(scenarioName.getField());
         this.scenarioGiven = new GqlvScenarioGiven(this, context);
-        addField(scenarioGiven.getField());
+        addChildField(scenarioGiven.getField());
 
         buildObjectType();
 

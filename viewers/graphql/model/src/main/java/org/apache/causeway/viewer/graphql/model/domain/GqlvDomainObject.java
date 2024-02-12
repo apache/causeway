@@ -18,18 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
@@ -43,7 +40,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
 import lombok.Getter;
 import lombok.val;
@@ -81,7 +77,7 @@ public class GqlvDomainObject
         this.objectSpecification = objectSpecification;
 
         this.meta = new GqlvMeta(this, context);
-        addField(meta.getField());
+        addChildField(meta.getField());
 
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
         inputTypeBuilder
@@ -130,7 +126,7 @@ public class GqlvDomainObject
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .forEach(objectAction -> {
                     GqlvAction gqlvAction = new GqlvAction(this, objectAction, context);
-                    addField(gqlvAction.getField());
+                    addChildField(gqlvAction.getField());
                     actions.put(objectAction.getId(), gqlvAction);
                 });
     }
@@ -144,14 +140,14 @@ public class GqlvDomainObject
 
     private void addProperty(final OneToOneAssociation otoa) {
         GqlvProperty gqlvProperty = new GqlvProperty(this, otoa, context);
-        addField(gqlvProperty.getField());
+        addChildField(gqlvProperty.getField());
         properties.put(otoa.getId(), gqlvProperty);
     }
 
     private void addCollection(OneToManyAssociation otom) {
         GqlvCollection collection = new GqlvCollection(this, otom, context);
-        addField(collection.getField());
-        if (collection.hasFieldDefinition()) {
+        addChildField(collection.getField());
+        if (collection.isFieldDefined()) {
             collections.put(otom.getId(), collection);
         }
     }

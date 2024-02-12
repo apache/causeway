@@ -45,8 +45,6 @@ public class GqlvActionParamDisabled extends GqlvAbstract {
 
     private final Holder holder;
 
-    @Getter private final GraphQLFieldDefinition field;
-
     public GqlvActionParamDisabled(
             final Holder holder,
             final Context context) {
@@ -57,13 +55,13 @@ public class GqlvActionParamDisabled extends GqlvAbstract {
                 .name("disabled")
                 .type(context.typeMapper.scalarTypeFor(String.class));
         holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum()+1);
-        this.field = fieldBuilder.build();
+        setField(fieldBuilder.build());
     }
 
 
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
+                holder.coordinatesFor(getField()),
                 this::disabled
         );
     }

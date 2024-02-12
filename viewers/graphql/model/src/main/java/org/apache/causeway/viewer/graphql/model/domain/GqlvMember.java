@@ -40,20 +40,9 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
             final GraphQLObjectType.Builder gqlObjectTypeBuilder,
             final Context context
     ) {
-        this(holder, objectMember, gqlObjectTypeBuilder, null, context);
-    }
-
-    public GqlvMember(
-            final H holder,
-            final T objectMember,
-            final GraphQLObjectType.Builder gqlObjectTypeBuilder,
-            final GraphQLFieldDefinition field,
-            final Context context
-    ) {
         super(gqlObjectTypeBuilder, context);
         this.holder = holder;
         this.objectMember = objectMember;
-        this.field = field;
     }
 
     public String getId() {
