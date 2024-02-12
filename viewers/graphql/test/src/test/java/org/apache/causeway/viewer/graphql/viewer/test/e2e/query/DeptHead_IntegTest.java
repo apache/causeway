@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(50)
 @ActiveProfiles("test")
-@DirtiesContext
 public class DeptHead_IntegTest extends Abstract_IntegTest {
 
     @Test

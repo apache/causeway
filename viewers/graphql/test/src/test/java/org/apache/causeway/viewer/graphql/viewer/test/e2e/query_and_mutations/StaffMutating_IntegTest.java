@@ -47,9 +47,8 @@ import lombok.val;
                 "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
         }
 )
-@Order(60)
+@Order(130)
 @ActiveProfiles("test")
-@DirtiesContext
 public class StaffMutating_IntegTest extends Abstract_IntegTest {
 
     @Test

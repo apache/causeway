@@ -16,8 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.query_and_mutations;
 
+import lombok.val;
+
+import java.util.Optional;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.approvaltests.Approvals;
@@ -26,60 +34,29 @@ import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-
-import lombok.val;
+import org.springframework.transaction.annotation.Propagation;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(20)
+@SpringBootTest(
+        classes = {
+                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
+        },
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
+        }
+)
+@Order(100)
 @ActiveProfiles("test")
-public class Admin_IntegTest extends Abstract_IntegTest {
+@DirtiesContext
+public class _Mutating_IntegTest extends Abstract_IntegTest {
 
     @Test
-    @UseReporter(DiffReporter.class)
-    void admin_action() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
+    void dummy() throws Exception {
     }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void action_with_disabled_param() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void action_with_hidden_param() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void other_admin_action() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
 
 }

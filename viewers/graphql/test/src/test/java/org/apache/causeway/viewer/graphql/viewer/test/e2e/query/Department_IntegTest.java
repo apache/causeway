@@ -50,7 +50,6 @@ import lombok.val;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(40)
 @ActiveProfiles("test")
-@DirtiesContext
 public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
