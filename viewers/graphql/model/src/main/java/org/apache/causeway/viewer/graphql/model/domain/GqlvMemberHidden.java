@@ -52,13 +52,6 @@ public class GqlvMemberHidden<T extends ObjectMember> extends GqlvAbstract {
                 .build());
     }
 
-    public void addDataFetcher(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData
-        );
-    }
-
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

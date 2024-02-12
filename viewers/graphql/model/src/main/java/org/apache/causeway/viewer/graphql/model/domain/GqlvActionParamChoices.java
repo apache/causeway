@@ -70,13 +70,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
          }
      }
 
-     public void addDataFetcher(Parent parent) {
-         context.codeRegistryBuilder.dataFetcher(
-                 parent.coordinatesFor(getField()),
-                 this::fetchData
-         );
-     }
-
      @Override
      protected List<Object> fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

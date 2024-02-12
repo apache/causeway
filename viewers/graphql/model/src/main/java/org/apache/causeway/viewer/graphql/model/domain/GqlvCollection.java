@@ -62,18 +62,12 @@ public class GqlvCollection
         return holder.getObjectSpecification();
     }
 
+    @Override
     public OneToManyAssociation getOneToManyAssociation() {
         return getObjectAssociation();
     }
 
-    public void addDataFetcher(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData);
-
-        addDataFetchersForChildren();
-    }
-
+    @Override
     protected void addDataFetchersForChildren() {
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);

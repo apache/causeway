@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -62,28 +61,6 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
             setField(fieldBuilder.build());
         } else {
             setField(null);
-        }
-    }
-
-    boolean hasAutoComplete() {
-        return this.getField() != null;
-    }
-
-    void addDataFetcher(Parent parent) {
-
-        val association = this.holder.getOneToOneAssociation();
-        val fieldObjectSpecification = association.getElementType();
-        val beanSort = fieldObjectSpecification.getBeanSort();
-
-        switch (beanSort) {
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-                context.codeRegistryBuilder.dataFetcher(
-                        parent.coordinatesFor(getField()),
-                        this::fetchData);
-
-                break;
         }
     }
 

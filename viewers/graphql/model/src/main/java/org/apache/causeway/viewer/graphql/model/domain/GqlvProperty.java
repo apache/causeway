@@ -75,7 +75,7 @@ public class GqlvProperty
         addChildField(this.validate.getField());
 
         val choices = new GqlvPropertyChoices(this, context);
-        if (choices.hasChoices()) {
+        if (choices.isFieldDefined()) {
             addChildField(choices.getField());
             this.choices = choices;
         } else {
@@ -83,7 +83,7 @@ public class GqlvProperty
         }
 
         val autoComplete = new GqlvPropertyAutoComplete(this, context);
-        if (autoComplete.hasAutoComplete()) {
+        if (autoComplete.isFieldDefined()) {
             addChildField(autoComplete.getField());
             this.autoComplete = autoComplete;
         } else {
@@ -128,14 +128,7 @@ public class GqlvProperty
         return getObjectAssociation();
     }
 
-    public void addDataFetcher(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData);
-
-        addDataFetchersForChildren();
-    }
-
+    @Override
     protected void addDataFetchersForChildren() {
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);

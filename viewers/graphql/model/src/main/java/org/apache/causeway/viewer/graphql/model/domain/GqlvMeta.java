@@ -69,13 +69,8 @@ public class GqlvMeta extends GqlvAbstractCustom {
         buildObjectTypeAndField(fieldName);
     }
 
-
-    public void addDataFetchers(Parent parent) {
-
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData);
-
+    @Override
+    protected void addDataFetchersForChildren() {
         context.codeRegistryBuilder.dataFetcher(
                 coordinates(getGqlObjectType(), logicalTypeName),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().logicalTypeName());

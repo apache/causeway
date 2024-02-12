@@ -47,5 +47,19 @@ public abstract class GqlvAbstract {
         return getField() != null;
     }
 
+    public final void addDataFetcher(Parent parent) {
+        if (getField() != null) {
+            // in some cases there might not be a field, eg GqlvCollectionGet for DomainObjectList#objects
+            context.codeRegistryBuilder.dataFetcher(
+                    parent.coordinatesFor(getField()),
+                    this::fetchData);
+        }
+
+        addDataFetchersForChildren();
+    }
+
+    protected void addDataFetchersForChildren() {
+    }
+
     protected abstract Object fetchData(DataFetchingEnvironment environment);
 }

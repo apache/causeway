@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import graphql.schema.DataFetcher;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -89,13 +87,7 @@ public class GqlvDomainService
     }
 
 
-    public void addDataFetchers(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData);
-        addDataFetchersForChildren();
-    }
-
+    @Override
     protected void addDataFetchersForChildren() {
         if (hasActions()) {
             actions.forEach((id, gqlva) -> gqlva.addDataFetcher(this));

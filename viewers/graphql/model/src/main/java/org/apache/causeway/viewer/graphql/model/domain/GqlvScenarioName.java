@@ -24,12 +24,6 @@ public class GqlvScenarioName extends GqlvAbstract {
         );
     }
 
-    public void addDataFetchers(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData);
-    }
-
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
         val graphQlContext = environment.getGraphQlContext();

@@ -56,14 +56,6 @@ public class GqlvActionParamValidate extends GqlvAbstract {
         setField(fieldBuilder.build());
     }
 
-
-    public void addDataFetcher(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData
-        );
-    }
-
     @Override
     protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

@@ -54,7 +54,7 @@ public class GqlvTopLevelQuery
 
         // add domain object lookup to top-level query
         for (GqlvDomainObject domainObject : this.domainObjects) {
-            addChildField(domainObject.getLookupField());
+            addChildField(domainObject.getField());
         }
 
         scenario = new GqlvScenario(context);
@@ -84,13 +84,13 @@ public class GqlvTopLevelQuery
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
             if (actionsAdded) {
-                domainService.addDataFetchers(this);
+                domainService.addDataFetcher(this);
             }
         });
 
 
-        domainObjects.forEach(domainObject -> domainObject.addDataFetchers(this));
+        domainObjects.forEach(domainObject -> domainObject.addDataFetcher(this));
 
-        scenario.addDataFetchers(this);
+        scenario.addDataFetcher(this);
     }
 }

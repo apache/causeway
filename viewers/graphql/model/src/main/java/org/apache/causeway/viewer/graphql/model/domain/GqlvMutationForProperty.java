@@ -75,23 +75,6 @@ public class GqlvMutationForProperty extends GqlvAbstract {
         return TypeNames.objectTypeNameFor(objectSpecification) + "__" + oneToOneAssociation.getId();
     }
 
-
-    public void addDataFetcher(Parent parent) {
-
-        val beanSort = oneToOneAssociation.getElementType().getBeanSort();
-
-        switch (beanSort) {
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-                context.codeRegistryBuilder.dataFetcher(
-                        parent.coordinatesFor(getField()),
-                        this::fetchData);
-
-                break;
-        }
-    }
-
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

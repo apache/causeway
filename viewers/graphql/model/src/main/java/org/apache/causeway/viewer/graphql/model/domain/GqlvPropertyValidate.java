@@ -52,24 +52,6 @@ public class GqlvPropertyValidate extends GqlvAbstract {
         setField(fieldBuilder.build());
     }
 
-    void addDataFetcher(Parent parent) {
-
-        val association = this.holder.getOneToOneAssociation();
-        val fieldObjectSpecification = association.getElementType();
-        val beanSort = fieldObjectSpecification.getBeanSort();
-
-        switch (beanSort) {
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-                context.codeRegistryBuilder.dataFetcher(
-                        parent.coordinatesFor(getField()),
-                        this::fetchData);
-
-                break;
-        }
-    }
-
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

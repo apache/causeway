@@ -57,13 +57,6 @@ public class GqlvActionParamHidden extends GqlvAbstract {
     }
 
 
-    public void addDataFetcher(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData
-        );
-    }
-
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

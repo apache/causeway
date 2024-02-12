@@ -52,13 +52,6 @@ public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
                 .build());
     }
 
-    public void addDataFetcher(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData
-        );
-    }
-
     @Override
     protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

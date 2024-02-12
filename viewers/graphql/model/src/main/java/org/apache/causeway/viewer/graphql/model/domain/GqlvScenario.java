@@ -59,17 +59,10 @@ public class GqlvScenario
     }
 
 
-    public void addDataFetchers(Parent parent) {
-        context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getField()),
-                this::fetchData);
-
-        addDataFetchersForChildren();
-    }
-
+    @Override
     protected void addDataFetchersForChildren() {
-        scenarioName.addDataFetchers(this);
-        scenarioGiven.addDataFetchers(this);
+        scenarioName.addDataFetcher(this);
+        scenarioGiven.addDataFetcher(this);
     }
 
     @Override

@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import graphql.Scalars;
-import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
@@ -53,9 +51,6 @@ public class GqlvDomainObject
         implements GqlvMember.Holder, GqlvMeta.Holder {
 
     @Getter private final ObjectSpecification objectSpecification;
-
-    @Getter
-    private final GraphQLFieldDefinition lookupField;
 
     private final GqlvMeta meta;
 
@@ -90,7 +85,7 @@ public class GqlvDomainObject
                         .build());
         gqlInputObjectType = inputTypeBuilder.build();
 
-        this.lookupField = buildFieldDefinition(gqlInputObjectType);
+        setField(buildFieldDefinition(gqlInputObjectType));
 
         addMembers();
 
@@ -118,7 +113,6 @@ public class GqlvDomainObject
                         .build())
                 .build();
     }
-
 
 
     private void addMembers() {
@@ -156,17 +150,9 @@ public class GqlvDomainObject
     }
 
 
-    public void addDataFetchers(Parent parent) {
-
-        this.context.codeRegistryBuilder.dataFetcher(
-                parent.coordinatesFor(getLookupField()),
-                this::fetchData);
-
-        addDataFetchersForChildren();
-    }
-
+    @Override
     protected void addDataFetchersForChildren() {
-        meta.addDataFetchers(this);
+        meta.addDataFetcher(this);
         properties.forEach((id, property) -> property.addDataFetcher(this));
         collections.forEach((id, collection) -> collection.addDataFetcher(this));
         actions.forEach((id, action) -> action.addDataFetcher(this));

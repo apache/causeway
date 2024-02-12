@@ -41,15 +41,6 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
     private GraphQLObjectType gqlObjectType;
 
     protected GqlvAbstractCustom(
-            final GraphQLObjectType.Builder gqlObjectTypeBuilder,
-            final Context context) {
-        super(context);
-        typeName = null; // TODO - remove this constructor
-
-        this.gqlObjectTypeBuilder = gqlObjectTypeBuilder;
-    }
-
-    protected GqlvAbstractCustom(
             final String typeName,
             final Context context) {
         super(context);
