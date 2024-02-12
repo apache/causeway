@@ -22,9 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -68,7 +66,7 @@ public class GqlvDomainService
 
         addActions();
         if (hasActions()) {
-            buildObjectTypeAndSetFieldName(TypeNames.objectTypeNameFor(this.objectSpecification));
+            buildObjectTypeAndField(TypeNames.objectTypeNameFor(this.objectSpecification));
         }
     }
 

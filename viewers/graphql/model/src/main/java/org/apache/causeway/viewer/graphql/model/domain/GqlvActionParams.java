@@ -64,7 +64,7 @@ public class GqlvActionParams
         });
 
         if (hasParams()) {
-            buildObjectTypeAndSetFieldName("params");
+            buildObjectTypeAndField("params");
         }
     }
 

@@ -51,7 +51,7 @@ public class GqlvCollection
         this.get = new GqlvCollectionGet(this, context);
         addChildField(get.getField());
 
-        buildObjectTypeAndSetFieldName(oneToManyAssociation.getId());
+        buildObjectTypeAndField(oneToManyAssociation.getId());
     }
 
     @Override

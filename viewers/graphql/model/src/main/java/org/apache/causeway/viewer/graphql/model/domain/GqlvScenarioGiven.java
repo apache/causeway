@@ -57,7 +57,7 @@ public class GqlvScenarioGiven
         }
 
 
-        buildObjectTypeAndSetFieldName("Given");
+        buildObjectTypeAndField("Given");
     }
 
 

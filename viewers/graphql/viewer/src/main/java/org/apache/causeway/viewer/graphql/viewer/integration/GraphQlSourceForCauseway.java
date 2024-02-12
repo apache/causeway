@@ -118,10 +118,10 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         // build the schema
         return GraphQLSchema.newSchema()
-                .query(topLevelQuery.getObjectType())
+                .query(topLevelQuery.getGqlObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
                 .codeRegistry(codeRegistry)
-                .mutation(topLevelMutation != null ? topLevelMutation.getObjectType() : null)
+                .mutation(topLevelMutation != null ? topLevelMutation.getGqlObjectType() : null)
                 .build();
     }
 

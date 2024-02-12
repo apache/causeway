@@ -112,7 +112,7 @@ public class GqlvActionParam
         this.validate = new GqlvActionParamValidate(this, context);
         addChildField(validate.getField());
 
-        buildObjectTypeAndSetFieldName(objectActionParameter.getId());
+        buildObjectTypeAndField(objectActionParameter.getId());
     }
 
     @Override

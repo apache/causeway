@@ -103,7 +103,7 @@ public class GqlvProperty
         }
 
 
-        buildObjectTypeAndSetFieldName(oneToOneAssociation.getId());
+        buildObjectTypeAndField(oneToOneAssociation.getId());
     }
 
     public void addGqlArgument(

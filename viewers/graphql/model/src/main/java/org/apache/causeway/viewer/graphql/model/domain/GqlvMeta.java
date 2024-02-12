@@ -24,7 +24,6 @@ import java.util.Optional;
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -39,7 +38,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import lombok.Getter;
 import lombok.val;
 
 public class GqlvMeta extends GqlvAbstractCustom {
@@ -66,7 +64,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
         }
 
         val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
-        buildObjectTypeAndSetFieldName(fieldName);
+        buildObjectTypeAndField(fieldName);
     }
 
 

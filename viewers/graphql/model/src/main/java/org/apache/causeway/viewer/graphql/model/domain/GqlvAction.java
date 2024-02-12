@@ -102,7 +102,7 @@ public class GqlvAction
             this.params = null;
         }
 
-        buildObjectTypeAndSetFieldName(objectAction.getId());
+        buildObjectTypeAndField(objectAction.getId());
     }
 
     public Can<ManagedObject> argumentManagedObjectsFor(

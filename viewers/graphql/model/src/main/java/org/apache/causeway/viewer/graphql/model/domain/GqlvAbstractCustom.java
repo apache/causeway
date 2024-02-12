@@ -57,10 +57,10 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHol
         return childField;
     }
 
-    protected GraphQLFieldDefinition buildObjectTypeAndSetFieldName(String fieldName) {
+    protected void buildObjectTypeAndField(String fieldName) {
         val graphQLObjectType = buildObjectType();
 
-        return setField(newFieldDefinition()
+        setField(newFieldDefinition()
                 .name(fieldName)
                 .type(graphQLObjectType)
                 .build());
@@ -70,9 +70,7 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHol
         this.gqlObjectType = gqlObjectTypeBuilder.build();
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(this.gqlObjectType);
         return this.gqlObjectType;
-
     }
-
 
     public final FieldCoordinates coordinatesFor(final GraphQLFieldDefinition field) {
         return FieldCoordinates.coordinates(gqlObjectType, field);
