@@ -53,6 +53,7 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
     @Getter private GraphQLFieldDefinition field;
 
+
     String getLogicalTypeName() {
         return objectSpecification.getLogicalTypeName();
     }
@@ -64,7 +65,17 @@ public class GqlvDomainService implements GqlvAction.Holder {
      */
     private GraphQLObjectType gqlObjectType;
 
-    public GqlvDomainService(
+    private static Map<ObjectSpecification, GqlvDomainService> serviceByObjectSpec = new LinkedHashMap<>();
+
+    public static GqlvDomainService of(
+            final ObjectSpecification objectSpec,
+            final Holder holder,
+            final Object servicePojo,
+            final Context context) {
+        return serviceByObjectSpec.computeIfAbsent(objectSpec, x -> new GqlvDomainService(holder, x, servicePojo, context));
+    }
+
+    private GqlvDomainService(
             final GqlvDomainService.Holder holder,
             final ObjectSpecification objectSpecification,
             final Object servicePojo,

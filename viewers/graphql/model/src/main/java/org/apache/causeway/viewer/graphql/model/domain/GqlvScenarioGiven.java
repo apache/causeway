@@ -1,34 +1,38 @@
-package org.apache.causeway.viewer.graphql.viewer.toplevel;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
-import static graphql.schema.GraphQLObjectType.newObject;
-
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
-
 import lombok.Getter;
 
-public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainObject.Holder, GqlvScenario.Holder {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-    private static final String OBJECT_TYPE_NAME = "Query";
+import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+
+import static graphql.schema.GraphQLObjectType.newObject;
+
+public class GqlvScenarioGiven implements GqlvDomainService.Holder, GqlvDomainObject.Holder {
+
+    private static final String OBJECT_TYPE_NAME = "Given";
 
     final GraphQLObjectType.Builder objectTypeBuilder;
     @Getter private final GraphQLObjectType objectType;
 
+    private final Holder holder;
+    private final GraphQLFieldDefinition field;
+
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
-    private final GqlvScenario scenario;
+    public GqlvScenarioGiven(
+            final GqlvScenarioGiven.Holder holder,
+            final Context context) {
 
-    public GqlvTopLevelQuery(final Context context) {
+        this.holder = holder;
 
         this.objectTypeBuilder = newObject().name(OBJECT_TYPE_NAME);
 
@@ -47,13 +51,11 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
 
         // add services to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-                case MANAGED_BEAN_CONTRIBUTING: // @DomainService
-                    context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                            .ifPresent(servicePojo -> {
-                                domainServices.add(GqlvDomainService.of(objectSpec, this, servicePojo, context));
-                            });
-                    break;
+            if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
+                context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
+                        .ifPresent(servicePojo -> {
+                            domainServices.add(GqlvDomainService.of(objectSpec, this, servicePojo, context));
+                        });
             }
         });
 
@@ -62,15 +64,17 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
             addField(domainObject.getLookupField());
         }
 
-        scenario = new GqlvScenario(this, context);
 
         objectType = objectTypeBuilder.build();
+
+        this.field = GraphQLFieldDefinition.newFieldDefinition().name("Given").type(objectType).build();
+        this.holder.addField(field);
     }
 
 
     @Override
     public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(OBJECT_TYPE_NAME, fieldDefinition.getName());
+        return FieldCoordinates.coordinates(objectType, fieldDefinition);
     }
 
     @Override
@@ -89,8 +93,10 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
 
 
         domainObjects.forEach(GqlvDomainObject::addDataFetchers);
-
     }
 
+    public interface Holder
+            extends GqlvHolder {
+    }
 
 }
