@@ -18,22 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -43,7 +35,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
 
@@ -107,94 +98,30 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         }
 
         val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
-        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment);
+        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment, objectManager, graphQLTypeRegistry);
 
-        val objectSpecifications = specificationLoader.snapshotSpecifications()
-                .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
-                .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
-                .filter(x -> x.isEntityOrViewModelOrAbstract() || x.getBeanSort().isManagedBeanContributing())
-                .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-                .toList();
-
-        // top-level query type and (dependent on configuration) the top-level mutation type
+        // top-level query and mutation type
         val topLevelQuery = new GqlvTopLevelQuery(context);
         val topLevelMutation =
                 causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
                         new GqlvTopLevelMutation(context)
                         : null;
 
-
-        // domain objects
-        val domainObjects = new LinkedHashMap<ObjectSpecification, GqlvDomainObject>();
-        objectSpecifications.forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-
-                case ABSTRACT:
-                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:     // @DomainObject(nature=ENTITY)
-
-                    val domainObject = new GqlvDomainObject(objectSpec, context, objectManager, graphQLTypeRegistry);
-                    domainObject.addTypesInto(graphQLTypeRegistry);
-                    domainObject.addDataFetchers();
-
-                    domainObjects.put(objectSpec, domainObject);
-
-                    break;
-            }
-        });
-
-
-        // add services to top-level query
-        objectSpecifications.forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-                case MANAGED_BEAN_CONTRIBUTING: // @DomainService
-                    serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                        .ifPresent(servicePojo -> {
-                            topLevelQuery.addDomainService(objectSpec, servicePojo, context);
-                            topLevelQuery.addDataFetchers();
-                        });
-                    break;
-            }
-        });
-
-        // add lookup to top-level query
-        domainObjects.forEach((objectSpec, domainObject) -> {
-            topLevelQuery.addLookupFor(objectSpec, domainObject);
-        });
-
-        topLevelQuery.buildQueryType();
-
-        // add top-level mutation (if application configuration requires it)
+        // add the data fetchers
+        topLevelQuery.addDataFetchers();
         if (topLevelMutation != null) {
-            objectSpecifications.forEach(objectSpec -> {
-                objectSpec.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                        .filter(x -> ! x.getSemantics().isSafeInNature())
-                        .forEach(objectAction -> topLevelMutation.addAction(objectSpec, objectAction));
-                objectSpec.streamProperties(MixedIn.INCLUDED)
-                        .filter(property -> ! property.isAlwaysHidden())
-                        .filter(property -> property.containsFacet(PropertySetterFacet.class))
-                        .forEach(property -> topLevelMutation.addProperty(objectSpec, property));
-
-            });
-            topLevelMutation.buildMutationType();
             topLevelMutation.addDataFetchers();
         }
 
-
-
-
-        // finalize the fetcher/mutator code that's been registered
+        // finalize the fetcher/mutator code that's been added
         val codeRegistry = codeRegistryBuilder.build();
 
         // build the schema
-        val schemaBuilder = GraphQLSchema.newSchema()
-                .query(topLevelQuery.getQueryType())
+        return GraphQLSchema.newSchema()
+                .query(topLevelQuery.getObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
-                .codeRegistry(codeRegistry);
-        if (topLevelMutation != null) {
-            schemaBuilder.mutation(topLevelMutation.getGqlObjectType());
-        }
-        return schemaBuilder
+                .codeRegistry(codeRegistry)
+                .mutation(topLevelMutation != null ? topLevelMutation.getObjectType() : null)
                 .build();
     }
 

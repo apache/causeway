@@ -33,8 +33,8 @@
 	<name>Apache Causeway Viewer - GraphQL (Test)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.graphql.test</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/incubator/viewer/graphql/test</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.graphql.test</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/test</git-plugin.propertiesDir>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 

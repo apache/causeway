@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
 import lombok.Getter;
 import lombok.val;
@@ -52,60 +51,62 @@ public class GqlvMeta {
     private final Holder holder;
 
     private final Context context;
-    private final ObjectManager objectManager;
 
-    @Getter private final GraphQLFieldDefinition metaField;
+    private final GraphQLObjectType objectType;
+
+    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvMeta(
             final Holder holder,
-            final Context context,
-            final ObjectManager objectManager
+            final Context context
     ) {
         this.holder = holder;
 
         this.context = context;
-        this.objectManager = objectManager;
 
         // we can build the metafield and meta type eagerly because we know exactly which fields it has.
-        val metaTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(this.holder.getObjectSpecification()));
-        metaTypeBuilder.field(id);
-        metaTypeBuilder.field(logicalTypeName);
+        val objectTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(this.holder.getObjectSpecification()));
+
+        objectTypeBuilder.field(id);
+        objectTypeBuilder.field(logicalTypeName);
         if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            metaTypeBuilder.field(version);
+            objectTypeBuilder.field(version);
         }
-        metaField = newFieldDefinition().name(context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName()).type(metaTypeBuilder.build()).build();
 
-        holder.addField(metaField);
+        val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
+
+        this.objectType = objectTypeBuilder.build();
+        field = newFieldDefinition()
+                        .name(fieldName)
+                        .type(objectType)
+                        .build();
+
+        holder.addField(field);
+
+        context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(objectType);
     }
 
-    GraphQLObjectType getMetaType() {
-        return (GraphQLObjectType) metaField.getType();
-    }
-
-    void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getMetaType());
-    }
 
     public void addDataFetchers() {
 
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getMetaField()),
+                holder.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment ->
                     context.bookmarkService.bookmarkFor(environment.getSource())
-                        .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, objectManager))
+                        .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
                         .orElseThrow());
 
         context.codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), logicalTypeName),
+                coordinates(objectType, logicalTypeName),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().logicalTypeName());
 
         context.codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), id),
+                coordinates(objectType, id),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
 
         if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             context.codeRegistryBuilder.dataFetcher(
-                    coordinates(getMetaType(), version),
+                    coordinates(objectType, version),
                     (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());
         }
     }
