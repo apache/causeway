@@ -69,9 +69,9 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
         return this.getField() != null;
     }
 
-    void addDataFetcher(Holder holder) {
+    void addDataFetcher(Parent parent) {
 
-        val association = holder.getOneToOneAssociation();
+        val association = this.holder.getOneToOneAssociation();
         val fieldObjectSpecification = association.getElementType();
         val beanSort = fieldObjectSpecification.getBeanSort();
 
@@ -80,7 +80,7 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(getField()),
+                        parent.coordinatesFor(getField()),
                         this::autoComplete);
 
                 break;
@@ -108,9 +108,8 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            OneToOneAssociationProvider {
+            extends ObjectSpecificationProvider,
+                    OneToOneAssociationProvider {
 
     }
 }

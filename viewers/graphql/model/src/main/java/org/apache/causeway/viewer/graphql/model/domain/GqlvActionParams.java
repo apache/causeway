@@ -94,9 +94,9 @@ public class GqlvActionParams
     }
 
 
-    void addDataFetcher(Holder holder) {
+    void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
         params.forEach((id, param) -> param.addDataFetcher(this));
@@ -118,8 +118,7 @@ public class GqlvActionParams
     }
 
     public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
+            extends ObjectSpecificationProvider,
                     ObjectActionProvider {
 
         void addGqlArguments(

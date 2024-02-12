@@ -43,18 +43,15 @@ import lombok.val;
 //@Log4j2
 public class GqlvMutationForProperty extends GqlvAbstract {
 
-    private final Holder holder;
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
     private String argumentName;
 
     public GqlvMutationForProperty(
-            final Holder holder,
             final ObjectSpecification objectSpec,
             final OneToOneAssociation oneToOneAssociation,
             final Context context) {
         super(context);
-        this.holder = holder;
         this.objectSpec = objectSpec;
         this.oneToOneAssociation = oneToOneAssociation;
 
@@ -79,7 +76,7 @@ public class GqlvMutationForProperty extends GqlvAbstract {
     }
 
 
-    public void addDataFetcher(Holder holder) {
+    public void addDataFetcher(Parent parent) {
 
         val beanSort = oneToOneAssociation.getElementType().getBeanSort();
 
@@ -88,7 +85,7 @@ public class GqlvMutationForProperty extends GqlvAbstract {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(getField()),
+                        parent.coordinatesFor(getField()),
                         this::set);
 
                 break;
@@ -147,9 +144,5 @@ public class GqlvMutationForProperty extends GqlvAbstract {
                         .build());
     }
 
-
-    public interface Holder
-            extends GqlvHolder {
-    }
 
 }

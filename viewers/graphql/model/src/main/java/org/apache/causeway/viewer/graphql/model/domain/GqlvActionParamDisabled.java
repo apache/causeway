@@ -58,9 +58,9 @@ public class GqlvActionParamDisabled extends GqlvAbstract {
     }
 
 
-    public void addDataFetcher(Holder holder) {
+    public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 this::disabled
         );
     }
@@ -85,8 +85,7 @@ public class GqlvActionParamDisabled extends GqlvAbstract {
     }
 
     public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
+            extends ObjectSpecificationProvider,
                     ObjectActionProvider,
                     ObjectActionParameterProvider {
         void addGqlArguments(

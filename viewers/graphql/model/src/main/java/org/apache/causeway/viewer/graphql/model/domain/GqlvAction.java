@@ -55,7 +55,8 @@ public class GqlvAction
                    GqlvMemberDisabled.Holder<ObjectAction>,
                    GqlvActionInvoke.Holder,
                    GqlvActionValidity.Holder,
-                   GqlvActionParams.Holder {
+                   GqlvActionParams.Holder,
+        Parent {
 
     private final GqlvMemberHidden<ObjectAction> hidden;
     private final GqlvMemberDisabled<ObjectAction> disabled;
@@ -248,9 +249,9 @@ public class GqlvAction
         return getObjectMember();
     }
 
-    public void addDataFetcher(Holder holder) {
+    public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
         hidden.addDataFetcher(this);

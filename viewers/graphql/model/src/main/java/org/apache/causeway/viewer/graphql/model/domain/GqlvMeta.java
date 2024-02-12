@@ -68,10 +68,10 @@ public class GqlvMeta extends GqlvAbstractCustom {
     }
 
 
-    public void addDataFetchers(Holder holder) {
+    public void addDataFetchers(Parent parent) {
 
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment ->
                     context.bookmarkService.bookmarkFor(environment.getSource())
                         .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
@@ -135,8 +135,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider {
+            extends ObjectSpecificationProvider {
 
     }
 }

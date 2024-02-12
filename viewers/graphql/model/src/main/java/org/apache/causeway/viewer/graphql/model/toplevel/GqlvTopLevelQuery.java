@@ -12,10 +12,11 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
+import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
 public class GqlvTopLevelQuery
         extends GqlvAbstractCustom
-        implements GqlvDomainService.Holder, GqlvDomainObject.Holder, GqlvScenario.Holder {
+        implements Parent {
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
@@ -32,7 +33,7 @@ public class GqlvTopLevelQuery
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(new GqlvDomainObject(objectSpec, this, context));
+                    domainObjects.add(new GqlvDomainObject(objectSpec, context));
 
                     break;
             }
@@ -44,7 +45,7 @@ public class GqlvTopLevelQuery
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo -> {
-                                GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, this, servicePojo, context);
+                                GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, servicePojo, context);
                                 addChildField(gqlvDomainService.getField());
                                 domainServices.add(gqlvDomainService);
                             });
@@ -80,6 +81,6 @@ public class GqlvTopLevelQuery
 
         domainObjects.forEach(domainObject -> domainObject.addDataFetchers(this));
 
-//        scenario.addDataFetchers();
+//        scenario.addDataFetchers(this);
     }
 }

@@ -52,18 +52,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvMutationForAction extends GqlvAbstract {
 
-    private final Holder holder;
     private final ObjectSpecification objectSpec;
     private final ObjectAction objectAction;
     private String argumentName;
 
     public GqlvMutationForAction(
-            final Holder holder,
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction,
             final Context context) {
         super(context);
-        this.holder = holder;
         this.objectSpec = objectSpec;
         this.objectAction = objectAction;
 
@@ -118,9 +115,9 @@ public class GqlvMutationForAction extends GqlvAbstract {
         }
     }
 
-    public void addDataFetcher(Holder holder) {
+    public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 this::invoke
         );
     }
@@ -218,8 +215,5 @@ public class GqlvMutationForAction extends GqlvAbstract {
         return GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }
 
-    public interface Holder
-            extends GqlvHolder {
-    }
 
 }

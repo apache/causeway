@@ -68,9 +68,9 @@ public class GqlvActionValidity extends GqlvAbstract {
         }
     }
 
-    public void addDataFetcher(Holder holder) {
+    public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 this::validate
         );
     }
@@ -106,9 +106,8 @@ public class GqlvActionValidity extends GqlvAbstract {
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectActionProvider {
+            extends ObjectSpecificationProvider,
+                    ObjectActionProvider {
 
         void addGqlArguments(
                 ObjectAction objectAction,

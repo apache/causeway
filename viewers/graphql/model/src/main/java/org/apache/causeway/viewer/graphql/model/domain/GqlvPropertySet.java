@@ -67,9 +67,9 @@ public class GqlvPropertySet extends GqlvAbstract {
         return context.typeMapper.outputTypeFor(holder.getObjectSpecification());   // setters return void, so we return the domain object instead
     }
 
-    void addDataFetcher(Holder holder) {
+    void addDataFetcher(Parent parent) {
 
-        val association = holder.getOneToOneAssociation();
+        val association = this.holder.getOneToOneAssociation();
         val fieldObjectSpecification = association.getElementType();
         val beanSort = fieldObjectSpecification.getBeanSort();
 
@@ -78,7 +78,7 @@ public class GqlvPropertySet extends GqlvAbstract {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(getField()),
+                        parent.coordinatesFor(getField()),
                         this::set);
 
                 break;
@@ -123,9 +123,8 @@ public class GqlvPropertySet extends GqlvAbstract {
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            OneToOneAssociationProvider {
+            extends ObjectSpecificationProvider,
+                    OneToOneAssociationProvider {
 
         void addGqlArgument(OneToOneAssociation oneToOneAssociation, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
     }

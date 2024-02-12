@@ -132,9 +132,9 @@ public class GqlvProperty
         return getObjectAssociation();
     }
 
-    public void addDataFetcher(Holder holder) {
+    public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
         hidden.addDataFetcher(this);

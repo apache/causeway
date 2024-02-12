@@ -50,8 +50,7 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider {
+            extends ObjectSpecificationProvider {
 
     }
 }

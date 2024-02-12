@@ -33,10 +33,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
 public class GqlvScenario
-        extends GqlvAbstractCustom
-        implements GqlvScenarioName.Holder, GqlvScenarioGiven.Holder {
-
-    private final Holder holder;
+        extends GqlvAbstractCustom {
 
     private final Scenario scenarioPojo;
 
@@ -44,16 +41,14 @@ public class GqlvScenario
     private final GqlvScenarioGiven scenarioGiven;
 
     public GqlvScenario(
-            final GqlvScenario.Holder holder,
             final Context context) {
         super("Scenario", context);
-        this.holder = holder;
 
         this.scenarioPojo = context.serviceRegistry.lookupService(Scenario.class).orElseThrow();
 
-        this.scenarioName = new GqlvScenarioName(this, context);
+        this.scenarioName = new GqlvScenarioName(context);
         addChildField(scenarioName.getField());
-        this.scenarioGiven = new GqlvScenarioGiven(this, context);
+        this.scenarioGiven = new GqlvScenarioGiven(context);
         addChildField(scenarioGiven.getField());
 
         buildObjectType();
@@ -70,9 +65,9 @@ public class GqlvScenario
     }
 
 
-    public void addDataFetchers(Holder holder) {
+    public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment -> scenarioPojo);
 
         scenarioName.addDataFetchers(this);
@@ -85,7 +80,4 @@ public class GqlvScenario
         return scenarioPojo.toString();
     }
 
-    public interface Holder
-            extends GqlvHolder {
-    }
 }

@@ -33,7 +33,6 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -54,8 +53,6 @@ public class GqlvDomainObject
 
     @Getter private final ObjectSpecification objectSpecification;
 
-    private final Holder holder;
-
     @Getter
     private final GraphQLFieldDefinition lookupField;
 
@@ -72,18 +69,15 @@ public class GqlvDomainObject
 
     public static GqlvDomainObject of(
             final ObjectSpecification objectSpecification,
-            final Holder holder,
             final Context context) {
-        return domainObjectBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(spec, holder, context));
+        return domainObjectBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(spec, context));
     }
 
     public GqlvDomainObject(
             final ObjectSpecification objectSpecification,
-            final Holder holder,
             final Context context) {
         super(TypeNames.objectTypeNameFor(objectSpecification), context);
 
-        this.holder = holder;
         this.objectSpecification = objectSpecification;
 
         this.meta = new GqlvMeta(this, context);
@@ -163,10 +157,10 @@ public class GqlvDomainObject
     }
 
 
-    public void addDataFetchers(Holder holder1) {
+    public void addDataFetchers(Parent parent) {
 
         this.context.codeRegistryBuilder.dataFetcher(
-                holder1.coordinatesFor(getLookupField()),
+                parent.coordinatesFor(getLookupField()),
                 (DataFetcher<Object>) environment -> {
                     Object target = environment.getArgument("object");
                     return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService)
@@ -185,7 +179,5 @@ public class GqlvDomainObject
         return objectSpecification.getLogicalTypeName();
     }
 
-    public interface Holder extends GqlvHolder {
-    }
 
 }

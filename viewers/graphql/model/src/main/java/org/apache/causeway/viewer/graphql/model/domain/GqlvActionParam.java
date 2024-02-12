@@ -130,9 +130,9 @@ public class GqlvActionParam
         return holder.getObjectAction();
     }
 
-    public void addDataFetcher(Holder holder) {
+    public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
         hidden.addDataFetcher(this);
@@ -167,8 +167,7 @@ public class GqlvActionParam
 
 
     public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
+            extends ObjectSpecificationProvider,
                     ObjectActionProvider {
 
         void addGqlArguments(

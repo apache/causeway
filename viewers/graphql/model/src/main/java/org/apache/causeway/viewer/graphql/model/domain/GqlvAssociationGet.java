@@ -55,9 +55,9 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
 
     abstract GraphQLOutputType outputTypeFor(Holder<T> holder);
 
-    void addDataFetcher(Holder<T> holder) {
+    void addDataFetcher(Parent parent) {
 
-        val association = holder.getObjectAssociation();
+        val association = this.holder.getObjectAssociation();
         val fieldObjectSpecification = association.getElementType();
         val beanSort = fieldObjectSpecification.getBeanSort();
 
@@ -68,7 +68,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
             case ENTITY:
 
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(getField()),
+                        parent.coordinatesFor(getField()),
                         this::get);
 
                 break;
@@ -98,9 +98,8 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
     }
 
     public interface Holder<T extends ObjectAssociation>
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectAssociationProvider<T> {
+            extends ObjectSpecificationProvider,
+                    ObjectAssociationProvider<T> {
 
     }
 }

@@ -67,9 +67,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
          }
      }
 
-     public void addDataFetcher(Holder holder) {
+     public void addDataFetcher(Parent parent) {
          context.codeRegistryBuilder.dataFetcher(
-                 holder.coordinatesFor(getField()),
+                 parent.coordinatesFor(getField()),
                  this::default_
          );
      }
@@ -96,10 +96,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
      }
 
      public interface Holder
-             extends GqlvHolder,
-             ObjectSpecificationProvider,
-             ObjectActionProvider,
-             ObjectActionParameterProvider {
+             extends ObjectSpecificationProvider,
+                     ObjectActionProvider,
+                     ObjectActionParameterProvider {
          GqlvActionParam.Holder getHolder();
 
          void addGqlArguments(

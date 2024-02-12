@@ -65,9 +65,9 @@ public class GqlvPropertyChoices extends GqlvAbstract {
         return this.getField() != null;
     }
 
-    void addDataFetcher(Holder holder) {
+    void addDataFetcher(Parent parent) {
 
-        val association = holder.getOneToOneAssociation();
+        val association = this.holder.getOneToOneAssociation();
         val fieldObjectSpecification = association.getElementType();
         val beanSort = fieldObjectSpecification.getBeanSort();
 
@@ -76,7 +76,7 @@ public class GqlvPropertyChoices extends GqlvAbstract {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(getField()),
+                        parent.coordinatesFor(getField()),
                         this::choices);
 
                 break;
@@ -102,9 +102,8 @@ public class GqlvPropertyChoices extends GqlvAbstract {
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            OneToOneAssociationProvider {
+            extends ObjectSpecificationProvider,
+                    OneToOneAssociationProvider {
 
         void addGqlArgument(OneToOneAssociation otoa, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
     }

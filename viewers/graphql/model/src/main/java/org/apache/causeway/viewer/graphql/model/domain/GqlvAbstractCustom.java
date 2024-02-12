@@ -29,11 +29,10 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.val;
 
 import java.util.Optional;
 
-public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHolder {
+public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent {
 
     protected final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final String typeName;

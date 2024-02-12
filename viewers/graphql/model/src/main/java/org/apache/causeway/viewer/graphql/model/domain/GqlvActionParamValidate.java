@@ -57,9 +57,9 @@ public class GqlvActionParamValidate extends GqlvAbstract {
     }
 
 
-    public void addDataFetcher(Holder holder) {
+    public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 this::disabled
         );
     }
@@ -87,8 +87,7 @@ public class GqlvActionParamValidate extends GqlvAbstract {
     }
 
     public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
+            extends ObjectSpecificationProvider,
                     ObjectActionProvider,
                     ObjectActionParameterProvider {
         void addGqlArgument(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum);

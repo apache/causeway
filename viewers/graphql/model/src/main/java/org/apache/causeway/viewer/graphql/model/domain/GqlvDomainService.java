@@ -23,10 +23,6 @@ import java.util.Map;
 
 import graphql.schema.DataFetcher;
 
-import static graphql.schema.FieldCoordinates.coordinates;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -43,7 +39,6 @@ public class GqlvDomainService
         extends GqlvAbstractCustom
         implements GqlvAction.Holder {
 
-    private final Holder holder;
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
 
@@ -53,20 +48,17 @@ public class GqlvDomainService
 
     public static GqlvDomainService of(
             final ObjectSpecification objectSpecification,
-            final Holder holder,
             final Object servicePojo,
             final Context context) {
-        return domainServiceBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(spec, holder, servicePojo, context));
+        return domainServiceBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(spec, servicePojo, context));
     }
 
     public GqlvDomainService(
             final ObjectSpecification objectSpecification,
-            final Holder holder,
             final Object servicePojo,
             final Context context) {
         super(TypeNames.objectTypeNameFor(objectSpecification), context);
 
-        this.holder = holder;
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
 
@@ -97,9 +89,9 @@ public class GqlvDomainService
     }
 
 
-    public void addDataFetchers(Holder holder) {
+    public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment -> getServicePojo());
         if (hasActions()) {
             actions.forEach((id, gqlva) -> gqlva.addDataFetcher(this));
@@ -113,8 +105,4 @@ public class GqlvDomainService
     }
 
 
-
-    public interface Holder
-            extends GqlvHolder {
-    }
 }

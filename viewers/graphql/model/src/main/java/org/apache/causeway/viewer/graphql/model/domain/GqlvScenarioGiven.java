@@ -11,19 +11,14 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 public class GqlvScenarioGiven
         extends GqlvAbstractCustom
-        implements GqlvDomainService.Holder, GqlvDomainObject.Holder {
-
-    private final Holder holder;
+        implements Parent {
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
     public GqlvScenarioGiven(
-            final GqlvScenarioGiven.Holder holder,
             final Context context) {
         super("Given", context);
-
-        this.holder = holder;
 
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
@@ -32,7 +27,7 @@ public class GqlvScenarioGiven
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(new GqlvDomainObject(objectSpec, this, context));
+                    domainObjects.add(new GqlvDomainObject(objectSpec, context));
 
                     break;
             }
@@ -42,7 +37,7 @@ public class GqlvScenarioGiven
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
                 context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                         .ifPresent(servicePojo -> {
-                            GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, this, servicePojo, context);
+                            GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, servicePojo, context);
                             addChildField(gqlvDomainService.getField());
                             domainServices.add(gqlvDomainService);
                         });
@@ -70,8 +65,5 @@ public class GqlvScenarioGiven
         domainObjects.forEach(domainObject -> domainObject.addDataFetchers(this));
     }
 
-    public interface Holder
-            extends GqlvHolder {
-    }
 
 }

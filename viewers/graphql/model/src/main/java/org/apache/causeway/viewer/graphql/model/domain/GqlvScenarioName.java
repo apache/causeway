@@ -12,15 +12,10 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 
 public class GqlvScenarioName extends GqlvAbstract {
 
-    private final Holder holder;
-
     public GqlvScenarioName(
-            final GqlvScenarioName.Holder holder,
             final Context context) {
 
         super(context);
-
-        this.holder = holder;
 
         setField(newFieldDefinition()
                     .name("Name")
@@ -29,9 +24,9 @@ public class GqlvScenarioName extends GqlvAbstract {
         );
     }
 
-    public void addDataFetchers(Holder holder) {
+    public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment ->  name(environment));
     }
 
@@ -39,10 +34,6 @@ public class GqlvScenarioName extends GqlvAbstract {
         // TODO: use graphQlContext instead.
         GraphQLContext graphQlContext = environment.getGraphQlContext();
         return context.serviceRegistry.lookupService(Scenario.class).map(Scenario::getName).orElseThrow();
-    }
-
-    public interface Holder
-            extends GqlvHolder {
     }
 
 }

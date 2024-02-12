@@ -52,9 +52,9 @@ public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
                 .build());
     }
 
-    public void addDataFetcher(Holder<T> holder) {
+    public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
+                parent.coordinatesFor(getField()),
                 this::disabled
         );
     }
@@ -78,8 +78,7 @@ public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
     }
 
     public interface Holder<T extends ObjectMember>
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectMemberProvider<T> {
+            extends ObjectSpecificationProvider,
+                    ObjectMemberProvider<T> {
     }
 }

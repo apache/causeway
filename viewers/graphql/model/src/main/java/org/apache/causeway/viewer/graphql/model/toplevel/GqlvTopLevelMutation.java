@@ -16,12 +16,13 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForAction;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForProperty;
+import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
 import lombok.val;
 
 public class GqlvTopLevelMutation
                 extends GqlvAbstractCustom
-                implements GqlvMutationForAction.Holder, GqlvMutationForProperty.Holder {
+                implements Parent {
 
     private final List<GqlvMutationForAction> actions = new ArrayList<>();
     private final List<GqlvMutationForProperty> properties = new ArrayList<>();
@@ -46,13 +47,13 @@ public class GqlvTopLevelMutation
     }
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
-        val gqlvMutationForAction = new GqlvMutationForAction(this, objectSpec, objectAction, context);
+        val gqlvMutationForAction = new GqlvMutationForAction(objectSpec, objectAction, context);
         addChildField(gqlvMutationForAction.getField());
         actions.add(gqlvMutationForAction);
     }
 
     public void addProperty(ObjectSpecification objectSpec, final OneToOneAssociation property) {
-        val gqlvMutationForProperty = new GqlvMutationForProperty(this, objectSpec, property, context);
+        val gqlvMutationForProperty = new GqlvMutationForProperty(objectSpec, property, context);
         addChildField(gqlvMutationForProperty.getField());
         properties.add(gqlvMutationForProperty);
     }
