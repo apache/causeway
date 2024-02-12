@@ -68,7 +68,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
     }
 
 
-    public void addDataFetchers() {
+    public void addDataFetchers(Holder holder) {
 
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),

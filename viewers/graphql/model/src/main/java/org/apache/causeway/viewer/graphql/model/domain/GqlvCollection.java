@@ -63,14 +63,14 @@ public class GqlvCollection
         return getObjectAssociation();
     }
 
-    public void addDataFetcher() {
+    public void addDataFetcher(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
-        hidden.addDataFetcher();
-        disabled.addDataFetcher();
-        get.addDataFetcher();
+        hidden.addDataFetcher(this);
+        disabled.addDataFetcher(this);
+        get.addDataFetcher(this);
     }
 
     public interface Holder extends GqlvAssociation.Holder {

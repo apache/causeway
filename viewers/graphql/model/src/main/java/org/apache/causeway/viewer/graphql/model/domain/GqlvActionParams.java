@@ -94,12 +94,12 @@ public class GqlvActionParams
     }
 
 
-    void addDataFetcher() {
+    void addDataFetcher(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
-        params.forEach((id, param) -> param.addDataFetcher());
+        params.forEach((id, param) -> param.addDataFetcher(this));
     }
 
 

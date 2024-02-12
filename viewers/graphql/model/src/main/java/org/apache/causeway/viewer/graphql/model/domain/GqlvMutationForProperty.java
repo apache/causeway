@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.Getter;
 import lombok.val;
 
 //@Log4j2
@@ -80,7 +79,7 @@ public class GqlvMutationForProperty extends GqlvAbstract {
     }
 
 
-    public void addDataFetcher() {
+    public void addDataFetcher(Holder holder) {
 
         val beanSort = oneToOneAssociation.getElementType().getBeanSort();
 
@@ -94,12 +93,6 @@ public class GqlvMutationForProperty extends GqlvAbstract {
 
                 break;
         }
-
-        // looks to be unnecessary...
-//        context.codeRegistryBuilder.dataFetcher(
-//                holder.coordinatesFor(getField()),
-//                this::set
-//        );
     }
 
     private Object set(final DataFetchingEnvironment dataFetchingEnvironment) {

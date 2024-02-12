@@ -32,7 +32,6 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 
-import lombok.Getter;
 import lombok.val;
 
 public class GqlvPropertyValidate extends GqlvAbstract {
@@ -53,7 +52,7 @@ public class GqlvPropertyValidate extends GqlvAbstract {
         setField(fieldBuilder.build());
     }
 
-    void addDataFetcher() {
+    void addDataFetcher(Holder holder) {
 
         val association = holder.getOneToOneAssociation();
         val fieldObjectSpecification = association.getElementType();

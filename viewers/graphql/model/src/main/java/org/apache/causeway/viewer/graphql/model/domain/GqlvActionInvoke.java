@@ -34,7 +34,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -120,7 +119,7 @@ public class GqlvActionInvoke extends GqlvAbstract {
         }
     }
 
-    public void addDataFetcher() {
+    public void addDataFetcher(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 this::invoke

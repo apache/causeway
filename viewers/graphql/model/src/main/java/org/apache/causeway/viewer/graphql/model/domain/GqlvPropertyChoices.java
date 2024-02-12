@@ -65,7 +65,7 @@ public class GqlvPropertyChoices extends GqlvAbstract {
         return this.getField() != null;
     }
 
-    void addDataFetcher() {
+    void addDataFetcher(Holder holder) {
 
         val association = holder.getOneToOneAssociation();
         val fieldObjectSpecification = association.getElementType();

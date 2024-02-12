@@ -130,23 +130,23 @@ public class GqlvActionParam
         return holder.getObjectAction();
     }
 
-    public void addDataFetcher() {
+    public void addDataFetcher(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
-        hidden.addDataFetcher();
-        disabled.addDataFetcher();
+        hidden.addDataFetcher(this);
+        disabled.addDataFetcher(this);
         if (choices != null) {
-            choices.addDataFetcher();
+            choices.addDataFetcher(this);
         }
         if (autoComplete != null) {
-            autoComplete.addDataFetcher();
+            autoComplete.addDataFetcher(this);
         }
         if (default_ != null) {
-            default_.addDataFetcher();
+            default_.addDataFetcher(this);
         }
-        validate.addDataFetcher();
+        validate.addDataFetcher(this);
     }
 
 

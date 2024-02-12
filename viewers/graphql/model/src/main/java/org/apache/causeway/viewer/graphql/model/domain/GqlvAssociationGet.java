@@ -55,7 +55,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
 
     abstract GraphQLOutputType outputTypeFor(Holder<T> holder);
 
-    void addDataFetcher() {
+    void addDataFetcher(Holder<T> holder) {
 
         val association = holder.getObjectAssociation();
         val fieldObjectSpecification = association.getElementType();

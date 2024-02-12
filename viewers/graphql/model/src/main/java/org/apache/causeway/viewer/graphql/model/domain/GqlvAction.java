@@ -248,19 +248,19 @@ public class GqlvAction
         return getObjectMember();
     }
 
-    public void addDataFetcher() {
+    public void addDataFetcher(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 new BookmarkedPojoFetcher(context.bookmarkService));
 
-        hidden.addDataFetcher();
-        disabled.addDataFetcher();
-        validate.addDataFetcher();
+        hidden.addDataFetcher(this);
+        disabled.addDataFetcher(this);
+        validate.addDataFetcher(this);
         if (invoke != null) {
-            invoke.addDataFetcher();
+            invoke.addDataFetcher(this);
         }
         if (params != null) {
-            params.addDataFetcher();
+            params.addDataFetcher(this);
         }
     }
 

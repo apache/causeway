@@ -118,7 +118,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
         }
     }
 
-    public void addDataFetcher() {
+    public void addDataFetcher(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 this::invoke

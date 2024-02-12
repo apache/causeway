@@ -4,9 +4,6 @@ import graphql.GraphQLContext;
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
-
-import lombok.Getter;
 
 import static graphql.schema.GraphQLFieldDefinition.*;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -32,7 +29,7 @@ public class GqlvScenarioName extends GqlvAbstract {
         );
     }
 
-    public void addDataFetchers() {
+    public void addDataFetchers(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment ->  name(environment));

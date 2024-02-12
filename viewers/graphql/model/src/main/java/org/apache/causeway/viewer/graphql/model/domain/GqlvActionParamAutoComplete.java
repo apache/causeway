@@ -78,7 +78,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
          }
      }
 
-     public void addDataFetcher() {
+     public void addDataFetcher(Holder holder) {
          context.codeRegistryBuilder.dataFetcher(
                  holder.coordinatesFor(getField()),
                  this::choices

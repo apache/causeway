@@ -73,12 +73,12 @@ public class GqlvTopLevelQuery
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
             if (actionsAdded) {
-                domainService.addDataFetchers();
+                domainService.addDataFetchers(this);
             }
         });
 
 
-        domainObjects.forEach(GqlvDomainObject::addDataFetchers);
+        domainObjects.forEach(domainObject -> domainObject.addDataFetchers(this));
 
 //        scenario.addDataFetchers();
     }

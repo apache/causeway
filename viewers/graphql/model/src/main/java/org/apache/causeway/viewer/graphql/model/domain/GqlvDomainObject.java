@@ -22,7 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.function.Function;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
@@ -164,20 +163,20 @@ public class GqlvDomainObject
     }
 
 
-    public void addDataFetchers() {
+    public void addDataFetchers(Holder holder1) {
 
         this.context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getLookupField()),
+                holder1.coordinatesFor(getLookupField()),
                 (DataFetcher<Object>) environment -> {
                     Object target = environment.getArgument("object");
                     return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService)
                             .orElse(null);
                 });
 
-        meta.addDataFetchers();
-        properties.forEach((id, property) -> property.addDataFetcher());
-        collections.forEach((id, collection) -> collection.addDataFetcher());
-        actions.forEach((id, action) -> action.addDataFetcher());
+        meta.addDataFetchers(this);
+        properties.forEach((id, property) -> property.addDataFetcher(this));
+        collections.forEach((id, collection) -> collection.addDataFetcher(this));
+        actions.forEach((id, action) -> action.addDataFetcher(this));
     }
 
 

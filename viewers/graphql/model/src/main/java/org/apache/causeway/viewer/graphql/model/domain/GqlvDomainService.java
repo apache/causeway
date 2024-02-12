@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 import graphql.schema.DataFetcher;
 
@@ -98,12 +97,12 @@ public class GqlvDomainService
     }
 
 
-    public void addDataFetchers() {
+    public void addDataFetchers(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment -> getServicePojo());
         if (hasActions()) {
-            actions.forEach((id, gqlva) -> gqlva.addDataFetcher());
+            actions.forEach((id, gqlva) -> gqlva.addDataFetcher(this));
         }
     }
 

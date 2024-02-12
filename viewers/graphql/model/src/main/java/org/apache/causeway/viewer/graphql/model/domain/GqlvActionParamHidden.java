@@ -35,7 +35,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
- import lombok.Getter;
  import lombok.val;
  import lombok.extern.log4j.Log4j2;
 
@@ -58,7 +57,7 @@ public class GqlvActionParamHidden extends GqlvAbstract {
     }
 
 
-    public void addDataFetcher() {
+    public void addDataFetcher(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 this::hidden

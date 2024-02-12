@@ -70,12 +70,12 @@ public class GqlvScenario
     }
 
 
-    public void addDataFetchers() {
+    public void addDataFetchers(Holder holder) {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment -> scenarioPojo);
 
-        scenarioName.addDataFetchers();
+        scenarioName.addDataFetchers(this);
         scenarioGiven.addDataFetchers();
     }
 
