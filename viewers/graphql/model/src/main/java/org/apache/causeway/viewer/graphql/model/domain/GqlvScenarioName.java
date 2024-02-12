@@ -27,10 +27,10 @@ public class GqlvScenarioName extends GqlvAbstract {
     public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                this::scenarioName);
+                this::fetchData);
     }
 
-    private String scenarioName(DataFetchingEnvironment environment) {
+    private Object fetchData(DataFetchingEnvironment environment) {
         val graphQlContext = environment.getGraphQlContext();
         return graphQlContext.get(GqlvScenario.KEY_SCENARIO_NAME);
     }

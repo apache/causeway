@@ -41,9 +41,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -252,7 +252,7 @@ public class GqlvAction
     public void addDataFetcher(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(context.bookmarkService));
+                this::fetchData);
 
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
@@ -264,6 +264,11 @@ public class GqlvAction
             params.addDataFetcher(this);
         }
     }
+
+    private Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+    }
+
 
 
     public interface Holder extends GqlvMember.Holder {
