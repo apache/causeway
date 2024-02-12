@@ -42,17 +42,15 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationP
 import lombok.Getter;
 import lombok.val;
 
-public class GqlvPropertySet {
+public class GqlvPropertySet extends GqlvAbstract {
 
     final Holder holder;
-    final Context context;
-    @Getter final GraphQLFieldDefinition field;
 
     public GqlvPropertySet(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         GraphQLOutputType graphQLOutputType = outputTypeFor(holder);
         if (graphQLOutputType != null) {
@@ -60,16 +58,15 @@ public class GqlvPropertySet {
                     .name("set")
                     .type(graphQLOutputType);
             holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
-            this.field = fieldBuilder.build();
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
     GraphQLOutputType outputTypeFor(Holder holder) {
         return context.typeMapper.outputTypeFor(holder.getObjectSpecification());   // setters return void, so we return the domain object instead
     }
-
 
     void addDataFetcher() {
 
@@ -82,7 +79,7 @@ public class GqlvPropertySet {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
+                        holder.coordinatesFor(getField()),
                         this::set);
 
                 break;

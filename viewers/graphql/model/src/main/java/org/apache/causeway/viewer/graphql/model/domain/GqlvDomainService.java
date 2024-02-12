@@ -65,17 +65,7 @@ public class GqlvDomainService implements GqlvAction.Holder {
      */
     private GraphQLObjectType gqlObjectType;
 
-    private static Map<ObjectSpecification, GqlvDomainService> serviceByObjectSpec = new LinkedHashMap<>();
-
-    public static GqlvDomainService of(
-            final ObjectSpecification objectSpec,
-            final Holder holder,
-            final Object servicePojo,
-            final Context context) {
-        return serviceByObjectSpec.computeIfAbsent(objectSpec, x -> new GqlvDomainService(holder, x, servicePojo, context));
-    }
-
-    private GqlvDomainService(
+    public GqlvDomainService(
             final GqlvDomainService.Holder holder,
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
@@ -88,7 +78,6 @@ public class GqlvDomainService implements GqlvAction.Holder {
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         addActions();
-
         if (hasActions()) {
             gqlObjectType = gqlObjectTypeBuilder.build();
             this.field = newFieldDefinition()

@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import lombok.Getter;
 import lombok.val;
 
-public class GqlvMeta {
+public class GqlvMeta extends GqlvAbstractCustom {
 
     static GraphQLFieldDefinition id = newFieldDefinition().name("id").type(nonNull(Scalars.GraphQLString)).build();
     static GraphQLFieldDefinition logicalTypeName = newFieldDefinition().name("logicalTypeName").type(nonNull(Scalars.GraphQLString)).build();
@@ -50,38 +50,23 @@ public class GqlvMeta {
 
     private final Holder holder;
 
-    private final Context context;
-
-    private final GraphQLObjectType objectType;
-
-    @Getter private final GraphQLFieldDefinition field;
-
     public GqlvMeta(
             final Holder holder,
             final Context context
     ) {
+        super(newObject().name(TypeNames.metaTypeNameFor(holder.getObjectSpecification())), context);
+
         this.holder = holder;
 
-        this.context = context;
 
-        // we can build the metafield and meta type eagerly because we know exactly which fields it has.
-        val objectTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(this.holder.getObjectSpecification()));
-
-        objectTypeBuilder.field(id);
-        objectTypeBuilder.field(logicalTypeName);
+        field(id);
+        field(logicalTypeName);
         if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            objectTypeBuilder.field(version);
+            field(version);
         }
 
         val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
-
-        this.objectType = objectTypeBuilder.build();
-        field = newFieldDefinition()
-                        .name(fieldName)
-                        .type(objectType)
-                        .build();
-
-        context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(objectType);
+        buildObjectTypeAndSetFieldName(fieldName);
     }
 
 
@@ -95,16 +80,16 @@ public class GqlvMeta {
                         .orElseThrow());
 
         context.codeRegistryBuilder.dataFetcher(
-                coordinates(objectType, logicalTypeName),
+                coordinates(getGqlObjectType(), logicalTypeName),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().logicalTypeName());
 
         context.codeRegistryBuilder.dataFetcher(
-                coordinates(objectType, id),
+                coordinates(getGqlObjectType(), id),
                 (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
 
         if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             context.codeRegistryBuilder.dataFetcher(
-                    coordinates(objectType, version),
+                    coordinates(getGqlObjectType(), version),
                     (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());
         }
     }

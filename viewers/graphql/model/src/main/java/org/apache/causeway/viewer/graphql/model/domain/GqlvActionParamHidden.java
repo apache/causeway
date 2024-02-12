@@ -40,18 +40,17 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionParamHidden {
+public class GqlvActionParamHidden extends GqlvAbstract {
 
     private final Holder holder;
-    private final Context context;
 
     @Getter private final GraphQLFieldDefinition field;
 
     public GqlvActionParamHidden(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")

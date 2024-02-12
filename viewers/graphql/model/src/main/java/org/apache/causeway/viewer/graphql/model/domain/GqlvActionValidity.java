@@ -43,18 +43,16 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionValidity {
+public class GqlvActionValidity extends GqlvAbstract {
 
     private final Holder holder;
-    private final Context context;
-    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvActionValidity(
             final Holder holder,
             final Context context
     ) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         val objectAction = holder.getObjectAction();
 
@@ -65,15 +63,15 @@ public class GqlvActionValidity {
                     .type(type);
 
             holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
-            this.field = fieldBuilder.build();
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
+                holder.coordinatesFor(getField()),
                 this::validate
         );
     }

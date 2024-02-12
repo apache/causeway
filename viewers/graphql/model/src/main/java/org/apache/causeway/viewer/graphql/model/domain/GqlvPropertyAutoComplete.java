@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -36,25 +35,19 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 
-import lombok.Getter;
 import lombok.val;
 
-public class GqlvPropertyAutoComplete {
+public class GqlvPropertyAutoComplete extends GqlvAbstract {
 
     private static final String SEARCH_PARAM_NAME = "search";
 
     private final Holder holder;
-    private final Context context;
-    /**
-     * Populated iff there are choices for this property
-     */
-    @Getter final GraphQLFieldDefinition field;
 
     public GqlvPropertyAutoComplete(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         val otoa = holder.getOneToOneAssociation();
         if (otoa.hasAutoComplete()) {
@@ -66,14 +59,14 @@ public class GqlvPropertyAutoComplete {
                             .name(SEARCH_PARAM_NAME)
                             .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
                     .build();
-            this.field = fieldBuilder.build();
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
     boolean hasAutoComplete() {
-        return this.field != null;
+        return this.getField() != null;
     }
 
     void addDataFetcher() {
@@ -87,7 +80,7 @@ public class GqlvPropertyAutoComplete {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
+                        holder.coordinatesFor(getField()),
                         this::autoComplete);
 
                 break;

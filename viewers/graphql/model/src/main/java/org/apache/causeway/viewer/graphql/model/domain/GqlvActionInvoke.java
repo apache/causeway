@@ -44,34 +44,32 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionInvoke {
+public class GqlvActionInvoke extends GqlvAbstract {
 
     private final Holder holder;
-    private final Context context;
-    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvActionInvoke(
             final Holder holder,
             final Context context) {
+        super(context);
+
         this.holder = holder;
-        this.context = context;
 
         val objectAction = holder.getObjectAction();
 
-        GraphQLOutputType type = typeFor(objectAction);
-        if (type != null) {
+        val graphQLOutputType = typeFor(objectAction);
+        if (graphQLOutputType != null) {
             val fieldBuilder = newFieldDefinition()
                     .name(fieldNameForSemanticsOf(objectAction))
-                    .type(type);
+                    .type(graphQLOutputType);
             holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
-            this.field = fieldBuilder.build();
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
@@ -93,7 +91,7 @@ public class GqlvActionInvoke {
 
     @Nullable
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
-        ObjectSpecification objectSpecification = objectAction.getReturnType();
+        val objectSpecification = objectAction.getReturnType();
         switch (objectSpecification.getBeanSort()){
 
             case COLLECTION:
@@ -124,7 +122,7 @@ public class GqlvActionInvoke {
 
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
+                holder.coordinatesFor(getField()),
                 this::invoke
         );
     }

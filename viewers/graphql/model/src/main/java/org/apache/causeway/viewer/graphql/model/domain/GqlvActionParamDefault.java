@@ -44,10 +44,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import lombok.extern.log4j.Log4j2;
 
  @Log4j2
- public class GqlvActionParamDefault {
+ public class GqlvActionParamDefault extends GqlvAbstract {
 
      private final Holder holder;
-     private final Context context;
 
      /**
       * Populated iff there are choices for this parameter.
@@ -57,8 +56,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
      public GqlvActionParamDefault(
              final Holder holder,
              final Context context) {
+         super(context);
          this.holder = holder;
-         this.context = context;
 
          val objectActionParameter = holder.getObjectActionParameter();
 

@@ -38,60 +38,43 @@ import lombok.Getter;
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
-public class GqlvScenario implements GqlvScenarioName.Holder, GqlvScenarioGiven.Holder {
+public class GqlvScenario
+        extends GqlvAbstractCustom
+        implements GqlvScenarioName.Holder, GqlvScenarioGiven.Holder {
 
     private final Holder holder;
-    private final Context context;
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final Scenario scenarioPojo;
 
     private final GqlvScenarioName scenarioName;
     private final GqlvScenarioGiven scenarioGiven;
 
-    @Getter private GraphQLFieldDefinition field;
-
-    private GraphQLObjectType gqlObjectType;
-
     public GqlvScenario(
             final GqlvScenario.Holder holder,
             final Context context) {
+        super(newObject().name("Scenario"), context);
         this.holder = holder;
-        this.context = context;
 
         this.scenarioPojo = context.serviceRegistry.lookupService(Scenario.class).orElseThrow();
-
-        this.gqlObjectTypeBuilder = newObject().name("Scenario");
 
         this.scenarioName = new GqlvScenarioName(this, context);
         addField(scenarioName.getField());
         this.scenarioGiven = new GqlvScenarioGiven(this, context);
         addField(scenarioGiven.getField());
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
+        buildObjectType();
 
-        this.field = new GraphQLFieldDefinition.Builder()
+        setField(new GraphQLFieldDefinition.Builder()
                             .name("Scenario")
-                            .type(gqlObjectType)
+                            .type(getGqlObjectType())
                             .argument(new GraphQLArgument.Builder()
                                                 .name("name")
                                                 .type(Scalars.GraphQLString)
                             )
-                            .build();
+                            .build()
+        );
     }
 
-
-    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        if (field != null) {
-            gqlObjectTypeBuilder.field(field);
-        }
-        return field;
-    }
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return coordinates(gqlObjectType, fieldDefinition);
-    }
 
     public void addDataFetchers() {
         context.codeRegistryBuilder.dataFetcher(

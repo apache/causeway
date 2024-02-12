@@ -50,12 +50,11 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import lombok.extern.log4j.Log4j2;
 
  @Log4j2
- public class GqlvActionParamAutoComplete {
+ public class GqlvActionParamAutoComplete extends GqlvAbstract {
 
      private static final String SEARCH_PARAM_NAME = "search";
 
      private final Holder holder;
-     private final Context context;
 
      /**
       * Populated iff there is an autocomplete for this parameter.
@@ -65,8 +64,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
      public GqlvActionParamAutoComplete(
              final Holder holder,
              final Context context) {
+         super(context);
          this.holder = holder;
-         this.context = context;
 
          val objectActionParameter = holder.getObjectActionParameter();
          if (objectActionParameter.hasAutoComplete()) {

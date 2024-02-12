@@ -45,8 +45,6 @@ public class GqlvProperty
                    GqlvPropertyValidate.Holder,
                    GqlvPropertySet.Holder {
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    private final GraphQLObjectType gqlObjectType;
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;
     private final GqlvPropertyGet get;
@@ -68,9 +66,7 @@ public class GqlvProperty
             final Holder holder,
             final OneToOneAssociation oneToOneAssociation,
             final Context context) {
-        super(holder, oneToOneAssociation, context);
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(this.holder.getObjectSpecification(), oneToOneAssociation));
+        super(holder, oneToOneAssociation, newObject().name(TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation)), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
         addField(hidden.getField());
@@ -109,14 +105,7 @@ public class GqlvProperty
         }
 
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
-
-        setField(
-            newFieldDefinition()
-                .name(oneToOneAssociation.getId())
-                .type(gqlObjectTypeBuilder)
-                .build()
-        );
+        buildObjectTypeAndSetFieldName(oneToOneAssociation.getId());
     }
 
     public void addGqlArgument(
@@ -145,13 +134,6 @@ public class GqlvProperty
         return getObjectAssociation();
     }
 
-    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        if (field != null) {
-            gqlObjectTypeBuilder.field(field);
-        }
-        return field;
-    }
-
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
@@ -170,12 +152,6 @@ public class GqlvProperty
         if (set != null) {
             set.addDataFetcher();
         }
-    }
-
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
 

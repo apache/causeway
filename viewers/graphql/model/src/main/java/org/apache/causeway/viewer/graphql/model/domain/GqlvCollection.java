@@ -36,19 +36,15 @@ public class GqlvCollection
                    GqlvMemberHidden.Holder<OneToManyAssociation>,
                    GqlvMemberDisabled.Holder<OneToManyAssociation> {
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    private final GraphQLObjectType gqlObjectType;
     private final GqlvMemberHidden<OneToManyAssociation> hidden;
     private final GqlvMemberDisabled<OneToManyAssociation> disabled;
     private final GqlvCollectionGet get;
 
     public GqlvCollection(
-            final Holder domainObject,
+            final Holder holder,
             final OneToManyAssociation oneToManyAssociation,
             final Context context) {
-        super(domainObject, oneToManyAssociation, context);
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation));
+        super(holder, oneToManyAssociation, newObject().name(TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation)), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
         addField(hidden.getField());
@@ -57,14 +53,7 @@ public class GqlvCollection
         this.get = new GqlvCollectionGet(this, context);
         addField(get.getField());
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
-
-        setField(
-            newFieldDefinition()
-                .name(oneToManyAssociation.getId())
-                .type(gqlObjectTypeBuilder)
-                .build()
-        );
+        buildObjectTypeAndSetFieldName(oneToManyAssociation.getId());
     }
 
     @Override
@@ -76,13 +65,6 @@ public class GqlvCollection
         return getObjectAssociation();
     }
 
-    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        if (field != null) {
-            gqlObjectTypeBuilder.field(field);
-        }
-        return field;
-    }
-
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
@@ -91,11 +73,6 @@ public class GqlvCollection
         hidden.addDataFetcher();
         disabled.addDataFetcher();
         get.addDataFetcher();
-    }
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
     }
 
     public interface Holder extends GqlvAssociation.Holder {

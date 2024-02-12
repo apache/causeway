@@ -42,24 +42,22 @@ import lombok.Getter;
 import lombok.val;
 
 //@Log4j2
-public class GqlvMutationForProperty {
+public class GqlvMutationForProperty extends GqlvAbstract {
 
     private final Holder holder;
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
-    private final Context context;
-    @Getter private final GraphQLFieldDefinition field;
     private String argumentName;
 
     public GqlvMutationForProperty(
             final Holder holder,
             final ObjectSpecification objectSpec,
             final OneToOneAssociation oneToOneAssociation,
-        final Context context) {
+            final Context context) {
+        super(context);
         this.holder = holder;
         this.objectSpec = objectSpec;
         this.oneToOneAssociation = oneToOneAssociation;
-        this.context = context;
 
         this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
 
@@ -69,9 +67,9 @@ public class GqlvMutationForProperty {
                     .name(fieldName(objectSpec, oneToOneAssociation))
                     .type(type);
             addGqlArguments(fieldBuilder);
-            this.field = fieldBuilder.build();
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
@@ -91,16 +89,17 @@ public class GqlvMutationForProperty {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
+                        holder.coordinatesFor(getField()),
                         this::set);
 
                 break;
         }
 
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::set
-        );
+        // looks to be unnecessary...
+//        context.codeRegistryBuilder.dataFetcher(
+//                holder.coordinatesFor(getField()),
+//                this::set
+//        );
     }
 
     private Object set(final DataFetchingEnvironment dataFetchingEnvironment) {

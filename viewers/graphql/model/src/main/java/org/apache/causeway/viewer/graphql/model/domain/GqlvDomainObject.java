@@ -52,47 +52,33 @@ import lombok.val;
  * Exposes a domain object (view model or entity) via the GQL viewer.
  */
 public class GqlvDomainObject
+        extends GqlvAbstractCustom
         implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMeta.Holder {
 
     @Getter private final ObjectSpecification objectSpecification;
 
     private final Holder holder;
-    private final Context context;
 
     @Getter
     private final GraphQLFieldDefinition lookupField;
 
     private final GqlvMeta meta;
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-
     private final SortedMap<String, GqlvProperty> properties = new TreeMap<>();
     private final SortedMap<String, GqlvCollection> collections = new TreeMap<>();
     private final Map<String, GqlvAction> actions = new TreeMap<>();
 
-    private GraphQLObjectType objectType;
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
-    private static Map<ObjectSpecification, GqlvDomainObject> objectByObjectSpec = new LinkedHashMap<>();
-
-    public static GqlvDomainObject of(
-            final ObjectSpecification objectSpec,
-            final GqlvDomainObject.Holder holder,
-            final Context context) {
-        return objectByObjectSpec.computeIfAbsent(objectSpec, x -> new GqlvDomainObject(holder, x, context));
-    }
-
-    private GqlvDomainObject(
+    public GqlvDomainObject(
             final GqlvDomainObject.Holder holder,
             final ObjectSpecification objectSpecification,
             final Context context) {
+        super(newObject().name(TypeNames.objectTypeNameFor(objectSpecification)), context);
+
         this.holder = holder;
-
         this.objectSpecification = objectSpecification;
-        this.context = context;
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.meta = new GqlvMeta(this, context);
         addField(meta.getField());
@@ -109,7 +95,7 @@ public class GqlvDomainObject
 
         addMembers();
 
-        objectType = gqlObjectTypeBuilder.build();
+        val objectType = buildObjectType();
 
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(objectType);
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlInputObjectType);
@@ -171,14 +157,6 @@ public class GqlvDomainObject
     }
 
 
-    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        if (field != null) {
-            gqlObjectTypeBuilder.field(field);
-        }
-        return field;
-    }
-
-
     public void addDataFetchers() {
 
         this.context.codeRegistryBuilder.dataFetcher(
@@ -193,12 +171,6 @@ public class GqlvDomainObject
         properties.forEach((id, property) -> property.addDataFetcher());
         collections.forEach((id, collection) -> collection.addDataFetcher());
         actions.forEach((id, action) -> action.addDataFetcher());
-    }
-
-
-    @Override
-    public FieldCoordinates coordinatesFor(final GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(objectType, fieldDefinition);
     }
 
 

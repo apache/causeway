@@ -44,6 +44,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionParam
+        extends GqlvAbstractCustom
         implements GqlvActionParamHidden.Holder,
                    GqlvActionParamDisabled.Holder,
                    GqlvActionParamChoices.Holder,
@@ -53,10 +54,8 @@ public class GqlvActionParam
 
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
-    private final Context context;
     @Getter private final int paramNum;
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final GraphQLObjectType gqlObjectType;
 
     private final GqlvActionParamHidden hidden;
@@ -82,11 +81,10 @@ public class GqlvActionParam
             final ObjectActionParameter objectActionParameter,
             final Context context,
             final int paramNum) {
+        super(newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter)), context);
         this.holder = holder;
         this.objectActionParameter = objectActionParameter;
-        this.context = context;
         this.paramNum = paramNum;
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter));
 
         this.hidden = new GqlvActionParamHidden(this, context);
         addField(hidden.getField());
@@ -141,13 +139,6 @@ public class GqlvActionParam
     @Override
     public ObjectAction getObjectAction() {
         return holder.getObjectAction();
-    }
-
-    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        if (field != null) {
-            gqlObjectTypeBuilder.field(field);
-        }
-        return field;
     }
 
     public void addDataFetcher() {

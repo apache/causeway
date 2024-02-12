@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -31,29 +30,26 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import lombok.Getter;
 import lombok.val;
 
-public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
+public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends GqlvAbstract {
 
     final Holder<T> holder;
-    final Context context;
-    @Getter final GraphQLFieldDefinition field;
 
     public GqlvAssociationGet(
             final Holder<T> holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         GraphQLOutputType type = outputTypeFor(holder);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("get")
                     .type(type);
-            this.field = fieldBuilder.build();
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
@@ -72,7 +68,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
             case ENTITY:
 
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
+                        holder.coordinatesFor(getField()),
                         this::get);
 
                 break;

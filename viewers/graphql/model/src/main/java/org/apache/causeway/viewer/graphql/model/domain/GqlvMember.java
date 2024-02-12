@@ -24,38 +24,36 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import graphql.schema.GraphQLObjectType;
 
-public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Holder> {
+import lombok.Getter;
+
+public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Holder>
+    extends GqlvAbstractCustom {
 
     @Getter final H holder;
     @Getter private final T objectMember;
 
-    final Context context;
-
-    @Getter @Setter(AccessLevel.PACKAGE)
-    GraphQLFieldDefinition field;
-
     public GqlvMember(
             final H holder,
             final T objectMember,
+            final GraphQLObjectType.Builder gqlObjectTypeBuilder,
             final Context context
     ) {
-        this(holder, objectMember, null, context);
+        this(holder, objectMember, gqlObjectTypeBuilder, null, context);
     }
 
     public GqlvMember(
             final H holder,
             final T objectMember,
+            final GraphQLObjectType.Builder gqlObjectTypeBuilder,
             final GraphQLFieldDefinition field,
             final Context context
     ) {
+        super(gqlObjectTypeBuilder, context);
         this.holder = holder;
         this.objectMember = objectMember;
         this.field = field;
-        this.context = context;
     }
 
     public String getId() {

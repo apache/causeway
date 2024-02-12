@@ -41,34 +41,31 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvMutationForAction {
+public class GqlvMutationForAction extends GqlvAbstract {
 
     private final Holder holder;
     private final ObjectSpecification objectSpec;
     private final ObjectAction objectAction;
-    private final Context context;
-    @Getter private final GraphQLFieldDefinition field;
     private String argumentName;
 
     public GqlvMutationForAction(
             final Holder holder,
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction,
-        final Context context) {
+            final Context context) {
+        super(context);
         this.holder = holder;
         this.objectSpec = objectSpec;
         this.objectAction = objectAction;
-        this.context = context;
 
         this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
 
@@ -78,9 +75,9 @@ public class GqlvMutationForAction {
                     .name(fieldName(objectSpec, objectAction))
                     .type(type);
             addGqlArguments(fieldBuilder);
-            this.field = fieldBuilder.build();
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
@@ -123,7 +120,7 @@ public class GqlvMutationForAction {
 
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
+                holder.coordinatesFor(getField()),
                 this::invoke
         );
     }

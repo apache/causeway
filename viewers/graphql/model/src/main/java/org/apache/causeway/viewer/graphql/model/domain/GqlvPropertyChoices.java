@@ -30,29 +30,23 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.Getter;
 import lombok.val;
 
-public class GqlvPropertyChoices {
+public class GqlvPropertyChoices extends GqlvAbstract {
 
     final Holder holder;
-    private final Context context;
-    /**
-     * Populated iff there are choices for this property
-     */
-    @Getter final GraphQLFieldDefinition field;
 
     public GqlvPropertyChoices(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         val otoa = holder.getOneToOneAssociation();
         if (otoa.hasChoices()) {
@@ -61,14 +55,14 @@ public class GqlvPropertyChoices {
                     .name("choices")
                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
             holder.addGqlArgument(otoa, fieldBuilder, TypeMapper.InputContext.CHOICES);
-            this.field = fieldBuilder.build();
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
     boolean hasChoices() {
-        return this.field != null;
+        return this.getField() != null;
     }
 
     void addDataFetcher() {
@@ -82,7 +76,7 @@ public class GqlvPropertyChoices {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
+                        holder.coordinatesFor(getField()),
                         this::choices);
 
                 break;

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -28,16 +29,18 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
     public GqlvAssociation(
             final H holder,
             final T objectAssociation,
+            final GraphQLObjectType.Builder gqlObjectTypeBuilder,
             final Context context) {
-        this(holder, objectAssociation, null, context);
+        this(holder, objectAssociation, gqlObjectTypeBuilder, null, context);
     }
 
     public GqlvAssociation(
             final H holder,
             final T objectAssociation,
+            final GraphQLObjectType.Builder gqlObjectTypeBuilder,
             final GraphQLFieldDefinition fieldDefinition,
             final Context context) {
-        super(holder, objectAssociation, fieldDefinition, context);
+        super(holder, objectAssociation, gqlObjectTypeBuilder, fieldDefinition, context);
     }
 
     public boolean hasFieldDefinition() {

@@ -35,24 +35,22 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationP
 import lombok.Getter;
 import lombok.val;
 
-public class GqlvPropertyValidate {
+public class GqlvPropertyValidate extends GqlvAbstract {
 
     final Holder holder;
-    private final Context context;
-    @Getter final GraphQLFieldDefinition field;
 
     public GqlvPropertyValidate(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
                 .type(context.typeMapper.scalarTypeFor(String.class));
         holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
-        this.field = fieldBuilder.build();
+        setField(fieldBuilder.build());
     }
 
     void addDataFetcher() {
@@ -66,7 +64,7 @@ public class GqlvPropertyValidate {
             case VIEW_MODEL:
             case ENTITY:
                 context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
+                        holder.coordinatesFor(getField()),
                         this::validate);
 
                 break;

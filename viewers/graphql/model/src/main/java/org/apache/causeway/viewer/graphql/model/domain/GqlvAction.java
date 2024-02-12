@@ -27,7 +27,6 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -59,9 +58,6 @@ public class GqlvAction
                    GqlvActionValidity.Holder,
                    GqlvActionParams.Holder {
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    private final GraphQLObjectType gqlObjectType;
-
     private final GqlvMemberHidden<ObjectAction> hidden;
     private final GqlvMemberDisabled<ObjectAction> disabled;
     private final GqlvActionValidity validate;
@@ -78,14 +74,14 @@ public class GqlvAction
             final Holder holder,
             final ObjectAction objectAction,
             final Context context) {
-        super(holder, objectAction, context);
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction));
+        super(holder, objectAction, newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction)), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
         addField(hidden.getField());
+
         this.disabled = new GqlvMemberDisabled<>(this, context);
         addField(disabled.getField());
+
         this.validate = new GqlvActionValidity(this, context);
         addField(validate.getField());
 
@@ -107,12 +103,7 @@ public class GqlvAction
             this.params = null;
         }
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
-
-        this.field = newFieldDefinition()
-                .name(objectAction.getId())
-                .type(gqlObjectTypeBuilder)
-                .build();
+        buildObjectTypeAndSetFieldName(objectAction.getId());
     }
 
     public Can<ManagedObject> argumentManagedObjectsFor(
@@ -258,13 +249,6 @@ public class GqlvAction
         return getObjectMember();
     }
 
-    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        if (field != null) {
-            gqlObjectTypeBuilder.field(field);
-        }
-        return field;
-    }
-
     public void addDataFetcher() {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
@@ -281,11 +265,6 @@ public class GqlvAction
         }
     }
 
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
-    }
 
     public interface Holder extends GqlvMember.Holder {
     }

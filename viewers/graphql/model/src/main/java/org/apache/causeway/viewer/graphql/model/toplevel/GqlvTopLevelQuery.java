@@ -39,7 +39,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(GqlvDomainObject.of(objectSpec, this, context));
+                    domainObjects.add(new GqlvDomainObject(this, objectSpec, context));
 
                     break;
             }
@@ -51,7 +51,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo -> {
-                                GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, this, servicePojo, context);
+                                GqlvDomainService gqlvDomainService = new GqlvDomainService(this, objectSpec, servicePojo, context);
                                 addField(gqlvDomainService.getField());
                                 domainServices.add(gqlvDomainService);
                             });

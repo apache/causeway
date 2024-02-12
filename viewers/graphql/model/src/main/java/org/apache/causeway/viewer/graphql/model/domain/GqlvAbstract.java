@@ -18,30 +18,32 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import lombok.val;
+import lombok.AccessLevel;
+import lombok.Getter;
 
-public class GqlvPropertyGet extends GqlvAssociationGet<OneToOneAssociation> {
+public abstract class GqlvAbstract {
 
-    public GqlvPropertyGet(
-            final Holder holder,
-            final Context context) {
-        super(holder, context);
+    protected final Context context;
+
+    @Getter
+    private GraphQLFieldDefinition field;
+
+    protected GqlvAbstract(final Context context) {
+        this.context = context;
     }
 
-    @Override
-    GraphQLOutputType outputTypeFor(GqlvAssociationGet.Holder<OneToOneAssociation> holder) {
-        val oneToOneAssociation = holder.getObjectAssociation();
-        return context.typeMapper.outputTypeFor(oneToOneAssociation);
+    protected final GraphQLFieldDefinition setField(GraphQLFieldDefinition field) {
+        this.field = field;
+        return field;
     }
 
-    public interface Holder extends GqlvAssociationGet.Holder<OneToOneAssociation> {
-
-        @Override
-        OneToOneAssociation getObjectAssociation();
-    }
 }
