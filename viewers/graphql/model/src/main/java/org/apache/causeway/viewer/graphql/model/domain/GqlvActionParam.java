@@ -132,6 +132,10 @@ public class GqlvActionParam
                 parent.coordinatesFor(getField()),
                 this::fetchData);
 
+        addDataFetchersForChildren();
+    }
+
+    protected void addDataFetchersForChildren() {
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         if (choices != null) {

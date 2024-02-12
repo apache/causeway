@@ -93,6 +93,10 @@ public class GqlvDomainService
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
                 this::fetchData);
+        addDataFetchersForChildren();
+    }
+
+    protected void addDataFetchersForChildren() {
         if (hasActions()) {
             actions.forEach((id, gqlva) -> gqlva.addDataFetcher(this));
         }

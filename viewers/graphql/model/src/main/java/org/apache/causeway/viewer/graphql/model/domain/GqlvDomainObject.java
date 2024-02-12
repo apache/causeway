@@ -162,6 +162,10 @@ public class GqlvDomainObject
                 parent.coordinatesFor(getLookupField()),
                 this::fetchData);
 
+        addDataFetchersForChildren();
+    }
+
+    protected void addDataFetchersForChildren() {
         meta.addDataFetchers(this);
         properties.forEach((id, property) -> property.addDataFetcher(this));
         collections.forEach((id, collection) -> collection.addDataFetcher(this));

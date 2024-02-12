@@ -59,6 +59,10 @@ public class GqlvScenarioGiven
                 parent.coordinatesFor(getField()),
                 this::fetchData);
 
+        addDataFetchersForChildren();
+    }
+
+    protected void addDataFetchersForChildren() {
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
             if (actionsAdded) {

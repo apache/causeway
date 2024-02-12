@@ -254,6 +254,10 @@ public class GqlvAction
                 parent.coordinatesFor(getField()),
                 this::fetchData);
 
+        addDataFetchersForChildren();
+    }
+
+    protected void addDataFetchersForChildren() {
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         validate.addDataFetcher(this);

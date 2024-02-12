@@ -64,6 +64,10 @@ public class GqlvScenario
                 parent.coordinatesFor(getField()),
                 this::fetchData);
 
+        addDataFetchersForChildren();
+    }
+
+    protected void addDataFetchersForChildren() {
         scenarioName.addDataFetchers(this);
         scenarioGiven.addDataFetchers(this);
     }

@@ -100,6 +100,10 @@ public class GqlvActionParams
                 parent.coordinatesFor(getField()),
                 this::fetchData);
 
+        addDataFetchersForChildren();
+    }
+
+    private void addDataFetchersForChildren() {
         params.forEach((id, param) -> param.addDataFetcher(this));
     }
 

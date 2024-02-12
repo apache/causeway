@@ -71,6 +71,10 @@ public class GqlvCollection
                 parent.coordinatesFor(getField()),
                 this::fetchData);
 
+        addDataFetchersForChildren();
+    }
+
+    protected void addDataFetchersForChildren() {
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         get.addDataFetcher(this);
