@@ -81,8 +81,6 @@ public class GqlvMeta {
                         .type(objectType)
                         .build();
 
-        holder.addField(field);
-
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(objectType);
     }
 

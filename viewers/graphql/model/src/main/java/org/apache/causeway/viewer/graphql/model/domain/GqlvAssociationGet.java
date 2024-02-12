@@ -31,35 +31,30 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
+import lombok.Getter;
 import lombok.val;
 
 public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
 
     final Holder<T> holder;
     final Context context;
-    final GraphQLFieldDefinition field;
+    @Getter final GraphQLFieldDefinition field;
 
     public GqlvAssociationGet(
             final Holder<T> holder,
             final Context context) {
         this.holder = holder;
         this.context = context;
-        this.field = fieldDefinition(holder);
-    }
 
-    GraphQLFieldDefinition fieldDefinition(final Holder<T> holder) {
-
-        GraphQLFieldDefinition fieldDefinition = null;
         GraphQLOutputType type = outputTypeFor(holder);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("get")
                     .type(type);
-            fieldDefinition = fieldBuilder.build();
-
-            holder.addField(fieldDefinition);
+            this.field = fieldBuilder.build();
+        } else {
+            this.field = null;
         }
-        return fieldDefinition;
     }
 
     abstract GraphQLOutputType outputTypeFor(Holder<T> holder);

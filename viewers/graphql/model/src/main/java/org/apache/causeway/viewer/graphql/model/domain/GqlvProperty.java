@@ -73,17 +73,37 @@ public class GqlvProperty
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(this.holder.getObjectSpecification(), oneToOneAssociation));
 
         this.hidden = new GqlvMemberHidden<>(this, context);
+        addField(hidden.getField());
+
         this.disabled = new GqlvMemberDisabled<>(this, context);
+        addField(disabled.getField());
+
         this.get = new GqlvPropertyGet(this, context);
+        addField(get.getField());
+
         this.validate = new GqlvPropertyValidate(this, context);
+        addField(this.validate.getField());
+
         val choices = new GqlvPropertyChoices(this, context);
-        this.choices = choices.hasChoices() ? choices : null;
+        if (choices.hasChoices()) {
+            addField(choices.getField());
+            this.choices = choices;
+        } else {
+            this.choices = null;
+        }
+
         val autoComplete = new GqlvPropertyAutoComplete(this, context);
-        this.autoComplete = autoComplete.hasAutoComplete() ? autoComplete : null;
+        if (autoComplete.hasAutoComplete()) {
+            addField(autoComplete.getField());
+            this.autoComplete = autoComplete;
+        } else {
+            this.autoComplete = null;
+        }
 
         val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         if (variant == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
             this.set = new GqlvPropertySet(this, context);
+            addField(set.getField());
         } else {
             this.set = null;
         }
@@ -92,12 +112,10 @@ public class GqlvProperty
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
         setField(
-            this.holder.addField(
-                newFieldDefinition()
-                    .name(oneToOneAssociation.getId())
-                    .type(gqlObjectTypeBuilder)
-                    .build()
-            )
+            newFieldDefinition()
+                .name(oneToOneAssociation.getId())
+                .type(gqlObjectTypeBuilder)
+                .build()
         );
     }
 
@@ -127,9 +145,10 @@ public class GqlvProperty
         return getObjectAssociation();
     }
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

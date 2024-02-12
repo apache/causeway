@@ -34,6 +34,7 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
     @Getter private final T objectMember;
 
     final Context context;
+
     @Getter @Setter(AccessLevel.PACKAGE)
     GraphQLFieldDefinition field;
 

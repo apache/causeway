@@ -32,6 +32,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -40,7 +41,7 @@ public class GqlvMemberHidden<T extends ObjectMember> {
 
     private final Holder<T> holder;
     private final Context context;
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvMemberHidden(
             final Holder<T> holder,
@@ -49,10 +50,10 @@ public class GqlvMemberHidden<T extends ObjectMember> {
         this.holder = holder;
         this.context = context;
 
-        this.field = holder.addField(newFieldDefinition()
+        this.field = newFieldDefinition()
                 .name("hidden")
                 .type(this.context.typeMapper.scalarTypeFor(boolean.class))
-                .build());
+                .build();
     }
 
     public void addDataFetcher() {

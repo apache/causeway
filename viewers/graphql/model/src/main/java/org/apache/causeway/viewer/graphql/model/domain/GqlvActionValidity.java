@@ -38,6 +38,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -46,7 +47,7 @@ public class GqlvActionValidity {
 
     private final Holder holder;
     private final Context context;
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvActionValidity(
             final Holder holder,
@@ -54,26 +55,20 @@ public class GqlvActionValidity {
     ) {
         this.holder = holder;
         this.context = context;
-        this.field = fieldDefinition(holder);
-    }
-
-    private GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         val objectAction = holder.getObjectAction();
 
-        GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLOutputType type = context.typeMapper.scalarTypeFor(String.class);
+        GraphQLOutputType type = this.context.typeMapper.scalarTypeFor(String.class);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("validate")
                     .type(type);
 
             holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
-            fieldDefinition = fieldBuilder.build();
-
-            holder.addField(fieldDefinition);
+            this.field = fieldBuilder.build();
+        } else {
+            this.field = null;
         }
-        return fieldDefinition;
     }
 
     public void addDataFetcher() {

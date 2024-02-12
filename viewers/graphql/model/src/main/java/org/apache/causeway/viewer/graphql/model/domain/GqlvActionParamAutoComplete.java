@@ -45,6 +45,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
+ import lombok.Getter;
  import lombok.val;
  import lombok.extern.log4j.Log4j2;
 
@@ -59,7 +60,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
      /**
       * Populated iff there is an autocomplete for this parameter.
       */
-     private final GraphQLFieldDefinition field;
+     @Getter private final GraphQLFieldDefinition field;
 
      public GqlvActionParamAutoComplete(
              final Holder holder,
@@ -78,7 +79,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
                      .name(SEARCH_PARAM_NAME)
                      .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
                      .build();
-             this.field = holder.addField(fieldBuilder.build());
+             this.field = fieldBuilder.build();
          } else {
              this.field = null;
          }

@@ -5,6 +5,8 @@ import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
+import lombok.Getter;
+
 import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -13,7 +15,7 @@ public class GqlvScenarioName  {
 
     private final Holder holder;
     private final Context context;
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvScenarioName(
             final GqlvScenarioName.Holder holder,
@@ -23,7 +25,6 @@ public class GqlvScenarioName  {
         this.context = context;
 
         this.field = GraphQLFieldDefinition.newFieldDefinition().name("Name").type(Scalars.GraphQLString).build();
-        this.holder.addField(field);
     }
 
     public void addDataFetchers() {

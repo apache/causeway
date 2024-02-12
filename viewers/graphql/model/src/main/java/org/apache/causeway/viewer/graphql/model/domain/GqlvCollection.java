@@ -51,18 +51,19 @@ public class GqlvCollection
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation));
 
         this.hidden = new GqlvMemberHidden<>(this, context);
+        addField(hidden.getField());
         this.disabled = new GqlvMemberDisabled<>(this, context);
+        addField(disabled.getField());
         this.get = new GqlvCollectionGet(this, context);
+        addField(get.getField());
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
         setField(
-            holder.addField(
-                newFieldDefinition()
-                    .name(oneToManyAssociation.getId())
-                    .type(gqlObjectTypeBuilder)
-                    .build()
-            )
+            newFieldDefinition()
+                .name(oneToManyAssociation.getId())
+                .type(gqlObjectTypeBuilder)
+                .build()
         );
     }
 
@@ -75,9 +76,10 @@ public class GqlvCollection
         return getObjectAssociation();
     }
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

@@ -36,6 +36,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 
+import lombok.Getter;
 import lombok.val;
 
 public class GqlvPropertyAutoComplete {
@@ -47,7 +48,7 @@ public class GqlvPropertyAutoComplete {
     /**
      * Populated iff there are choices for this property
      */
-    final GraphQLFieldDefinition field;
+    @Getter final GraphQLFieldDefinition field;
 
     public GqlvPropertyAutoComplete(
             final Holder holder,
@@ -65,7 +66,7 @@ public class GqlvPropertyAutoComplete {
                             .name(SEARCH_PARAM_NAME)
                             .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
                     .build();
-            this.field = holder.addField(fieldBuilder.build());
+            this.field = fieldBuilder.build();
         } else {
             this.field = null;
         }

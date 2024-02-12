@@ -39,36 +39,31 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 
+import lombok.Getter;
 import lombok.val;
 
 public class GqlvPropertySet {
 
     final Holder holder;
     final Context context;
-    final GraphQLFieldDefinition field;
+    @Getter final GraphQLFieldDefinition field;
 
     public GqlvPropertySet(
             final Holder holder,
             final Context context) {
         this.holder = holder;
         this.context = context;
-        this.field = fieldDefinition(holder);
-    }
 
-    GraphQLFieldDefinition fieldDefinition(final Holder holder) {
-
-        GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLOutputType type = outputTypeFor(holder);
-        if (type != null) {
+        GraphQLOutputType graphQLOutputType = outputTypeFor(holder);
+        if (graphQLOutputType != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("set")
-                    .type(type);
+                    .type(graphQLOutputType);
             holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
-            fieldDefinition = fieldBuilder.build();
-
-            holder.addField(fieldDefinition);
+            this.field = fieldBuilder.build();
+        } else {
+            this.field = null;
         }
-        return fieldDefinition;
     }
 
     GraphQLOutputType outputTypeFor(Holder holder) {

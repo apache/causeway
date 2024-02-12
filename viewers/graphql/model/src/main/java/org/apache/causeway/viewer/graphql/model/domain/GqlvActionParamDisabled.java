@@ -35,6 +35,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParamete
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -45,7 +46,7 @@ public class GqlvActionParamDisabled {
     private final Holder holder;
     private final Context context;
 
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvActionParamDisabled(
             final Holder holder,
@@ -57,7 +58,7 @@ public class GqlvActionParamDisabled {
                 .name("disabled")
                 .type(context.typeMapper.scalarTypeFor(String.class));
         holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum()+1);
-        this.field = holder.addField(fieldBuilder.build());
+        this.field = fieldBuilder.build();
     }
 
 

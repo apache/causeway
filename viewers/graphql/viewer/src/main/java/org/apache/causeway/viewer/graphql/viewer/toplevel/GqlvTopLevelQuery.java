@@ -20,7 +20,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
 
     private static final String OBJECT_TYPE_NAME = "Query";
 
-    final GraphQLObjectType.Builder objectTypeBuilder;
+    final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     @Getter private final GraphQLObjectType objectType;
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
@@ -30,7 +30,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
 
     public GqlvTopLevelQuery(final Context context) {
 
-        this.objectTypeBuilder = newObject().name(OBJECT_TYPE_NAME);
+        this.gqlObjectTypeBuilder = newObject().name(OBJECT_TYPE_NAME);
 
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
@@ -51,7 +51,9 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo -> {
-                                domainServices.add(GqlvDomainService.of(objectSpec, this, servicePojo, context));
+                                GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, this, servicePojo, context);
+                                addField(gqlvDomainService.getField());
+                                domainServices.add(gqlvDomainService);
                             });
                     break;
             }
@@ -63,8 +65,9 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
         }
 
         scenario = new GqlvScenario(this, context);
+        addField(scenario.getField());
 
-        objectType = objectTypeBuilder.build();
+        objectType = gqlObjectTypeBuilder.build();
     }
 
 
@@ -73,9 +76,10 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
         return FieldCoordinates.coordinates(OBJECT_TYPE_NAME, fieldDefinition.getName());
     }
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        objectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

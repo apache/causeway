@@ -58,7 +58,7 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
     /**
      * Populated iff {@link #hasParams()}
      */
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
     private final Map<String, GqlvActionParam> params = new LinkedHashMap<>();
 
@@ -77,10 +77,10 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
         this.field = hasParams() ?
-                holder.addField(newFieldDefinition()
+                newFieldDefinition()
                     .name("params")
                     .type(gqlObjectTypeBuilder)
-                    .build())
+                    .build()
                 : null;
     }
 
@@ -104,13 +104,16 @@ public class GqlvActionParams implements GqlvActionParam.Holder {
     }
 
     void addParam(ObjectActionParameter objectActionParameter, int paramNum) {
-        params.put(objectActionParameter.getId(), new GqlvActionParam(this, objectActionParameter, context, paramNum));
+        GqlvActionParam gqlvActionParam = new GqlvActionParam(this, objectActionParameter, context, paramNum);
+        addField(gqlvActionParam.getField());
+        params.put(objectActionParameter.getId(), gqlvActionParam);
     }
 
 
-     @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

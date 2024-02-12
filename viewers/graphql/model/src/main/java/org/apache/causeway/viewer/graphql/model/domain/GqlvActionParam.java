@@ -60,7 +60,7 @@ public class GqlvActionParam
     private final GraphQLObjectType gqlObjectType;
 
     private final GqlvActionParamHidden hidden;
-    private final GqlvActionParamDisabled validate;
+    private final GqlvActionParamDisabled disabled;
     /**
      * Populated iff there are choices for this param
      */
@@ -73,9 +73,9 @@ public class GqlvActionParam
      * Populated iff there is a default for this param
      */
     private final GqlvActionParamDefault default_;
-    private final GqlvActionParamValidate disabled;
+    private final GqlvActionParamValidate validate;
 
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvActionParam(
             final Holder holder,
@@ -89,21 +89,43 @@ public class GqlvActionParam
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter));
 
         this.hidden = new GqlvActionParamHidden(this, context);
-        this.disabled = new GqlvActionParamValidate(this, context);
+        addField(hidden.getField());
+        this.disabled = new GqlvActionParamDisabled(this, context);
+        addField(disabled.getField());
+
         val choices = new GqlvActionParamChoices(this, context);
-        this.choices = choices.hasChoices() ? choices : null;
+        addField(choices.getField());
+        if (choices.hasChoices()) {
+            this.choices = choices;
+        } else {
+            this.choices = null;
+        }
+
         val autoComplete = new GqlvActionParamAutoComplete(this, context);
-        this.autoComplete = autoComplete.hasAutoComplete() ? autoComplete : null;
+        addField(autoComplete.getField());
+        if (autoComplete.hasAutoComplete()) {
+            this.autoComplete = autoComplete;
+        } else {
+            this.autoComplete = null;
+        }
+
         val default_ = new GqlvActionParamDefault(this, context);
-        this.default_ = default_.hasDefault() ? default_ : null;
-        this.validate = new GqlvActionParamDisabled(this, context);
+        addField(default_.getField());
+        if (default_.hasDefault()) {
+            this.default_ = default_;
+        } else {
+            this.default_ = null;
+        }
+
+        this.validate = new GqlvActionParamValidate(this, context);
+        addField(validate.getField());
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
-        this.field = holder.addField(newFieldDefinition()
+        this.field = newFieldDefinition()
                         .name(objectActionParameter.getId())
                         .type(gqlObjectTypeBuilder)
-                        .build());
+                        .build();
     }
 
     @Override
@@ -121,9 +143,10 @@ public class GqlvActionParam
         return holder.getObjectAction();
     }
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

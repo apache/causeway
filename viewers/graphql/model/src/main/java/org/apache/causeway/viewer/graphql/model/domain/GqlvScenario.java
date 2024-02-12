@@ -64,7 +64,9 @@ public class GqlvScenario implements GqlvScenarioName.Holder, GqlvScenarioGiven.
         this.gqlObjectTypeBuilder = newObject().name("Scenario");
 
         this.scenarioName = new GqlvScenarioName(this, context);
+        addField(scenarioName.getField());
         this.scenarioGiven = new GqlvScenarioGiven(this, context);
+        addField(scenarioGiven.getField());
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
@@ -76,14 +78,13 @@ public class GqlvScenario implements GqlvScenarioName.Holder, GqlvScenarioGiven.
                                                 .type(Scalars.GraphQLString)
                             )
                             .build();
-
-        holder.addField(field);
     }
 
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

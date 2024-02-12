@@ -36,6 +36,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 
+import lombok.Getter;
 import lombok.val;
 
 public class GqlvPropertyChoices {
@@ -45,7 +46,7 @@ public class GqlvPropertyChoices {
     /**
      * Populated iff there are choices for this property
      */
-    final GraphQLFieldDefinition field;
+    @Getter final GraphQLFieldDefinition field;
 
     public GqlvPropertyChoices(
             final Holder holder,
@@ -60,7 +61,7 @@ public class GqlvPropertyChoices {
                     .name("choices")
                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
             holder.addGqlArgument(otoa, fieldBuilder, TypeMapper.InputContext.CHOICES);
-            this.field = holder.addField(fieldBuilder.build());
+            this.field = fieldBuilder.build();
         } else {
             this.field = null;
         }

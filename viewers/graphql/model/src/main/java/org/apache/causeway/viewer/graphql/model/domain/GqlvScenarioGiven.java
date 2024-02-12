@@ -19,11 +19,11 @@ public class GqlvScenarioGiven implements GqlvDomainService.Holder, GqlvDomainOb
 
     private static final String OBJECT_TYPE_NAME = "Given";
 
-    final GraphQLObjectType.Builder objectTypeBuilder;
+    final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     @Getter private final GraphQLObjectType objectType;
 
     private final Holder holder;
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
@@ -34,7 +34,7 @@ public class GqlvScenarioGiven implements GqlvDomainService.Holder, GqlvDomainOb
 
         this.holder = holder;
 
-        this.objectTypeBuilder = newObject().name(OBJECT_TYPE_NAME);
+        this.gqlObjectTypeBuilder = newObject().name(OBJECT_TYPE_NAME);
 
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
@@ -53,7 +53,9 @@ public class GqlvScenarioGiven implements GqlvDomainService.Holder, GqlvDomainOb
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
                 context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                         .ifPresent(servicePojo -> {
-                            domainServices.add(GqlvDomainService.of(objectSpec, this, servicePojo, context));
+                            GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, this, servicePojo, context);
+                            addField(gqlvDomainService.getField());
+                            domainServices.add(gqlvDomainService);
                         });
             }
         });
@@ -64,10 +66,9 @@ public class GqlvScenarioGiven implements GqlvDomainService.Holder, GqlvDomainOb
         }
 
 
-        objectType = objectTypeBuilder.build();
+        objectType = gqlObjectTypeBuilder.build();
 
         this.field = GraphQLFieldDefinition.newFieldDefinition().name("Given").type(objectType).build();
-        this.holder.addField(field);
     }
 
 
@@ -76,9 +77,10 @@ public class GqlvScenarioGiven implements GqlvDomainService.Holder, GqlvDomainOb
         return FieldCoordinates.coordinates(objectType, fieldDefinition);
     }
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        objectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

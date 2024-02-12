@@ -44,6 +44,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -52,7 +53,7 @@ public class GqlvActionInvoke {
 
     private final Holder holder;
     private final Context context;
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
     public GqlvActionInvoke(
             final Holder holder,
@@ -68,7 +69,7 @@ public class GqlvActionInvoke {
                     .name(fieldNameForSemanticsOf(objectAction))
                     .type(type);
             holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
-            this.field = holder.addField(fieldBuilder.build());
+            this.field = fieldBuilder.build();
         } else {
             this.field = null;
         }

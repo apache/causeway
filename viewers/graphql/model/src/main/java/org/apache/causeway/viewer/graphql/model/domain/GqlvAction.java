@@ -83,22 +83,36 @@ public class GqlvAction
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction));
 
         this.hidden = new GqlvMemberHidden<>(this, context);
+        addField(hidden.getField());
         this.disabled = new GqlvMemberDisabled<>(this, context);
+        addField(disabled.getField());
         this.validate = new GqlvActionValidity(this, context);
+        addField(validate.getField());
 
         val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        this.invoke = objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT
-                ? new GqlvActionInvoke(this, context)
-                : null;
+        if (objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
+            this.invoke = new GqlvActionInvoke(this, context);
+            GraphQLFieldDefinition invokeField = this.invoke.getField();
+            if (invokeField != null) {
+                addField(invokeField);
+            }
+        } else {
+            this.invoke = null;
+        }
         val params = new GqlvActionParams(this, context);
-        this.params = params.hasParams() ? params : null;
+        if (params.hasParams()) {
+            this.params = params;
+            addField(params.getField());
+        } else {
+            this.params = null;
+        }
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
-        this.field = holder.addField(newFieldDefinition()
+        this.field = newFieldDefinition()
                 .name(objectAction.getId())
                 .type(gqlObjectTypeBuilder)
-                .build());
+                .build();
     }
 
     public Can<ManagedObject> argumentManagedObjectsFor(
@@ -244,9 +258,10 @@ public class GqlvAction
         return getObjectMember();
     }
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

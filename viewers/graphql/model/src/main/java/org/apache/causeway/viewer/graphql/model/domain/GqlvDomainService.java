@@ -51,7 +51,7 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
 
-    @Getter private GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
 
 
     String getLogicalTypeName() {
@@ -91,7 +91,12 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
         if (hasActions()) {
             gqlObjectType = gqlObjectTypeBuilder.build();
-            addFieldFor(holder);
+            this.field = newFieldDefinition()
+                    .name(TypeNames.objectTypeNameFor(this.objectSpecification))
+                    .type(gqlObjectType)
+                    .build();
+        } else {
+            this.field = null;
         }
     }
 
@@ -110,13 +115,16 @@ public class GqlvDomainService implements GqlvAction.Holder {
     }
 
     private void addAction(final ObjectAction objectAction) {
-        actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
+        GqlvAction gqlvAction = new GqlvAction(this, objectAction, context);
+        addField(gqlvAction.getField());
+        actions.put(objectAction.getId(), gqlvAction);
     }
 
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 
@@ -127,13 +135,6 @@ public class GqlvDomainService implements GqlvAction.Holder {
                     "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
         }
         return coordinates(gqlObjectType, fieldDefinition);
-    }
-
-    public void addFieldFor(Holder holder) {
-        holder.addField(this.field = newFieldDefinition()
-                .name(TypeNames.objectTypeNameFor(objectSpecification))
-                .type(gqlObjectType)
-                .build());
     }
 
     public void addDataFetchers() {

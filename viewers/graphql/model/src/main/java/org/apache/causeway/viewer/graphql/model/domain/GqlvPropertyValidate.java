@@ -32,13 +32,14 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 
+import lombok.Getter;
 import lombok.val;
 
 public class GqlvPropertyValidate {
 
     final Holder holder;
     private final Context context;
-    final GraphQLFieldDefinition field;
+    @Getter final GraphQLFieldDefinition field;
 
     public GqlvPropertyValidate(
             final Holder holder,
@@ -51,7 +52,7 @@ public class GqlvPropertyValidate {
                 .type(context.typeMapper.scalarTypeFor(String.class));
         holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
-        this.field = holder.addField(fieldBuilder.build());
+        this.field = fieldBuilder.build();
     }
 
     void addDataFetcher() {

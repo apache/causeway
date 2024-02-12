@@ -38,6 +38,7 @@ import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import lombok.Getter;
 import lombok.val;
 
 //@Log4j2
@@ -47,7 +48,7 @@ public class GqlvMutationForProperty {
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
     private final Context context;
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
     private String argumentName;
 
     public GqlvMutationForProperty(
@@ -68,7 +69,7 @@ public class GqlvMutationForProperty {
                     .name(fieldName(objectSpec, oneToOneAssociation))
                     .type(type);
             addGqlArguments(fieldBuilder);
-            this.field = holder.addField(fieldBuilder.build());
+            this.field = fieldBuilder.build();
         } else {
             this.field = null;
         }

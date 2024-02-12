@@ -46,6 +46,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -56,7 +57,7 @@ public class GqlvMutationForAction {
     private final ObjectSpecification objectSpec;
     private final ObjectAction objectAction;
     private final Context context;
-    private final GraphQLFieldDefinition field;
+    @Getter private final GraphQLFieldDefinition field;
     private String argumentName;
 
     public GqlvMutationForAction(
@@ -77,7 +78,7 @@ public class GqlvMutationForAction {
                     .name(fieldName(objectSpec, objectAction))
                     .type(type);
             addGqlArguments(fieldBuilder);
-            this.field = holder.addField(fieldBuilder.build());
+            this.field = fieldBuilder.build();
         } else {
             this.field = null;
         }

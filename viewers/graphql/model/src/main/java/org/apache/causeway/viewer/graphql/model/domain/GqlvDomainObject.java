@@ -95,6 +95,7 @@ public class GqlvDomainObject
         this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         this.meta = new GqlvMeta(this, context);
+        addField(meta.getField());
 
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
         inputTypeBuilder
@@ -142,7 +143,9 @@ public class GqlvDomainObject
 
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .forEach(objectAction -> {
-                    actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
+                    GqlvAction gqlvAction = new GqlvAction(this, objectAction, context);
+                    addField(gqlvAction.getField());
+                    actions.put(objectAction.getId(), gqlvAction);
                 });
     }
 
@@ -154,20 +157,24 @@ public class GqlvDomainObject
     }
 
     private void addProperty(final OneToOneAssociation otoa) {
-        properties.put(otoa.getId(), new GqlvProperty(this, otoa, context));
+        GqlvProperty gqlvProperty = new GqlvProperty(this, otoa, context);
+        addField(gqlvProperty.getField());
+        properties.put(otoa.getId(), gqlvProperty);
     }
 
     private void addCollection(OneToManyAssociation otom) {
         GqlvCollection collection = new GqlvCollection(this, otom, context);
+        addField(collection.getField());
         if (collection.hasFieldDefinition()) {
             collections.put(otom.getId(), collection);
         }
     }
 
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 

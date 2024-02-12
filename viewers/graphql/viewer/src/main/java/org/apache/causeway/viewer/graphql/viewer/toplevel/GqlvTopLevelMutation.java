@@ -56,16 +56,21 @@ public class GqlvTopLevelMutation
 
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
-        actions.add(new GqlvMutationForAction(this, objectSpec, objectAction, context));
+        val gqlvMutationForAction = new GqlvMutationForAction(this, objectSpec, objectAction, context);
+        addField(gqlvMutationForAction.getField());
+        actions.add(gqlvMutationForAction);
     }
 
     public void addProperty(ObjectSpecification objectSpec, final OneToOneAssociation property) {
-        properties.add(new GqlvMutationForProperty(this, objectSpec, property, context));
+        val gqlvMutationForProperty = new GqlvMutationForProperty(this, objectSpec, property, context);
+        addField(gqlvMutationForProperty.getField());
+        properties.add(gqlvMutationForProperty);
     }
 
-    @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
+    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
+        if (field != null) {
+            gqlObjectTypeBuilder.field(field);
+        }
         return field;
     }
 
