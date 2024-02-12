@@ -20,9 +20,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -48,18 +48,25 @@ public class GqlvDomainService
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
 
-    String getLogicalTypeName() {
-        return objectSpecification.getLogicalTypeName();
-    }
-
     private final Map<String, GqlvAction> actions = new LinkedHashMap<>();
 
-    public GqlvDomainService(
-            final GqlvDomainService.Holder holder,
+    private final static Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec = new LinkedHashMap<>();
+
+    public static GqlvDomainService of(
             final ObjectSpecification objectSpecification,
+            final Holder holder,
+            final Object servicePojo,
+            final Context context) {
+        return domainServiceBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(spec, holder, servicePojo, context));
+    }
+
+    public GqlvDomainService(
+            final ObjectSpecification objectSpecification,
+            final Holder holder,
             final Object servicePojo,
             final Context context) {
         super(TypeNames.objectTypeNameFor(objectSpecification), context);
+
         this.holder = holder;
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
@@ -86,17 +93,10 @@ public class GqlvDomainService
 
     private void addAction(final ObjectAction objectAction) {
         GqlvAction gqlvAction = new GqlvAction(this, objectAction, context);
-        addField(gqlvAction.getField());
+        addChildField(gqlvAction.getField());
         actions.put(objectAction.getId(), gqlvAction);
     }
 
-
-    private GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        if (field != null) {
-            gqlObjectTypeBuilder.field(field);
-        }
-        return field;
-    }
 
     public void addDataFetchers() {
         context.codeRegistryBuilder.dataFetcher(

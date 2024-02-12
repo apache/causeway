@@ -80,15 +80,13 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements GqlvHol
     }
 
     protected void buildObjectTypeAndField(String fieldName) {
-        if (isBuilt()) {
-            return;
+        if (!isBuilt()) {
+            buildObjectType();
         }
-
-        val graphQLObjectType = buildObjectType();
 
         setField(newFieldDefinition()
                 .name(fieldName)
-                .type(graphQLObjectType)
+                .type(getGqlObjectType())
                 .build());
     }
 

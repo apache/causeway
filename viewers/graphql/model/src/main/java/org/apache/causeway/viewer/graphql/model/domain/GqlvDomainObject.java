@@ -18,9 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
@@ -67,9 +69,18 @@ public class GqlvDomainObject
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
-    public GqlvDomainObject(
-            final GqlvDomainObject.Holder holder,
+    private final static Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec = new LinkedHashMap<>();
+
+    public static GqlvDomainObject of(
             final ObjectSpecification objectSpecification,
+            final Holder holder,
+            final Context context) {
+        return domainObjectBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(spec, holder, context));
+    }
+
+    public GqlvDomainObject(
+            final ObjectSpecification objectSpecification,
+            final Holder holder,
             final Context context) {
         super(TypeNames.objectTypeNameFor(objectSpecification), context);
 

@@ -32,7 +32,7 @@ public class GqlvTopLevelQuery
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(new GqlvDomainObject(this, objectSpec, context));
+                    domainObjects.add(new GqlvDomainObject(objectSpec, this, context));
 
                     break;
             }
@@ -44,7 +44,7 @@ public class GqlvTopLevelQuery
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo -> {
-                                GqlvDomainService gqlvDomainService = new GqlvDomainService(this, objectSpec, servicePojo, context);
+                                GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, this, servicePojo, context);
                                 addChildField(gqlvDomainService.getField());
                                 domainServices.add(gqlvDomainService);
                             });
