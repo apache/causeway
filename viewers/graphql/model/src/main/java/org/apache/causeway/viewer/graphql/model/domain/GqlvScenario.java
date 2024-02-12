@@ -34,7 +34,7 @@ public class GqlvScenario
     public static final String KEY_SCENARIO_NAME = String.format("%s#%s", GqlvScenario.class.getName(), "name");
 
     private final GqlvScenarioName scenarioName;
-    private final GqlvScenarioStep scenarioGiven;
+    private final GqlvScenarioStep scenarioStep;
 
     public GqlvScenario(
             final Context context) {
@@ -42,8 +42,17 @@ public class GqlvScenario
 
         this.scenarioName = new GqlvScenarioName(context);
         addChildField(scenarioName.getField());
-        this.scenarioGiven = new GqlvScenarioStep("Given", "Given", context);
-        addChildField(scenarioGiven.getField());
+
+        this.scenarioStep = new GqlvScenarioStep(context);
+        addChildField(scenarioStep.newField("Given"));
+//        addChildField(scenarioStep.newField("GivenAlso"));
+//        addChildField(scenarioStep.newField("GivenAlsoAlso"));
+//        addChildField(scenarioStep.newField("GivenAlsoAlsoAlso"));
+        addChildField(scenarioStep.newField("When"));
+        addChildField(scenarioStep.newField("Then"));
+//        addChildField(scenarioStep.newField("ThenAlso"));
+//        addChildField(scenarioStep.newField("ThenAlsoAlso"));
+//        addChildField(scenarioStep.newField("ThenAlsoAlsoAlso"));
 
         buildObjectType();
 
@@ -62,7 +71,15 @@ public class GqlvScenario
     @Override
     protected void addDataFetchersForChildren() {
         scenarioName.addDataFetcher(this);
-        scenarioGiven.addDataFetcher(this);
+        scenarioStep.addDataFetcher(this, "Given");
+//        scenarioStep.addDataFetcher(this, "GivenAlso");
+//        scenarioStep.addDataFetcher(this, "GivenAlsoAlso");
+//        scenarioStep.addDataFetcher(this, "GivenAlsoAlsoAlso");
+        scenarioStep.addDataFetcher(this, "When");
+        scenarioStep.addDataFetcher(this, "Then");
+//        scenarioStep.addDataFetcher(this, "ThenAlso");
+//        scenarioStep.addDataFetcher(this, "ThenAlsoAlso");
+//        scenarioStep.addDataFetcher(this, "ThenAlsoAlsoAlso");
     }
 
     @Override

@@ -1,0 +1,44 @@
+{
+  "data" : {
+    "Scenario" : {
+      "Name" : "Find department and change its name",
+      "Given" : {
+        "university_dept_Departments" : {
+          "findDepartmentByName" : {
+            "invoke" : {
+              "name" : {
+                "get" : "Classics"
+              }
+            }
+          }
+        }
+      },
+      "When" : {
+        "university_dept_Departments" : {
+          "findDepartmentByName" : {
+            "invoke" : {
+              "changeName" : {
+                "invokeIdempotent" : {
+                  "name" : {
+                    "get" : "Ancient History"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Then" : {
+        "university_dept_Departments" : {
+          "findDepartmentByName" : {
+            "invoke" : {
+              "name" : {
+                "get" : "Ancient History"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

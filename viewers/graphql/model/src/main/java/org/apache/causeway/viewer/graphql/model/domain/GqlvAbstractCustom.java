@@ -74,10 +74,14 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
             buildObjectType();
         }
 
-        setField(newFieldDefinition()
+        setField(newField(fieldName));
+    }
+
+    public GraphQLFieldDefinition newField(String fieldName) {
+        return newFieldDefinition()
                 .name(fieldName)
                 .type(getGqlObjectType())
-                .build());
+                .build();
     }
 
     protected final GraphQLObjectType buildObjectType() {
@@ -94,6 +98,14 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
                     String.format("GQL Object Type for '%s' not yet built", typeName));
         }
         return FieldCoordinates.coordinates(gqlObjectType, field);
+    }
+
+    public final FieldCoordinates coordinatesFor(final String fieldName) {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(
+                    String.format("GQL Object Type for '%s' not yet built", typeName));
+        }
+        return FieldCoordinates.coordinates(gqlObjectType, fieldName);
     }
 
 }

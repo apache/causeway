@@ -1,7 +1,7 @@
 {
   Scenario(name: "Fizz and buzz are concatenated together"){
     Name
-    Given {
+    When {
       university_calc_Calculator {
         concat {
           invoke(prefix: "Fizz", suffix: "Buzz")

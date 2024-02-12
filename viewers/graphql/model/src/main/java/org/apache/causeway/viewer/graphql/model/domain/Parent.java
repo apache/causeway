@@ -27,4 +27,6 @@ public interface Parent {
      * Called while registering the fetchers.
      */
     FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition);
+
+    FieldCoordinates coordinatesFor(String fieldName);
 }

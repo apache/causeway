@@ -16,11 +16,8 @@ public class GqlvScenarioStep
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
-    public GqlvScenarioStep(
-            final String typeName,
-            final String fieldName,
-            final Context context) {
-        super(typeName, context);
+    public GqlvScenarioStep(final Context context) {
+        super("ScenarioStep", context);
 
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
@@ -51,7 +48,7 @@ public class GqlvScenarioStep
             addChildField(domainObject.getField());
         }
 
-        buildObjectTypeAndField(fieldName);
+        buildObjectType();
     }
 
 

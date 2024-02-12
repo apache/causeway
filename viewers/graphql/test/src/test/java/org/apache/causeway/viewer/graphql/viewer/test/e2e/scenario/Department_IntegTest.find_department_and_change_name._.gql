@@ -1,0 +1,42 @@
+{
+  Scenario(name: "Find department and change its name"){
+    Name
+    Given {
+      university_dept_Departments {
+        findDepartmentByName {
+          invoke(name: "Classics") {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+    When {
+      university_dept_Departments {
+        findDepartmentByName {
+          invoke(name: "Classics") {
+            changeName {
+              invokeIdempotent(newName: "Ancient History") {
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    Then {
+      university_dept_Departments {
+        findDepartmentByName {
+          invoke(name: "Ancient History") {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}

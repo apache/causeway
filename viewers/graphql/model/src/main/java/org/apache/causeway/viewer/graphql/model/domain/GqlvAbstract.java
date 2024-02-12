@@ -31,6 +31,14 @@ public abstract class GqlvAbstract {
 
     protected final Context context;
 
+    /**
+     * Usually populated, being the field that will be added to the parent's type
+     *
+     * <p>
+     *     However, {@link GqlvScenarioStep} is an exception; it doesn't populate this field - instead
+     *     {@link GqlvAbstractCustom#newField(String)} is used to create multiple fields for the type.
+     * </p>
+     */
     @Getter
     private GraphQLFieldDefinition field;
 
@@ -54,6 +62,22 @@ public abstract class GqlvAbstract {
                     parent.coordinatesFor(getField()),
                     this::fetchData);
         }
+
+        addDataFetchersForChildren();
+    }
+
+
+    /**
+     * Use the provided fieldName rather than that of {@link #getField()}.
+     *
+     * <p>
+     *     Used to allow multiple fields of the same type, eg {@link GqlvScenarioStep}.
+     * </p>
+     */
+    public final void addDataFetcher(Parent parent, String fieldName) {
+        context.codeRegistryBuilder.dataFetcher(
+                parent.coordinatesFor(fieldName),
+                this::fetchData);
 
         addDataFetchersForChildren();
     }
