@@ -45,14 +45,8 @@ public class GqlvScenario
 
         this.scenarioStep = new GqlvScenarioStep(context);
         addChildField(scenarioStep.newField("Given"));
-//        addChildField(scenarioStep.newField("GivenAlso"));
-//        addChildField(scenarioStep.newField("GivenAlsoAlso"));
-//        addChildField(scenarioStep.newField("GivenAlsoAlsoAlso"));
         addChildField(scenarioStep.newField("When"));
         addChildField(scenarioStep.newField("Then"));
-//        addChildField(scenarioStep.newField("ThenAlso"));
-//        addChildField(scenarioStep.newField("ThenAlsoAlso"));
-//        addChildField(scenarioStep.newField("ThenAlsoAlsoAlso"));
 
         buildObjectType();
 
@@ -72,14 +66,8 @@ public class GqlvScenario
     protected void addDataFetchersForChildren() {
         scenarioName.addDataFetcher(this);
         scenarioStep.addDataFetcher(this, "Given");
-//        scenarioStep.addDataFetcher(this, "GivenAlso");
-//        scenarioStep.addDataFetcher(this, "GivenAlsoAlso");
-//        scenarioStep.addDataFetcher(this, "GivenAlsoAlsoAlso");
         scenarioStep.addDataFetcher(this, "When");
         scenarioStep.addDataFetcher(this, "Then");
-//        scenarioStep.addDataFetcher(this, "ThenAlso");
-//        scenarioStep.addDataFetcher(this, "ThenAlsoAlso");
-//        scenarioStep.addDataFetcher(this, "ThenAlsoAlsoAlso");
     }
 
     @Override
