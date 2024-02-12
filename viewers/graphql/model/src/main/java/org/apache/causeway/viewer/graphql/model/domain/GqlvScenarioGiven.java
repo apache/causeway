@@ -49,7 +49,6 @@ public class GqlvScenarioGiven implements GqlvDomainService.Holder, GqlvDomainOb
             }
         });
 
-        // add services to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
                 context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())

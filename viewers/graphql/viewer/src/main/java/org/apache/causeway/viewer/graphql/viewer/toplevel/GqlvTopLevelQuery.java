@@ -80,6 +80,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
     }
 
     public void addDataFetchers() {
+
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
             if (actionsAdded) {
@@ -90,7 +91,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
 
         domainObjects.forEach(GqlvDomainObject::addDataFetchers);
 
+        scenario.addDataFetchers();
     }
-
 
 }

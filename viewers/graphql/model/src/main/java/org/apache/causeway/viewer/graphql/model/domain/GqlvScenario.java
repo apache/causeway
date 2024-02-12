@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.Scalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
@@ -29,12 +31,14 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
+import graphql.schema.GraphQLScalarType;
+
 import lombok.Getter;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
-public class GqlvScenario implements GqlvScenarioGiven.Holder {
+public class GqlvScenario implements GqlvScenarioName.Holder, GqlvScenarioGiven.Holder {
 
     private final Holder holder;
     private final Context context;
@@ -42,6 +46,7 @@ public class GqlvScenario implements GqlvScenarioGiven.Holder {
     private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final Scenario scenarioPojo;
 
+    private final GqlvScenarioName scenarioName;
     private final GqlvScenarioGiven scenarioGiven;
 
     @Getter private GraphQLFieldDefinition field;
@@ -56,13 +61,21 @@ public class GqlvScenario implements GqlvScenarioGiven.Holder {
 
         this.scenarioPojo = context.serviceRegistry.lookupService(Scenario.class).orElseThrow();
 
-        this.gqlObjectTypeBuilder = newObject().name("Scenario"); // TODO: probably need to change this type?
+        this.gqlObjectTypeBuilder = newObject().name("Scenario");
 
+        this.scenarioName = new GqlvScenarioName(this, context);
         this.scenarioGiven = new GqlvScenarioGiven(this, context);
 
         this.gqlObjectType = gqlObjectTypeBuilder.build();
 
-        this.field = new GraphQLFieldDefinition.Builder().name("Scenario").type(gqlObjectType).build();
+        this.field = new GraphQLFieldDefinition.Builder()
+                            .name("Scenario")
+                            .type(gqlObjectType)
+                            .argument(new GraphQLArgument.Builder()
+                                                .name("name")
+                                                .type(Scalars.GraphQLString)
+                            )
+                            .build();
 
         holder.addField(field);
     }
@@ -83,7 +96,9 @@ public class GqlvScenario implements GqlvScenarioGiven.Holder {
         context.codeRegistryBuilder.dataFetcher(
                 holder.coordinatesFor(getField()),
                 (DataFetcher<Object>) environment -> scenarioPojo);
-        // add
+
+        scenarioName.addDataFetchers();
+        scenarioGiven.addDataFetchers();
     }
 
 

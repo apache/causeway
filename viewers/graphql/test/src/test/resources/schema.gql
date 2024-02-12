@@ -63,7 +63,7 @@ type Given {
 }
 
 type Query {
-  Scenario: Scenario
+  Scenario(name: String): Scenario
   _gqlv_lookup__causeway_applib_DomainObjectList(object: causeway_applib_DomainObjectList__gqlv_input): causeway_applib_DomainObjectList
   _gqlv_lookup__causeway_applib_FacetGroupNode(object: causeway_applib_FacetGroupNode__gqlv_input): causeway_applib_FacetGroupNode
   _gqlv_lookup__causeway_applib_ParameterNode(object: causeway_applib_ParameterNode__gqlv_input): causeway_applib_ParameterNode
@@ -113,6 +113,7 @@ type Query {
 
 type Scenario {
   Given: Given
+  Name: String
 }
 
 type causeway_applib_DomainObjectList {
