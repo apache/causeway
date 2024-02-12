@@ -9,7 +9,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
 public class GqlvTopLevelQuery
@@ -19,7 +18,7 @@ public class GqlvTopLevelQuery
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
-    private final GqlvScenario scenario;
+//    private final GqlvScenario scenario;
 
     public GqlvTopLevelQuery(final Context context) {
         super("Query", context);
@@ -56,8 +55,8 @@ public class GqlvTopLevelQuery
             addChildField(domainObject.getLookupField());
         }
 
-        scenario = new GqlvScenario(context);
-        addChildField(scenario.getField());
+//        scenario = new GqlvScenario(context);
+//        addChildField(scenario.getField());
 
         buildObjectType();
     }
@@ -79,6 +78,6 @@ public class GqlvTopLevelQuery
 
         domainObjects.forEach(domainObject -> domainObject.addDataFetchers(this));
 
-        scenario.addDataFetchers(this);
+//        scenario.addDataFetchers(this);
     }
 }

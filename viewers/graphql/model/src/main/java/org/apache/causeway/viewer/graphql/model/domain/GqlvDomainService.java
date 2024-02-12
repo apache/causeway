@@ -44,13 +44,11 @@ public class GqlvDomainService
 
     private final Map<String, GqlvAction> actions = new LinkedHashMap<>();
 
-    private final static Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec = new LinkedHashMap<>();
-
     public static GqlvDomainService of(
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
-        return domainServiceBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(spec, servicePojo, context));
+        return context.domainServiceBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(spec, servicePojo, context));
     }
 
     public GqlvDomainService(

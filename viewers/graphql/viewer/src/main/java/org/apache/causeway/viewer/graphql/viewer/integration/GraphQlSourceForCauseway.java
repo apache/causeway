@@ -55,11 +55,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final CausewayConfiguration causewayConfiguration;
     private final CausewaySystemEnvironment causewaySystemEnvironment;
     private final SpecificationLoader specificationLoader;
-    private final ServiceRegistry serviceRegistry;
-    private final ObjectManager objectManager;
-    private final BookmarkService bookmarkService;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
-    private final TypeMapper typeMapper;
+    private final Context context;
+
     private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
 
     @PostConstruct
@@ -97,9 +95,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
-        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment, objectManager, graphQLTypeRegistry);
-
         // top-level query and mutation type
         val topLevelQuery = new GqlvTopLevelQuery(context);
         val topLevelMutation =
@@ -114,7 +109,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         }
 
         // finalize the fetcher/mutator code that's been added
-        val codeRegistry = codeRegistryBuilder.build();
+        val codeRegistry = context.codeRegistryBuilder.build();
 
         // build the schema
         return GraphQLSchema.newSchema()

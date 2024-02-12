@@ -65,12 +65,10 @@ public class GqlvDomainObject
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
-    private final static Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec = new LinkedHashMap<>();
-
     public static GqlvDomainObject of(
             final ObjectSpecification objectSpecification,
             final Context context) {
-        return domainObjectBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(spec, context));
+        return context.domainObjectBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(spec, context));
     }
 
     private GqlvDomainObject(
