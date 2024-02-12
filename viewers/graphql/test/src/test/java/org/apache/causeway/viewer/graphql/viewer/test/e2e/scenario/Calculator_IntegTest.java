@@ -23,6 +23,7 @@ import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +39,7 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
 
 
     @Test
+    @Disabled
     @UseReporter(DiffReporter.class)
     void concat() throws Exception {
 

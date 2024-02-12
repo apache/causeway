@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.viewer.toplevel;
+package org.apache.causeway.viewer.graphql.model.toplevel;
 
 import java.util.ArrayList;
 import java.util.List;
