@@ -71,5 +71,4 @@ public class GqlvScenario
         environment.getGraphQlContext().put(KEY_SCENARIO_NAME, scenarioName);
         return environment;
     }
-
 }

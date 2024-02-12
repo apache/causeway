@@ -26,7 +26,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvMember.Holder> extends GqlvMember<T, H> {
+public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvMember.Holder>
+        extends GqlvMember<T, H> {
 
     public GqlvAssociation(
             final H holder,

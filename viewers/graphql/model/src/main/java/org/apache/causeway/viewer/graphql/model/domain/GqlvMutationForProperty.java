@@ -127,6 +127,4 @@ public class GqlvMutationForProperty extends GqlvAbstract {
                         .type(context.typeMapper.inputTypeFor(oneToOneAssociation, TypeMapper.InputContext.INVOKE))
                         .build());
     }
-
-
 }

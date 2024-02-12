@@ -49,7 +49,6 @@ public class GqlvScenarioGiven
             addChildField(domainObject.getField());
         }
 
-
         buildObjectTypeAndField("Given");
     }
 

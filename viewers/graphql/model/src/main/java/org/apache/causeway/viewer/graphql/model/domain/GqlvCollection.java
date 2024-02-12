@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 
 public class GqlvCollection
         extends GqlvAssociation<OneToManyAssociation, GqlvCollection.Holder>
-        implements GqlvCollectionGet.Holder,
+        implements GqlvAssociationGet.Holder<OneToManyAssociation>,
                    GqlvMemberHidden.Holder<OneToManyAssociation>,
                    GqlvMemberDisabled.Holder<OneToManyAssociation> {
 
@@ -62,10 +62,6 @@ public class GqlvCollection
         return holder.getObjectSpecification();
     }
 
-    @Override
-    public OneToManyAssociation getOneToManyAssociation() {
-        return getObjectAssociation();
-    }
 
     @Override
     protected void addDataFetchersForChildren() {
