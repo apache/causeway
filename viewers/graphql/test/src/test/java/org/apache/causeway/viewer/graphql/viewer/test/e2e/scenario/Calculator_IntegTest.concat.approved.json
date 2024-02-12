@@ -1,0 +1,14 @@
+{
+  "data" : {
+    "Scenario" : {
+      "Name" : "Fizz buzz",
+      "Given" : {
+        "university_calc_Calculator" : {
+          "concat" : {
+            "invoke" : "FizzBuzz"
+          }
+        }
+      }
+    }
+  }
+}

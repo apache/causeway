@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 
@@ -35,7 +36,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 public class GqlvScenario
         extends GqlvAbstractCustom {
 
-    private final Scenario scenarioPojo;
+    public static final String KEY_SCENARIO_NAME = String.format("%s#%s", GqlvScenario.class.getName(), "name");
 
     private final GqlvScenarioName scenarioName;
     private final GqlvScenarioGiven scenarioGiven;
@@ -43,8 +44,6 @@ public class GqlvScenario
     public GqlvScenario(
             final Context context) {
         super("Scenario", context);
-
-        this.scenarioPojo = context.serviceRegistry.lookupService(Scenario.class).orElseThrow();
 
         this.scenarioName = new GqlvScenarioName(context);
         addChildField(scenarioName.getField());
@@ -68,16 +67,14 @@ public class GqlvScenario
     public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment -> scenarioPojo);
+                (DataFetcher<Object>) environment -> {
+                    String scenarioName = environment.getArgument("name");
+                    environment.getGraphQlContext().put(KEY_SCENARIO_NAME, scenarioName);
+                    return environment;
+                });
 
         scenarioName.addDataFetchers(this);
-        scenarioGiven.addDataFetchers();
-    }
-
-
-    @Override
-    public String toString() {
-        return scenarioPojo.toString();
+        scenarioGiven.addDataFetchers(this);
     }
 
 }

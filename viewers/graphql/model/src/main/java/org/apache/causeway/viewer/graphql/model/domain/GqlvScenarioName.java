@@ -1,9 +1,9 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.GraphQLContext;
 import graphql.Scalars;
-import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+
+import lombok.val;
 
 import static graphql.schema.GraphQLFieldDefinition.*;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -27,13 +27,12 @@ public class GqlvScenarioName extends GqlvAbstract {
     public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment ->  name(environment));
+                this::scenarioName);
     }
 
-    private String name(DataFetchingEnvironment environment) {
-        // TODO: use graphQlContext instead.
-        GraphQLContext graphQlContext = environment.getGraphQlContext();
-        return context.serviceRegistry.lookupService(Scenario.class).map(Scenario::getName).orElseThrow();
+    private String scenarioName(DataFetchingEnvironment environment) {
+        val graphQlContext = environment.getGraphQlContext();
+        return graphQlContext.get(GqlvScenario.KEY_SCENARIO_NAME);
     }
 
 }

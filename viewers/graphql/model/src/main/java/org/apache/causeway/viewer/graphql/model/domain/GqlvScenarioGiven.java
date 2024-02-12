@@ -1,5 +1,8 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,7 +57,11 @@ public class GqlvScenarioGiven
     }
 
 
-    public void addDataFetchers() {
+    public void addDataFetchers(Parent parent) {
+        context.codeRegistryBuilder.dataFetcher(
+                parent.coordinatesFor(getField()),
+                (DataFetcher<Object>) environment -> environment);
+
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
             if (actionsAdded) {

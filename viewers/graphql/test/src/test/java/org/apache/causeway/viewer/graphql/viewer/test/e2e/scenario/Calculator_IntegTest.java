@@ -39,7 +39,6 @@ public class Calculator_IntegTest extends Abstract_IntegTest {
 
 
     @Test
-    @Disabled
     @UseReporter(DiffReporter.class)
     void concat() throws Exception {
 
