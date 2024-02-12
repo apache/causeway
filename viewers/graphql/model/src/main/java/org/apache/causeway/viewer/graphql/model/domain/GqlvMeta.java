@@ -93,11 +93,6 @@ public class GqlvMeta extends GqlvAbstractCustom {
                 .orElseThrow();
     }
 
-    // TODO: probably equivalent of:
-//    private Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
-//        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
-//    }
-
 
 
     /**
