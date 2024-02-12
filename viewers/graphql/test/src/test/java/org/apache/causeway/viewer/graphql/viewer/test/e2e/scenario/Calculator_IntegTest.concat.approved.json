@@ -1,7 +1,7 @@
 {
   "data" : {
     "Scenario" : {
-      "Name" : "Fizz buzz",
+      "Name" : "Fizz and buzz are concatenated together",
       "Given" : {
         "university_calc_Calculator" : {
           "concat" : {

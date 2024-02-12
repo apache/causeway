@@ -126,7 +126,8 @@ public class GqlvActionInvoke extends GqlvAbstract {
         );
     }
 
-    private Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

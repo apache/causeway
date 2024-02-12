@@ -122,7 +122,8 @@ public class GqlvMutationForAction extends GqlvAbstract {
         );
     }
 
-    private Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val isService = objectSpec.getBeanSort().isManagedBeanContributing();
 

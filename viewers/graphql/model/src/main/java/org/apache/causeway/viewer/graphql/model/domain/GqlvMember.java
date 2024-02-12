@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.GraphQLFieldDefinition;
-
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import graphql.schema.GraphQLObjectType;
+import graphql.schema.DataFetchingEnvironment;
 
 import lombok.Getter;
 
@@ -47,6 +46,11 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
 
     public String getId() {
         return objectMember.getFeatureIdentifier().getFullIdentityString();
+    }
+
+    @Override
+    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 
     public interface Holder

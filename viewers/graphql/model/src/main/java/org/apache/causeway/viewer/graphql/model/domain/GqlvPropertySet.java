@@ -85,7 +85,8 @@ public class GqlvPropertySet extends GqlvAbstract {
         }
     }
 
-    Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

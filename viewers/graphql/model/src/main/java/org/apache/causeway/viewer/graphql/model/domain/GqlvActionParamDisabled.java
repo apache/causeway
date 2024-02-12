@@ -65,7 +65,8 @@ public class GqlvActionParamDisabled extends GqlvAbstract {
         );
     }
 
-    private String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());

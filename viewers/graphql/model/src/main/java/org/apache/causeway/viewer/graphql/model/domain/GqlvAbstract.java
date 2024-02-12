@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -46,4 +47,5 @@ public abstract class GqlvAbstract {
         return getField() != null;
     }
 
+    protected abstract Object fetchData(DataFetchingEnvironment environment);
 }

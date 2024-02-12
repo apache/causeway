@@ -30,7 +30,8 @@ public class GqlvScenarioName extends GqlvAbstract {
                 this::fetchData);
     }
 
-    private Object fetchData(DataFetchingEnvironment environment) {
+    @Override
+    protected Object fetchData(DataFetchingEnvironment environment) {
         val graphQlContext = environment.getGraphQlContext();
         return graphQlContext.get(GqlvScenario.KEY_SCENARIO_NAME);
     }

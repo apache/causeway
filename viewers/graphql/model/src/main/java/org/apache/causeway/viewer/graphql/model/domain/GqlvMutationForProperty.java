@@ -92,7 +92,8 @@ public class GqlvMutationForProperty extends GqlvAbstract {
         }
     }
 
-    private Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
 
         Object target = dataFetchingEnvironment.getArgument(argumentName);

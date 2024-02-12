@@ -3,6 +3,7 @@ package org.apache.causeway.viewer.graphql.model.toplevel;
 import java.util.ArrayList;
 import java.util.List;
 
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLObjectType;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -60,6 +61,17 @@ public class GqlvTopLevelQuery
         addChildField(scenario.getField());
 
         buildObjectType();
+    }
+
+    /**
+     * Never used.
+     *
+     * @param environment
+     * @return
+     */
+    @Override
+    protected Object fetchData(DataFetchingEnvironment environment) {
+        return null;
     }
 
     @Override

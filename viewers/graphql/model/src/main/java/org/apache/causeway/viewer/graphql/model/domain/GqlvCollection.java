@@ -76,11 +76,4 @@ public class GqlvCollection
         get.addDataFetcher(this);
     }
 
-    private Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
-        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
-    }
-
-    public interface Holder extends GqlvAssociation.Holder {
-
-    }
 }

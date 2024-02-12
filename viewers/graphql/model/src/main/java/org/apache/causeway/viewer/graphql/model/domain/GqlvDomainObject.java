@@ -50,7 +50,7 @@ import lombok.val;
  */
 public class GqlvDomainObject
         extends GqlvAbstractCustom
-        implements GqlvAction.Holder, GqlvProperty.Holder, GqlvCollection.Holder, GqlvMeta.Holder {
+        implements GqlvMember.Holder, GqlvMeta.Holder {
 
     @Getter private final ObjectSpecification objectSpecification;
 
@@ -168,7 +168,8 @@ public class GqlvDomainObject
         actions.forEach((id, action) -> action.addDataFetcher(this));
     }
 
-    private Object fetchData(DataFetchingEnvironment environment) {
+    @Override
+    protected Object fetchData(DataFetchingEnvironment environment) {
         Object target = environment.getArgument("object");
         return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService)
                 .orElse(null);

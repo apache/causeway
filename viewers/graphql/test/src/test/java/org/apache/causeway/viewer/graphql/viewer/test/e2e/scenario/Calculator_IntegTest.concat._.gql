@@ -1,5 +1,5 @@
 {
-  Scenario(name: "Fizz buzz"){
+  Scenario(name: "Fizz and buzz are concatenated together"){
     Name
     Given {
       university_calc_Calculator {

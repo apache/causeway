@@ -98,7 +98,8 @@ public class GqlvDomainService
         }
     }
 
-    private Object fetchData(DataFetchingEnvironment environment) {
+    @Override
+    protected Object fetchData(DataFetchingEnvironment environment) {
         return getServicePojo();
     }
 

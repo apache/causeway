@@ -1,16 +1,13 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-
-import static graphql.schema.GraphQLObjectType.newObject;
 
 public class GqlvScenarioGiven
         extends GqlvAbstractCustom
@@ -60,7 +57,7 @@ public class GqlvScenarioGiven
     public void addDataFetchers(Parent parent) {
         context.codeRegistryBuilder.dataFetcher(
                 parent.coordinatesFor(getField()),
-                GqlvScenarioGiven::fetchData);
+                this::fetchData);
 
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
@@ -72,7 +69,8 @@ public class GqlvScenarioGiven
         domainObjects.forEach(domainObject -> domainObject.addDataFetchers(this));
     }
 
-    private static DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
+    @Override
+    protected DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
         return environment;
     }
 

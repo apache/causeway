@@ -75,7 +75,8 @@ public class GqlvActionValidity extends GqlvAbstract {
         );
     }
 
-    private Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         final ObjectAction objectAction = holder.getObjectAction();
 

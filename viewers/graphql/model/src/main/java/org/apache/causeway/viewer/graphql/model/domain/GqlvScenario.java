@@ -19,14 +19,9 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.Scalars;
-import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
-
-import static graphql.schema.FieldCoordinates.coordinates;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
@@ -73,7 +68,8 @@ public class GqlvScenario
         scenarioGiven.addDataFetchers(this);
     }
 
-    private DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
+    @Override
+    protected DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
         String scenarioName = environment.getArgument("name");
         environment.getGraphQlContext().put(KEY_SCENARIO_NAME, scenarioName);
         return environment;

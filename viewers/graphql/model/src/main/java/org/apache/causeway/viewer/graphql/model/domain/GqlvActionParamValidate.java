@@ -64,7 +64,8 @@ public class GqlvActionParamValidate extends GqlvAbstract {
         );
     }
 
-    private String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

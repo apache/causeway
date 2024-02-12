@@ -76,7 +76,8 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
         }
     }
 
-    Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         // TODO: introduce evaluator
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);

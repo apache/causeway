@@ -91,7 +91,8 @@ public class GqlvMeta extends GqlvAbstractCustom {
         }
     }
 
-    private Fetcher fetchData(DataFetchingEnvironment environment) {
+    @Override
+    public Object fetchData(final DataFetchingEnvironment environment) {
         return context.bookmarkService.bookmarkFor(environment.getSource())
                 .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
                 .orElseThrow();

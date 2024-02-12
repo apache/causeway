@@ -64,7 +64,8 @@ public class GqlvActionParamHidden extends GqlvAbstract {
         );
     }
 
-    private boolean fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

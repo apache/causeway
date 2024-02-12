@@ -104,7 +104,8 @@ public class GqlvActionParams
     }
 
 
-    private Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 

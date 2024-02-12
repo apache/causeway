@@ -18,13 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvAssociation.Holder> extends GqlvMember<T, H> {
+public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvMember.Holder> extends GqlvMember<T, H> {
 
     public GqlvAssociation(
             final H holder,
@@ -42,7 +44,4 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Gql
         return getObjectMember();
     }
 
-    public interface Holder
-            extends GqlvMember.Holder {
-    }
 }

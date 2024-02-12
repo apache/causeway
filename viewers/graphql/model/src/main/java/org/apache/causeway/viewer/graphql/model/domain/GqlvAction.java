@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvAction
-        extends GqlvMember<ObjectAction, GqlvAction.Holder>
+        extends GqlvMember<ObjectAction, GqlvMember.Holder>
         implements GqlvMemberHidden.Holder<ObjectAction>,
                    GqlvMemberDisabled.Holder<ObjectAction>,
                    GqlvActionInvoke.Holder,
@@ -265,12 +265,4 @@ public class GqlvAction
         }
     }
 
-    private Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
-        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
-    }
-
-
-
-    public interface Holder extends GqlvMember.Holder {
-    }
 }
