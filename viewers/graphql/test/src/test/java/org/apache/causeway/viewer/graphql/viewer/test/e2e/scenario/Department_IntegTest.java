@@ -18,32 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e.scenario;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
-
-import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise

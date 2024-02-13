@@ -21,32 +21,25 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelMutation;
-
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
+import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelMutation;
 import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQuery;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import graphql.GraphQL;
 import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

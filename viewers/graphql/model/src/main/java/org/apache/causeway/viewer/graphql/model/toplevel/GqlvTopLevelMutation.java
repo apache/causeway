@@ -3,11 +3,6 @@ package org.apache.causeway.viewer.graphql.model.toplevel;
 import java.util.ArrayList;
 import java.util.List;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.GraphQLObjectType.newObject;
-
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -19,6 +14,8 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForAction;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForProperty;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLObjectType;
 import lombok.val;
 
 public class GqlvTopLevelMutation

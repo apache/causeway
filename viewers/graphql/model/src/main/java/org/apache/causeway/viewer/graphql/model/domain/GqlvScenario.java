@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.Scalars;
-import graphql.language.FieldDefinition;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
