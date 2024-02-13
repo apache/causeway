@@ -22,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
@@ -102,12 +101,11 @@ public class FileUtils {
      * @param dirFilter
      * @param fileFilter
      * @return set of matching files
-     * @throws IOException
      */
     public Set<File> searchFiles(
             final File dir,
             final Predicate<File> dirFilter,
-            final Predicate<File> fileFilter) throws IOException {
+            final Predicate<File> fileFilter) {
         final Set<File> fileList = new LinkedHashSet<>();
         searchFiles(dir, dirFilter, fileFilter, fileList::add);
         return fileList;
@@ -121,13 +119,13 @@ public class FileUtils {
      * @param dirFilter
      * @param fileFilter
      * @param onFileFound
-     * @throws IOException
      */
+    @SneakyThrows
     public void searchFiles(
             final File dir,
             final Predicate<File> dirFilter,
             final Predicate<File> fileFilter,
-            final Consumer<File> onFileFound) throws IOException {
+            final Consumer<File> onFileFound) {
         if(!dir.exists()) {
             return;
         }
