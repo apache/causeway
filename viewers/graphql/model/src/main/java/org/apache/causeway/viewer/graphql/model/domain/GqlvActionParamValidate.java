@@ -35,6 +35,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParamete
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
+import graphql.schema.GraphQLOutputType;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -51,7 +52,7 @@ public class GqlvActionParamValidate extends GqlvAbstract {
 
         val fieldBuilder = newFieldDefinition()
                 .name("validity")
-                .type(context.typeMapper.scalarTypeFor(String.class));
+                .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
         holder.addGqlArgument(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         setField(fieldBuilder.build());
     }

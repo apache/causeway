@@ -21,6 +21,10 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
+
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +41,18 @@ import graphql.GraphQL;
 import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
+import graphql.schema.GraphQLEnumType;
+import graphql.schema.GraphQLEnumValueDefinition;
+import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLSchema;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.*;
 
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

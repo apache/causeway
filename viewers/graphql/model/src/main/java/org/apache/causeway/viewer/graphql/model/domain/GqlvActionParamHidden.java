@@ -35,6 +35,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
  import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
+ import graphql.schema.GraphQLOutputType;
  import lombok.val;
  import lombok.extern.log4j.Log4j2;
 
@@ -51,7 +52,7 @@ public class GqlvActionParamHidden extends GqlvAbstract {
 
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")
-                .type(context.typeMapper.scalarTypeFor(boolean.class));
+                .type((GraphQLOutputType) context.typeMapper.outputTypeFor(boolean.class));
         holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         setField(fieldBuilder.build());
     }

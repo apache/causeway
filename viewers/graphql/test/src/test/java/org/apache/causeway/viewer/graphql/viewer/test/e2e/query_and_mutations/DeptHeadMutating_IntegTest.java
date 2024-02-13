@@ -41,17 +41,7 @@ import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@SpringBootTest(
-        classes = {
-                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
-        },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {
-                "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
-        }
-)
 @Order(120)
-@DirtiesContext
 @ActiveProfiles("test")
 public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
 

@@ -22,22 +22,36 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
 
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+
 import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
-/**
- * Just a simple wrapper around the set of discovered {@link GraphQLType}s.
- */
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
+
 @Component
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class GraphQLTypeRegistry {
+
+    private final Provider<Context> contextProvider;
 
     Set<GraphQLType> graphQLTypes = new HashSet<>();
 
@@ -59,7 +73,33 @@ public class GraphQLTypeRegistry {
     }
 
 
+    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(final Class<?> typeToAdd) {
+        val objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
+        val typeName = TypeNames.enumTypeNameFor(objectSpec);
+        val enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
+        if (enumTypeIfAny.isPresent()) {
+            return enumTypeIfAny.get();
+        }
+        val enumType = newEnum()
+                .name(typeName)
+                .values(Stream.of(typeToAdd.getEnumConstants())
+                        .map(enumValue -> newEnumValueDefinition()
+                                .name(enumValue.toString())
+                                .value(enumValue)
+                                .build()).collect(Collectors.toList())
+                )
+                .build();
+        add(enumType);
+        return enumType;
+    }
+
+
     public void addTypeIfNotAlreadyPresent(final GraphQLType typeToAdd) {
+
+        if (typeToAdd instanceof GraphQLEnumType) {
+            addTypeIfNotAlreadyPresent((GraphQLEnumType) typeToAdd);
+            return;
+        }
 
         if (typeToAdd instanceof GraphQLObjectType) {
             addTypeIfNotAlreadyPresent((GraphQLObjectType) typeToAdd);
@@ -81,6 +121,15 @@ public class GraphQLTypeRegistry {
         // GraphQLList
         // GraphQLNonNull
         log.warn("GraphQLType {} not yet implemented", typeToAdd.getClass().getName());
+    }
+
+    void addTypeIfNotAlreadyPresent(final GraphQLEnumType typeToAdd){
+        if (isPresent(typeToAdd, GraphQLEnumType.class)){
+            // For now we just log and skip
+            log.debug("GraphQLEnumType for {} already present", typeToAdd.getName());
+            return;
+        }
+        add(typeToAdd);
     }
 
     void addTypeIfNotAlreadyPresent(final GraphQLObjectType typeToAdd){

@@ -20,13 +20,22 @@ package org.apache.causeway.viewer.graphql.model.marshallers;
 
 import graphql.Scalars;
 
+import graphql.schema.GraphQLEnumType;
+
+import lombok.val;
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
+
+import org.apache.causeway.viewer.graphql.model.context.Context;
+
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
 import org.springframework.stereotype.Component;
 
@@ -39,15 +48,13 @@ import org.springframework.stereotype.Component;
 public class ScalarMarshallerObject extends ScalarMarshallerAbstract<Object> {
 
     @Inject
-    public ScalarMarshallerObject(final CausewayConfiguration causewayConfiguration) {
+    public ScalarMarshallerObject(
+            final CausewayConfiguration causewayConfiguration) {
         super(Object.class, Scalars.GraphQLString, causewayConfiguration);
     }
 
     @Override
     public Object unmarshal(Object graphValue, Class<?> targetType) {
-        if (targetType.isEnum()) {
-            return Enum.valueOf((Class<Enum>) targetType, graphValue.toString());
-        }
         return graphValue;
     }
 }

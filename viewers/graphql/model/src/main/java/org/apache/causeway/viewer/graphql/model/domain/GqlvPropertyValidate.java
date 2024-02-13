@@ -32,6 +32,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 
+import graphql.schema.GraphQLOutputType;
 import lombok.val;
 
 public class GqlvPropertyValidate extends GqlvAbstract {
@@ -46,7 +47,7 @@ public class GqlvPropertyValidate extends GqlvAbstract {
 
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
-                .type(context.typeMapper.scalarTypeFor(String.class));
+                .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
         holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
         setField(fieldBuilder.build());

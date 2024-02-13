@@ -22,6 +22,50 @@ directive @specifiedBy(
     url: String!
   ) on SCALAR
 
+type Mutation {
+  causeway_applib_PropertyNode__mixedIn(_gqlv_target: causeway_applib_PropertyNode__gqlv_input, mixedIn: Boolean!): causeway_applib_PropertyNode
+  causeway_applib_node_ActionNode__mixedIn(_gqlv_target: causeway_applib_node_ActionNode__gqlv_input, mixedIn: Boolean!): causeway_applib_node_ActionNode
+  causeway_applib_node_CollectionNode__mixedIn(_gqlv_target: causeway_applib_node_CollectionNode__gqlv_input, mixedIn: Boolean!): causeway_applib_node_CollectionNode
+  causeway_applib_node_FacetNode__shadowed(_gqlv_target: causeway_applib_node_FacetNode__gqlv_input, shadowed: Boolean!): causeway_applib_node_FacetNode
+  causeway_conf_ConfigurationProperty__key(_gqlv_target: causeway_conf_ConfigurationProperty__gqlv_input, key: String!): causeway_conf_ConfigurationProperty
+  causeway_conf_ConfigurationProperty__value(_gqlv_target: causeway_conf_ConfigurationProperty__gqlv_input, value: String!): causeway_conf_ConfigurationProperty
+  causeway_schema_metamodel_v2_DomainClassDto__actions(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, actions: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__annotations(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, annotations: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__collections(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, collections: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__facets(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, facets: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__id(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, id: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__majorVersion(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, majorVersion: String): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__minorVersion(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, minorVersion: String): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__properties(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, properties: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__service(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, service: Boolean!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_testing_fixtures_FixtureResult__fixtureScriptClassName(_gqlv_target: causeway_testing_fixtures_FixtureResult__gqlv_input, fixtureScriptClassName: String): causeway_testing_fixtures_FixtureResult
+  causeway_testing_fixtures_FixtureResult__key(_gqlv_target: causeway_testing_fixtures_FixtureResult__gqlv_input, key: String!): causeway_testing_fixtures_FixtureResult
+  causeway_testing_fixtures_FixtureResult__object(_gqlv_target: causeway_testing_fixtures_FixtureResult__gqlv_input, object: String!): causeway_testing_fixtures_FixtureResult
+  org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn(_gqlv_target: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input, mixedIn: Boolean!): org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName(_gqlv_target: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input, friendlyName: String!): org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
+  university_admin_AdminMenu__actionWithDisabledParam(firstParam: String!, secondParam: String!, thirdParameter: String!): String
+  university_admin_AdminMenu__actionWithHiddenParam(firstParam: String!, secondParam: String!): String
+  university_admin_AdminMenu__adminAction: String
+  university_admin_AdminMenu__otherAdminAction: String
+  university_dept_Department__addStaffMember(_gqlv_target: university_dept_Department__gqlv_input, staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department
+  university_dept_Department__addStaffMembers(_gqlv_target: university_dept_Department__gqlv_input, staffMembers: [university_dept_StaffMember__gqlv_input]): university_dept_Department
+  university_dept_Department__changeDeptHead(_gqlv_target: university_dept_Department__gqlv_input, newDeptHead: university_dept_DeptHead__gqlv_input!): university_dept_Department
+  university_dept_Department__changeName(_gqlv_target: university_dept_Department__gqlv_input, newName: String!): university_dept_Department
+  university_dept_Department__deptHead(_gqlv_target: university_dept_Department__gqlv_input, deptHead: university_dept_DeptHead__gqlv_input): university_dept_Department
+  university_dept_Department__name(_gqlv_target: university_dept_Department__gqlv_input, name: String!): university_dept_Department
+  university_dept_Department__removeStaffMember(_gqlv_target: university_dept_Department__gqlv_input, staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department
+  university_dept_Departments__createDepartment(deptHead: university_dept_DeptHead__gqlv_input, name: String!): university_dept_Department
+  university_dept_DeptHead__changeDepartment(_gqlv_target: university_dept_DeptHead__gqlv_input, department: university_dept_Department__gqlv_input!): university_dept_DeptHead
+  university_dept_DeptHead__changeName(_gqlv_target: university_dept_DeptHead__gqlv_input, newName: String!): university_dept_DeptHead
+  university_dept_DeptHead__department(_gqlv_target: university_dept_DeptHead__gqlv_input, department: university_dept_Department__gqlv_input): university_dept_DeptHead
+  university_dept_DeptHead__name(_gqlv_target: university_dept_DeptHead__gqlv_input, name: String): university_dept_DeptHead
+  university_dept_StaffMember__department(_gqlv_target: university_dept_StaffMember__gqlv_input, department: university_dept_Department__gqlv_input): university_dept_StaffMember
+  university_dept_StaffMember__grade(_gqlv_target: university_dept_StaffMember__gqlv_input, grade: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): university_dept_StaffMember
+  university_dept_StaffMember__name(_gqlv_target: university_dept_StaffMember__gqlv_input, name: String!): university_dept_StaffMember
+  university_dept_StaffMember__photo(_gqlv_target: university_dept_StaffMember__gqlv_input, photo: String): university_dept_StaffMember
+  university_dept_Staff__createStaffMember(department: university_dept_Department__gqlv_input!, name: String!): university_dept_StaffMember
+}
+
 type Query {
   Scenario(name: String): Scenario
   causeway_applib_DomainObjectList(object: causeway_applib_DomainObjectList__gqlv_input): causeway_applib_DomainObjectList
@@ -382,12 +426,12 @@ type causeway_applib_UserMemento__authenticationCode__gqlv_property {
 }
 
 type causeway_applib_UserMemento__authenticationSource__gqlv_property {
-  choices(authenticationSource: String): [String]
+  choices(authenticationSource: org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum): [org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum]
   disabled: String
-  get: String!
+  get: org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!
   hidden: Boolean
-  set(authenticationSource: String!): causeway_applib_UserMemento
-  validate(authenticationSource: String): String
+  set(authenticationSource: org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!): causeway_applib_UserMemento
+  validate(authenticationSource: org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum): String
 }
 
 type causeway_applib_UserMemento__avatarUrl__gqlv_property {
@@ -828,12 +872,12 @@ type causeway_feat_ApplicationTypeAction {
 }
 
 type causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
-  choices(actionSemantics: String): [String]
+  choices(actionSemantics: causeway_applib_annotation_SemanticsOf__gqlv_enum): [causeway_applib_annotation_SemanticsOf__gqlv_enum]
   disabled: String
-  get: String!
+  get: causeway_applib_annotation_SemanticsOf__gqlv_enum!
   hidden: Boolean
-  set(actionSemantics: String!): causeway_feat_ApplicationTypeAction
-  validate(actionSemantics: String): String
+  set(actionSemantics: causeway_applib_annotation_SemanticsOf__gqlv_enum!): causeway_feat_ApplicationTypeAction
+  validate(actionSemantics: causeway_applib_annotation_SemanticsOf__gqlv_enum): String
 }
 
 type causeway_feat_ApplicationTypeAction__gqlv_meta {
@@ -1901,9 +1945,9 @@ type university_calc_Calculator__concat__suffix__gqlv_action_parameter {
 type university_calc_Calculator__nextMonth__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(month: String!): String
+  invoke(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
   params: university_calc_Calculator__nextMonth__gqlv_action_params
-  validate(month: String): String
+  validate(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
 }
 
 type university_calc_Calculator__nextMonth__gqlv_action_params {
@@ -1911,8 +1955,8 @@ type university_calc_Calculator__nextMonth__gqlv_action_params {
 }
 
 type university_calc_Calculator__nextMonth__month__gqlv_action_parameter {
-  choices: [String]
-  disabled(month: String): String
+  choices: [org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum]
+  disabled(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
   hidden: Boolean
   validity: String
 }
@@ -2355,12 +2399,12 @@ type university_dept_StaffMember__gqlv_meta {
 }
 
 type university_dept_StaffMember__grade__gqlv_property {
-  choices(grade: String): [String]
+  choices(grade: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): [org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum]
   disabled: String
-  get: String!
+  get: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!
   hidden: Boolean
-  set(grade: String!): university_dept_StaffMember
-  validate(grade: String): String
+  set(grade: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): university_dept_StaffMember
+  validate(grade: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): String
 }
 
 type university_dept_StaffMember__name__gqlv_property {
@@ -2431,6 +2475,44 @@ type university_dept_Staff__findStaffMemberByName__name__gqlv_action_parameter {
   disabled(name: String): String
   hidden: Boolean
   validity: String
+}
+
+enum causeway_applib_annotation_SemanticsOf__gqlv_enum {
+  IDEMPOTENT
+  IDEMPOTENT_ARE_YOU_SURE
+  NON_IDEMPOTENT
+  NON_IDEMPOTENT_ARE_YOU_SURE
+  NOT_SPECIFIED
+  SAFE
+  SAFE_AND_REQUEST_CACHEABLE
+}
+
+enum org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum {
+  DEFAULT
+  EXTERNAL
+}
+
+enum org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum {
+  APRIL
+  AUGUST
+  DECEMBER
+  FEBRUARY
+  JANUARY
+  JULY
+  JUNE
+  MARCH
+  MAY
+  NOVEMBER
+  OCTOBER
+  SEPTEMBER
+}
+
+enum org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum {
+  LECTURER
+  PROFESSOR
+  READER
+  RESEARCH_ASSISTANT
+  SENIOR_LECTURER
 }
 
 input causeway_applib_DomainObjectList__gqlv_input {
