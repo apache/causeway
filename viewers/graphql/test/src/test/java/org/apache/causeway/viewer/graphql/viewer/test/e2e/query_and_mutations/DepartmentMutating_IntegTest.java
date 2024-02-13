@@ -51,6 +51,7 @@ import lombok.val;
         }
 )
 @Order(110)
+@DirtiesContext
 @ActiveProfiles("test")
 public class DepartmentMutating_IntegTest extends Abstract_IntegTest {
 

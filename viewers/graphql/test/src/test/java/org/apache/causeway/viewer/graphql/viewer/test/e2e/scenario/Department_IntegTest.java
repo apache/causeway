@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -47,6 +48,7 @@ import lombok.val;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(40)
+@DirtiesContext
 @ActiveProfiles("test")
 public class Department_IntegTest extends Abstract_IntegTest {
 

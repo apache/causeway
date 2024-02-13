@@ -48,6 +48,7 @@ import lombok.val;
         }
 )
 @Order(130)
+@DirtiesContext
 @ActiveProfiles("test")
 public class StaffMutating_IntegTest extends Abstract_IntegTest {
 

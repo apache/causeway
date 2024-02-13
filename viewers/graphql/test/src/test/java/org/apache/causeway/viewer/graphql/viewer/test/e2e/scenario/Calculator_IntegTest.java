@@ -33,6 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(30)
+@DirtiesContext
 @ActiveProfiles("test")
 public class Calculator_IntegTest extends Abstract_IntegTest {
 
