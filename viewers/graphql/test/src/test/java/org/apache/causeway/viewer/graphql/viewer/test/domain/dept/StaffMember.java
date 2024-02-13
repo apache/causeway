@@ -32,6 +32,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -50,8 +51,9 @@ import lombok.Setter;
         name = "StaffMember"
 )
 @javax.inject.Named("university.dept.StaffMember")
-@NoArgsConstructor
 @DomainObject(nature = Nature.ENTITY, autoCompleteRepository = StaffMemberRepository.class, autoCompleteMethod = "findByNameMatching")
+@DomainObjectLayout(describedAs = "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews")
+@NoArgsConstructor
 public class StaffMember implements Comparable<StaffMember> {
 
     public StaffMember(

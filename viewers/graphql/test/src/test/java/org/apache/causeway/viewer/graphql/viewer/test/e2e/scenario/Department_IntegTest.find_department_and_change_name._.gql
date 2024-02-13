@@ -1,6 +1,7 @@
 {
   Scenario(name: "Find department and change its name"){
     Name
+
     Given {
       university_dept_Departments {
         findDepartmentByName {
@@ -12,25 +13,11 @@
         }
       }
     }
+
     When {
-      university_dept_Departments {
-        findDepartmentByName {
-          invoke(name: "Classics") {
-            changeName {
-              invokeIdempotent(newName: "Ancient History") {
-                name {
-                  get
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    Then {
-      university_dept_Departments {
-        findDepartmentByName {
-          invoke(name: "Ancient History") {
+      university_dept_Department(object: {ref: "classics_dept"}) {
+        changeName {
+          invokeIdempotent(newName: "Ancient History") {
             name {
               get
             }

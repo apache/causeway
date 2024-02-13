@@ -45,11 +45,12 @@ public class GqlvMetaSaveAs extends GqlvAbstract {
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
         String ref = environment.getArgument("ref");
-        environment.getGraphQlContext().put(keyFor(ref), BookmarkedPojo.sourceFrom(environment));
+        GqlvMeta.Fetcher source = environment.getSource();
+        environment.getGraphQlContext().put(keyFor(ref), new BookmarkedPojo(source.bookmark(), context.bookmarkService));
         return ref;
     }
 
-    private static String keyFor(String ref) {
+    public static String keyFor(String ref) {
         return GqlvMetaSaveAs.class.getName() + "#" + ref;
     }
 

@@ -42,6 +42,8 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
         super(typeName, context);
         this.holder = holder;
         this.objectMember = objectMember;
+
+        objectMember.getCanonicalDescription().ifPresent(gqlObjectTypeBuilder::description);
     }
 
     public String getId() {

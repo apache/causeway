@@ -2398,7 +2398,7 @@ public class CausewayConfiguration {
                 /**
                  * Lookup field prefix
                  */
-                private String fieldNamePrefix = "_gqlv_lookup__";
+                private String fieldNamePrefix = "";
                 /**
                  * Lookup field suffix
                  */

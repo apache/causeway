@@ -41,6 +41,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
@@ -115,16 +116,16 @@ public class GqlvAction
 
     /**
      *
-     * @param dataFetchingEnvironment
+     * @param environment
      * @param objectAction
      * @param context
      * @return
      */
     public static Can<ManagedObject> argumentManagedObjectsFor(
-            final DataFetchingEnvironment dataFetchingEnvironment,
+            final DataFetchingEnvironment environment,
             final ObjectAction objectAction,
             final Context context) {
-        Map<String, Object> argumentPojos = dataFetchingEnvironment.getArguments();
+        Map<String, Object> argumentPojos = environment.getArguments();
         Can<ObjectActionParameter> parameters = objectAction.getParameters();
         return parameters
                 .map(oap -> {
@@ -144,12 +145,12 @@ public class GqlvAction
                             if (argumentValue instanceof List) {
                                 val argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
-                                        .map(value -> asPojo(oap.getElementType(), value, context.bookmarkService))
+                                        .map(value -> asPojo(oap.getElementType(), value, context.bookmarkService, environment))
                                         .filter(Optional::isPresent)
                                         .map(Optional::get)
                                         .collect(Collectors.toList());
                             } else {
-                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, context.bookmarkService).orElse(null);
+                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, context.bookmarkService, environment).orElse(null);
                             }
                             return ManagedObject.adaptParameter(oap, pojoOrPojoList);
 
@@ -185,15 +186,25 @@ public class GqlvAction
     public static Optional<Object> asPojo(
             final ObjectSpecification elementType,
             final Object argumentValueObj,
-            final BookmarkService bookmarkService) {
+            final BookmarkService bookmarkService,
+            final DataFetchingEnvironment environment) {
         val argumentValue = (Map<String, String>) argumentValueObj;
         String idValue = argumentValue.get("id");
-        Class<?> paramClass = elementType.getCorrespondingClass();
-        Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
-        return bookmarkIfAny
-                .map(bookmarkService::lookup)
-                .filter(Optional::isPresent)
-                .map(Optional::get);
+        if (idValue != null) {
+            Class<?> paramClass = elementType.getCorrespondingClass();
+            Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
+            return bookmarkIfAny
+                    .map(bookmarkService::lookup)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get);
+        }
+        String refValue = argumentValue.get("ref");
+        if (refValue != null) {
+            String key = GqlvMetaSaveAs.keyFor(refValue);
+            BookmarkedPojo value = environment.getGraphQlContext().get(key);
+            return Optional.of(value).map(BookmarkedPojo::getTargetPojo);
+        }
+        throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
     }
 
     public void addGqlArguments(

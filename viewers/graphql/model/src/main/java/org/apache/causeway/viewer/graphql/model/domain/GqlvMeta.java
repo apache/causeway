@@ -134,6 +134,10 @@ public class GqlvMeta extends GqlvAbstractCustom {
                     .orElse(null);
         }
 
+        public Bookmark bookmark() {
+            return bookmark;
+        }
+
     }
 
     public interface Holder

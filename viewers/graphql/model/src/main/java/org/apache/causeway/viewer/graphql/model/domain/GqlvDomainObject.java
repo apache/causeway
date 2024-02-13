@@ -31,7 +31,6 @@ import graphql.schema.GraphQLInputObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
-import static graphql.schema.GraphQLNonNull.nonNull;
 
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -73,6 +72,7 @@ public class GqlvDomainObject
         super(TypeNames.objectTypeNameFor(objectSpecification), context);
 
         this.objectSpecification = objectSpecification;
+        gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
         this.meta = new GqlvMeta(this, context);
         addChildField(meta.getField());
@@ -81,8 +81,15 @@ public class GqlvDomainObject
         inputTypeBuilder
                 .field(newInputObjectField()
                         .name("id")
-                        .type(nonNull(Scalars.GraphQLID))
-                        .build());
+                        .type(Scalars.GraphQLID)
+                        .build()
+                )
+                .field(newInputObjectField()
+                        .name("ref")
+                        .type(Scalars.GraphQLString)
+                        .build()
+                )
+        ;
         gqlInputObjectType = inputTypeBuilder.build();
 
         setField(buildFieldDefinition(gqlInputObjectType));
@@ -96,7 +103,7 @@ public class GqlvDomainObject
 
     }
 
-    private GraphQLFieldDefinition buildFieldDefinition(GraphQLInputObjectType gqlInputObjectType) {
+    private GraphQLFieldDefinition buildFieldDefinition(final GraphQLInputObjectType gqlInputObjectType) {
         val lookupConfig = this.context.causewayConfiguration.getViewer().getGraphql().getLookup();
         val objectSpec = getObjectSpecification();
         val fieldName = String.format("%s%s%s",
@@ -161,7 +168,7 @@ public class GqlvDomainObject
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
         Object target = environment.getArgument("object");
-        return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService)
+        return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService, environment)
                 .orElse(null);
     }
 

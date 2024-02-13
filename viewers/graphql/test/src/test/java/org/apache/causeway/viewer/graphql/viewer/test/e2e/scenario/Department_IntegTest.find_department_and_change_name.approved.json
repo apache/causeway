@@ -6,32 +6,17 @@
         "university_dept_Departments" : {
           "findDepartmentByName" : {
             "invoke" : {
-              "name" : {
-                "get" : "Classics"
+              "_gqlv_meta" : {
+                "saveAs" : "classics_dept"
               }
             }
           }
         }
       },
       "When" : {
-        "university_dept_Departments" : {
-          "findDepartmentByName" : {
-            "invoke" : {
-              "changeName" : {
-                "invokeIdempotent" : {
-                  "name" : {
-                    "get" : "Ancient History"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "Then" : {
-        "university_dept_Departments" : {
-          "findDepartmentByName" : {
-            "invoke" : {
+        "university_dept_Department" : {
+          "changeName" : {
+            "invokeIdempotent" : {
               "name" : {
                 "get" : "Ancient History"
               }

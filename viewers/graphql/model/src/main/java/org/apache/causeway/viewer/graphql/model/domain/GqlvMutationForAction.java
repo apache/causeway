@@ -116,7 +116,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
     }
 
     @Override
-    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    protected Object fetchData(final DataFetchingEnvironment environment) {
 
         val isService = objectSpec.getBeanSort().isManagedBeanContributing();
 
@@ -124,8 +124,8 @@ public class GqlvMutationForAction extends GqlvAbstract {
         if (isService) {
             sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.getCorrespondingClass());
         } else {
-            Object target = dataFetchingEnvironment.getArgument(argumentName);
-            sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService)
+            Object target = environment.getArgument(argumentName);
+            sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService, environment)
                     .orElseThrow(); // TODO: better error handling if no such object found.
         }
 
@@ -142,7 +142,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
         }
 
         val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = argumentManagedObjectsFor(dataFetchingEnvironment, objectAction);
+        val argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction);
 
         val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
