@@ -113,19 +113,7 @@ public class Staff_IntegTest extends Abstract_IntegTest {
     @UseReporter(DiffReporter.class)
     void create_staff_member_with_department() throws Exception {
 
-        final Bookmark bookmark =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> {
-                            Department department = departmentRepository.findByName("Classics");
-                            return bookmarkService.bookmarkFor(department).orElseThrow();
-                        }
-                ).valueAsNonNullElseFail();
-
-        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
+        Approvals.verify(submit(), jsonOptions());
 
     }
 }

@@ -1,24 +1,40 @@
 {
-  university_dept_Staff {
-    createStaffMember {
-      invokeNonIdempotent(name: "Dr. Georgina McGovern", department: { id: "$departmentId"}) {
-        name {
-          get
-        }
-        department {
-          get {
-            name {
-              get
+  Scenario(name: "New member of staff") {
+    Name
+    Given {
+      university_dept_Departments {
+        findDepartmentByName {
+          invoke(name: "Classics") {
+            _gqlv_meta {
+              saveAs(ref: "classics")
             }
           }
         }
-        _gqlv_meta {
-          title
-          logicalTypeName
-          version
-          cssClass
-          iconName
-          grid
+      }
+    }
+    When {
+      university_dept_Staff {
+        createStaffMember {
+          invokeNonIdempotent(name: "Dr. Georgina McGovern", department: { ref: "classics"}) {
+            name {
+              get
+            }
+            department {
+              get {
+                name {
+                  get
+                }
+              }
+            }
+            _gqlv_meta {
+              title
+              logicalTypeName
+              version
+              cssClass
+              iconName
+              grid
+            }
+          }
         }
       }
     }
