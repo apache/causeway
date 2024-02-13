@@ -18,7 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e.query_and_mutations;
 
+import lombok.val;
+
 import java.util.Optional;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
@@ -31,14 +39,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
-
-import lombok.val;
-
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @SpringBootTest(
@@ -50,29 +50,13 @@ import lombok.val;
                 "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
         }
 )
-@Order(110)
-@DirtiesContext
+@Order(100)
 @ActiveProfiles("test")
-public class DepartmentMutating_IntegTest extends Abstract_IntegTest {
+@DirtiesContext
+public class _Mutating_IntegTest extends Abstract_IntegTest {
 
     @Test
-    @UseReporter(DiffReporter.class)
-    void change_department_name_visibility() throws Exception {
-
-        final Bookmark bookmark =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> {
-                            Department department = departmentRepository.findByName("Classics");
-                            Optional<Bookmark> bookmark1 = bookmarkService.bookmarkFor(department);
-                            return bookmark1.orElseThrow();
-                        }
-                ).valueAsNonNullElseFail();
-
-        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
+    void dummy() throws Exception {
     }
 
 }

@@ -1,6 +1,5 @@
 module org.apache.causeway.incubator.viewer.graphql.viewer {
     exports org.apache.causeway.viewer.graphql.viewer;
-    exports org.apache.causeway.viewer.graphql.viewer.toplevel;
     exports org.apache.causeway.viewer.graphql.viewer.integration;
 
     requires com.fasterxml.jackson.core;

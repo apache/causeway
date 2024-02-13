@@ -1,5 +1,5 @@
 {
-  _gqlv_lookup__university_dept_Department(object: {id: "$departmentId"}) {
+  university_dept_Department(object: {id: "$departmentId"}) {
     changeName {
       hidden
     }

@@ -19,12 +19,7 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
@@ -32,11 +27,11 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
 import lombok.val;
@@ -44,6 +39,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionParam
+        extends GqlvAbstractCustom
         implements GqlvActionParamHidden.Holder,
                    GqlvActionParamDisabled.Holder,
                    GqlvActionParamChoices.Holder,
@@ -53,14 +49,10 @@ public class GqlvActionParam
 
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
-    private final Context context;
     @Getter private final int paramNum;
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    private final GraphQLObjectType gqlObjectType;
-
     private final GqlvActionParamHidden hidden;
-    private final GqlvActionParamDisabled validate;
+    private final GqlvActionParamDisabled disabled;
     /**
      * Populated iff there are choices for this param
      */
@@ -73,37 +65,51 @@ public class GqlvActionParam
      * Populated iff there is a default for this param
      */
     private final GqlvActionParamDefault default_;
-    private final GqlvActionParamValidate disabled;
-
-    private final GraphQLFieldDefinition field;
+    private final GqlvActionParamValidate validate;
 
     public GqlvActionParam(
             final Holder holder,
             final ObjectActionParameter objectActionParameter,
             final Context context,
             final int paramNum) {
+        super(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter), context);
         this.holder = holder;
         this.objectActionParameter = objectActionParameter;
-        this.context = context;
         this.paramNum = paramNum;
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter));
 
         this.hidden = new GqlvActionParamHidden(this, context);
-        this.disabled = new GqlvActionParamValidate(this, context);
+        addChildField(hidden.getField());
+        this.disabled = new GqlvActionParamDisabled(this, context);
+        addChildField(disabled.getField());
+
         val choices = new GqlvActionParamChoices(this, context);
-        this.choices = choices.hasChoices() ? choices : null;
+        addChildField(choices.getField());
+        if (choices.isFieldDefined()) {
+            this.choices = choices;
+        } else {
+            this.choices = null;
+        }
+
         val autoComplete = new GqlvActionParamAutoComplete(this, context);
-        this.autoComplete = autoComplete.hasAutoComplete() ? autoComplete : null;
+        addChildField(autoComplete.getField());
+        if (autoComplete.isFieldDefined()) {
+            this.autoComplete = autoComplete;
+        } else {
+            this.autoComplete = null;
+        }
+
         val default_ = new GqlvActionParamDefault(this, context);
-        this.default_ = default_.hasDefault() ? default_ : null;
-        this.validate = new GqlvActionParamDisabled(this, context);
+        addChildField(default_.getField());
+        if (default_.isFieldDefined()) {
+            this.default_ = default_;
+        } else {
+            this.default_ = null;
+        }
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
+        this.validate = new GqlvActionParamValidate(this, context);
+        addChildField(validate.getField());
 
-        this.field = holder.addField(newFieldDefinition()
-                        .name(objectActionParameter.getId())
-                        .type(gqlObjectTypeBuilder)
-                        .build());
+        buildObjectTypeAndField(objectActionParameter.getId());
     }
 
     @Override
@@ -122,35 +128,27 @@ public class GqlvActionParam
     }
 
     @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
-        return field;
-    }
-
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                new BookmarkedPojoFetcher(context.bookmarkService));
-
-        hidden.addDataFetcher();
-        disabled.addDataFetcher();
+    protected void addDataFetchersForChildren() {
+        hidden.addDataFetcher(this);
+        disabled.addDataFetcher(this);
         if (choices != null) {
-            choices.addDataFetcher();
+            choices.addDataFetcher(this);
         }
         if (autoComplete != null) {
-            autoComplete.addDataFetcher();
+            autoComplete.addDataFetcher(this);
         }
         if (default_ != null) {
-            default_.addDataFetcher();
+            default_.addDataFetcher(this);
         }
-        validate.addDataFetcher();
+        validate.addDataFetcher(this);
     }
-
 
     @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
+    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
+
+
 
     @Override
     public void addGqlArguments(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
@@ -164,13 +162,12 @@ public class GqlvActionParam
 
     @Override
     public void addGqlArgument(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
-
+        // TODO: what lives here?
     }
 
 
     public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
+            extends ObjectSpecificationProvider,
                     ObjectActionProvider {
 
         void addGqlArguments(

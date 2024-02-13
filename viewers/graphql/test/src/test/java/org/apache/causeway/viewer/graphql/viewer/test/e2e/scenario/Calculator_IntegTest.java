@@ -16,74 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.scenario;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
-
-import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(50)
+@Order(30)
 @DirtiesContext
 @ActiveProfiles("test")
-public class DeptHead_IntegTest extends Abstract_IntegTest {
+public class Calculator_IntegTest extends Abstract_IntegTest {
+
 
     @Test
     @UseReporter(DiffReporter.class)
-    void find_depthead_by_name() throws Exception {
+    void concat() throws Exception {
 
         // when, then
         Approvals.verify(submit(), jsonOptions());
-    }
 
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name_invalid() throws Exception {
-
-        String response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name_invoke_invalid() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_depthead_and_change_name() throws Exception {
-
-        // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
-        String response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-
-        // and also in the database
-        DeptHead deptHeadAfter = transactionService.callTransactional(
-                Propagation.REQUIRED,
-                () -> deptHeadRepository.findByName("Prof. Richard Horwich")
-        ).valueAsNullableElseFail();
-
-        assertThat(deptHeadAfter).isNotNull();
     }
 
 

@@ -18,9 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
+import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -28,42 +26,35 @@ import static graphql.schema.GraphQLObjectType.newObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 
 public class GqlvCollection
         extends GqlvAssociation<OneToManyAssociation, GqlvCollection.Holder>
-        implements GqlvCollectionGet.Holder,
+        implements GqlvAssociationGet.Holder<OneToManyAssociation>,
                    GqlvMemberHidden.Holder<OneToManyAssociation>,
                    GqlvMemberDisabled.Holder<OneToManyAssociation> {
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    private final GraphQLObjectType gqlObjectType;
     private final GqlvMemberHidden<OneToManyAssociation> hidden;
     private final GqlvMemberDisabled<OneToManyAssociation> disabled;
     private final GqlvCollectionGet get;
 
     public GqlvCollection(
-            final Holder domainObject,
+            final Holder holder,
             final OneToManyAssociation oneToManyAssociation,
             final Context context) {
-        super(domainObject, oneToManyAssociation, context);
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation));
+        super(holder, oneToManyAssociation, TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
+        addChildField(hidden.getField());
+
         this.disabled = new GqlvMemberDisabled<>(this, context);
+        addChildField(disabled.getField());
+
         this.get = new GqlvCollectionGet(this, context);
+        addChildField(get.getField());
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
-
-        setField(
-            holder.addField(
-                newFieldDefinition()
-                    .name(oneToManyAssociation.getId())
-                    .type(gqlObjectTypeBuilder)
-                    .build()
-            )
-        );
+        buildObjectTypeAndField(oneToManyAssociation.getId());
     }
 
     @Override
@@ -71,32 +62,12 @@ public class GqlvCollection
         return holder.getObjectSpecification();
     }
 
-    public OneToManyAssociation getOneToManyAssociation() {
-        return getObjectAssociation();
-    }
 
     @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
-        return field;
+    protected void addDataFetchersForChildren() {
+        hidden.addDataFetcher(this);
+        disabled.addDataFetcher(this);
+        get.addDataFetcher(this);
     }
 
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(context.bookmarkService));
-
-        hidden.addDataFetcher();
-        disabled.addDataFetcher();
-        get.addDataFetcher();
-    }
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
-    }
-
-    public interface Holder extends GqlvAssociation.Holder {
-
-    }
 }

@@ -18,31 +18,25 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLNonNull.nonNull;
+
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvMember.Holder>
-        extends GqlvMember<T, H> {
+public class GqlvMetaVersion extends GqlvAbstract {
 
-    public GqlvAssociation(
-            final H holder,
-            final T objectAssociation,
-            final String typeName,
-            final Context context) {
-        super(holder, objectAssociation, typeName, context);
+    public GqlvMetaVersion(final Context context) {
+        super(context);
+
+        setField(newFieldDefinition().name("version").type(Scalars.GraphQLString).build());
     }
 
-
-    /**
-     * @see #getObjectMember()
-     */
-    public T getObjectAssociation() {
-        return getObjectMember();
+    @Override
+    protected String fetchData(DataFetchingEnvironment environment) {
+        return environment.<GqlvMeta.Fetcher>getSource().version();
     }
 
 }

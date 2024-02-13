@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
+import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelMutation;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
+import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQuery;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -55,11 +55,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final CausewayConfiguration causewayConfiguration;
     private final CausewaySystemEnvironment causewaySystemEnvironment;
     private final SpecificationLoader specificationLoader;
-    private final ServiceRegistry serviceRegistry;
-    private final ObjectManager objectManager;
-    private final BookmarkService bookmarkService;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
-    private final TypeMapper typeMapper;
+    private final Context context;
+
     private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
 
     @PostConstruct
@@ -97,9 +95,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
-        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment, objectManager, graphQLTypeRegistry);
-
         // top-level query and mutation type
         val topLevelQuery = new GqlvTopLevelQuery(context);
         val topLevelMutation =
@@ -114,14 +109,14 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         }
 
         // finalize the fetcher/mutator code that's been added
-        val codeRegistry = codeRegistryBuilder.build();
+        val codeRegistry = context.codeRegistryBuilder.build();
 
         // build the schema
         return GraphQLSchema.newSchema()
-                .query(topLevelQuery.getObjectType())
+                .query(topLevelQuery.getGqlObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
                 .codeRegistry(codeRegistry)
-                .mutation(topLevelMutation != null ? topLevelMutation.getObjectType() : null)
+                .mutation(topLevelMutation != null ? topLevelMutation.getGqlObjectType() : null)
                 .build();
     }
 

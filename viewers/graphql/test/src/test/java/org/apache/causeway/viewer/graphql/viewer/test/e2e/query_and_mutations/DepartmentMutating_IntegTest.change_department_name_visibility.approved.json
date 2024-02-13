@@ -1,6 +1,6 @@
 {
   "data" : {
-    "_gqlv_lookup__university_dept_Department" : {
+    "university_dept_Department" : {
       "changeName" : {
         "hidden" : false
       }

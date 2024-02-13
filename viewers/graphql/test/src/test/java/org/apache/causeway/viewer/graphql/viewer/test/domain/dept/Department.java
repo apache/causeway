@@ -40,6 +40,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
@@ -59,6 +60,7 @@ import lombok.val;
 @javax.inject.Named("university.dept.Department")
 @NoArgsConstructor
 @DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
+@DomainObjectLayout(describedAs = "University department specializing in a field of study")
 public class Department implements Comparable<Department> {
 
 

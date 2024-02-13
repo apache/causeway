@@ -41,33 +41,28 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvMutationForAction {
+public class GqlvMutationForAction extends GqlvAbstract {
 
-    private final Holder holder;
     private final ObjectSpecification objectSpec;
     private final ObjectAction objectAction;
-    private final Context context;
-    private final GraphQLFieldDefinition field;
     private String argumentName;
 
     public GqlvMutationForAction(
-            final Holder holder,
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction,
-        final Context context) {
-        this.holder = holder;
+            final Context context) {
+        super(context);
         this.objectSpec = objectSpec;
         this.objectAction = objectAction;
-        this.context = context;
 
         this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
 
@@ -77,9 +72,9 @@ public class GqlvMutationForAction {
                     .name(fieldName(objectSpec, objectAction))
                     .type(type);
             addGqlArguments(fieldBuilder);
-            this.field = holder.addField(fieldBuilder.build());
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
@@ -120,14 +115,8 @@ public class GqlvMutationForAction {
         }
     }
 
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::invoke
-        );
-    }
-
-    private Object invoke(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment environment) {
 
         val isService = objectSpec.getBeanSort().isManagedBeanContributing();
 
@@ -135,8 +124,8 @@ public class GqlvMutationForAction {
         if (isService) {
             sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.getCorrespondingClass());
         } else {
-            Object target = dataFetchingEnvironment.getArgument(argumentName);
-            sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService)
+            Object target = environment.getArgument(argumentName);
+            sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService, environment)
                     .orElseThrow(); // TODO: better error handling if no such object found.
         }
 
@@ -153,7 +142,7 @@ public class GqlvMutationForAction {
         }
 
         val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = argumentManagedObjectsFor(dataFetchingEnvironment, objectAction);
+        val argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction);
 
         val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
@@ -220,8 +209,5 @@ public class GqlvMutationForAction {
         return GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }
 
-    public interface Holder
-            extends GqlvHolder {
-    }
 
 }

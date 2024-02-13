@@ -31,18 +31,25 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+
+import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+@Component
 @RequiredArgsConstructor
 public class Context {
 
-    public final GraphQLCodeRegistry.Builder codeRegistryBuilder;
+    public final GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
     public final BookmarkService bookmarkService;
     public final SpecificationLoader specificationLoader;
     public final TypeMapper typeMapper;
@@ -51,6 +58,9 @@ public class Context {
     public final CausewaySystemEnvironment causewaySystemEnvironment;
     public final ObjectManager objectManager;
     public final GraphQLTypeRegistry graphQLTypeRegistry;
+
+    public final Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec = new LinkedHashMap<>();
+    public final Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec = new LinkedHashMap<>();
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()

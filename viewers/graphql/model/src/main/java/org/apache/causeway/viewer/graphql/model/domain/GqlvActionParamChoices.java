@@ -47,21 +47,15 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import lombok.extern.log4j.Log4j2;
 
  @Log4j2
- public class GqlvActionParamChoices {
+ public class GqlvActionParamChoices extends GqlvAbstract {
 
      private final Holder holder;
-     private final Context context;
-
-     /**
-      * Populated iff there are choices for this parameter.
-      */
-     private final GraphQLFieldDefinition field;
 
      public GqlvActionParamChoices(
              final Holder holder,
              final Context context) {
+         super(context);
          this.holder = holder;
-         this.context = context;
 
          val objectActionParameter = holder.getObjectActionParameter();
          if (objectActionParameter.hasChoices()) {
@@ -70,24 +64,14 @@ package org.apache.causeway.viewer.graphql.model.domain;
                      .name("choices")
                      .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
              holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.CHOICES, holder.getParamNum());
-             this.field = holder.addField(fieldBuilder.build());
+             setField(fieldBuilder.build());
          } else {
-             this.field = null;
+             setField(null);
          }
      }
 
-     boolean hasChoices() {
-         return field != null;
-     }
-
-     public void addDataFetcher() {
-         context.codeRegistryBuilder.dataFetcher(
-                 holder.coordinatesFor(field),
-                 this::choices
-         );
-     }
-
-     private List<Object> choices(final DataFetchingEnvironment dataFetchingEnvironment) {
+     @Override
+     protected List<Object> fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
          val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
          val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
@@ -111,10 +95,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
      }
 
      public interface Holder
-             extends GqlvHolder,
-             ObjectSpecificationProvider,
-             ObjectActionProvider,
-             ObjectActionParameterProvider {
+             extends ObjectSpecificationProvider,
+                     ObjectActionProvider,
+                     ObjectActionParameterProvider {
          GqlvActionParam.Holder getHolder();
 
          void addGqlArguments(

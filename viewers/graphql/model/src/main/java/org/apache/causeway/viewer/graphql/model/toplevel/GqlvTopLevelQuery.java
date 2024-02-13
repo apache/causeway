@@ -1,33 +1,29 @@
-package org.apache.causeway.viewer.graphql.viewer.toplevel;
+package org.apache.causeway.viewer.graphql.model.toplevel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLObjectType;
 
-import static graphql.schema.GraphQLObjectType.newObject;
-
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
+import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
-import lombok.Getter;
-
-public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainObject.Holder {
-
-    private static final String OBJECT_TYPE_NAME = "Query";
-
-    final GraphQLObjectType.Builder objectTypeBuilder;
-    @Getter private final GraphQLObjectType objectType;
+public class GqlvTopLevelQuery
+        extends GqlvAbstractCustom
+        implements Parent {
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
-    public GqlvTopLevelQuery(final Context context) {
+    private final GqlvScenario scenario;
 
-        this.objectTypeBuilder = newObject().name(OBJECT_TYPE_NAME);
+    public GqlvTopLevelQuery(final Context context) {
+        super("Query", context);
 
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
@@ -36,7 +32,7 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(new GqlvDomainObject(this, objectSpec, context));
+                    domainObjects.add(GqlvDomainObject.of(objectSpec, context));
 
                     break;
             }
@@ -48,7 +44,9 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo -> {
-                                domainServices.add(new GqlvDomainService(this, objectSpec, servicePojo, context));
+                                GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, servicePojo, context);
+                                addChildField(gqlvDomainService.getField());
+                                domainServices.add(gqlvDomainService);
                             });
                     break;
             }
@@ -56,36 +54,43 @@ public class GqlvTopLevelQuery implements GqlvDomainService.Holder, GqlvDomainOb
 
         // add domain object lookup to top-level query
         for (GqlvDomainObject domainObject : this.domainObjects) {
-            addField(domainObject.getLookupField());
+            addChildField(domainObject.getField());
         }
 
-        objectType = objectTypeBuilder.build();
+        scenario = new GqlvScenario(context);
+        addChildField(scenario.getField());
+
+        buildObjectType();
     }
 
-
+    /**
+     * Never used.
+     *
+     * @param environment
+     * @return
+     */
     @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(OBJECT_TYPE_NAME, fieldDefinition.getName());
+    protected Object fetchData(DataFetchingEnvironment environment) {
+        return null;
     }
 
     @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        objectTypeBuilder.field(field);
-        return field;
+    public GraphQLObjectType getGqlObjectType() {
+        return super.getGqlObjectType();
     }
 
     public void addDataFetchers() {
+
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
             if (actionsAdded) {
-                domainService.addDataFetchers();
+                domainService.addDataFetcher(this);
             }
         });
 
 
-        domainObjects.forEach(GqlvDomainObject::addDataFetchers);
+        domainObjects.forEach(domainObject -> domainObject.addDataFetcher(this));
 
+        scenario.addDataFetcher(this);
     }
-
-
 }

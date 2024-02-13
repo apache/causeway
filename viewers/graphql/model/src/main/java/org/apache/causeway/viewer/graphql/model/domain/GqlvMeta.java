@@ -23,8 +23,8 @@ import java.util.Optional;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -37,78 +37,61 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import lombok.Getter;
 import lombok.val;
 
-public class GqlvMeta {
-
-    static GraphQLFieldDefinition id = newFieldDefinition().name("id").type(nonNull(Scalars.GraphQLString)).build();
-    static GraphQLFieldDefinition logicalTypeName = newFieldDefinition().name("logicalTypeName").type(nonNull(Scalars.GraphQLString)).build();
-    static GraphQLFieldDefinition version = newFieldDefinition().name("version").type(Scalars.GraphQLString).build();
+public class GqlvMeta extends GqlvAbstractCustom {
 
     private final Holder holder;
-
-    private final Context context;
-
-    private final GraphQLObjectType objectType;
-
-    @Getter private final GraphQLFieldDefinition field;
+    private final GqlvMetaId metaId;
+    private final GqlvMetaLogicalTypeName metaLogicalTypeName;
+    private final GqlvMetaVersion metaVersion;
+    private final GqlvMetaSaveAs metaSaveAs;
 
     public GqlvMeta(
             final Holder holder,
             final Context context
     ) {
+        super(TypeNames.metaTypeNameFor(holder.getObjectSpecification()), context);
         this.holder = holder;
 
-        this.context = context;
+        metaId = new GqlvMetaId(context);
+        addChildField(metaId.getField());
 
-        // we can build the metafield and meta type eagerly because we know exactly which fields it has.
-        val objectTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(this.holder.getObjectSpecification()));
-
-        objectTypeBuilder.field(id);
-        objectTypeBuilder.field(logicalTypeName);
-        if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            objectTypeBuilder.field(version);
-        }
-
-        val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
-
-        this.objectType = objectTypeBuilder.build();
-        field = newFieldDefinition()
-                        .name(fieldName)
-                        .type(objectType)
-                        .build();
-
-        holder.addField(field);
-
-        context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(objectType);
-    }
-
-
-    public void addDataFetchers() {
-
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment ->
-                    context.bookmarkService.bookmarkFor(environment.getSource())
-                        .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
-                        .orElseThrow());
-
-        context.codeRegistryBuilder.dataFetcher(
-                coordinates(objectType, logicalTypeName),
-                (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().logicalTypeName());
-
-        context.codeRegistryBuilder.dataFetcher(
-                coordinates(objectType, id),
-                (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
+        metaLogicalTypeName = new GqlvMetaLogicalTypeName(context);
+        addChildField(metaLogicalTypeName.getField());
 
         if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            context.codeRegistryBuilder.dataFetcher(
-                    coordinates(objectType, version),
-                    (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());
+            metaVersion = new GqlvMetaVersion(context);
+            addChildField(metaVersion.getField());
+        } else {
+            metaVersion = null;
         }
+
+        metaSaveAs = new GqlvMetaSaveAs(context);
+        addChildField(metaSaveAs.getField());
+
+        val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
+        buildObjectTypeAndField(fieldName);
+    }
+
+    @Override
+    protected void addDataFetchersForChildren() {
+        metaId.addDataFetcher(this);
+        metaLogicalTypeName.addDataFetcher(this);
+        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
+            metaVersion.addDataFetcher(this);
+        }
+        metaSaveAs.addDataFetcher(this);
+    }
+
+    @Override
+    public Object fetchData(final DataFetchingEnvironment environment) {
+        return context.bookmarkService.bookmarkFor(environment.getSource())
+                .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
+                .orElseThrow();
     }
 
 
@@ -151,11 +134,14 @@ public class GqlvMeta {
                     .orElse(null);
         }
 
+        public Bookmark bookmark() {
+            return bookmark;
+        }
+
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider {
+            extends ObjectSpecificationProvider {
 
     }
 }

@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -33,59 +32,31 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 
 import lombok.val;
 
-public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
+public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends GqlvAbstract {
 
     final Holder<T> holder;
-    final Context context;
-    final GraphQLFieldDefinition field;
 
     public GqlvAssociationGet(
             final Holder<T> holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
-        this.field = fieldDefinition(holder);
-    }
 
-    GraphQLFieldDefinition fieldDefinition(final Holder<T> holder) {
-
-        GraphQLFieldDefinition fieldDefinition = null;
         GraphQLOutputType type = outputTypeFor(holder);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("get")
                     .type(type);
-            fieldDefinition = fieldBuilder.build();
-
-            holder.addField(fieldDefinition);
+            setField(fieldBuilder.build());
+        } else {
+            setField(null);
         }
-        return fieldDefinition;
     }
 
     abstract GraphQLOutputType outputTypeFor(Holder<T> holder);
 
-    void addDataFetcher() {
-
-        val association = holder.getObjectAssociation();
-        val fieldObjectSpecification = association.getElementType();
-        val beanSort = fieldObjectSpecification.getBeanSort();
-
-        switch (beanSort) {
-
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-
-                context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
-                        this::get);
-
-                break;
-
-        }
-    }
-
-    Object get(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         // TODO: introduce evaluator
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
@@ -107,9 +78,8 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> {
     }
 
     public interface Holder<T extends ObjectAssociation>
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectAssociationProvider<T> {
+            extends ObjectSpecificationProvider,
+                    ObjectAssociationProvider<T> {
 
     }
 }

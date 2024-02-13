@@ -21,20 +21,13 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.FieldCoordinates.coordinates;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+
+import graphql.schema.DataFetchingEnvironment;
 
 import lombok.Getter;
 import lombok.val;
@@ -42,45 +35,34 @@ import lombok.val;
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainService implements GqlvAction.Holder {
+public class GqlvDomainService
+        extends GqlvAbstractCustom
+        implements GqlvAction.Holder {
 
-    private final Holder holder;
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
-    private final Context context;
-
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-
-    @Getter private GraphQLFieldDefinition field;
-
-    String getLogicalTypeName() {
-        return objectSpecification.getLogicalTypeName();
-    }
 
     private final Map<String, GqlvAction> actions = new LinkedHashMap<>();
 
-    /**
-     * Will be <code>null</code> if there are no actions.
-     */
-    private GraphQLObjectType gqlObjectType;
-
-    public GqlvDomainService(
-            final GqlvDomainService.Holder holder,
+    public static GqlvDomainService of(
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
-        this.holder = holder;
+        return context.domainServiceBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(spec, servicePojo, context));
+    }
+
+    public GqlvDomainService(
+            final ObjectSpecification objectSpecification,
+            final Object servicePojo,
+            final Context context) {
+        super(TypeNames.objectTypeNameFor(objectSpecification), context);
+
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
-        this.context = context;
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         addActions();
-
         if (hasActions()) {
-            gqlObjectType = gqlObjectTypeBuilder.build();
-            addFieldFor(holder);
+            buildObjectTypeAndField(TypeNames.objectTypeNameFor(this.objectSpecification));
         }
     }
 
@@ -99,39 +81,22 @@ public class GqlvDomainService implements GqlvAction.Holder {
     }
 
     private void addAction(final ObjectAction objectAction) {
-        actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
+        val gqlvAction = new GqlvAction(this, objectAction, context);
+        addChildField(gqlvAction.getField());
+        actions.put(objectAction.getId(), gqlvAction);
     }
 
 
     @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
-        return field;
-    }
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
-        }
-        return coordinates(gqlObjectType, fieldDefinition);
-    }
-
-    public void addFieldFor(Holder holder) {
-        holder.addField(this.field = newFieldDefinition()
-                .name(TypeNames.objectTypeNameFor(objectSpecification))
-                .type(gqlObjectType)
-                .build());
-    }
-
-    public void addDataFetchers() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
-                (DataFetcher<Object>) environment -> getServicePojo());
+    protected void addDataFetchersForChildren() {
         if (hasActions()) {
-            actions.forEach((id, gqlva) -> gqlva.addDataFetcher());
+            actions.forEach((id, gqlva) -> gqlva.addDataFetcher(this));
         }
+    }
+
+    @Override
+    protected Object fetchData(DataFetchingEnvironment environment) {
+        return getServicePojo();
     }
 
 
@@ -141,8 +106,4 @@ public class GqlvDomainService implements GqlvAction.Holder {
     }
 
 
-
-    public interface Holder
-            extends GqlvHolder {
-    }
 }

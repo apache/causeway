@@ -39,35 +39,26 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionParamHidden {
+public class GqlvActionParamHidden extends GqlvAbstract {
 
     private final Holder holder;
-    private final Context context;
-
-    private final GraphQLFieldDefinition field;
 
     public GqlvActionParamHidden(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")
                 .type(context.typeMapper.scalarTypeFor(boolean.class));
         holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
-        this.field = holder.addField(fieldBuilder.build());
+        setField(fieldBuilder.build());
     }
 
 
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::hidden
-        );
-    }
-
-    private boolean hidden(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -90,8 +81,7 @@ public class GqlvActionParamHidden {
     }
 
     public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
+            extends ObjectSpecificationProvider,
                     ObjectActionProvider,
                     ObjectActionParameterProvider {
         void addGqlArguments(

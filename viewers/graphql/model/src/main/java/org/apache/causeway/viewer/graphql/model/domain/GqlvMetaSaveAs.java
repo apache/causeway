@@ -18,31 +18,40 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLArgument;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvMember.Holder>
-        extends GqlvMember<T, H> {
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-    public GqlvAssociation(
-            final H holder,
-            final T objectAssociation,
-            final String typeName,
-            final Context context) {
-        super(holder, objectAssociation, typeName, context);
+public class GqlvMetaSaveAs extends GqlvAbstract {
+
+    public GqlvMetaSaveAs(final Context context) {
+        super(context);
+
+        setField(newFieldDefinition()
+                    .name("saveAs")
+                    .type(Scalars.GraphQLString)
+                    .argument(new GraphQLArgument.Builder()
+                            .name("ref")
+                            .type(Scalars.GraphQLString)
+                    )
+                    .build());
     }
 
+    @Override
+    protected Object fetchData(DataFetchingEnvironment environment) {
+        String ref = environment.getArgument("ref");
+        GqlvMeta.Fetcher source = environment.getSource();
+        environment.getGraphQlContext().put(keyFor(ref), new BookmarkedPojo(source.bookmark(), context.bookmarkService));
+        return ref;
+    }
 
-    /**
-     * @see #getObjectMember()
-     */
-    public T getObjectAssociation() {
-        return getObjectMember();
+    public static String keyFor(String ref) {
+        return GqlvMetaSaveAs.class.getName() + "#" + ref;
     }
 
 }

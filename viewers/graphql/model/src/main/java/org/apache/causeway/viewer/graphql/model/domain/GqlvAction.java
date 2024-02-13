@@ -24,10 +24,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
@@ -43,24 +41,22 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvAction
-        extends GqlvMember<ObjectAction, GqlvAction.Holder>
+        extends GqlvMember<ObjectAction, GqlvMember.Holder>
         implements GqlvMemberHidden.Holder<ObjectAction>,
                    GqlvMemberDisabled.Holder<ObjectAction>,
                    GqlvActionInvoke.Holder,
                    GqlvActionValidity.Holder,
-                   GqlvActionParams.Holder {
-
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    private final GraphQLObjectType gqlObjectType;
+                   GqlvActionParams.Holder,
+        Parent {
 
     private final GqlvMemberHidden<ObjectAction> hidden;
     private final GqlvMemberDisabled<ObjectAction> disabled;
@@ -78,27 +74,36 @@ public class GqlvAction
             final Holder holder,
             final ObjectAction objectAction,
             final Context context) {
-        super(holder, objectAction, context);
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction));
+        super(holder, objectAction, TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
+        addChildField(hidden.getField());
+
         this.disabled = new GqlvMemberDisabled<>(this, context);
+        addChildField(disabled.getField());
+
         this.validate = new GqlvActionValidity(this, context);
+        addChildField(validate.getField());
 
         val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        this.invoke = objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT
-                ? new GqlvActionInvoke(this, context)
-                : null;
+        if (objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
+            this.invoke = new GqlvActionInvoke(this, context);
+            GraphQLFieldDefinition invokeField = this.invoke.getField();
+            if (invokeField != null) {
+                addChildField(invokeField);
+            }
+        } else {
+            this.invoke = null;
+        }
         val params = new GqlvActionParams(this, context);
-        this.params = params.hasParams() ? params : null;
+        if (params.hasParams()) {
+            this.params = params;
+            addChildField(params.getField());
+        } else {
+            this.params = null;
+        }
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
-
-        this.field = holder.addField(newFieldDefinition()
-                .name(objectAction.getId())
-                .type(gqlObjectTypeBuilder)
-                .build());
+        buildObjectTypeAndField(objectAction.getId());
     }
 
     public Can<ManagedObject> argumentManagedObjectsFor(
@@ -111,16 +116,16 @@ public class GqlvAction
 
     /**
      *
-     * @param dataFetchingEnvironment
+     * @param environment
      * @param objectAction
      * @param context
      * @return
      */
     public static Can<ManagedObject> argumentManagedObjectsFor(
-            final DataFetchingEnvironment dataFetchingEnvironment,
+            final DataFetchingEnvironment environment,
             final ObjectAction objectAction,
             final Context context) {
-        Map<String, Object> argumentPojos = dataFetchingEnvironment.getArguments();
+        Map<String, Object> argumentPojos = environment.getArguments();
         Can<ObjectActionParameter> parameters = objectAction.getParameters();
         return parameters
                 .map(oap -> {
@@ -140,12 +145,12 @@ public class GqlvAction
                             if (argumentValue instanceof List) {
                                 val argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
-                                        .map(value -> asPojo(oap.getElementType(), value, context.bookmarkService))
+                                        .map(value -> asPojo(oap.getElementType(), value, context.bookmarkService, environment))
                                         .filter(Optional::isPresent)
                                         .map(Optional::get)
                                         .collect(Collectors.toList());
                             } else {
-                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, context.bookmarkService).orElse(null);
+                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, context.bookmarkService, environment).orElse(null);
                             }
                             return ManagedObject.adaptParameter(oap, pojoOrPojoList);
 
@@ -181,15 +186,25 @@ public class GqlvAction
     public static Optional<Object> asPojo(
             final ObjectSpecification elementType,
             final Object argumentValueObj,
-            final BookmarkService bookmarkService) {
+            final BookmarkService bookmarkService,
+            final DataFetchingEnvironment environment) {
         val argumentValue = (Map<String, String>) argumentValueObj;
         String idValue = argumentValue.get("id");
-        Class<?> paramClass = elementType.getCorrespondingClass();
-        Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
-        return bookmarkIfAny
-                .map(bookmarkService::lookup)
-                .filter(Optional::isPresent)
-                .map(Optional::get);
+        if (idValue != null) {
+            Class<?> paramClass = elementType.getCorrespondingClass();
+            Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
+            return bookmarkIfAny
+                    .map(bookmarkService::lookup)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get);
+        }
+        String refValue = argumentValue.get("ref");
+        if (refValue != null) {
+            String key = GqlvMetaSaveAs.keyFor(refValue);
+            BookmarkedPojo value = environment.getGraphQlContext().get(key);
+            return Optional.of(value).map(BookmarkedPojo::getTargetPojo);
+        }
+        throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
     }
 
     public void addGqlArguments(
@@ -245,33 +260,16 @@ public class GqlvAction
     }
 
     @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
-        return field;
-    }
-
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(context.bookmarkService));
-
-        hidden.addDataFetcher();
-        disabled.addDataFetcher();
-        validate.addDataFetcher();
+    protected void addDataFetchersForChildren() {
+        hidden.addDataFetcher(this);
+        disabled.addDataFetcher(this);
+        validate.addDataFetcher(this);
         if (invoke != null) {
-            invoke.addDataFetcher();
+            invoke.addDataFetcher(this);
         }
         if (params != null) {
-            params.addDataFetcher();
+            params.addDataFetcher(this);
         }
     }
 
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
-    }
-
-    public interface Holder extends GqlvMember.Holder {
-    }
 }
