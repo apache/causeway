@@ -195,8 +195,9 @@ public class GqlvMeta extends GqlvAbstractCustom {
                         val facet = managedObject.getSpecification().getFacet(GridFacet.class);
                         return facet != null ? facet.getGrid(managedObject) : null;
                     })
-                    .filter(Objects::nonNull)
+                    .filter(obj -> Objects.nonNull(obj))
                     .map(JaxbUtils::toStringUtf8)
+                    .map(x -> x.replaceAll("(\r\n)", "\n"))
                     .orElse(null);
         }
 
