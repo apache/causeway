@@ -90,16 +90,11 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         // top-level query and mutation type
         val topLevelQuery = new GqlvTopLevelQuery(context);
-        val topLevelMutation =
-                causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
-                        new GqlvTopLevelMutation(context)
-                        : null;
+        val topLevelMutation = new GqlvTopLevelMutation(context);
 
         // add the data fetchers
         topLevelQuery.addDataFetchers();
-        if (topLevelMutation != null) {
-            topLevelMutation.addDataFetchers();
-        }
+        topLevelMutation.addDataFetchers();
 
         // finalize the fetcher/mutator code that's been added
         val codeRegistry = context.codeRegistryBuilder.build();
@@ -107,9 +102,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         // build the schema
         return GraphQLSchema.newSchema()
                 .query(topLevelQuery.getGqlObjectType())
+                .mutation(topLevelMutation.getGqlObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
                 .codeRegistry(codeRegistry)
-                .mutation(topLevelMutation != null ? topLevelMutation.getGqlObjectType() : null)
                 .build();
     }
 
