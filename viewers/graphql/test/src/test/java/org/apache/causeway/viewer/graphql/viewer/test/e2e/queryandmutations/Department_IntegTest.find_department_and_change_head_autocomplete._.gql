@@ -5,6 +5,7 @@
         changeDeptHead {
           params {
             newDeptHead {
+              datatype
               autoComplete(search: "Ho") {
                 name {
                   get

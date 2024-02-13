@@ -211,5 +211,13 @@ public class Department_IntegTest extends Abstract_IntegTest {
         Approvals.verify(submit(), jsonOptions());
     }
 
+    @Test
+    @UseReporter(DiffReporter.class)
+    void find_department_and_list_its_staff() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
 
 }

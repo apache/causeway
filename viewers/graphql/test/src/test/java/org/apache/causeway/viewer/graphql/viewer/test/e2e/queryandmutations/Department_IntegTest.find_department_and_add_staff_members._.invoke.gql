@@ -3,6 +3,11 @@
     findDepartmentByName {
       invoke(name: "Classics") {
         addStaffMembers {
+          params {
+            staffMembers {
+              datatype
+            }
+          }
           invokeIdempotent(staffMembers: [{id: "$staffMemberId1"}, {id: "$staffMemberId2"}]) {
             name {
               get

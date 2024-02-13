@@ -37,7 +37,8 @@ public class GqlvProperty
                    GqlvPropertyChoices.Holder,
                    GqlvPropertyAutoComplete.Holder,
                    GqlvPropertyValidate.Holder,
-                   GqlvPropertySet.Holder {
+                   GqlvPropertySet.Holder,
+                   GqlvAssociationDatatype.Holder<OneToOneAssociation> {
 
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;
@@ -55,6 +56,8 @@ public class GqlvProperty
      * Populated iff the API variant allows for it.
      */
     private final GqlvPropertySet set;
+
+    private final GqlvPropertyDatatype datatype;
 
     public GqlvProperty(
             final Holder holder,
@@ -98,6 +101,8 @@ public class GqlvProperty
             this.set = null;
         }
 
+        this.datatype = new GqlvPropertyDatatype(this, context);
+        addChildField(datatype.getField());
 
         buildObjectTypeAndField(oneToOneAssociation.getId());
     }
@@ -132,17 +137,23 @@ public class GqlvProperty
     protected void addDataFetchersForChildren() {
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
+
         get.addDataFetcher(this);
+
         if(choices != null) {
             choices.addDataFetcher(this);
         }
+
         if(autoComplete != null) {
             autoComplete.addDataFetcher(this);
         }
         validate.addDataFetcher(this);
+
         if (set != null) {
             set.addDataFetcher(this);
         }
+
+        datatype.addDataFetcher(this);
     }
 
 }
