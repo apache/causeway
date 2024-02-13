@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
@@ -26,59 +26,62 @@ import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-import lombok.val;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Propagation;
+
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(20)
+@Order(50)
 @ActiveProfiles("test")
-public class Admin_IntegTest extends Abstract_IntegTest {
+public class DeptHead_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void admin_action() throws Exception {
+    void find_depthead_by_name() throws Exception {
 
-        // when
-        val response = submit();
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void find_depthead_and_change_name_invalid() throws Exception {
+
+        String response = submit();
 
         // then payload
         Approvals.verify(response, jsonOptions());
     }
-
     @Test
     @UseReporter(DiffReporter.class)
-    void action_with_disabled_param() throws Exception {
+    void find_depthead_and_change_name_invoke_invalid() throws Exception {
 
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
     }
 
     @Test
     @UseReporter(DiffReporter.class)
-    void action_with_hidden_param() throws Exception {
+    void find_depthead_and_change_name() throws Exception {
 
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void other_admin_action() throws Exception {
-
-        // when
-        val response = submit();
+        // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
+        String response = submit();
 
         // then payload
         Approvals.verify(response, jsonOptions());
+
+        // and also in the database
+        DeptHead deptHeadAfter = transactionService.callTransactional(
+                Propagation.REQUIRED,
+                () -> deptHeadRepository.findByName("Prof. Richard Horwich")
+        ).valueAsNullableElseFail();
+
+        assertThat(deptHeadAfter).isNotNull();
     }
 
 

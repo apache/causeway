@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query_and_mutations;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
 import java.util.Optional;
 

@@ -12,6 +12,14 @@
             }
           }
         }
+        _gqlv_meta {
+          title
+          logicalTypeName
+          version
+          cssClass
+          iconName
+          grid
+        }
       }
     }
   }
