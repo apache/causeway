@@ -6,6 +6,7 @@
           "changeDeptHead" : {
             "params" : {
               "newDeptHead" : {
+                "datatype" : "university_dept_DeptHead",
                 "autoComplete" : [ {
                   "name" : {
                     "get" : "Dr. Susan Hopwood"

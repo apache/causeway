@@ -4,6 +4,7 @@
       invoke {
         name {
           get
+          datatype
         }
         _gqlv_meta {
           logicalTypeName

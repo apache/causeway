@@ -4,7 +4,8 @@
       "findAllDepartments" : {
         "invoke" : [ {
           "name" : {
-            "get" : "Civil Engineering"
+            "get" : "Civil Engineering",
+            "datatype" : "java_lang_String"
           },
           "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
@@ -12,7 +13,8 @@
           }
         }, {
           "name" : {
-            "get" : "Classics"
+            "get" : "Classics",
+            "datatype" : "java_lang_String"
           },
           "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
@@ -20,7 +22,8 @@
           }
         }, {
           "name" : {
-            "get" : "Mathematics"
+            "get" : "Mathematics",
+            "datatype" : "java_lang_String"
           },
           "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
@@ -28,7 +31,8 @@
           }
         }, {
           "name" : {
-            "get" : "Pathology"
+            "get" : "Pathology",
+            "datatype" : "java_lang_String"
           },
           "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
@@ -36,7 +40,8 @@
           }
         }, {
           "name" : {
-            "get" : "Physics"
+            "get" : "Physics",
+            "datatype" : "java_lang_String"
           },
           "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",
@@ -44,7 +49,8 @@
           }
         }, {
           "name" : {
-            "get" : "Textiles"
+            "get" : "Textiles",
+            "datatype" : "java_lang_String"
           },
           "_gqlv_meta" : {
             "logicalTypeName" : "university.dept.Department",

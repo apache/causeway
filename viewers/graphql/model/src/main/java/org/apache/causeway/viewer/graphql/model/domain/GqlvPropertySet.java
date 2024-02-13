@@ -51,20 +51,14 @@ public class GqlvPropertySet extends GqlvAbstract {
         super(context);
         this.holder = holder;
 
-        GraphQLOutputType graphQLOutputType = outputTypeFor(holder);
-        if (graphQLOutputType != null) {
-            val fieldBuilder = newFieldDefinition()
-                    .name("set")
-                    .type(graphQLOutputType);
-            holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
-            setField(fieldBuilder.build());
-        } else {
-            setField(null);
-        }
-    }
+        // setters return void, so we return the domain object instead
+        val graphQLOutputType = this.context.typeMapper.outputTypeFor(holder.getObjectSpecification());
 
-    GraphQLOutputType outputTypeFor(Holder holder) {
-        return context.typeMapper.outputTypeFor(holder.getObjectSpecification());   // setters return void, so we return the domain object instead
+        val fieldBuilder = newFieldDefinition()
+                .name("set")
+                .type(graphQLOutputType);
+        holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
+        setField(fieldBuilder.build());
     }
 
     @Override
