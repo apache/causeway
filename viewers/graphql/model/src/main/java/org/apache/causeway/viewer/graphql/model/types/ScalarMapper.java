@@ -16,20 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain;
+package org.apache.causeway.viewer.graphql.model.types;
 
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.*;
 
-public interface GqlvHolder {
+/**
+ * Internal SPI.
+ */
+public interface ScalarMapper {
 
-    /**
-     * Called while building out the structure
-     */
-    GraphQLFieldDefinition addField(GraphQLFieldDefinition fieldDefinition);
+    GraphQLScalarType scalarTypeFor(final Class<?> clazz);
 
-    /**
-     * Called while registering the fetchers.
-     */
-    FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition);
+    Object unmarshal(
+            final Object argumentValue,
+            final Class<?> targetType);
+
 }

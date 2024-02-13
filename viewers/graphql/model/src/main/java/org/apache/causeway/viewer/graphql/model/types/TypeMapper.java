@@ -16,13 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.applib.types;
-
-import graphql.ExperimentalApi;
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLScalarType;
+package org.apache.causeway.viewer.graphql.model.types;
 
 import org.springframework.lang.Nullable;
 
@@ -31,20 +25,18 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 
+import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLScalarType;
+
 /**
- * SPI to map framework's own datatypes to GraphQL's types.
+ * Internal SPI to map framework's own datatypes to GraphQL's types.
  *
  * <p>
  *     The framework provides a default implementation (as a fallback) that supports most of the common data types.
  * </p>
- *
- * <p>
- *     <b>NOTE</b>: this API is considered experimental/beta and may change in the future.
- * </p>
- *
- * @since 2.0 {@index}
  */
-@ExperimentalApi
 public interface TypeMapper {
 
     GraphQLScalarType scalarTypeFor(final Class<?> c);
@@ -68,7 +60,7 @@ public interface TypeMapper {
 
     GraphQLInputType inputTypeFor(final ObjectSpecification elementType);
 
-    Object adaptPojo(
+    Object unmarshal(
             final Object argumentValue,
             final ObjectSpecification elementType);
 

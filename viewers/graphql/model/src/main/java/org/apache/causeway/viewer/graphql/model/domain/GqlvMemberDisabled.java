@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
@@ -36,34 +35,25 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvMemberDisabled<T extends ObjectMember> {
+public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
 
     private final Holder<T> holder;
-    private final Context context;
-    private final GraphQLFieldDefinition field;
 
     public GqlvMemberDisabled(
             final Holder<T> holder,
             final Context context
     ) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
-        this.field = holder.addField(newFieldDefinition()
+        setField(newFieldDefinition()
                 .name("disabled")
-                .type(this.context.typeMapper.scalarTypeFor(String.class))
+                .type(context.typeMapper.scalarTypeFor(String.class))
                 .build());
     }
 
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::disabled
-        );
-    }
-
-    private String disabled(
-            final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -81,8 +71,7 @@ public class GqlvMemberDisabled<T extends ObjectMember> {
     }
 
     public interface Holder<T extends ObjectMember>
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectMemberProvider<T> {
+            extends ObjectSpecificationProvider,
+                    ObjectMemberProvider<T> {
     }
 }

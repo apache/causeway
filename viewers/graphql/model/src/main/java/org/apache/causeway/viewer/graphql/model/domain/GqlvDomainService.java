@@ -21,20 +21,13 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.FieldCoordinates.coordinates;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
-
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
+import graphql.schema.DataFetchingEnvironment;
 
 import lombok.Getter;
 import lombok.val;
@@ -42,40 +35,34 @@ import lombok.val;
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
  */
-public class GqlvDomainService implements GqlvAction.Holder {
+public class GqlvDomainService
+        extends GqlvAbstractCustom
+        implements GqlvAction.Holder {
 
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
-    private final Context context;
-
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-
-    String getLogicalTypeName() {
-        return objectSpecification.getLogicalTypeName();
-    }
 
     private final Map<String, GqlvAction> actions = new LinkedHashMap<>();
 
-    /**
-     * Will be <code>null</code> if there are no actions.
-     */
-    private GraphQLObjectType gqlObjectType;
+    public static GqlvDomainService of(
+            final ObjectSpecification objectSpecification,
+            final Object servicePojo,
+            final Context context) {
+        return context.domainServiceBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(spec, servicePojo, context));
+    }
 
     public GqlvDomainService(
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
+        super(TypeNames.objectTypeNameFor(objectSpecification), context);
+
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
-        this.context = context;
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.objectTypeNameFor(objectSpecification));
 
         addActions();
-
         if (hasActions()) {
-            gqlObjectType = gqlObjectTypeBuilder.build();
-            addDataFetchers();
+            buildObjectTypeAndField(TypeNames.objectTypeNameFor(this.objectSpecification));
         }
     }
 
@@ -85,52 +72,38 @@ public class GqlvDomainService implements GqlvAction.Holder {
 
     private void addActions() {
 
-        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-
+        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                .filter(x -> x.getSemantics().isSafeInNature() ||
-                             variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT)
+                .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||
+                        apiVariant != CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_ONLY    // the other variants have an entry for all actions.
+                )
                 .forEach(this::addAction);
     }
 
     private void addAction(final ObjectAction objectAction) {
-        actions.put(objectAction.getId(), new GqlvAction(this, objectAction, context));
+        val gqlvAction = new GqlvAction(this, objectAction, context);
+        addChildField(gqlvAction.getField());
+        actions.put(objectAction.getId(), gqlvAction);
     }
 
 
     @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
-        return field;
-    }
-
-    void addDataFetchers() {
-        actions.forEach((id, gqlva) -> gqlva.addDataFetcher());
+    protected void addDataFetchersForChildren() {
+        if (hasActions()) {
+            actions.forEach((id, gqlva) -> gqlva.addDataFetcher(this));
+        }
     }
 
     @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
-        }
-        return coordinates(gqlObjectType, fieldDefinition);
+    protected Object fetchData(DataFetchingEnvironment environment) {
+        return getServicePojo();
     }
 
-    public GraphQLFieldDefinition createTopLevelQueryField() {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(String.format(
-                    "GraphQLObjectType has not yet been built for %s", getLogicalTypeName()));
-        }
-        return newFieldDefinition()
-                .name(TypeNames.objectTypeNameFor(objectSpecification))
-                .type(gqlObjectType)
-                .build();
-    }
 
     @Override
     public String toString() {
         return objectSpecification.getLogicalTypeName();
     }
+
 
 }

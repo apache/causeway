@@ -26,7 +26,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
@@ -34,45 +34,26 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationP
 
 import lombok.val;
 
-public class GqlvPropertyValidate {
+public class GqlvPropertyValidate extends GqlvAbstract {
 
     final Holder holder;
-    private final Context context;
-    final GraphQLFieldDefinition field;
 
     public GqlvPropertyValidate(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
                 .type(context.typeMapper.scalarTypeFor(String.class));
         holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
-        this.field = holder.addField(fieldBuilder.build());
+        setField(fieldBuilder.build());
     }
 
-    void addDataFetcher() {
-
-        val association = holder.getOneToOneAssociation();
-        val fieldObjectSpecification = association.getElementType();
-        val beanSort = fieldObjectSpecification.getBeanSort();
-
-        switch (beanSort) {
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-                context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
-                        this::validate);
-
-                break;
-        }
-    }
-
-    Object validate(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -93,9 +74,8 @@ public class GqlvPropertyValidate {
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            OneToOneAssociationProvider {
+            extends ObjectSpecificationProvider,
+                    OneToOneAssociationProvider {
 
         void addGqlArgument(OneToOneAssociation oneToOneAssociation, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
     }

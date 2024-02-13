@@ -50,9 +50,9 @@ import lombok.val;
                 "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
         }
 )
-@Order(110)
-@ActiveProfiles("test")
+@Order(120)
 @DirtiesContext
+@ActiveProfiles("test")
 public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
 
     @Test

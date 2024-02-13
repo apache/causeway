@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
@@ -42,48 +42,34 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionValidity {
+public class GqlvActionValidity extends GqlvAbstract {
 
     private final Holder holder;
-    private final Context context;
-    private final GraphQLFieldDefinition field;
 
     public GqlvActionValidity(
             final Holder holder,
             final Context context
     ) {
+        super(context);
         this.holder = holder;
-        this.context = context;
-        this.field = fieldDefinition(holder);
-    }
-
-    private GraphQLFieldDefinition fieldDefinition(final Holder holder) {
 
         val objectAction = holder.getObjectAction();
 
-        GraphQLFieldDefinition fieldDefinition = null;
-        GraphQLOutputType type = context.typeMapper.scalarTypeFor(String.class);
+        GraphQLOutputType type = this.context.typeMapper.scalarTypeFor(String.class);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("validate")
                     .type(type);
 
             holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
-            fieldDefinition = fieldBuilder.build();
-
-            holder.addField(fieldDefinition);
+            setField(fieldBuilder.build());
+        } else {
+            setField(null);
         }
-        return fieldDefinition;
     }
 
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::validate
-        );
-    }
-
-    private Object validate(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         final ObjectAction objectAction = holder.getObjectAction();
 
@@ -114,9 +100,8 @@ public class GqlvActionValidity {
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            ObjectActionProvider {
+            extends ObjectSpecificationProvider,
+                    ObjectActionProvider {
 
         void addGqlArguments(
                 ObjectAction objectAction,

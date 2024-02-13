@@ -25,7 +25,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import lombok.val;
 
-public class GqlvPropertyGet  extends GqlvAssociationGet<OneToOneAssociation> {
+public class GqlvPropertyGet extends GqlvAssociationGet<OneToOneAssociation> {
 
     public GqlvPropertyGet(
             final Holder holder,

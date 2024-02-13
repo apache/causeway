@@ -21,16 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.Objects;
 import java.util.Optional;
 
-import graphql.Scalars;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.FieldCoordinates.coordinates;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLObjectType.newObject;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -38,76 +28,60 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 
-import lombok.Getter;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.val;
 
-public class GqlvMeta {
-
-    static GraphQLFieldDefinition id = newFieldDefinition().name("id").type(nonNull(Scalars.GraphQLString)).build();
-    static GraphQLFieldDefinition logicalTypeName = newFieldDefinition().name("logicalTypeName").type(nonNull(Scalars.GraphQLString)).build();
-    static GraphQLFieldDefinition version = newFieldDefinition().name("version").type(Scalars.GraphQLString).build();
+public class GqlvMeta extends GqlvAbstractCustom {
 
     private final Holder holder;
-
-    private final Context context;
-    private final ObjectManager objectManager;
-
-    @Getter private final GraphQLFieldDefinition metaField;
+    private final GqlvMetaId metaId;
+    private final GqlvMetaLogicalTypeName metaLogicalTypeName;
+    private final GqlvMetaVersion metaVersion;
+    private final GqlvMetaSaveAs metaSaveAs;
 
     public GqlvMeta(
             final Holder holder,
-            final Context context,
-            final ObjectManager objectManager
+            final Context context
     ) {
+        super(TypeNames.metaTypeNameFor(holder.getObjectSpecification()), context);
         this.holder = holder;
 
-        this.context = context;
-        this.objectManager = objectManager;
+        metaId = new GqlvMetaId(context);
+        addChildField(metaId.getField());
 
-        // we can build the metafield and meta type eagerly because we know exactly which fields it has.
-        val metaTypeBuilder = newObject().name(TypeNames.metaTypeNameFor(this.holder.getObjectSpecification()));
-        metaTypeBuilder.field(id);
-        metaTypeBuilder.field(logicalTypeName);
-        if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            metaTypeBuilder.field(version);
-        }
-        metaField = newFieldDefinition().name(context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName()).type(metaTypeBuilder.build()).build();
-
-        holder.addField(metaField);
-    }
-
-    GraphQLObjectType getMetaType() {
-        return (GraphQLObjectType) metaField.getType();
-    }
-
-    void registerTypesInto(GraphQLTypeRegistry graphQLTypeRegistry) {
-        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(getMetaType());
-    }
-
-    public void addDataFetchers() {
-
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getMetaField()),
-                (DataFetcher<Object>) environment ->
-                    context.bookmarkService.bookmarkFor(environment.getSource())
-                        .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, objectManager))
-                        .orElseThrow());
-
-        context.codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), logicalTypeName),
-                (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().logicalTypeName());
-
-        context.codeRegistryBuilder.dataFetcher(
-                coordinates(getMetaType(), id),
-                (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().id());
+        metaLogicalTypeName = new GqlvMetaLogicalTypeName(context);
+        addChildField(metaLogicalTypeName.getField());
 
         if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            context.codeRegistryBuilder.dataFetcher(
-                    coordinates(getMetaType(), version),
-                    (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());
+            metaVersion = new GqlvMetaVersion(context);
+            addChildField(metaVersion.getField());
+        } else {
+            metaVersion = null;
         }
+
+        metaSaveAs = new GqlvMetaSaveAs(context);
+        addChildField(metaSaveAs.getField());
+
+        val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
+        buildObjectTypeAndField(fieldName);
+    }
+
+    @Override
+    protected void addDataFetchersForChildren() {
+        metaId.addDataFetcher(this);
+        metaLogicalTypeName.addDataFetcher(this);
+        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
+            metaVersion.addDataFetcher(this);
+        }
+        metaSaveAs.addDataFetcher(this);
+    }
+
+    @Override
+    public Object fetchData(final DataFetchingEnvironment environment) {
+        return context.bookmarkService.bookmarkFor(environment.getSource())
+                .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
+                .orElseThrow();
     }
 
 
@@ -150,11 +124,14 @@ public class GqlvMeta {
                     .orElse(null);
         }
 
+        public Bookmark bookmark() {
+            return bookmark;
+        }
+
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider {
+            extends ObjectSpecificationProvider {
 
     }
 }

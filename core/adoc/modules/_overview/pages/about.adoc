@@ -1084,11 +1084,6 @@ Directory: /core/codegen-bytebuddy
 ----
 |Code generation using ByteBuddy.
 
-.Components
-****
-o.a.i.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy +
-****
-
 .Dependencies
 ****
 net.bytebuddy:byte-buddy:jar:<managed> +
@@ -2585,7 +2580,7 @@ org.springframework.graphql:spring-graphql:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/graphql/applib/auth/UserMementoProvider.adoc[UserMementoProvider], xref:refguide:viewer:index/graphql/applib/types/TypeMapper.adoc[TypeMapper]
+xref:refguide:viewer:index/graphql/applib/auth/UserMementoProvider.adoc[UserMementoProvider], xref:refguide:viewer:index/graphql/applib/marshallers/ScalarMarshaller.adoc[ScalarMarshaller]
 ****
 
 |Apache Causeway Viewer - GraphQL (Model)
@@ -2598,7 +2593,34 @@ Directory: /viewers/graphql/model
 ----
 |.Components
 ****
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerBigDecimal +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerBigInteger +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerBooleanPrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerBooleanWrapper +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerBytePrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerByteWrapper +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerCharPrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerCharacterWrapper +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerDoublePrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerDoubleWrapper +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerFloatPrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerFloatWrapper +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerIntPrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerIntegerWrapper +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerJdk8LocalDate +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerJdk8ZonedDateTime +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerJodaDateTime +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerJodaLocalDate +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerLongPrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerLongWrapper +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerObject +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerShortPrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerShortWrapper +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerString +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerVoidPrimitive +
+o.a.i.viewer.graphql.model.marshallers.ScalarMarshallerVoidWrapper +
 o.a.i.viewer.graphql.model.registry.GraphQLTypeRegistry +
+o.a.i.viewer.graphql.model.types.ScalarMapperDefault +
 ****
 
 .Dependencies

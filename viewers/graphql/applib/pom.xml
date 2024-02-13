@@ -33,8 +33,8 @@
 	<name>Apache Causeway Viewer - GraphQL (Applib)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.graphql.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/incubator/viewer/graphql/applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.graphql.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>

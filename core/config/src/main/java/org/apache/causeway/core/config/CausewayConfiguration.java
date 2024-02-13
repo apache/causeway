@@ -2392,6 +2392,20 @@ public class CausewayConfiguration {
                 private String fieldName = "_gqlv_meta";
             }
 
+            private final Lookup lookup = new Lookup();
+            @Data
+            public static class Lookup {
+                /**
+                 * Lookup field prefix
+                 */
+                private String fieldNamePrefix = "";
+                /**
+                 * Lookup field suffix
+                 */
+                private String fieldNameSuffix = "";
+                private String argument = "object";
+            }
+
             private final Mutation mutation = new Mutation();
             @Data
             public static class Mutation {
@@ -2401,9 +2415,9 @@ public class CausewayConfiguration {
                 private String targetArgName = "_gqlv_target";
             }
 
-            private final TypeMapper typeMapper = new TypeMapper();
+            private final ScalarMarshaller scalarMarshaller = new ScalarMarshaller();
             @Data
-            public static class TypeMapper {
+            public static class ScalarMarshaller {
 
                 /**
                  * For both JDK8's {@link java.time.LocalDate} and JodaTime's {@link org.joda.time.LocalDate}

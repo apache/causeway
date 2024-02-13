@@ -28,7 +28,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
@@ -40,35 +40,25 @@ import lombok.extern.log4j.Log4j2;
 
 
 @Log4j2
-public class GqlvActionParamDisabled {
+public class GqlvActionParamDisabled extends GqlvAbstract {
 
     private final Holder holder;
-    private final Context context;
-
-    private final GraphQLFieldDefinition field;
 
     public GqlvActionParamDisabled(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         val fieldBuilder = newFieldDefinition()
                 .name("disabled")
                 .type(context.typeMapper.scalarTypeFor(String.class));
         holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum()+1);
-        this.field = holder.addField(fieldBuilder.build());
+        setField(fieldBuilder.build());
     }
 
-
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::disabled
-        );
-    }
-
-    private String disabled(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
@@ -88,8 +78,7 @@ public class GqlvActionParamDisabled {
     }
 
     public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
+            extends ObjectSpecificationProvider,
                     ObjectActionProvider,
                     ObjectActionParameterProvider {
         void addGqlArguments(

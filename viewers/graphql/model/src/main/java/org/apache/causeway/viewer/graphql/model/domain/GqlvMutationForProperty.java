@@ -18,46 +18,42 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
 import java.util.Map;
+
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLOutputType;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLOutputType;
 import lombok.val;
 
 //@Log4j2
-public class GqlvMutationForProperty {
+public class GqlvMutationForProperty extends GqlvAbstract {
 
-    private final Holder holder;
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
-    private final Context context;
-    private final GraphQLFieldDefinition field;
     private String argumentName;
 
     public GqlvMutationForProperty(
-            final Holder holder,
             final ObjectSpecification objectSpec,
             final OneToOneAssociation oneToOneAssociation,
-        final Context context) {
-        this.holder = holder;
+            final Context context) {
+        super(context);
         this.objectSpec = objectSpec;
         this.oneToOneAssociation = oneToOneAssociation;
-        this.context = context;
 
         this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
 
@@ -67,9 +63,9 @@ public class GqlvMutationForProperty {
                     .name(fieldName(objectSpec, oneToOneAssociation))
                     .type(type);
             addGqlArguments(fieldBuilder);
-            this.field = holder.addField(fieldBuilder.build());
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
@@ -79,38 +75,17 @@ public class GqlvMutationForProperty {
         return TypeNames.objectTypeNameFor(objectSpecification) + "__" + oneToOneAssociation.getId();
     }
 
-
-    public void addDataFetcher() {
-
-        val beanSort = oneToOneAssociation.getElementType().getBeanSort();
-
-        switch (beanSort) {
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-                context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
-                        this::set);
-
-                break;
-        }
-
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::set
-        );
-    }
-
-    private Object set(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment environment) {
 
 
-        Object target = dataFetchingEnvironment.getArgument(argumentName);
-        Object sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService)
+        Object target = environment.getArgument(argumentName);
+        Object sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService, environment)
                     .orElseThrow(); // TODO: better error handling if no such object found.
 
         val managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
-        Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
+        Map<String, Object> arguments = environment.getArguments();
         Object argumentValue = arguments.get(oneToOneAssociation.getId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
 
@@ -152,10 +127,4 @@ public class GqlvMutationForProperty {
                         .type(context.typeMapper.inputTypeFor(oneToOneAssociation, TypeMapper.InputContext.INVOKE))
                         .build());
     }
-
-
-    public interface Holder
-            extends GqlvHolder {
-    }
-
 }

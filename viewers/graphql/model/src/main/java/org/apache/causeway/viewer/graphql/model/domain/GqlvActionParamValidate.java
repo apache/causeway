@@ -28,7 +28,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
@@ -39,35 +39,25 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionParamValidate {
+public class GqlvActionParamValidate extends GqlvAbstract {
 
     private final Holder holder;
-    private final Context context;
-
-    private final GraphQLFieldDefinition field;
 
     public GqlvActionParamValidate(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         val fieldBuilder = newFieldDefinition()
                 .name("validity")
                 .type(context.typeMapper.scalarTypeFor(String.class));
         holder.addGqlArgument(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
-        this.field = holder.addField(fieldBuilder.build());
+        setField(fieldBuilder.build());
     }
 
-
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(field),
-                this::disabled
-        );
-    }
-
-    private String disabled(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -90,8 +80,7 @@ public class GqlvActionParamValidate {
     }
 
     public interface Holder
-            extends GqlvHolder,
-                    ObjectSpecificationProvider,
+            extends ObjectSpecificationProvider,
                     ObjectActionProvider,
                     ObjectActionParameterProvider {
         void addGqlArgument(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum);

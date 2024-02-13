@@ -1,0 +1,14 @@
+{
+  "data" : {
+    "Scenario" : {
+      "Name" : "Fizz and buzz are concatenated together",
+      "When" : {
+        "university_calc_Calculator" : {
+          "concat" : {
+            "invoke" : "FizzBuzz"
+          }
+        }
+      }
+    }
+  }
+}

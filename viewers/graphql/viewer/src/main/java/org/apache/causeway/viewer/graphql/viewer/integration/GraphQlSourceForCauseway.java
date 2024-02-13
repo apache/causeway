@@ -18,40 +18,26 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
-import java.util.Comparator;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
-
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelMutation;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.id.HasLogicalType;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.viewer.toplevel.GqlvTopLevelQuery;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelMutation;
+import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQuery;
 
 import graphql.GraphQL;
 import graphql.execution.SimpleDataFetcherExceptionHandler;
-import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -60,11 +46,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final CausewayConfiguration causewayConfiguration;
     private final CausewaySystemEnvironment causewaySystemEnvironment;
     private final SpecificationLoader specificationLoader;
-    private final ServiceRegistry serviceRegistry;
-    private final ObjectManager objectManager;
-    private final BookmarkService bookmarkService;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
-    private final TypeMapper typeMapper;
+    private final Context context;
+
     private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
 
     @PostConstruct
@@ -97,81 +81,28 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        val codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
-        val context = new Context(codeRegistryBuilder, bookmarkService, specificationLoader, typeMapper, serviceRegistry, causewayConfiguration, causewaySystemEnvironment);
-
-        // add to the top-level query type and (dependent on configuration) the top-level mutation type also
-        val topLevelQuery = new GqlvTopLevelQuery(serviceRegistry, codeRegistryBuilder);
+        // top-level query and mutation type
+        val topLevelQuery = new GqlvTopLevelQuery(context);
         val topLevelMutation =
                 causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
-                    new GqlvTopLevelMutation(context)
-                    : null;
+                        new GqlvTopLevelMutation(context)
+                        : null;
 
-
-        val objectSpecifications = specificationLoader.snapshotSpecifications()
-                .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
-                .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
-                .filter(x -> x.isEntityOrViewModelOrAbstract() || x.getBeanSort().isManagedBeanContributing())
-                .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-                .toList();
-
-        // add to top-level query
-        objectSpecifications.forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-                case MANAGED_BEAN_CONTRIBUTING: // @DomainService
-                    serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                        .ifPresent(servicePojo -> topLevelQuery.addDomainServiceTo(objectSpec, servicePojo, context));
-                    break;
-            }
-        });
-        topLevelQuery.buildQueryType();
-
-        // add top-level mutation (if application configuration requires it)
+        // add the data fetchers
+        topLevelQuery.addDataFetchers();
         if (topLevelMutation != null) {
-            objectSpecifications.forEach(objectSpec -> {
-                objectSpec.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                        .filter(x -> ! x.getSemantics().isSafeInNature())
-                        .forEach(objectAction -> topLevelMutation.addAction(objectSpec, objectAction));
-                objectSpec.streamProperties(MixedIn.INCLUDED)
-                        .filter(property -> ! property.isAlwaysHidden())
-                        .filter(property -> property.containsFacet(PropertySetterFacet.class))
-                        .forEach(property -> topLevelMutation.addProperty(objectSpec, property));
-
-            });
-            topLevelMutation.buildMutationType();
             topLevelMutation.addDataFetchers();
         }
 
-        // add remaining domain objects
-        objectSpecifications.forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-
-                case ABSTRACT:
-                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:     // @DomainObject(nature=ENTITY)
-
-                    val gqlvDomainObject = new GqlvDomainObject(objectSpec, context, objectManager, graphQLTypeRegistry);
-                    gqlvDomainObject.addTypesInto(graphQLTypeRegistry);
-                    gqlvDomainObject.addDataFetchers();
-
-                    break;
-            }
-        });
-
-
-
-        // finalize the fetcher/mutator code that's been registered
-        val codeRegistry = codeRegistryBuilder.build();
+        // finalize the fetcher/mutator code that's been added
+        val codeRegistry = context.codeRegistryBuilder.build();
 
         // build the schema
-        val schemaBuilder = GraphQLSchema.newSchema()
-                .query(topLevelQuery.getQueryType())
+        return GraphQLSchema.newSchema()
+                .query(topLevelQuery.getGqlObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
-                .codeRegistry(codeRegistry);
-        if (topLevelMutation != null) {
-            schemaBuilder.mutation(topLevelMutation.getGqlObjectType());
-        }
-        return schemaBuilder
+                .codeRegistry(codeRegistry)
+                .mutation(topLevelMutation != null ? topLevelMutation.getGqlObjectType() : null)
                 .build();
     }
 

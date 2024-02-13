@@ -18,52 +18,45 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.GraphQLFieldDefinition;
-
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import graphql.schema.DataFetchingEnvironment;
 
-public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Holder> {
+import lombok.Getter;
+
+public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Holder>
+    extends GqlvAbstractCustom {
 
     @Getter final H holder;
     @Getter private final T objectMember;
 
-    final Context context;
-    @Getter @Setter(AccessLevel.PACKAGE)
-    GraphQLFieldDefinition field;
-
     public GqlvMember(
             final H holder,
             final T objectMember,
+            final String typeName,
             final Context context
     ) {
-        this(holder, objectMember, null, context);
-    }
-
-    public GqlvMember(
-            final H holder,
-            final T objectMember,
-            final GraphQLFieldDefinition field,
-            final Context context
-    ) {
+        super(typeName, context);
         this.holder = holder;
         this.objectMember = objectMember;
-        this.field = field;
-        this.context = context;
+
+        objectMember.getCanonicalDescription().ifPresent(gqlObjectTypeBuilder::description);
     }
 
     public String getId() {
         return objectMember.getFeatureIdentifier().getFullIdentityString();
     }
 
+    @Override
+    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+    }
+
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider {
+            extends ObjectSpecificationProvider {
 
     }
 }

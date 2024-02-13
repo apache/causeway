@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -38,22 +36,17 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationP
 
 import lombok.val;
 
-public class GqlvPropertyAutoComplete {
+public class GqlvPropertyAutoComplete extends GqlvAbstract {
 
     private static final String SEARCH_PARAM_NAME = "search";
 
     private final Holder holder;
-    private final Context context;
-    /**
-     * Populated iff there are choices for this property
-     */
-    final GraphQLFieldDefinition field;
 
     public GqlvPropertyAutoComplete(
             final Holder holder,
             final Context context) {
+        super(context);
         this.holder = holder;
-        this.context = context;
 
         val otoa = holder.getOneToOneAssociation();
         if (otoa.hasAutoComplete()) {
@@ -65,35 +58,14 @@ public class GqlvPropertyAutoComplete {
                             .name(SEARCH_PARAM_NAME)
                             .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
                     .build();
-            this.field = holder.addField(fieldBuilder.build());
+            setField(fieldBuilder.build());
         } else {
-            this.field = null;
+            setField(null);
         }
     }
 
-    boolean hasAutoComplete() {
-        return this.field != null;
-    }
-
-    void addDataFetcher() {
-
-        val association = holder.getOneToOneAssociation();
-        val fieldObjectSpecification = association.getElementType();
-        val beanSort = fieldObjectSpecification.getBeanSort();
-
-        switch (beanSort) {
-            case VALUE:
-            case VIEW_MODEL:
-            case ENTITY:
-                context.codeRegistryBuilder.dataFetcher(
-                        holder.coordinatesFor(field),
-                        this::autoComplete);
-
-                break;
-        }
-    }
-
-    List<Object> autoComplete(final DataFetchingEnvironment dataFetchingEnvironment) {
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
@@ -114,9 +86,8 @@ public class GqlvPropertyAutoComplete {
     }
 
     public interface Holder
-            extends GqlvHolder,
-            ObjectSpecificationProvider,
-            OneToOneAssociationProvider {
+            extends ObjectSpecificationProvider,
+                    OneToOneAssociationProvider {
 
     }
 }

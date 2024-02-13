@@ -18,25 +18,19 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.graphql.applib.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojoFetcher;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 
 public class GqlvProperty
-        extends GqlvAssociation<OneToOneAssociation, GqlvProperty.Holder>
+        extends GqlvAssociation<OneToOneAssociation, GqlvMember.Holder>
         implements GqlvMemberHidden.Holder<OneToOneAssociation>,
                    GqlvMemberDisabled.Holder<OneToOneAssociation>,
                    GqlvPropertyGet.Holder,
@@ -45,8 +39,6 @@ public class GqlvProperty
                    GqlvPropertyValidate.Holder,
                    GqlvPropertySet.Holder {
 
-    private final GraphQLObjectType.Builder gqlObjectTypeBuilder;
-    private final GraphQLObjectType gqlObjectType;
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;
     private final GqlvPropertyGet get;
@@ -68,37 +60,46 @@ public class GqlvProperty
             final Holder holder,
             final OneToOneAssociation oneToOneAssociation,
             final Context context) {
-        super(holder, oneToOneAssociation, context);
-
-        this.gqlObjectTypeBuilder = newObject().name(TypeNames.propertyTypeNameFor(this.holder.getObjectSpecification(), oneToOneAssociation));
+        super(holder, oneToOneAssociation, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
+        addChildField(hidden.getField());
+
         this.disabled = new GqlvMemberDisabled<>(this, context);
+        addChildField(disabled.getField());
+
         this.get = new GqlvPropertyGet(this, context);
+        addChildField(get.getField());
+
         this.validate = new GqlvPropertyValidate(this, context);
+        addChildField(this.validate.getField());
+
         val choices = new GqlvPropertyChoices(this, context);
-        this.choices = choices.hasChoices() ? choices : null;
+        if (choices.isFieldDefined()) {
+            addChildField(choices.getField());
+            this.choices = choices;
+        } else {
+            this.choices = null;
+        }
+
         val autoComplete = new GqlvPropertyAutoComplete(this, context);
-        this.autoComplete = autoComplete.hasAutoComplete() ? autoComplete : null;
+        if (autoComplete.isFieldDefined()) {
+            addChildField(autoComplete.getField());
+            this.autoComplete = autoComplete;
+        } else {
+            this.autoComplete = null;
+        }
 
         val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         if (variant == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
             this.set = new GqlvPropertySet(this, context);
+            addChildField(set.getField());
         } else {
             this.set = null;
         }
 
 
-        this.gqlObjectType = gqlObjectTypeBuilder.build();
-
-        setField(
-            this.holder.addField(
-                newFieldDefinition()
-                    .name(oneToOneAssociation.getId())
-                    .type(gqlObjectTypeBuilder)
-                    .build()
-            )
-        );
+        buildObjectTypeAndField(oneToOneAssociation.getId());
     }
 
     public void addGqlArgument(
@@ -128,39 +129,20 @@ public class GqlvProperty
     }
 
     @Override
-    public GraphQLFieldDefinition addField(GraphQLFieldDefinition field) {
-        gqlObjectTypeBuilder.field(field);
-        return field;
-    }
-
-    public void addDataFetcher() {
-        context.codeRegistryBuilder.dataFetcher(
-                holder.coordinatesFor(getField()),
-                new BookmarkedPojoFetcher(context.bookmarkService));
-
-        hidden.addDataFetcher();
-        disabled.addDataFetcher();
-        get.addDataFetcher();
+    protected void addDataFetchersForChildren() {
+        hidden.addDataFetcher(this);
+        disabled.addDataFetcher(this);
+        get.addDataFetcher(this);
         if(choices != null) {
-            choices.addDataFetcher();
+            choices.addDataFetcher(this);
         }
         if(autoComplete != null) {
-            autoComplete.addDataFetcher();
+            autoComplete.addDataFetcher(this);
         }
-        validate.addDataFetcher();
+        validate.addDataFetcher(this);
         if (set != null) {
-            set.addDataFetcher();
+            set.addDataFetcher(this);
         }
     }
 
-
-    @Override
-    public FieldCoordinates coordinatesFor(GraphQLFieldDefinition fieldDefinition) {
-        return FieldCoordinates.coordinates(gqlObjectType, fieldDefinition);
-    }
-
-
-    public interface Holder
-            extends GqlvAssociation.Holder {
-    }
 }

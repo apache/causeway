@@ -34,6 +34,7 @@ import jakarta.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -55,6 +56,7 @@ import lombok.Setter;
         autoCompleteRepository = DeptHeadRepository.class,
         autoCompleteMethod = "findByNameContaining"
 )
+@DomainObjectLayout(describedAs = "Departmental head, responsible for curriculum, research, funding and staff")
 @NoArgsConstructor
 public class DeptHead implements Comparable<DeptHead> {
 

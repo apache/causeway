@@ -18,15 +18,21 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.Comparator;
 
-import jakarta.persistence.*;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -35,14 +41,19 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.persistence.jpa.applib.types.BlobJpaEmbeddable;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(
         schema = "public",
         name = "StaffMember"
 )
 @jakarta.inject.Named("university.dept.StaffMember")
-@NoArgsConstructor
 @DomainObject(nature = Nature.ENTITY, autoCompleteRepository = StaffMemberRepository.class, autoCompleteMethod = "findByNameMatching")
+@DomainObjectLayout(describedAs = "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews")
+@NoArgsConstructor
 public class StaffMember implements Comparable<StaffMember> {
 
     public StaffMember(
@@ -61,7 +72,7 @@ public class StaffMember implements Comparable<StaffMember> {
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
     private String name;
-    public String validateName(String proposedName) {
+    public String validateName(final String proposedName) {
         if(proposedName.contains("!")) {
             return "Name cannot contain '!' character";
         }
