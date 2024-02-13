@@ -55,17 +55,12 @@ public class GqlvActionValidity extends GqlvAbstract {
 
         val objectAction = holder.getObjectAction();
 
-        GraphQLOutputType type = this.context.typeMapper.scalarTypeFor(String.class);
-        if (type != null) {
-            val fieldBuilder = newFieldDefinition()
-                    .name("validate")
-                    .type(type);
+        val fieldBuilder = newFieldDefinition()
+                .name("validate")
+                .type((GraphQLOutputType) this.context.typeMapper.outputTypeFor(String.class));
 
-            holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
-            setField(fieldBuilder.build());
-        } else {
-            setField(null);
-        }
+        holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
+        setField(fieldBuilder.build());
     }
 
     @Override

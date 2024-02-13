@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
 import java.util.Optional;
 
@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -45,7 +44,6 @@ import lombok.val;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(60)
-@DirtiesContext
 @ActiveProfiles("test")
 public class Staff_IntegTest extends Abstract_IntegTest {
 
@@ -115,19 +113,7 @@ public class Staff_IntegTest extends Abstract_IntegTest {
     @UseReporter(DiffReporter.class)
     void create_staff_member_with_department() throws Exception {
 
-        final Bookmark bookmark =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> {
-                            Department department = departmentRepository.findByName("Classics");
-                            return bookmarkService.bookmarkFor(department).orElseThrow();
-                        }
-                ).valueAsNonNullElseFail();
-
-        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
+        Approvals.verify(submit(), jsonOptions());
 
     }
 }

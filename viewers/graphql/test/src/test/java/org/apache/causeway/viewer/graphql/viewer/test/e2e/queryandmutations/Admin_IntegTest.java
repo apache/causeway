@@ -16,30 +16,69 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.scenario;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
+
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
+import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(40)
+@Order(20)
 @ActiveProfiles("test")
-public class Department_IntegTest extends Abstract_IntegTest {
+public class Admin_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void find_department_and_change_name() throws Exception {
+    void admin_action() throws Exception {
 
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void action_with_disabled_param() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void action_with_hidden_param() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void other_admin_action() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
     }
 
 

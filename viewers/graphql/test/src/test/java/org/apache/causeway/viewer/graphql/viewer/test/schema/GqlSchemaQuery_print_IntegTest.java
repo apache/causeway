@@ -16,29 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.schema.query_and_mutations;
+package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
 import org.junit.jupiter.api.Order;
 
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
 import org.apache.causeway.viewer.graphql.viewer.test.schema.AbstractGqlSchema_print_IntegTest;
 
-@SpringBootTest(
-        classes = {
-                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
-        },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {
-                "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
-        }
-)
-@Order(100)
+@Order(0)
 @Transactional
 @DirtiesContext
-public class GqlSchemaQueryAndMutations_print_IntegTest extends AbstractGqlSchema_print_IntegTest {
+public class GqlSchemaQuery_print_IntegTest extends AbstractGqlSchema_print_IntegTest {
 
 }

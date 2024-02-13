@@ -21,6 +21,10 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
+
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +41,18 @@ import graphql.GraphQL;
 import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
+import graphql.schema.GraphQLEnumType;
+import graphql.schema.GraphQLEnumValueDefinition;
+import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLSchema;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.*;
 
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -90,16 +103,11 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
 
         // top-level query and mutation type
         val topLevelQuery = new GqlvTopLevelQuery(context);
-        val topLevelMutation =
-                causewayConfiguration.getViewer().getGraphql().getApiVariant() == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_AND_MUTATIONS ?
-                        new GqlvTopLevelMutation(context)
-                        : null;
+        val topLevelMutation = new GqlvTopLevelMutation(context);
 
         // add the data fetchers
         topLevelQuery.addDataFetchers();
-        if (topLevelMutation != null) {
-            topLevelMutation.addDataFetchers();
-        }
+        topLevelMutation.addDataFetchers();
 
         // finalize the fetcher/mutator code that's been added
         val codeRegistry = context.codeRegistryBuilder.build();
@@ -107,9 +115,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         // build the schema
         return GraphQLSchema.newSchema()
                 .query(topLevelQuery.getGqlObjectType())
+                .mutation(topLevelMutation.getGqlObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
                 .codeRegistry(codeRegistry)
-                .mutation(topLevelMutation != null ? topLevelMutation.getGqlObjectType() : null)
                 .build();
     }
 

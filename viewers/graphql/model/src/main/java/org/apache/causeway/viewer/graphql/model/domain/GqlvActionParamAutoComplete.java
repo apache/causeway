@@ -70,7 +70,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
              holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
              fieldBuilder.argument(GraphQLArgument.newArgument()
                      .name(SEARCH_PARAM_NAME)
-                     .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
+                     .type(nonNull(context.typeMapper.outputTypeFor(String.class))))
                      .build();
              setField(fieldBuilder.build());
          } else {

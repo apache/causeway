@@ -16,9 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
+import java.util.Optional;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
@@ -26,61 +26,55 @@ import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Propagation;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(20)
-@DirtiesContext
+@Order(120)
 @ActiveProfiles("test")
-public class Admin_IntegTest extends Abstract_IntegTest {
+public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void admin_action() throws Exception {
+    void create_department() throws Exception {
 
-        // when
-        val response = submit();
+        // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
+        String response = submit();
 
         // then payload
         Approvals.verify(response, jsonOptions());
+
     }
 
     @Test
     @UseReporter(DiffReporter.class)
-    void action_with_disabled_param() throws Exception {
+    void change_department_name() throws Exception {
 
-        // when
-        val response = submit();
+        final Bookmark bookmark =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> {
+                            Department department = departmentRepository.findByName("Classics");
+                            Optional<Bookmark> bookmark1 = bookmarkService.bookmarkFor(department);
+                            return bookmark1.orElseThrow();
+                        }
+                ).valueAsNonNullElseFail();
 
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void action_with_hidden_param() throws Exception {
-
-        // when
-        val response = submit();
+        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
 
         // then payload
         Approvals.verify(response, jsonOptions());
     }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void other_admin_action() throws Exception {
-
-        // when
-        val response = submit();
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
-
 
 }

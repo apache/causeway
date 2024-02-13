@@ -16,18 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.schema.query;
+package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.junit.jupiter.api.Order;
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
 
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.Transactional;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLNonNull.nonNull;
 
-import org.apache.causeway.viewer.graphql.viewer.test.schema.AbstractGqlSchema_print_IntegTest;
+import org.apache.causeway.viewer.graphql.model.context.Context;
 
-@Order(0)
-@Transactional
-@DirtiesContext
-public class GqlSchemaQuery_print_IntegTest extends AbstractGqlSchema_print_IntegTest {
+public class GqlvMetaLayout extends GqlvAbstract {
+
+    public GqlvMetaLayout(final Context context) {
+        super(context);
+
+        setField(newFieldDefinition().name("layout").type(Scalars.GraphQLString).build());
+    }
+
+    @Override
+    protected String fetchData(DataFetchingEnvironment environment) {
+        return environment.<GqlvMeta.Fetcher>getSource().layout();
+    }
 
 }

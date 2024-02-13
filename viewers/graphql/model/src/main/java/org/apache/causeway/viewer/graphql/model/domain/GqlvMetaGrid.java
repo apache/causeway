@@ -16,31 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.scenario;
+package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.approvaltests.Approvals;
-import org.approvaltests.reporters.DiffReporter;
-import org.approvaltests.reporters.UseReporter;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
 
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLNonNull.nonNull;
 
+import org.apache.causeway.viewer.graphql.model.context.Context;
 
-//NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(40)
-@ActiveProfiles("test")
-public class Department_IntegTest extends Abstract_IntegTest {
+public class GqlvMetaGrid extends GqlvAbstract {
 
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_department_and_change_name() throws Exception {
+    public GqlvMetaGrid(final Context context) {
+        super(context);
 
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
+        setField(newFieldDefinition().name("grid").type(Scalars.GraphQLString).build());
     }
 
+    @Override
+    protected String fetchData(DataFetchingEnvironment environment) {
+        return environment.<GqlvMeta.Fetcher>getSource().grid();
+    }
 
 }

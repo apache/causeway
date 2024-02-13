@@ -19,16 +19,20 @@
 package org.apache.causeway.viewer.graphql.model.types;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import graphql.Scalars;
+import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLScalarType;
+import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
 
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
+
+import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +48,8 @@ import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TypeMapperDefault implements TypeMapper {
 
@@ -52,25 +58,40 @@ public class TypeMapperDefault implements TypeMapper {
 
         @Bean
         @ConditionalOnMissingBean(TypeMapper.class)
-        public TypeMapper defaultTypeMapper(final ScalarMapper scalarMapper) {
-            return new TypeMapperDefault(scalarMapper);
+        public TypeMapper defaultTypeMapper(final ScalarMapper scalarMapper, final Provider<Context> contextProvider) {
+            return new TypeMapperDefault(scalarMapper, contextProvider);
         }
     }
 
     private final ScalarMapper scalarMapper;
+    private final Provider<Context> contextProvider;
 
 
     @Override
-    public GraphQLScalarType scalarTypeFor(final Class<?> clazz){
-        GraphQLScalarType scalarType = scalarMapper.scalarTypeFor(clazz);
-        return scalarType;
+    public GraphQLOutputType outputTypeFor(final Class<?> clazz){
+        if (clazz.isEnum()) {
+            return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz);
+        }
+        return scalarMapper.scalarTypeFor(clazz);
+    }
+
+    @Override
+    public GraphQLInputType inputTypeFor(final Class<?> clazz){
+        if (clazz.isEnum()) {
+            return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz);
+        }
+        return scalarMapper.scalarTypeFor(clazz);
     }
 
     @Override
     public Object unmarshal(
             final Object gqlValue,
             final ObjectSpecification targetObjectSpec) {
-        return scalarMapper.unmarshal(gqlValue, targetObjectSpec.getCorrespondingClass());
+        val correspondingClass = targetObjectSpec.getCorrespondingClass();
+        if (correspondingClass.isEnum()) {
+            return gqlValue;
+        }
+        return scalarMapper.unmarshal(gqlValue, correspondingClass);
     }
 
     @Override
@@ -88,7 +109,7 @@ public class TypeMapperDefault implements TypeMapper {
 
             case VALUE:
 
-                GraphQLScalarType scalarType = scalarTypeFor(otoaObjectSpec.getCorrespondingClass());
+                GraphQLOutputType scalarType = outputTypeFor(otoaObjectSpec.getCorrespondingClass());
 
                 return oneToOneFeature.isOptional()
                         ? scalarType
@@ -108,7 +129,7 @@ public class TypeMapperDefault implements TypeMapper {
                 return typeRef(TypeNames.objectTypeNameFor(objectSpecification));
 
             case VALUE:
-                return scalarTypeFor(objectSpecification.getCorrespondingClass());
+                return outputTypeFor(objectSpecification.getCorrespondingClass());
 
             case COLLECTION:
                 // should be noop
@@ -133,7 +154,7 @@ public class TypeMapperDefault implements TypeMapper {
             case ENTITY:
                 return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType)));
             case VALUE:
-                return GraphQLList.list(scalarTypeFor(elementType.getCorrespondingClass()));
+                return GraphQLList.list(outputTypeFor(elementType.getCorrespondingClass()));
         }
         return null;
     }
@@ -156,7 +177,7 @@ public class TypeMapperDefault implements TypeMapper {
                 return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec));
 
             case VALUE:
-                return scalarTypeFor(elementObjectSpec.getCorrespondingClass());
+                return inputTypeFor(elementObjectSpec.getCorrespondingClass());
 
             case COLLECTION:
                 throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
@@ -181,7 +202,7 @@ public class TypeMapperDefault implements TypeMapper {
                 return typeRef(TypeNames.inputTypeNameFor(elementType));
 
             case VALUE:
-                return scalarTypeFor(elementType.getCorrespondingClass());
+                return inputTypeFor(elementType.getCorrespondingClass());
 
             case COLLECTION:
                 throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.getFullIdentifier()));

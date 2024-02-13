@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
@@ -32,7 +32,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(30)
-@DirtiesContext
 @ActiveProfiles("test")
 public class Calculator_IntegTest extends Abstract_IntegTest {
 

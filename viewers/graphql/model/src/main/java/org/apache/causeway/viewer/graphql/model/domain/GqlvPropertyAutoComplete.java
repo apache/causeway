@@ -56,7 +56,7 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
             fieldBuilder.argument(GraphQLArgument.newArgument()
                             .name(SEARCH_PARAM_NAME)
-                            .type(nonNull(context.typeMapper.scalarTypeFor(String.class))))
+                            .type(nonNull(context.typeMapper.outputTypeFor(String.class))))
                     .build();
             setField(fieldBuilder.build());
         } else {

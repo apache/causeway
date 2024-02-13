@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query_and_mutations;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
@@ -38,17 +38,7 @@ import lombok.val;
 
 
 // NOT USING @Transactional since we are running server within same transaction otherwise
-@SpringBootTest(
-        classes = {
-                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
-        },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {
-                "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
-        }
-)
 @Order(130)
-@DirtiesContext
 @ActiveProfiles("test")
 public class StaffMutating_IntegTest extends Abstract_IntegTest {
 
