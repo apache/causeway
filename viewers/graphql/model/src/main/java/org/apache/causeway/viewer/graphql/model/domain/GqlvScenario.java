@@ -19,11 +19,14 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.Scalars;
+import graphql.language.FieldDefinition;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -50,14 +53,14 @@ public class GqlvScenario
 
         buildObjectType();
 
-        setField(new GraphQLFieldDefinition.Builder()
-                            .name("Scenario")
-                            .type(getGqlObjectType())
-                            .argument(new GraphQLArgument.Builder()
-                                                .name("name")
-                                                .type(Scalars.GraphQLString)
-                            )
-                            .build()
+        setField(newFieldDefinition()
+                    .name("Scenario")
+                    .type(getGqlObjectType())
+                    .argument(new GraphQLArgument.Builder()
+                                        .name("name")
+                                        .type(Scalars.GraphQLString)
+                    )
+                    .build()
         );
     }
 

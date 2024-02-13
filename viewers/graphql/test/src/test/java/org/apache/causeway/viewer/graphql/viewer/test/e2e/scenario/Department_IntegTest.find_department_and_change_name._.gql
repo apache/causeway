@@ -5,8 +5,8 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
-            name {
-              get
+            _gqlv_meta {
+              saveAs(ref: "classics_dept")
             }
           }
         }

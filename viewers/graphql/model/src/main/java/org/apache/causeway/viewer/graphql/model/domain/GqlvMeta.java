@@ -44,18 +44,17 @@ import lombok.val;
 
 public class GqlvMeta extends GqlvAbstractCustom {
 
-    static GraphQLFieldDefinition version = newFieldDefinition().name("version").type(Scalars.GraphQLString).build();
-
+    private final Holder holder;
     private final GqlvMetaId metaId;
     private final GqlvMetaLogicalTypeName metaLogicalTypeName;
-    private final Holder holder;
+    private final GqlvMetaVersion metaVersion;
+    private final GqlvMetaSaveAs metaSaveAs;
 
     public GqlvMeta(
             final Holder holder,
             final Context context
     ) {
         super(TypeNames.metaTypeNameFor(holder.getObjectSpecification()), context);
-
         this.holder = holder;
 
         metaId = new GqlvMetaId(context);
@@ -64,9 +63,15 @@ public class GqlvMeta extends GqlvAbstractCustom {
         metaLogicalTypeName = new GqlvMetaLogicalTypeName(context);
         addChildField(metaLogicalTypeName.getField());
 
-        if (this.holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            addChildField(version);
+        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
+            metaVersion = new GqlvMetaVersion(context);
+            addChildField(metaVersion.getField());
+        } else {
+            metaVersion = null;
         }
+
+        metaSaveAs = new GqlvMetaSaveAs(context);
+        addChildField(metaSaveAs.getField());
 
         val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
         buildObjectTypeAndField(fieldName);
@@ -76,12 +81,10 @@ public class GqlvMeta extends GqlvAbstractCustom {
     protected void addDataFetchersForChildren() {
         metaId.addDataFetcher(this);
         metaLogicalTypeName.addDataFetcher(this);
-
         if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            context.codeRegistryBuilder.dataFetcher(
-                    coordinates(getGqlObjectType(), version),
-                    (DataFetcher<Object>) environment -> environment.<Fetcher>getSource().version());
+            metaVersion.addDataFetcher(this);
         }
+        metaSaveAs.addDataFetcher(this);
     }
 
     @Override
@@ -90,7 +93,6 @@ public class GqlvMeta extends GqlvAbstractCustom {
                 .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
                 .orElseThrow();
     }
-
 
 
     /**
