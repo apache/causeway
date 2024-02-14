@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -32,17 +34,18 @@ import lombok.val;
 public class GqlvProperty
         extends GqlvAssociation<OneToOneAssociation, GqlvMember.Holder>
         implements GqlvMemberHidden.Holder<OneToOneAssociation>,
-                   GqlvMemberDisabled.Holder<OneToOneAssociation>,
-                   GqlvPropertyGet.Holder,
-                   GqlvPropertyChoices.Holder,
-                   GqlvPropertyAutoComplete.Holder,
-                   GqlvPropertyValidate.Holder,
-                   GqlvPropertySet.Holder,
-                   GqlvAssociationDatatype.Holder<OneToOneAssociation> {
+        GqlvMemberDisabled.Holder<OneToOneAssociation>,
+        GqlvPropertyGet.Holder,
+        GqlvPropertyChoices.Holder,
+        GqlvPropertyAutoComplete.Holder,
+        GqlvPropertyValidate.Holder,
+        GqlvPropertySet.Holder,
+        GqlvAssociationDatatype.Holder<OneToOneAssociation>,
+        GqlvPropertyGetBlob.Holder {
 
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;
-    private final GqlvPropertyGet get;
+    private final GqlvAbstract get;
     /**
      * Populated iff there are choices
      */
@@ -71,7 +74,11 @@ public class GqlvProperty
         this.disabled = new GqlvMemberDisabled<>(this, context);
         addChildField(disabled.getField());
 
-        this.get = new GqlvPropertyGet(this, context);
+        if (isBlob()) {
+            this.get = new GqlvPropertyGetBlob(this, context);
+        } else {
+            this.get = new GqlvPropertyGet(this, context);
+        }
         addChildField(get.getField());
 
         this.validate = new GqlvPropertyValidate(this, context);
@@ -105,6 +112,14 @@ public class GqlvProperty
         addChildField(datatype.getField());
 
         buildObjectTypeAndField(oneToOneAssociation.getId());
+    }
+
+    private boolean isBlob() {
+        return getOneToOneAssociation().getElementType().getCorrespondingClass() == Blob.class;
+    }
+
+    private boolean isClob() {
+        return getOneToOneAssociation().getElementType().getCorrespondingClass() == Clob.class;
     }
 
     public void addGqlArgument(

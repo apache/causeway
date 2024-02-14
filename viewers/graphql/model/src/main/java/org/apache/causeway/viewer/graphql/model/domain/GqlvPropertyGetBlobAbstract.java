@@ -18,47 +18,38 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.Optional;
+import java.util.function.Function;
+
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLOutputType;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+
+import graphql.schema.GraphQLFieldDefinition;
 
 import lombok.val;
 
-public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends GqlvAbstract {
+public abstract class GqlvPropertyGetBlobAbstract extends GqlvAbstract {
 
-    final Holder<T> holder;
+    final Holder holder;
 
-    public GqlvAssociationGet(
-            final Holder<T> holder,
-            final Context context) {
+    public GqlvPropertyGetBlobAbstract(
+            final Holder holder,
+            final Context context, String name) {
         super(context);
         this.holder = holder;
 
-        GraphQLOutputType type = outputTypeFor(holder);
-        if (type != null) {
-            val fieldBuilder = newFieldDefinition()
-                    .name("get")
-                    .type(type);
-            setField(fieldBuilder.build());
-        } else {
-            setField(null);
-        }
+        setField(GraphQLFieldDefinition.newFieldDefinition()
+                    .name(name)
+                    .type(Scalars.GraphQLString)
+                    .build());
     }
 
-    abstract GraphQLOutputType outputTypeFor(Holder<T> holder);
-
-    @Override
-    protected Object fetchData(final DataFetchingEnvironment environment) {
-
-        // TODO: introduce evaluator
+    protected Object fetchDataFromBlob(DataFetchingEnvironment environment, Function<Blob, ?> mapper) {
         val sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
         val sourcePojoClass = sourcePojo.getClass();
@@ -72,14 +63,15 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 
-        return resultManagedObject != null
-                ? resultManagedObject.getPojo()
-                : null;
+        return Optional.ofNullable(resultManagedObject)
+                .map(ManagedObject::getPojo)
+                .filter(Blob.class::isInstance)
+                .map(Blob.class::cast)
+                .map(mapper)
+                .orElse(null);
     }
 
-    public interface Holder<T extends ObjectAssociation>
-            extends ObjectSpecificationProvider,
-                    ObjectAssociationProvider<T> {
-
+    public interface Holder extends GqlvPropertyGet.Holder {
     }
+
 }

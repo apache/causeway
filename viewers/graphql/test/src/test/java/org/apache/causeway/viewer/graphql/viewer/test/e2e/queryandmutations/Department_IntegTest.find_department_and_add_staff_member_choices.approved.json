@@ -1,0 +1,52 @@
+{
+  "data" : {
+    "Scenario" : {
+      "Given" : {
+        "university_dept_Departments" : {
+          "findDepartmentByName" : {
+            "invoke" : {
+              "addStaffMembers" : {
+                "params" : {
+                  "staffMembers" : {
+                    "choices" : [ {
+                      "_gqlv_meta" : {
+                        "id" : "15",
+                        "saveAs" : "staff-member-choices"
+                      },
+                      "name" : {
+                        "get" : "John Gartner"
+                      }
+                    }, {
+                      "_gqlv_meta" : {
+                        "id" : "16",
+                        "saveAs" : "staff-member-choices"
+                      },
+                      "name" : {
+                        "get" : "Margaret Randall"
+                      }
+                    }, {
+                      "_gqlv_meta" : {
+                        "id" : "14",
+                        "saveAs" : "staff-member-choices"
+                      },
+                      "name" : {
+                        "get" : "Mervin Hughes"
+                      }
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Then" : {
+        "university_dept_StaffMember" : {
+          "name" : {
+            "get" : "Margaret Randall"
+          }
+        }
+      }
+    }
+  }
+}

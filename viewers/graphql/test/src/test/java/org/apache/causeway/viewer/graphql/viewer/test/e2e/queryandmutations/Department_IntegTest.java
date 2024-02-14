@@ -115,6 +115,15 @@ public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
+    void find_department_and_add_staff_member_choices() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void find_department_and_add_staff_members() throws Exception {
 
         // when, then

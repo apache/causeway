@@ -72,22 +72,13 @@ public class GqlvAction
             final Context context) {
         super(holder, objectAction, TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction), context);
 
-        this.hidden = new GqlvMemberHidden<>(this, context);
-        addChildField(hidden.getField());
-
-        this.disabled = new GqlvMemberDisabled<>(this, context);
-        addChildField(disabled.getField());
-
-        this.validate = new GqlvActionValidity(this, context);
-        addChildField(validate.getField());
+        addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
+        addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
+        addChildFieldFor(this.validate = new GqlvActionValidity(this, context));
 
         val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         if (objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
-            this.invoke = new GqlvActionInvoke(this, context);
-            GraphQLFieldDefinition invokeField = this.invoke.getField();
-            if (invokeField != null) {
-                addChildField(invokeField);
-            }
+            addChildFieldFor(this.invoke = new GqlvActionInvoke(this, context));
         } else {
             this.invoke = null;
         }

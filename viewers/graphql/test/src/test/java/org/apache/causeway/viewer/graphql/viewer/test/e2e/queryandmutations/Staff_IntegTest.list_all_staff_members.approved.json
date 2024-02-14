@@ -10,7 +10,11 @@
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : "StaffMember-photo-Bar.pdf [application/pdf]: 47488 bytes"
+            "get" : {
+              "name" : "StaffMember-photo-Bar.pdf",
+              "mimeType" : "application/pdf",
+              "bytes" : "///graphql/object/university.dept.StaffMember:658/photo/blobBytes"
+            }
           }
         }, {
           "name" : {
@@ -20,7 +24,11 @@
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : null
+            "get" : {
+              "name" : null,
+              "mimeType" : null,
+              "bytes" : "///graphql/object/university.dept.StaffMember:660/photo/blobBytes"
+            }
           }
         }, {
           "name" : {
@@ -30,7 +38,11 @@
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : "StaffMember-photo-Foo.pdf [application/pdf]: 47185 bytes"
+            "get" : {
+              "name" : "StaffMember-photo-Foo.pdf",
+              "mimeType" : "application/pdf",
+              "bytes" : "///graphql/object/university.dept.StaffMember:657/photo/blobBytes"
+            }
           }
         }, {
           "name" : {
@@ -40,7 +52,11 @@
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : null
+            "get" : {
+              "name" : null,
+              "mimeType" : null,
+              "bytes" : "///graphql/object/university.dept.StaffMember:661/photo/blobBytes"
+            }
           }
         }, {
           "name" : {
@@ -50,7 +66,11 @@
             "get" : "LECTURER"
           },
           "photo" : {
-            "get" : "StaffMember-photo-Fizz.pdf [application/pdf]: 46833 bytes"
+            "get" : {
+              "name" : "StaffMember-photo-Fizz.pdf",
+              "mimeType" : "application/pdf",
+              "bytes" : "///graphql/object/university.dept.StaffMember:659/photo/blobBytes"
+            }
           }
         } ]
       }

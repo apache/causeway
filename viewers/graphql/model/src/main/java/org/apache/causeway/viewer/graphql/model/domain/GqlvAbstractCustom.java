@@ -59,6 +59,10 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
         return gqlObjectType != null;
     }
 
+    protected final void addChildFieldFor(GqlvAbstract hasField) {
+        addChildField(hasField.getField());
+    }
+
     protected final void addChildField(GraphQLFieldDefinition childField) {
         if (isBuilt()) {
             return;
