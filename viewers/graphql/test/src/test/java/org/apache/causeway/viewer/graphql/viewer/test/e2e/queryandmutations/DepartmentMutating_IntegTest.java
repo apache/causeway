@@ -25,15 +25,11 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 

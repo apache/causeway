@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 public class GqlvCollectionDatatype extends GqlvAssociationDatatype<OneToManyAssociation> {

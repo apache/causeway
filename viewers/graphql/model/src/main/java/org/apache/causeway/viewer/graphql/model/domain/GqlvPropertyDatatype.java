@@ -18,16 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.Scalars;
-import graphql.schema.DataFetchingEnvironment;
-
-import lombok.val;
-
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 public class GqlvPropertyDatatype extends GqlvAssociationDatatype<OneToOneAssociation> {
 

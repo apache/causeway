@@ -18,21 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
-import graphql.Scalars;
-import graphql.schema.GraphQLEnumType;
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-import graphql.schema.GraphQLTypeReference;
-
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
 
-import org.apache.causeway.viewer.graphql.model.context.Context;
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -43,12 +33,16 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
+import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
+import graphql.Scalars;
+import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLTypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TypeMapperDefault implements TypeMapper {
