@@ -45,7 +45,8 @@ public class GqlvActionParam
                    GqlvActionParamChoices.Holder,
                    GqlvActionParamAutoComplete.Holder,
                    GqlvActionParamDefault.Holder,
-                   GqlvActionParamValidate.Holder {
+                   GqlvActionParamValidate.Holder,
+                   GqlvActionParamDatatype.Holder {
 
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
@@ -66,6 +67,7 @@ public class GqlvActionParam
      */
     private final GqlvActionParamDefault default_;
     private final GqlvActionParamValidate validate;
+    private final GqlvActionParamDatatype datatype;
 
     public GqlvActionParam(
             final Holder holder,
@@ -109,6 +111,9 @@ public class GqlvActionParam
         this.validate = new GqlvActionParamValidate(this, context);
         addChildField(validate.getField());
 
+        this.datatype = new GqlvActionParamDatatype(this, context);
+        addChildField(datatype.getField());
+
         buildObjectTypeAndField(objectActionParameter.getId());
     }
 
@@ -129,26 +134,31 @@ public class GqlvActionParam
 
     @Override
     protected void addDataFetchersForChildren() {
+
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
+
         if (choices != null) {
             choices.addDataFetcher(this);
         }
+
         if (autoComplete != null) {
             autoComplete.addDataFetcher(this);
         }
+
         if (default_ != null) {
             default_.addDataFetcher(this);
         }
+
         validate.addDataFetcher(this);
+
+        datatype.addDataFetcher(this);
     }
 
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
-
-
 
     @Override
     public void addGqlArguments(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {

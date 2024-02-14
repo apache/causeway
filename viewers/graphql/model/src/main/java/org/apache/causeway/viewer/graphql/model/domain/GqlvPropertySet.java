@@ -18,19 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.Map;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLOutputType;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import java.util.Map;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
@@ -38,7 +33,10 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLFieldDefinition;
 import lombok.val;
 
 public class GqlvPropertySet extends GqlvAbstract {
@@ -51,20 +49,14 @@ public class GqlvPropertySet extends GqlvAbstract {
         super(context);
         this.holder = holder;
 
-        GraphQLOutputType graphQLOutputType = outputTypeFor(holder);
-        if (graphQLOutputType != null) {
-            val fieldBuilder = newFieldDefinition()
-                    .name("set")
-                    .type(graphQLOutputType);
-            holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
-            setField(fieldBuilder.build());
-        } else {
-            setField(null);
-        }
-    }
+        // setters return void, so we return the domain object instead
+        val graphQLOutputType = this.context.typeMapper.outputTypeFor(holder.getObjectSpecification());
 
-    GraphQLOutputType outputTypeFor(Holder holder) {
-        return context.typeMapper.outputTypeFor(holder.getObjectSpecification());   // setters return void, so we return the domain object instead
+        val fieldBuilder = newFieldDefinition()
+                .name("set")
+                .type(graphQLOutputType);
+        holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
+        setField(fieldBuilder.build());
     }
 
     @Override

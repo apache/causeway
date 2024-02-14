@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -49,7 +48,6 @@ import lombok.val;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(40)
-@DirtiesContext
 @ActiveProfiles("test")
 public class Department_IntegTest extends Abstract_IntegTest {
 
@@ -208,6 +206,14 @@ public class Department_IntegTest extends Abstract_IntegTest {
     @Test
     @UseReporter(DiffReporter.class)
     void find_department_and_remove_staff_member_choices() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void find_department_and_list_its_staff() throws Exception {
 
         // when, then
         Approvals.verify(submit(), jsonOptions());

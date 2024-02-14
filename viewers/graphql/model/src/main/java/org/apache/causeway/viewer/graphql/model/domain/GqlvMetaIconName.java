@@ -16,35 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.marshallers;
+package org.apache.causeway.viewer.graphql.model.domain;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
+import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
 
+public class GqlvMetaIconName extends GqlvAbstract {
 
-/**
- * Acts as a fallback.  We put it last in the list
- */
-@Component
-@Priority(PriorityPrecedence.LAST)
-public class ScalarMarshallerObject extends ScalarMarshallerAbstract<Object> {
+    public GqlvMetaIconName(final Context context) {
+        super(context);
 
-    @Inject
-    public ScalarMarshallerObject(
-            final CausewayConfiguration causewayConfiguration) {
-        super(Object.class, Scalars.GraphQLString, causewayConfiguration);
+        setField(newFieldDefinition().name("iconName").type(Scalars.GraphQLString).build());
     }
 
     @Override
-    public Object unmarshal(Object graphValue, Class<?> targetType) {
-        return graphValue;
+    protected String fetchData(DataFetchingEnvironment environment) {
+        return environment.<GqlvMeta.Fetcher>getSource().iconName();
     }
+
 }

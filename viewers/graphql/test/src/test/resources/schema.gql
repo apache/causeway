@@ -22,6 +22,50 @@ directive @specifiedBy(
     url: String!
   ) on SCALAR
 
+type Mutation {
+  causeway_applib_PropertyNode__mixedIn(_gqlv_target: causeway_applib_PropertyNode__gqlv_input, mixedIn: Boolean!): causeway_applib_PropertyNode
+  causeway_applib_node_ActionNode__mixedIn(_gqlv_target: causeway_applib_node_ActionNode__gqlv_input, mixedIn: Boolean!): causeway_applib_node_ActionNode
+  causeway_applib_node_CollectionNode__mixedIn(_gqlv_target: causeway_applib_node_CollectionNode__gqlv_input, mixedIn: Boolean!): causeway_applib_node_CollectionNode
+  causeway_applib_node_FacetNode__shadowed(_gqlv_target: causeway_applib_node_FacetNode__gqlv_input, shadowed: Boolean!): causeway_applib_node_FacetNode
+  causeway_conf_ConfigurationProperty__key(_gqlv_target: causeway_conf_ConfigurationProperty__gqlv_input, key: String!): causeway_conf_ConfigurationProperty
+  causeway_conf_ConfigurationProperty__value(_gqlv_target: causeway_conf_ConfigurationProperty__gqlv_input, value: String!): causeway_conf_ConfigurationProperty
+  causeway_schema_metamodel_v2_DomainClassDto__actions(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, actions: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__annotations(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, annotations: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__collections(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, collections: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__facets(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, facets: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__id(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, id: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__majorVersion(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, majorVersion: String): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__minorVersion(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, minorVersion: String): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__properties(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, properties: String!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_schema_metamodel_v2_DomainClassDto__service(_gqlv_target: causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, service: Boolean!): causeway_schema_metamodel_v2_DomainClassDto
+  causeway_testing_fixtures_FixtureResult__fixtureScriptClassName(_gqlv_target: causeway_testing_fixtures_FixtureResult__gqlv_input, fixtureScriptClassName: String): causeway_testing_fixtures_FixtureResult
+  causeway_testing_fixtures_FixtureResult__key(_gqlv_target: causeway_testing_fixtures_FixtureResult__gqlv_input, key: String!): causeway_testing_fixtures_FixtureResult
+  causeway_testing_fixtures_FixtureResult__object(_gqlv_target: causeway_testing_fixtures_FixtureResult__gqlv_input, object: String!): causeway_testing_fixtures_FixtureResult
+  org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn(_gqlv_target: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input, mixedIn: Boolean!): org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName(_gqlv_target: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input, friendlyName: String!): org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
+  university_admin_AdminMenu__actionWithDisabledParam(firstParam: String!, secondParam: String!, thirdParameter: String!): String
+  university_admin_AdminMenu__actionWithHiddenParam(firstParam: String!, secondParam: String!): String
+  university_admin_AdminMenu__adminAction: String
+  university_admin_AdminMenu__otherAdminAction: String
+  university_dept_Department__addStaffMember(_gqlv_target: university_dept_Department__gqlv_input, staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department
+  university_dept_Department__addStaffMembers(_gqlv_target: university_dept_Department__gqlv_input, staffMembers: [university_dept_StaffMember__gqlv_input]): university_dept_Department
+  university_dept_Department__changeDeptHead(_gqlv_target: university_dept_Department__gqlv_input, newDeptHead: university_dept_DeptHead__gqlv_input!): university_dept_Department
+  university_dept_Department__changeName(_gqlv_target: university_dept_Department__gqlv_input, newName: String!): university_dept_Department
+  university_dept_Department__deptHead(_gqlv_target: university_dept_Department__gqlv_input, deptHead: university_dept_DeptHead__gqlv_input): university_dept_Department
+  university_dept_Department__name(_gqlv_target: university_dept_Department__gqlv_input, name: String!): university_dept_Department
+  university_dept_Department__removeStaffMember(_gqlv_target: university_dept_Department__gqlv_input, staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department
+  university_dept_Departments__createDepartment(deptHead: university_dept_DeptHead__gqlv_input, name: String!): university_dept_Department
+  university_dept_DeptHead__changeDepartment(_gqlv_target: university_dept_DeptHead__gqlv_input, department: university_dept_Department__gqlv_input!): university_dept_DeptHead
+  university_dept_DeptHead__changeName(_gqlv_target: university_dept_DeptHead__gqlv_input, newName: String!): university_dept_DeptHead
+  university_dept_DeptHead__department(_gqlv_target: university_dept_DeptHead__gqlv_input, department: university_dept_Department__gqlv_input): university_dept_DeptHead
+  university_dept_DeptHead__name(_gqlv_target: university_dept_DeptHead__gqlv_input, name: String): university_dept_DeptHead
+  university_dept_StaffMember__department(_gqlv_target: university_dept_StaffMember__gqlv_input, department: university_dept_Department__gqlv_input): university_dept_StaffMember
+  university_dept_StaffMember__grade(_gqlv_target: university_dept_StaffMember__gqlv_input, grade: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): university_dept_StaffMember
+  university_dept_StaffMember__name(_gqlv_target: university_dept_StaffMember__gqlv_input, name: String!): university_dept_StaffMember
+  university_dept_StaffMember__photo(_gqlv_target: university_dept_StaffMember__gqlv_input, photo: String): university_dept_StaffMember
+  university_dept_Staff__createStaffMember(department: university_dept_Department__gqlv_input!, name: String!): university_dept_StaffMember
+}
+
 type Query {
   Scenario(name: String): Scenario
   causeway_applib_DomainObjectList(object: causeway_applib_DomainObjectList__gqlv_input): causeway_applib_DomainObjectList
@@ -137,6 +181,7 @@ type causeway_applib_DomainObjectList {
 }
 
 type causeway_applib_DomainObjectList__actionArguments__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -145,6 +190,7 @@ type causeway_applib_DomainObjectList__actionArguments__gqlv_property {
 }
 
 type causeway_applib_DomainObjectList__actionId__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -153,6 +199,7 @@ type causeway_applib_DomainObjectList__actionId__gqlv_property {
 }
 
 type causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -161,6 +208,7 @@ type causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property {
 }
 
 type causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -169,9 +217,14 @@ type causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
 }
 
 type causeway_applib_DomainObjectList__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_DomainObjectList__objects__gqlv_collection {
@@ -180,6 +233,7 @@ type causeway_applib_DomainObjectList__objects__gqlv_collection {
 }
 
 type causeway_applib_DomainObjectList__title__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -200,6 +254,7 @@ type causeway_applib_FacetGroupNode__childNodes__gqlv_collection {
 }
 
 type causeway_applib_FacetGroupNode__facets__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -208,12 +263,18 @@ type causeway_applib_FacetGroupNode__facets__gqlv_property {
 }
 
 type causeway_applib_FacetGroupNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_FacetGroupNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): causeway_applib_FacetGroupNode
@@ -233,12 +294,18 @@ type causeway_applib_ParameterNode__childNodes__gqlv_collection {
 }
 
 type causeway_applib_ParameterNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_ParameterNode__parameter__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -247,6 +314,7 @@ type causeway_applib_ParameterNode__parameter__gqlv_property {
 }
 
 type causeway_applib_ParameterNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   get: causeway_applib_node_ActionNode!
   hidden: Boolean
@@ -268,12 +336,18 @@ type causeway_applib_PropertyNode__childNodes__gqlv_collection {
 }
 
 type causeway_applib_PropertyNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_PropertyNode__mixedIn__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -282,6 +356,7 @@ type causeway_applib_PropertyNode__mixedIn__gqlv_property {
 }
 
 type causeway_applib_PropertyNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   get: causeway_applib_TypeNode!
   hidden: Boolean
@@ -290,6 +365,7 @@ type causeway_applib_PropertyNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_PropertyNode__property__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -304,6 +380,7 @@ type causeway_applib_RoleMemento {
 }
 
 type causeway_applib_RoleMemento__description__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -312,12 +389,18 @@ type causeway_applib_RoleMemento__description__gqlv_property {
 }
 
 type causeway_applib_RoleMemento__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_RoleMemento__name__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -338,6 +421,7 @@ type causeway_applib_TypeNode__childNodes__gqlv_collection {
 }
 
 type causeway_applib_TypeNode__domainClassDto__gqlv_property {
+  datatype: String
   disabled: String
   get: causeway_schema_metamodel_v2_DomainClassDto!
   hidden: Boolean
@@ -346,12 +430,18 @@ type causeway_applib_TypeNode__domainClassDto__gqlv_property {
 }
 
 type causeway_applib_TypeNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_TypeNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): causeway_applib_TypeNode
@@ -374,6 +464,7 @@ type causeway_applib_UserMemento {
 }
 
 type causeway_applib_UserMemento__authenticationCode__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -382,15 +473,17 @@ type causeway_applib_UserMemento__authenticationCode__gqlv_property {
 }
 
 type causeway_applib_UserMemento__authenticationSource__gqlv_property {
-  choices(authenticationSource: String): [String]
+  choices(authenticationSource: org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum): [org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum]
+  datatype: String
   disabled: String
-  get: String!
+  get: org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!
   hidden: Boolean
-  set(authenticationSource: String!): causeway_applib_UserMemento
-  validate(authenticationSource: String): String
+  set(authenticationSource: org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!): causeway_applib_UserMemento
+  validate(authenticationSource: org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum): String
 }
 
 type causeway_applib_UserMemento__avatarUrl__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -399,12 +492,18 @@ type causeway_applib_UserMemento__avatarUrl__gqlv_property {
 }
 
 type causeway_applib_UserMemento__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_UserMemento__impersonating__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -413,6 +512,7 @@ type causeway_applib_UserMemento__impersonating__gqlv_property {
 }
 
 type causeway_applib_UserMemento__languageLocale__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -421,6 +521,7 @@ type causeway_applib_UserMemento__languageLocale__gqlv_property {
 }
 
 type causeway_applib_UserMemento__multiTenancyToken__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -429,6 +530,7 @@ type causeway_applib_UserMemento__multiTenancyToken__gqlv_property {
 }
 
 type causeway_applib_UserMemento__name__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -437,6 +539,7 @@ type causeway_applib_UserMemento__name__gqlv_property {
 }
 
 type causeway_applib_UserMemento__numberFormatLocale__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -445,6 +548,7 @@ type causeway_applib_UserMemento__numberFormatLocale__gqlv_property {
 }
 
 type causeway_applib_UserMemento__realName__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -459,6 +563,7 @@ type causeway_applib_UserMemento__roles__gqlv_collection {
 }
 
 type causeway_applib_UserMemento__timeFormatLocale__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -487,6 +592,7 @@ type causeway_applib_node_ActionNode {
 }
 
 type causeway_applib_node_ActionNode__action__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -500,12 +606,18 @@ type causeway_applib_node_ActionNode__childNodes__gqlv_collection {
 }
 
 type causeway_applib_node_ActionNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_node_ActionNode__mixedIn__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -514,6 +626,7 @@ type causeway_applib_node_ActionNode__mixedIn__gqlv_property {
 }
 
 type causeway_applib_node_ActionNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   get: causeway_applib_TypeNode!
   hidden: Boolean
@@ -535,6 +648,7 @@ type causeway_applib_node_CollectionNode__childNodes__gqlv_collection {
 }
 
 type causeway_applib_node_CollectionNode__collection__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -543,12 +657,18 @@ type causeway_applib_node_CollectionNode__collection__gqlv_property {
 }
 
 type causeway_applib_node_CollectionNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_node_CollectionNode__mixedIn__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -557,6 +677,7 @@ type causeway_applib_node_CollectionNode__mixedIn__gqlv_property {
 }
 
 type causeway_applib_node_CollectionNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   get: causeway_applib_TypeNode!
   hidden: Boolean
@@ -577,6 +698,7 @@ type causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection {
 }
 
 type causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -585,12 +707,18 @@ type causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property {
 }
 
 type causeway_applib_node_FacetAttrNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_node_FacetAttrNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   get: causeway_applib_node_FacetNode!
   hidden: Boolean
@@ -612,6 +740,7 @@ type causeway_applib_node_FacetNode__childNodes__gqlv_collection {
 }
 
 type causeway_applib_node_FacetNode__facet__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -620,12 +749,18 @@ type causeway_applib_node_FacetNode__facet__gqlv_property {
 }
 
 type causeway_applib_node_FacetNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_applib_node_FacetNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): causeway_applib_node_FacetNode
@@ -633,6 +768,7 @@ type causeway_applib_node_FacetNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_node_FacetNode__shadowed__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -658,12 +794,18 @@ type causeway_conf_ConfigurationProperty {
 }
 
 type causeway_conf_ConfigurationProperty__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_conf_ConfigurationProperty__key__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -672,6 +814,7 @@ type causeway_conf_ConfigurationProperty__key__gqlv_property {
 }
 
 type causeway_conf_ConfigurationProperty__value__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -693,9 +836,14 @@ type causeway_conf_ConfigurationViewmodel__environment__gqlv_collection {
 }
 
 type causeway_conf_ConfigurationViewmodel__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_conf_ConfigurationViewmodel__primary__gqlv_collection {
@@ -719,12 +867,18 @@ type causeway_feat_ApplicationFeatureViewModel {
 }
 
 type causeway_feat_ApplicationFeatureViewModel__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -733,6 +887,7 @@ type causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property {
 }
 
 type causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -741,6 +896,7 @@ type causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property {
 }
 
 type causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationFeatureViewModel
@@ -748,6 +904,7 @@ type causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property {
 }
 
 type causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -770,12 +927,18 @@ type causeway_feat_ApplicationNamespace__contents__gqlv_collection {
 }
 
 type causeway_feat_ApplicationNamespace__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_feat_ApplicationNamespace__memberName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -784,6 +947,7 @@ type causeway_feat_ApplicationNamespace__memberName__gqlv_property {
 }
 
 type causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -792,6 +956,7 @@ type causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
 }
 
 type causeway_feat_ApplicationNamespace__parent__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationNamespace
@@ -799,6 +964,7 @@ type causeway_feat_ApplicationNamespace__parent__gqlv_property {
 }
 
 type causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -828,21 +994,28 @@ type causeway_feat_ApplicationTypeAction {
 }
 
 type causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
-  choices(actionSemantics: String): [String]
+  choices(actionSemantics: causeway_applib_annotation_SemanticsOf__gqlv_enum): [causeway_applib_annotation_SemanticsOf__gqlv_enum]
+  datatype: String
   disabled: String
-  get: String!
+  get: causeway_applib_annotation_SemanticsOf__gqlv_enum!
   hidden: Boolean
-  set(actionSemantics: String!): causeway_feat_ApplicationTypeAction
-  validate(actionSemantics: String): String
+  set(actionSemantics: causeway_applib_annotation_SemanticsOf__gqlv_enum!): causeway_feat_ApplicationTypeAction
+  validate(actionSemantics: causeway_applib_annotation_SemanticsOf__gqlv_enum): String
 }
 
 type causeway_feat_ApplicationTypeAction__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_feat_ApplicationTypeAction__memberName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -851,6 +1024,7 @@ type causeway_feat_ApplicationTypeAction__memberName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -859,6 +1033,7 @@ type causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeAction__parent__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationTypeAction
@@ -866,6 +1041,7 @@ type causeway_feat_ApplicationTypeAction__parent__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeAction__returnType__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -874,6 +1050,7 @@ type causeway_feat_ApplicationTypeAction__returnType__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -892,6 +1069,7 @@ type causeway_feat_ApplicationTypeCollection {
 }
 
 type causeway_feat_ApplicationTypeCollection__derived__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -900,6 +1078,7 @@ type causeway_feat_ApplicationTypeCollection__derived__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -908,12 +1087,18 @@ type causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeCollection__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_feat_ApplicationTypeCollection__memberName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -922,6 +1107,7 @@ type causeway_feat_ApplicationTypeCollection__memberName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -930,6 +1116,7 @@ type causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeCollection__parent__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationTypeCollection
@@ -937,6 +1124,7 @@ type causeway_feat_ApplicationTypeCollection__parent__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -953,12 +1141,18 @@ type causeway_feat_ApplicationTypeMember {
 }
 
 type causeway_feat_ApplicationTypeMember__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_feat_ApplicationTypeMember__memberName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -967,6 +1161,7 @@ type causeway_feat_ApplicationTypeMember__memberName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -975,6 +1170,7 @@ type causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeMember__parent__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationTypeMember
@@ -982,6 +1178,7 @@ type causeway_feat_ApplicationTypeMember__parent__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1002,6 +1199,7 @@ type causeway_feat_ApplicationTypeProperty {
 }
 
 type causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -1010,12 +1208,18 @@ type causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property {
+  datatype: String
   disabled: String
   get: Int
   hidden: Boolean
@@ -1024,6 +1228,7 @@ type causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty__memberName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1032,6 +1237,7 @@ type causeway_feat_ApplicationTypeProperty__memberName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1040,6 +1246,7 @@ type causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty__parent__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationTypeProperty
@@ -1047,6 +1254,7 @@ type causeway_feat_ApplicationTypeProperty__parent__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty__returnType__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1055,6 +1263,7 @@ type causeway_feat_ApplicationTypeProperty__returnType__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1063,6 +1272,7 @@ type causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property {
+  datatype: String
   disabled: String
   get: Int
   hidden: Boolean
@@ -1083,12 +1293,18 @@ type causeway_feat_ApplicationType__collections__gqlv_collection {
 }
 
 type causeway_feat_ApplicationType__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_feat_ApplicationType__memberName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1097,6 +1313,7 @@ type causeway_feat_ApplicationType__memberName__gqlv_property {
 }
 
 type causeway_feat_ApplicationType__namespaceName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1105,6 +1322,7 @@ type causeway_feat_ApplicationType__namespaceName__gqlv_property {
 }
 
 type causeway_feat_ApplicationType__parent__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parent: causeway_feat_ApplicationFeatureViewModel__gqlv_input!): causeway_feat_ApplicationType
@@ -1118,6 +1336,7 @@ type causeway_feat_ApplicationType__properties__gqlv_collection {
 }
 
 type causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1139,6 +1358,7 @@ type causeway_schema_metamodel_v2_DomainClassDto {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1147,6 +1367,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1155,6 +1376,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1163,6 +1385,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1171,12 +1394,18 @@ type causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1185,6 +1414,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -1193,6 +1423,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -1201,6 +1432,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1209,6 +1441,7 @@ type causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -1221,9 +1454,14 @@ type causeway_security_LoginRedirect {
 }
 
 type causeway_security_LoginRedirect__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_security_LogoutMenu {
@@ -1246,6 +1484,7 @@ type causeway_testing_fixtures_FixtureResult {
 }
 
 type causeway_testing_fixtures_FixtureResult__className__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1254,6 +1493,7 @@ type causeway_testing_fixtures_FixtureResult__className__gqlv_property {
 }
 
 type causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -1262,12 +1502,18 @@ type causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_prope
 }
 
 type causeway_testing_fixtures_FixtureResult__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_testing_fixtures_FixtureResult__key__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1276,6 +1522,7 @@ type causeway_testing_fixtures_FixtureResult__key__gqlv_property {
 }
 
 type causeway_testing_fixtures_FixtureResult__object__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(object: String!): causeway_testing_fixtures_FixtureResult
@@ -1287,9 +1534,14 @@ type java_lang_Runnable {
 }
 
 type java_lang_Runnable__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type java_util_Map {
@@ -1297,9 +1549,14 @@ type java_util_Map {
 }
 
 type java_util_Map__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type java_util_SortedMap {
@@ -1307,9 +1564,14 @@ type java_util_SortedMap {
 }
 
 type java_util_SortedMap__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type java_util_concurrent_Callable {
@@ -1317,9 +1579,14 @@ type java_util_concurrent_Callable {
 }
 
 type java_util_concurrent_Callable__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type java_util_function_BiFunction {
@@ -1327,9 +1594,14 @@ type java_util_function_BiFunction {
 }
 
 type java_util_function_BiFunction__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type java_util_function_Consumer {
@@ -1337,9 +1609,14 @@ type java_util_function_Consumer {
 }
 
 type java_util_function_Consumer__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type java_util_function_Function {
@@ -1347,9 +1624,14 @@ type java_util_function_Function {
 }
 
 type java_util_function_Function__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type java_util_stream_Stream {
@@ -1357,9 +1639,14 @@ type java_util_stream_Stream {
 }
 
 type java_util_stream_Stream__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode {
@@ -1374,12 +1661,18 @@ type org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_c
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   hidden: Boolean
   set(parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): org_apache_causeway_core_metamodel_inspect_model_MMNode
@@ -1399,12 +1692,18 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gq
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property {
+  datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
@@ -1413,6 +1712,7 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property {
+  datatype: String
   disabled: String
   get: causeway_applib_TypeNode!
   hidden: Boolean
@@ -1427,6 +1727,7 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
 }
 
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1435,12 +1736,18 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__f
 }
 
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
 }
 
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -1456,6 +1763,7 @@ type university_admin_AdminMenu {
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter {
+  datatype: String
   disabled(firstParam: String): String
   hidden: Boolean
   validity: String
@@ -1476,18 +1784,21 @@ type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params {
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter {
+  datatype: String
   disabled(firstParam: String, secondParam: String): String
   hidden(firstParam: String): Boolean
   validity: String
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter {
+  datatype: String
   disabled(firstParam: String, secondParam: String, thirdParameter: String): String
   hidden(firstParam: String, secondParam: String): Boolean
   validity: String
 }
 
 type university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter {
+  datatype: String
   disabled(firstParam: String): String
   hidden: Boolean
   validity: String
@@ -1507,6 +1818,7 @@ type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params {
 }
 
 type university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter {
+  datatype: String
   disabled(firstParam: String, secondParam: String): String
   hidden(firstParam: String): Boolean
   validity: String
@@ -1562,12 +1874,14 @@ type university_calc_Calculator__addBigDecimals__gqlv_action_params {
 }
 
 type university_calc_Calculator__addBigDecimals__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: String): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
   validity: String
@@ -1587,12 +1901,14 @@ type university_calc_Calculator__addBigIntegers__gqlv_action_params {
 }
 
 type university_calc_Calculator__addBigIntegers__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: String): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
   validity: String
@@ -1612,12 +1928,14 @@ type university_calc_Calculator__addByteWrappers__gqlv_action_params {
 }
 
 type university_calc_Calculator__addByteWrappers__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addByteWrappers__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
   validity: String
@@ -1637,12 +1955,14 @@ type university_calc_Calculator__addBytes__gqlv_action_params {
 }
 
 type university_calc_Calculator__addBytes__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addBytes__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
   validity: String
@@ -1662,12 +1982,14 @@ type university_calc_Calculator__addDoubleWrappers__gqlv_action_params {
 }
 
 type university_calc_Calculator__addDoubleWrappers__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Float): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addDoubleWrappers__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
   validity: String
@@ -1687,12 +2009,14 @@ type university_calc_Calculator__addDoubles__gqlv_action_params {
 }
 
 type university_calc_Calculator__addDoubles__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Float): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addDoubles__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
   validity: String
@@ -1712,12 +2036,14 @@ type university_calc_Calculator__addFloatWrappers__gqlv_action_params {
 }
 
 type university_calc_Calculator__addFloatWrappers__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Float): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addFloatWrappers__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
   validity: String
@@ -1737,12 +2063,14 @@ type university_calc_Calculator__addFloats__gqlv_action_params {
 }
 
 type university_calc_Calculator__addFloats__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Float): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addFloats__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
   validity: String
@@ -1762,12 +2090,14 @@ type university_calc_Calculator__addIntegerWrappers__gqlv_action_params {
 }
 
 type university_calc_Calculator__addIntegerWrappers__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addIntegerWrappers__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
   validity: String
@@ -1787,12 +2117,14 @@ type university_calc_Calculator__addIntegers__gqlv_action_params {
 }
 
 type university_calc_Calculator__addIntegers__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addIntegers__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
   validity: String
@@ -1812,12 +2144,14 @@ type university_calc_Calculator__addShortWrappers__gqlv_action_params {
 }
 
 type university_calc_Calculator__addShortWrappers__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addShortWrappers__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
   validity: String
@@ -1837,12 +2171,14 @@ type university_calc_Calculator__addShorts__gqlv_action_params {
 }
 
 type university_calc_Calculator__addShorts__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addShorts__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
   validity: String
@@ -1862,12 +2198,14 @@ type university_calc_Calculator__and__gqlv_action_params {
 }
 
 type university_calc_Calculator__and__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__and__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
   validity: String
@@ -1887,12 +2225,14 @@ type university_calc_Calculator__concat__gqlv_action_params {
 }
 
 type university_calc_Calculator__concat__prefix__gqlv_action_parameter {
+  datatype: String
   disabled(prefix: String): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__concat__suffix__gqlv_action_parameter {
+  datatype: String
   disabled(prefix: String, suffix: String): String
   hidden(prefix: String): Boolean
   validity: String
@@ -1901,9 +2241,9 @@ type university_calc_Calculator__concat__suffix__gqlv_action_parameter {
 type university_calc_Calculator__nextMonth__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(month: String!): String
+  invoke(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
   params: university_calc_Calculator__nextMonth__gqlv_action_params
-  validate(month: String): String
+  validate(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
 }
 
 type university_calc_Calculator__nextMonth__gqlv_action_params {
@@ -1911,8 +2251,9 @@ type university_calc_Calculator__nextMonth__gqlv_action_params {
 }
 
 type university_calc_Calculator__nextMonth__month__gqlv_action_parameter {
-  choices: [String]
-  disabled(month: String): String
+  choices: [org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum]
+  datatype: String
+  disabled(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
   hidden: Boolean
   validity: String
 }
@@ -1930,6 +2271,7 @@ type university_calc_Calculator__not__gqlv_action_params {
 }
 
 type university_calc_Calculator__not__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
   validity: String
@@ -1949,18 +2291,21 @@ type university_calc_Calculator__or__gqlv_action_params {
 }
 
 type university_calc_Calculator__or__x__gqlv_action_parameter {
+  datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__or__y__gqlv_action_parameter {
+  datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
   validity: String
 }
 
 type university_calc_Calculator__plusDays__date__gqlv_action_parameter {
+  datatype: String
   disabled(date: String): String
   hidden: Boolean
   validity: String
@@ -1980,12 +2325,14 @@ type university_calc_Calculator__plusDays__gqlv_action_params {
 }
 
 type university_calc_Calculator__plusDays__numDays__gqlv_action_parameter {
+  datatype: String
   disabled(date: String, numDays: Int): String
   hidden(date: String): Boolean
   validity: String
 }
 
 type university_calc_Calculator__plusJodaDays__date__gqlv_action_parameter {
+  datatype: String
   disabled(date: String): String
   hidden: Boolean
   validity: String
@@ -2005,6 +2352,7 @@ type university_calc_Calculator__plusJodaDays__gqlv_action_params {
 }
 
 type university_calc_Calculator__plusJodaDays__numDays__gqlv_action_parameter {
+  datatype: String
   disabled(date: String, numDays: Int): String
   hidden(date: String): Boolean
   validity: String
@@ -2038,6 +2386,7 @@ type university_dept_Department__addStaffMember__gqlv_action_params {
 
 type university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter {
   autoComplete(search: String!): [university_dept_StaffMember]
+  datatype: String
   disabled(staffMember: university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
   validity: String
@@ -2058,6 +2407,7 @@ type university_dept_Department__addStaffMembers__gqlv_action_params {
 
 type university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter {
   choices: [university_dept_StaffMember]
+  datatype: String
   disabled(staffMembers: [university_dept_StaffMember__gqlv_input]): String
   hidden: Boolean
   validity: String
@@ -2078,6 +2428,7 @@ type university_dept_Department__changeDeptHead__gqlv_action_params {
 
 type university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter {
   autoComplete(search: String!): [university_dept_DeptHead]
+  datatype: String
   default: university_dept_DeptHead
   disabled(newDeptHead: university_dept_DeptHead__gqlv_input): String
   hidden: Boolean
@@ -2098,6 +2449,7 @@ type university_dept_Department__changeName__gqlv_action_params {
 }
 
 type university_dept_Department__changeName__newName__gqlv_action_parameter {
+  datatype: String
   default: String
   disabled(newName: String): String
   hidden: Boolean
@@ -2107,6 +2459,7 @@ type university_dept_Department__changeName__newName__gqlv_action_parameter {
 "Departmental head, responsible for curriculum, research, funding and staff"
 type university_dept_Department__deptHead__gqlv_property {
   autoComplete(search: String!): [university_dept_DeptHead]
+  datatype: String
   disabled: String
   get: university_dept_DeptHead
   hidden: Boolean
@@ -2115,13 +2468,19 @@ type university_dept_Department__deptHead__gqlv_property {
 }
 
 type university_dept_Department__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
   version: String
 }
 
 type university_dept_Department__name__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -2144,6 +2503,7 @@ type university_dept_Department__removeStaffMember__gqlv_action_params {
 
 type university_dept_Department__removeStaffMember__staffMember__gqlv_action_parameter {
   choices: [university_dept_StaffMember]
+  datatype: String
   disabled(staffMember: university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
   validity: String
@@ -2164,6 +2524,7 @@ type university_dept_Departments {
 
 type university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
   autoComplete(name: String, search: String!): [university_dept_DeptHead]
+  datatype: String
   disabled(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
   hidden(name: String): Boolean
   validity: String
@@ -2184,6 +2545,7 @@ type university_dept_Departments__createDepartment__gqlv_action_params {
 }
 
 type university_dept_Departments__createDepartment__name__gqlv_action_parameter {
+  datatype: String
   disabled(name: String): String
   hidden: Boolean
   validity: String
@@ -2211,6 +2573,7 @@ type university_dept_Departments__findDepartmentByName__gqlv_action_params {
 }
 
 type university_dept_Departments__findDepartmentByName__name__gqlv_action_parameter {
+  datatype: String
   disabled(name: String): String
   hidden: Boolean
   validity: String
@@ -2227,6 +2590,7 @@ type university_dept_DeptHead {
 
 type university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter {
   choices: [university_dept_Department]
+  datatype: String
   disabled(department: university_dept_Department__gqlv_input): String
   hidden: Boolean
   validity: String
@@ -2259,6 +2623,7 @@ type university_dept_DeptHead__changeName__gqlv_action_params {
 }
 
 type university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
+  datatype: String
   default: String
   disabled(newName: String): String
   hidden: Boolean
@@ -2268,6 +2633,7 @@ type university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
 "University department specializing in a field of study"
 type university_dept_DeptHead__department__gqlv_property {
   choices(department: university_dept_Department__gqlv_input): [university_dept_Department]
+  datatype: String
   disabled: String
   get: university_dept_Department
   hidden: Boolean
@@ -2276,13 +2642,19 @@ type university_dept_DeptHead__department__gqlv_property {
 }
 
 type university_dept_DeptHead__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
   version: String
 }
 
 type university_dept_DeptHead__name__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -2317,6 +2689,7 @@ type university_dept_DeptHeads__findHeadByName__gqlv_action_params {
 }
 
 type university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter {
+  datatype: String
   disabled(name: String): String
   hidden: Boolean
   validity: String
@@ -2340,6 +2713,7 @@ type university_dept_StaffMember {
 "University department specializing in a field of study"
 type university_dept_StaffMember__department__gqlv_property {
   choices(department: university_dept_Department__gqlv_input): [university_dept_Department]
+  datatype: String
   disabled: String
   get: university_dept_Department
   hidden: Boolean
@@ -2348,22 +2722,29 @@ type university_dept_StaffMember__department__gqlv_property {
 }
 
 type university_dept_StaffMember__gqlv_meta {
+  cssClass: String
+  grid: String
+  iconName: String
   id: String!
+  layout: String
   logicalTypeName: String!
   saveAs(ref: String): String
+  title: String!
   version: String
 }
 
 type university_dept_StaffMember__grade__gqlv_property {
-  choices(grade: String): [String]
+  choices(grade: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): [org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum]
+  datatype: String
   disabled: String
-  get: String!
+  get: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!
   hidden: Boolean
-  set(grade: String!): university_dept_StaffMember
-  validate(grade: String): String
+  set(grade: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): university_dept_StaffMember
+  validate(grade: org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): String
 }
 
 type university_dept_StaffMember__name__gqlv_property {
+  datatype: String
   disabled: String
   get: String!
   hidden: Boolean
@@ -2372,6 +2753,7 @@ type university_dept_StaffMember__name__gqlv_property {
 }
 
 type university_dept_StaffMember__photo__gqlv_property {
+  datatype: String
   disabled: String
   get: String
   hidden: Boolean
@@ -2381,6 +2763,7 @@ type university_dept_StaffMember__photo__gqlv_property {
 
 type university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
   choices(name: String): [university_dept_Department]
+  datatype: String
   disabled(department: university_dept_Department__gqlv_input, name: String): String
   hidden(name: String): Boolean
   validity: String
@@ -2401,6 +2784,7 @@ type university_dept_Staff__createStaffMember__gqlv_action_params {
 }
 
 type university_dept_Staff__createStaffMember__name__gqlv_action_parameter {
+  datatype: String
   disabled(name: String): String
   hidden: Boolean
   validity: String
@@ -2428,9 +2812,48 @@ type university_dept_Staff__findStaffMemberByName__gqlv_action_params {
 }
 
 type university_dept_Staff__findStaffMemberByName__name__gqlv_action_parameter {
+  datatype: String
   disabled(name: String): String
   hidden: Boolean
   validity: String
+}
+
+enum causeway_applib_annotation_SemanticsOf__gqlv_enum {
+  IDEMPOTENT
+  IDEMPOTENT_ARE_YOU_SURE
+  NON_IDEMPOTENT
+  NON_IDEMPOTENT_ARE_YOU_SURE
+  NOT_SPECIFIED
+  SAFE
+  SAFE_AND_REQUEST_CACHEABLE
+}
+
+enum org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum {
+  DEFAULT
+  EXTERNAL
+}
+
+enum org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum {
+  APRIL
+  AUGUST
+  DECEMBER
+  FEBRUARY
+  JANUARY
+  JULY
+  JUNE
+  MARCH
+  MAY
+  NOVEMBER
+  OCTOBER
+  SEPTEMBER
+}
+
+enum org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum {
+  LECTURER
+  PROFESSOR
+  READER
+  RESEARCH_ASSISTANT
+  SENIOR_LECTURER
 }
 
 input causeway_applib_DomainObjectList__gqlv_input {

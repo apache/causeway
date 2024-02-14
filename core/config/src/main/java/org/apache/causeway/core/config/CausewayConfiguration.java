@@ -2360,14 +2360,14 @@ public class CausewayConfiguration {
                  */
                 QUERY_AND_MUTATIONS,
                 /**
-                 * Exposes only a Query API, but relaxes the rule that system state may not be changed by also including
-                 * idempotent and non-idempotent actions as part of the schema.  Modifiable properties
-                 * can also be set.
+                 * Exposes an API with both Query and Mutations, but relaxes the constraints for the Query API by also
+                 * including idempotent and non-idempotent actions and property setters.
                  *
                  * <p>
                  *     <b>IMPORTANT</b>: be aware that the resultant API is not compliant with the rules of the
-                 *     GraphQL spec; in particular, it violates <a href="https://spec.graphql.org/June2018/#sec-Language.Operations">2.3 Operations</a> which states:
-                 *     &quot;query – [is] a read‐only fetch.&quot;
+                 *     GraphQL spec; in particular, it violates
+                 *     <a href="https://spec.graphql.org/June2018/#sec-Language.Operations">2.3 Operations</a> which
+                 *     states: &quot;query – [is] a read‐only fetch.&quot;
                  * </p>
                  */
                 QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT,

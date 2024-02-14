@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.scenario;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
@@ -27,20 +27,56 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
+import lombok.val;
+
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(30)
+@Order(20)
 @ActiveProfiles("test")
-public class Calculator_IntegTest extends Abstract_IntegTest {
-
+public class Admin_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void concat() throws Exception {
+    void admin_action() throws Exception {
 
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
+        // when
+        val response = submit();
 
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void action_with_disabled_param() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void action_with_hidden_param() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void other_admin_action() throws Exception {
+
+        // when
+        val response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
     }
 
 

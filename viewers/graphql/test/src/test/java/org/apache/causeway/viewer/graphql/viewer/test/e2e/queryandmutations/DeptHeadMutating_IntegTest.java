@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.query_and_mutations;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
 import java.util.Optional;
 
@@ -25,15 +25,11 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
@@ -41,23 +37,25 @@ import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@SpringBootTest(
-        classes = {
-                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
-        },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {
-                "causeway.viewer.graphql.api-variant=QUERY_AND_MUTATIONS"
-        }
-)
-@Order(110)
-@DirtiesContext
+@Order(120)
 @ActiveProfiles("test")
-public class DepartmentMutating_IntegTest extends Abstract_IntegTest {
+public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void change_department_name_visibility() throws Exception {
+    void create_department() throws Exception {
+
+        // when lookup 'Prof. Dicky Horwich' and change it to 'Prof. Richard Horwich'
+        String response = submit();
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void change_department_name() throws Exception {
 
         final Bookmark bookmark =
                 transactionService.callTransactional(

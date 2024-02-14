@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLScalarType;
 
 /**
  * Internal SPI to map framework's own datatypes to GraphQL's types.
@@ -39,7 +38,9 @@ import graphql.schema.GraphQLScalarType;
  */
 public interface TypeMapper {
 
-    GraphQLScalarType scalarTypeFor(final Class<?> c);
+    GraphQLOutputType outputTypeFor(final Class<?> c);
+
+    GraphQLInputType inputTypeFor(final Class<?> c);
 
     GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature);
 

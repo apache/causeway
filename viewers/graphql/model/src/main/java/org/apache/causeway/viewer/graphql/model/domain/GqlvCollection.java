@@ -26,16 +26,19 @@ public class GqlvCollection
         extends GqlvAssociation<OneToManyAssociation, GqlvCollection.Holder>
         implements GqlvAssociationGet.Holder<OneToManyAssociation>,
                    GqlvMemberHidden.Holder<OneToManyAssociation>,
-                   GqlvMemberDisabled.Holder<OneToManyAssociation> {
+                   GqlvMemberDisabled.Holder<OneToManyAssociation>,
+                   GqlvAssociationDatatype.Holder<OneToManyAssociation> {
 
     private final GqlvMemberHidden<OneToManyAssociation> hidden;
     private final GqlvMemberDisabled<OneToManyAssociation> disabled;
     private final GqlvCollectionGet get;
+    private final GqlvCollectionDatatype datatype;
 
     public GqlvCollection(
             final Holder holder,
             final OneToManyAssociation oneToManyAssociation,
-            final Context context) {
+            final Context context
+    ) {
         super(holder, oneToManyAssociation, TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation), context);
 
         this.hidden = new GqlvMemberHidden<>(this, context);
@@ -46,6 +49,9 @@ public class GqlvCollection
 
         this.get = new GqlvCollectionGet(this, context);
         addChildField(get.getField());
+
+        this.datatype = new GqlvCollectionDatatype(this, context);
+        addChildField(datatype.getField());
 
         buildObjectTypeAndField(oneToManyAssociation.getId());
     }
@@ -61,6 +67,7 @@ public class GqlvCollection
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         get.addDataFetcher(this);
+        datatype.addDataFetcher(this);
     }
 
 }

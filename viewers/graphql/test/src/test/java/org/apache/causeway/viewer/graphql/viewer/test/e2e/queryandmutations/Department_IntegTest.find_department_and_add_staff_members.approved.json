@@ -4,6 +4,11 @@
       "findDepartmentByName" : {
         "invoke" : {
           "addStaffMembers" : {
+            "params" : {
+              "staffMembers" : {
+                "datatype" : "university_dept_StaffMember"
+              }
+            },
             "invokeIdempotent" : {
               "name" : {
                 "get" : "Classics"

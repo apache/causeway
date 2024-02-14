@@ -16,18 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.schema.query;
+package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.junit.jupiter.api.Order;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.Transactional;
+import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import org.apache.causeway.viewer.graphql.viewer.test.schema.AbstractGqlSchema_print_IntegTest;
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
 
-@Order(0)
-@Transactional
-@DirtiesContext
-public class GqlSchemaQuery_print_IntegTest extends AbstractGqlSchema_print_IntegTest {
+public class GqlvMetaCssClass extends GqlvAbstract {
+
+    public GqlvMetaCssClass(final Context context) {
+        super(context);
+
+        setField(newFieldDefinition().name("cssClass").type(Scalars.GraphQLString).build());
+    }
+
+    @Override
+    protected String fetchData(DataFetchingEnvironment environment) {
+        return environment.<GqlvMeta.Fetcher>getSource().cssClass();
+    }
 
 }

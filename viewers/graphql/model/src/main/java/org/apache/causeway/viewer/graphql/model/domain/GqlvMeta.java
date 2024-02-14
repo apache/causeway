@@ -24,7 +24,12 @@ import java.util.Optional;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
@@ -38,6 +43,11 @@ public class GqlvMeta extends GqlvAbstractCustom {
     private final GqlvMetaId metaId;
     private final GqlvMetaLogicalTypeName metaLogicalTypeName;
     private final GqlvMetaVersion metaVersion;
+    private final GqlvMetaTitle metaTitle;
+    private final GqlvMetaIconName metaIconName;
+    private final GqlvMetaCssClass metaCssClass;
+    private final GqlvMetaLayout metaLayout;
+    private final GqlvMetaGrid metaGrid;
     private final GqlvMetaSaveAs metaSaveAs;
 
     public GqlvMeta(
@@ -60,6 +70,21 @@ public class GqlvMeta extends GqlvAbstractCustom {
             metaVersion = null;
         }
 
+        metaTitle = new GqlvMetaTitle(context);
+        addChildField(metaTitle.getField());
+
+        metaIconName = new GqlvMetaIconName(context);
+        addChildField(metaIconName.getField());
+
+        metaCssClass = new GqlvMetaCssClass(context);
+        addChildField(metaCssClass.getField());
+
+        metaLayout = new GqlvMetaLayout(context);
+        addChildField(metaLayout.getField());
+
+        metaGrid = new GqlvMetaGrid(context);
+        addChildField(metaGrid.getField());
+
         metaSaveAs = new GqlvMetaSaveAs(context);
         addChildField(metaSaveAs.getField());
 
@@ -74,6 +99,11 @@ public class GqlvMeta extends GqlvAbstractCustom {
         if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
             metaVersion.addDataFetcher(this);
         }
+        metaTitle.addDataFetcher(this);
+        metaIconName.addDataFetcher(this);
+        metaCssClass.addDataFetcher(this);
+        metaLayout.addDataFetcher(this);
+        metaGrid.addDataFetcher(this);
         metaSaveAs.addDataFetcher(this);
     }
 
@@ -112,22 +142,69 @@ public class GqlvMeta extends GqlvAbstractCustom {
         }
 
         public String version(){
-            Object domainObject = bookmarkService.lookup(bookmark).orElse(null);
-            if (domainObject == null) {
-                return null;
-            }
-            EntityFacet entityFacet = objectManager.adapt(domainObject).getSpecification().getFacet(EntityFacet.class);
-            return Optional.ofNullable(entityFacet)
-                    .map(x -> x.versionOf(domainObject))
-                    .filter(Objects::nonNull)
-                    .map(Object::toString)
-                    .orElse(null);
+            return managedObject()
+                    .map(managedObject -> {
+                        val domainPojo = managedObject.getPojo();
+                        val entityFacet = managedObject.getSpecification().getFacet(EntityFacet.class);
+                        if (entityFacet != null) {
+                            val object = entityFacet.versionOf(domainPojo);
+                            return object != null ? object.toString() : null;
+                        } else {
+                            return null;
+                        }
+                    }).orElse(null);
         }
 
         public Bookmark bookmark() {
             return bookmark;
         }
 
+        public String title() {
+            return managedObject()
+                    .map(ManagedObject::getTitle)
+                    .orElse(null);
+        }
+
+        public String iconName() {
+            return managedObject()
+                    .map(ManagedObject::getIconName)
+                    .orElse(null);
+        }
+
+        public String cssClass() {
+            return managedObject()
+                    .map(managedObject -> {
+                        val facet = managedObject.getSpecification().getFacet(CssClassFacet.class);
+                        return facet != null ? facet.cssClass(managedObject) : null;
+                    })
+                    .orElse(null);
+        }
+
+        public String layout() {
+            return managedObject()
+                    .map(managedObject -> {
+                        val facet = managedObject.getSpecification().getFacet(LayoutFacet.class);
+                        return facet != null ? facet.layout(managedObject) : null;
+                    })
+                    .orElse(null);
+        }
+
+        public String grid() {
+            return managedObject()
+                    .map(managedObject -> {
+                        val facet = managedObject.getSpecification().getFacet(GridFacet.class);
+                        return facet != null ? facet.getGrid(managedObject) : null;
+                    })
+                    .filter(obj -> Objects.nonNull(obj))
+                    .map(JaxbUtils::toStringUtf8)
+                    .map(x -> x.replaceAll("(\r\n)", "\n"))
+                    .orElse(null);
+        }
+
+        private Optional<ManagedObject> managedObject() {
+            return bookmarkService.lookup(bookmark)
+                    .map(objectManager::adapt);
+        }
     }
 
     public interface Holder

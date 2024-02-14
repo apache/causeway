@@ -41,6 +41,10 @@ public final class TypeNames {
         return objectTypeNameFor(objectSpecification) + "__gqlv_input";
     }
 
+    public static String enumTypeNameFor(ObjectSpecification objectSpec) {
+        return objectTypeNameFor(objectSpec) + "__gqlv_enum";
+    }
+
     public static String actionTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
         return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action";
     }

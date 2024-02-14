@@ -129,7 +129,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     private void processObjectSupport(
             final ProcessClassContext processClassContext,
             final ObjectSupportMethod objectSupportMethodEnum,
-            final BiFunction<ResolvedMethod, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
+            final BiFunction<ResolvedMethod, FacetHolder, Optional<? extends Facet>> objectSupportFacetConstructor) {
 
         MethodFinder
         .objectSupport(
@@ -140,7 +140,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         .streamMethodsMatchingSignature(NO_ARG)
         .peek(processClassContext::removeMethod)
         .forEach(method->{
-            addFacetIfPresent(ojectSupportFacetConstructor
+            addFacetIfPresent(objectSupportFacetConstructor
                     .apply(method, processClassContext.getFacetHolder()));
         });
     }

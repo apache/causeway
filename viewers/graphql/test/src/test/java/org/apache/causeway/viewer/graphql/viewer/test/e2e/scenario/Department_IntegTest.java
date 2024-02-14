@@ -23,7 +23,6 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
@@ -31,7 +30,6 @@ import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(40)
-@DirtiesContext
 @ActiveProfiles("test")
 public class Department_IntegTest extends Abstract_IntegTest {
 
