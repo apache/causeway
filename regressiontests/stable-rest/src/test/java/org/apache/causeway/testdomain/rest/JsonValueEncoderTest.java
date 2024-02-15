@@ -52,7 +52,6 @@ import lombok.val;
         Configuration_headless.class,
         CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
 })
-//@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true") //TODO WIP
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 class JsonValueEncoderTest {
 

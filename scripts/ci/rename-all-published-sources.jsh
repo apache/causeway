@@ -358,17 +358,19 @@ var rootPath = "" + System.getenv("ROOT_PATH_LEGACY");
 if(rootPath.isBlank()
         || ! new File(rootPath).exists()) {
     System.err.println("env ROOT_PATH_LEGACY must point to an existing directory");
-    /exit 1
-}
+    // /exit 1      // syntax error
 
-var root = new File(rootPath);
+} else {
 
-var renamer = RenameProject.renameBackToLegacy(root);
-System.out.printf("processing root %s%n", root.getAbsolutePath());
-
-renamer.renameAllFiles();
-renamer.rewriteAllFileContents();
-
-System.out.println("done.");
-
+    var root = new File(rootPath);
+    
+    var renamer = RenameProject.renameBackToLegacy(root);
+    System.out.printf("processing root %s%n", root.getAbsolutePath());
+    
+    renamer.renameAllFiles();
+    renamer.rewriteAllFileContents();
+    
+    System.out.println("done.");
+}    
+    
 /exit

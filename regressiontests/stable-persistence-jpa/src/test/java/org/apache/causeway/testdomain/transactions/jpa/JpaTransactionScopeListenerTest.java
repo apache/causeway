@@ -42,6 +42,7 @@ import org.apache.causeway.testdomain.util.interaction.InteractionBoundaryProbe;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
+import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
 @SpringBootTest(
         classes = {
@@ -57,7 +58,7 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHa
  */
 @DirtiesContext
 @ExtendWith(CausewayInteractionHandler.class)
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+@DisabledIfRunningWithSurefire
 class JpaTransactionScopeListenerTest {
 
     @Inject private FixtureScripts fixtureScripts;

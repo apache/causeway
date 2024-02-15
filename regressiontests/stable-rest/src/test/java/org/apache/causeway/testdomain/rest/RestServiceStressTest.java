@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -38,6 +37,7 @@ import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
+import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
     Configuration_usingJdo.class,
     CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
 })
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+@DisabledIfRunningWithSurefire
 @Log4j2
 class RestServiceStressTest {
 

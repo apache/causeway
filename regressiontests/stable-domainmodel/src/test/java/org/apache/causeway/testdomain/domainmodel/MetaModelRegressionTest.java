@@ -59,8 +59,6 @@ import lombok.SneakyThrows;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-//uncomment if intended only for manual verification.
-//@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class MetaModelRegressionTest {
 
     @Inject MetaModelServiceMenu metaModelServiceMenu;
