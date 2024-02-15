@@ -1,18 +1,93 @@
 {
   "data" : {
-    "university_dept_Departments" : {
-      "findDepartmentByName" : {
-        "invoke" : {
-          "addStaffMembers" : {
-            "params" : {
+    "Scenario" : {
+      "Given" : {
+        "university_dept_Departments" : {
+          "findDepartmentByName" : {
+            "invoke" : {
               "staffMembers" : {
-                "datatype" : "university_dept_StaffMember"
+                "get" : [ {
+                  "name" : {
+                    "get" : "Gerry Jones"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Letitia Leadbetter"
+                  }
+                } ]
               }
-            },
-            "invokeIdempotent" : {
-              "name" : {
-                "get" : "Classics"
-              },
+            }
+          }
+        }
+      },
+      "When" : {
+        "university_dept_Departments" : {
+          "findDepartmentByName" : {
+            "invoke" : {
+              "addStaffMembers" : {
+                "params" : {
+                  "staffMembers" : {
+                    "datatype" : "university_dept_StaffMember",
+                    "choices" : [ {
+                      "_gqlv_meta" : {
+                        "id" : "15",
+                        "saveAs" : "staff-member"
+                      },
+                      "name" : {
+                        "get" : "John Gartner"
+                      }
+                    }, {
+                      "_gqlv_meta" : {
+                        "id" : "16",
+                        "saveAs" : "staff-member"
+                      },
+                      "name" : {
+                        "get" : "Margaret Randall"
+                      }
+                    }, {
+                      "_gqlv_meta" : {
+                        "id" : "14",
+                        "saveAs" : "staff-member"
+                      },
+                      "name" : {
+                        "get" : "Mervin Hughes"
+                      }
+                    } ]
+                  }
+                },
+                "invokeIdempotent" : {
+                  "name" : {
+                    "get" : "Classics"
+                  },
+                  "staffMembers" : {
+                    "get" : [ {
+                      "name" : {
+                        "get" : "Gerry Jones"
+                      }
+                    }, {
+                      "name" : {
+                        "get" : "John Gartner"
+                      }
+                    }, {
+                      "name" : {
+                        "get" : "Letitia Leadbetter"
+                      }
+                    }, {
+                      "name" : {
+                        "get" : "Margaret Randall"
+                      }
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Then" : {
+        "university_dept_Departments" : {
+          "findDepartmentByName" : {
+            "invoke" : {
               "staffMembers" : {
                 "get" : [ {
                   "name" : {

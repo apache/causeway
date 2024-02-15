@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -23,37 +24,13 @@ import lombok.Value;
 
 import java.util.Optional;
 
-@RestController(value = "/graphql/object")
+@RestController()
+@RequestMapping("/graphql/object")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class BlobBytesController {
 
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;
-
-    @Value(staticConstructor = "of")
-    private static class ManagedObjectAndPropertyIfAny {
-        ManagedObject owningObject;
-        Optional<OneToOneAssociation> propertyIfAny;
-        boolean isPropertyPresent() {
-            return propertyIfAny.isPresent();
-        }
-    }
-
-    private static class ManagedObjectAndProperty {
-        private static ManagedObjectAndProperty of(ManagedObjectAndPropertyIfAny tuple) {
-            return new ManagedObjectAndProperty(tuple);
-        }
-        private ManagedObjectAndProperty(ManagedObjectAndPropertyIfAny tuple) {
-            this.owningObject = tuple.owningObject;
-            this.property = tuple.propertyIfAny.orElse(null);
-        }
-        ManagedObject owningObject;
-        OneToOneAssociation property;
-
-        public ManagedObject value() {
-            return property.get(owningObject);
-        }
-    }
 
     @GetMapping(value = "/{logicalTypeName}:{id}/{propertyId}/blobBytes")
     public ResponseEntity<byte[]> propertyBlobBytes(
@@ -77,4 +54,31 @@ public class BlobBytesController {
                         .body(blob.getBytes()))
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @Value(staticConstructor = "of")
+    private static class ManagedObjectAndPropertyIfAny {
+        ManagedObject owningObject;
+        Optional<OneToOneAssociation> propertyIfAny;
+        boolean isPropertyPresent() {
+            return propertyIfAny.isPresent();
+        }
+    }
+
+    private static class ManagedObjectAndProperty {
+        private static ManagedObjectAndProperty of(ManagedObjectAndPropertyIfAny tuple) {
+            return new ManagedObjectAndProperty(tuple);
+        }
+        private ManagedObjectAndProperty(ManagedObjectAndPropertyIfAny tuple) {
+            this.owningObject = tuple.owningObject;
+            this.property = tuple.propertyIfAny.orElse(null);
+        }
+        ManagedObject owningObject;
+        OneToOneAssociation property;
+
+        ManagedObject value() {
+            return property.get(owningObject);
+        }
+    }
+
+
 }

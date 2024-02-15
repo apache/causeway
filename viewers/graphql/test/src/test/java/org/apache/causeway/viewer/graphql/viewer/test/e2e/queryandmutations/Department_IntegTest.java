@@ -127,28 +127,8 @@ public class Department_IntegTest extends Abstract_IntegTest {
     void find_department_and_add_staff_members() throws Exception {
 
         // when, then
-        String submit = submit("choices");
+        Approvals.verify(submit(), jsonOptions());
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(submit);
-
-        JsonNode staffMembersNode = root.at("/data/university_dept_Departments/findDepartmentByName/invoke/addStaffMembers/params/staffMembers/choices");
-
-        List<String> ids = new ArrayList<>();
-        staffMembersNode.forEach(staffMemberNode -> {
-            String id = staffMemberNode.get("_gqlv_meta").get("id").asText();
-            if (!_Strings.isNullOrEmpty(id)) {
-                ids.add(id);
-            }
-        });
-
-        Assertions.assertThat(ids).hasSize(3);
-
-        val replacements = _Maps.unmodifiable(
-                "$staffMemberId1", ids.get(0),
-                "$staffMemberId2", ids.get(1));
-
-        Approvals.verify(submit("invoke", replacements), jsonOptions());
     }
 
     @Test

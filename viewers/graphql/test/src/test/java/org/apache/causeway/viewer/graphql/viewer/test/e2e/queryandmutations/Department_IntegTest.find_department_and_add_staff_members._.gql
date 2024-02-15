@@ -1,0 +1,70 @@
+{
+  Scenario(name: "can add staff members") {
+    Given {
+      university_dept_Departments {
+        findDepartmentByName {
+          invoke(name: "Classics") {
+            staffMembers {
+              get {
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    When {
+      university_dept_Departments {
+        findDepartmentByName {
+          invoke(name: "Classics") {
+            addStaffMembers {
+              params {
+                staffMembers {
+                  datatype
+                  choices {
+                    _gqlv_meta {
+                      id
+                      saveAs(ref: "staff-member")
+                    }
+                    name {
+                      get
+                    }
+                  }
+                }
+              }
+              invokeIdempotent(staffMembers: [{ref: "staff-member"}, {ref: "staff-member-2"}]) {
+                name {
+                  get
+                }
+                staffMembers {
+                  get {
+                    name {
+                      get
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    Then {
+      university_dept_Departments {
+        findDepartmentByName {
+          invoke(name: "Classics") {
+            staffMembers {
+              get {
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
