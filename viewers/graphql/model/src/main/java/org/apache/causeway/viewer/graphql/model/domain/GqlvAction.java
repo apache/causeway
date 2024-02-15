@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -76,21 +77,27 @@ public class GqlvAction
         addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
         addChildFieldFor(this.validate = new GqlvActionValidity(this, context));
 
-        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        if (objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
-            addChildFieldFor(this.invoke = new GqlvActionInvoke(this, context));
-        } else {
-            this.invoke = null;
-        }
-        val params = new GqlvActionParams(this, context);
-        if (params.hasParams()) {
-            this.params = params;
-            addChildField(params.getField());
-        } else {
-            this.params = null;
-        }
+        addChildFieldFor(
+                this.invoke = isInvokeAllowed(objectAction)
+                    ? new GqlvActionInvoke(this, context)
+                    : null);
+        addChildFieldFor(this.params = new GqlvActionParams(this, context));
 
         buildObjectTypeAndField(objectAction.getId());
+    }
+
+    private boolean isInvokeAllowed(ObjectAction objectAction) {
+        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        switch (apiVariant) {
+            case QUERY_ONLY:
+            case QUERY_AND_MUTATIONS:
+                return objectAction.getSemantics().isSafeInNature();
+            case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT:
+                return true;
+            default:
+                // shouldn't happen
+                throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
+        }
     }
 
     public Can<ManagedObject> argumentManagedObjectsFor(

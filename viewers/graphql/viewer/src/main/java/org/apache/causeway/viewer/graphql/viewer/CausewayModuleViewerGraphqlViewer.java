@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer;
 
-import org.apache.causeway.viewer.graphql.viewer.controller.BlobBytesController;
+import org.apache.causeway.viewer.graphql.viewer.controller.ResourceController;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.graphql.GraphQlAutoConfiguration;
@@ -47,7 +47,7 @@ import org.apache.causeway.viewer.graphql.model.CausewayModuleViewerGraphqlModel
         GraphQlWebMvcAutoConfiguration.class,
 
         // controllers
-        BlobBytesController.class
+        ResourceController.class
 })
 @EnableConfigurationProperties({
         GraphQlProperties.class, GraphQlCorsProperties.class

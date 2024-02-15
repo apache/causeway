@@ -2,12 +2,14 @@ package org.apache.causeway.viewer.graphql.viewer.controller;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,7 @@ import java.util.Optional;
 @RestController()
 @RequestMapping("/graphql/object")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class BlobBytesController {
+public class ResourceController {
 
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;
@@ -38,21 +40,42 @@ public class BlobBytesController {
             @PathVariable final String id,
             @PathVariable final String propertyId) {
 
+        return valueOf(logicalTypeName, id, propertyId)
+                .filter(Blob.class::isInstance)
+                .map(Blob.class::cast)
+                .map(blob -> ResponseEntity.ok()
+                        .contentType(MediaType.asMediaType(MimeType.valueOf(blob.getMimeType().toString())))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(blob.getName()).build().toString())
+                        .contentLength(blob.getBytes().length)
+                        .body(blob.getBytes()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(value = "/{logicalTypeName}:{id}/{propertyId}/clobChars")
+    public ResponseEntity<CharSequence> propertyClobChars(
+            @PathVariable final String logicalTypeName,
+            @PathVariable final String id,
+            @PathVariable final String propertyId) {
+
+        return valueOf(logicalTypeName, id, propertyId)
+                .filter(Clob.class::isInstance)
+                .map(Clob.class::cast)
+                .map(clob -> ResponseEntity.ok()
+                        .contentType(MediaType.asMediaType(MimeType.valueOf(clob.getMimeType().toString())))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(clob.getName()).build().toString())
+                        .contentLength(clob.getChars().length())
+                        .body(clob.getChars()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    private Optional<Object> valueOf(String logicalTypeName, String id, String propertyId) {
         return bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, id))
                 .map(objectManager::adapt)
                 .map(managedObject -> ManagedObjectAndPropertyIfAny.of(managedObject, managedObject.getSpecification().getProperty(propertyId)))
                 .filter(ManagedObjectAndPropertyIfAny::isPropertyPresent)
                 .map(ManagedObjectAndProperty::of)
                 .map(ManagedObjectAndProperty::value)
-                .map(ManagedObject::getPojo)
-                .filter(Blob.class::isInstance)
-                .map(Blob.class::cast)
-                .map(blob -> ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_PDF)
-                        .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(blob.getName()).build().toString())
-                        .contentLength(blob.getBytes().length)
-                        .body(blob.getBytes()))
-                .orElse(ResponseEntity.notFound().build());
+                .map(ManagedObject::getPojo);
     }
 
     @Value(staticConstructor = "of")

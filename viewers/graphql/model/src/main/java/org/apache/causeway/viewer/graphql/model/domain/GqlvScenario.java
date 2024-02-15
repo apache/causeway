@@ -41,8 +41,7 @@ public class GqlvScenario
             final Context context) {
         super("Scenario", context);
 
-        this.scenarioName = new GqlvScenarioName(context);
-        addChildField(scenarioName.getField());
+        addChildFieldFor(this.scenarioName = new GqlvScenarioName(context));
 
         this.scenarioStep = new GqlvScenarioStep(context);
         addChildField(scenarioStep.newField("Given"));

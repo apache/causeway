@@ -82,7 +82,7 @@ public class GqlvDomainService
 
     private void addAction(final ObjectAction objectAction) {
         val gqlvAction = new GqlvAction(this, objectAction, context);
-        addChildField(gqlvAction.getField());
+        addChildFieldFor(gqlvAction);
         actions.put(objectAction.getId(), gqlvAction);
     }
 

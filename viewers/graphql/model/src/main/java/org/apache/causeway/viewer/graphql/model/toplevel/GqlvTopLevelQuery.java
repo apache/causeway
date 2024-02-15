@@ -6,6 +6,8 @@ import java.util.List;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLObjectType;
 
+import lombok.val;
+
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
@@ -44,8 +46,8 @@ public class GqlvTopLevelQuery
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo -> {
-                                GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, servicePojo, context);
-                                addChildField(gqlvDomainService.getField());
+                                val gqlvDomainService = GqlvDomainService.of(objectSpec, servicePojo, context);
+                                addChildFieldFor(gqlvDomainService);
                                 domainServices.add(gqlvDomainService);
                             });
                     break;
@@ -53,12 +55,11 @@ public class GqlvTopLevelQuery
         });
 
         // add domain object lookup to top-level query
-        for (GqlvDomainObject domainObject : this.domainObjects) {
-            addChildField(domainObject.getField());
+        for (val gqlvDomainObject : this.domainObjects) {
+            addChildFieldFor(gqlvDomainObject);
         }
 
-        scenario = new GqlvScenario(context);
-        addChildField(scenario.getField());
+        addChildFieldFor(scenario = new GqlvScenario(context));
 
         buildObjectType();
     }

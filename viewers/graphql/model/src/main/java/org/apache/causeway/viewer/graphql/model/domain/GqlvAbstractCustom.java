@@ -27,6 +27,8 @@ import static graphql.schema.GraphQLObjectType.newObject;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
+import org.springframework.lang.Nullable;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 
@@ -59,15 +61,17 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
         return gqlObjectType != null;
     }
 
-    protected final void addChildFieldFor(GqlvAbstract hasField) {
+    protected final void addChildFieldFor(@Nullable GqlvAbstract hasField) {
+        if (isBuilt()) {
+            throw new IllegalStateException("Object type has already been built");
+        }
+        if (hasField == null) {
+            return;
+        }
         addChildField(hasField.getField());
     }
 
-    protected final void addChildField(GraphQLFieldDefinition childField) {
-        if (isBuilt()) {
-            return;
-        }
-
+    void addChildField(GraphQLFieldDefinition childField) {
         if (childField != null) {
             gqlObjectTypeBuilder.field(childField);
         }

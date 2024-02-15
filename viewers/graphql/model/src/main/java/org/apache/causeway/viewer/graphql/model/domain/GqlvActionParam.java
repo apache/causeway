@@ -79,40 +79,13 @@ public class GqlvActionParam
         this.objectActionParameter = objectActionParameter;
         this.paramNum = paramNum;
 
-        this.hidden = new GqlvActionParamHidden(this, context);
-        addChildField(hidden.getField());
-        this.disabled = new GqlvActionParamDisabled(this, context);
-        addChildField(disabled.getField());
-
-        val choices = new GqlvActionParamChoices(this, context);
-        addChildField(choices.getField());
-        if (choices.isFieldDefined()) {
-            this.choices = choices;
-        } else {
-            this.choices = null;
-        }
-
-        val autoComplete = new GqlvActionParamAutoComplete(this, context);
-        addChildField(autoComplete.getField());
-        if (autoComplete.isFieldDefined()) {
-            this.autoComplete = autoComplete;
-        } else {
-            this.autoComplete = null;
-        }
-
-        val default_ = new GqlvActionParamDefault(this, context);
-        addChildField(default_.getField());
-        if (default_.isFieldDefined()) {
-            this.default_ = default_;
-        } else {
-            this.default_ = null;
-        }
-
-        this.validate = new GqlvActionParamValidate(this, context);
-        addChildField(validate.getField());
-
-        this.datatype = new GqlvActionParamDatatype(this, context);
-        addChildField(datatype.getField());
+        addChildFieldFor(this.hidden = new GqlvActionParamHidden(this, context));
+        addChildFieldFor(this.disabled = new GqlvActionParamDisabled(this, context));
+        addChildFieldFor(this.choices = new GqlvActionParamChoices(this, context));
+        addChildFieldFor(this.autoComplete = new GqlvActionParamAutoComplete(this, context));
+        addChildFieldFor(this.default_ = new GqlvActionParamDefault(this, context));
+        addChildFieldFor(this.validate = new GqlvActionParamValidate(this, context));
+        addChildFieldFor(this.datatype = new GqlvActionParamDatatype(this, context));
 
         buildObjectTypeAndField(objectActionParameter.getId());
     }

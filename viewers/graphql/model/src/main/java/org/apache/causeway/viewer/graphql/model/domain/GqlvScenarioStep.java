@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import graphql.schema.DataFetchingEnvironment;
 
+import lombok.val;
+
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
@@ -36,16 +38,16 @@ public class GqlvScenarioStep
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
                 context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                         .ifPresent(servicePojo -> {
-                            GqlvDomainService gqlvDomainService = GqlvDomainService.of(objectSpec, servicePojo, context);
-                            addChildField(gqlvDomainService.getField());
+                            val gqlvDomainService = GqlvDomainService.of(objectSpec, servicePojo, context);
+                            addChildFieldFor(gqlvDomainService);
                             domainServices.add(gqlvDomainService);
                         });
             }
         });
 
         // add domain object lookup to top-level query
-        for (GqlvDomainObject domainObject : this.domainObjects) {
-            addChildField(domainObject.getField());
+        for (val gqlvDomainObject : this.domainObjects) {
+            addChildFieldFor(gqlvDomainObject);
         }
 
         buildObjectType();

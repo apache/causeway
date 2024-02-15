@@ -57,13 +57,13 @@ public class GqlvTopLevelMutation
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
         val gqlvMutationForAction = new GqlvMutationForAction(objectSpec, objectAction, context);
-        addChildField(gqlvMutationForAction.getField());
+        addChildFieldFor(gqlvMutationForAction);
         actions.add(gqlvMutationForAction);
     }
 
     public void addProperty(ObjectSpecification objectSpec, final OneToOneAssociation property) {
         val gqlvMutationForProperty = new GqlvMutationForProperty(objectSpec, property, context);
-        addChildField(gqlvMutationForProperty.getField());
+        addChildFieldFor(gqlvMutationForProperty);
         properties.add(gqlvMutationForProperty);
     }
 

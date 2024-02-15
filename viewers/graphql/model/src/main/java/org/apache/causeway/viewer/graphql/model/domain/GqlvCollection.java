@@ -41,17 +41,10 @@ public class GqlvCollection
     ) {
         super(holder, oneToManyAssociation, TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation), context);
 
-        this.hidden = new GqlvMemberHidden<>(this, context);
-        addChildField(hidden.getField());
-
-        this.disabled = new GqlvMemberDisabled<>(this, context);
-        addChildField(disabled.getField());
-
-        this.get = new GqlvCollectionGet(this, context);
-        addChildField(get.getField());
-
-        this.datatype = new GqlvCollectionDatatype(this, context);
-        addChildField(datatype.getField());
+        addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
+        addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
+        addChildFieldFor(this.get = new GqlvCollectionGet(this, context));
+        addChildFieldFor(this.datatype = new GqlvCollectionDatatype(this, context));
 
         buildObjectTypeAndField(oneToManyAssociation.getId());
     }

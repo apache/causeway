@@ -57,46 +57,29 @@ public class GqlvMeta extends GqlvAbstractCustom {
         super(TypeNames.metaTypeNameFor(holder.getObjectSpecification()), context);
         this.holder = holder;
 
-        metaId = new GqlvMetaId(context);
-        addChildField(metaId.getField());
-
-        metaLogicalTypeName = new GqlvMetaLogicalTypeName(context);
-        addChildField(metaLogicalTypeName.getField());
-
-        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            metaVersion = new GqlvMetaVersion(context);
-            addChildField(metaVersion.getField());
-        } else {
-            metaVersion = null;
-        }
-
-        metaTitle = new GqlvMetaTitle(context);
-        addChildField(metaTitle.getField());
-
-        metaIconName = new GqlvMetaIconName(context);
-        addChildField(metaIconName.getField());
-
-        metaCssClass = new GqlvMetaCssClass(context);
-        addChildField(metaCssClass.getField());
-
-        metaLayout = new GqlvMetaLayout(context);
-        addChildField(metaLayout.getField());
-
-        metaGrid = new GqlvMetaGrid(context);
-        addChildField(metaGrid.getField());
-
-        metaSaveAs = new GqlvMetaSaveAs(context);
-        addChildField(metaSaveAs.getField());
+        addChildFieldFor(this.metaId = new GqlvMetaId(context));
+        addChildFieldFor(this.metaLogicalTypeName = new GqlvMetaLogicalTypeName(context));
+        addChildFieldFor(this.metaVersion = isEntity() ? new GqlvMetaVersion(context) : null);
+        addChildFieldFor(this.metaTitle = new GqlvMetaTitle(context));
+        addChildFieldFor(this.metaIconName = new GqlvMetaIconName(context));
+        addChildFieldFor(this.metaCssClass = new GqlvMetaCssClass(context));
+        addChildFieldFor(this.metaLayout = new GqlvMetaLayout(context));
+        addChildFieldFor(this.metaGrid = new GqlvMetaGrid(context));
+        addChildFieldFor(this.metaSaveAs = new GqlvMetaSaveAs(context));
 
         val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
         buildObjectTypeAndField(fieldName);
+    }
+
+    private boolean isEntity() {
+        return holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY;
     }
 
     @Override
     protected void addDataFetchersForChildren() {
         metaId.addDataFetcher(this);
         metaLogicalTypeName.addDataFetcher(this);
-        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
+        if (isEntity()) {
             metaVersion.addDataFetcher(this);
         }
         metaTitle.addDataFetcher(this);

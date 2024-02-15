@@ -85,8 +85,8 @@ public class GqlvActionParams
     }
 
     void addParam(ObjectActionParameter objectActionParameter, int paramNum) {
-        GqlvActionParam gqlvActionParam = new GqlvActionParam(this, objectActionParameter, context, paramNum);
-        addChildField(gqlvActionParam.getField());
+        val gqlvActionParam = new GqlvActionParam(this, objectActionParameter, context, paramNum);
+        addChildFieldFor(gqlvActionParam);
         params.put(objectActionParameter.getId(), gqlvActionParam);
     }
 
