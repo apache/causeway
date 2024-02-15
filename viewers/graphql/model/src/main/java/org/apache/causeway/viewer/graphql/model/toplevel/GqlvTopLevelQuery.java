@@ -6,14 +6,14 @@ import java.util.List;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLObjectType;
 
-import lombok.val;
-
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
+
+import lombok.val;
 
 public class GqlvTopLevelQuery
         extends GqlvAbstractCustom

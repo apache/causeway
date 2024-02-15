@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.DataFetchingEnvironment;
-
-import lombok.val;
-
 import java.util.Optional;
+
+import graphql.schema.DataFetchingEnvironment;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+
+import lombok.val;
 
 public class GqlvPropertyGetBlobBytes extends GqlvPropertyGetBlobAbstract {
 

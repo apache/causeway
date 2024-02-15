@@ -23,9 +23,7 @@ import graphql.schema.GraphQLFieldDefinition;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;

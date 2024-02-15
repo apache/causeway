@@ -21,13 +21,13 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-
-import graphql.schema.DataFetchingEnvironment;
 
 import lombok.Getter;
 import lombok.val;

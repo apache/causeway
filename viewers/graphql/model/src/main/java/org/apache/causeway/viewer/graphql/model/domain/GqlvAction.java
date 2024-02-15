@@ -23,10 +23,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -37,11 +40,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 

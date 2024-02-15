@@ -18,7 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.model.context;
 
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import graphql.schema.GraphQLCodeRegistry;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -36,14 +43,7 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
-
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor

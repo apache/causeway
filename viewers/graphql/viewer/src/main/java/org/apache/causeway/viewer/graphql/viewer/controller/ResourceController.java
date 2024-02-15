@@ -1,9 +1,8 @@
 package org.apache.causeway.viewer.graphql.viewer.controller;
 
-import javax.inject.Inject;
+import java.util.Optional;
 
-import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import javax.inject.Inject;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -18,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-
-import java.util.Optional;
 
 @RestController()
 @RequestMapping("/graphql/object")

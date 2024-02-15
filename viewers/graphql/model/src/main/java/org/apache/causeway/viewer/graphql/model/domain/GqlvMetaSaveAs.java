@@ -23,12 +23,10 @@ import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 public class GqlvMetaSaveAs extends GqlvAbstract {
 

@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
-
-import graphql.Scalars;
-import graphql.schema.DataFetchingEnvironment;
 
 public class GqlvMetaId extends GqlvAbstract {
 

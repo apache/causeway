@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.apache.causeway.viewer.graphql.model.context.Context;
-
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
+
+import org.apache.causeway.viewer.graphql.model.context.Context;
+
 import lombok.Getter;
 
 public abstract class GqlvAbstract {

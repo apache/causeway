@@ -6,10 +6,10 @@ import java.util.Objects;
 
 import graphql.schema.DataFetchingEnvironment;
 
-import lombok.val;
-
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+
+import lombok.val;
 
 public class GqlvScenarioStep
         extends GqlvAbstractCustom

@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

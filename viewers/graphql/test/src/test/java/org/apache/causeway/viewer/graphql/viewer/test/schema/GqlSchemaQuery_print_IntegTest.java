@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
 import org.junit.jupiter.api.Order;
+
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
