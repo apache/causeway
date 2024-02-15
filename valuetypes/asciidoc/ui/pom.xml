@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>com.github.jnr</groupId>
 			<artifactId>jnr-enxio</artifactId>
-			<version>0.32.16</version>
+			<version>0.32.17</version>
 			<exclusions>
 				<!-- convergence issues -->
 				<exclusion>
