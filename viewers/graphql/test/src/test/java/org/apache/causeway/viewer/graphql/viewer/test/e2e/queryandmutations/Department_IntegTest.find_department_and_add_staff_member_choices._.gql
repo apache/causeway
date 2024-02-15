@@ -8,8 +8,7 @@
               params {
                 staffMembers {
                   choices {
-                    _gqlv_meta {
-                      id
+                    _meta {
                       saveAs(ref: "staff-member-choices")
                     }
                     name {

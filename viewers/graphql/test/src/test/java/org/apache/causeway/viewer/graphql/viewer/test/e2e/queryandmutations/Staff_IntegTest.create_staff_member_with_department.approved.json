@@ -6,7 +6,7 @@
         "university_dept_Departments" : {
           "findDepartmentByName" : {
             "invoke" : {
-              "_gqlv_meta" : {
+              "_meta" : {
                 "saveAs" : "classics"
               }
             }
@@ -27,7 +27,7 @@
                   }
                 }
               },
-              "_gqlv_meta" : {
+              "_meta" : {
                 "title" : "Untitled Staff Member",
                 "logicalTypeName" : "university.dept.StaffMember",
                 "version" : null,

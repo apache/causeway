@@ -230,10 +230,24 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
         return _Resources.loadAsString(getClass(), resourceName, StandardCharsets.UTF_8);
     }
 
+    public enum BookmarkOptions {
+        SCRUB,
+        PRESERVE,
+        ;
+    }
+
     protected Options jsonOptions() {
+        return jsonOptions(BookmarkOptions.SCRUB);
+    }
+
+    protected Options jsonOptions(BookmarkOptions bookmarkOptions) {
         return new Options().withScrubber(s -> {
             try {
-                return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
+                String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
+                if (bookmarkOptions == BookmarkOptions.SCRUB) {
+                    prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
+                }
+                return prettyJson;
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

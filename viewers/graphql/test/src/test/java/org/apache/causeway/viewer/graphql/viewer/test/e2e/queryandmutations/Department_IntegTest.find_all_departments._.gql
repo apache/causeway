@@ -6,7 +6,7 @@
           get
           datatype
         }
-        _gqlv_meta {
+        _meta {
           logicalTypeName
           version
         }

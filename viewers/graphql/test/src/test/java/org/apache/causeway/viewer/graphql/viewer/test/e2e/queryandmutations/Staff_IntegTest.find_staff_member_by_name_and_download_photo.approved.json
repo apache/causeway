@@ -8,7 +8,7 @@
           },
           "photo" : {
             "get" : {
-              "bytes" : "///graphql/object/university.dept.StaffMember:13/photo/blobBytes"
+              "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
             }
           }
         }

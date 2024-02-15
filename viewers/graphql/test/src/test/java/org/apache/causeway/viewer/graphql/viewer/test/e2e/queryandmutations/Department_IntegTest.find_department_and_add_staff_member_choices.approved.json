@@ -9,24 +9,21 @@
                 "params" : {
                   "staffMembers" : {
                     "choices" : [ {
-                      "_gqlv_meta" : {
-                        "id" : "15",
+                      "_meta" : {
                         "saveAs" : "staff-member-choices"
                       },
                       "name" : {
                         "get" : "John Gartner"
                       }
                     }, {
-                      "_gqlv_meta" : {
-                        "id" : "16",
+                      "_meta" : {
                         "saveAs" : "staff-member-choices"
                       },
                       "name" : {
                         "get" : "Margaret Randall"
                       }
                     }, {
-                      "_gqlv_meta" : {
-                        "id" : "14",
+                      "_meta" : {
                         "saveAs" : "staff-member-choices"
                       },
                       "name" : {

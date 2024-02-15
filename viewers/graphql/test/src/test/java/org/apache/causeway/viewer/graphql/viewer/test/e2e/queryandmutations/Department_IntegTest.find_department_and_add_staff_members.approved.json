@@ -29,24 +29,21 @@
                   "staffMembers" : {
                     "datatype" : "university_dept_StaffMember",
                     "choices" : [ {
-                      "_gqlv_meta" : {
-                        "id" : "15",
+                      "_meta" : {
                         "saveAs" : "staff-member"
                       },
                       "name" : {
                         "get" : "John Gartner"
                       }
                     }, {
-                      "_gqlv_meta" : {
-                        "id" : "16",
+                      "_meta" : {
                         "saveAs" : "staff-member"
                       },
                       "name" : {
                         "get" : "Margaret Randall"
                       }
                     }, {
-                      "_gqlv_meta" : {
-                        "id" : "14",
+                      "_meta" : {
                         "saveAs" : "staff-member"
                       },
                       "name" : {
