@@ -24,7 +24,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
@@ -46,6 +45,7 @@ import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -61,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Log4j2
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+@DisabledIfRunningWithSurefire
 class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private JpaTestFixtures jpaTestFixtures;

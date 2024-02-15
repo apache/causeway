@@ -20,14 +20,9 @@ package org.apache.causeway.testdomain.transactions.jpa;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Refs;
-
-import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -38,12 +33,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
+import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
 import lombok.val;
 
@@ -60,7 +58,7 @@ import lombok.val;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ExtendWith({CausewayInteractionHandler.class})
 @DirtiesContext
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+@DisabledIfRunningWithSurefire
 class JpaTransactionRollbackTest_usingTransactionService
 //extends CausewayIntegrationTestAbstract
 {

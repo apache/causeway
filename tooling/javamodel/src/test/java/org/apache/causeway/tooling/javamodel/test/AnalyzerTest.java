@@ -24,10 +24,10 @@ import java.io.File;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.io.FileUtils;
+import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.causeway.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.causeway.tooling.javamodel.ast.CompilationUnits;
@@ -55,7 +55,7 @@ class AnalyzerTest {
     }
 
     @Test //work in progress, as of yet a proof of concept
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    @DisabledIfRunningWithSurefire
     void testJavaDocMining() {
 
         val projDir = ProjectSamples.self();
@@ -89,7 +89,7 @@ class AnalyzerTest {
     }
 
     @Test //fails when run with the CI pipeline
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    @DisabledIfRunningWithSurefire
     void testAnnotationGathering() {
 
         val projDir = ProjectSamples.apacheCausewayRuntime();

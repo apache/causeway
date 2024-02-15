@@ -36,7 +36,6 @@ import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.util.crypt.ICrypt;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -45,6 +44,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
+
+import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
 
 import lombok.val;
 
@@ -85,7 +86,7 @@ class CryptFactoryTest {
         ThreadContext.setRequestCycle(null);
     }
 
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    @DisabledIfRunningWithSurefire
     @ParameterizedTest(name = "{index} {0}")
     @MethodSource("provideCryptoCandidates")
     void authenticationStrategyRoundtrip_whenProduction(
