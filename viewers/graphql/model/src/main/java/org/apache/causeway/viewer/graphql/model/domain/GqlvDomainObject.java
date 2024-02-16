@@ -39,6 +39,8 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
+import graphql.schema.GraphQLList;
+
 import lombok.Getter;
 import lombok.val;
 
