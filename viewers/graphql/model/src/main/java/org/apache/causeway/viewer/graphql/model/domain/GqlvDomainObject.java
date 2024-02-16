@@ -74,6 +74,12 @@ public class GqlvDomainObject
         this.objectSpecification = objectSpecification;
         gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
+        if(isBuilt()) {
+            this.meta = null;
+            this.gqlInputObjectType = null;
+            return;
+        }
+
         addChildFieldFor(this.meta = new GqlvMeta(this, context));
 
         val inputObjectTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
@@ -158,6 +164,9 @@ public class GqlvDomainObject
 
     @Override
     protected void addDataFetchersForChildren() {
+        if(meta == null) {
+            return;
+        }
         meta.addDataFetcher(this);
         properties.forEach((id, property) -> property.addDataFetcher(this));
         collections.forEach((id, collection) -> collection.addDataFetcher(this));
