@@ -51,7 +51,7 @@ public class GqlvAction
                    GqlvActionInvoke.Holder,
                    GqlvActionValidity.Holder,
                    GqlvActionParams.Holder,
-        Parent {
+                   Parent {
 
     private final GqlvMemberHidden<ObjectAction> hidden;
     private final GqlvMemberDisabled<ObjectAction> disabled;
@@ -71,6 +71,14 @@ public class GqlvAction
             final Context context) {
         super(holder, objectAction, TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction), context);
 
+        if(isBuilt()) {
+            this.hidden = null;
+            this.disabled = null;
+            this.validate = null;
+            this.invoke = null;
+            this.params = null;
+            return;
+        }
         addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
         addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
         addChildFieldFor(this.validate = new GqlvActionValidity(this, context));
@@ -253,6 +261,9 @@ public class GqlvAction
 
     @Override
     protected void addDataFetchersForChildren() {
+        if(hidden == null) {
+            return;
+        }
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         validate.addDataFetcher(this);

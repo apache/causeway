@@ -63,7 +63,8 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
 
     protected final void addChildFieldFor(@Nullable GqlvAbstract hasField) {
         if (isBuilt()) {
-            throw new IllegalStateException("Object type has already been built");
+            // the type was built already
+            return;
         }
         if (hasField == null) {
             return;
@@ -72,6 +73,10 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
     }
 
     void addChildField(GraphQLFieldDefinition childField) {
+        if (isBuilt()) {
+            // the type was built already
+            return;
+        }
         if (childField != null) {
             gqlObjectTypeBuilder.field(childField);
         }

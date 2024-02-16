@@ -21,6 +21,10 @@ public class GqlvScenarioStep
     public GqlvScenarioStep(final Context context) {
         super("ScenarioStep", context);
 
+        if(isBuilt()) {
+            return;
+        }
+
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
 

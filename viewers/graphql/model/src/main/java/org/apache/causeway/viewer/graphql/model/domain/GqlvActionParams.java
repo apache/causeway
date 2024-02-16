@@ -56,6 +56,11 @@ public class GqlvActionParams
         super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction()), context);
         this.holder = holder;
 
+        if (isBuilt()) {
+            // nothing else to be done
+            return;
+        }
+
         val idx = new AtomicInteger(0);
         holder.getObjectAction().getParameters().forEach(objectActionParameter -> {
             addParam(objectActionParameter, idx.getAndIncrement());

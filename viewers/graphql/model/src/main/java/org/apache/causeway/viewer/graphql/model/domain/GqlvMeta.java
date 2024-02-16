@@ -58,6 +58,19 @@ public class GqlvMeta extends GqlvAbstractCustom {
         super(TypeNames.metaTypeNameFor(holder.getObjectSpecification()), context);
         this.holder = holder;
 
+        if(isBuilt()) {
+            this.metaId = null;
+            this.metaLogicalTypeName = null;
+            this.metaVersion = null;
+            this.metaTitle = null;
+            this.metaIconName = null;
+            this.metaCssClass = null;
+            this.metaLayout = null;
+            this.metaGrid = null;
+            this.metaSaveAs = null;
+            return;
+        }
+
         addChildFieldFor(this.metaId = new GqlvMetaId(context));
         addChildFieldFor(this.metaLogicalTypeName = new GqlvMetaLogicalTypeName(context));
         addChildFieldFor(this.metaVersion = isEntity() ? new GqlvMetaVersion(context) : null);
@@ -78,6 +91,9 @@ public class GqlvMeta extends GqlvAbstractCustom {
 
     @Override
     protected void addDataFetchersForChildren() {
+        if (metaId == null) {
+            return;
+        }
         metaId.addDataFetcher(this);
         metaLogicalTypeName.addDataFetcher(this);
         if (isEntity()) {

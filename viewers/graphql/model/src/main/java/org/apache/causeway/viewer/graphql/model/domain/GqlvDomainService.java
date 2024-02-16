@@ -60,6 +60,10 @@ public class GqlvDomainService
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
 
+        if(isBuilt()) {
+            return;
+        }
+
         addActions();
         if (hasActions()) {
             buildObjectTypeAndField(TypeNames.objectTypeNameFor(this.objectSpecification));

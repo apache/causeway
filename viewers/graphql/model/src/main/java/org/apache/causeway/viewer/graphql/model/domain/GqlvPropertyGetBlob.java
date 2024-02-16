@@ -43,7 +43,16 @@ public class GqlvPropertyGetBlob
             final Holder holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember()), context);
+
         this.holder = holder;
+
+        if (isBuilt()) {
+            // type already exists, nothing else to do.
+            this.blobName = null;
+            this.blobMimeType = null;
+            this.blobBytes = null;
+            return;
+        }
 
         addChildFieldFor(blobName = new GqlvPropertyGetBlobBytes(this, context));
         addChildFieldFor(blobMimeType = new GqlvPropertyGetBlobMimeType(this, context));
@@ -62,6 +71,9 @@ public class GqlvPropertyGetBlob
 
     @Override
     protected void addDataFetchersForChildren() {
+        if (blobName == null) {
+            return;
+        }
         blobName.addDataFetcher(this);
         blobMimeType.addDataFetcher(this);
         blobBytes.addDataFetcher(this);

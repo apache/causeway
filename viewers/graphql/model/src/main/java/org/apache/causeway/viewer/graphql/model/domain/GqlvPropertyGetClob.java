@@ -45,6 +45,13 @@ public class GqlvPropertyGetClob
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember()), context);
         this.holder = holder;
 
+        if(isBuilt()) {
+            this.clobChars = null;
+            this.clobMimeType = null;
+            this.clobName = null;
+            return;
+        }
+
         addChildFieldFor(clobChars = new GqlvPropertyGetClobChars(this, context));
         addChildFieldFor(clobMimeType = new GqlvPropertyGetClobMimeType(this, context));
         addChildFieldFor(clobName = new GqlvPropertyGetClobName(this, context));
@@ -62,6 +69,9 @@ public class GqlvPropertyGetClob
 
     @Override
     protected void addDataFetchersForChildren() {
+        if(clobChars == null) {
+            return;
+        }
         clobChars.addDataFetcher(this);
         clobMimeType.addDataFetcher(this);
         clobName.addDataFetcher(this);

@@ -41,6 +41,13 @@ public class GqlvCollection
     ) {
         super(holder, oneToManyAssociation, TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation), context);
 
+        if(isBuilt()) {
+            this.hidden = null;
+            this.disabled = null;
+            this.get = null;
+            this.datatype = null;
+            return;
+        }
         addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
         addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
         addChildFieldFor(this.get = new GqlvCollectionGet(this, context));
@@ -57,6 +64,9 @@ public class GqlvCollection
 
     @Override
     protected void addDataFetchersForChildren() {
+        if(hidden == null) {
+            return;
+        }
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         get.addDataFetcher(this);

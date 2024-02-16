@@ -78,6 +78,20 @@ public class GqlvActionParam
         this.objectActionParameter = objectActionParameter;
         this.paramNum = paramNum;
 
+        if (isBuilt()) {
+            this.hidden = null;
+            this.disabled = null;
+            this.choices = null;
+            this.autoComplete = null;
+            this.default_ = null;
+            this.validate = null;
+            this.datatype = null;
+
+            // nothing else to be done
+            return;
+        }
+
+
         addChildFieldFor(this.hidden = new GqlvActionParamHidden(this, context));
         addChildFieldFor(this.disabled = new GqlvActionParamDisabled(this, context));
         addChildFieldFor(this.choices = new GqlvActionParamChoices(this, context));
@@ -106,6 +120,10 @@ public class GqlvActionParam
 
     @Override
     protected void addDataFetchersForChildren() {
+
+        if (hidden == null) {
+            return;
+        }
 
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);

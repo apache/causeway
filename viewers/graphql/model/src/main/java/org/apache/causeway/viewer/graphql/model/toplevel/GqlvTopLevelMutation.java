@@ -29,6 +29,10 @@ public class GqlvTopLevelMutation
     public GqlvTopLevelMutation(final Context context) {
         super("Mutation", context);
 
+        if (isBuilt()) {
+            // type already exists, nothing else to do.
+            return;
+        }
         val objectSpecifications = context.objectSpecifications();
 
         objectSpecifications.forEach(objectSpec -> {

@@ -68,16 +68,26 @@ public class GqlvProperty
             final Context context) {
         super(holder, oneToOneAssociation, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation), context);
 
+        if (isBuilt()) {
+            this.hidden = null;
+            this.disabled = null;
+            this.choices = null;
+            this.autoComplete = null;
+            this.validate = null;
+            this.set = null;
+            this.datatype = null;
+            this.get = null;
+            return;
+        }
         addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
         addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
 
-        this.get = isBlob() ? new GqlvPropertyGetBlob(this, context) : isClob() ? new GqlvPropertyGetClob(this, context) : new GqlvPropertyGet(this, context);
         addChildFieldFor(
-                isBlob()
-                    ? new GqlvPropertyGetBlob(this, context)
-                    : isClob()
-                        ? new GqlvPropertyGetClob(this, context)
-                        : new GqlvPropertyGet(this, context)
+                this.get = isBlob()
+                            ? new GqlvPropertyGetBlob(this, context)
+                            : isClob()
+                                ? new GqlvPropertyGetClob(this, context)
+                                : new GqlvPropertyGet(this, context)
         );
 
         addChildFieldFor(this.validate = new GqlvPropertyValidate(this, context));
