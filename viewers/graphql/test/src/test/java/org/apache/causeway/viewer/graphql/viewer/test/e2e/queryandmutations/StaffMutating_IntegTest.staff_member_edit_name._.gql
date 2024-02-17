@@ -1,6 +1,6 @@
 mutation {
   university_dept_StaffMember__name(
-      _gqlv_target: {id: "$staffMemberId"},
+      _target: {id: "$staffMemberId"},
       name: "Jonathon Gartner"
   ) {
     name {

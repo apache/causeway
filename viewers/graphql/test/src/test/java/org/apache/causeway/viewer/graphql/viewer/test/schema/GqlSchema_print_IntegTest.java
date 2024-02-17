@@ -31,6 +31,7 @@ import org.approvaltests.core.Options;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.commons.io.TextUtils;
@@ -44,7 +45,8 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertNotN
 import lombok.val;
 
 @Transactional
-public abstract class AbstractGqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
+@DirtiesContext
+public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;

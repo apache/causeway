@@ -22,6 +22,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -34,8 +37,6 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -54,6 +55,11 @@ public class GqlvActionParams
             final Context context) {
         super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction()), context);
         this.holder = holder;
+
+        if (isBuilt()) {
+            // nothing else to be done
+            return;
+        }
 
         val idx = new AtomicInteger(0);
         holder.getObjectAction().getParameters().forEach(objectActionParameter -> {
@@ -85,8 +91,8 @@ public class GqlvActionParams
     }
 
     void addParam(ObjectActionParameter objectActionParameter, int paramNum) {
-        GqlvActionParam gqlvActionParam = new GqlvActionParam(this, objectActionParameter, context, paramNum);
-        addChildField(gqlvActionParam.getField());
+        val gqlvActionParam = new GqlvActionParam(this, objectActionParameter, context, paramNum);
+        addChildFieldFor(gqlvActionParam);
         params.put(objectActionParameter.getId(), gqlvActionParam);
     }
 

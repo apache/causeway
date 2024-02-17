@@ -1,6 +1,7 @@
 module org.apache.causeway.incubator.viewer.graphql.viewer {
     exports org.apache.causeway.viewer.graphql.viewer;
     exports org.apache.causeway.viewer.graphql.viewer.integration;
+    exports org.apache.causeway.viewer.graphql.viewer.controller;
 
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
@@ -25,4 +26,5 @@ module org.apache.causeway.incubator.viewer.graphql.viewer {
     requires spring.graphql;
     requires spring.tx;
     requires org.apache.causeway.incubator.viewer.graphql.applib;
+    requires spring.web;
 }

@@ -25,26 +25,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
 
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
-
-import javax.inject.Inject;
-import javax.inject.Provider;
-
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

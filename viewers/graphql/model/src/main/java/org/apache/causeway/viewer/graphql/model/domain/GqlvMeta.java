@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import java.util.Objects;
 import java.util.Optional;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -34,7 +36,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import graphql.schema.DataFetchingEnvironment;
 import lombok.val;
 
 public class GqlvMeta extends GqlvAbstractCustom {
@@ -57,46 +58,45 @@ public class GqlvMeta extends GqlvAbstractCustom {
         super(TypeNames.metaTypeNameFor(holder.getObjectSpecification()), context);
         this.holder = holder;
 
-        metaId = new GqlvMetaId(context);
-        addChildField(metaId.getField());
-
-        metaLogicalTypeName = new GqlvMetaLogicalTypeName(context);
-        addChildField(metaLogicalTypeName.getField());
-
-        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
-            metaVersion = new GqlvMetaVersion(context);
-            addChildField(metaVersion.getField());
-        } else {
-            metaVersion = null;
+        if(isBuilt()) {
+            this.metaId = null;
+            this.metaLogicalTypeName = null;
+            this.metaVersion = null;
+            this.metaTitle = null;
+            this.metaIconName = null;
+            this.metaCssClass = null;
+            this.metaLayout = null;
+            this.metaGrid = null;
+            this.metaSaveAs = null;
+            return;
         }
 
-        metaTitle = new GqlvMetaTitle(context);
-        addChildField(metaTitle.getField());
-
-        metaIconName = new GqlvMetaIconName(context);
-        addChildField(metaIconName.getField());
-
-        metaCssClass = new GqlvMetaCssClass(context);
-        addChildField(metaCssClass.getField());
-
-        metaLayout = new GqlvMetaLayout(context);
-        addChildField(metaLayout.getField());
-
-        metaGrid = new GqlvMetaGrid(context);
-        addChildField(metaGrid.getField());
-
-        metaSaveAs = new GqlvMetaSaveAs(context);
-        addChildField(metaSaveAs.getField());
+        addChildFieldFor(this.metaId = new GqlvMetaId(context));
+        addChildFieldFor(this.metaLogicalTypeName = new GqlvMetaLogicalTypeName(context));
+        addChildFieldFor(this.metaVersion = isEntity() ? new GqlvMetaVersion(context) : null);
+        addChildFieldFor(this.metaTitle = new GqlvMetaTitle(context));
+        addChildFieldFor(this.metaIconName = new GqlvMetaIconName(context));
+        addChildFieldFor(this.metaCssClass = new GqlvMetaCssClass(context));
+        addChildFieldFor(this.metaLayout = new GqlvMetaLayout(context));
+        addChildFieldFor(this.metaGrid = new GqlvMetaGrid(context));
+        addChildFieldFor(this.metaSaveAs = new GqlvMetaSaveAs(context));
 
         val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
         buildObjectTypeAndField(fieldName);
     }
 
+    private boolean isEntity() {
+        return holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY;
+    }
+
     @Override
     protected void addDataFetchersForChildren() {
+        if (metaId == null) {
+            return;
+        }
         metaId.addDataFetcher(this);
         metaLogicalTypeName.addDataFetcher(this);
-        if (holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY) {
+        if (isEntity()) {
             metaVersion.addDataFetcher(this);
         }
         metaTitle.addDataFetcher(this);

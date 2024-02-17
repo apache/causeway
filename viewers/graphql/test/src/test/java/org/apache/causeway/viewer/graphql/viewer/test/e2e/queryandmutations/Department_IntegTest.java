@@ -18,18 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -38,10 +31,9 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import lombok.val;
 
@@ -115,31 +107,20 @@ public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
+    void find_department_and_add_staff_member_choices() throws Exception {
+
+        // when, then
+        Approvals.verify(submit(), jsonOptions());
+
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     void find_department_and_add_staff_members() throws Exception {
 
         // when, then
-        String submit = submit("choices");
+        Approvals.verify(submit(), jsonOptions());
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(submit);
-
-        JsonNode staffMembersNode = root.at("/data/university_dept_Departments/findDepartmentByName/invoke/addStaffMembers/params/staffMembers/choices");
-
-        List<String> ids = new ArrayList<>();
-        staffMembersNode.forEach(staffMemberNode -> {
-            String id = staffMemberNode.get("_gqlv_meta").get("id").asText();
-            if (!_Strings.isNullOrEmpty(id)) {
-                ids.add(id);
-            }
-        });
-
-        Assertions.assertThat(ids).hasSize(3);
-
-        val replacements = _Maps.unmodifiable(
-                "$staffMemberId1", ids.get(0),
-                "$staffMemberId2", ids.get(1));
-
-        Approvals.verify(submit("invoke", replacements), jsonOptions());
     }
 
     @Test

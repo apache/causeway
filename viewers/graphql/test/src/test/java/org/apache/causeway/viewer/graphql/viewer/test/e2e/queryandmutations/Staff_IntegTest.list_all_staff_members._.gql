@@ -9,7 +9,11 @@
           get
         }
         photo {
-          get
+          get {
+            name
+            mimeType
+            bytes
+          }
         }
       }
     }

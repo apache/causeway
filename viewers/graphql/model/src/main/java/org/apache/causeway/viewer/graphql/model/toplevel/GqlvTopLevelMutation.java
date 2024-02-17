@@ -3,6 +3,9 @@ package org.apache.causeway.viewer.graphql.model.toplevel;
 import java.util.ArrayList;
 import java.util.List;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLObjectType;
+
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -14,8 +17,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForAction;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvMutationForProperty;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLObjectType;
 import lombok.val;
 
 public class GqlvTopLevelMutation
@@ -28,6 +29,10 @@ public class GqlvTopLevelMutation
     public GqlvTopLevelMutation(final Context context) {
         super("Mutation", context);
 
+        if (isBuilt()) {
+            // type already exists, nothing else to do.
+            return;
+        }
         val objectSpecifications = context.objectSpecifications();
 
         objectSpecifications.forEach(objectSpec -> {
@@ -57,13 +62,13 @@ public class GqlvTopLevelMutation
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
         val gqlvMutationForAction = new GqlvMutationForAction(objectSpec, objectAction, context);
-        addChildField(gqlvMutationForAction.getField());
+        addChildFieldFor(gqlvMutationForAction);
         actions.add(gqlvMutationForAction);
     }
 
     public void addProperty(ObjectSpecification objectSpec, final OneToOneAssociation property) {
         val gqlvMutationForProperty = new GqlvMutationForProperty(objectSpec, property, context);
-        addChildField(gqlvMutationForProperty.getField());
+        addChildFieldFor(gqlvMutationForProperty);
         properties.add(gqlvMutationForProperty);
     }
 

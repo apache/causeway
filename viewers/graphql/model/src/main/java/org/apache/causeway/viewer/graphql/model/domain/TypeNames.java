@@ -61,6 +61,10 @@ public final class TypeNames {
         return objectTypeNameFor(owningType) + "__" + oneToOneAssociation.getId() + "__gqlv_property";
     }
 
+    public static String propertyBlobTypeNameFor(ObjectSpecification owningType, OneToOneAssociation oneToOneAssociation) {
+        return objectTypeNameFor(owningType) + "__" + oneToOneAssociation.getId() + "__gqlv_property_blob";
+    }
+
     public static String collectionTypeNameFor(ObjectSpecification owningType, OneToManyAssociation objectMember) {
         return objectTypeNameFor(owningType) + "__" + objectMember.getId() + "__gqlv_collection";
     }

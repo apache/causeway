@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.GraphQLContext;
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 public class GqlvMetaSaveAs extends GqlvAbstract {
 
@@ -46,7 +47,16 @@ public class GqlvMetaSaveAs extends GqlvAbstract {
     protected Object fetchData(DataFetchingEnvironment environment) {
         String ref = environment.getArgument("ref");
         GqlvMeta.Fetcher source = environment.getSource();
-        environment.getGraphQlContext().put(keyFor(ref), new BookmarkedPojo(source.bookmark(), context.bookmarkService));
+        String originalKey = keyFor(ref);
+        GraphQLContext graphQlContext = environment.getGraphQlContext();
+
+        // we ensure the key hasn't been used already
+        int i = 2; // we start at 2 deliberately, so save "cust", "cust-2", "cust-3" ... etc if there is a clash
+        String key = originalKey;
+        while (graphQlContext.hasKey(key)) {
+            key = originalKey + "-" + (i++);
+        }
+        graphQlContext.put(key, new BookmarkedPojo(source.bookmark(), context.bookmarkService));
         return ref;
     }
 

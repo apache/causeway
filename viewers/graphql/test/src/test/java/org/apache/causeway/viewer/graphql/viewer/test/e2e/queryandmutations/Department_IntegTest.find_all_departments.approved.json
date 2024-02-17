@@ -7,7 +7,7 @@
             "get" : "Civil Engineering",
             "datatype" : "java_lang_String"
           },
-          "_gqlv_meta" : {
+          "_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -16,7 +16,7 @@
             "get" : "Classics",
             "datatype" : "java_lang_String"
           },
-          "_gqlv_meta" : {
+          "_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -25,7 +25,7 @@
             "get" : "Mathematics",
             "datatype" : "java_lang_String"
           },
-          "_gqlv_meta" : {
+          "_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -34,7 +34,7 @@
             "get" : "Pathology",
             "datatype" : "java_lang_String"
           },
-          "_gqlv_meta" : {
+          "_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -43,7 +43,7 @@
             "get" : "Physics",
             "datatype" : "java_lang_String"
           },
-          "_gqlv_meta" : {
+          "_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }
@@ -52,7 +52,7 @@
             "get" : "Textiles",
             "datatype" : "java_lang_String"
           },
-          "_gqlv_meta" : {
+          "_meta" : {
             "logicalTypeName" : "university.dept.Department",
             "version" : null
           }

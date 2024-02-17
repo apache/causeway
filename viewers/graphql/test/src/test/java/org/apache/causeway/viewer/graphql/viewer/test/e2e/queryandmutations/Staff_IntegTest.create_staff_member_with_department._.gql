@@ -5,7 +5,7 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
-            _gqlv_meta {
+            _meta {
               saveAs(ref: "classics")
             }
           }
@@ -26,13 +26,12 @@
                 }
               }
             }
-            _gqlv_meta {
+            _meta {
               title
               logicalTypeName
               version
               cssClass
               iconName
-              grid
             }
           }
         }

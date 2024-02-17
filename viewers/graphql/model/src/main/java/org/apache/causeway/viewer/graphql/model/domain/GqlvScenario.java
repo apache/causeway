@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
-import org.apache.causeway.viewer.graphql.model.context.Context;
-
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import org.apache.causeway.viewer.graphql.model.context.Context;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -41,8 +41,7 @@ public class GqlvScenario
             final Context context) {
         super("Scenario", context);
 
-        this.scenarioName = new GqlvScenarioName(context);
-        addChildField(scenarioName.getField());
+        addChildFieldFor(this.scenarioName = new GqlvScenarioName(context));
 
         this.scenarioStep = new GqlvScenarioStep(context);
         addChildField(scenarioStep.newField("Given"));

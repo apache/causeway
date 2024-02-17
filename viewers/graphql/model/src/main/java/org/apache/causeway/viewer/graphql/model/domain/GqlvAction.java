@@ -23,6 +23,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
@@ -36,11 +40,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -52,7 +51,7 @@ public class GqlvAction
                    GqlvActionInvoke.Holder,
                    GqlvActionValidity.Holder,
                    GqlvActionParams.Holder,
-        Parent {
+                   Parent {
 
     private final GqlvMemberHidden<ObjectAction> hidden;
     private final GqlvMemberDisabled<ObjectAction> disabled;
@@ -72,34 +71,39 @@ public class GqlvAction
             final Context context) {
         super(holder, objectAction, TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction), context);
 
-        this.hidden = new GqlvMemberHidden<>(this, context);
-        addChildField(hidden.getField());
-
-        this.disabled = new GqlvMemberDisabled<>(this, context);
-        addChildField(disabled.getField());
-
-        this.validate = new GqlvActionValidity(this, context);
-        addChildField(validate.getField());
-
-        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        if (objectAction.getSemantics().isSafeInNature() || variant == QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
-            this.invoke = new GqlvActionInvoke(this, context);
-            GraphQLFieldDefinition invokeField = this.invoke.getField();
-            if (invokeField != null) {
-                addChildField(invokeField);
-            }
-        } else {
+        if(isBuilt()) {
+            this.hidden = null;
+            this.disabled = null;
+            this.validate = null;
             this.invoke = null;
-        }
-        val params = new GqlvActionParams(this, context);
-        if (params.hasParams()) {
-            this.params = params;
-            addChildField(params.getField());
-        } else {
             this.params = null;
+            return;
         }
+        addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
+        addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
+        addChildFieldFor(this.validate = new GqlvActionValidity(this, context));
+
+        addChildFieldFor(
+                this.invoke = isInvokeAllowed(objectAction)
+                    ? new GqlvActionInvoke(this, context)
+                    : null);
+        addChildFieldFor(this.params = new GqlvActionParams(this, context));
 
         buildObjectTypeAndField(objectAction.getId());
+    }
+
+    private boolean isInvokeAllowed(ObjectAction objectAction) {
+        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        switch (apiVariant) {
+            case QUERY_ONLY:
+            case QUERY_AND_MUTATIONS:
+                return objectAction.getSemantics().isSafeInNature();
+            case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT:
+                return true;
+            default:
+                // shouldn't happen
+                throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
+        }
     }
 
     public Can<ManagedObject> argumentManagedObjectsFor(
@@ -257,6 +261,9 @@ public class GqlvAction
 
     @Override
     protected void addDataFetchersForChildren() {
+        if(hidden == null) {
+            return;
+        }
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         validate.addDataFetcher(this);

@@ -16,15 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.schema;
+package org.apache.causeway.viewer.graphql.model.domain;
 
-import org.junit.jupiter.api.Order;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.Transactional;
+import graphql.schema.DataFetchingEnvironment;
 
-@Order(0)
-@Transactional
-@DirtiesContext
-public class GqlSchemaQuery_print_IntegTest extends AbstractGqlSchema_print_IntegTest {
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+
+public class GqlvPropertyGetClobName extends GqlvPropertyGetClobAbstract {
+
+    public GqlvPropertyGetClobName(
+            final Holder holder,
+            final Context context) {
+        super(holder, context, "name");
+    }
+
+    @Override
+    protected Object fetchData(DataFetchingEnvironment environment) {
+        return fetchDataFromBlob(environment, Blob::getName);
+    }
 
 }

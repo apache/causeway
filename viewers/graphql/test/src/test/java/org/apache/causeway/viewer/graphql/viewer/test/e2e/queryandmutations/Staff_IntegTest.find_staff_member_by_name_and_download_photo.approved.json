@@ -1,0 +1,18 @@
+{
+  "data" : {
+    "university_dept_Staff" : {
+      "findStaffMemberByName" : {
+        "invoke" : {
+          "name" : {
+            "get" : "Gerry Jones"
+          },
+          "photo" : {
+            "get" : {
+              "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+            }
+          }
+        }
+      }
+    }
+  }
+}

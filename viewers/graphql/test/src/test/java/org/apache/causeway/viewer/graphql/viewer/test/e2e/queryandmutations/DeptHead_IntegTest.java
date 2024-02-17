@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
@@ -32,6 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise

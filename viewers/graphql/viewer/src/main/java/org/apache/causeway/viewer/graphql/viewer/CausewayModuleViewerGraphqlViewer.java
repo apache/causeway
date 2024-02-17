@@ -32,6 +32,7 @@ import org.springframework.graphql.execution.BatchLoaderRegistry;
 import org.springframework.graphql.execution.DefaultBatchLoaderRegistry;
 
 import org.apache.causeway.viewer.graphql.model.CausewayModuleViewerGraphqlModel;
+import org.apache.causeway.viewer.graphql.viewer.controller.ResourceController;
 
 @Configuration
 @Import({
@@ -42,7 +43,10 @@ import org.apache.causeway.viewer.graphql.model.CausewayModuleViewerGraphqlModel
 
         // autoconfigurations
         GraphQlAutoConfiguration.class,
-        GraphQlWebMvcAutoConfiguration.class
+        GraphQlWebMvcAutoConfiguration.class,
+
+        // controllers
+        ResourceController.class
 })
 @EnableConfigurationProperties({
         GraphQlProperties.class, GraphQlCorsProperties.class

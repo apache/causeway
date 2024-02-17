@@ -56,10 +56,10 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
     abstract GraphQLOutputType outputTypeFor(Holder<T> holder);
 
     @Override
-    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    protected Object fetchData(final DataFetchingEnvironment environment) {
 
         // TODO: introduce evaluator
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
         val sourcePojoClass = sourcePojo.getClass();
         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);

@@ -21,7 +21,8 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -32,17 +33,19 @@ import lombok.val;
 public class GqlvProperty
         extends GqlvAssociation<OneToOneAssociation, GqlvMember.Holder>
         implements GqlvMemberHidden.Holder<OneToOneAssociation>,
-                   GqlvMemberDisabled.Holder<OneToOneAssociation>,
-                   GqlvPropertyGet.Holder,
-                   GqlvPropertyChoices.Holder,
-                   GqlvPropertyAutoComplete.Holder,
-                   GqlvPropertyValidate.Holder,
-                   GqlvPropertySet.Holder,
-                   GqlvAssociationDatatype.Holder<OneToOneAssociation> {
+        GqlvMemberDisabled.Holder<OneToOneAssociation>,
+        GqlvPropertyGet.Holder,
+        GqlvPropertyChoices.Holder,
+        GqlvPropertyAutoComplete.Holder,
+        GqlvPropertyValidate.Holder,
+        GqlvPropertySet.Holder,
+        GqlvAssociationDatatype.Holder<OneToOneAssociation>,
+        GqlvPropertyGetBlob.Holder,
+        GqlvPropertyGetClob.Holder {
 
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;
-    private final GqlvPropertyGet get;
+    private final GqlvAbstract get;
     /**
      * Populated iff there are choices
      */
@@ -65,46 +68,59 @@ public class GqlvProperty
             final Context context) {
         super(holder, oneToOneAssociation, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation), context);
 
-        this.hidden = new GqlvMemberHidden<>(this, context);
-        addChildField(hidden.getField());
-
-        this.disabled = new GqlvMemberDisabled<>(this, context);
-        addChildField(disabled.getField());
-
-        this.get = new GqlvPropertyGet(this, context);
-        addChildField(get.getField());
-
-        this.validate = new GqlvPropertyValidate(this, context);
-        addChildField(this.validate.getField());
-
-        val choices = new GqlvPropertyChoices(this, context);
-        if (choices.isFieldDefined()) {
-            addChildField(choices.getField());
-            this.choices = choices;
-        } else {
+        if (isBuilt()) {
+            this.hidden = null;
+            this.disabled = null;
             this.choices = null;
-        }
-
-        val autoComplete = new GqlvPropertyAutoComplete(this, context);
-        if (autoComplete.isFieldDefined()) {
-            addChildField(autoComplete.getField());
-            this.autoComplete = autoComplete;
-        } else {
             this.autoComplete = null;
-        }
-
-        val variant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        if (variant == CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT) {
-            this.set = new GqlvPropertySet(this, context);
-            addChildField(set.getField());
-        } else {
+            this.validate = null;
             this.set = null;
+            this.datatype = null;
+            this.get = null;
+            return;
         }
+        addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
+        addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
 
-        this.datatype = new GqlvPropertyDatatype(this, context);
-        addChildField(datatype.getField());
+        addChildFieldFor(
+                this.get = isBlob()
+                            ? new GqlvPropertyGetBlob(this, context)
+                            : isClob()
+                                ? new GqlvPropertyGetClob(this, context)
+                                : new GqlvPropertyGet(this, context)
+        );
+
+        addChildFieldFor(this.validate = new GqlvPropertyValidate(this, context));
+        addChildFieldFor(this.choices = new GqlvPropertyChoices(this, context));
+        addChildFieldFor(this.autoComplete = new GqlvPropertyAutoComplete(this, context));
+        addChildFieldFor(this.set = isSetterAllowed() ? new GqlvPropertySet(this, context) : null);
+        addChildFieldFor(this.datatype = new GqlvPropertyDatatype(this, context));
 
         buildObjectTypeAndField(oneToOneAssociation.getId());
+    }
+
+    private boolean isSetterAllowed() {
+        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        switch (apiVariant) {
+            case QUERY_ONLY:
+            case QUERY_AND_MUTATIONS:
+                return false;
+            case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT:
+                return true;
+            default:
+                // shouldn't happen
+                throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
+        }
+    }
+
+
+
+    private boolean isBlob() {
+        return getOneToOneAssociation().getElementType().getCorrespondingClass() == Blob.class;
+    }
+
+    private boolean isClob() {
+        return getOneToOneAssociation().getElementType().getCorrespondingClass() == Clob.class;
     }
 
     public void addGqlArgument(

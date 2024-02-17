@@ -39,6 +39,8 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
+import graphql.schema.GraphQLList;
+
 import lombok.Getter;
 import lombok.val;
 
@@ -74,11 +76,16 @@ public class GqlvDomainObject
         this.objectSpecification = objectSpecification;
         gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
-        this.meta = new GqlvMeta(this, context);
-        addChildField(meta.getField());
+        if(isBuilt()) {
+            this.meta = null;
+            this.gqlInputObjectType = null;
+            return;
+        }
 
-        GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
-        inputTypeBuilder
+        addChildFieldFor(this.meta = new GqlvMeta(this, context));
+
+        val inputObjectTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification));
+        inputObjectTypeBuilder
                 .field(newInputObjectField()
                         .name("id")
                         .type(Scalars.GraphQLID)
@@ -90,7 +97,7 @@ public class GqlvDomainObject
                         .build()
                 )
         ;
-        gqlInputObjectType = inputTypeBuilder.build();
+        gqlInputObjectType = inputObjectTypeBuilder.build();
 
         setField(buildFieldDefinition(gqlInputObjectType));
 
@@ -129,8 +136,8 @@ public class GqlvDomainObject
 
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .forEach(objectAction -> {
-                    GqlvAction gqlvAction = new GqlvAction(this, objectAction, context);
-                    addChildField(gqlvAction.getField());
+                    val gqlvAction = new GqlvAction(this, objectAction, context);
+                    addChildFieldFor(gqlvAction);
                     actions.put(objectAction.getId(), gqlvAction);
                 });
     }
@@ -143,22 +150,25 @@ public class GqlvDomainObject
     }
 
     private void addProperty(final OneToOneAssociation otoa) {
-        GqlvProperty gqlvProperty = new GqlvProperty(this, otoa, context);
-        addChildField(gqlvProperty.getField());
+        val gqlvProperty = new GqlvProperty(this, otoa, context);
+        addChildFieldFor(gqlvProperty);
         properties.put(otoa.getId(), gqlvProperty);
     }
 
     private void addCollection(OneToManyAssociation otom) {
-        GqlvCollection collection = new GqlvCollection(this, otom, context);
-        addChildField(collection.getField());
-        if (collection.isFieldDefined()) {
-            collections.put(otom.getId(), collection);
+        val gqlvCollection = new GqlvCollection(this, otom, context);
+        addChildFieldFor(gqlvCollection);
+        if (gqlvCollection.isFieldDefined()) {
+            collections.put(otom.getId(), gqlvCollection);
         }
     }
 
 
     @Override
     protected void addDataFetchersForChildren() {
+        if(meta == null) {
+            return;
+        }
         meta.addDataFetcher(this);
         properties.forEach((id, property) -> property.addDataFetcher(this));
         collections.forEach((id, collection) -> collection.addDataFetcher(this));

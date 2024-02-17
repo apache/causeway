@@ -18,7 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Optional;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
@@ -26,15 +34,18 @@ import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Propagation;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
+
+import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
@@ -112,4 +123,43 @@ public class Staff_IntegTest extends Abstract_IntegTest {
         Approvals.verify(submit(), jsonOptions());
 
     }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void find_staff_member_by_name_and_download_photo() throws Exception {
+
+        String response = submit();
+        Approvals.verify(response, jsonOptions());
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response);
+
+        String url = root
+                .at("/data/university_dept_Staff/findStaffMemberByName/invoke/photo/get/bytes")
+                .asText();
+
+        assertThat(url).matches("///graphql/object/university.dept.StaffMember:(\\d+)/photo/blobBytes");
+
+        val httpResponse = submitReturningBytes(url);
+
+        assertThat(httpResponse.statusCode()).isEqualTo(200);
+        byte[] bytes = httpResponse.body();
+        assertThat(bytes).isNotEmpty();
+
+    }
+
+    private HttpResponse<byte[]> submitReturningBytes(String url) throws IOException, InterruptedException {
+
+        val urlSuffix = url.substring(3); // strip off the '///' prefix
+        val uri = URI.create(String.format("http://0.0.0.0:%d/%s", port, urlSuffix));
+
+        HttpRequest httpRequest = HttpRequest.newBuilder().
+                uri(uri).
+                GET().
+                build();
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+        return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
+    }
+
 }

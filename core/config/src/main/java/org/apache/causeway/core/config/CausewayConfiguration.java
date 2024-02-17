@@ -2389,7 +2389,7 @@ public class CausewayConfiguration {
                  * Note that field names <i>cannot</i> being with &quot;__&quot;, as that is reserved by the
                  * underlying GraphQL implementation.
                  */
-                private String fieldName = "_gqlv_meta";
+                private String fieldName = "_meta";
             }
 
             private final Lookup lookup = new Lookup();
@@ -2412,7 +2412,7 @@ public class CausewayConfiguration {
                 /**
                  * The name of the synthetic argument of mutators representing the target domain object.
                  */
-                private String targetArgName = "_gqlv_target";
+                private String targetArgName = "_target";
             }
 
             private final ScalarMarshaller scalarMarshaller = new ScalarMarshaller();
