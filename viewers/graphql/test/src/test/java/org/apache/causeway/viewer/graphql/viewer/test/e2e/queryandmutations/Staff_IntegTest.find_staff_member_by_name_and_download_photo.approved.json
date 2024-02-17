@@ -6,6 +6,9 @@
           "name" : {
             "get" : "Gerry Jones"
           },
+          "_meta" : {
+            "grid" : "///graphql/object/university.dept.StaffMember:NNN/grid"
+          },
           "photo" : {
             "get" : {
               "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"

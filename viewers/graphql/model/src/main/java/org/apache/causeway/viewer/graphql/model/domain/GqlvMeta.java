@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.causeway.core.metamodel.object.Bookmarkable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -191,13 +192,9 @@ public class GqlvMeta extends GqlvAbstractCustom {
 
         public String grid() {
             return managedObject()
-                    .map(managedObject -> {
-                        val facet = managedObject.getSpecification().getFacet(GridFacet.class);
-                        return facet != null ? facet.getGrid(managedObject) : null;
-                    })
-                    .filter(obj -> Objects.nonNull(obj))
-                    .map(JaxbUtils::toStringUtf8)
-                    .map(x -> x.replaceAll("(\r\n)", "\n"))
+                    .flatMap(Bookmarkable::getBookmark
+                    ).map(x -> String.format(
+                    "///%s/object/%s:%s/grid", "graphql", x.getLogicalTypeName(), x.getIdentifier()))
                     .orElse(null);
         }
 

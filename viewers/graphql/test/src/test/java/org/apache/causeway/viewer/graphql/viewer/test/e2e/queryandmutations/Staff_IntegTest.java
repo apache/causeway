@@ -51,7 +51,6 @@ import lombok.val;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(60)
 @ActiveProfiles("test")
-@DisabledIfEnvironmentVariable(named = "PROJECT_ROOT_PATH", matches = ".*isis") // disable for isis build
 public class Staff_IntegTest extends Abstract_IntegTest {
 
     @Test
@@ -131,25 +130,41 @@ public class Staff_IntegTest extends Abstract_IntegTest {
         String response = submit();
         Approvals.verify(response, jsonOptions());
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response);
+        val objectMapper = new ObjectMapper();
+        val jsonNodeRoot = objectMapper.readTree(response);
 
-        String url = root
+        val gridUrl = jsonNodeRoot
+                .at("/data/university_dept_Staff/findStaffMemberByName/invoke/_meta/grid")
+                .asText();
+
+        assertThat(gridUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/grid");
+        val gridHttpResponse = submitReturningString(gridUrl);
+
+        assertThat(gridHttpResponse.statusCode()).isEqualTo(200);
+        val gridChars = gridHttpResponse.body();
+        assertThat(gridChars).isNotEmpty();
+
+
+        val photoBytesUrl = jsonNodeRoot
                 .at("/data/university_dept_Staff/findStaffMemberByName/invoke/photo/get/bytes")
                 .asText();
 
-        assertThat(url).matches("///graphql/object/university.dept.StaffMember:(\\d+)/photo/blobBytes");
-
-        val httpResponse = submitReturningBytes(url);
-
-        assertThat(httpResponse.statusCode()).isEqualTo(200);
-        byte[] bytes = httpResponse.body();
-        assertThat(bytes).isNotEmpty();
-
+        assertThat(photoBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/photo/blobBytes");
+        val photoBytesResponse = submitReturningBytes(photoBytesUrl);
+        assertThat(photoBytesResponse.statusCode()).isEqualTo(200);
+        val photoBytes = photoBytesResponse.body();
+        assertThat(photoBytes).isNotEmpty();
     }
 
     private HttpResponse<byte[]> submitReturningBytes(String url) throws IOException, InterruptedException {
+        return submitReturningResponseHandledBy(url, HttpResponse.BodyHandlers.ofByteArray());
+    }
 
+    private HttpResponse<String> submitReturningString(String url) throws IOException, InterruptedException {
+        return submitReturningResponseHandledBy(url, HttpResponse.BodyHandlers.ofString());
+    }
+
+    private <T> HttpResponse<T> submitReturningResponseHandledBy(String url, HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
         val urlSuffix = url.substring(3); // strip off the '///' prefix
         val uri = URI.create(String.format("http://0.0.0.0:%d/%s", port, urlSuffix));
 
@@ -159,7 +174,7 @@ public class Staff_IntegTest extends Abstract_IntegTest {
                 build();
 
         HttpClient httpClient = HttpClient.newHttpClient();
-        return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
+        return httpClient.send(httpRequest, responseBodyHandler);
     }
 
 }

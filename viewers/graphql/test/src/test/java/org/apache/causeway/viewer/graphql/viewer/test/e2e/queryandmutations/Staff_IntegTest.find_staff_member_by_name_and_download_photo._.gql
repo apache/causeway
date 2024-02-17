@@ -5,6 +5,9 @@
         name {
           get
         }
+        _meta {
+          grid
+        }
         photo {
           get {
             bytes
