@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "university_calc_Calculator" : {
+      "someUrl" : {
+        "invoke" : "https://causeway.apache.org"
+      }
+    }
+  }
+}

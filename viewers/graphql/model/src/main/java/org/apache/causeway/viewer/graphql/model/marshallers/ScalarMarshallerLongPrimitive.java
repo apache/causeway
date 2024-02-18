@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.graphql.model.marshallers;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import graphql.Scalars;
+import graphql.scalars.ExtendedScalars;
 
 import org.springframework.stereotype.Component;
 
@@ -39,7 +39,7 @@ public class ScalarMarshallerLongPrimitive extends ScalarMarshallerAbstract<Long
 
     @Inject
     public ScalarMarshallerLongPrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(long.class, Scalars.GraphQLString, causewayConfiguration);
+        super(long.class, ExtendedScalars.GraphQLLong, causewayConfiguration);
     }
 
     @Override

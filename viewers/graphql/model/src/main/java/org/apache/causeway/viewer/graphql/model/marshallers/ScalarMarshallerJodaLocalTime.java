@@ -18,11 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
 import graphql.Scalars;
-import graphql.scalars.ExtendedScalars;
+
+import java.time.format.DateTimeFormatter;
+
+import org.joda.time.LocalTime;
 
 import org.springframework.stereotype.Component;
 
@@ -30,18 +34,24 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
 
+import static org.joda.time.format.DateTimeFormat.forPattern;
+
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class ScalarMarshallerByteWrapper extends ScalarMarshallerAbstract<Byte> {
+public class ScalarMarshallerJodaLocalTime extends ScalarMarshallerAbstract<LocalTime> {
+
+    private final CausewayConfiguration.Viewer.Graphql.ScalarMarshaller scalarMarshallerConfig;
 
     @Inject
-    public ScalarMarshallerByteWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Byte.class, ExtendedScalars.GraphQLByte, causewayConfiguration);
+    public ScalarMarshallerJodaLocalTime(final CausewayConfiguration causewayConfiguration) {
+        super(LocalTime.class, Scalars.GraphQLString, causewayConfiguration);
+        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
     }
 
     @Override
-    public Byte unmarshal(Object graphValue, Class<?> targetType) {
-        return ((Integer)graphValue).byteValue();
+    public LocalTime unmarshal(Object graphValue, Class<?> targetType) {
+        String str = (String) graphValue;
+        return LocalTime.parse(str, forPattern(scalarMarshallerConfig.getLocalTimeFormat()));
     }
 }

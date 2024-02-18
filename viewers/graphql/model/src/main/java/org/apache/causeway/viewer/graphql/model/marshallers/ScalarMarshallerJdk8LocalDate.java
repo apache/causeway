@@ -25,6 +25,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 
 import graphql.Scalars;
+import graphql.scalars.ExtendedScalars;
 
 import org.springframework.stereotype.Component;
 

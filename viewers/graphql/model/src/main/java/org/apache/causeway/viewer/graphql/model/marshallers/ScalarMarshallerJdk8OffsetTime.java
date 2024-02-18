@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
+import java.time.LocalTime;
+import java.time.OffsetTime;
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import graphql.Scalars;
 import graphql.scalars.ExtendedScalars;
 
 import org.springframework.stereotype.Component;
@@ -33,15 +35,18 @@ import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbs
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class ScalarMarshallerByteWrapper extends ScalarMarshallerAbstract<Byte> {
+public class ScalarMarshallerJdk8OffsetTime extends ScalarMarshallerAbstract<OffsetTime> {
+
+    private final CausewayConfiguration.Viewer.Graphql.ScalarMarshaller scalarMarshallerConfig;
 
     @Inject
-    public ScalarMarshallerByteWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Byte.class, ExtendedScalars.GraphQLByte, causewayConfiguration);
+    public ScalarMarshallerJdk8OffsetTime(final CausewayConfiguration causewayConfiguration) {
+        super(OffsetTime.class, ExtendedScalars.Time, causewayConfiguration);
+        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
     }
 
     @Override
-    public Byte unmarshal(Object graphValue, Class<?> targetType) {
-        return ((Integer)graphValue).byteValue();
+    public OffsetTime unmarshal(Object graphValue, Class<?> targetType) {
+        return (OffsetTime) graphValue;
     }
 }

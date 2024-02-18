@@ -21,8 +21,9 @@ package org.apache.causeway.viewer.graphql.model.marshallers;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import graphql.Scalars;
 import graphql.scalars.ExtendedScalars;
+
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -31,17 +32,21 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
 
 
+/**
+ * Maps to a string to avoid loss of precision.
+ */
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class ScalarMarshallerByteWrapper extends ScalarMarshallerAbstract<Byte> {
+public class ScalarMarshallerUuid extends ScalarMarshallerAbstract<UUID> {
 
     @Inject
-    public ScalarMarshallerByteWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Byte.class, ExtendedScalars.GraphQLByte, causewayConfiguration);
+    public ScalarMarshallerUuid(final CausewayConfiguration causewayConfiguration) {
+        super(UUID.class, ExtendedScalars.UUID, causewayConfiguration);
     }
 
     @Override
-    public Byte unmarshal(Object graphValue, Class<?> targetType) {
-        return ((Integer)graphValue).byteValue();
+    public UUID unmarshal(Object graphValue, Class<?> targetType) {
+        return (UUID)graphValue;
     }
+
 }

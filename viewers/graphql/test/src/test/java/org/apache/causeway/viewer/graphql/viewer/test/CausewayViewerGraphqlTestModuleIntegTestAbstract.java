@@ -50,6 +50,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.graphql.test.tester.HttpGraphQlTester;
+import org.springframework.lang.Nullable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -69,6 +70,7 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
+import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 
@@ -157,21 +159,29 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
      * @return the response body as a string
      * @throws Exception if an error occurs during the submission
      */
-    protected String submit() throws Exception{
+    protected String submit() {
         return submit(Collections.emptyMap());
     }
 
-    protected String submit(Map<String,String> replacements) throws Exception{
+    @SneakyThrows
+    protected String submit(Map<String,String> replacements) {
         val httpRequest = buildRequest(testInfo, "._.gql", replacements);
         return submitRequest(httpRequest);
     }
 
-    protected String submit(String variant) throws Exception{
+    protected String submit(String variant) {
         return submit(variant, Collections.emptyMap());
     }
 
-    protected String submit(String variant, Map<String,String> replacements) throws Exception{
+    @SneakyThrows
+    protected String submit(String variant, Map<String,String> replacements) {
         val httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
+        return submitRequest(httpRequest);
+    }
+
+    @SneakyThrows
+    protected String submitFileNamed(final String fileName) {
+        val httpRequest = buildRequest(fileName, Collections.emptyMap());
         return submitRequest(httpRequest);
     }
 
@@ -180,13 +190,19 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
         String query;
     }
 
+    @SneakyThrows
     protected HttpRequest buildRequest(
             final TestInfo testInfo,
             final String resourceSuffix,
-            final Map<String, String> replacements) throws IOException {
+            final Map<String, String> replacements) {
 
         val testMethodName = testInfo.getTestMethod().map(Method::getName).get();
         val resourceName = getClass().getSimpleName() + "." + testMethodName + resourceSuffix;
+        return buildRequest(resourceName, replacements);
+    }
+
+    @SneakyThrows
+    protected HttpRequest buildRequest(String resourceName, Map<String, String> replacements) {
         String resourceContents = readResource(resourceName);
         String resourceContent = replace(resourceContents, replacements);
 
@@ -237,22 +253,33 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
     }
 
     protected Options jsonOptions() {
-        return jsonOptions(BookmarkOptions.SCRUB);
+        return jsonOptions(null, BookmarkOptions.SCRUB);
     }
 
     protected Options jsonOptions(BookmarkOptions bookmarkOptions) {
-        return new Options().withScrubber(s -> {
-            try {
-                String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
-                if (bookmarkOptions == BookmarkOptions.SCRUB) {
-                    prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
-                }
-                return prettyJson;
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        })
-        .forFile().withExtension(".json");
+        return jsonOptions(null, bookmarkOptions);
+    }
+
+    public Options jsonOptions(Options options) {
+        return jsonOptions(options, BookmarkOptions.SCRUB);
+    }
+
+    public Options jsonOptions(@Nullable Options options, BookmarkOptions bookmarkOptions) {
+        if (options == null) {
+            options = new Options();
+        }
+        return options.withScrubber(s -> {
+                    try {
+                        String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
+                        if (bookmarkOptions == BookmarkOptions.SCRUB) {
+                            prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
+                        }
+                        return prettyJson;
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .forFile().withExtension(".json");
     }
 
 
