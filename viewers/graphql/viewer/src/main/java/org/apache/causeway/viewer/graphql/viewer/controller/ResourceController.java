@@ -1,13 +1,21 @@
 package org.apache.causeway.viewer.graphql.viewer.controller;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Inject;
+
+import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
+
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +32,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 
 @RestController()
 @RequestMapping("/graphql/object")
@@ -37,9 +46,9 @@ public class ResourceController {
     public ResponseEntity<byte[]> propertyBlobBytes(
             @PathVariable final String logicalTypeName,
             @PathVariable final String id,
-            @PathVariable final String propertyId) {
-
-        return valueOf(logicalTypeName, id, propertyId)
+            @PathVariable final String propertyId
+    ) {
+        return valueOfProperty(logicalTypeName, id, propertyId)
                 .filter(Blob.class::isInstance)
                 .map(Blob.class::cast)
                 .map(blob -> ResponseEntity.ok()
@@ -54,9 +63,9 @@ public class ResourceController {
     public ResponseEntity<CharSequence> propertyClobChars(
             @PathVariable final String logicalTypeName,
             @PathVariable final String id,
-            @PathVariable final String propertyId) {
-
-        return valueOf(logicalTypeName, id, propertyId)
+            @PathVariable final String propertyId
+    ) {
+        return valueOfProperty(logicalTypeName, id, propertyId)
                 .filter(Clob.class::isInstance)
                 .map(Clob.class::cast)
                 .map(clob -> ResponseEntity.ok()
@@ -67,14 +76,66 @@ public class ResourceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    private Optional<Object> valueOf(String logicalTypeName, String id, String propertyId) {
-        return bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, id))
-                .map(objectManager::adapt)
+    @GetMapping(value = "/{logicalTypeName}:{id}/_meta/grid")
+    public ResponseEntity<String> grid(
+            @PathVariable final String logicalTypeName,
+            @PathVariable final String id
+    ) {
+        return lookup(logicalTypeName, id)
+                .map(ResourceController::gridOf)
+                .filter(Objects::nonNull)
+                .map(JaxbUtils::toStringUtf8)
+                .map(x -> x.replaceAll("(\r\n)", "\n"))
+                .map(gridText -> ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_XML)
+                        .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(logicalTypeName + ".layout.xml").build().toString())
+                        .contentLength(gridText.length())
+                        .body(gridText))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(value = "/{logicalTypeName}:{id}/_meta/icon")
+    public ResponseEntity<byte[]> icon(
+            @PathVariable final String logicalTypeName,
+            @PathVariable final String id
+    ) {
+        return lookup(logicalTypeName, id)
+                .map(ManagedObject::getIcon)
+                .filter(Objects::nonNull)
+                .map(objectIcon -> {
+                    val bytes = objectIcon.asBytes();
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.parseMediaType(objectIcon.getMimeType().getMimeType().toString()))
+                            .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(logicalTypeName + ".png").build().toString())
+                            .contentLength(bytes.length)
+                            .body(bytes);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Nullable
+    private static Grid gridOf(ManagedObject managedObject) {
+        val facet = managedObject.getSpecification().getFacet(GridFacet.class);
+        return facet != null ? facet.getGrid(managedObject) : null;
+    }
+
+    @Nullable
+    private static ObjectIcon iconOf(ManagedObject managedObject) {
+        return managedObject.getIcon();
+    }
+
+    private Optional<Object> valueOfProperty(String logicalTypeName, String id, String propertyId) {
+        return lookup(logicalTypeName, id)
                 .map(managedObject -> ManagedObjectAndPropertyIfAny.of(managedObject, managedObject.getSpecification().getProperty(propertyId)))
                 .filter(ManagedObjectAndPropertyIfAny::isPropertyPresent)
                 .map(ManagedObjectAndProperty::of)
                 .map(ManagedObjectAndProperty::value)
                 .map(ManagedObject::getPojo);
+    }
+
+    private Optional<ManagedObject> lookup(String logicalTypeName, String id) {
+        return bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, id))
+                .map(objectManager::adapt);
     }
 
     @Value(staticConstructor = "of")
@@ -101,6 +162,4 @@ public class ResourceController {
             return property.get(owningObject);
         }
     }
-
-
 }

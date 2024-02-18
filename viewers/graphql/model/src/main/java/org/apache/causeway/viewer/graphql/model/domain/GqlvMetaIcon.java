@@ -25,17 +25,17 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-public class GqlvMetaIconName extends GqlvAbstract {
+public class GqlvMetaIcon extends GqlvAbstract {
 
-    public GqlvMetaIconName(final Context context) {
+    public GqlvMetaIcon(final Context context) {
         super(context);
 
-        setField(newFieldDefinition().name("iconName").type(Scalars.GraphQLString).build());
+        setField(newFieldDefinition().name("icon").type(Scalars.GraphQLString).build());
     }
 
     @Override
     protected String fetchData(DataFetchingEnvironment environment) {
-        return environment.<GqlvMeta.Fetcher>getSource().iconName();
+        return environment.<GqlvMeta.Fetcher>getSource().icon();
     }
 
 }

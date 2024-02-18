@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -26,11 +25,10 @@ import graphql.schema.DataFetchingEnvironment;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.causeway.core.metamodel.object.Bookmarkable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -45,7 +43,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
     private final GqlvMetaLogicalTypeName metaLogicalTypeName;
     private final GqlvMetaVersion metaVersion;
     private final GqlvMetaTitle metaTitle;
-    private final GqlvMetaIconName metaIconName;
+    private final GqlvMetaIcon metaIconName;
     private final GqlvMetaCssClass metaCssClass;
     private final GqlvMetaLayout metaLayout;
     private final GqlvMetaGrid metaGrid;
@@ -75,7 +73,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
         addChildFieldFor(this.metaLogicalTypeName = new GqlvMetaLogicalTypeName(context));
         addChildFieldFor(this.metaVersion = isEntity() ? new GqlvMetaVersion(context) : null);
         addChildFieldFor(this.metaTitle = new GqlvMetaTitle(context));
-        addChildFieldFor(this.metaIconName = new GqlvMetaIconName(context));
+        addChildFieldFor(this.metaIconName = new GqlvMetaIcon(context));
         addChildFieldFor(this.metaCssClass = new GqlvMetaCssClass(context));
         addChildFieldFor(this.metaLayout = new GqlvMetaLayout(context));
         addChildFieldFor(this.metaGrid = new GqlvMetaGrid(context));
@@ -165,12 +163,6 @@ public class GqlvMeta extends GqlvAbstractCustom {
                     .orElse(null);
         }
 
-        public String iconName() {
-            return managedObject()
-                    .map(ManagedObject::getIconName)
-                    .orElse(null);
-        }
-
         public String cssClass() {
             return managedObject()
                     .map(managedObject -> {
@@ -190,14 +182,19 @@ public class GqlvMeta extends GqlvAbstractCustom {
         }
 
         public String grid() {
+            return resource("grid");
+        }
+
+        public String icon() {
+            return resource("icon");
+        }
+
+        private String resource(String resource) {
             return managedObject()
-                    .map(managedObject -> {
-                        val facet = managedObject.getSpecification().getFacet(GridFacet.class);
-                        return facet != null ? facet.getGrid(managedObject) : null;
-                    })
-                    .filter(obj -> Objects.nonNull(obj))
-                    .map(JaxbUtils::toStringUtf8)
-                    .map(x -> x.replaceAll("(\r\n)", "\n"))
+                    .flatMap(Bookmarkable::getBookmark
+                    ).map(bookmark -> String.format(
+                            "///%s/object/%s:%s/_meta/%s",
+                            "graphql", bookmark.getLogicalTypeName(), bookmark.getIdentifier(), resource) )
                     .orElse(null);
         }
 
