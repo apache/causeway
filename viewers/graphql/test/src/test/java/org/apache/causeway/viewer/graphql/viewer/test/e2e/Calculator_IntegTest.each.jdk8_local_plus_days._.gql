@@ -1,6 +1,6 @@
 {
   university_calc_Calculator {
-    plusJodaDays {
+    jdk8LocalPlusDays {
       invoke(date: "2024-01-26", numDays: 2)
     }
   }

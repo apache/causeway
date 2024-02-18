@@ -1,8 +1,8 @@
 {
   "data" : {
     "university_calc_Calculator" : {
-      "addBigDecimals" : {
-        "invoke" : "3.3"
+      "someUrl" : {
+        "invoke" : "https://causeway.apache.org"
       }
     }
   }

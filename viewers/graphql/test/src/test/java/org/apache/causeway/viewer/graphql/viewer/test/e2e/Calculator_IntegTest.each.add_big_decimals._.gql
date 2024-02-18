@@ -1,7 +1,7 @@
 {
   university_calc_Calculator {
-    addBigIntegers {
-      invoke(x: "1", y: "2")
+    addBigDecimals {
+      invoke(x: "1.1", y: "2.2")
     }
   }
 }

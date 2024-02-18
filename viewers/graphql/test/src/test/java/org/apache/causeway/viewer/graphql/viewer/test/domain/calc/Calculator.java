@@ -2,8 +2,14 @@ package org.apache.causeway.viewer.graphql.viewer.test.domain.calc;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.time.ZonedDateTime;
+import java.util.Locale;
+import java.util.UUID;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -18,6 +24,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 @Named("university.calc.Calculator")
 @DomainService(nature= NatureOfService.VIEW)
@@ -86,23 +93,43 @@ public class Calculator {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public LocalDate plusDays(LocalDate date, int numDays) {
+    public LocalDate jdk8LocalPlusDays(LocalDate date, int numDays) {
         return date.plusDays(numDays);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public ZonedDateTime plusDaysAndHoursAndMinutes(ZonedDateTime dateTime, int numDays, int numHours, int numMinutes) {
+    public OffsetDateTime jdk8OffsetPlusDaysAndHoursAndMinutes(OffsetDateTime dateTime, int numDays, int numHours, int numMinutes) {
         return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.LocalDate plusJodaDays(org.joda.time.LocalDate date, int numDays) {
+    public ZonedDateTime jdk8ZonedPlusDaysAndHoursAndMinutes(ZonedDateTime dateTime, int numDays, int numHours, int numMinutes) {
+        return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public OffsetTime jdk8OffsetPlusHoursAndMinutes(OffsetTime time, int numHours, int numMinutes) {
+        return time.plusHours(numHours).plusMinutes(numMinutes);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public LocalTime jdk8LocalPlusHoursAndMinutes(LocalTime time, int numHours, int numMinutes) {
+        return time.plusHours(numHours).plusMinutes(numMinutes);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public org.joda.time.LocalDate jodaLocalPlusDays(org.joda.time.LocalDate date, int numDays) {
         return date.plusDays(numDays);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.DateTime plusJodaDaysAndHoursAndMinutes(org.joda.time.DateTime dateTime, int numDays, int numHours, int numMinutes) {
+    public org.joda.time.DateTime jodaPlusDaysAndHoursAndMinutes(org.joda.time.DateTime dateTime, int numDays, int numHours, int numMinutes) {
         return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public org.joda.time.LocalTime jodaLocalPlusHoursAndMinutes(org.joda.time.LocalTime time, int numHours, int numMinutes) {
+        return time.plusHours(numHours).plusMinutes(numMinutes);
     }
 
 
@@ -129,6 +156,23 @@ public class Calculator {
     @Action(semantics = SemanticsOf.SAFE)
     public String concat(String prefix, @Parameter(optionality = Optionality.OPTIONAL) String suffix) {
         return prefix + suffix;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public UUID someUuid() {
+        return UUID.fromString("91be0d2d-1752-4962-ad2c-89a7ef73a656");
+    }
+
+    @SneakyThrows
+    @Action(semantics = SemanticsOf.SAFE)
+    public URL someUrl() {
+        return new URL("https://causeway.apache.org");
+    }
+
+    @SneakyThrows
+    @Action(semantics = SemanticsOf.SAFE)
+    public Locale someLocale() {
+        return Locale.UK;
     }
 
 }

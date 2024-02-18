@@ -2420,13 +2420,17 @@ public class CausewayConfiguration {
             public static class ScalarMarshaller {
 
                 /**
+                 * For both JDK8's {@link java.time.LocalTime} and JodaTime's {@link org.joda.time.LocalTime}
+                 */
+                private String localTimeFormat = "HH:mm:ss";
+                /**
                  * For both JDK8's {@link java.time.LocalDate} and JodaTime's {@link org.joda.time.LocalDate}
                  */
                 private String localDateFormat = "yyyy-MM-dd";
                 /**
                  * for JDK8's {@link java.time.ZonedDateTime} and JodaTime's {@link org.joda.time.DateTime}
                  */
-                private String zonedDateTimeFormat = "yyyy-MM-dd HH:mm:ss z";
+                private String zonedDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ssXXX";
             }
 
             @Getter

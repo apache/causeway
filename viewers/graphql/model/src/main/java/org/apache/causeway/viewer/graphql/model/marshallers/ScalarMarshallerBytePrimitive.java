@@ -22,6 +22,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 
 import graphql.Scalars;
+import graphql.scalars.ExtendedScalars;
 
 import org.springframework.stereotype.Component;
 
@@ -36,7 +37,7 @@ public class ScalarMarshallerBytePrimitive extends ScalarMarshallerAbstract<Byte
 
     @Inject
     public ScalarMarshallerBytePrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(byte.class, Scalars.GraphQLInt, causewayConfiguration);
+        super(byte.class, ExtendedScalars.GraphQLByte, causewayConfiguration);
     }
 
     @Override

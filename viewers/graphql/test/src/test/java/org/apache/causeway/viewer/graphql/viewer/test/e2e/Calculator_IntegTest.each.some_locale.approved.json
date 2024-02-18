@@ -1,8 +1,8 @@
 {
   "data" : {
     "university_calc_Calculator" : {
-      "plusDays" : {
-        "invoke" : "2024-01-28"
+      "someLocale" : {
+        "invoke" : "en_GB"
       }
     }
   }

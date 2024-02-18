@@ -1872,13 +1872,20 @@ type university_calc_Calculator {
   addShorts: university_calc_Calculator__addShorts__gqlv_action
   and: university_calc_Calculator__and__gqlv_action
   concat: university_calc_Calculator__concat__gqlv_action
+  jdk8LocalPlusDays: university_calc_Calculator__jdk8LocalPlusDays__gqlv_action
+  jdk8LocalPlusHoursAndMinutes: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action
+  jdk8OffsetPlusDaysAndHoursAndMinutes: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action
+  jdk8OffsetPlusHoursAndMinutes: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action
+  jdk8ZonedPlusDaysAndHoursAndMinutes: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action
+  jodaLocalPlusDays: university_calc_Calculator__jodaLocalPlusDays__gqlv_action
+  jodaLocalPlusHoursAndMinutes: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action
+  jodaPlusDaysAndHoursAndMinutes: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action
   nextMonth: university_calc_Calculator__nextMonth__gqlv_action
   not: university_calc_Calculator__not__gqlv_action
   or: university_calc_Calculator__or__gqlv_action
-  plusDays: university_calc_Calculator__plusDays__gqlv_action
-  plusDaysAndHoursAndMinutes: university_calc_Calculator__plusDaysAndHoursAndMinutes__gqlv_action
-  plusJodaDays: university_calc_Calculator__plusJodaDays__gqlv_action
-  plusJodaDaysAndHoursAndMinutes: university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__gqlv_action
+  someLocale: university_calc_Calculator__someLocale__gqlv_action
+  someUrl: university_calc_Calculator__someUrl__gqlv_action
+  someUuid: university_calc_Calculator__someUuid__gqlv_action
 }
 
 type university_calc_Calculator__addBigDecimals__gqlv_action {
@@ -1938,9 +1945,9 @@ type university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter {
 type university_calc_Calculator__addByteWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Int!, y: Int): Int
+  invoke(x: Byte!, y: Byte): Int
   params: university_calc_Calculator__addByteWrappers__gqlv_action_params
-  validate(x: Int, y: Int): String
+  validate(x: Byte, y: Byte): String
 }
 
 type university_calc_Calculator__addByteWrappers__gqlv_action_params {
@@ -1950,24 +1957,24 @@ type university_calc_Calculator__addByteWrappers__gqlv_action_params {
 
 type university_calc_Calculator__addByteWrappers__x__gqlv_action_parameter {
   datatype: String
-  disabled(x: Int): String
+  disabled(x: Byte): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addByteWrappers__y__gqlv_action_parameter {
   datatype: String
-  disabled(x: Int, y: Int): String
-  hidden(x: Int): Boolean
+  disabled(x: Byte, y: Byte): String
+  hidden(x: Byte): Boolean
   validity: String
 }
 
 type university_calc_Calculator__addBytes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Int!, y: Int!): Int
+  invoke(x: Byte!, y: Byte!): Byte
   params: university_calc_Calculator__addBytes__gqlv_action_params
-  validate(x: Int, y: Int): String
+  validate(x: Byte, y: Byte): String
 }
 
 type university_calc_Calculator__addBytes__gqlv_action_params {
@@ -1977,15 +1984,15 @@ type university_calc_Calculator__addBytes__gqlv_action_params {
 
 type university_calc_Calculator__addBytes__x__gqlv_action_parameter {
   datatype: String
-  disabled(x: Int): String
+  disabled(x: Byte): String
   hidden: Boolean
   validity: String
 }
 
 type university_calc_Calculator__addBytes__y__gqlv_action_parameter {
   datatype: String
-  disabled(x: Int, y: Int): String
-  hidden(x: Int): Boolean
+  disabled(x: Byte, y: Byte): String
+  hidden(x: Byte): Boolean
   validity: String
 }
 
@@ -2259,6 +2266,294 @@ type university_calc_Calculator__concat__suffix__gqlv_action_parameter {
   validity: String
 }
 
+type university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(date: String!, numDays: Int!): String
+  params: university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params
+  validate(date: String, numDays: Int): String
+}
+
+type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params {
+  date: university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_parameter
+  numDays: university_calc_Calculator__jdk8LocalPlusDays__numDays__gqlv_action_parameter
+}
+
+type university_calc_Calculator__jdk8LocalPlusDays__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String, numDays: Int): String
+  hidden(date: String): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): String
+  params: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: String): String
+}
+
+type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params {
+  numHours: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  numMinutes: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  time: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: String): String
+  hidden(time: String): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: String): String
+  hidden(numHours: Int, time: String): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): DateTime
+  params: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  dateTime: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  numDays: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  numHours: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  numMinutes: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int): String
+  hidden(dateTime: DateTime): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
+  hidden(dateTime: DateTime, numDays: Int): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: Time!): Time
+  params: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: Time): String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params {
+  numHours: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  numMinutes: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  time: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: Time): String
+  hidden(time: Time): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: Time): String
+  hidden(numHours: Int, time: Time): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: Time): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
+  params: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  dateTime: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  numDays: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  numHours: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  numMinutes: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int): String
+  hidden(dateTime: String): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int): String
+  hidden(dateTime: String, numDays: Int): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaLocalPlusDays__date__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaLocalPlusDays__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(date: String!, numDays: Int!): String
+  params: university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params
+  validate(date: String, numDays: Int): String
+}
+
+type university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params {
+  date: university_calc_Calculator__jodaLocalPlusDays__date__gqlv_action_parameter
+  numDays: university_calc_Calculator__jodaLocalPlusDays__numDays__gqlv_action_parameter
+}
+
+type university_calc_Calculator__jodaLocalPlusDays__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String, numDays: Int): String
+  hidden(date: String): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): String
+  params: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: String): String
+}
+
+type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params {
+  numHours: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  numMinutes: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  time: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: String): String
+  hidden(time: String): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: String): String
+  hidden(numHours: Int, time: String): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
+  params: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  dateTime: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  numDays: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  numHours: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  numMinutes: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int): String
+  hidden(dateTime: String): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int): String
+  hidden(dateTime: String, numDays: Int): Boolean
+  validity: String
+}
+
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
 type university_calc_Calculator__nextMonth__gqlv_action {
   disabled: String
   hidden: Boolean
@@ -2325,144 +2620,25 @@ type university_calc_Calculator__or__y__gqlv_action_parameter {
   validity: String
 }
 
-type university_calc_Calculator__plusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusDaysAndHoursAndMinutes__gqlv_action {
+type university_calc_Calculator__someLocale__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
-  params: university_calc_Calculator__plusDaysAndHoursAndMinutes__gqlv_action_params
-  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+  invoke: String
+  validate: String
 }
 
-type university_calc_Calculator__plusDaysAndHoursAndMinutes__gqlv_action_params {
-  dateTime: university_calc_Calculator__plusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
-  numDays: university_calc_Calculator__plusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
-  numHours: university_calc_Calculator__plusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
-  numMinutes: university_calc_Calculator__plusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
-}
-
-type university_calc_Calculator__plusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int): String
-  hidden(dateTime: String): Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int, numHours: Int): String
-  hidden(dateTime: String, numDays: Int): Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
-  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusDays__date__gqlv_action_parameter {
-  datatype: String
-  disabled(date: Date): String
-  hidden: Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusDays__gqlv_action {
+type university_calc_Calculator__someUrl__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(date: Date!, numDays: Int!): Date
-  params: university_calc_Calculator__plusDays__gqlv_action_params
-  validate(date: Date, numDays: Int): String
+  invoke: String
+  validate: String
 }
 
-type university_calc_Calculator__plusDays__gqlv_action_params {
-  date: university_calc_Calculator__plusDays__date__gqlv_action_parameter
-  numDays: university_calc_Calculator__plusDays__numDays__gqlv_action_parameter
-}
-
-type university_calc_Calculator__plusDays__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(date: Date, numDays: Int): String
-  hidden(date: Date): Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__gqlv_action {
+type university_calc_Calculator__someUuid__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
-  params: university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__gqlv_action_params
-  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
-}
-
-type university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__gqlv_action_params {
-  dateTime: university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
-  numDays: university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
-  numHours: university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
-  numMinutes: university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
-}
-
-type university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int): String
-  hidden(dateTime: String): Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int, numHours: Int): String
-  hidden(dateTime: String, numDays: Int): Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusJodaDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
-  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusJodaDays__date__gqlv_action_parameter {
-  datatype: String
-  disabled(date: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type university_calc_Calculator__plusJodaDays__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(date: String!, numDays: Int!): String
-  params: university_calc_Calculator__plusJodaDays__gqlv_action_params
-  validate(date: String, numDays: Int): String
-}
-
-type university_calc_Calculator__plusJodaDays__gqlv_action_params {
-  date: university_calc_Calculator__plusJodaDays__date__gqlv_action_parameter
-  numDays: university_calc_Calculator__plusJodaDays__numDays__gqlv_action_parameter
-}
-
-type university_calc_Calculator__plusJodaDays__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(date: String, numDays: Int): String
-  hidden(date: String): Boolean
-  validity: String
+  invoke: UUID
+  validate: String
 }
 
 "University department specializing in a field of study"
@@ -2970,11 +3146,20 @@ enum org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum
   SENIOR_LECTURER
 }
 
-"An RFC-3339 compliant Full Date Scalar"
-scalar Date
+"An 8-bit signed integer"
+scalar Byte
+
+"An RFC-3339 compliant DateTime Scalar"
+scalar DateTime
 
 "A 16-bit signed integer"
 scalar Short
+
+"An RFC-3339 compliant Full Time Scalar"
+scalar Time
+
+"A universally unique identifier compliant UUID Scalar"
+scalar UUID
 
 input causeway_applib_DomainObjectList__gqlv_input {
   id: ID
