@@ -3,6 +3,7 @@ package org.apache.causeway.viewer.graphql.viewer.test.domain.calc;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -90,9 +91,20 @@ public class Calculator {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    public ZonedDateTime plusDaysAndHoursAndMinutes(ZonedDateTime dateTime, int numDays, int numHours, int numMinutes) {
+        return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
     public org.joda.time.LocalDate plusJodaDays(org.joda.time.LocalDate date, int numDays) {
         return date.plusDays(numDays);
     }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public org.joda.time.DateTime plusJodaDaysAndHoursAndMinutes(org.joda.time.DateTime dateTime, int numDays, int numHours, int numMinutes) {
+        return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
+    }
+
 
     @Action(semantics = SemanticsOf.SAFE)
     public boolean and(boolean x, boolean y) {

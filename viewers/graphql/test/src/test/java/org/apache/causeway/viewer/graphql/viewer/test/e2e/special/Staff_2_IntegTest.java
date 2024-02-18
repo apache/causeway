@@ -16,16 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e.queryandmutations;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.special;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.approvaltests.Approvals;
@@ -33,16 +31,11 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import lombok.val;
@@ -51,77 +44,7 @@ import lombok.val;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(60)
 @ActiveProfiles("test")
-public class Staff_IntegTest extends Abstract_IntegTest {
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void list_all_staff_members() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_staff_member_by_name_and_edit_grade_choices() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void find_staff_member_by_name_and_edit() throws Exception {
-
-        // given
-        final Optional<Bookmark> bookmarkIfAny =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> {
-                            StaffMember pojo = staffMemberRepository.findByName("Gerry Jones");
-                            return bookmarkService.bookmarkFor(pojo);
-                        }
-                ).valueAsNullableElseFail();
-
-        assertThat(bookmarkIfAny).isPresent();
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-
-        // and in the database...
-        final Optional<StaffMember> staffMemberIfAny =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> bookmarkService.lookup(bookmarkIfAny.get(), StaffMember.class)
-                ).valueAsNullableElseFail();
-
-        assertThat(staffMemberIfAny).isPresent();
-        assertThat(staffMemberIfAny.get()).extracting(StaffMember::getName).isEqualTo("Gerald Johns");
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void staff_member_name_validate() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void staff_member_name_edit_invalid() throws Exception {
-
-        // when, then
-        Approvals.verify(submit(), jsonOptions());
-    }
-
-    @Test
-    @UseReporter(DiffReporter.class)
-    void create_staff_member_with_department() throws Exception {
-
-        Approvals.verify(submit(), jsonOptions());
-
-    }
+public class Staff_2_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)

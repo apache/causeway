@@ -120,6 +120,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <graphql-java.version>19.2</graphql-java.version>
+        <graphql-java-extended-scalars.version>19.1</graphql-java-extended-scalars.version>
         <guava.version>33.0.0-jre</guava.version>
 
         <htmlparser.version>2.1</htmlparser.version>
@@ -1497,13 +1498,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             </dependency>
 
 
-            <!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used
-				by causeway-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
-			<dependency>
-				<groupId>com.fasterxml.woodstox</groupId>
-				<artifactId>woodstox-core</artifactId>
-				<version>6.6.0</version>
-			</dependency>
             <dependency>
 				<groupId>org.codehaus.woodstox</groupId>
 				<artifactId>stax2-api</artifactId>
@@ -1519,11 +1513,23 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
 				<version>2.7.14</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
 			</dependency>
+            <!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used
+				by causeway-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
+			<dependency>
+				<groupId>com.fasterxml.woodstox</groupId>
+				<artifactId>woodstox-core</artifactId>
+				<version>6.6.0</version>
+			</dependency>
 			<dependency>
 	            <groupId>com.sun.xml.bind</groupId>
 	            <artifactId>jaxb-impl</artifactId>
 	            <version>2.3.9</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
 	        </dependency>
+            <dependency>
+                <groupId>com.graphql-java</groupId>
+                <artifactId>graphql-java-extended-scalars</artifactId>
+                <version>${graphql-java-extended-scalars.version}</version>
+            </dependency>
 
 			<dependency>
 				<groupId>org.ow2.asm</groupId>

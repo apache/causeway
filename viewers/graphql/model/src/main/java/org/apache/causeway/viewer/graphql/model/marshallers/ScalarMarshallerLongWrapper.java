@@ -22,6 +22,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 
 import graphql.Scalars;
+import graphql.scalars.ExtendedScalars;
 
 import org.springframework.stereotype.Component;
 
@@ -39,7 +40,7 @@ public class ScalarMarshallerLongWrapper extends ScalarMarshallerAbstract<Long> 
 
     @Inject
     public ScalarMarshallerLongWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Long.class, Scalars.GraphQLString, causewayConfiguration);
+        super(Long.class, ExtendedScalars.GraphQLLong, causewayConfiguration);
     }
 
     @Override
