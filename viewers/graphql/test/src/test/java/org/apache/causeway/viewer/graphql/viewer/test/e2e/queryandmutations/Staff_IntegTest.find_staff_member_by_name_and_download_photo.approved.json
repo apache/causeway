@@ -7,8 +7,8 @@
             "get" : "Gerry Jones"
           },
           "_meta" : {
-            "grid" : "///graphql/object/university.dept.StaffMember:NNN/grid",
-            "icon" : "///graphql/object/university.dept.StaffMember:NNN/icon"
+            "grid" : "///graphql/object/university.dept.StaffMember:NNN/_meta/grid",
+            "icon" : "///graphql/object/university.dept.StaffMember:NNN/_meta/icon"
           },
           "photo" : {
             "get" : {
