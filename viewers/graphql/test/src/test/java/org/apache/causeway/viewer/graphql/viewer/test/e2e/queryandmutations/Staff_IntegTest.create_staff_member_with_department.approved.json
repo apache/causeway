@@ -32,7 +32,7 @@
                 "logicalTypeName" : "university.dept.StaffMember",
                 "version" : null,
                 "cssClass" : null,
-                "iconName" : null
+                "icon" : "///graphql/object/university.dept.StaffMember:NNN/icon"
               }
             }
           }

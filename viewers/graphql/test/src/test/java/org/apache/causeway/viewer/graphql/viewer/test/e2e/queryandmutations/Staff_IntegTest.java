@@ -137,7 +137,7 @@ public class Staff_IntegTest extends Abstract_IntegTest {
                 .at("/data/university_dept_Staff/findStaffMemberByName/invoke/_meta/grid")
                 .asText();
 
-        assertThat(gridUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/grid");
+        assertThat(gridUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/grid");
         val gridHttpResponse = submitReturningString(gridUrl);
 
         assertThat(gridHttpResponse.statusCode()).isEqualTo(200);
@@ -154,6 +154,17 @@ public class Staff_IntegTest extends Abstract_IntegTest {
         assertThat(photoBytesResponse.statusCode()).isEqualTo(200);
         val photoBytes = photoBytesResponse.body();
         assertThat(photoBytes).isNotEmpty();
+
+
+        val iconBytesUrl = jsonNodeRoot
+                .at("/data/university_dept_Staff/findStaffMemberByName/invoke/_meta/icon")
+                .asText();
+
+        assertThat(iconBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/icon");
+        val iconBytesResponse = submitReturningBytes(iconBytesUrl);
+        assertThat(iconBytesResponse.statusCode()).isEqualTo(200);
+        val iconBytes = iconBytesResponse.body();
+        assertThat(iconBytes).isNotEmpty();
     }
 
     private HttpResponse<byte[]> submitReturningBytes(String url) throws IOException, InterruptedException {

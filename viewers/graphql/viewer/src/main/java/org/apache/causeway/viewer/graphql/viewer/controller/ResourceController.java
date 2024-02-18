@@ -9,6 +9,8 @@ import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -74,7 +76,7 @@ public class ResourceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(value = "/{logicalTypeName}:{id}/grid")
+    @GetMapping(value = "/{logicalTypeName}:{id}/_meta/grid")
     public ResponseEntity<String> grid(
             @PathVariable final String logicalTypeName,
             @PathVariable final String id
@@ -92,10 +94,34 @@ public class ResourceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping(value = "/{logicalTypeName}:{id}/_meta/icon")
+    public ResponseEntity<byte[]> icon(
+            @PathVariable final String logicalTypeName,
+            @PathVariable final String id
+    ) {
+        return lookup(logicalTypeName, id)
+                .map(ManagedObject::getIcon)
+                .filter(Objects::nonNull)
+                .map(objectIcon -> {
+                    val bytes = objectIcon.asBytes();
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.parseMediaType(objectIcon.getMimeType().getMimeType().toString()))
+                            .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(logicalTypeName + ".png").build().toString())
+                            .contentLength(bytes.length)
+                            .body(bytes);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @Nullable
     private static Grid gridOf(ManagedObject managedObject) {
         val facet = managedObject.getSpecification().getFacet(GridFacet.class);
         return facet != null ? facet.getGrid(managedObject) : null;
+    }
+
+    @Nullable
+    private static ObjectIcon iconOf(ManagedObject managedObject) {
+        return managedObject.getIcon();
     }
 
     private Optional<Object> valueOfProperty(String logicalTypeName, String id, String propertyId) {
