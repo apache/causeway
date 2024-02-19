@@ -83,17 +83,22 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
         }
     }
 
-    protected void buildObjectTypeAndField(String fieldName) {
+    protected void buildObjectTypeAndField(
+            final String fieldName,
+            final String description) {
         if (!isBuilt()) {
             buildObjectType();
         }
 
-        setField(newField(fieldName));
+        setField(newField(fieldName, description));
     }
 
-    public GraphQLFieldDefinition newField(String fieldName) {
+    public GraphQLFieldDefinition newField(
+            final String fieldName,
+            final String description) {
         return newFieldDefinition()
                 .name(fieldName)
+                .description(description)
                 .type(getGqlObjectType())
                 .build();
     }

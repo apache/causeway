@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import lombok.val;
 
 public class GqlvMeta extends GqlvAbstractCustom {
@@ -88,7 +86,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
         addChildFieldFor(this.metaGrid = isResourceNotForbidden() ? new GqlvMetaGrid(context) : null);
 
         val fieldName = graphqlConfiguration.getMetaData().getFieldName();
-        buildObjectTypeAndField(fieldName);
+        buildObjectTypeAndField(fieldName, "Object metadata");
     }
 
     private boolean isResourceNotForbidden() {

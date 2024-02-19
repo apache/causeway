@@ -88,7 +88,7 @@ public class GqlvAction
                     : null);
         addChildFieldFor(this.params = new GqlvActionParams(this, context));
 
-        buildObjectTypeAndField(objectAction.getId());
+        buildObjectTypeAndField(objectAction.getId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
     }
 
     private boolean isInvokeAllowed(ObjectAction objectAction) {

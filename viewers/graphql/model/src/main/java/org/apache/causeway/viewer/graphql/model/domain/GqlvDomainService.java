@@ -65,7 +65,7 @@ public class GqlvDomainService
 
         addActions();
         if (hasActions()) {
-            buildObjectTypeAndField(TypeNames.objectTypeNameFor(this.objectSpecification));
+            buildObjectTypeAndField(TypeNames.objectTypeNameFor(this.objectSpecification), this.objectSpecification.getDescription());
         }
     }
 
@@ -101,6 +101,5 @@ public class GqlvDomainService
     public String toString() {
         return objectSpecification.getLogicalTypeName();
     }
-
 
 }

@@ -67,7 +67,7 @@ public class GqlvActionInvokeArgs
             return;
         }
 
-        buildObjectTypeAndField("args");
+        buildObjectTypeAndField("args", "Arguments used to invoke this action");
     }
 
     @Override

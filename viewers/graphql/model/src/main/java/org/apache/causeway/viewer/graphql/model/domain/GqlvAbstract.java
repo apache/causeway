@@ -34,7 +34,7 @@ public abstract class GqlvAbstract {
      *
      * <p>
      *     However, {@link GqlvScenarioStep} is an exception; it doesn't populate this field - instead
-     *     {@link GqlvAbstractCustom#newField(String)} is used to create multiple fields for the type.
+     *     {@link GqlvAbstractCustom#newField(String, String)} is used to create multiple fields for the type.
      * </p>
      */
     @Getter

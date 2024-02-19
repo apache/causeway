@@ -44,9 +44,9 @@ public class GqlvScenario
         addChildFieldFor(this.scenarioName = new GqlvScenarioName(context));
 
         this.scenarioStep = new GqlvScenarioStep(context);
-        addChildField(scenarioStep.newField("Given"));
-        addChildField(scenarioStep.newField("When"));
-        addChildField(scenarioStep.newField("Then"));
+        addChildField(scenarioStep.newField("Given", "Given the system under test has this initial state"));
+        addChildField(scenarioStep.newField("When", "When the system is changed in some particular way"));
+        addChildField(scenarioStep.newField("Then", "Then the system has this resultant state"));
 
         buildObjectType();
 

@@ -36,10 +36,10 @@ public class GqlvCollection
 
     public GqlvCollection(
             final Holder holder,
-            final OneToManyAssociation oneToManyAssociation,
+            final OneToManyAssociation otma,
             final Context context
     ) {
-        super(holder, oneToManyAssociation, TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), oneToManyAssociation), context);
+        super(holder, otma, TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), otma), context);
 
         if(isBuilt()) {
             this.hidden = null;
@@ -53,7 +53,7 @@ public class GqlvCollection
         addChildFieldFor(this.get = new GqlvCollectionGet(this, context));
         addChildFieldFor(this.datatype = new GqlvCollectionDatatype(this, context));
 
-        buildObjectTypeAndField(oneToManyAssociation.getId());
+        buildObjectTypeAndField(otma.getId(), otma.getCanonicalDescription().orElse(otma.getCanonicalFriendlyName()));
     }
 
     @Override

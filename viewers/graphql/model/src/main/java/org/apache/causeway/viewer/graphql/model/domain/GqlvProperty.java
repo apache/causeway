@@ -64,9 +64,9 @@ public class GqlvProperty
 
     public GqlvProperty(
             final Holder holder,
-            final OneToOneAssociation oneToOneAssociation,
+            final OneToOneAssociation otoa,
             final Context context) {
-        super(holder, oneToOneAssociation, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), oneToOneAssociation), context);
+        super(holder, otoa, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), otoa), context);
 
         if (isBuilt()) {
             this.hidden = null;
@@ -96,7 +96,7 @@ public class GqlvProperty
         addChildFieldFor(this.set = isSetterAllowed() ? new GqlvPropertySet(this, context) : null);
         addChildFieldFor(this.datatype = new GqlvPropertyDatatype(this, context));
 
-        buildObjectTypeAndField(oneToOneAssociation.getId());
+        buildObjectTypeAndField(otoa.getId(), otoa.getCanonicalDescription().orElse(otoa.getCanonicalFriendlyName()));
     }
 
     private boolean isSetterAllowed() {

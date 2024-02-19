@@ -69,7 +69,7 @@ public class GqlvActionParams
             return;
         }
 
-        buildObjectTypeAndField("params");
+        buildObjectTypeAndField("params", "Parameters of this action");
     }
 
     @Override
