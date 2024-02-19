@@ -4,15 +4,17 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
-            addStaffMembers {
-              params {
-                staffMembers {
-                  choices {
-                    _meta {
-                      saveAs(ref: "staff-member-choices")
-                    }
-                    name {
-                      get
+            results {
+              addStaffMembers {
+                params {
+                  staffMembers {
+                    choices {
+                      _meta {
+                        saveAs(ref: "staff-member-choices")
+                      }
+                      name {
+                        get
+                      }
                     }
                   }
                 }

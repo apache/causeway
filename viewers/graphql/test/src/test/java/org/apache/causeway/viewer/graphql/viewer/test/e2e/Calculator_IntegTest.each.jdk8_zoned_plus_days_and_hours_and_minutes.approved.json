@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "jdk8ZonedPlusDaysAndHoursAndMinutes" : {
-        "invoke" : "2022-04-18T10:35:10+02:00"
+        "invoke" : {
+          "results" : "2022-04-18T10:35:10+02:00"
+        }
       }
     }
   }

@@ -1,7 +1,9 @@
 {
   university_calc_Calculator {
     someUrl {
-      invoke
+      invoke {
+        results
+      }
     }
   }
 }

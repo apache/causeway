@@ -37,38 +37,38 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionParam
+public class GqlvActionParamsParam
         extends GqlvAbstractCustom
-        implements GqlvActionParamHidden.Holder,
-                   GqlvActionParamDisabled.Holder,
-                   GqlvActionParamChoices.Holder,
-                   GqlvActionParamAutoComplete.Holder,
-                   GqlvActionParamDefault.Holder,
-                   GqlvActionParamValidate.Holder,
-                   GqlvActionParamDatatype.Holder {
+        implements GqlvActionParamsParamHidden.Holder,
+                   GqlvActionParamsParamDisabled.Holder,
+                   GqlvActionParamsParamChoices.Holder,
+                   GqlvActionParamsParamAutoComplete.Holder,
+                   GqlvActionParamsParamDefault.Holder,
+                   GqlvActionParamsParamValidate.Holder,
+                   GqlvActionParamsParamDatatype.Holder {
 
     @Getter private final Holder holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
-    private final GqlvActionParamHidden hidden;
-    private final GqlvActionParamDisabled disabled;
+    private final GqlvActionParamsParamHidden hidden;
+    private final GqlvActionParamsParamDisabled disabled;
     /**
      * Populated iff there are choices for this param
      */
-    private final GqlvActionParamChoices choices;
+    private final GqlvActionParamsParamChoices choices;
     /**
      * Populated iff there is an autocomplete for this param
      */
-    private final GqlvActionParamAutoComplete autoComplete;
+    private final GqlvActionParamsParamAutoComplete autoComplete;
     /**
      * Populated iff there is a default for this param
      */
-    private final GqlvActionParamDefault default_;
-    private final GqlvActionParamValidate validate;
-    private final GqlvActionParamDatatype datatype;
+    private final GqlvActionParamsParamDefault default_;
+    private final GqlvActionParamsParamValidate validate;
+    private final GqlvActionParamsParamDatatype datatype;
 
-    public GqlvActionParam(
+    public GqlvActionParamsParam(
             final Holder holder,
             final ObjectActionParameter objectActionParameter,
             final Context context,
@@ -92,13 +92,13 @@ public class GqlvActionParam
         }
 
 
-        addChildFieldFor(this.hidden = new GqlvActionParamHidden(this, context));
-        addChildFieldFor(this.disabled = new GqlvActionParamDisabled(this, context));
-        addChildFieldFor(this.choices = new GqlvActionParamChoices(this, context));
-        addChildFieldFor(this.autoComplete = new GqlvActionParamAutoComplete(this, context));
-        addChildFieldFor(this.default_ = new GqlvActionParamDefault(this, context));
-        addChildFieldFor(this.validate = new GqlvActionParamValidate(this, context));
-        addChildFieldFor(this.datatype = new GqlvActionParamDatatype(this, context));
+        addChildFieldFor(this.hidden = new GqlvActionParamsParamHidden(this, context));
+        addChildFieldFor(this.disabled = new GqlvActionParamsParamDisabled(this, context));
+        addChildFieldFor(this.choices = new GqlvActionParamsParamChoices(this, context));
+        addChildFieldFor(this.autoComplete = new GqlvActionParamsParamAutoComplete(this, context));
+        addChildFieldFor(this.default_ = new GqlvActionParamsParamDefault(this, context));
+        addChildFieldFor(this.validate = new GqlvActionParamsParamValidate(this, context));
+        addChildFieldFor(this.datatype = new GqlvActionParamsParamDatatype(this, context));
 
         buildObjectTypeAndField(objectActionParameter.getId());
     }
@@ -151,13 +151,20 @@ public class GqlvActionParam
     }
 
     @Override
-    public void addGqlArguments(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
+    public void addGqlArguments(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder fieldBuilder,
+            final TypeMapper.InputContext inputContext,
+            final int paramNum) {
         holder.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum);
     }
 
     @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(DataFetchingEnvironment dataFetchingEnvironment, ObjectAction objectAction, BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
+    public Can<ManagedObject> argumentManagedObjectsFor(
+            final Environment environment,
+            final ObjectAction objectAction,
+            final BookmarkService bookmarkService) {
+        return holder.argumentManagedObjectsFor(environment, objectAction, bookmarkService);
     }
 
     @Override
@@ -177,7 +184,7 @@ public class GqlvActionParam
                 int paramNum);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment dataFetchingEnvironment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

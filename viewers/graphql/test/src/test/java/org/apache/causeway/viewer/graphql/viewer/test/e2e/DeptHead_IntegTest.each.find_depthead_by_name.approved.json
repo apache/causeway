@@ -3,13 +3,15 @@
     "university_dept_DeptHeads" : {
       "findHeadByName" : {
         "invoke" : {
-          "name" : {
-            "get" : "Dr. Barney Jones"
-          },
-          "department" : {
-            "get" : {
-              "name" : {
-                "get" : "Classics"
+          "results" : {
+            "name" : {
+              "get" : "Dr. Barney Jones"
+            },
+            "department" : {
+              "get" : {
+                "name" : {
+                  "get" : "Classics"
+                }
               }
             }
           }

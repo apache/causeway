@@ -3,9 +3,11 @@
     "university_dept_Staff" : {
       "findStaffMemberByName" : {
         "invoke" : {
-          "grade" : {
-            "disabled" : null,
-            "choices" : [ "PROFESSOR", "READER", "SENIOR_LECTURER", "LECTURER", "RESEARCH_ASSISTANT" ]
+          "results" : {
+            "grade" : {
+              "disabled" : null,
+              "choices" : [ "PROFESSOR", "READER", "SENIOR_LECTURER", "LECTURER", "RESEARCH_ASSISTANT" ]
+            }
           }
         }
       }

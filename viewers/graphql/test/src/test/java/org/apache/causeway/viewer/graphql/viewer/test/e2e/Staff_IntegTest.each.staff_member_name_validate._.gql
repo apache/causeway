@@ -2,8 +2,10 @@
   university_dept_Staff {
     findStaffMemberByName {
       invoke(name: "Gerry Jones") {
-        name {
-          validate(name: "Gerry!")
+        results {
+          name {
+            validate(name: "Gerry!")
+          }
         }
       }
     }

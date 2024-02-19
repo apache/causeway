@@ -30,19 +30,23 @@ import lombok.val;
 
 public class GqlvPropertyGetClobChars extends GqlvPropertyGetClobAbstract {
 
+    private final String graphqlPath;
+
     public GqlvPropertyGetClobChars(
             final Holder holder,
             final Context context) {
-        super(holder, context, "bytes");
+        super(holder, context, "chars");
+
+        this.graphqlPath = context.causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
     }
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
         val sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        Optional<Bookmark> bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
+        val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> String.format(
-                "///%s/object/%s:%s/%s/clobChars", "graphql", x.getLogicalTypeName(), x.getIdentifier(), holder.getObjectAssociation().getId())).orElse(null);
+                "//%s/object/%s:%s/%s/clobChars", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), holder.getObjectAssociation().getId())).orElse(null);
 
     }
 

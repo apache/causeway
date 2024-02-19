@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "addDoubles" : {
-        "invoke" : 3.3000000000000003
+        "invoke" : {
+          "results" : 3.3000000000000003
+        }
       }
     }
   }

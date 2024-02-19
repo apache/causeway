@@ -3,10 +3,12 @@
     "university_dept_Staff" : {
       "findStaffMemberByName" : {
         "invoke" : {
-          "name" : {
-            "set" : {
-              "name" : {
-                "get" : "Gerald Johns"
+          "results" : {
+            "name" : {
+              "set" : {
+                "name" : {
+                  "get" : "Gerald Johns"
+                }
               }
             }
           }

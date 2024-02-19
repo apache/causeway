@@ -22,6 +22,7 @@ import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -35,9 +36,11 @@ public class GqlvPropertyGetClob
 {
 
     final Holder holder;
-    final GqlvPropertyGetClobChars clobChars;
-    final GqlvPropertyGetClobMimeType clobMimeType;
     final GqlvPropertyGetClobName clobName;
+    final GqlvPropertyGetClobMimeType clobMimeType;
+    final GqlvPropertyGetClobChars clobChars;
+
+    private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetClob(
             final Holder holder,
@@ -45,21 +48,28 @@ public class GqlvPropertyGetClob
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember()), context);
         this.holder = holder;
 
-        if(isBuilt()) {
-            this.clobChars = null;
-            this.clobMimeType = null;
+        this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+
+        if (isBuilt()) {
+            // type already exists, nothing else to do.
             this.clobName = null;
+            this.clobMimeType = null;
+            this.clobChars = null;
             return;
         }
 
-        addChildFieldFor(clobChars = new GqlvPropertyGetClobChars(this, context));
-        addChildFieldFor(clobMimeType = new GqlvPropertyGetClobMimeType(this, context));
         addChildFieldFor(clobName = new GqlvPropertyGetClobName(this, context));
+        addChildFieldFor(clobMimeType = new GqlvPropertyGetClobMimeType(this, context));
+        addChildFieldFor(clobChars = isResourceNotForbidden() ? new GqlvPropertyGetClobChars(this, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")
                     .type(buildObjectType())
                     .build());
+    }
+
+    private boolean isResourceNotForbidden() {
+        return graphqlConfiguration.getResources().getResponseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     @Override
@@ -69,12 +79,14 @@ public class GqlvPropertyGetClob
 
     @Override
     protected void addDataFetchersForChildren() {
-        if(clobChars == null) {
+        if(clobName == null) {
             return;
         }
-        clobChars.addDataFetcher(this);
-        clobMimeType.addDataFetcher(this);
         clobName.addDataFetcher(this);
+        clobMimeType.addDataFetcher(this);
+        if(clobChars != null) {
+            clobChars.addDataFetcher(this);
+        }
     }
 
     @Override

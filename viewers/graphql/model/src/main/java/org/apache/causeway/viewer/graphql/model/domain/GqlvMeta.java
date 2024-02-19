@@ -25,6 +25,7 @@ import graphql.schema.DataFetchingEnvironment;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
@@ -33,6 +34,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+
+import org.springframework.beans.factory.annotation.Value;
 
 import lombok.val;
 
@@ -43,11 +46,13 @@ public class GqlvMeta extends GqlvAbstractCustom {
     private final GqlvMetaLogicalTypeName metaLogicalTypeName;
     private final GqlvMetaVersion metaVersion;
     private final GqlvMetaTitle metaTitle;
-    private final GqlvMetaIcon metaIconName;
+    private final GqlvMetaIcon metaIcon;
     private final GqlvMetaCssClass metaCssClass;
     private final GqlvMetaLayout metaLayout;
     private final GqlvMetaGrid metaGrid;
     private final GqlvMetaSaveAs metaSaveAs;
+
+    private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvMeta(
             final Holder holder,
@@ -56,12 +61,14 @@ public class GqlvMeta extends GqlvAbstractCustom {
         super(TypeNames.metaTypeNameFor(holder.getObjectSpecification()), context);
         this.holder = holder;
 
+        this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+
         if(isBuilt()) {
             this.metaId = null;
             this.metaLogicalTypeName = null;
             this.metaVersion = null;
             this.metaTitle = null;
-            this.metaIconName = null;
+            this.metaIcon = null;
             this.metaCssClass = null;
             this.metaLayout = null;
             this.metaGrid = null;
@@ -73,14 +80,19 @@ public class GqlvMeta extends GqlvAbstractCustom {
         addChildFieldFor(this.metaLogicalTypeName = new GqlvMetaLogicalTypeName(context));
         addChildFieldFor(this.metaVersion = isEntity() ? new GqlvMetaVersion(context) : null);
         addChildFieldFor(this.metaTitle = new GqlvMetaTitle(context));
-        addChildFieldFor(this.metaIconName = new GqlvMetaIcon(context));
         addChildFieldFor(this.metaCssClass = new GqlvMetaCssClass(context));
         addChildFieldFor(this.metaLayout = new GqlvMetaLayout(context));
-        addChildFieldFor(this.metaGrid = new GqlvMetaGrid(context));
         addChildFieldFor(this.metaSaveAs = new GqlvMetaSaveAs(context));
 
-        val fieldName = context.causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName();
+        addChildFieldFor(this.metaIcon = isResourceNotForbidden() ? new GqlvMetaIcon(context) : null);
+        addChildFieldFor(this.metaGrid = isResourceNotForbidden() ? new GqlvMetaGrid(context) : null);
+
+        val fieldName = graphqlConfiguration.getMetaData().getFieldName();
         buildObjectTypeAndField(fieldName);
+    }
+
+    private boolean isResourceNotForbidden() {
+        return graphqlConfiguration.getResources().getResponseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     private boolean isEntity() {
@@ -90,6 +102,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
     @Override
     protected void addDataFetchersForChildren() {
         if (metaId == null) {
+            // none of the fields will have been initialized
             return;
         }
         metaId.addDataFetcher(this);
@@ -98,17 +111,21 @@ public class GqlvMeta extends GqlvAbstractCustom {
             metaVersion.addDataFetcher(this);
         }
         metaTitle.addDataFetcher(this);
-        metaIconName.addDataFetcher(this);
         metaCssClass.addDataFetcher(this);
         metaLayout.addDataFetcher(this);
-        metaGrid.addDataFetcher(this);
         metaSaveAs.addDataFetcher(this);
+        if (metaGrid != null) {
+            metaGrid.addDataFetcher(this);
+        }
+        if (metaIcon != null) {
+            metaIcon.addDataFetcher(this);
+        }
     }
 
     @Override
     public Object fetchData(final DataFetchingEnvironment environment) {
         return context.bookmarkService.bookmarkFor(environment.getSource())
-                .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager))
+                .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager, context.causewayConfiguration))
                 .orElseThrow();
     }
 
@@ -121,14 +138,20 @@ public class GqlvMeta extends GqlvAbstractCustom {
         private final Bookmark bookmark;
         private final BookmarkService bookmarkService;
         private final ObjectManager objectManager;
+        private final CausewayConfiguration causewayConfiguration;
+        private final String graphqlPath;
 
         Fetcher(
                 final Bookmark bookmark,
                 final BookmarkService bookmarkService,
-                final ObjectManager objectManager) {
+                final ObjectManager objectManager,
+                final CausewayConfiguration causewayConfiguration
+        ) {
             this.bookmark = bookmark;
             this.bookmarkService = bookmarkService;
             this.objectManager = objectManager;
+            this.causewayConfiguration = causewayConfiguration;
+            this.graphqlPath = causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
         }
 
         public String logicalTypeName(){
@@ -193,8 +216,8 @@ public class GqlvMeta extends GqlvAbstractCustom {
             return managedObject()
                     .flatMap(Bookmarkable::getBookmark
                     ).map(bookmark -> String.format(
-                            "///%s/object/%s:%s/_meta/%s",
-                            "graphql", bookmark.getLogicalTypeName(), bookmark.getIdentifier(), resource) )
+                            "//%s/object/%s:%s/%s/%s",
+                            graphqlPath, bookmark.getLogicalTypeName(), bookmark.getIdentifier(), causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName(), resource) )
                     .orElse(null);
         }
 

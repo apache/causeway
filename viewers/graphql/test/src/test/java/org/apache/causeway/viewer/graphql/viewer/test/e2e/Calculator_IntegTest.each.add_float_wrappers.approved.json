@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "addFloatWrappers" : {
-        "invoke" : 3.3000002
+        "invoke" : {
+          "results" : 3.3000002
+        }
       }
     }
   }

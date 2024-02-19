@@ -23,10 +23,12 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import java.util.stream.Collectors;
 
  import graphql.schema.DataFetchingEnvironment;
+ import graphql.schema.GraphQLArgument;
  import graphql.schema.GraphQLFieldDefinition;
  import graphql.schema.GraphQLList;
 
  import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+ import static graphql.schema.GraphQLNonNull.nonNull;
 
  import org.apache.causeway.applib.annotation.Where;
  import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -47,23 +49,29 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import lombok.extern.log4j.Log4j2;
 
  @Log4j2
- public class GqlvActionParamChoices extends GqlvAbstract {
+ public class GqlvActionParamsParamAutoComplete extends GqlvAbstract {
+
+     private static final String SEARCH_PARAM_NAME = "search";
 
      private final Holder holder;
 
-     public GqlvActionParamChoices(
+     public GqlvActionParamsParamAutoComplete(
              final Holder holder,
              final Context context) {
          super(context);
          this.holder = holder;
 
          val objectActionParameter = holder.getObjectActionParameter();
-         if (objectActionParameter.hasChoices()) {
+         if (objectActionParameter.hasAutoComplete()) {
              val elementType = objectActionParameter.getElementType();
              val fieldBuilder = newFieldDefinition()
-                     .name("choices")
+                     .name("autoComplete")
                      .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
-             holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.CHOICES, holder.getParamNum());
+             holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
+             fieldBuilder.argument(GraphQLArgument.newArgument()
+                     .name(SEARCH_PARAM_NAME)
+                     .type(nonNull(context.typeMapper.outputTypeFor(String.class))))
+                     .build();
              setField(fieldBuilder.build());
          } else {
              setField(null);
@@ -83,13 +91,14 @@ package org.apache.causeway.viewer.graphql.model.domain;
          val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
          val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-         val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+         val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
          val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
-         val choices = objectActionParameter.getChoices(pendingArgs, InteractionInitiatedBy.USER);
+         val searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
+         val autoCompleteManagedObjects = objectActionParameter.getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
 
-         return choices.stream()
+         return autoCompleteManagedObjects.stream()
                     .map(ManagedObject::getPojo)
                     .collect(Collectors.toList());
      }
@@ -98,7 +107,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
              extends ObjectSpecificationProvider,
                      ObjectActionProvider,
                      ObjectActionParameterProvider {
-         GqlvActionParam.Holder getHolder();
+         GqlvActionParamsParam.Holder getHolder();
 
          void addGqlArguments(
                  ObjectAction objectAction,
@@ -107,7 +116,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
                  int paramNum);
 
          Can<ManagedObject> argumentManagedObjectsFor(
-                 DataFetchingEnvironment dataFetchingEnvironment,
+                 Environment environment,
                  ObjectAction objectAction,
                  BookmarkService bookmarkService);
      }

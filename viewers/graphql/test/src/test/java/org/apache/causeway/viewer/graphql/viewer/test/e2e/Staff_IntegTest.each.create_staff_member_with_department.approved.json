@@ -6,8 +6,10 @@
         "university_dept_Departments" : {
           "findDepartmentByName" : {
             "invoke" : {
-              "_meta" : {
-                "saveAs" : "classics"
+              "results" : {
+                "_meta" : {
+                  "saveAs" : "classics"
+                }
               }
             }
           }
@@ -17,22 +19,24 @@
         "university_dept_Staff" : {
           "createStaffMember" : {
             "invokeNonIdempotent" : {
-              "name" : {
-                "get" : "Dr. Georgina McGovern"
-              },
-              "department" : {
-                "get" : {
-                  "name" : {
-                    "get" : "Classics"
+              "results" : {
+                "name" : {
+                  "get" : "Dr. Georgina McGovern"
+                },
+                "department" : {
+                  "get" : {
+                    "name" : {
+                      "get" : "Classics"
+                    }
                   }
+                },
+                "_meta" : {
+                  "title" : "Untitled Staff Member",
+                  "logicalTypeName" : "university.dept.StaffMember",
+                  "version" : null,
+                  "cssClass" : null,
+                  "icon" : "///graphql/object/university.dept.StaffMember:NNN/_meta/icon"
                 }
-              },
-              "_meta" : {
-                "title" : "Untitled Staff Member",
-                "logicalTypeName" : "university.dept.StaffMember",
-                "version" : null,
-                "cssClass" : null,
-                "icon" : "///graphql/object/university.dept.StaffMember:NNN/_meta/icon"
               }
             }
           }

@@ -2,13 +2,15 @@
   university_dept_Departments {
     findDepartmentByName {
       invoke(name: "Classics") {
-        changeDeptHead {
-          params {
-            newDeptHead {
-              datatype
-              autoComplete(search: "Ho") {
-                name {
-                  get
+        results {
+          changeDeptHead {
+            params {
+              newDeptHead {
+                datatype
+                autoComplete(search: "Ho") {
+                  name {
+                    get
+                  }
                 }
               }
             }

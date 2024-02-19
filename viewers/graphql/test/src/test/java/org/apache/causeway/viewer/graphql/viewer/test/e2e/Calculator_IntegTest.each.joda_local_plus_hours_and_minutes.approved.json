@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "jodaLocalPlusHoursAndMinutes" : {
-        "invoke" : "15:55:05.000"
+        "invoke" : {
+          "results" : "15:55:05.000"
+        }
       }
     }
   }

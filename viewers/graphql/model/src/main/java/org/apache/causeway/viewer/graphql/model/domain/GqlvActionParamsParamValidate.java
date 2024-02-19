@@ -40,11 +40,11 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionParamValidate extends GqlvAbstract {
+public class GqlvActionParamsParamValidate extends GqlvAbstract {
 
     private final Holder holder;
 
-    public GqlvActionParamValidate(
+    public GqlvActionParamsParamValidate(
             final Holder holder,
             final Context context) {
         super(context);
@@ -74,7 +74,7 @@ public class GqlvActionParamValidate extends GqlvAbstract {
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
 
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
         val usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return usable.isVetoed() ? usable.getReasonAsString().orElse("Invalid") : null;
@@ -87,7 +87,7 @@ public class GqlvActionParamValidate extends GqlvAbstract {
         void addGqlArgument(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment environment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

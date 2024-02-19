@@ -2,12 +2,14 @@
   university_dept_Departments {
     findDepartmentByName {
       invoke(name: "Classics") {
-        changeDeptHead {
-          params {
-            newDeptHead {
-              default {
-                name {
-                  get
+        results {
+          changeDeptHead {
+            params {
+              newDeptHead {
+                default {
+                  name {
+                    get
+                  }
                 }
               }
             }

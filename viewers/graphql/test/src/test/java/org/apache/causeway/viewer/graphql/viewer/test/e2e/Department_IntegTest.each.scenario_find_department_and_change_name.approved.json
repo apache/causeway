@@ -6,8 +6,10 @@
         "university_dept_Departments" : {
           "findDepartmentByName" : {
             "invoke" : {
-              "_meta" : {
-                "saveAs" : "classics_dept"
+              "results" : {
+                "_meta" : {
+                  "saveAs" : "classics_dept"
+                }
               }
             }
           }
@@ -17,8 +19,10 @@
         "university_dept_Department" : {
           "changeName" : {
             "invokeIdempotent" : {
-              "name" : {
-                "get" : "Ancient History"
+              "results" : {
+                "name" : {
+                  "get" : "Ancient History"
+                }
               }
             }
           }

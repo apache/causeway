@@ -176,9 +176,9 @@ public class GqlvDomainObject
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment environment) {
-        Object target = environment.getArgument("object");
-        return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService, environment)
+    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+        Object target = dataFetchingEnvironment.getArgument("object");
+        return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService, new Environment.For(dataFetchingEnvironment))
                 .orElse(null);
     }
 

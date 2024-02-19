@@ -40,11 +40,11 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionParamHidden extends GqlvAbstract {
+public class GqlvActionParamsParamHidden extends GqlvAbstract {
 
     private final Holder holder;
 
-    public GqlvActionParamHidden(
+    public GqlvActionParamsParamHidden(
             final Holder holder,
             final Context context) {
         super(context);
@@ -75,7 +75,7 @@ public class GqlvActionParamHidden extends GqlvAbstract {
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
 
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
         val visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return visible.isVetoed();
@@ -92,7 +92,7 @@ public class GqlvActionParamHidden extends GqlvAbstract {
                 int paramNum);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment environment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

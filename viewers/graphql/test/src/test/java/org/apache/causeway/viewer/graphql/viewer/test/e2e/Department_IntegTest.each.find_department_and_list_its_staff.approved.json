@@ -3,20 +3,22 @@
     "university_dept_Departments" : {
       "findDepartmentByName" : {
         "invoke" : {
-          "name" : {
-            "get" : "Classics"
-          },
-          "staffMembers" : {
-            "datatype" : "university_dept_StaffMember",
-            "get" : [ {
-              "name" : {
-                "get" : "Gerry Jones"
-              }
-            }, {
-              "name" : {
-                "get" : "Letitia Leadbetter"
-              }
-            } ]
+          "results" : {
+            "name" : {
+              "get" : "Classics"
+            },
+            "staffMembers" : {
+              "datatype" : "university_dept_StaffMember",
+              "get" : [ {
+                "name" : {
+                  "get" : "Gerry Jones"
+                }
+              }, {
+                "name" : {
+                  "get" : "Letitia Leadbetter"
+                }
+              } ]
+            }
           }
         }
       }

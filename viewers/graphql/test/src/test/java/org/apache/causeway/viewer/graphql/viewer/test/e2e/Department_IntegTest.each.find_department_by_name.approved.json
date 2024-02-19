@@ -3,16 +3,18 @@
     "university_dept_Departments" : {
       "findDepartmentByName" : {
         "invoke" : {
-          "staffMembers" : {
-            "get" : [ {
-              "name" : {
-                "get" : "Gerry Jones"
-              }
-            }, {
-              "name" : {
-                "get" : "Letitia Leadbetter"
-              }
-            } ]
+          "results" : {
+            "staffMembers" : {
+              "get" : [ {
+                "name" : {
+                  "get" : "Gerry Jones"
+                }
+              }, {
+                "name" : {
+                  "get" : "Letitia Leadbetter"
+                }
+              } ]
+            }
           }
         }
       }

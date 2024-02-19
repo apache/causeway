@@ -3,16 +3,18 @@
     "university_dept_Departments" : {
       "findDepartmentByName" : {
         "invoke" : {
-          "deptHead" : {
-            "autoComplete" : [ {
-              "name" : {
-                "get" : "Dr. Susan Hopwood"
-              }
-            }, {
-              "name" : {
-                "get" : "Prof. Dicky Horwich"
-              }
-            } ]
+          "results" : {
+            "deptHead" : {
+              "autoComplete" : [ {
+                "name" : {
+                  "get" : "Dr. Susan Hopwood"
+                }
+              }, {
+                "name" : {
+                  "get" : "Prof. Dicky Horwich"
+                }
+              } ]
+            }
           }
         }
       }

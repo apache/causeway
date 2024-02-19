@@ -3,8 +3,10 @@
     "university_dept_Staff" : {
       "findStaffMemberByName" : {
         "invoke" : {
-          "name" : {
-            "validate" : "Name cannot contain '!' character"
+          "results" : {
+            "name" : {
+              "validate" : "Name cannot contain '!' character"
+            }
           }
         }
       }

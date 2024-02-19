@@ -1,7 +1,9 @@
 {
   university_calc_Calculator {
     addBigIntegers {
-      invoke(x: "1", y: "2")
+      invoke(x: "1", y: "2") {
+        results
+      }
     }
   }
 }

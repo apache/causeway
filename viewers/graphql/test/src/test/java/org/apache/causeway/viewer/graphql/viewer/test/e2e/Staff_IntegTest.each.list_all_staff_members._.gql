@@ -2,17 +2,19 @@
   university_dept_Staff {
     findAllStaffMembers {
       invoke {
-        name {
-          get
-        }
-        grade {
-          get
-        }
-        photo {
-          get {
-            name
-            mimeType
-            bytes
+        results {
+          name {
+            get
+          }
+          grade {
+            get
+          }
+          photo {
+            get {
+              name
+              mimeType
+              bytes
+            }
           }
         }
       }
