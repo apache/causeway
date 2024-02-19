@@ -30,10 +30,14 @@ import lombok.val;
 
 public class GqlvPropertyGetBlobBytes extends GqlvPropertyGetBlobAbstract {
 
+    private final String graphqlPath;
+
     public GqlvPropertyGetBlobBytes(
             final Holder holder,
             final Context context) {
         super(holder, context, "bytes");
+
+        this.graphqlPath = context.causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
     }
 
     @Override
@@ -42,7 +46,7 @@ public class GqlvPropertyGetBlobBytes extends GqlvPropertyGetBlobAbstract {
 
         Optional<Bookmark> bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> String.format(
-                "///%s/object/%s:%s/%s/blobBytes", "graphql", x.getLogicalTypeName(), x.getIdentifier(), holder.getObjectAssociation().getId())).orElse(null);
+                "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), holder.getObjectAssociation().getId())).orElse(null);
 
     }
 

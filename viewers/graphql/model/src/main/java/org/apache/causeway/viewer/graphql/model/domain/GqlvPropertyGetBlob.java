@@ -22,6 +22,7 @@ import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -39,12 +40,15 @@ public class GqlvPropertyGetBlob
     final GqlvPropertyGetBlobMimeType blobMimeType;
     final GqlvPropertyGetBlobName blobBytes;
 
+    private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
+
     public GqlvPropertyGetBlob(
             final Holder holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember()), context);
-
         this.holder = holder;
+
+        this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
         if (isBuilt()) {
             // type already exists, nothing else to do.
@@ -56,12 +60,16 @@ public class GqlvPropertyGetBlob
 
         addChildFieldFor(blobName = new GqlvPropertyGetBlobBytes(this, context));
         addChildFieldFor(blobMimeType = new GqlvPropertyGetBlobMimeType(this, context));
-        addChildFieldFor(blobBytes = new GqlvPropertyGetBlobName(this, context));
+        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new GqlvPropertyGetBlobName(this, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")
                     .type(buildObjectType())
                     .build());
+    }
+
+    private boolean isResourceNotForbidden() {
+        return graphqlConfiguration.getResources().getResponseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     @Override
@@ -76,7 +84,9 @@ public class GqlvPropertyGetBlob
         }
         blobName.addDataFetcher(this);
         blobMimeType.addDataFetcher(this);
-        blobBytes.addDataFetcher(this);
+        if (blobBytes != null) {
+            blobBytes.addDataFetcher(this);
+        }
     }
 
     @Override

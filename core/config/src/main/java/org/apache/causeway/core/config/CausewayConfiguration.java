@@ -2433,6 +2433,55 @@ public class CausewayConfiguration {
                 private String zonedDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ssXXX";
             }
 
+            /**
+             * The different ways in which resources ({@link org.apache.causeway.applib.value.Blob} bytes,
+             * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
+             * resource controller.
+             */
+            public enum ResponseType {
+                /**
+                 * Do not allow the resources to be downloaded at all.  This is the default.
+                 *
+                 * <p>
+                 *     In this case any {@link org.apache.causeway.applib.value.Blob} and
+                 *     {@link org.apache.causeway.applib.value.Clob} properties will <i>not</i> provide a link to
+                 *     the URL.  Attempting to download from the resource controller will result in a 403 (forbidden).
+                 * </p>
+                 */
+                FORBIDDEN,
+                /**
+                 * Allows resources to be downloaded directly.
+                 *
+                 * <p>
+                 *     <b>IMPORTANT: </b> if enabling this configuration property, make sure that the <code>ResourcesController</code> endpoints
+                 *     are secured appropriately.
+                 * </p>
+                 */
+                DIRECT,
+                /**
+                 * Allows resources to be downloaded as attachments (using <code>Content-Disposition</code> header).
+                 *
+                 * <p>
+                 *     <b>IMPORTANT: </b> if enabling this configuration property, make sure that the <code>ResourcesController</code> endpoints
+                 *     are secured appropriately.
+                 * </p>
+                 */
+                ATTACHMENT,
+                ;
+            }
+
+            @Getter
+            private final Resources resources = new Resources();
+            @Data
+            public static class Resources {
+                /**
+                 * How resources ({@link org.apache.causeway.applib.value.Blob} bytes,
+                 * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
+                 * resource controller.
+                 */
+                private ResponseType responseType = ResponseType.FORBIDDEN;
+            }
+
             @Getter
             private final Authentication authentication = new Authentication();
             @Data
@@ -2454,7 +2503,6 @@ public class CausewayConfiguration {
                     private List<String> roles;
                 }
             }
-
         }
 
         private final Restfulobjects restfulobjects = new Restfulobjects();
