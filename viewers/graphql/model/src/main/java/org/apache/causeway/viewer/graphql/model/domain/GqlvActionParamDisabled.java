@@ -72,7 +72,7 @@ public class GqlvActionParamDisabled extends GqlvAbstract {
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
         val usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
@@ -89,7 +89,7 @@ public class GqlvActionParamDisabled extends GqlvAbstract {
                 int i);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment environment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

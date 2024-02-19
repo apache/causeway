@@ -218,6 +218,8 @@ type causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
 
 type causeway_applib_DomainObjectList__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -264,6 +266,8 @@ type causeway_applib_FacetGroupNode__facets__gqlv_property {
 
 type causeway_applib_FacetGroupNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -294,6 +298,8 @@ type causeway_applib_ParameterNode__childNodes__gqlv_collection {
 
 type causeway_applib_ParameterNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -335,6 +341,8 @@ type causeway_applib_PropertyNode__childNodes__gqlv_collection {
 
 type causeway_applib_PropertyNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -386,6 +394,8 @@ type causeway_applib_RoleMemento__description__gqlv_property {
 
 type causeway_applib_RoleMemento__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -426,6 +436,8 @@ type causeway_applib_TypeNode__domainClassDto__gqlv_property {
 
 type causeway_applib_TypeNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -486,6 +498,8 @@ type causeway_applib_UserMemento__avatarUrl__gqlv_property {
 
 type causeway_applib_UserMemento__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -571,8 +585,12 @@ type causeway_applib_UserMenu {
 type causeway_applib_UserMenu__me__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: causeway_applib_UserMemento
+  invoke: causeway_applib_UserMenu__me__gqlv_action_invoke
   validate: String
+}
+
+type causeway_applib_UserMenu__me__gqlv_action_invoke {
+  results: causeway_applib_UserMemento
 }
 
 type causeway_applib_node_ActionNode {
@@ -600,6 +618,8 @@ type causeway_applib_node_ActionNode__childNodes__gqlv_collection {
 
 type causeway_applib_node_ActionNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -650,6 +670,8 @@ type causeway_applib_node_CollectionNode__collection__gqlv_property {
 
 type causeway_applib_node_CollectionNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -699,6 +721,8 @@ type causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property {
 
 type causeway_applib_node_FacetAttrNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -740,6 +764,8 @@ type causeway_applib_node_FacetNode__facet__gqlv_property {
 
 type causeway_applib_node_FacetNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -771,8 +797,12 @@ type causeway_conf_ConfigurationMenu {
 type causeway_conf_ConfigurationMenu__configuration__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: causeway_conf_ConfigurationViewmodel
+  invoke: causeway_conf_ConfigurationMenu__configuration__gqlv_action_invoke
   validate: String
+}
+
+type causeway_conf_ConfigurationMenu__configuration__gqlv_action_invoke {
+  results: causeway_conf_ConfigurationViewmodel
 }
 
 type causeway_conf_ConfigurationProperty {
@@ -783,6 +813,8 @@ type causeway_conf_ConfigurationProperty {
 
 type causeway_conf_ConfigurationProperty__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -824,6 +856,8 @@ type causeway_conf_ConfigurationViewmodel__environment__gqlv_collection {
 
 type causeway_conf_ConfigurationViewmodel__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -855,6 +889,8 @@ type causeway_feat_ApplicationFeatureViewModel {
 
 type causeway_feat_ApplicationFeatureViewModel__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -914,6 +950,8 @@ type causeway_feat_ApplicationNamespace__contents__gqlv_collection {
 
 type causeway_feat_ApplicationNamespace__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -989,6 +1027,8 @@ type causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
 
 type causeway_feat_ApplicationTypeAction__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1070,6 +1110,8 @@ type causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
 
 type causeway_feat_ApplicationTypeCollection__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1122,6 +1164,8 @@ type causeway_feat_ApplicationTypeMember {
 
 type causeway_feat_ApplicationTypeMember__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1187,6 +1231,8 @@ type causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
 
 type causeway_feat_ApplicationTypeProperty__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1272,6 +1318,8 @@ type causeway_feat_ApplicationType__collections__gqlv_collection {
 
 type causeway_feat_ApplicationType__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1372,6 +1420,8 @@ type causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
 
 type causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1430,6 +1480,8 @@ type causeway_security_LoginRedirect {
 
 type causeway_security_LoginRedirect__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1444,8 +1496,12 @@ type causeway_security_LogoutMenu {
 type causeway_security_LogoutMenu__logout__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invoke: causeway_security_LogoutMenu__logout__gqlv_action_invoke
   validate: String
+}
+
+type causeway_security_LogoutMenu__logout__gqlv_action_invoke {
+  results: String
 }
 
 type causeway_testing_fixtures_FixtureResult {
@@ -1476,6 +1532,8 @@ type causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_prope
 
 type causeway_testing_fixtures_FixtureResult__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1506,6 +1564,8 @@ type java_lang_Runnable {
 
 type java_lang_Runnable__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1519,6 +1579,8 @@ type java_util_Map {
 
 type java_util_Map__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1532,6 +1594,8 @@ type java_util_SortedMap {
 
 type java_util_SortedMap__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1545,6 +1609,8 @@ type java_util_concurrent_Callable {
 
 type java_util_concurrent_Callable__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1558,6 +1624,8 @@ type java_util_function_BiFunction {
 
 type java_util_function_BiFunction__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1571,6 +1639,8 @@ type java_util_function_Consumer {
 
 type java_util_function_Consumer__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1584,6 +1654,8 @@ type java_util_function_Function {
 
 type java_util_function_Function__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1597,6 +1669,8 @@ type java_util_stream_Stream {
 
 type java_util_stream_Stream__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1618,6 +1692,8 @@ type org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_c
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1648,6 +1724,8 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gq
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1690,6 +1768,8 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__f
 
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -1723,9 +1803,13 @@ type university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_actio
 type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(firstParam: String!, secondParam: String!, thirdParameter: String!): String
+  invokeNonIdempotent(firstParam: String!, secondParam: String!, thirdParameter: String!): university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke
   params: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params
   validate(firstParam: String, secondParam: String, thirdParameter: String): String
+}
+
+type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke {
+  results: String
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params {
@@ -1758,9 +1842,13 @@ type university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_
 type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(firstParam: String!, secondParam: String!): String
+  invokeNonIdempotent(firstParam: String!, secondParam: String!): university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke
   params: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params
   validate(firstParam: String, secondParam: String): String
+}
+
+type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke {
+  results: String
 }
 
 type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params {
@@ -1778,15 +1866,23 @@ type university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action
 type university_admin_AdminMenu__adminAction__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent: String
+  invokeNonIdempotent: university_admin_AdminMenu__adminAction__gqlv_action_invoke
   validate: String
+}
+
+type university_admin_AdminMenu__adminAction__gqlv_action_invoke {
+  results: String
 }
 
 type university_admin_AdminMenu__otherAdminAction__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent: String
+  invokeNonIdempotent: university_admin_AdminMenu__otherAdminAction__gqlv_action_invoke
   validate: String
+}
+
+type university_admin_AdminMenu__otherAdminAction__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator {
@@ -1823,9 +1919,13 @@ type university_calc_Calculator {
 type university_calc_Calculator__addBigDecimals__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: String!, y: String): String
+  invoke(x: String!, y: String): university_calc_Calculator__addBigDecimals__gqlv_action_invoke
   params: university_calc_Calculator__addBigDecimals__gqlv_action_params
   validate(x: String, y: String): String
+}
+
+type university_calc_Calculator__addBigDecimals__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__addBigDecimals__gqlv_action_params {
@@ -1850,9 +1950,13 @@ type university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter {
 type university_calc_Calculator__addBigIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: String!, y: String): String
+  invoke(x: String!, y: String): university_calc_Calculator__addBigIntegers__gqlv_action_invoke
   params: university_calc_Calculator__addBigIntegers__gqlv_action_params
   validate(x: String, y: String): String
+}
+
+type university_calc_Calculator__addBigIntegers__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__addBigIntegers__gqlv_action_params {
@@ -1877,9 +1981,13 @@ type university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter {
 type university_calc_Calculator__addByteWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Byte!, y: Byte): Int
+  invoke(x: Byte!, y: Byte): university_calc_Calculator__addByteWrappers__gqlv_action_invoke
   params: university_calc_Calculator__addByteWrappers__gqlv_action_params
   validate(x: Byte, y: Byte): String
+}
+
+type university_calc_Calculator__addByteWrappers__gqlv_action_invoke {
+  results: Int
 }
 
 type university_calc_Calculator__addByteWrappers__gqlv_action_params {
@@ -1904,9 +2012,13 @@ type university_calc_Calculator__addByteWrappers__y__gqlv_action_parameter {
 type university_calc_Calculator__addBytes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Byte!, y: Byte!): Byte
+  invoke(x: Byte!, y: Byte!): university_calc_Calculator__addBytes__gqlv_action_invoke
   params: university_calc_Calculator__addBytes__gqlv_action_params
   validate(x: Byte, y: Byte): String
+}
+
+type university_calc_Calculator__addBytes__gqlv_action_invoke {
+  results: Byte
 }
 
 type university_calc_Calculator__addBytes__gqlv_action_params {
@@ -1931,9 +2043,13 @@ type university_calc_Calculator__addBytes__y__gqlv_action_parameter {
 type university_calc_Calculator__addDoubleWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Float!, y: Float): Float
+  invoke(x: Float!, y: Float): university_calc_Calculator__addDoubleWrappers__gqlv_action_invoke
   params: university_calc_Calculator__addDoubleWrappers__gqlv_action_params
   validate(x: Float, y: Float): String
+}
+
+type university_calc_Calculator__addDoubleWrappers__gqlv_action_invoke {
+  results: Float
 }
 
 type university_calc_Calculator__addDoubleWrappers__gqlv_action_params {
@@ -1958,9 +2074,13 @@ type university_calc_Calculator__addDoubleWrappers__y__gqlv_action_parameter {
 type university_calc_Calculator__addDoubles__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Float!, y: Float!): Float
+  invoke(x: Float!, y: Float!): university_calc_Calculator__addDoubles__gqlv_action_invoke
   params: university_calc_Calculator__addDoubles__gqlv_action_params
   validate(x: Float, y: Float): String
+}
+
+type university_calc_Calculator__addDoubles__gqlv_action_invoke {
+  results: Float
 }
 
 type university_calc_Calculator__addDoubles__gqlv_action_params {
@@ -1985,9 +2105,13 @@ type university_calc_Calculator__addDoubles__y__gqlv_action_parameter {
 type university_calc_Calculator__addFloatWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Float!, y: Float): Float
+  invoke(x: Float!, y: Float): university_calc_Calculator__addFloatWrappers__gqlv_action_invoke
   params: university_calc_Calculator__addFloatWrappers__gqlv_action_params
   validate(x: Float, y: Float): String
+}
+
+type university_calc_Calculator__addFloatWrappers__gqlv_action_invoke {
+  results: Float
 }
 
 type university_calc_Calculator__addFloatWrappers__gqlv_action_params {
@@ -2012,9 +2136,13 @@ type university_calc_Calculator__addFloatWrappers__y__gqlv_action_parameter {
 type university_calc_Calculator__addFloats__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Float!, y: Float!): Float
+  invoke(x: Float!, y: Float!): university_calc_Calculator__addFloats__gqlv_action_invoke
   params: university_calc_Calculator__addFloats__gqlv_action_params
   validate(x: Float, y: Float): String
+}
+
+type university_calc_Calculator__addFloats__gqlv_action_invoke {
+  results: Float
 }
 
 type university_calc_Calculator__addFloats__gqlv_action_params {
@@ -2039,9 +2167,13 @@ type university_calc_Calculator__addFloats__y__gqlv_action_parameter {
 type university_calc_Calculator__addIntegerWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Int!, y: Int): Int
+  invoke(x: Int!, y: Int): university_calc_Calculator__addIntegerWrappers__gqlv_action_invoke
   params: university_calc_Calculator__addIntegerWrappers__gqlv_action_params
   validate(x: Int, y: Int): String
+}
+
+type university_calc_Calculator__addIntegerWrappers__gqlv_action_invoke {
+  results: Int
 }
 
 type university_calc_Calculator__addIntegerWrappers__gqlv_action_params {
@@ -2066,9 +2198,13 @@ type university_calc_Calculator__addIntegerWrappers__y__gqlv_action_parameter {
 type university_calc_Calculator__addIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Int!, y: Int!): Int
+  invoke(x: Int!, y: Int!): university_calc_Calculator__addIntegers__gqlv_action_invoke
   params: university_calc_Calculator__addIntegers__gqlv_action_params
   validate(x: Int, y: Int): String
+}
+
+type university_calc_Calculator__addIntegers__gqlv_action_invoke {
+  results: Int
 }
 
 type university_calc_Calculator__addIntegers__gqlv_action_params {
@@ -2093,9 +2229,13 @@ type university_calc_Calculator__addIntegers__y__gqlv_action_parameter {
 type university_calc_Calculator__addShortWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Short!, y: Short): Short
+  invoke(x: Short!, y: Short): university_calc_Calculator__addShortWrappers__gqlv_action_invoke
   params: university_calc_Calculator__addShortWrappers__gqlv_action_params
   validate(x: Short, y: Short): String
+}
+
+type university_calc_Calculator__addShortWrappers__gqlv_action_invoke {
+  results: Short
 }
 
 type university_calc_Calculator__addShortWrappers__gqlv_action_params {
@@ -2120,9 +2260,13 @@ type university_calc_Calculator__addShortWrappers__y__gqlv_action_parameter {
 type university_calc_Calculator__addShorts__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Short!, y: Short!): Short
+  invoke(x: Short!, y: Short!): university_calc_Calculator__addShorts__gqlv_action_invoke
   params: university_calc_Calculator__addShorts__gqlv_action_params
   validate(x: Short, y: Short): String
+}
+
+type university_calc_Calculator__addShorts__gqlv_action_invoke {
+  results: Short
 }
 
 type university_calc_Calculator__addShorts__gqlv_action_params {
@@ -2147,9 +2291,13 @@ type university_calc_Calculator__addShorts__y__gqlv_action_parameter {
 type university_calc_Calculator__and__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Boolean!, y: Boolean!): Boolean
+  invoke(x: Boolean!, y: Boolean!): university_calc_Calculator__and__gqlv_action_invoke
   params: university_calc_Calculator__and__gqlv_action_params
   validate(x: Boolean, y: Boolean): String
+}
+
+type university_calc_Calculator__and__gqlv_action_invoke {
+  results: Boolean
 }
 
 type university_calc_Calculator__and__gqlv_action_params {
@@ -2174,9 +2322,13 @@ type university_calc_Calculator__and__y__gqlv_action_parameter {
 type university_calc_Calculator__concat__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(prefix: String!, suffix: String): String
+  invoke(prefix: String!, suffix: String): university_calc_Calculator__concat__gqlv_action_invoke
   params: university_calc_Calculator__concat__gqlv_action_params
   validate(prefix: String, suffix: String): String
+}
+
+type university_calc_Calculator__concat__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__concat__gqlv_action_params {
@@ -2208,9 +2360,13 @@ type university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_parameter 
 type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(date: String!, numDays: Int!): String
+  invoke(date: String!, numDays: Int!): university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_invoke
   params: university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params
   validate(date: String, numDays: Int): String
+}
+
+type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params {
@@ -2228,9 +2384,13 @@ type university_calc_Calculator__jdk8LocalPlusDays__numDays__gqlv_action_paramet
 type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(numHours: Int!, numMinutes: Int!, time: String!): String
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke
   params: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: String): String
+}
+
+type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params {
@@ -2270,9 +2430,13 @@ type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime_
 type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): DateTime
+  invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke
   params: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  results: DateTime
 }
 
 type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params {
@@ -2306,9 +2470,13 @@ type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinute
 type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(numHours: Int!, numMinutes: Int!, time: Time!): Time
+  invoke(numHours: Int!, numMinutes: Int!, time: Time!): university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke
   params: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: Time): String
+}
+
+type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke {
+  results: Time
 }
 
 type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params {
@@ -2348,9 +2516,13 @@ type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__
 type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke
   params: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params {
@@ -2391,9 +2563,13 @@ type university_calc_Calculator__jodaLocalPlusDays__date__gqlv_action_parameter 
 type university_calc_Calculator__jodaLocalPlusDays__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(date: String!, numDays: Int!): String
+  invoke(date: String!, numDays: Int!): university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke
   params: university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params
   validate(date: String, numDays: Int): String
+}
+
+type university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params {
@@ -2411,9 +2587,13 @@ type university_calc_Calculator__jodaLocalPlusDays__numDays__gqlv_action_paramet
 type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(numHours: Int!, numMinutes: Int!, time: String!): String
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke
   params: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: String): String
+}
+
+type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params {
@@ -2453,9 +2633,13 @@ type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_
 type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke
   params: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params {
@@ -2489,9 +2673,13 @@ type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numMinutes__gql
 type university_calc_Calculator__nextMonth__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
+  invoke(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): university_calc_Calculator__nextMonth__gqlv_action_invoke
   params: university_calc_Calculator__nextMonth__gqlv_action_params
   validate(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
+}
+
+type university_calc_Calculator__nextMonth__gqlv_action_invoke {
+  results: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
 }
 
 type university_calc_Calculator__nextMonth__gqlv_action_params {
@@ -2509,9 +2697,13 @@ type university_calc_Calculator__nextMonth__month__gqlv_action_parameter {
 type university_calc_Calculator__not__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Boolean!): Boolean
+  invoke(x: Boolean!): university_calc_Calculator__not__gqlv_action_invoke
   params: university_calc_Calculator__not__gqlv_action_params
   validate(x: Boolean): String
+}
+
+type university_calc_Calculator__not__gqlv_action_invoke {
+  results: Boolean
 }
 
 type university_calc_Calculator__not__gqlv_action_params {
@@ -2528,9 +2720,13 @@ type university_calc_Calculator__not__x__gqlv_action_parameter {
 type university_calc_Calculator__or__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(x: Boolean!, y: Boolean!): Boolean
+  invoke(x: Boolean!, y: Boolean!): university_calc_Calculator__or__gqlv_action_invoke
   params: university_calc_Calculator__or__gqlv_action_params
   validate(x: Boolean, y: Boolean): String
+}
+
+type university_calc_Calculator__or__gqlv_action_invoke {
+  results: Boolean
 }
 
 type university_calc_Calculator__or__gqlv_action_params {
@@ -2555,22 +2751,34 @@ type university_calc_Calculator__or__y__gqlv_action_parameter {
 type university_calc_Calculator__someLocale__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invoke: university_calc_Calculator__someLocale__gqlv_action_invoke
   validate: String
+}
+
+type university_calc_Calculator__someLocale__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__someUrl__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: String
+  invoke: university_calc_Calculator__someUrl__gqlv_action_invoke
   validate: String
+}
+
+type university_calc_Calculator__someUrl__gqlv_action_invoke {
+  results: String
 }
 
 type university_calc_Calculator__someUuid__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: UUID
+  invoke: university_calc_Calculator__someUuid__gqlv_action_invoke
   validate: String
+}
+
+type university_calc_Calculator__someUuid__gqlv_action_invoke {
+  results: UUID
 }
 
 "University department specializing in a field of study"
@@ -2590,9 +2798,13 @@ type university_dept_Department {
 type university_dept_Department__addStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department
+  invokeIdempotent(staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department__addStaffMember__gqlv_action_invoke
   params: university_dept_Department__addStaffMember__gqlv_action_params
   validate(staffMember: university_dept_StaffMember__gqlv_input): String
+}
+
+type university_dept_Department__addStaffMember__gqlv_action_invoke {
+  results: university_dept_Department
 }
 
 type university_dept_Department__addStaffMember__gqlv_action_params {
@@ -2611,9 +2823,13 @@ type university_dept_Department__addStaffMember__staffMember__gqlv_action_parame
 type university_dept_Department__addStaffMembers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(staffMembers: [university_dept_StaffMember__gqlv_input]): university_dept_Department
+  invokeIdempotent(staffMembers: [university_dept_StaffMember__gqlv_input]): university_dept_Department__addStaffMembers__gqlv_action_invoke
   params: university_dept_Department__addStaffMembers__gqlv_action_params
   validate(staffMembers: [university_dept_StaffMember__gqlv_input]): String
+}
+
+type university_dept_Department__addStaffMembers__gqlv_action_invoke {
+  results: university_dept_Department
 }
 
 type university_dept_Department__addStaffMembers__gqlv_action_params {
@@ -2632,9 +2848,13 @@ type university_dept_Department__addStaffMembers__staffMembers__gqlv_action_para
 type university_dept_Department__changeDeptHead__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(newDeptHead: university_dept_DeptHead__gqlv_input!): university_dept_Department
+  invokeIdempotent(newDeptHead: university_dept_DeptHead__gqlv_input!): university_dept_Department__changeDeptHead__gqlv_action_invoke
   params: university_dept_Department__changeDeptHead__gqlv_action_params
   validate(newDeptHead: university_dept_DeptHead__gqlv_input): String
+}
+
+type university_dept_Department__changeDeptHead__gqlv_action_invoke {
+  results: university_dept_Department
 }
 
 type university_dept_Department__changeDeptHead__gqlv_action_params {
@@ -2654,9 +2874,13 @@ type university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parame
 type university_dept_Department__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(newName: String!): university_dept_Department
+  invokeIdempotent(newName: String!): university_dept_Department__changeName__gqlv_action_invoke
   params: university_dept_Department__changeName__gqlv_action_params
   validate(newName: String): String
+}
+
+type university_dept_Department__changeName__gqlv_action_invoke {
+  results: university_dept_Department
 }
 
 type university_dept_Department__changeName__gqlv_action_params {
@@ -2684,6 +2908,8 @@ type university_dept_Department__deptHead__gqlv_property {
 
 type university_dept_Department__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -2705,9 +2931,13 @@ type university_dept_Department__name__gqlv_property {
 type university_dept_Department__removeStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department
+  invokeIdempotent(staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department__removeStaffMember__gqlv_action_invoke
   params: university_dept_Department__removeStaffMember__gqlv_action_params
   validate(staffMember: university_dept_StaffMember__gqlv_input): String
+}
+
+type university_dept_Department__removeStaffMember__gqlv_action_invoke {
+  results: university_dept_Department
 }
 
 type university_dept_Department__removeStaffMember__gqlv_action_params {
@@ -2748,9 +2978,13 @@ type university_dept_Departments__createDepartment__deptHead__gqlv_action_parame
 type university_dept_Departments__createDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(deptHead: university_dept_DeptHead__gqlv_input, name: String!): university_dept_Department
+  invokeNonIdempotent(deptHead: university_dept_DeptHead__gqlv_input, name: String!): university_dept_Departments__createDepartment__gqlv_action_invoke
   params: university_dept_Departments__createDepartment__gqlv_action_params
   validate(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
+}
+
+type university_dept_Departments__createDepartment__gqlv_action_invoke {
+  results: university_dept_Department
 }
 
 type university_dept_Departments__createDepartment__gqlv_action_params {
@@ -2769,17 +3003,25 @@ type university_dept_Departments__createDepartment__name__gqlv_action_parameter 
 type university_dept_Departments__findAllDepartments__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: [university_dept_Department]
+  invoke: university_dept_Departments__findAllDepartments__gqlv_action_invoke
   validate: String
+}
+
+type university_dept_Departments__findAllDepartments__gqlv_action_invoke {
+  results: [university_dept_Department]
 }
 
 "University department specializing in a field of study"
 type university_dept_Departments__findDepartmentByName__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(name: String!): university_dept_Department
+  invoke(name: String!): university_dept_Departments__findDepartmentByName__gqlv_action_invoke
   params: university_dept_Departments__findDepartmentByName__gqlv_action_params
   validate(name: String): String
+}
+
+type university_dept_Departments__findDepartmentByName__gqlv_action_invoke {
+  results: university_dept_Department
 }
 
 type university_dept_Departments__findDepartmentByName__gqlv_action_params {
@@ -2814,9 +3056,13 @@ type university_dept_DeptHead__changeDepartment__department__gqlv_action_paramet
 type university_dept_DeptHead__changeDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(department: university_dept_Department__gqlv_input!): university_dept_DeptHead
+  invokeIdempotent(department: university_dept_Department__gqlv_input!): university_dept_DeptHead__changeDepartment__gqlv_action_invoke
   params: university_dept_DeptHead__changeDepartment__gqlv_action_params
   validate(department: university_dept_Department__gqlv_input): String
+}
+
+type university_dept_DeptHead__changeDepartment__gqlv_action_invoke {
+  results: university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeDepartment__gqlv_action_params {
@@ -2827,9 +3073,13 @@ type university_dept_DeptHead__changeDepartment__gqlv_action_params {
 type university_dept_DeptHead__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(newName: String!): university_dept_DeptHead
+  invokeIdempotent(newName: String!): university_dept_DeptHead__changeName__gqlv_action_invoke
   params: university_dept_DeptHead__changeName__gqlv_action_params
   validate(newName: String): String
+}
+
+type university_dept_DeptHead__changeName__gqlv_action_invoke {
+  results: university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeName__gqlv_action_params {
@@ -2857,6 +3107,8 @@ type university_dept_DeptHead__department__gqlv_property {
 
 type university_dept_DeptHead__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -2883,17 +3135,25 @@ type university_dept_DeptHeads {
 type university_dept_DeptHeads__findAllHeads__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: [university_dept_DeptHead]
+  invoke: university_dept_DeptHeads__findAllHeads__gqlv_action_invoke
   validate: String
+}
+
+type university_dept_DeptHeads__findAllHeads__gqlv_action_invoke {
+  results: [university_dept_DeptHead]
 }
 
 "Departmental head, responsible for curriculum, research, funding and staff"
 type university_dept_DeptHeads__findHeadByName__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(name: String!): university_dept_DeptHead
+  invoke(name: String!): university_dept_DeptHeads__findHeadByName__gqlv_action_invoke
   params: university_dept_DeptHeads__findHeadByName__gqlv_action_params
   validate(name: String): String
+}
+
+type university_dept_DeptHeads__findHeadByName__gqlv_action_invoke {
+  results: university_dept_DeptHead
 }
 
 type university_dept_DeptHeads__findHeadByName__gqlv_action_params {
@@ -2935,6 +3195,8 @@ type university_dept_StaffMember__department__gqlv_property {
 
 type university_dept_StaffMember__gqlv_meta {
   cssClass: String
+  grid: String
+  icon: String
   id: String!
   layout: String
   logicalTypeName: String!
@@ -2974,6 +3236,7 @@ type university_dept_StaffMember__photo__gqlv_property {
 type university_dept_StaffMember__photo__gqlv_property_blob {
   bytes: String
   mimeType: String
+  name: String
 }
 
 type university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
@@ -2988,9 +3251,13 @@ type university_dept_Staff__createStaffMember__department__gqlv_action_parameter
 type university_dept_Staff__createStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(department: university_dept_Department__gqlv_input!, name: String!): university_dept_StaffMember
+  invokeNonIdempotent(department: university_dept_Department__gqlv_input!, name: String!): university_dept_Staff__createStaffMember__gqlv_action_invoke
   params: university_dept_Staff__createStaffMember__gqlv_action_params
   validate(department: university_dept_Department__gqlv_input, name: String): String
+}
+
+type university_dept_Staff__createStaffMember__gqlv_action_invoke {
+  results: university_dept_StaffMember
 }
 
 type university_dept_Staff__createStaffMember__gqlv_action_params {
@@ -3009,17 +3276,25 @@ type university_dept_Staff__createStaffMember__name__gqlv_action_parameter {
 type university_dept_Staff__findAllStaffMembers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke: [university_dept_StaffMember]
+  invoke: university_dept_Staff__findAllStaffMembers__gqlv_action_invoke
   validate: String
+}
+
+type university_dept_Staff__findAllStaffMembers__gqlv_action_invoke {
+  results: [university_dept_StaffMember]
 }
 
 "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
 type university_dept_Staff__findStaffMemberByName__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(name: String!): university_dept_StaffMember
+  invoke(name: String!): university_dept_Staff__findStaffMemberByName__gqlv_action_invoke
   params: university_dept_Staff__findStaffMemberByName__gqlv_action_params
   validate(name: String): String
+}
+
+type university_dept_Staff__findStaffMemberByName__gqlv_action_invoke {
+  results: university_dept_StaffMember
 }
 
 type university_dept_Staff__findStaffMemberByName__gqlv_action_params {

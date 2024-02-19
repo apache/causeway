@@ -75,7 +75,7 @@ public class GqlvActionParamHidden extends GqlvAbstract {
 
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
 
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
         val visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return visible.isVetoed();
@@ -92,7 +92,7 @@ public class GqlvActionParamHidden extends GqlvAbstract {
                 int paramNum);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment environment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

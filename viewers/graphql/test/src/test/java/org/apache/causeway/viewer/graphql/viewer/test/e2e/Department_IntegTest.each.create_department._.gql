@@ -4,8 +4,10 @@
       hidden
       disabled
       invokeNonIdempotent(name: "newbie") {
-        name {
-          get
+        results {
+          name {
+            get
+          }
         }
       }
     }

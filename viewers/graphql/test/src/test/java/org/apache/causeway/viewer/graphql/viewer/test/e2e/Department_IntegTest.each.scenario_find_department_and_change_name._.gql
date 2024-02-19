@@ -6,8 +6,10 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
-            _meta {
-              saveAs(ref: "classics_dept")
+            results {
+              _meta {
+                saveAs(ref: "classics_dept")
+              }
             }
           }
         }
@@ -18,8 +20,10 @@
       university_dept_Department(object: {ref: "classics_dept"}) {
         changeName {
           invokeIdempotent(newName: "Ancient History") {
-            name {
-              get
+            results {
+              name {
+                get
+              }
             }
           }
         }

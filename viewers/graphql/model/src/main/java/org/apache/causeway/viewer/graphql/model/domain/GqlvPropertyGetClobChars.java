@@ -44,7 +44,7 @@ public class GqlvPropertyGetClobChars extends GqlvPropertyGetClobAbstract {
     protected Object fetchData(DataFetchingEnvironment environment) {
         val sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        Optional<Bookmark> bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
+        val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> String.format(
                 "//%s/object/%s:%s/%s/clobChars", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), holder.getObjectAssociation().getId())).orElse(null);
 

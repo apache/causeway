@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 
@@ -107,7 +106,7 @@ public class GqlvAction
     }
 
     public Can<ManagedObject> argumentManagedObjectsFor(
-            final DataFetchingEnvironment dataFetchingEnvironment,
+            final Environment dataFetchingEnvironment,
             final ObjectAction objectAction,
             final BookmarkService bookmarkService) {
 
@@ -122,7 +121,7 @@ public class GqlvAction
      * @return
      */
     public static Can<ManagedObject> argumentManagedObjectsFor(
-            final DataFetchingEnvironment environment,
+            final Environment environment,
             final ObjectAction objectAction,
             final Context context) {
         Map<String, Object> argumentPojos = environment.getArguments();
@@ -187,7 +186,7 @@ public class GqlvAction
             final ObjectSpecification elementType,
             final Object argumentValueObj,
             final BookmarkService bookmarkService,
-            final DataFetchingEnvironment environment) {
+            final Environment environment) {
         val argumentValue = (Map<String, String>) argumentValueObj;
         String idValue = argumentValue.get("id");
         if (idValue != null) {

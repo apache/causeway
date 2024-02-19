@@ -49,6 +49,12 @@ public final class TypeNames {
         return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action";
     }
 
+    public static String actionInvokeTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectAction objectAction) {
+        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action_invoke";
+    }
+
     public static String actionParamsTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
         return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action_params";
     }

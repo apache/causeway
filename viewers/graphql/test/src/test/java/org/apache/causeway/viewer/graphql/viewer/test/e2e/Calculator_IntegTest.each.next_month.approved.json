@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "nextMonth" : {
-        "invoke" : "JULY"
+        "invoke" : {
+          "results" : "JULY"
+        }
       }
     }
   }

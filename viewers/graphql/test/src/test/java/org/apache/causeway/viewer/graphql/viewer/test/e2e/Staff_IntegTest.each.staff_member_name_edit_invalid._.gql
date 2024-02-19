@@ -2,10 +2,12 @@
   university_dept_Staff {
     findStaffMemberByName {
       invoke(name: "Gerry Jones") {
-        name {
-          set(name: "Gerry!") {
-            name {
-              get
+        results {
+          name {
+            set(name: "Gerry!") {
+              name {
+                get
+              }
             }
           }
         }

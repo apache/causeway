@@ -3,8 +3,10 @@
     "university_dept_DeptHeads" : {
       "findHeadByName" : {
         "invoke" : {
-          "changeName" : {
-            "validate" : "Name cannot contain '!' character"
+          "results" : {
+            "changeName" : {
+              "validate" : "Name cannot contain '!' character"
+            }
           }
         }
       }

@@ -76,16 +76,16 @@ public class GqlvMutationForProperty extends GqlvAbstract {
     }
 
     @Override
-    protected Object fetchData(final DataFetchingEnvironment environment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
 
-        Object target = environment.getArgument(argumentName);
-        Object sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService, environment)
+        Object target = dataFetchingEnvironment.getArgument(argumentName);
+        Object sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService, new Environment.For(dataFetchingEnvironment))
                     .orElseThrow(); // TODO: better error handling if no such object found.
 
         val managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
-        Map<String, Object> arguments = environment.getArguments();
+        Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Object argumentValue = arguments.get(oneToOneAssociation.getId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
 

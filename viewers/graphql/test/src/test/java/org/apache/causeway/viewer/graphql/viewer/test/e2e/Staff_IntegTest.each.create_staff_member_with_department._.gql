@@ -5,8 +5,10 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
-            _meta {
-              saveAs(ref: "classics")
+            results {
+              _meta {
+                saveAs(ref: "classics")
+              }
             }
           }
         }
@@ -16,22 +18,24 @@
       university_dept_Staff {
         createStaffMember {
           invokeNonIdempotent(name: "Dr. Georgina McGovern", department: { ref: "classics"}) {
-            name {
-              get
-            }
-            department {
-              get {
-                name {
-                  get
+            results {
+              name {
+                get
+              }
+              department {
+                get {
+                  name {
+                    get
+                  }
                 }
               }
-            }
-            _meta {
-              title
-              logicalTypeName
-              version
-              cssClass
-              icon
+              _meta {
+                title
+                logicalTypeName
+                version
+                cssClass
+                icon
+              }
             }
           }
         }

@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "and" : {
-        "invoke" : false
+        "invoke" : {
+          "results" : false
+        }
       }
     }
   }

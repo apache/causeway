@@ -116,15 +116,16 @@ public class GqlvMutationForAction extends GqlvAbstract {
     }
 
     @Override
-    protected Object fetchData(final DataFetchingEnvironment environment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val isService = objectSpec.getBeanSort().isManagedBeanContributing();
 
+        val environment = new Environment.For(dataFetchingEnvironment);
         Object sourcePojo;
         if (isService) {
             sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.getCorrespondingClass());
         } else {
-            Object target = environment.getArgument(argumentName);
+            Object target = dataFetchingEnvironment.getArgument(argumentName);
             sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService, environment)
                     .orElseThrow(); // TODO: better error handling if no such object found.
         }
@@ -204,7 +205,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
     }
 
     private Can<ManagedObject> argumentManagedObjectsFor(
-            final DataFetchingEnvironment dataFetchingEnvironment,
+            final Environment dataFetchingEnvironment,
             final ObjectAction objectAction) {
         return GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }

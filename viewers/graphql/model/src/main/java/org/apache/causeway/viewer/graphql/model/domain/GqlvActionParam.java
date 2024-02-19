@@ -151,13 +151,20 @@ public class GqlvActionParam
     }
 
     @Override
-    public void addGqlArguments(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
+    public void addGqlArguments(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder fieldBuilder,
+            final TypeMapper.InputContext inputContext,
+            final int paramNum) {
         holder.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum);
     }
 
     @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(DataFetchingEnvironment dataFetchingEnvironment, ObjectAction objectAction, BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
+    public Can<ManagedObject> argumentManagedObjectsFor(
+            final Environment environment,
+            final ObjectAction objectAction,
+            final BookmarkService bookmarkService) {
+        return holder.argumentManagedObjectsFor(environment, objectAction, bookmarkService);
     }
 
     @Override
@@ -177,7 +184,7 @@ public class GqlvActionParam
                 int paramNum);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment dataFetchingEnvironment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

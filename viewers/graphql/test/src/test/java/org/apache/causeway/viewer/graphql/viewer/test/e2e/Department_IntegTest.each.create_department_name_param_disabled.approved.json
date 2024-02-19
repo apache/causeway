@@ -8,8 +8,10 @@
           }
         },
         "invokeNonIdempotent" : {
-          "name" : {
-            "get" : "newbie"
+          "results" : {
+            "name" : {
+              "get" : "newbie"
+            }
           }
         }
       }

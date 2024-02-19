@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "someUuid" : {
-        "invoke" : "91be0d2d-1752-4962-ad2c-89a7ef73a656"
+        "invoke" : {
+          "results" : "91be0d2d-1752-4962-ad2c-89a7ef73a656"
+        }
       }
     }
   }

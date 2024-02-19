@@ -2,10 +2,12 @@
   university_dept_Departments {
     findDepartmentByName {
       invoke(name: "Classics") {
-        staffMembers {
-          get {
-            name {
-              get
+        results {
+          staffMembers {
+            get {
+              name {
+                get
+              }
             }
           }
         }

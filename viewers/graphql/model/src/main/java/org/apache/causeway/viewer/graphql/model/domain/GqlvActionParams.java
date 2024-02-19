@@ -115,7 +115,7 @@ public class GqlvActionParams
 
     @Override
     public Can<ManagedObject> argumentManagedObjectsFor(
-            DataFetchingEnvironment dataFetchingEnvironment,
+            Environment dataFetchingEnvironment,
             ObjectAction objectAction,
             BookmarkService bookmarkService) {
         return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
@@ -132,7 +132,7 @@ public class GqlvActionParams
                 int paramNum);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment dataFetchingEnvironment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

@@ -91,7 +91,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
          val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
          val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-         val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+         val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
          val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
@@ -116,7 +116,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
                  int paramNum);
 
          Can<ManagedObject> argumentManagedObjectsFor(
-                 DataFetchingEnvironment dataFetchingEnvironment,
+                 Environment environment,
                  ObjectAction objectAction,
                  BookmarkService bookmarkService);
      }

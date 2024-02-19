@@ -3,8 +3,10 @@
     "university_dept_Departments" : {
       "findDepartmentByName" : {
         "invoke" : {
-          "deptHead" : {
-            "autoComplete" : [ ]
+          "results" : {
+            "deptHead" : {
+              "autoComplete" : [ ]
+            }
           }
         }
       }

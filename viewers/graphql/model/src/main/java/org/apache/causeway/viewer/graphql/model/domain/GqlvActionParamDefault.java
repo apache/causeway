@@ -74,7 +74,7 @@ public class GqlvActionParamDefault extends GqlvAbstract {
         val objectAction = holder.getObjectAction();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
         val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
         val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
         val defaultManagedObject = objectActionParameter.getDefault(pendingArgs);
@@ -94,7 +94,7 @@ public class GqlvActionParamDefault extends GqlvAbstract {
                 int paramNum);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment environment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

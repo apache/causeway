@@ -20,24 +20,15 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
-import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
@@ -47,29 +38,34 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionInvoke extends GqlvAbstract {
+public class GqlvActionInvoke
+        extends GqlvAbstractCustom
+        implements GqlvActionInvokeResult.Holder {
 
     private final Holder holder;
+    private final GqlvActionInvokeResult result;
 
     public GqlvActionInvoke(
             final Holder holder,
             final Context context) {
-        super(context);
+        super(TypeNames.actionInvokeTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction()), context);
 
         this.holder = holder;
 
-        val objectAction = holder.getObjectAction();
-
-        val graphQLOutputType = typeFor(objectAction);
-        if (graphQLOutputType != null) {
-            val fieldBuilder = newFieldDefinition()
-                    .name(fieldNameForSemanticsOf(objectAction))
-                    .type(graphQLOutputType);
-            holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
-            setField(fieldBuilder.build());
-        } else {
-            setField(null);
+        if(isBuilt()) {
+            this.result = null;
+            return;
         }
+
+        addChildFieldFor(this.result = new GqlvActionInvokeResult(holder, context));
+
+        val gqlObjectType = buildObjectType();
+        val objectAction = holder.getObjectAction();
+        val fieldBuilder = newFieldDefinition()
+                .name(fieldNameForSemanticsOf(objectAction))
+                .type(gqlObjectType);
+        holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
+        setField(fieldBuilder.build());
     }
 
     private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
@@ -88,70 +84,51 @@ public class GqlvActionInvoke extends GqlvAbstract {
         }
     }
 
-    @Nullable
-    private GraphQLOutputType typeFor(final ObjectAction objectAction){
-        val objectSpecification = objectAction.getReturnType();
-        switch (objectSpecification.getBeanSort()){
-
-            case COLLECTION:
-
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
-                if (facet == null) {
-                    log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
-                    return null;
-                }
-                val objectSpecificationOfCollectionElement = facet.elementSpec();
-                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement);
-                if (wrappedType == null) {
-                    log.warn("Unable to create wrapped type of for {} for action {}",
-                            objectSpecificationOfCollectionElement.getFullIdentifier(),
-                            objectAction.getFeatureIdentifier().getFullIdentityString());
-                    return null;
-                }
-                return GraphQLList.list(wrappedType);
-
-            case VALUE:
-            case ENTITY:
-            case VIEW_MODEL:
-            default:
-                return context.typeMapper.outputTypeFor(objectSpecification);
-
-        }
-    }
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        // make args available to child fields
+        dataFetchingEnvironment.getGraphQlContext().put("arguments", dataFetchingEnvironment.getArguments());
 
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
-            return null;
-        }
+        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+    }
 
-        val objectAction = holder.getObjectAction();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+    @Override
+    protected void addDataFetchersForChildren() {
+        result.addDataFetcher(this);
+    }
 
-        val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(objectAction.getFeatureIdentifier());
-        }
+    @Override
+    public void addGqlArguments(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder fieldBuilder,
+            final TypeMapper.InputContext inputContext,
+            final int parameterCount) {
+        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, parameterCount);
+    }
 
-        val usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(objectAction.getFeatureIdentifier());
-        }
+    @Override
+    public Can<ManagedObject> argumentManagedObjectsFor(
+            final Environment dataFetchingEnvironment,
+            final ObjectAction objectAction,
+            final BookmarkService bookmarkService) {
+        return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
+    }
 
-        val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context.bookmarkService);
+    @Override
+    public ObjectAction getObjectAction() {
+        return holder.getObjectAction();
+    }
 
-        val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
-        }
+    @Override
+    public ObjectAction getObjectMember() {
+        return holder.getObjectMember();
+    }
 
-        val resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return resultManagedObject.getPojo();
+    @Override
+    public ObjectSpecification getObjectSpecification() {
+        return holder.getObjectSpecification();
     }
 
     public interface Holder
@@ -165,7 +142,7 @@ public class GqlvActionInvoke extends GqlvAbstract {
                 final int parameterCount);
 
         Can<ManagedObject> argumentManagedObjectsFor(
-                DataFetchingEnvironment dataFetchingEnvironment,
+                Environment dataFetchingEnvironment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
     }

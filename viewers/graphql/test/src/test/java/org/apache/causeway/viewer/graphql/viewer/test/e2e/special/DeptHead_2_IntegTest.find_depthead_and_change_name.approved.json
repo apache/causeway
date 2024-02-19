@@ -3,10 +3,14 @@
     "university_dept_DeptHeads" : {
       "findHeadByName" : {
         "invoke" : {
-          "changeName" : {
-            "invokeIdempotent" : {
-              "name" : {
-                "get" : "Prof. Richard Horwich"
+          "results" : {
+            "changeName" : {
+              "invokeIdempotent" : {
+                "results" : {
+                  "name" : {
+                    "get" : "Prof. Richard Horwich"
+                  }
+                }
               }
             }
           }

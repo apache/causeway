@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "jdk8LocalPlusHoursAndMinutes" : {
-        "invoke" : "15:55:05"
+        "invoke" : {
+          "results" : "15:55:05"
+        }
       }
     }
   }

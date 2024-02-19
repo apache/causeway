@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "concat" : {
-        "invoke" : "FizzBuzz"
+        "invoke" : {
+          "results" : "FizzBuzz"
+        }
       }
     }
   }

@@ -2,7 +2,9 @@
   "data" : {
     "university_calc_Calculator" : {
       "someUrl" : {
-        "invoke" : "https://causeway.apache.org"
+        "invoke" : {
+          "results" : "https://causeway.apache.org"
+        }
       }
     }
   }

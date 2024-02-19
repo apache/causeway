@@ -4,10 +4,12 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
-            staffMembers {
-              get {
-                name {
-                  get
+            results {
+              staffMembers {
+                get {
+                  name {
+                    get
+                  }
                 }
               }
             }
@@ -19,28 +21,32 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
-            addStaffMembers {
-              params {
-                staffMembers {
-                  datatype
-                  choices {
-                    _meta {
-                      saveAs(ref: "staff-member")
-                    }
-                    name {
-                      get
+            results {
+              addStaffMembers {
+                params {
+                  staffMembers {
+                    datatype
+                    choices {
+                      _meta {
+                        saveAs(ref: "staff-member")
+                      }
+                      name {
+                        get
+                      }
                     }
                   }
                 }
-              }
-              invokeIdempotent(staffMembers: [{ref: "staff-member"}, {ref: "staff-member-2"}]) {
-                name {
-                  get
-                }
-                staffMembers {
-                  get {
+                invokeIdempotent(staffMembers: [{ref: "staff-member"}, {ref: "staff-member-2"}]) {
+                  results {
                     name {
                       get
+                    }
+                    staffMembers {
+                      get {
+                        name {
+                          get
+                        }
+                      }
                     }
                   }
                 }
@@ -54,10 +60,12 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
-            staffMembers {
-              get {
-                name {
-                  get
+            results {
+              staffMembers {
+                get {
+                  name {
+                    get
+                  }
                 }
               }
             }

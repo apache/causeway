@@ -5,8 +5,10 @@
         "hidden" : false,
         "disabled" : null,
         "invokeNonIdempotent" : {
-          "name" : {
-            "get" : "newbie"
+          "results" : {
+            "name" : {
+              "get" : "newbie"
+            }
           }
         }
       }

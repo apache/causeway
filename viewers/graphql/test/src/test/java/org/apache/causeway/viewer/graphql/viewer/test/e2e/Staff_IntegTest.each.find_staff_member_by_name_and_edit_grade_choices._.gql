@@ -2,9 +2,11 @@
   university_dept_Staff {
     findStaffMemberByName {
       invoke(name: "Gerry Jones") {
-        grade {
-          disabled
-          choices
+        results {
+          grade {
+            disabled
+            choices
+          }
         }
       }
     }

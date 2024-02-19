@@ -2,13 +2,15 @@
   university_dept_Departments {
     findAllDepartments {
       invoke {
-        name {
-          get
-          datatype
-        }
-        _meta {
-          logicalTypeName
-          version
+        results {
+          name {
+            get
+            datatype
+          }
+          _meta {
+            logicalTypeName
+            version
+          }
         }
       }
     }
