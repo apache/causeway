@@ -43,10 +43,10 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionParamDefault extends GqlvAbstract {
+public class GqlvActionParamsParamDefault extends GqlvAbstract {
     private final Holder holder;
 
-    public GqlvActionParamDefault(
+    public GqlvActionParamsParamDefault(
             final Holder holder,
             final Context context) {
         super(context);
@@ -85,7 +85,7 @@ public class GqlvActionParamDefault extends GqlvAbstract {
             extends ObjectSpecificationProvider,
             ObjectActionProvider,
             ObjectActionParameterProvider {
-        GqlvActionParam.Holder getHolder();
+        GqlvActionParamsParam.Holder getHolder();
 
         void addGqlArguments(
                 ObjectAction objectAction,

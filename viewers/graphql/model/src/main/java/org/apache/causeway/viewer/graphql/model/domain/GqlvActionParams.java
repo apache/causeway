@@ -30,7 +30,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
@@ -44,11 +43,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParams
         extends GqlvAbstractCustom
-        implements GqlvActionParam.Holder {
+        implements GqlvActionParamsParam.Holder {
 
     @Getter private final Holder holder;
 
-    private final Map<String, GqlvActionParam> params = new LinkedHashMap<>();
+    private final Map<String, GqlvActionParamsParam> params = new LinkedHashMap<>();
 
     public GqlvActionParams(
             final Holder holder,
@@ -63,7 +62,9 @@ public class GqlvActionParams
 
         val idx = new AtomicInteger(0);
         holder.getObjectAction().getParameters().forEach(objectActionParameter -> {
-            addParam(objectActionParameter, idx.getAndIncrement());
+            val gqlvActionParam = new GqlvActionParamsParam(this, objectActionParameter, this.context, idx.getAndIncrement());
+            addChildFieldFor(gqlvActionParam);
+            params.put(objectActionParameter.getId(), gqlvActionParam);
         });
 
         if (hasParams()) {
@@ -88,12 +89,6 @@ public class GqlvActionParams
 
     public boolean hasParams() {
         return !params.isEmpty();
-    }
-
-    void addParam(ObjectActionParameter objectActionParameter, int paramNum) {
-        val gqlvActionParam = new GqlvActionParam(this, objectActionParameter, context, paramNum);
-        addChildFieldFor(gqlvActionParam);
-        params.put(objectActionParameter.getId(), gqlvActionParam);
     }
 
     @Override

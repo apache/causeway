@@ -28,11 +28,11 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParamete
 
 import lombok.val;
 
-public class GqlvActionParamDatatype extends GqlvAbstract {
+public class GqlvActionParamsParamDatatype extends GqlvAbstract {
 
     private final Holder holder;
 
-    public GqlvActionParamDatatype(
+    public GqlvActionParamsParamDatatype(
             final Holder holder,
             final Context context) {
         super(context);

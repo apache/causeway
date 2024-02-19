@@ -23,12 +23,10 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import java.util.stream.Collectors;
 
  import graphql.schema.DataFetchingEnvironment;
- import graphql.schema.GraphQLArgument;
  import graphql.schema.GraphQLFieldDefinition;
  import graphql.schema.GraphQLList;
 
  import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
- import static graphql.schema.GraphQLNonNull.nonNull;
 
  import org.apache.causeway.applib.annotation.Where;
  import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -49,29 +47,23 @@ package org.apache.causeway.viewer.graphql.model.domain;
  import lombok.extern.log4j.Log4j2;
 
  @Log4j2
- public class GqlvActionParamAutoComplete extends GqlvAbstract {
-
-     private static final String SEARCH_PARAM_NAME = "search";
+ public class GqlvActionParamsParamChoices extends GqlvAbstract {
 
      private final Holder holder;
 
-     public GqlvActionParamAutoComplete(
+     public GqlvActionParamsParamChoices(
              final Holder holder,
              final Context context) {
          super(context);
          this.holder = holder;
 
          val objectActionParameter = holder.getObjectActionParameter();
-         if (objectActionParameter.hasAutoComplete()) {
+         if (objectActionParameter.hasChoices()) {
              val elementType = objectActionParameter.getElementType();
              val fieldBuilder = newFieldDefinition()
-                     .name("autoComplete")
+                     .name("choices")
                      .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
-             holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
-             fieldBuilder.argument(GraphQLArgument.newArgument()
-                     .name(SEARCH_PARAM_NAME)
-                     .type(nonNull(context.typeMapper.outputTypeFor(String.class))))
-                     .build();
+             holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.CHOICES, holder.getParamNum());
              setField(fieldBuilder.build());
          } else {
              setField(null);
@@ -95,10 +87,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
          val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
-         val searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
-         val autoCompleteManagedObjects = objectActionParameter.getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
+         val choices = objectActionParameter.getChoices(pendingArgs, InteractionInitiatedBy.USER);
 
-         return autoCompleteManagedObjects.stream()
+         return choices.stream()
                     .map(ManagedObject::getPojo)
                     .collect(Collectors.toList());
      }
@@ -107,7 +98,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
              extends ObjectSpecificationProvider,
                      ObjectActionProvider,
                      ObjectActionParameterProvider {
-         GqlvActionParam.Holder getHolder();
+         GqlvActionParamsParam.Holder getHolder();
 
          void addGqlArguments(
                  ObjectAction objectAction,
