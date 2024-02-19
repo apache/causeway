@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
@@ -35,11 +34,7 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-
-import graphql.schema.GraphQLList;
 
 import lombok.Getter;
 import lombok.val;
@@ -55,9 +50,9 @@ public class GqlvDomainObject
 
     private final GqlvMeta meta;
 
-    private final SortedMap<String, GqlvProperty> properties = new TreeMap<>();
-    private final SortedMap<String, GqlvCollection> collections = new TreeMap<>();
-    private final Map<String, GqlvAction> actions = new TreeMap<>();
+    private final List<GqlvProperty> properties = new ArrayList<>();
+    private final List<GqlvCollection> collections = new ArrayList<>();
+    private final List<GqlvAction> actions = new ArrayList<>();
 
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
@@ -131,15 +126,12 @@ public class GqlvDomainObject
 
     private void addMembers() {
 
-        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addProperty);
-        objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
-
+        objectSpecification.streamProperties(MixedIn.INCLUDED)
+                .forEach(prop -> properties.add(addChildFieldFor(new GqlvProperty(this, prop, context))));
+        objectSpecification.streamCollections(MixedIn.INCLUDED)
+                .forEach(coll -> collections.add(addChildFieldFor(new GqlvCollection(this, coll, context))));
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                .forEach(objectAction -> {
-                    val gqlvAction = new GqlvAction(this, objectAction, context);
-                    addChildFieldFor(gqlvAction);
-                    actions.put(objectAction.getId(), gqlvAction);
-                });
+                .forEach(act -> actions.add(addChildFieldFor(new GqlvAction(this, act, context))));
     }
 
     @SuppressWarnings("unused")
@@ -149,20 +141,6 @@ public class GqlvDomainObject
                 : ActionScope.PROTOTYPE;
     }
 
-    private void addProperty(final OneToOneAssociation otoa) {
-        val gqlvProperty = new GqlvProperty(this, otoa, context);
-        addChildFieldFor(gqlvProperty);
-        properties.put(otoa.getId(), gqlvProperty);
-    }
-
-    private void addCollection(OneToManyAssociation otom) {
-        val gqlvCollection = new GqlvCollection(this, otom, context);
-        addChildFieldFor(gqlvCollection);
-        if (gqlvCollection.isFieldDefined()) {
-            collections.put(otom.getId(), gqlvCollection);
-        }
-    }
-
 
     @Override
     protected void addDataFetchersForChildren() {
@@ -170,9 +148,9 @@ public class GqlvDomainObject
             return;
         }
         meta.addDataFetcher(this);
-        properties.forEach((id, property) -> property.addDataFetcher(this));
-        collections.forEach((id, collection) -> collection.addDataFetcher(this));
-        actions.forEach((id, action) -> action.addDataFetcher(this));
+        properties.forEach(property -> property.addDataFetcher(this));
+        collections.forEach(collection -> collection.addDataFetcher(this));
+        actions.forEach(action -> action.addDataFetcher(this));
     }
 
     @Override
