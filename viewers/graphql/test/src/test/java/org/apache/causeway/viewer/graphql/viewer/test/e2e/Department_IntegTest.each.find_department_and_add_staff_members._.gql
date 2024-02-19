@@ -1,9 +1,13 @@
 {
   Scenario(name: "can add staff members") {
+    Name
     Given {
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
+            args {
+              name
+            }
             results {
               staffMembers {
                 get {
@@ -60,6 +64,9 @@
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
+            args {
+              name
+            }
             results {
               staffMembers {
                 get {

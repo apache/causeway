@@ -1,10 +1,14 @@
 {
   "data" : {
     "Scenario" : {
+      "Name" : "can add staff members",
       "Given" : {
         "university_dept_Departments" : {
           "findDepartmentByName" : {
             "invoke" : {
+              "args" : {
+                "name" : "Classics"
+              },
               "results" : {
                 "staffMembers" : {
                   "get" : [ {
@@ -91,6 +95,9 @@
         "university_dept_Departments" : {
           "findDepartmentByName" : {
             "invoke" : {
+              "args" : {
+                "name" : "Classics"
+              },
               "results" : {
                 "staffMembers" : {
                   "get" : [ {

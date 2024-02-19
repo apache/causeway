@@ -6,6 +6,10 @@
         "university_calc_Calculator" : {
           "concat" : {
             "invoke" : {
+              "args" : {
+                "prefix" : "Fizz",
+                "suffix" : "Buzz"
+              },
               "results" : "FizzBuzz"
             }
           }

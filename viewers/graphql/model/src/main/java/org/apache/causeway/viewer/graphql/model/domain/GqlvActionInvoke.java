@@ -40,10 +40,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvoke
         extends GqlvAbstractCustom
-        implements GqlvActionInvokeResult.Holder {
+        implements GqlvActionInvokeResult.Holder,
+                   GqlvActionInvokeArgs.Holder {
 
     private final Holder holder;
     private final GqlvActionInvokeResult result;
+    private final GqlvActionInvokeArgs args;
 
     public GqlvActionInvoke(
             final Holder holder,
@@ -54,10 +56,12 @@ public class GqlvActionInvoke
 
         if(isBuilt()) {
             this.result = null;
+            this.args = null;
             return;
         }
 
-        addChildFieldFor(this.result = new GqlvActionInvokeResult(holder, context));
+        addChildFieldFor(this.result = new GqlvActionInvokeResult(this, context));
+        addChildFieldFor(this.args = new GqlvActionInvokeArgs(this, context));
 
         val gqlObjectType = buildObjectType();
         val objectAction = holder.getObjectAction();
@@ -97,6 +101,7 @@ public class GqlvActionInvoke
     @Override
     protected void addDataFetchersForChildren() {
         result.addDataFetcher(this);
+        args.addDataFetcher(this);
     }
 
     @Override
@@ -110,10 +115,10 @@ public class GqlvActionInvoke
 
     @Override
     public Can<ManagedObject> argumentManagedObjectsFor(
-            final Environment dataFetchingEnvironment,
+            final Environment environment,
             final ObjectAction objectAction,
             final BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
+        return holder.argumentManagedObjectsFor(environment, objectAction, bookmarkService);
     }
 
     @Override

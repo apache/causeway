@@ -1808,7 +1808,14 @@ type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
   validate(firstParam: String, secondParam: String, thirdParameter: String): String
 }
 
+type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_args {
+  firstParam: String
+  secondParam: String
+  thirdParameter: String
+}
+
 type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke {
+  args: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_args
   results: String
 }
 
@@ -1847,7 +1854,13 @@ type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
   validate(firstParam: String, secondParam: String): String
 }
 
+type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_args {
+  firstParam: String
+  secondParam: String
+}
+
 type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke {
+  args: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_args
   results: String
 }
 
@@ -1924,7 +1937,13 @@ type university_calc_Calculator__addBigDecimals__gqlv_action {
   validate(x: String, y: String): String
 }
 
+type university_calc_Calculator__addBigDecimals__gqlv_action_args {
+  x: String
+  y: String
+}
+
 type university_calc_Calculator__addBigDecimals__gqlv_action_invoke {
+  args: university_calc_Calculator__addBigDecimals__gqlv_action_args
   results: String
 }
 
@@ -1955,7 +1974,13 @@ type university_calc_Calculator__addBigIntegers__gqlv_action {
   validate(x: String, y: String): String
 }
 
+type university_calc_Calculator__addBigIntegers__gqlv_action_args {
+  x: String
+  y: String
+}
+
 type university_calc_Calculator__addBigIntegers__gqlv_action_invoke {
+  args: university_calc_Calculator__addBigIntegers__gqlv_action_args
   results: String
 }
 
@@ -1986,7 +2011,13 @@ type university_calc_Calculator__addByteWrappers__gqlv_action {
   validate(x: Byte, y: Byte): String
 }
 
+type university_calc_Calculator__addByteWrappers__gqlv_action_args {
+  x: Byte
+  y: Byte
+}
+
 type university_calc_Calculator__addByteWrappers__gqlv_action_invoke {
+  args: university_calc_Calculator__addByteWrappers__gqlv_action_args
   results: Int
 }
 
@@ -2017,7 +2048,13 @@ type university_calc_Calculator__addBytes__gqlv_action {
   validate(x: Byte, y: Byte): String
 }
 
+type university_calc_Calculator__addBytes__gqlv_action_args {
+  x: Byte
+  y: Byte
+}
+
 type university_calc_Calculator__addBytes__gqlv_action_invoke {
+  args: university_calc_Calculator__addBytes__gqlv_action_args
   results: Byte
 }
 
@@ -2048,7 +2085,13 @@ type university_calc_Calculator__addDoubleWrappers__gqlv_action {
   validate(x: Float, y: Float): String
 }
 
+type university_calc_Calculator__addDoubleWrappers__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
 type university_calc_Calculator__addDoubleWrappers__gqlv_action_invoke {
+  args: university_calc_Calculator__addDoubleWrappers__gqlv_action_args
   results: Float
 }
 
@@ -2079,7 +2122,13 @@ type university_calc_Calculator__addDoubles__gqlv_action {
   validate(x: Float, y: Float): String
 }
 
+type university_calc_Calculator__addDoubles__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
 type university_calc_Calculator__addDoubles__gqlv_action_invoke {
+  args: university_calc_Calculator__addDoubles__gqlv_action_args
   results: Float
 }
 
@@ -2110,7 +2159,13 @@ type university_calc_Calculator__addFloatWrappers__gqlv_action {
   validate(x: Float, y: Float): String
 }
 
+type university_calc_Calculator__addFloatWrappers__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
 type university_calc_Calculator__addFloatWrappers__gqlv_action_invoke {
+  args: university_calc_Calculator__addFloatWrappers__gqlv_action_args
   results: Float
 }
 
@@ -2141,7 +2196,13 @@ type university_calc_Calculator__addFloats__gqlv_action {
   validate(x: Float, y: Float): String
 }
 
+type university_calc_Calculator__addFloats__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
 type university_calc_Calculator__addFloats__gqlv_action_invoke {
+  args: university_calc_Calculator__addFloats__gqlv_action_args
   results: Float
 }
 
@@ -2172,7 +2233,13 @@ type university_calc_Calculator__addIntegerWrappers__gqlv_action {
   validate(x: Int, y: Int): String
 }
 
+type university_calc_Calculator__addIntegerWrappers__gqlv_action_args {
+  x: Int
+  y: Int
+}
+
 type university_calc_Calculator__addIntegerWrappers__gqlv_action_invoke {
+  args: university_calc_Calculator__addIntegerWrappers__gqlv_action_args
   results: Int
 }
 
@@ -2203,7 +2270,13 @@ type university_calc_Calculator__addIntegers__gqlv_action {
   validate(x: Int, y: Int): String
 }
 
+type university_calc_Calculator__addIntegers__gqlv_action_args {
+  x: Int
+  y: Int
+}
+
 type university_calc_Calculator__addIntegers__gqlv_action_invoke {
+  args: university_calc_Calculator__addIntegers__gqlv_action_args
   results: Int
 }
 
@@ -2234,7 +2307,13 @@ type university_calc_Calculator__addShortWrappers__gqlv_action {
   validate(x: Short, y: Short): String
 }
 
+type university_calc_Calculator__addShortWrappers__gqlv_action_args {
+  x: Short
+  y: Short
+}
+
 type university_calc_Calculator__addShortWrappers__gqlv_action_invoke {
+  args: university_calc_Calculator__addShortWrappers__gqlv_action_args
   results: Short
 }
 
@@ -2265,7 +2344,13 @@ type university_calc_Calculator__addShorts__gqlv_action {
   validate(x: Short, y: Short): String
 }
 
+type university_calc_Calculator__addShorts__gqlv_action_args {
+  x: Short
+  y: Short
+}
+
 type university_calc_Calculator__addShorts__gqlv_action_invoke {
+  args: university_calc_Calculator__addShorts__gqlv_action_args
   results: Short
 }
 
@@ -2296,7 +2381,13 @@ type university_calc_Calculator__and__gqlv_action {
   validate(x: Boolean, y: Boolean): String
 }
 
+type university_calc_Calculator__and__gqlv_action_args {
+  x: Boolean
+  y: Boolean
+}
+
 type university_calc_Calculator__and__gqlv_action_invoke {
+  args: university_calc_Calculator__and__gqlv_action_args
   results: Boolean
 }
 
@@ -2327,7 +2418,13 @@ type university_calc_Calculator__concat__gqlv_action {
   validate(prefix: String, suffix: String): String
 }
 
+type university_calc_Calculator__concat__gqlv_action_args {
+  prefix: String
+  suffix: String
+}
+
 type university_calc_Calculator__concat__gqlv_action_invoke {
+  args: university_calc_Calculator__concat__gqlv_action_args
   results: String
 }
 
@@ -2365,7 +2462,13 @@ type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action {
   validate(date: String, numDays: Int): String
 }
 
+type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_args {
+  date: String
+  numDays: Int
+}
+
 type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_invoke {
+  args: university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_args
   results: String
 }
 
@@ -2389,7 +2492,14 @@ type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action {
   validate(numHours: Int, numMinutes: Int, time: String): String
 }
 
+type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: String
+}
+
 type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke {
+  args: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_args
   results: String
 }
 
@@ -2435,7 +2545,15 @@ type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_acti
   validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: DateTime
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
 type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  args: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args
   results: DateTime
 }
 
@@ -2475,7 +2593,14 @@ type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
   validate(numHours: Int, numMinutes: Int, time: Time): String
 }
 
+type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: Time
+}
+
 type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke {
+  args: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args
   results: Time
 }
 
@@ -2521,7 +2646,15 @@ type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_actio
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
 type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  args: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args
   results: String
 }
 
@@ -2568,7 +2701,13 @@ type university_calc_Calculator__jodaLocalPlusDays__gqlv_action {
   validate(date: String, numDays: Int): String
 }
 
+type university_calc_Calculator__jodaLocalPlusDays__gqlv_action_args {
+  date: String
+  numDays: Int
+}
+
 type university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke {
+  args: university_calc_Calculator__jodaLocalPlusDays__gqlv_action_args
   results: String
 }
 
@@ -2592,7 +2731,14 @@ type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action {
   validate(numHours: Int, numMinutes: Int, time: String): String
 }
 
+type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: String
+}
+
 type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke {
+  args: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_args
   results: String
 }
 
@@ -2638,7 +2784,15 @@ type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action {
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
 type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  args: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args
   results: String
 }
 
@@ -2678,7 +2832,12 @@ type university_calc_Calculator__nextMonth__gqlv_action {
   validate(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
 }
 
+type university_calc_Calculator__nextMonth__gqlv_action_args {
+  month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
+}
+
 type university_calc_Calculator__nextMonth__gqlv_action_invoke {
+  args: university_calc_Calculator__nextMonth__gqlv_action_args
   results: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
 }
 
@@ -2702,7 +2861,12 @@ type university_calc_Calculator__not__gqlv_action {
   validate(x: Boolean): String
 }
 
+type university_calc_Calculator__not__gqlv_action_args {
+  x: Boolean
+}
+
 type university_calc_Calculator__not__gqlv_action_invoke {
+  args: university_calc_Calculator__not__gqlv_action_args
   results: Boolean
 }
 
@@ -2725,7 +2889,13 @@ type university_calc_Calculator__or__gqlv_action {
   validate(x: Boolean, y: Boolean): String
 }
 
+type university_calc_Calculator__or__gqlv_action_args {
+  x: Boolean
+  y: Boolean
+}
+
 type university_calc_Calculator__or__gqlv_action_invoke {
+  args: university_calc_Calculator__or__gqlv_action_args
   results: Boolean
 }
 
@@ -2803,7 +2973,12 @@ type university_dept_Department__addStaffMember__gqlv_action {
   validate(staffMember: university_dept_StaffMember__gqlv_input): String
 }
 
+type university_dept_Department__addStaffMember__gqlv_action_args {
+  staffMember: university_dept_StaffMember
+}
+
 type university_dept_Department__addStaffMember__gqlv_action_invoke {
+  args: university_dept_Department__addStaffMember__gqlv_action_args
   results: university_dept_Department
 }
 
@@ -2828,7 +3003,12 @@ type university_dept_Department__addStaffMembers__gqlv_action {
   validate(staffMembers: [university_dept_StaffMember__gqlv_input]): String
 }
 
+type university_dept_Department__addStaffMembers__gqlv_action_args {
+  staffMembers: [university_dept_StaffMember]
+}
+
 type university_dept_Department__addStaffMembers__gqlv_action_invoke {
+  args: university_dept_Department__addStaffMembers__gqlv_action_args
   results: university_dept_Department
 }
 
@@ -2853,7 +3033,12 @@ type university_dept_Department__changeDeptHead__gqlv_action {
   validate(newDeptHead: university_dept_DeptHead__gqlv_input): String
 }
 
+type university_dept_Department__changeDeptHead__gqlv_action_args {
+  newDeptHead: university_dept_DeptHead
+}
+
 type university_dept_Department__changeDeptHead__gqlv_action_invoke {
+  args: university_dept_Department__changeDeptHead__gqlv_action_args
   results: university_dept_Department
 }
 
@@ -2879,7 +3064,12 @@ type university_dept_Department__changeName__gqlv_action {
   validate(newName: String): String
 }
 
+type university_dept_Department__changeName__gqlv_action_args {
+  newName: String
+}
+
 type university_dept_Department__changeName__gqlv_action_invoke {
+  args: university_dept_Department__changeName__gqlv_action_args
   results: university_dept_Department
 }
 
@@ -2936,7 +3126,12 @@ type university_dept_Department__removeStaffMember__gqlv_action {
   validate(staffMember: university_dept_StaffMember__gqlv_input): String
 }
 
+type university_dept_Department__removeStaffMember__gqlv_action_args {
+  staffMember: university_dept_StaffMember
+}
+
 type university_dept_Department__removeStaffMember__gqlv_action_invoke {
+  args: university_dept_Department__removeStaffMember__gqlv_action_args
   results: university_dept_Department
 }
 
@@ -2983,7 +3178,13 @@ type university_dept_Departments__createDepartment__gqlv_action {
   validate(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
 }
 
+type university_dept_Departments__createDepartment__gqlv_action_args {
+  deptHead: university_dept_DeptHead
+  name: String
+}
+
 type university_dept_Departments__createDepartment__gqlv_action_invoke {
+  args: university_dept_Departments__createDepartment__gqlv_action_args
   results: university_dept_Department
 }
 
@@ -3020,7 +3221,12 @@ type university_dept_Departments__findDepartmentByName__gqlv_action {
   validate(name: String): String
 }
 
+type university_dept_Departments__findDepartmentByName__gqlv_action_args {
+  name: String
+}
+
 type university_dept_Departments__findDepartmentByName__gqlv_action_invoke {
+  args: university_dept_Departments__findDepartmentByName__gqlv_action_args
   results: university_dept_Department
 }
 
@@ -3061,7 +3267,12 @@ type university_dept_DeptHead__changeDepartment__gqlv_action {
   validate(department: university_dept_Department__gqlv_input): String
 }
 
+type university_dept_DeptHead__changeDepartment__gqlv_action_args {
+  department: university_dept_Department
+}
+
 type university_dept_DeptHead__changeDepartment__gqlv_action_invoke {
+  args: university_dept_DeptHead__changeDepartment__gqlv_action_args
   results: university_dept_DeptHead
 }
 
@@ -3078,7 +3289,12 @@ type university_dept_DeptHead__changeName__gqlv_action {
   validate(newName: String): String
 }
 
+type university_dept_DeptHead__changeName__gqlv_action_args {
+  newName: String
+}
+
 type university_dept_DeptHead__changeName__gqlv_action_invoke {
+  args: university_dept_DeptHead__changeName__gqlv_action_args
   results: university_dept_DeptHead
 }
 
@@ -3152,7 +3368,12 @@ type university_dept_DeptHeads__findHeadByName__gqlv_action {
   validate(name: String): String
 }
 
+type university_dept_DeptHeads__findHeadByName__gqlv_action_args {
+  name: String
+}
+
 type university_dept_DeptHeads__findHeadByName__gqlv_action_invoke {
+  args: university_dept_DeptHeads__findHeadByName__gqlv_action_args
   results: university_dept_DeptHead
 }
 
@@ -3256,7 +3477,13 @@ type university_dept_Staff__createStaffMember__gqlv_action {
   validate(department: university_dept_Department__gqlv_input, name: String): String
 }
 
+type university_dept_Staff__createStaffMember__gqlv_action_args {
+  department: university_dept_Department
+  name: String
+}
+
 type university_dept_Staff__createStaffMember__gqlv_action_invoke {
+  args: university_dept_Staff__createStaffMember__gqlv_action_args
   results: university_dept_StaffMember
 }
 
@@ -3293,7 +3520,12 @@ type university_dept_Staff__findStaffMemberByName__gqlv_action {
   validate(name: String): String
 }
 
+type university_dept_Staff__findStaffMemberByName__gqlv_action_args {
+  name: String
+}
+
 type university_dept_Staff__findStaffMemberByName__gqlv_action_invoke {
+  args: university_dept_Staff__findStaffMemberByName__gqlv_action_args
   results: university_dept_StaffMember
 }
 

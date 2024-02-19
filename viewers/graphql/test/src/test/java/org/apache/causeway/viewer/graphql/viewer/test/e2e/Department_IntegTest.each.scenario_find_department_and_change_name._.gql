@@ -1,11 +1,13 @@
 {
   Scenario(name: "Find department and change its name"){
     Name
-
     Given {
       university_dept_Departments {
         findDepartmentByName {
           invoke(name: "Classics") {
+            args {
+              name
+            }
             results {
               _meta {
                 saveAs(ref: "classics_dept")
@@ -20,6 +22,9 @@
       university_dept_Department(object: {ref: "classics_dept"}) {
         changeName {
           invokeIdempotent(newName: "Ancient History") {
+            args {
+              newName
+            }
             results {
               name {
                 get

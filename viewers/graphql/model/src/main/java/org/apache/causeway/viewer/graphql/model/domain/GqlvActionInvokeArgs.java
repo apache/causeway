@@ -18,12 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import graphql.schema.DataFetchingEnvironment;
+
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
@@ -34,25 +37,20 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class GqlvActionParams
+public class GqlvActionInvokeArgs
         extends GqlvAbstractCustom
-        implements GqlvActionParamsParam.Holder {
+        implements GqlvActionInvokeArgsArg.Holder {
 
     @Getter private final Holder holder;
 
-    private final List<GqlvActionParamsParam> params = new ArrayList<>();
+    private final List<GqlvActionInvokeArgsArg> args = new ArrayList<>();
 
-    public GqlvActionParams(
+    public GqlvActionInvokeArgs(
             final Holder holder,
             final Context context) {
-        super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction()), context);
+        super(TypeNames.actionArgsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction()), context);
         this.holder = holder;
 
         if (isBuilt()) {
@@ -62,14 +60,14 @@ public class GqlvActionParams
 
         val idx = new AtomicInteger(0);
         holder.getObjectAction().getParameters().forEach(objectActionParameter -> {
-            params.add(addChildFieldFor(new GqlvActionParamsParam(this, objectActionParameter, this.context, idx.getAndIncrement())));
+            args.add(addChildFieldFor(new GqlvActionInvokeArgsArg(this, objectActionParameter, this.context, idx.getAndIncrement())));
         });
 
-        if (params.isEmpty()) {
+        if (args.isEmpty()) {
             return;
         }
 
-        buildObjectTypeAndField("params");
+        buildObjectTypeAndField("args");
     }
 
     @Override
@@ -89,7 +87,7 @@ public class GqlvActionParams
 
     @Override
     protected void addDataFetchersForChildren() {
-        params.forEach(param -> param.addDataFetcher(this));
+        args.forEach(param -> param.addDataFetcher(this));
     }
 
     @Override
@@ -98,16 +96,7 @@ public class GqlvActionParams
     }
 
     @Override
-    public void addGqlArguments(
-            ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
-        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum);
-    }
-
-    @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(
-            Environment dataFetchingEnvironment,
-            ObjectAction objectAction,
-            BookmarkService bookmarkService) {
+    public Can<ManagedObject> argumentManagedObjectsFor(Environment dataFetchingEnvironment, ObjectAction objectAction, BookmarkService bookmarkService) {
         return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
     }
 
@@ -115,15 +104,10 @@ public class GqlvActionParams
             extends ObjectSpecificationProvider,
                     ObjectActionProvider {
 
-        void addGqlArguments(
-                ObjectAction objectAction,
-                GraphQLFieldDefinition.Builder fieldBuilder,
-                TypeMapper.InputContext inputContext,
-                int paramNum);
-
         Can<ManagedObject> argumentManagedObjectsFor(
                 Environment dataFetchingEnvironment,
                 ObjectAction objectAction,
                 BookmarkService bookmarkService);
+
     }
 }
