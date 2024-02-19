@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -47,7 +49,7 @@ public class GqlvActionParams
 
     @Getter private final Holder holder;
 
-    private final Map<String, GqlvActionParamsParam> params = new LinkedHashMap<>();
+    private final List<GqlvActionParamsParam> params = new ArrayList<>();
 
     public GqlvActionParams(
             final Holder holder,
@@ -64,7 +66,7 @@ public class GqlvActionParams
         holder.getObjectAction().getParameters().forEach(objectActionParameter -> {
             val gqlvActionParam = new GqlvActionParamsParam(this, objectActionParameter, this.context, idx.getAndIncrement());
             addChildFieldFor(gqlvActionParam);
-            params.put(objectActionParameter.getId(), gqlvActionParam);
+            params.add(gqlvActionParam);
         });
 
         if (hasParams()) {
@@ -93,7 +95,7 @@ public class GqlvActionParams
 
     @Override
     protected void addDataFetchersForChildren() {
-        params.forEach((id, param) -> param.addDataFetcher(this));
+        params.forEach(param -> param.addDataFetcher(this));
     }
 
 
