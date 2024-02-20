@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 
@@ -37,11 +35,7 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-import java.util.Map;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
-import static org.apache.causeway.viewer.graphql.model.domain.GqlvAction.asPojo;
 
 @Log4j2
 public class GqlvActionInvokeArgsArg

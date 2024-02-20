@@ -111,6 +111,8 @@ type Query {
   university_dept_Departments: university_dept_Departments
   university_dept_DeptHead(object: university_dept_DeptHead__gqlv_input): university_dept_DeptHead
   university_dept_DeptHeads: university_dept_DeptHeads
+  university_dept_People: university_dept_People
+  university_dept_Person(object: university_dept_Person__gqlv_input): university_dept_Person
   university_dept_Staff: university_dept_Staff
   university_dept_StaffMember(object: university_dept_StaffMember__gqlv_input): university_dept_StaffMember
 }
@@ -169,6 +171,8 @@ type ScenarioStep {
   university_dept_Departments: university_dept_Departments
   university_dept_DeptHead(object: university_dept_DeptHead__gqlv_input): university_dept_DeptHead
   university_dept_DeptHeads: university_dept_DeptHeads
+  university_dept_People: university_dept_People
+  university_dept_Person(object: university_dept_Person__gqlv_input): university_dept_Person
   university_dept_Staff: university_dept_Staff
   university_dept_StaffMember(object: university_dept_StaffMember__gqlv_input): university_dept_StaffMember
 }
@@ -1599,6 +1603,22 @@ type causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
   hidden: Boolean
   set(service: Boolean!): causeway_schema_metamodel_v2_DomainClassDto
   validate(service: Boolean): String
+}
+
+type causeway_schema_metamodel_v2_FacetHolder {
+  "Object metadata"
+  _meta: causeway_schema_metamodel_v2_FacetHolder__gqlv_meta
+}
+
+type causeway_schema_metamodel_v2_FacetHolder__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
 }
 
 type causeway_security_LoginRedirect {
@@ -3738,6 +3758,102 @@ type university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter {
   validity: String
 }
 
+type university_dept_People {
+  "Find Named"
+  findNamed: university_dept_People__findNamed__gqlv_action
+  "Name Of"
+  nameOf: university_dept_People__nameOf__gqlv_action
+}
+
+type university_dept_People__findNamed__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(name: String!): university_dept_People__findNamed__gqlv_action_invoke
+  "Parameters of this action"
+  params: university_dept_People__findNamed__gqlv_action_params
+  validate(name: String): String
+}
+
+type university_dept_People__findNamed__gqlv_action_args {
+  name: String
+}
+
+type university_dept_People__findNamed__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_People__findNamed__gqlv_action_args
+  results: university_dept_Person
+}
+
+type university_dept_People__findNamed__gqlv_action_params {
+  "Name"
+  name: university_dept_People__findNamed__name__gqlv_action_parameter
+}
+
+type university_dept_People__findNamed__name__gqlv_action_parameter {
+  datatype: String
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_dept_People__nameOf__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(person: university_dept_Person__gqlv_input!): university_dept_People__nameOf__gqlv_action_invoke
+  "Parameters of this action"
+  params: university_dept_People__nameOf__gqlv_action_params
+  validate(person: university_dept_Person__gqlv_input): String
+}
+
+type university_dept_People__nameOf__gqlv_action_args {
+  person: university_dept_Person
+}
+
+type university_dept_People__nameOf__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_People__nameOf__gqlv_action_args
+  results: String
+}
+
+type university_dept_People__nameOf__gqlv_action_params {
+  "Person"
+  person: university_dept_People__nameOf__person__gqlv_action_parameter
+}
+
+type university_dept_People__nameOf__person__gqlv_action_parameter {
+  datatype: String
+  disabled(person: university_dept_Person__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_dept_Person {
+  "Object metadata"
+  _meta: university_dept_Person__gqlv_meta
+  "Name"
+  name: university_dept_Person__name__gqlv_property
+}
+
+type university_dept_Person__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type university_dept_Person__name__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(name: String!): university_dept_Person
+  validate(name: String): String
+}
+
 type university_dept_Staff {
   "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   createStaffMember: university_dept_Staff__createStaffMember__gqlv_action
@@ -3959,186 +4075,352 @@ scalar Time
 scalar UUID
 
 input causeway_applib_DomainObjectList__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_FacetGroupNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_ParameterNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_PropertyNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_RoleMemento__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_TypeNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_UserMemento__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_node_ActionNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_node_CollectionNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_node_FacetAttrNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_node_FacetNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_conf_ConfigurationProperty__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_conf_ConfigurationViewmodel__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationFeatureViewModel__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationNamespace__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationTypeAction__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationTypeCollection__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationTypeMember__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationTypeProperty__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationType__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_schema_metamodel_v2_DomainClassDto__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input causeway_schema_metamodel_v2_FacetHolder__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_security_LoginRedirect__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_testing_fixtures_FixtureResult__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_lang_Runnable__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_Map__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_SortedMap__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_concurrent_Callable__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_function_BiFunction__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_function_Consumer__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_function_Function__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_stream_Stream__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input university_dept_Department__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input university_dept_DeptHead__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input university_dept_Person__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input university_dept_StaffMember__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }

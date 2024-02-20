@@ -25,6 +25,7 @@ public class GqlvScenarioStep
             return;
         }
 
+        // add domain object lookup to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
 
@@ -32,7 +33,7 @@ public class GqlvScenarioStep
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(GqlvDomainObject.of(objectSpec, context));
+                    domainObjects.add(addChildFieldFor(GqlvDomainObject.of(objectSpec, context)));
 
                     break;
             }
@@ -41,18 +42,9 @@ public class GqlvScenarioStep
         context.objectSpecifications().forEach(objectSpec -> {
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
                 context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                        .ifPresent(servicePojo -> {
-                            val gqlvDomainService = GqlvDomainService.of(objectSpec, servicePojo, context);
-                            addChildFieldFor(gqlvDomainService);
-                            domainServices.add(gqlvDomainService);
-                        });
+                        .ifPresent(servicePojo -> domainServices.add(addChildFieldFor(GqlvDomainService.of(objectSpec, servicePojo, context))));
             }
         });
-
-        // add domain object lookup to top-level query
-        for (val gqlvDomainObject : this.domainObjects) {
-            addChildFieldFor(gqlvDomainObject);
-        }
 
         buildObjectType();
     }

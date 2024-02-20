@@ -20,6 +20,8 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e.special;
 
 import java.util.Optional;
 
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
@@ -40,23 +42,43 @@ import lombok.val;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(120)
 @ActiveProfiles("test")
-public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
+public class Person_2_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void change_department_name() throws Exception {
+    void name_of_person_using_id_and_logicalTypeName() throws Exception {
 
         final Bookmark bookmark =
                 transactionService.callTransactional(
                         Propagation.REQUIRED,
                         () -> {
-                            Department department = departmentRepository.findByName("Classics");
-                            Optional<Bookmark> bookmark1 = bookmarkService.bookmarkFor(department);
+                            StaffMember staffMember = staffMemberRepository.findByName("Letitia Leadbetter");
+                            Optional<Bookmark> bookmark1 = bookmarkService.bookmarkFor(staffMember);
                             return bookmark1.orElseThrow();
                         }
                 ).valueAsNonNullElseFail();
 
-        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
+        val response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.getIdentifier()));
+
+        // then payload
+        Approvals.verify(response, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void name_of_person_using_id_but_invalid_logicalTypeName() throws Exception {
+
+        final Bookmark bookmark =
+                transactionService.callTransactional(
+                        Propagation.REQUIRED,
+                        () -> {
+                            StaffMember staffMember = staffMemberRepository.findByName("Letitia Leadbetter");
+                            Optional<Bookmark> bookmark1 = bookmarkService.bookmarkFor(staffMember);
+                            return bookmark1.orElseThrow();
+                        }
+                ).valueAsNonNullElseFail();
+
+        val response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.getIdentifier()));
 
         // then payload
         Approvals.verify(response, jsonOptions());

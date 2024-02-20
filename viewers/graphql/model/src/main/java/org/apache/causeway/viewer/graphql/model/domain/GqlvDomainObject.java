@@ -60,7 +60,35 @@ public class GqlvDomainObject
     public static GqlvDomainObject of(
             final ObjectSpecification objectSpecification,
             final Context context) {
-        return context.domainObjectBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(spec, context));
+
+        mapSuperclassesIfNecessary(objectSpecification, context);
+
+        return computeIfAbsentGqlvDomainObject(context, objectSpecification);
+    }
+
+    private static void mapSuperclassesIfNecessary(
+            final ObjectSpecification objectSpecification,
+            final Context context) {
+        // no need to map if the target subclass has already been built
+        if(context.domainObjectBySpec.containsKey(objectSpecification)) {
+            return;
+        }
+        val superclasses = superclassesOf(objectSpecification);
+        superclasses.forEach(objectSpec -> computeIfAbsentGqlvDomainObject(context, objectSpec));
+    }
+
+    private static GqlvDomainObject computeIfAbsentGqlvDomainObject(Context context, ObjectSpecification objectSpec) {
+        return context.domainObjectBySpec.computeIfAbsent(objectSpec, spec -> new GqlvDomainObject(spec, context));
+    }
+
+    private static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {
+        val superclasses = new ArrayList<ObjectSpecification>();
+        ObjectSpecification superclass = objectSpecification.superclass();
+        while (superclass != null && superclass.getCorrespondingClass() != Object.class) {
+            superclasses.add(0, superclass);
+            superclass = superclass.superclass();
+        }
+        return superclasses;
     }
 
     private GqlvDomainObject(
@@ -83,11 +111,19 @@ public class GqlvDomainObject
         inputObjectTypeBuilder
                 .field(newInputObjectField()
                         .name("id")
+                        .description("Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state")
                         .type(Scalars.GraphQLID)
                         .build()
                 )
                 .field(newInputObjectField()
+                        .name("logicalTypeName")
+                        .description("If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class")
+                        .type(Scalars.GraphQLString)
+                        .build()
+                )
+                .field(newInputObjectField()
                         .name("ref")
+                        .description("Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'")
                         .type(Scalars.GraphQLString)
                         .build()
                 )
@@ -156,7 +192,7 @@ public class GqlvDomainObject
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         Object target = dataFetchingEnvironment.getArgument("object");
-        return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService, new Environment.For(dataFetchingEnvironment))
+        return GqlvAction.asPojo(getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
                 .orElse(null);
     }
 

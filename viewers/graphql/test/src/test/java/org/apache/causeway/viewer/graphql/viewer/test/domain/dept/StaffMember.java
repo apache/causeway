@@ -54,7 +54,7 @@ import lombok.Setter;
 @DomainObject(nature = Nature.ENTITY, autoCompleteRepository = StaffMemberRepository.class, autoCompleteMethod = "findByNameMatching")
 @DomainObjectLayout(describedAs = "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews")
 @NoArgsConstructor
-public class StaffMember implements Comparable<StaffMember> {
+public class StaffMember extends Person implements Comparable<StaffMember> {
 
     public StaffMember(
             final String name,

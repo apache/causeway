@@ -1,0 +1,27 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/Scenario/When/university_dept_People/nameOf/invoke/results) : 'Person' is mandatory",
+    "locations" : [ {
+      "line" : 8,
+      "column" : 13
+    } ],
+    "path" : [ "Scenario", "When", "university_dept_People", "nameOf", "invoke", "results" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "Scenario" : {
+      "Name" : "Obtain name of person that's a non-existent StaffMember",
+      "When" : {
+        "university_dept_People" : {
+          "nameOf" : {
+            "invoke" : {
+              "results" : null
+            }
+          }
+        }
+      }
+    }
+  }
+}
