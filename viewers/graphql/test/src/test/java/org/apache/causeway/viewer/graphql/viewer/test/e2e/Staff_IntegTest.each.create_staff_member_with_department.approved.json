@@ -6,6 +6,9 @@
         "university_dept_Departments" : {
           "findDepartmentByName" : {
             "invoke" : {
+              "args" : {
+                "name" : "Classics"
+              },
               "results" : {
                 "_meta" : {
                   "saveAs" : "classics"
@@ -19,6 +22,14 @@
         "university_dept_Staff" : {
           "createStaffMember" : {
             "invokeNonIdempotent" : {
+              "args" : {
+                "name" : "Dr. Georgina McGovern",
+                "department" : {
+                  "name" : {
+                    "get" : "Classics"
+                  }
+                }
+              },
               "results" : {
                 "name" : {
                   "get" : "Dr. Georgina McGovern"

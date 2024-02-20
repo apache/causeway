@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
@@ -35,11 +34,7 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-
-import graphql.schema.GraphQLList;
 
 import lombok.Getter;
 import lombok.val;
@@ -55,9 +50,9 @@ public class GqlvDomainObject
 
     private final GqlvMeta meta;
 
-    private final SortedMap<String, GqlvProperty> properties = new TreeMap<>();
-    private final SortedMap<String, GqlvCollection> collections = new TreeMap<>();
-    private final Map<String, GqlvAction> actions = new TreeMap<>();
+    private final List<GqlvProperty> properties = new ArrayList<>();
+    private final List<GqlvCollection> collections = new ArrayList<>();
+    private final List<GqlvAction> actions = new ArrayList<>();
 
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
@@ -65,7 +60,35 @@ public class GqlvDomainObject
     public static GqlvDomainObject of(
             final ObjectSpecification objectSpecification,
             final Context context) {
-        return context.domainObjectBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(spec, context));
+
+        mapSuperclassesIfNecessary(objectSpecification, context);
+
+        return computeIfAbsentGqlvDomainObject(context, objectSpecification);
+    }
+
+    private static void mapSuperclassesIfNecessary(
+            final ObjectSpecification objectSpecification,
+            final Context context) {
+        // no need to map if the target subclass has already been built
+        if(context.domainObjectBySpec.containsKey(objectSpecification)) {
+            return;
+        }
+        val superclasses = superclassesOf(objectSpecification);
+        superclasses.forEach(objectSpec -> computeIfAbsentGqlvDomainObject(context, objectSpec));
+    }
+
+    private static GqlvDomainObject computeIfAbsentGqlvDomainObject(Context context, ObjectSpecification objectSpec) {
+        return context.domainObjectBySpec.computeIfAbsent(objectSpec, spec -> new GqlvDomainObject(spec, context));
+    }
+
+    private static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {
+        val superclasses = new ArrayList<ObjectSpecification>();
+        ObjectSpecification superclass = objectSpecification.superclass();
+        while (superclass != null && superclass.getCorrespondingClass() != Object.class) {
+            superclasses.add(0, superclass);
+            superclass = superclass.superclass();
+        }
+        return superclasses;
     }
 
     private GqlvDomainObject(
@@ -88,11 +111,19 @@ public class GqlvDomainObject
         inputObjectTypeBuilder
                 .field(newInputObjectField()
                         .name("id")
+                        .description("Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state")
                         .type(Scalars.GraphQLID)
                         .build()
                 )
                 .field(newInputObjectField()
+                        .name("logicalTypeName")
+                        .description("If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class")
+                        .type(Scalars.GraphQLString)
+                        .build()
+                )
+                .field(newInputObjectField()
                         .name("ref")
+                        .description("Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'")
                         .type(Scalars.GraphQLString)
                         .build()
                 )
@@ -131,15 +162,12 @@ public class GqlvDomainObject
 
     private void addMembers() {
 
-        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::addProperty);
-        objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(this::addCollection);
-
+        objectSpecification.streamProperties(MixedIn.INCLUDED)
+                .forEach(prop -> properties.add(addChildFieldFor(new GqlvProperty(this, prop, context))));
+        objectSpecification.streamCollections(MixedIn.INCLUDED)
+                .forEach(coll -> collections.add(addChildFieldFor(new GqlvCollection(this, coll, context))));
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                .forEach(objectAction -> {
-                    val gqlvAction = new GqlvAction(this, objectAction, context);
-                    addChildFieldFor(gqlvAction);
-                    actions.put(objectAction.getId(), gqlvAction);
-                });
+                .forEach(act -> actions.add(addChildFieldFor(new GqlvAction(this, act, context))));
     }
 
     @SuppressWarnings("unused")
@@ -149,20 +177,6 @@ public class GqlvDomainObject
                 : ActionScope.PROTOTYPE;
     }
 
-    private void addProperty(final OneToOneAssociation otoa) {
-        val gqlvProperty = new GqlvProperty(this, otoa, context);
-        addChildFieldFor(gqlvProperty);
-        properties.put(otoa.getId(), gqlvProperty);
-    }
-
-    private void addCollection(OneToManyAssociation otom) {
-        val gqlvCollection = new GqlvCollection(this, otom, context);
-        addChildFieldFor(gqlvCollection);
-        if (gqlvCollection.isFieldDefined()) {
-            collections.put(otom.getId(), gqlvCollection);
-        }
-    }
-
 
     @Override
     protected void addDataFetchersForChildren() {
@@ -170,15 +184,15 @@ public class GqlvDomainObject
             return;
         }
         meta.addDataFetcher(this);
-        properties.forEach((id, property) -> property.addDataFetcher(this));
-        collections.forEach((id, collection) -> collection.addDataFetcher(this));
-        actions.forEach((id, action) -> action.addDataFetcher(this));
+        properties.forEach(property -> property.addDataFetcher(this));
+        collections.forEach(collection -> collection.addDataFetcher(this));
+        actions.forEach(action -> action.addDataFetcher(this));
     }
 
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         Object target = dataFetchingEnvironment.getArgument("object");
-        return GqlvAction.asPojo(getObjectSpecification(), target, this.context.bookmarkService, new Environment.For(dataFetchingEnvironment))
+        return GqlvAction.asPojo(getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
                 .orElse(null);
     }
 

@@ -18,15 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import graphql.schema.DataFetchingEnvironment;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import lombok.Getter;
@@ -42,7 +41,7 @@ public class GqlvDomainService
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
 
-    private final Map<String, GqlvAction> actions = new LinkedHashMap<>();
+    private final List<GqlvAction> actions = new ArrayList<>();
 
     public static GqlvDomainService of(
             final ObjectSpecification objectSpecification,
@@ -66,7 +65,7 @@ public class GqlvDomainService
 
         addActions();
         if (hasActions()) {
-            buildObjectTypeAndField(TypeNames.objectTypeNameFor(this.objectSpecification));
+            buildObjectTypeAndField(TypeNames.objectTypeNameFor(this.objectSpecification), this.objectSpecification.getDescription());
         }
     }
 
@@ -81,20 +80,14 @@ public class GqlvDomainService
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||
                         apiVariant != CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_ONLY    // the other variants have an entry for all actions.
                 )
-                .forEach(this::addAction);
-    }
-
-    private void addAction(final ObjectAction objectAction) {
-        val gqlvAction = new GqlvAction(this, objectAction, context);
-        addChildFieldFor(gqlvAction);
-        actions.put(objectAction.getId(), gqlvAction);
+                .forEach(act -> actions.add(addChildFieldFor(new GqlvAction(this, act, context))));
     }
 
 
     @Override
     protected void addDataFetchersForChildren() {
         if (hasActions()) {
-            actions.forEach((id, gqlva) -> gqlva.addDataFetcher(this));
+            actions.forEach(act -> act.addDataFetcher(this));
         }
     }
 
@@ -108,6 +101,5 @@ public class GqlvDomainService
     public String toString() {
         return objectSpecification.getLogicalTypeName();
     }
-
 
 }

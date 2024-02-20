@@ -52,7 +52,7 @@ public class GqlvActionParamsParamHidden extends GqlvAbstract {
 
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")
-                .type((GraphQLOutputType) context.typeMapper.outputTypeFor(boolean.class));
+                .type(context.typeMapper.outputTypeFor(boolean.class));
         holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         setField(fieldBuilder.build());
     }

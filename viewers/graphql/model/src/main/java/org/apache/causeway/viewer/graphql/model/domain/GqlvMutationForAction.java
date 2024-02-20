@@ -19,6 +19,8 @@
 package org.apache.causeway.viewer.graphql.model.domain;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Optional;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
@@ -28,6 +30,9 @@ import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import org.springframework.lang.Nullable;
 
@@ -126,7 +131,33 @@ public class GqlvMutationForAction extends GqlvAbstract {
             sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.getCorrespondingClass());
         } else {
             Object target = dataFetchingEnvironment.getArgument(argumentName);
-            sourcePojo = GqlvAction.asPojo(objectSpec, target, context.bookmarkService, environment)
+            Optional<Object> result;
+            val argumentValue = (Map<String, String>) target;
+            String idValue = argumentValue.get("id");
+            if (idValue != null) {
+                String logicalTypeName = argumentValue.get("logicalTypeName");
+                Optional<Bookmark> bookmarkIfAny;
+                if (logicalTypeName != null) {
+                    bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, idValue));
+                } else {
+                    Class<?> paramClass = objectSpec.getCorrespondingClass();
+                    bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
+                }
+                result = bookmarkIfAny
+                        .map(context.bookmarkService::lookup)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get);
+            } else {
+                String refValue = argumentValue.get("ref");
+                if (refValue != null) {
+                    String key = GqlvMetaSaveAs.keyFor(refValue);
+                    BookmarkedPojo value = ((Environment) environment).getGraphQlContext().get(key);
+                    result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
+                } else {
+                    throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
+                }
+            }
+            sourcePojo = result
                     .orElseThrow(); // TODO: better error handling if no such object found.
         }
 

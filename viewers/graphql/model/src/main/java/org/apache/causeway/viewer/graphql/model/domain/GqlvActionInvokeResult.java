@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.GraphQLContext;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
@@ -48,15 +47,13 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.Map;
-
 @Log4j2
 public class GqlvActionInvokeResult extends GqlvAbstract {
 
-    private final GqlvActionInvoke.Holder holder;
+    private final GqlvActionInvokeResult.Holder holder;
 
     public GqlvActionInvokeResult(
-            final GqlvActionInvoke.Holder holder,
+            final GqlvActionInvokeResult.Holder holder,
             final Context context) {
         super(context);
 
@@ -110,18 +107,8 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-        val environment = new Environment() {
 
-            @Override
-            public Map<String, Object> getArguments() {
-                return dataFetchingEnvironment.getGraphQlContext().get("arguments");
-            }
-
-            @Override
-            public GraphQLContext getGraphQlContext() {
-                return dataFetchingEnvironment.getGraphQlContext();
-            }
-        };
+        val environment = new Environment.ForTunnelled(dataFetchingEnvironment);
 
         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
         if (objectSpecification == null) {

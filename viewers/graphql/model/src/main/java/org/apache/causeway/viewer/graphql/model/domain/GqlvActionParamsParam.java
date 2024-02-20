@@ -70,12 +70,12 @@ public class GqlvActionParamsParam
 
     public GqlvActionParamsParam(
             final Holder holder,
-            final ObjectActionParameter objectActionParameter,
+            final ObjectActionParameter oap,
             final Context context,
             final int paramNum) {
-        super(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), objectActionParameter), context);
+        super(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), oap), context);
         this.holder = holder;
-        this.objectActionParameter = objectActionParameter;
+        this.objectActionParameter = oap;
         this.paramNum = paramNum;
 
         if (isBuilt()) {
@@ -100,7 +100,7 @@ public class GqlvActionParamsParam
         addChildFieldFor(this.validate = new GqlvActionParamsParamValidate(this, context));
         addChildFieldFor(this.datatype = new GqlvActionParamsParamDatatype(this, context));
 
-        buildObjectTypeAndField(objectActionParameter.getId());
+        buildObjectTypeAndField(oap.getId(), oap.getCanonicalDescription().orElse(oap.getCanonicalFriendlyName()));
     }
 
     @Override

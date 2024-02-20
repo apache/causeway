@@ -88,7 +88,7 @@ public class GqlvAction
                     : null);
         addChildFieldFor(this.params = new GqlvActionParams(this, context));
 
-        buildObjectTypeAndField(objectAction.getId());
+        buildObjectTypeAndField(objectAction.getId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
     }
 
     private boolean isInvokeAllowed(ObjectAction objectAction) {
@@ -130,6 +130,8 @@ public class GqlvAction
                 .map(oap -> {
                     final ObjectSpecification elementType = oap.getElementType();
                     Object argumentValue = argumentPojos.get(oap.getId());
+                    Object pojoOrPojoList;
+
                     switch (elementType.getBeanSort()) {
 
                         case VALUE:
@@ -140,20 +142,23 @@ public class GqlvAction
                             if (argumentValue == null) {
                                 return ManagedObject.empty(elementType);
                             }
-                            Object pojoOrPojoList;
+                            // fall through
+
+                        case ABSTRACT:
+                            // if the parameter is abstract, we still attempt to figure out the arguments.
+                            // the arguments will need to either use 'ref' or else both 'id' AND 'logicalTypeName'
                             if (argumentValue instanceof List) {
                                 val argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
-                                        .map(value -> asPojo(oap.getElementType(), value, context.bookmarkService, environment))
+                                        .map(value -> asPojo(oap.getElementType(), value, environment, context))
                                         .filter(Optional::isPresent)
                                         .map(Optional::get)
                                         .collect(Collectors.toList());
                             } else {
-                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, context.bookmarkService, environment).orElse(null);
+                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, environment, context).orElse(null);
                             }
                             return ManagedObject.adaptParameter(oap, pojoOrPojoList);
 
-                        case ABSTRACT:
                         case COLLECTION:
                         case MANAGED_BEAN_CONTRIBUTING:
                         case VETOED:
@@ -185,26 +190,63 @@ public class GqlvAction
     public static Optional<Object> asPojo(
             final ObjectSpecification elementType,
             final Object argumentValueObj,
-            final BookmarkService bookmarkService,
-            final Environment environment) {
+            final Environment environment,
+            final Context context
+    ) {
         val argumentValue = (Map<String, String>) argumentValueObj;
-        String idValue = argumentValue.get("id");
+
+        val refValue = argumentValue.get("ref");
+        if (refValue != null) {
+            String key = GqlvMetaSaveAs.keyFor(refValue);
+            BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
+            if (bookmarkedPojo == null) {
+                throw new IllegalArgumentException(String.format(
+                    "Could not find object referenced '%s' in the execution context; was it saved previously using \"saveAs\" ?", refValue));
+            }
+            val targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
+            val targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
+            if (targetPojoSpec == null) {
+                throw new IllegalArgumentException(String.format(
+                    "The object referenced '%s' is not part of the metamodel (has class '%s')",
+                    refValue, targetPojoClass.getCanonicalName()));
+            }
+            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo())) {
+                throw new IllegalArgumentException(String.format(
+                    "The object referenced '%s' has a type '%s' that is not assignable to the required type '%s'",
+                    refValue, targetPojoSpec.getLogicalTypeName(), elementType.getLogicalTypeName()));
+            }
+            return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
+        }
+
+        val idValue = argumentValue.get("id");
         if (idValue != null) {
             Class<?> paramClass = elementType.getCorrespondingClass();
-            Optional<Bookmark> bookmarkIfAny = bookmarkService.bookmarkFor(paramClass, idValue);
+            Optional<Bookmark> bookmarkIfAny;
+            if(elementType.isAbstract()) {
+                val logicalTypeName = argumentValue.get("logicalTypeName");
+                if (logicalTypeName == null) {
+                    throw new IllegalArgumentException(String.format(
+                            "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
+                            elementType.getLogicalTypeName()));
+                }
+                if(context.specificationLoader.specForLogicalTypeName(logicalTypeName).isEmpty()) {
+                    throw new IllegalArgumentException(String.format(
+                            "The 'logicalTypeName' of '%s' is unknown in the metamodel",
+                            logicalTypeName));
+                }
+
+                 bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, idValue));
+            } else {
+                bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
+            }
             return bookmarkIfAny
-                    .map(bookmarkService::lookup)
+                    .map(context.bookmarkService::lookup)
                     .filter(Optional::isPresent)
                     .map(Optional::get);
         }
-        String refValue = argumentValue.get("ref");
-        if (refValue != null) {
-            String key = GqlvMetaSaveAs.keyFor(refValue);
-            BookmarkedPojo value = environment.getGraphQlContext().get(key);
-            return Optional.of(value).map(BookmarkedPojo::getTargetPojo);
-        }
         throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
     }
+
 
     public void addGqlArguments(
             final ObjectAction objectAction,

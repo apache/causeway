@@ -111,14 +111,19 @@ type Query {
   university_dept_Departments: university_dept_Departments
   university_dept_DeptHead(object: university_dept_DeptHead__gqlv_input): university_dept_DeptHead
   university_dept_DeptHeads: university_dept_DeptHeads
+  university_dept_People: university_dept_People
+  university_dept_Person(object: university_dept_Person__gqlv_input): university_dept_Person
   university_dept_Staff: university_dept_Staff
   university_dept_StaffMember(object: university_dept_StaffMember__gqlv_input): university_dept_StaffMember
 }
 
 type Scenario {
+  "Given the system under test has this initial state"
   Given: ScenarioStep
   Name: String
+  "Then the system has this resultant state"
   Then: ScenarioStep
+  "When the system is changed in some particular way"
   When: ScenarioStep
 }
 
@@ -166,17 +171,26 @@ type ScenarioStep {
   university_dept_Departments: university_dept_Departments
   university_dept_DeptHead(object: university_dept_DeptHead__gqlv_input): university_dept_DeptHead
   university_dept_DeptHeads: university_dept_DeptHeads
+  university_dept_People: university_dept_People
+  university_dept_Person(object: university_dept_Person__gqlv_input): university_dept_Person
   university_dept_Staff: university_dept_Staff
   university_dept_StaffMember(object: university_dept_StaffMember__gqlv_input): university_dept_StaffMember
 }
 
 type causeway_applib_DomainObjectList {
+  "Object metadata"
   _meta: causeway_applib_DomainObjectList__gqlv_meta
+  "Action Arguments"
   actionArguments: causeway_applib_DomainObjectList__actionArguments__gqlv_property
+  "Action Id"
   actionId: causeway_applib_DomainObjectList__actionId__gqlv_property
+  "Action Owning Fqcn"
   actionOwningFqcn: causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property
+  "Element Type Fqcn"
   elementTypeFqcn: causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property
+  "Objects"
   objects: causeway_applib_DomainObjectList__objects__gqlv_collection
+  "Title"
   title: causeway_applib_DomainObjectList__title__gqlv_property
 }
 
@@ -243,9 +257,13 @@ type causeway_applib_DomainObjectList__title__gqlv_property {
 }
 
 type causeway_applib_FacetGroupNode {
+  "Object metadata"
   _meta: causeway_applib_FacetGroupNode__gqlv_meta
+  "Child Nodes"
   childNodes: causeway_applib_FacetGroupNode__childNodes__gqlv_collection
+  "Facets"
   facets: causeway_applib_FacetGroupNode__facets__gqlv_property
+  "Parent Node"
   parentNode: causeway_applib_FacetGroupNode__parentNode__gqlv_property
 }
 
@@ -284,9 +302,13 @@ type causeway_applib_FacetGroupNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_ParameterNode {
+  "Object metadata"
   _meta: causeway_applib_ParameterNode__gqlv_meta
+  "Child Nodes"
   childNodes: causeway_applib_ParameterNode__childNodes__gqlv_collection
+  "Parameter"
   parameter: causeway_applib_ParameterNode__parameter__gqlv_property
+  "Parent Node"
   parentNode: causeway_applib_ParameterNode__parentNode__gqlv_property
 }
 
@@ -326,10 +348,15 @@ type causeway_applib_ParameterNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_PropertyNode {
+  "Object metadata"
   _meta: causeway_applib_PropertyNode__gqlv_meta
+  "Child Nodes"
   childNodes: causeway_applib_PropertyNode__childNodes__gqlv_collection
+  "Mixed In"
   mixedIn: causeway_applib_PropertyNode__mixedIn__gqlv_property
+  "Parent Node"
   parentNode: causeway_applib_PropertyNode__parentNode__gqlv_property
+  "Property"
   property: causeway_applib_PropertyNode__property__gqlv_property
 }
 
@@ -378,8 +405,11 @@ type causeway_applib_PropertyNode__property__gqlv_property {
 }
 
 type causeway_applib_RoleMemento {
+  "Object metadata"
   _meta: causeway_applib_RoleMemento__gqlv_meta
+  "Description"
   description: causeway_applib_RoleMemento__description__gqlv_property
+  "Name"
   name: causeway_applib_RoleMemento__name__gqlv_property
 }
 
@@ -413,9 +443,13 @@ type causeway_applib_RoleMemento__name__gqlv_property {
 }
 
 type causeway_applib_TypeNode {
+  "Object metadata"
   _meta: causeway_applib_TypeNode__gqlv_meta
+  "Child Nodes"
   childNodes: causeway_applib_TypeNode__childNodes__gqlv_collection
+  "Domain Class Dto"
   domainClassDto: causeway_applib_TypeNode__domainClassDto__gqlv_property
+  "Parent Node"
   parentNode: causeway_applib_TypeNode__parentNode__gqlv_property
 }
 
@@ -454,17 +488,29 @@ type causeway_applib_TypeNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_UserMemento {
+  "Object metadata"
   _meta: causeway_applib_UserMemento__gqlv_meta
+  "Authentication Code"
   authenticationCode: causeway_applib_UserMemento__authenticationCode__gqlv_property
+  "Authentication Source"
   authenticationSource: causeway_applib_UserMemento__authenticationSource__gqlv_property
+  "Avatar Url"
   avatarUrl: causeway_applib_UserMemento__avatarUrl__gqlv_property
+  "Impersonating"
   impersonating: causeway_applib_UserMemento__impersonating__gqlv_property
+  "Language Locale"
   languageLocale: causeway_applib_UserMemento__languageLocale__gqlv_property
+  "Multi Tenancy Token"
   multiTenancyToken: causeway_applib_UserMemento__multiTenancyToken__gqlv_property
+  "Name"
   name: causeway_applib_UserMemento__name__gqlv_property
+  "Number Format Locale"
   numberFormatLocale: causeway_applib_UserMemento__numberFormatLocale__gqlv_property
+  "Real Name"
   realName: causeway_applib_UserMemento__realName__gqlv_property
+  "Roles"
   roles: causeway_applib_UserMemento__roles__gqlv_collection
+  "Time Format Locale"
   timeFormatLocale: causeway_applib_UserMemento__timeFormatLocale__gqlv_property
 }
 
@@ -578,6 +624,7 @@ type causeway_applib_UserMemento__timeFormatLocale__gqlv_property {
 }
 
 type causeway_applib_UserMenu {
+  "Returns your user account details"
   me: causeway_applib_UserMenu__me__gqlv_action
 }
 
@@ -594,10 +641,15 @@ type causeway_applib_UserMenu__me__gqlv_action_invoke {
 }
 
 type causeway_applib_node_ActionNode {
+  "Object metadata"
   _meta: causeway_applib_node_ActionNode__gqlv_meta
+  "Action"
   action: causeway_applib_node_ActionNode__action__gqlv_property
+  "Child Nodes"
   childNodes: causeway_applib_node_ActionNode__childNodes__gqlv_collection
+  "Mixed In"
   mixedIn: causeway_applib_node_ActionNode__mixedIn__gqlv_property
+  "Parent Node"
   parentNode: causeway_applib_node_ActionNode__parentNode__gqlv_property
 }
 
@@ -646,10 +698,15 @@ type causeway_applib_node_ActionNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_node_CollectionNode {
+  "Object metadata"
   _meta: causeway_applib_node_CollectionNode__gqlv_meta
+  "Child Nodes"
   childNodes: causeway_applib_node_CollectionNode__childNodes__gqlv_collection
+  "Collection"
   collection: causeway_applib_node_CollectionNode__collection__gqlv_property
+  "Mixed In"
   mixedIn: causeway_applib_node_CollectionNode__mixedIn__gqlv_property
+  "Parent Node"
   parentNode: causeway_applib_node_CollectionNode__parentNode__gqlv_property
 }
 
@@ -698,9 +755,13 @@ type causeway_applib_node_CollectionNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_node_FacetAttrNode {
+  "Object metadata"
   _meta: causeway_applib_node_FacetAttrNode__gqlv_meta
+  "Child Nodes"
   childNodes: causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection
+  "Facet Attr"
   facetAttr: causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property
+  "Parent Node"
   parentNode: causeway_applib_node_FacetAttrNode__parentNode__gqlv_property
 }
 
@@ -740,10 +801,15 @@ type causeway_applib_node_FacetAttrNode__parentNode__gqlv_property {
 }
 
 type causeway_applib_node_FacetNode {
+  "Object metadata"
   _meta: causeway_applib_node_FacetNode__gqlv_meta
+  "Child Nodes"
   childNodes: causeway_applib_node_FacetNode__childNodes__gqlv_collection
+  "Facet"
   facet: causeway_applib_node_FacetNode__facet__gqlv_property
+  "Parent Node"
   parentNode: causeway_applib_node_FacetNode__parentNode__gqlv_property
+  "Shadowed"
   shadowed: causeway_applib_node_FacetNode__shadowed__gqlv_property
 }
 
@@ -791,6 +857,7 @@ type causeway_applib_node_FacetNode__shadowed__gqlv_property {
 }
 
 type causeway_conf_ConfigurationMenu {
+  "Configuration"
   configuration: causeway_conf_ConfigurationMenu__configuration__gqlv_action
 }
 
@@ -806,8 +873,11 @@ type causeway_conf_ConfigurationMenu__configuration__gqlv_action_invoke {
 }
 
 type causeway_conf_ConfigurationProperty {
+  "Object metadata"
   _meta: causeway_conf_ConfigurationProperty__gqlv_meta
+  "Key"
   key: causeway_conf_ConfigurationProperty__key__gqlv_property
+  "Value"
   value: causeway_conf_ConfigurationProperty__value__gqlv_property
 }
 
@@ -841,9 +911,13 @@ type causeway_conf_ConfigurationProperty__value__gqlv_property {
 }
 
 type causeway_conf_ConfigurationViewmodel {
+  "Object metadata"
   _meta: causeway_conf_ConfigurationViewmodel__gqlv_meta
+  "Environment"
   environment: causeway_conf_ConfigurationViewmodel__environment__gqlv_collection
+  "Primary"
   primary: causeway_conf_ConfigurationViewmodel__primary__gqlv_collection
+  "Secondary"
   secondary: causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection
 }
 
@@ -880,10 +954,15 @@ type causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection {
 }
 
 type causeway_feat_ApplicationFeatureViewModel {
+  "Object metadata"
   _meta: causeway_feat_ApplicationFeatureViewModel__gqlv_meta
+  "Member Name"
   memberName: causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property
+  "Namespace Name"
   namespaceName: causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property
+  "Parent"
   parent: causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property
+  "Type Simple Name"
   typeSimpleName: causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property
 }
 
@@ -934,11 +1013,17 @@ type causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationNamespace {
+  "Object metadata"
   _meta: causeway_feat_ApplicationNamespace__gqlv_meta
+  "Contents"
   contents: causeway_feat_ApplicationNamespace__contents__gqlv_collection
+  "Member Name"
   memberName: causeway_feat_ApplicationNamespace__memberName__gqlv_property
+  "Namespace Name"
   namespaceName: causeway_feat_ApplicationNamespace__namespaceName__gqlv_property
+  "Parent"
   parent: causeway_feat_ApplicationNamespace__parent__gqlv_property
+  "Type Simple Name"
   typeSimpleName: causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property
 }
 
@@ -995,23 +1080,38 @@ type causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationType {
+  "Object metadata"
   _meta: causeway_feat_ApplicationType__gqlv_meta
+  "Actions"
   actions: causeway_feat_ApplicationType__actions__gqlv_collection
+  "Collections"
   collections: causeway_feat_ApplicationType__collections__gqlv_collection
+  "Member Name"
   memberName: causeway_feat_ApplicationType__memberName__gqlv_property
+  "Namespace Name"
   namespaceName: causeway_feat_ApplicationType__namespaceName__gqlv_property
+  "Parent"
   parent: causeway_feat_ApplicationType__parent__gqlv_property
+  "Properties"
   properties: causeway_feat_ApplicationType__properties__gqlv_collection
+  "Type Simple Name"
   typeSimpleName: causeway_feat_ApplicationType__typeSimpleName__gqlv_property
 }
 
 type causeway_feat_ApplicationTypeAction {
+  "Object metadata"
   _meta: causeway_feat_ApplicationTypeAction__gqlv_meta
+  "Action Semantics"
   actionSemantics: causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property
+  "Member Name"
   memberName: causeway_feat_ApplicationTypeAction__memberName__gqlv_property
+  "Namespace Name"
   namespaceName: causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property
+  "Parent"
   parent: causeway_feat_ApplicationTypeAction__parent__gqlv_property
+  "Return Type"
   returnType: causeway_feat_ApplicationTypeAction__returnType__gqlv_property
+  "Type Simple Name"
   typeSimpleName: causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property
 }
 
@@ -1081,12 +1181,19 @@ type causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeCollection {
+  "Object metadata"
   _meta: causeway_feat_ApplicationTypeCollection__gqlv_meta
+  "Derived"
   derived: causeway_feat_ApplicationTypeCollection__derived__gqlv_property
+  "Element Type"
   elementType: causeway_feat_ApplicationTypeCollection__elementType__gqlv_property
+  "Member Name"
   memberName: causeway_feat_ApplicationTypeCollection__memberName__gqlv_property
+  "Namespace Name"
   namespaceName: causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property
+  "Parent"
   parent: causeway_feat_ApplicationTypeCollection__parent__gqlv_property
+  "Type Simple Name"
   typeSimpleName: causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property
 }
 
@@ -1155,10 +1262,15 @@ type causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeMember {
+  "Object metadata"
   _meta: causeway_feat_ApplicationTypeMember__gqlv_meta
+  "Member Name"
   memberName: causeway_feat_ApplicationTypeMember__memberName__gqlv_property
+  "Namespace Name"
   namespaceName: causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property
+  "Parent"
   parent: causeway_feat_ApplicationTypeMember__parent__gqlv_property
+  "Type Simple Name"
   typeSimpleName: causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property
 }
 
@@ -1209,14 +1321,23 @@ type causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
 }
 
 type causeway_feat_ApplicationTypeProperty {
+  "Object metadata"
   _meta: causeway_feat_ApplicationTypeProperty__gqlv_meta
+  "Derived"
   derived: causeway_feat_ApplicationTypeProperty__derived__gqlv_property
+  "Max Length"
   maxLength: causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property
+  "Member Name"
   memberName: causeway_feat_ApplicationTypeProperty__memberName__gqlv_property
+  "Namespace Name"
   namespaceName: causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property
+  "Parent"
   parent: causeway_feat_ApplicationTypeProperty__parent__gqlv_property
+  "Return Type"
   returnType: causeway_feat_ApplicationTypeProperty__returnType__gqlv_property
+  "Type Simple Name"
   typeSimpleName: causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property
+  "Typical Length"
   typicalLength: causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property
 }
 
@@ -1370,15 +1491,25 @@ type causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
 }
 
 type causeway_schema_metamodel_v2_DomainClassDto {
+  "Object metadata"
   _meta: causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta
+  "Actions"
   actions: causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property
+  "Annotations"
   annotations: causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property
+  "Collections"
   collections: causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property
+  "Facets"
   facets: causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property
+  "Id"
   id: causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property
+  "Major Version"
   majorVersion: causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property
+  "Minor Version"
   minorVersion: causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property
+  "Properties"
   properties: causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property
+  "Service"
   service: causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property
 }
 
@@ -1474,7 +1605,24 @@ type causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
   validate(service: Boolean): String
 }
 
+type causeway_schema_metamodel_v2_FacetHolder {
+  "Object metadata"
+  _meta: causeway_schema_metamodel_v2_FacetHolder__gqlv_meta
+}
+
+type causeway_schema_metamodel_v2_FacetHolder__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
 type causeway_security_LoginRedirect {
+  "Object metadata"
   _meta: causeway_security_LoginRedirect__gqlv_meta
 }
 
@@ -1490,6 +1638,7 @@ type causeway_security_LoginRedirect__gqlv_meta {
 }
 
 type causeway_security_LogoutMenu {
+  "Logout"
   logout: causeway_security_LogoutMenu__logout__gqlv_action
 }
 
@@ -1505,10 +1654,15 @@ type causeway_security_LogoutMenu__logout__gqlv_action_invoke {
 }
 
 type causeway_testing_fixtures_FixtureResult {
+  "Object metadata"
   _meta: causeway_testing_fixtures_FixtureResult__gqlv_meta
+  "Result class"
   className: causeway_testing_fixtures_FixtureResult__className__gqlv_property
+  "Fixture script"
   fixtureScriptClassName: causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_property
+  "Key"
   key: causeway_testing_fixtures_FixtureResult__key__gqlv_property
+  "Result"
   object: causeway_testing_fixtures_FixtureResult__object__gqlv_property
 }
 
@@ -1559,6 +1713,7 @@ type causeway_testing_fixtures_FixtureResult__object__gqlv_property {
 }
 
 type java_lang_Runnable {
+  "Object metadata"
   _meta: java_lang_Runnable__gqlv_meta
 }
 
@@ -1574,6 +1729,7 @@ type java_lang_Runnable__gqlv_meta {
 }
 
 type java_util_Map {
+  "Object metadata"
   _meta: java_util_Map__gqlv_meta
 }
 
@@ -1589,6 +1745,7 @@ type java_util_Map__gqlv_meta {
 }
 
 type java_util_SortedMap {
+  "Object metadata"
   _meta: java_util_SortedMap__gqlv_meta
 }
 
@@ -1604,6 +1761,7 @@ type java_util_SortedMap__gqlv_meta {
 }
 
 type java_util_concurrent_Callable {
+  "Object metadata"
   _meta: java_util_concurrent_Callable__gqlv_meta
 }
 
@@ -1619,6 +1777,7 @@ type java_util_concurrent_Callable__gqlv_meta {
 }
 
 type java_util_function_BiFunction {
+  "Object metadata"
   _meta: java_util_function_BiFunction__gqlv_meta
 }
 
@@ -1634,6 +1793,7 @@ type java_util_function_BiFunction__gqlv_meta {
 }
 
 type java_util_function_Consumer {
+  "Object metadata"
   _meta: java_util_function_Consumer__gqlv_meta
 }
 
@@ -1649,6 +1809,7 @@ type java_util_function_Consumer__gqlv_meta {
 }
 
 type java_util_function_Function {
+  "Object metadata"
   _meta: java_util_function_Function__gqlv_meta
 }
 
@@ -1664,6 +1825,7 @@ type java_util_function_Function__gqlv_meta {
 }
 
 type java_util_stream_Stream {
+  "Object metadata"
   _meta: java_util_stream_Stream__gqlv_meta
 }
 
@@ -1679,8 +1841,11 @@ type java_util_stream_Stream__gqlv_meta {
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MMNode {
+  "Object metadata"
   _meta: org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta
+  "Child Nodes"
   childNodes: org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_collection
+  "Parent Node"
   parentNode: org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property
 }
 
@@ -1710,9 +1875,13 @@ type org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_p
 }
 
 type org_apache_causeway_core_metamodel_inspect_model_MemberNode {
+  "Object metadata"
   _meta: org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta
+  "Child Nodes"
   childNodes: org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gqlv_collection
+  "Mixed In"
   mixedIn: org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property
+  "Parent Node"
   parentNode: org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property
 }
 
@@ -1752,8 +1921,11 @@ type org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gq
 }
 
 type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
+  "Object metadata"
   _meta: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta
+  "Friendly Name"
   friendlyName: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__gqlv_property
+  "Qualified Name"
   qualifiedName: org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__gqlv_property
 }
 
@@ -1787,9 +1959,13 @@ type org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__q
 }
 
 type university_admin_AdminMenu {
+  "Action With Disabled Param"
   actionWithDisabledParam: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action
+  "Action With Hidden Param"
   actionWithHiddenParam: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action
+  "Admin Action"
   adminAction: university_admin_AdminMenu__adminAction__gqlv_action
+  "Other Admin Action"
   otherAdminAction: university_admin_AdminMenu__otherAdminAction__gqlv_action
 }
 
@@ -1804,17 +1980,29 @@ type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(firstParam: String!, secondParam: String!, thirdParameter: String!): university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke
+  "Parameters of this action"
   params: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params
   validate(firstParam: String, secondParam: String, thirdParameter: String): String
 }
 
+type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_args {
+  firstParam: String
+  secondParam: String
+  thirdParameter: String
+}
+
 type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_args
   results: String
 }
 
 type university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params {
+  "First Param"
   firstParam: university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter
+  "Second Param"
   secondParam: university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter
+  "Third Parameter"
   thirdParameter: university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter
 }
 
@@ -1843,16 +2031,26 @@ type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(firstParam: String!, secondParam: String!): university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke
+  "Parameters of this action"
   params: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params
   validate(firstParam: String, secondParam: String): String
 }
 
+type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_args {
+  firstParam: String
+  secondParam: String
+}
+
 type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_args
   results: String
 }
 
 type university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params {
+  "First Param"
   firstParam: university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter
+  "Second Param"
   secondParam: university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter
 }
 
@@ -1886,33 +2084,61 @@ type university_admin_AdminMenu__otherAdminAction__gqlv_action_invoke {
 }
 
 type university_calc_Calculator {
+  "Add Big Decimals"
   addBigDecimals: university_calc_Calculator__addBigDecimals__gqlv_action
+  "Add Big Integers"
   addBigIntegers: university_calc_Calculator__addBigIntegers__gqlv_action
+  "Add Byte Wrappers"
   addByteWrappers: university_calc_Calculator__addByteWrappers__gqlv_action
+  "Add Bytes"
   addBytes: university_calc_Calculator__addBytes__gqlv_action
+  "Add Double Wrappers"
   addDoubleWrappers: university_calc_Calculator__addDoubleWrappers__gqlv_action
+  "Add Doubles"
   addDoubles: university_calc_Calculator__addDoubles__gqlv_action
+  "Add Float Wrappers"
   addFloatWrappers: university_calc_Calculator__addFloatWrappers__gqlv_action
+  "Add Floats"
   addFloats: university_calc_Calculator__addFloats__gqlv_action
+  "Add Integer Wrappers"
   addIntegerWrappers: university_calc_Calculator__addIntegerWrappers__gqlv_action
+  "Add Integers"
   addIntegers: university_calc_Calculator__addIntegers__gqlv_action
+  "Add Short Wrappers"
   addShortWrappers: university_calc_Calculator__addShortWrappers__gqlv_action
+  "Add Shorts"
   addShorts: university_calc_Calculator__addShorts__gqlv_action
+  "And"
   and: university_calc_Calculator__and__gqlv_action
+  "Concat"
   concat: university_calc_Calculator__concat__gqlv_action
+  "Jdk 8 Local Plus Days"
   jdk8LocalPlusDays: university_calc_Calculator__jdk8LocalPlusDays__gqlv_action
+  "Jdk 8 Local Plus Hours And Minutes"
   jdk8LocalPlusHoursAndMinutes: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action
+  "Jdk 8 Offset Plus Days And Hours And Minutes"
   jdk8OffsetPlusDaysAndHoursAndMinutes: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action
+  "Jdk 8 Offset Plus Hours And Minutes"
   jdk8OffsetPlusHoursAndMinutes: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action
+  "Jdk 8 Zoned Plus Days And Hours And Minutes"
   jdk8ZonedPlusDaysAndHoursAndMinutes: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action
+  "Joda Local Plus Days"
   jodaLocalPlusDays: university_calc_Calculator__jodaLocalPlusDays__gqlv_action
+  "Joda Local Plus Hours And Minutes"
   jodaLocalPlusHoursAndMinutes: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action
+  "Joda Plus Days And Hours And Minutes"
   jodaPlusDaysAndHoursAndMinutes: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action
+  "Next Month"
   nextMonth: university_calc_Calculator__nextMonth__gqlv_action
+  "Not"
   not: university_calc_Calculator__not__gqlv_action
+  "Or"
   or: university_calc_Calculator__or__gqlv_action
+  "Some Locale"
   someLocale: university_calc_Calculator__someLocale__gqlv_action
+  "Some Url"
   someUrl: university_calc_Calculator__someUrl__gqlv_action
+  "Some Uuid"
   someUuid: university_calc_Calculator__someUuid__gqlv_action
 }
 
@@ -1920,16 +2146,26 @@ type university_calc_Calculator__addBigDecimals__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: String!, y: String): university_calc_Calculator__addBigDecimals__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addBigDecimals__gqlv_action_params
   validate(x: String, y: String): String
 }
 
+type university_calc_Calculator__addBigDecimals__gqlv_action_args {
+  x: String
+  y: String
+}
+
 type university_calc_Calculator__addBigDecimals__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addBigDecimals__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__addBigDecimals__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addBigDecimals__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter
 }
 
@@ -1951,16 +2187,26 @@ type university_calc_Calculator__addBigIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: String!, y: String): university_calc_Calculator__addBigIntegers__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addBigIntegers__gqlv_action_params
   validate(x: String, y: String): String
 }
 
+type university_calc_Calculator__addBigIntegers__gqlv_action_args {
+  x: String
+  y: String
+}
+
 type university_calc_Calculator__addBigIntegers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addBigIntegers__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__addBigIntegers__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addBigIntegers__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter
 }
 
@@ -1982,16 +2228,26 @@ type university_calc_Calculator__addByteWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Byte!, y: Byte): university_calc_Calculator__addByteWrappers__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addByteWrappers__gqlv_action_params
   validate(x: Byte, y: Byte): String
 }
 
+type university_calc_Calculator__addByteWrappers__gqlv_action_args {
+  x: Byte
+  y: Byte
+}
+
 type university_calc_Calculator__addByteWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addByteWrappers__gqlv_action_args
   results: Int
 }
 
 type university_calc_Calculator__addByteWrappers__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addByteWrappers__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addByteWrappers__y__gqlv_action_parameter
 }
 
@@ -2013,16 +2269,26 @@ type university_calc_Calculator__addBytes__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Byte!, y: Byte!): university_calc_Calculator__addBytes__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addBytes__gqlv_action_params
   validate(x: Byte, y: Byte): String
 }
 
+type university_calc_Calculator__addBytes__gqlv_action_args {
+  x: Byte
+  y: Byte
+}
+
 type university_calc_Calculator__addBytes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addBytes__gqlv_action_args
   results: Byte
 }
 
 type university_calc_Calculator__addBytes__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addBytes__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addBytes__y__gqlv_action_parameter
 }
 
@@ -2044,16 +2310,26 @@ type university_calc_Calculator__addDoubleWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float): university_calc_Calculator__addDoubleWrappers__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addDoubleWrappers__gqlv_action_params
   validate(x: Float, y: Float): String
 }
 
+type university_calc_Calculator__addDoubleWrappers__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
 type university_calc_Calculator__addDoubleWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addDoubleWrappers__gqlv_action_args
   results: Float
 }
 
 type university_calc_Calculator__addDoubleWrappers__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addDoubleWrappers__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addDoubleWrappers__y__gqlv_action_parameter
 }
 
@@ -2075,16 +2351,26 @@ type university_calc_Calculator__addDoubles__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float!): university_calc_Calculator__addDoubles__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addDoubles__gqlv_action_params
   validate(x: Float, y: Float): String
 }
 
+type university_calc_Calculator__addDoubles__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
 type university_calc_Calculator__addDoubles__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addDoubles__gqlv_action_args
   results: Float
 }
 
 type university_calc_Calculator__addDoubles__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addDoubles__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addDoubles__y__gqlv_action_parameter
 }
 
@@ -2106,16 +2392,26 @@ type university_calc_Calculator__addFloatWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float): university_calc_Calculator__addFloatWrappers__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addFloatWrappers__gqlv_action_params
   validate(x: Float, y: Float): String
 }
 
+type university_calc_Calculator__addFloatWrappers__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
 type university_calc_Calculator__addFloatWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addFloatWrappers__gqlv_action_args
   results: Float
 }
 
 type university_calc_Calculator__addFloatWrappers__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addFloatWrappers__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addFloatWrappers__y__gqlv_action_parameter
 }
 
@@ -2137,16 +2433,26 @@ type university_calc_Calculator__addFloats__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float!): university_calc_Calculator__addFloats__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addFloats__gqlv_action_params
   validate(x: Float, y: Float): String
 }
 
+type university_calc_Calculator__addFloats__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
 type university_calc_Calculator__addFloats__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addFloats__gqlv_action_args
   results: Float
 }
 
 type university_calc_Calculator__addFloats__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addFloats__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addFloats__y__gqlv_action_parameter
 }
 
@@ -2168,16 +2474,26 @@ type university_calc_Calculator__addIntegerWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Int!, y: Int): university_calc_Calculator__addIntegerWrappers__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addIntegerWrappers__gqlv_action_params
   validate(x: Int, y: Int): String
 }
 
+type university_calc_Calculator__addIntegerWrappers__gqlv_action_args {
+  x: Int
+  y: Int
+}
+
 type university_calc_Calculator__addIntegerWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addIntegerWrappers__gqlv_action_args
   results: Int
 }
 
 type university_calc_Calculator__addIntegerWrappers__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addIntegerWrappers__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addIntegerWrappers__y__gqlv_action_parameter
 }
 
@@ -2199,16 +2515,26 @@ type university_calc_Calculator__addIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Int!, y: Int!): university_calc_Calculator__addIntegers__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addIntegers__gqlv_action_params
   validate(x: Int, y: Int): String
 }
 
+type university_calc_Calculator__addIntegers__gqlv_action_args {
+  x: Int
+  y: Int
+}
+
 type university_calc_Calculator__addIntegers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addIntegers__gqlv_action_args
   results: Int
 }
 
 type university_calc_Calculator__addIntegers__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addIntegers__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addIntegers__y__gqlv_action_parameter
 }
 
@@ -2230,16 +2556,26 @@ type university_calc_Calculator__addShortWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Short!, y: Short): university_calc_Calculator__addShortWrappers__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addShortWrappers__gqlv_action_params
   validate(x: Short, y: Short): String
 }
 
+type university_calc_Calculator__addShortWrappers__gqlv_action_args {
+  x: Short
+  y: Short
+}
+
 type university_calc_Calculator__addShortWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addShortWrappers__gqlv_action_args
   results: Short
 }
 
 type university_calc_Calculator__addShortWrappers__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addShortWrappers__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addShortWrappers__y__gqlv_action_parameter
 }
 
@@ -2261,16 +2597,26 @@ type university_calc_Calculator__addShorts__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Short!, y: Short!): university_calc_Calculator__addShorts__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__addShorts__gqlv_action_params
   validate(x: Short, y: Short): String
 }
 
+type university_calc_Calculator__addShorts__gqlv_action_args {
+  x: Short
+  y: Short
+}
+
 type university_calc_Calculator__addShorts__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__addShorts__gqlv_action_args
   results: Short
 }
 
 type university_calc_Calculator__addShorts__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__addShorts__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__addShorts__y__gqlv_action_parameter
 }
 
@@ -2292,16 +2638,26 @@ type university_calc_Calculator__and__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!, y: Boolean!): university_calc_Calculator__and__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__and__gqlv_action_params
   validate(x: Boolean, y: Boolean): String
 }
 
+type university_calc_Calculator__and__gqlv_action_args {
+  x: Boolean
+  y: Boolean
+}
+
 type university_calc_Calculator__and__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__and__gqlv_action_args
   results: Boolean
 }
 
 type university_calc_Calculator__and__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__and__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__and__y__gqlv_action_parameter
 }
 
@@ -2323,16 +2679,26 @@ type university_calc_Calculator__concat__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(prefix: String!, suffix: String): university_calc_Calculator__concat__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__concat__gqlv_action_params
   validate(prefix: String, suffix: String): String
 }
 
+type university_calc_Calculator__concat__gqlv_action_args {
+  prefix: String
+  suffix: String
+}
+
 type university_calc_Calculator__concat__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__concat__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__concat__gqlv_action_params {
+  "Prefix"
   prefix: university_calc_Calculator__concat__prefix__gqlv_action_parameter
+  "Suffix"
   suffix: university_calc_Calculator__concat__suffix__gqlv_action_parameter
 }
 
@@ -2361,16 +2727,26 @@ type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(date: String!, numDays: Int!): university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params
   validate(date: String, numDays: Int): String
 }
 
+type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_args {
+  date: String
+  numDays: Int
+}
+
 type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params {
+  "Date"
   date: university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_parameter
+  "Num Days"
   numDays: university_calc_Calculator__jdk8LocalPlusDays__numDays__gqlv_action_parameter
 }
 
@@ -2385,17 +2761,29 @@ type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(numHours: Int!, numMinutes: Int!, time: String!): university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: String): String
 }
 
+type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: String
+}
+
 type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
   numHours: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
   numMinutes: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
   time: university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter
 }
 
@@ -2431,18 +2819,32 @@ type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_acti
   disabled: String
   hidden: Boolean
   invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
+type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: DateTime
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
 type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args
   results: DateTime
 }
 
 type university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
   dateTime: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
   numDays: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
   numHours: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
   numMinutes: university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
 }
 
@@ -2471,17 +2873,29 @@ type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(numHours: Int!, numMinutes: Int!, time: Time!): university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: Time): String
 }
 
+type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: Time
+}
+
 type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args
   results: Time
 }
 
 type university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
   numHours: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
   numMinutes: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
   time: university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter
 }
 
@@ -2517,18 +2931,32 @@ type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_actio
   disabled: String
   hidden: Boolean
   invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
+type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
 type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
   dateTime: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
   numDays: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
   numHours: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
   numMinutes: university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
 }
 
@@ -2564,16 +2992,26 @@ type university_calc_Calculator__jodaLocalPlusDays__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(date: String!, numDays: Int!): university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params
   validate(date: String, numDays: Int): String
 }
 
+type university_calc_Calculator__jodaLocalPlusDays__gqlv_action_args {
+  date: String
+  numDays: Int
+}
+
 type university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__jodaLocalPlusDays__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params {
+  "Date"
   date: university_calc_Calculator__jodaLocalPlusDays__date__gqlv_action_parameter
+  "Num Days"
   numDays: university_calc_Calculator__jodaLocalPlusDays__numDays__gqlv_action_parameter
 }
 
@@ -2588,17 +3026,29 @@ type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(numHours: Int!, numMinutes: Int!, time: String!): university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: String): String
 }
 
+type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: String
+}
+
 type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
   numHours: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
   numMinutes: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
   time: university_calc_Calculator__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter
 }
 
@@ -2634,18 +3084,32 @@ type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
+type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
 type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args
   results: String
 }
 
 type university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
   dateTime: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
   numDays: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
   numHours: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
   numMinutes: university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
 }
 
@@ -2674,15 +3138,23 @@ type university_calc_Calculator__nextMonth__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): university_calc_Calculator__nextMonth__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__nextMonth__gqlv_action_params
   validate(month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
 }
 
+type university_calc_Calculator__nextMonth__gqlv_action_args {
+  month: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
+}
+
 type university_calc_Calculator__nextMonth__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__nextMonth__gqlv_action_args
   results: org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
 }
 
 type university_calc_Calculator__nextMonth__gqlv_action_params {
+  "Month"
   month: university_calc_Calculator__nextMonth__month__gqlv_action_parameter
 }
 
@@ -2698,15 +3170,23 @@ type university_calc_Calculator__not__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!): university_calc_Calculator__not__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__not__gqlv_action_params
   validate(x: Boolean): String
 }
 
+type university_calc_Calculator__not__gqlv_action_args {
+  x: Boolean
+}
+
 type university_calc_Calculator__not__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__not__gqlv_action_args
   results: Boolean
 }
 
 type university_calc_Calculator__not__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__not__x__gqlv_action_parameter
 }
 
@@ -2721,16 +3201,26 @@ type university_calc_Calculator__or__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!, y: Boolean!): university_calc_Calculator__or__gqlv_action_invoke
+  "Parameters of this action"
   params: university_calc_Calculator__or__gqlv_action_params
   validate(x: Boolean, y: Boolean): String
 }
 
+type university_calc_Calculator__or__gqlv_action_args {
+  x: Boolean
+  y: Boolean
+}
+
 type university_calc_Calculator__or__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_calc_Calculator__or__gqlv_action_args
   results: Boolean
 }
 
 type university_calc_Calculator__or__gqlv_action_params {
+  "X"
   x: university_calc_Calculator__or__x__gqlv_action_parameter
+  "Y"
   y: university_calc_Calculator__or__y__gqlv_action_parameter
 }
 
@@ -2783,14 +3273,23 @@ type university_calc_Calculator__someUuid__gqlv_action_invoke {
 
 "University department specializing in a field of study"
 type university_dept_Department {
+  "Object metadata"
   _meta: university_dept_Department__gqlv_meta
+  "University department specializing in a field of study"
   addStaffMember: university_dept_Department__addStaffMember__gqlv_action
+  "University department specializing in a field of study"
   addStaffMembers: university_dept_Department__addStaffMembers__gqlv_action
+  "University department specializing in a field of study"
   changeDeptHead: university_dept_Department__changeDeptHead__gqlv_action
+  "University department specializing in a field of study"
   changeName: university_dept_Department__changeName__gqlv_action
+  "Departmental head, responsible for curriculum, research, funding and staff"
   deptHead: university_dept_Department__deptHead__gqlv_property
+  "Name"
   name: university_dept_Department__name__gqlv_property
+  "University department specializing in a field of study"
   removeStaffMember: university_dept_Department__removeStaffMember__gqlv_action
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   staffMembers: university_dept_Department__staffMembers__gqlv_collection
 }
 
@@ -2799,15 +3298,23 @@ type university_dept_Department__addStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department__addStaffMember__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Department__addStaffMember__gqlv_action_params
   validate(staffMember: university_dept_StaffMember__gqlv_input): String
 }
 
+type university_dept_Department__addStaffMember__gqlv_action_args {
+  staffMember: university_dept_StaffMember
+}
+
 type university_dept_Department__addStaffMember__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Department__addStaffMember__gqlv_action_args
   results: university_dept_Department
 }
 
 type university_dept_Department__addStaffMember__gqlv_action_params {
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   staffMember: university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter
 }
 
@@ -2824,15 +3331,23 @@ type university_dept_Department__addStaffMembers__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(staffMembers: [university_dept_StaffMember__gqlv_input]): university_dept_Department__addStaffMembers__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Department__addStaffMembers__gqlv_action_params
   validate(staffMembers: [university_dept_StaffMember__gqlv_input]): String
 }
 
+type university_dept_Department__addStaffMembers__gqlv_action_args {
+  staffMembers: [university_dept_StaffMember]
+}
+
 type university_dept_Department__addStaffMembers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Department__addStaffMembers__gqlv_action_args
   results: university_dept_Department
 }
 
 type university_dept_Department__addStaffMembers__gqlv_action_params {
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   staffMembers: university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter
 }
 
@@ -2849,15 +3364,23 @@ type university_dept_Department__changeDeptHead__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(newDeptHead: university_dept_DeptHead__gqlv_input!): university_dept_Department__changeDeptHead__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Department__changeDeptHead__gqlv_action_params
   validate(newDeptHead: university_dept_DeptHead__gqlv_input): String
 }
 
+type university_dept_Department__changeDeptHead__gqlv_action_args {
+  newDeptHead: university_dept_DeptHead
+}
+
 type university_dept_Department__changeDeptHead__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Department__changeDeptHead__gqlv_action_args
   results: university_dept_Department
 }
 
 type university_dept_Department__changeDeptHead__gqlv_action_params {
+  "Departmental head, responsible for curriculum, research, funding and staff"
   newDeptHead: university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter
 }
 
@@ -2875,15 +3398,23 @@ type university_dept_Department__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(newName: String!): university_dept_Department__changeName__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Department__changeName__gqlv_action_params
   validate(newName: String): String
 }
 
+type university_dept_Department__changeName__gqlv_action_args {
+  newName: String
+}
+
 type university_dept_Department__changeName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Department__changeName__gqlv_action_args
   results: university_dept_Department
 }
 
 type university_dept_Department__changeName__gqlv_action_params {
+  "New Name"
   newName: university_dept_Department__changeName__newName__gqlv_action_parameter
 }
 
@@ -2932,15 +3463,23 @@ type university_dept_Department__removeStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(staffMember: university_dept_StaffMember__gqlv_input!): university_dept_Department__removeStaffMember__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Department__removeStaffMember__gqlv_action_params
   validate(staffMember: university_dept_StaffMember__gqlv_input): String
 }
 
+type university_dept_Department__removeStaffMember__gqlv_action_args {
+  staffMember: university_dept_StaffMember
+}
+
 type university_dept_Department__removeStaffMember__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Department__removeStaffMember__gqlv_action_args
   results: university_dept_Department
 }
 
 type university_dept_Department__removeStaffMember__gqlv_action_params {
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   staffMember: university_dept_Department__removeStaffMember__staffMember__gqlv_action_parameter
 }
 
@@ -2961,8 +3500,11 @@ type university_dept_Department__staffMembers__gqlv_collection {
 }
 
 type university_dept_Departments {
+  "University department specializing in a field of study"
   createDepartment: university_dept_Departments__createDepartment__gqlv_action
+  "University department specializing in a field of study"
   findAllDepartments: university_dept_Departments__findAllDepartments__gqlv_action
+  "University department specializing in a field of study"
   findDepartmentByName: university_dept_Departments__findDepartmentByName__gqlv_action
 }
 
@@ -2979,16 +3521,26 @@ type university_dept_Departments__createDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(deptHead: university_dept_DeptHead__gqlv_input, name: String!): university_dept_Departments__createDepartment__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Departments__createDepartment__gqlv_action_params
   validate(deptHead: university_dept_DeptHead__gqlv_input, name: String): String
 }
 
+type university_dept_Departments__createDepartment__gqlv_action_args {
+  deptHead: university_dept_DeptHead
+  name: String
+}
+
 type university_dept_Departments__createDepartment__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Departments__createDepartment__gqlv_action_args
   results: university_dept_Department
 }
 
 type university_dept_Departments__createDepartment__gqlv_action_params {
+  "Departmental head, responsible for curriculum, research, funding and staff"
   deptHead: university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter
+  "Name"
   name: university_dept_Departments__createDepartment__name__gqlv_action_parameter
 }
 
@@ -3016,15 +3568,23 @@ type university_dept_Departments__findDepartmentByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_Departments__findDepartmentByName__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Departments__findDepartmentByName__gqlv_action_params
   validate(name: String): String
 }
 
+type university_dept_Departments__findDepartmentByName__gqlv_action_args {
+  name: String
+}
+
 type university_dept_Departments__findDepartmentByName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Departments__findDepartmentByName__gqlv_action_args
   results: university_dept_Department
 }
 
 type university_dept_Departments__findDepartmentByName__gqlv_action_params {
+  "Name"
   name: university_dept_Departments__findDepartmentByName__name__gqlv_action_parameter
 }
 
@@ -3037,10 +3597,15 @@ type university_dept_Departments__findDepartmentByName__name__gqlv_action_parame
 
 "Departmental head, responsible for curriculum, research, funding and staff"
 type university_dept_DeptHead {
+  "Object metadata"
   _meta: university_dept_DeptHead__gqlv_meta
+  "Departmental head, responsible for curriculum, research, funding and staff"
   changeDepartment: university_dept_DeptHead__changeDepartment__gqlv_action
+  "Departmental head, responsible for curriculum, research, funding and staff"
   changeName: university_dept_DeptHead__changeName__gqlv_action
+  "University department specializing in a field of study"
   department: university_dept_DeptHead__department__gqlv_property
+  "Name"
   name: university_dept_DeptHead__name__gqlv_property
 }
 
@@ -3057,15 +3622,23 @@ type university_dept_DeptHead__changeDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(department: university_dept_Department__gqlv_input!): university_dept_DeptHead__changeDepartment__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_DeptHead__changeDepartment__gqlv_action_params
   validate(department: university_dept_Department__gqlv_input): String
 }
 
+type university_dept_DeptHead__changeDepartment__gqlv_action_args {
+  department: university_dept_Department
+}
+
 type university_dept_DeptHead__changeDepartment__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_DeptHead__changeDepartment__gqlv_action_args
   results: university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeDepartment__gqlv_action_params {
+  "University department specializing in a field of study"
   department: university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter
 }
 
@@ -3074,15 +3647,23 @@ type university_dept_DeptHead__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(newName: String!): university_dept_DeptHead__changeName__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_DeptHead__changeName__gqlv_action_params
   validate(newName: String): String
 }
 
+type university_dept_DeptHead__changeName__gqlv_action_args {
+  newName: String
+}
+
 type university_dept_DeptHead__changeName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_DeptHead__changeName__gqlv_action_args
   results: university_dept_DeptHead
 }
 
 type university_dept_DeptHead__changeName__gqlv_action_params {
+  "New Name"
   newName: university_dept_DeptHead__changeName__newName__gqlv_action_parameter
 }
 
@@ -3127,7 +3708,9 @@ type university_dept_DeptHead__name__gqlv_property {
 }
 
 type university_dept_DeptHeads {
+  "Departmental head, responsible for curriculum, research, funding and staff"
   findAllHeads: university_dept_DeptHeads__findAllHeads__gqlv_action
+  "Departmental head, responsible for curriculum, research, funding and staff"
   findHeadByName: university_dept_DeptHeads__findHeadByName__gqlv_action
 }
 
@@ -3148,15 +3731,23 @@ type university_dept_DeptHeads__findHeadByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_DeptHeads__findHeadByName__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_DeptHeads__findHeadByName__gqlv_action_params
   validate(name: String): String
 }
 
+type university_dept_DeptHeads__findHeadByName__gqlv_action_args {
+  name: String
+}
+
 type university_dept_DeptHeads__findHeadByName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_DeptHeads__findHeadByName__gqlv_action_args
   results: university_dept_DeptHead
 }
 
 type university_dept_DeptHeads__findHeadByName__gqlv_action_params {
+  "Name"
   name: university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter
 }
 
@@ -3167,18 +3758,122 @@ type university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter {
   validity: String
 }
 
+type university_dept_People {
+  "Find Named"
+  findNamed: university_dept_People__findNamed__gqlv_action
+  "Name Of"
+  nameOf: university_dept_People__nameOf__gqlv_action
+}
+
+type university_dept_People__findNamed__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(name: String!): university_dept_People__findNamed__gqlv_action_invoke
+  "Parameters of this action"
+  params: university_dept_People__findNamed__gqlv_action_params
+  validate(name: String): String
+}
+
+type university_dept_People__findNamed__gqlv_action_args {
+  name: String
+}
+
+type university_dept_People__findNamed__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_People__findNamed__gqlv_action_args
+  results: university_dept_Person
+}
+
+type university_dept_People__findNamed__gqlv_action_params {
+  "Name"
+  name: university_dept_People__findNamed__name__gqlv_action_parameter
+}
+
+type university_dept_People__findNamed__name__gqlv_action_parameter {
+  datatype: String
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_dept_People__nameOf__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(person: university_dept_Person__gqlv_input!): university_dept_People__nameOf__gqlv_action_invoke
+  "Parameters of this action"
+  params: university_dept_People__nameOf__gqlv_action_params
+  validate(person: university_dept_Person__gqlv_input): String
+}
+
+type university_dept_People__nameOf__gqlv_action_args {
+  person: university_dept_Person
+}
+
+type university_dept_People__nameOf__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_People__nameOf__gqlv_action_args
+  results: String
+}
+
+type university_dept_People__nameOf__gqlv_action_params {
+  "Person"
+  person: university_dept_People__nameOf__person__gqlv_action_parameter
+}
+
+type university_dept_People__nameOf__person__gqlv_action_parameter {
+  datatype: String
+  disabled(person: university_dept_Person__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+type university_dept_Person {
+  "Object metadata"
+  _meta: university_dept_Person__gqlv_meta
+  "Name"
+  name: university_dept_Person__name__gqlv_property
+}
+
+type university_dept_Person__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type university_dept_Person__name__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(name: String!): university_dept_Person
+  validate(name: String): String
+}
+
 type university_dept_Staff {
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   createStaffMember: university_dept_Staff__createStaffMember__gqlv_action
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   findAllStaffMembers: university_dept_Staff__findAllStaffMembers__gqlv_action
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   findStaffMemberByName: university_dept_Staff__findStaffMemberByName__gqlv_action
 }
 
 "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
 type university_dept_StaffMember {
+  "Object metadata"
   _meta: university_dept_StaffMember__gqlv_meta
+  "University department specializing in a field of study"
   department: university_dept_StaffMember__department__gqlv_property
+  "Grade"
   grade: university_dept_StaffMember__grade__gqlv_property
+  "Name"
   name: university_dept_StaffMember__name__gqlv_property
+  "Photo"
   photo: university_dept_StaffMember__photo__gqlv_property
 }
 
@@ -3252,16 +3947,26 @@ type university_dept_Staff__createStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(department: university_dept_Department__gqlv_input!, name: String!): university_dept_Staff__createStaffMember__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Staff__createStaffMember__gqlv_action_params
   validate(department: university_dept_Department__gqlv_input, name: String): String
 }
 
+type university_dept_Staff__createStaffMember__gqlv_action_args {
+  department: university_dept_Department
+  name: String
+}
+
 type university_dept_Staff__createStaffMember__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Staff__createStaffMember__gqlv_action_args
   results: university_dept_StaffMember
 }
 
 type university_dept_Staff__createStaffMember__gqlv_action_params {
+  "University department specializing in a field of study"
   department: university_dept_Staff__createStaffMember__department__gqlv_action_parameter
+  "Name"
   name: university_dept_Staff__createStaffMember__name__gqlv_action_parameter
 }
 
@@ -3289,15 +3994,23 @@ type university_dept_Staff__findStaffMemberByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): university_dept_Staff__findStaffMemberByName__gqlv_action_invoke
+  "Parameters of this action"
   params: university_dept_Staff__findStaffMemberByName__gqlv_action_params
   validate(name: String): String
 }
 
+type university_dept_Staff__findStaffMemberByName__gqlv_action_args {
+  name: String
+}
+
 type university_dept_Staff__findStaffMemberByName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: university_dept_Staff__findStaffMemberByName__gqlv_action_args
   results: university_dept_StaffMember
 }
 
 type university_dept_Staff__findStaffMemberByName__gqlv_action_params {
+  "Name"
   name: university_dept_Staff__findStaffMemberByName__name__gqlv_action_parameter
 }
 
@@ -3362,186 +4075,352 @@ scalar Time
 scalar UUID
 
 input causeway_applib_DomainObjectList__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_FacetGroupNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_ParameterNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_PropertyNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_RoleMemento__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_TypeNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_UserMemento__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_node_ActionNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_node_CollectionNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_node_FacetAttrNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_applib_node_FacetNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_conf_ConfigurationProperty__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_conf_ConfigurationViewmodel__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationFeatureViewModel__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationNamespace__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationTypeAction__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationTypeCollection__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationTypeMember__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationTypeProperty__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_feat_ApplicationType__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_schema_metamodel_v2_DomainClassDto__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input causeway_schema_metamodel_v2_FacetHolder__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_security_LoginRedirect__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input causeway_testing_fixtures_FixtureResult__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_lang_Runnable__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_Map__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_SortedMap__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_concurrent_Callable__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_function_BiFunction__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_function_Consumer__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_function_Function__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input java_util_stream_Stream__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input university_dept_Department__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input university_dept_DeptHead__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input university_dept_Person__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
 
 input university_dept_StaffMember__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
   ref: String
 }
