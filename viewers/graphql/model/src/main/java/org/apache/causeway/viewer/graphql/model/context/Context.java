@@ -38,8 +38,8 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 

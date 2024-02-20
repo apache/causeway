@@ -8,12 +8,10 @@ import graphql.schema.GraphQLObjectType;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
-
-import lombok.val;
 
 public class GqlvTopLevelQuery
         extends GqlvAbstractCustom
