@@ -19,11 +19,14 @@
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import graphql.GraphQL;
 import graphql.execution.SimpleDataFetcherExceptionHandler;
 import graphql.schema.GraphQLSchema;
+
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
+
+import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQueryForSimpleAndRich;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
@@ -35,13 +38,12 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelMutation;
-import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQuery;
+import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvTopLevelRich;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service()
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+//@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GraphQlSourceForCauseway implements GraphQlSource {
 
     private final CausewayConfiguration causewayConfiguration;
@@ -49,8 +51,26 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final SpecificationLoader specificationLoader;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
     private final Context context;
-
     private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
+
+    private CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
+
+    public GraphQlSourceForCauseway(
+            final CausewayConfiguration causewayConfiguration,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final SpecificationLoader specificationLoader,
+            final GraphQLTypeRegistry graphQLTypeRegistry,
+            final Context context,
+            final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy) {
+        this.causewayConfiguration = causewayConfiguration;
+        this.causewaySystemEnvironment = causewaySystemEnvironment;
+        this.specificationLoader = specificationLoader;
+        this.graphQLTypeRegistry = graphQLTypeRegistry;
+        this.context = context;
+        this.executionStrategy = executionStrategy;
+
+        this.graphqlConfiguration = causewayConfiguration.getViewer().getGraphql();
+    }
 
     @PostConstruct
     public void init() {
@@ -82,11 +102,21 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        // top-level query and mutation type
-        val topLevelQuery = new GqlvTopLevelQuery(context);
+        GqlvAbstractCustom topLevelQuery;
+        switch (graphqlConfiguration.getSchemaStyle()) {
+            case SIMPLE_ONLY:
+                throw new IllegalStateException("SIMPLE_ONLY not yet supported");
+            case RICH_ONLY:
+                topLevelQuery = new GqlvTopLevelRich(context);
+                break;
+            case SIMPLE_AND_RICH:
+            default:
+                topLevelQuery = new GqlvTopLevelQueryForSimpleAndRich(context);
+                break;
+        }
+
         val topLevelMutation = new GqlvTopLevelMutation(context);
 
-        // add the data fetchers
         topLevelQuery.addDataFetchers();
         topLevelMutation.addDataFetchers();
 

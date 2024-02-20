@@ -39,7 +39,7 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
     protected final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final String typeName;
 
-    @Getter(AccessLevel.PROTECTED)
+    @Getter
     private GraphQLObjectType gqlObjectType;
 
     protected GqlvAbstractCustom(
@@ -109,6 +109,9 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
             context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(this.gqlObjectType);
         }
         return this.gqlObjectType;
+    }
+
+    public void addDataFetchers() {
     }
 
     public final FieldCoordinates coordinatesFor(final GraphQLFieldDefinition field) {

@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.model.toplevel;
+package org.apache.causeway.viewer.graphql.model.domain.rich;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,24 +6,27 @@ import java.util.List;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLObjectType;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
-public class GqlvTopLevelQuery
+public class GqlvTopLevelRich
         extends GqlvAbstractCustom
         implements Parent {
+
+    private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
 
     private final GqlvScenario scenario;
 
-    public GqlvTopLevelQuery(final Context context) {
+    public GqlvTopLevelRich(final Context context) {
         super("Query", context);
+
+        graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
         // add domain object lookup to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
@@ -51,7 +54,11 @@ public class GqlvTopLevelQuery
             }
         });
 
-        addChildFieldFor(scenario = new GqlvScenario(context));
+        if (graphqlConfiguration.isIncludeTestingFieldInRich()) {
+            addChildFieldFor(scenario = new GqlvScenario(context));
+        } else {
+            scenario = null;
+        }
 
         buildObjectType();
     }
@@ -84,6 +91,8 @@ public class GqlvTopLevelQuery
 
         domainObjects.forEach(domainObject -> domainObject.addDataFetcher(this));
 
-        scenario.addDataFetcher(this);
+        if (scenario != null) {
+            scenario.addDataFetcher(this);
+        }
     }
 }

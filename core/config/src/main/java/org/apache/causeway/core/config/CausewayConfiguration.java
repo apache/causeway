@@ -2375,6 +2375,10 @@ public class CausewayConfiguration {
                  */
                 SIMPLE_AND_RICH,
                 ;
+
+                public boolean isRich() {
+                    return this == RICH_ONLY || this == SIMPLE_AND_RICH;
+                }
             }
 
             /**
