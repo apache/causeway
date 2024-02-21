@@ -56,7 +56,7 @@ public final class PropertyChangeRecord {
     public static PropertyChangeRecord ofCurrent(
             final @NonNull PropertyChangeRecordId pcrId) {
         return new PropertyChangeRecord(pcrId)
-                        .withPreValueSetToCurrent();
+                        .withPreValueSetToCurrentElseUnknown();
     }
 
     public static PropertyChangeRecord ofCurrent(
