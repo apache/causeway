@@ -49,34 +49,12 @@ import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(50)
 @ActiveProfiles("test")
-public class DeptHead_IntegTest extends Abstract_IntegTest {
+public class DeptHead_IntegTest extends AbstractDynamic_IntegTest {
 
+    @Override
     @TestFactory
     Iterable<DynamicTest> each() throws IOException, URISyntaxException {
-
-        val integClassName = getClass().getSimpleName();
-        val classUrl = getClass().getResource(integClassName + ".class");
-        Path classPath = Paths.get(classUrl.toURI());
-        Path directoryPath = classPath.getParent();
-
-        return Files.walk(directoryPath)
-                .filter(Files::isRegularFile)
-                .filter(file -> {
-                    String fileName = file.getFileName().toString();
-                    return fileName.startsWith(integClassName) && fileName.endsWith("._.gql");
-                })
-                .map(file -> {
-                    String fileName = file.getFileName().toString();
-                    String testName = fileName.substring(integClassName.length() + ".each.".length()).replace("._.gql", "");
-                    return JupiterApprovals.dynamicTest(
-                            testName,
-                            options -> {
-                                Approvals.verify(submitFileNamed(fileName), jsonOptions(options));
-                                afterEach();
-                                beforeEach();
-                            });
-                })
-                .collect(Collectors.toList());
+        return super.each();
     }
 
 }

@@ -1,16 +1,18 @@
 {
   "data" : {
-    "university_dept_DeptHeads" : {
-      "findHeadByName" : {
-        "invoke" : {
-          "results" : {
-            "name" : {
-              "get" : "Dr. Barney Jones"
-            },
-            "department" : {
-              "get" : {
-                "name" : {
-                  "get" : "Classics"
+    "rich" : {
+      "university_dept_DeptHeads" : {
+        "findHeadByName" : {
+          "invoke" : {
+            "results" : {
+              "name" : {
+                "get" : "Dr. Barney Jones"
+              },
+              "department" : {
+                "get" : {
+                  "name" : {
+                    "get" : "Classics"
+                  }
                 }
               }
             }

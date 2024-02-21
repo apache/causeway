@@ -1,30 +1,32 @@
 {
   "data" : {
-    "Scenario" : {
-      "Name" : "DeptHead is also a Person",
-      "Given" : {
-        "university_dept_People" : {
-          "findNamed" : {
-            "invoke" : {
-              "args" : {
-                "name" : "Dr. Helen Johansen"
-              },
-              "results" : {
-                "name" : {
-                  "get" : "Dr. Helen Johansen"
+    "rich" : {
+      "Scenario" : {
+        "Name" : "DeptHead is also a Person",
+        "Given" : {
+          "university_dept_People" : {
+            "findNamed" : {
+              "invoke" : {
+                "args" : {
+                  "name" : "Dr. Helen Johansen"
                 },
-                "_meta" : {
-                  "saveAs" : "dept-head"
+                "results" : {
+                  "name" : {
+                    "get" : "Dr. Helen Johansen"
+                  },
+                  "_meta" : {
+                    "saveAs" : "dept-head"
+                  }
                 }
               }
             }
           }
-        }
-      },
-      "When" : {
-        "university_dept_Person" : {
-          "name" : {
-            "get" : "Dr. Helen Johansen"
+        },
+        "When" : {
+          "university_dept_Person" : {
+            "name" : {
+              "get" : "Dr. Helen Johansen"
+            }
           }
         }
       }

@@ -1,13 +1,15 @@
 {
   "data" : {
-    "university_dept_Staff" : {
-      "findStaffMemberByName" : {
-        "invoke" : {
-          "results" : {
-            "name" : {
-              "set" : {
-                "name" : {
-                  "get" : "Gerald Johns"
+    "rich" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "invoke" : {
+            "results" : {
+              "name" : {
+                "set" : {
+                  "name" : {
+                    "get" : "Gerald Johns"
+                  }
                 }
               }
             }

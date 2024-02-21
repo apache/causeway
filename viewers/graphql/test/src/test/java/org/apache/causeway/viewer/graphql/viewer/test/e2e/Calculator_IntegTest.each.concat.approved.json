@@ -1,9 +1,11 @@
 {
   "data" : {
-    "university_calc_Calculator" : {
-      "concat" : {
-        "invoke" : {
-          "results" : "FizzBuzz"
+    "rich" : {
+      "university_calc_Calculator" : {
+        "concat" : {
+          "invoke" : {
+            "results" : "FizzBuzz"
+          }
         }
       }
     }

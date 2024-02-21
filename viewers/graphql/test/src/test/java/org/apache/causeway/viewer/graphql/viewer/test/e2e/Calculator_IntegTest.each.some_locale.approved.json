@@ -1,9 +1,11 @@
 {
   "data" : {
-    "university_calc_Calculator" : {
-      "someLocale" : {
-        "invoke" : {
-          "results" : "en_GB"
+    "rich" : {
+      "university_calc_Calculator" : {
+        "someLocale" : {
+          "invoke" : {
+            "results" : "en_GB"
+          }
         }
       }
     }

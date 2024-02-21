@@ -1,18 +1,20 @@
 {
-  university_dept_Staff {
-    findStaffMemberByName {
-      invoke(name: "Gerry Jones") {
-        results {
-          name {
-            get
-          }
-          _meta {
-            grid
-            icon
-          }
-          photo {
-            get {
-              bytes
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            name {
+              get
+            }
+            _meta {
+              grid
+              icon
+            }
+            photo {
+              get {
+                bytes
+              }
             }
           }
         }

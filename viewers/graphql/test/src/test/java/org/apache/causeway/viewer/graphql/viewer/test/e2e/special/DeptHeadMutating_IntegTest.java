@@ -20,6 +20,8 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e.special;
 
 import java.util.Optional;
 
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.AbstractDynamic_IntegTest;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;

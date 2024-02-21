@@ -1,12 +1,26 @@
 {
-  "errors" : [ {
-    "message" : "Validation error (FieldUndefined@[university_dept_Staff]) : Field 'university_dept_Staff' in type 'SimpleAndRich' is undefined",
-    "locations" : [ {
-      "line" : 2,
-      "column" : 3
-    } ],
-    "extensions" : {
-      "classification" : "ValidationError"
+  "data" : {
+    "rich" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "invoke" : {
+            "results" : {
+              "name" : {
+                "get" : "Gerry Jones"
+              },
+              "_meta" : {
+                "grid" : "///graphql/object/university.dept.StaffMember:NNN/_meta/grid",
+                "icon" : "///graphql/object/university.dept.StaffMember:NNN/_meta/icon"
+              },
+              "photo" : {
+                "get" : {
+                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                }
+              }
+            }
+          }
+        }
+      }
     }
-  } ]
+  }
 }

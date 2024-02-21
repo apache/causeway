@@ -1,21 +1,23 @@
 {
   "data" : {
-    "university_dept_Departments" : {
-      "findDepartmentByName" : {
-        "invoke" : {
-          "results" : {
-            "removeStaffMember" : {
-              "params" : {
-                "staffMember" : {
-                  "choices" : [ {
-                    "name" : {
-                      "get" : "Gerry Jones"
-                    }
-                  }, {
-                    "name" : {
-                      "get" : "Letitia Leadbetter"
-                    }
-                  } ]
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "removeStaffMember" : {
+                "params" : {
+                  "staffMember" : {
+                    "choices" : [ {
+                      "name" : {
+                        "get" : "Gerry Jones"
+                      }
+                    }, {
+                      "name" : {
+                        "get" : "Letitia Leadbetter"
+                      }
+                    } ]
+                  }
                 }
               }
             }

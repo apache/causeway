@@ -1,16 +1,18 @@
 {
   "data" : {
-    "university_dept_Departments" : {
-      "findDepartmentByName" : {
-        "invoke" : {
-          "results" : {
-            "changeName" : {
-              "params" : {
-                "newName" : {
-                  "datatype" : "java_lang_String"
-                }
-              },
-              "validate" : "Name cannot contain '!' character"
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "changeName" : {
+                "params" : {
+                  "newName" : {
+                    "datatype" : "java_lang_String"
+                  }
+                },
+                "validate" : "Name cannot contain '!' character"
+              }
             }
           }
         }

@@ -1,9 +1,11 @@
 {
   "data" : {
-    "university_calc_Calculator" : {
-      "addFloats" : {
-        "invoke" : {
-          "results" : 3.3000002
+    "rich" : {
+      "university_calc_Calculator" : {
+        "addFloats" : {
+          "invoke" : {
+            "results" : 3.3000002
+          }
         }
       }
     }

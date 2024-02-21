@@ -1,9 +1,11 @@
 {
   "data" : {
-    "university_calc_Calculator" : {
-      "nextMonth" : {
-        "invoke" : {
-          "results" : "JULY"
+    "rich" : {
+      "university_calc_Calculator" : {
+        "nextMonth" : {
+          "invoke" : {
+            "results" : "JULY"
+          }
         }
       }
     }
