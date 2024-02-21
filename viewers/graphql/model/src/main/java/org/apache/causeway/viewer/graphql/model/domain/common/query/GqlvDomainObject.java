@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +39,11 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvAction;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvCollection;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMember;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMeta;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvProperty;
 
 import lombok.Getter;
 import lombok.val;
@@ -50,9 +55,8 @@ public class GqlvDomainObject
         extends GqlvAbstractCustom
         implements GqlvMember.Holder, GqlvMeta.Holder {
 
-    private static final SchemaType SCHEMA_TYPE = SchemaType.SIMPLE;
-
     @Getter private final ObjectSpecification objectSpecification;
+    @Getter private final SchemaType schemaType;
 
     private final GqlvMeta meta;
 
@@ -64,15 +68,17 @@ public class GqlvDomainObject
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
     public static GqlvDomainObject of(
+            final SchemaType schemaType,
             final ObjectSpecification objectSpecification,
             final Context context) {
 
-        mapSuperclassesIfNecessary(objectSpecification, context);
+        mapSuperclassesIfNecessary(schemaType, objectSpecification, context);
 
-        return computeIfAbsentGqlvDomainObject(context, objectSpecification);
+        return computeIfAbsentGqlvDomainObject(schemaType, objectSpecification, context);
     }
 
     private static void mapSuperclassesIfNecessary(
+            final SchemaType schemaType,
             final ObjectSpecification objectSpecification,
             final Context context) {
         // no need to map if the target subclass has already been built
@@ -80,11 +86,14 @@ public class GqlvDomainObject
             return;
         }
         val superclasses = superclassesOf(objectSpecification);
-        superclasses.forEach(objectSpec -> computeIfAbsentGqlvDomainObject(context, objectSpec));
+        superclasses.forEach(objectSpec -> computeIfAbsentGqlvDomainObject(schemaType, objectSpec, context));
     }
 
-    private static GqlvDomainObject computeIfAbsentGqlvDomainObject(Context context, ObjectSpecification objectSpec) {
-        return context.simpleDomainObjectBySpec.computeIfAbsent(objectSpec, spec -> new GqlvDomainObject(spec, context));
+    private static GqlvDomainObject computeIfAbsentGqlvDomainObject(
+            final SchemaType schemaType,
+            final ObjectSpecification objectSpec,
+            final Context context) {
+        return context.simpleDomainObjectBySpec.computeIfAbsent(objectSpec, spec -> new GqlvDomainObject(schemaType, spec, context));
     }
 
     private static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {
@@ -98,11 +107,13 @@ public class GqlvDomainObject
     }
 
     private GqlvDomainObject(
+            final SchemaType schemaType,
             final ObjectSpecification objectSpecification,
             final Context context) {
-        super(TypeNames.objectTypeNameFor(objectSpecification, SCHEMA_TYPE), context);
+        super(TypeNames.objectTypeNameFor(objectSpecification, schemaType), context);
 
         this.objectSpecification = objectSpecification;
+        this.schemaType = schemaType;
         gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
         if(isBuilt()) {
@@ -202,9 +213,6 @@ public class GqlvDomainObject
                 .orElse(null);
     }
 
-    public SchemaType getSchemaType() {
-        return SCHEMA_TYPE;
-    }
 
     @Override
     public String toString() {

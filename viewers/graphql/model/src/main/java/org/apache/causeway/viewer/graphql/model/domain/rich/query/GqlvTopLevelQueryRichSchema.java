@@ -12,10 +12,15 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
 
 public class GqlvTopLevelQueryRichSchema
         extends GqlvAbstractCustom
         implements Parent {
+
+    private static final SchemaType SCHEMA_TYPE = SchemaType.RICH;
 
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
@@ -37,7 +42,7 @@ public class GqlvTopLevelQueryRichSchema
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(addChildFieldFor(GqlvDomainObject.of(objectSpec, context)));
+                    domainObjects.add(addChildFieldFor(GqlvDomainObject.of(SCHEMA_TYPE, objectSpec, context)));
 
                     break;
             }
@@ -50,7 +55,7 @@ public class GqlvTopLevelQueryRichSchema
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo ->
                                     domainServices.add(
-                                            addChildFieldFor(GqlvDomainService.of(objectSpec, servicePojo, context))));
+                                            addChildFieldFor(GqlvDomainService.of(SCHEMA_TYPE, objectSpec, servicePojo, context))));
                     break;
             }
         });

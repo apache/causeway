@@ -8,12 +8,14 @@ import graphql.schema.DataFetchingEnvironment;
 
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
 
 public class GqlvScenarioStep
         extends GqlvAbstractCustom
         implements Parent {
+
+    private static final SchemaType SCHEMA_TYPE = SchemaType.RICH;
 
     private final List<GqlvDomainService> domainServices = new ArrayList<>();
     private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
@@ -33,7 +35,7 @@ public class GqlvScenarioStep
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(addChildFieldFor(GqlvDomainObject.of(objectSpec, context)));
+                    domainObjects.add(addChildFieldFor(GqlvDomainObject.of(SCHEMA_TYPE, objectSpec, context)));
 
                     break;
             }
@@ -42,7 +44,7 @@ public class GqlvScenarioStep
         context.objectSpecifications().forEach(objectSpec -> {
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
                 context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                        .ifPresent(servicePojo -> domainServices.add(addChildFieldFor(GqlvDomainService.of(objectSpec, servicePojo, context))));
+                        .ifPresent(servicePojo -> domainServices.add(addChildFieldFor(GqlvDomainService.of(SCHEMA_TYPE, objectSpec, servicePojo, context))));
             }
         });
 
