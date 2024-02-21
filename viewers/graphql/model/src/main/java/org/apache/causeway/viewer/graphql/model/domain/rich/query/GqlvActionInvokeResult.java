@@ -91,7 +91,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
                     return null;
                 }
                 val objectSpecificationOfCollectionElement = facet.elementSpec();
-                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement);
+                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, holder.getSchemaType());
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
                             objectSpecificationOfCollectionElement.getFullIdentifier(),
@@ -104,7 +104,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
             case ENTITY:
             case VIEW_MODEL:
             default:
-                return context.typeMapper.outputTypeFor(objectSpecification);
+                return context.typeMapper.outputTypeFor(objectSpecification, holder.getSchemaType());
 
         }
     }

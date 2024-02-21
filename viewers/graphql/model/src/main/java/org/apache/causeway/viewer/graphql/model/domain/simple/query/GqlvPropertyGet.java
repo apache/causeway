@@ -37,7 +37,7 @@ public class GqlvPropertyGet extends GqlvAssociationGet<OneToOneAssociation> {
     @Override
     GraphQLOutputType outputTypeFor(GqlvAssociationGet.Holder<OneToOneAssociation> holder) {
         val oneToOneAssociation = holder.getObjectAssociation();
-        return context.typeMapper.outputTypeFor(oneToOneAssociation);
+        return context.typeMapper.outputTypeFor(oneToOneAssociation, holder.getSchemaType());
     }
 
     public interface Holder

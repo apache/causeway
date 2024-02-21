@@ -26,6 +26,8 @@ import graphql.schema.GraphQLType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -87,7 +89,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
                     return null;
                 }
                 val objectSpecificationOfCollectionElement = facet.elementSpec();
-                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement);
+                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, holder.getSchemaType());
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
                             objectSpecificationOfCollectionElement.getFullIdentifier(),
@@ -100,7 +102,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
             case ENTITY:
             case VIEW_MODEL:
             default:
-                return context.typeMapper.outputTypeFor(objectSpecification);
+                return context.typeMapper.outputTypeFor(objectSpecification, holder.getSchemaType());
 
         }
     }

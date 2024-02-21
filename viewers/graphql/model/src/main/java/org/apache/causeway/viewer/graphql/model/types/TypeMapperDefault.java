@@ -67,7 +67,7 @@ public class TypeMapperDefault implements TypeMapper {
     @Override
     public GraphQLOutputType outputTypeFor(final Class<?> clazz){
         if (clazz.isEnum()) {
-            return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz);
+            return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
         }
         return scalarMapper.scalarTypeFor(clazz);
     }
@@ -75,7 +75,7 @@ public class TypeMapperDefault implements TypeMapper {
     @Override
     public GraphQLInputType inputTypeFor(final Class<?> clazz){
         if (clazz.isEnum()) {
-            return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz);
+            return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
         }
         return scalarMapper.scalarTypeFor(clazz);
     }
@@ -92,14 +92,16 @@ public class TypeMapperDefault implements TypeMapper {
     }
 
     @Override
-    public GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature) {
+    public GraphQLOutputType outputTypeFor(
+            final OneToOneFeature oneToOneFeature,
+            final SchemaType schemaType) {
         ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
         switch (otoaObjectSpec.getBeanSort()) {
 
             case VIEW_MODEL:
             case ENTITY:
 
-                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec, SchemaType.RICH));
+                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec, schemaType));
                 return oneToOneFeature.isOptional()
                         ? fieldTypeRef
                         : nonNull(fieldTypeRef);
@@ -117,13 +119,15 @@ public class TypeMapperDefault implements TypeMapper {
 
     @Override
     @Nullable
-    public GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification){
+    public GraphQLOutputType outputTypeFor(
+            final ObjectSpecification objectSpecification,
+            final SchemaType schemaType){
 
         switch (objectSpecification.getBeanSort()){
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return typeRef(TypeNames.objectTypeNameFor(objectSpecification, SchemaType.RICH));
+                return typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
 
             case VALUE:
                 return outputTypeFor(objectSpecification.getCorrespondingClass());
@@ -139,17 +143,21 @@ public class TypeMapperDefault implements TypeMapper {
     }
 
     @Override
-    @Nullable public GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation) {
+    @Nullable public GraphQLList listTypeForElementTypeOf(
+            final OneToManyAssociation oneToManyAssociation,
+            final SchemaType schemaType) {
         val elementType = oneToManyAssociation.getElementType();
-        return listTypeFor(elementType);
+        return listTypeFor(elementType, schemaType);
     }
 
     @Override
-    @Nullable public GraphQLList listTypeFor(ObjectSpecification elementType) {
+    @Nullable public GraphQLList listTypeFor(
+            final ObjectSpecification elementType,
+            final SchemaType schemaType) {
         switch (elementType.getBeanSort()) {
             case VIEW_MODEL:
             case ENTITY:
-                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType, SchemaType.RICH)));
+                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType, schemaType)));
             case VALUE:
                 return GraphQLList.list(outputTypeFor(elementType.getCorrespondingClass()));
         }
@@ -159,19 +167,22 @@ public class TypeMapperDefault implements TypeMapper {
     @Override
     public GraphQLInputType inputTypeFor(
             final OneToOneFeature oneToOneFeature,
-            final InputContext inputContext) {
+            final InputContext inputContext,
+            final SchemaType schemaType) {
         return oneToOneFeature.isOptional() || inputContext.isOptionalAlwaysAllowed()
-                ? inputTypeFor_(oneToOneFeature)
-                : nonNull(inputTypeFor_(oneToOneFeature));
+                ? inputTypeFor_(oneToOneFeature, schemaType)
+                : nonNull(inputTypeFor_(oneToOneFeature, schemaType));
     }
 
-    private GraphQLInputType inputTypeFor_(final OneToOneFeature oneToOneFeature){
+    private GraphQLInputType inputTypeFor_(
+            final OneToOneFeature oneToOneFeature,
+            final SchemaType schemaType){
         val elementObjectSpec = oneToOneFeature.getElementType();
         switch (elementObjectSpec.getBeanSort()) {
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, SchemaType.RICH));
+                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
 
             case VALUE:
                 return inputTypeFor(elementObjectSpec.getCorrespondingClass());
@@ -185,18 +196,22 @@ public class TypeMapperDefault implements TypeMapper {
     }
 
     @Override
-    public GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter){
+    public GraphQLList inputTypeFor(
+            final OneToManyActionParameter oneToManyActionParameter,
+            final SchemaType schemaType){
         val elementObjectSpec = oneToManyActionParameter.getElementType();
-        return GraphQLList.list(inputTypeFor(elementObjectSpec));
+        return GraphQLList.list(inputTypeFor(elementObjectSpec, schemaType));
     }
 
     @Override
-    public GraphQLInputType inputTypeFor(final ObjectSpecification elementType){
+    public GraphQLInputType inputTypeFor(
+            final ObjectSpecification elementType,
+            final SchemaType schemaType){
         switch (elementType.getBeanSort()) {
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementType, SchemaType.RICH));
+                return typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
 
             case VALUE:
                 return inputTypeFor(elementType.getCorrespondingClass());

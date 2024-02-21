@@ -281,7 +281,7 @@ public class GqlvAction
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext, getSchemaType()))
                 .build();
     }
 
@@ -290,7 +290,7 @@ public class GqlvAction
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter))
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, getSchemaType()))
                 .build();
     }
 

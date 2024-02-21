@@ -51,6 +51,8 @@ import lombok.val;
 //@Log4j2
 public class GqlvMutationForProperty extends GqlvAbstract {
 
+    private static final SchemaType SCHEMA_TYPE = SchemaType.RICH;
+
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
     private String argumentName;
@@ -65,7 +67,7 @@ public class GqlvMutationForProperty extends GqlvAbstract {
 
         this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
 
-        GraphQLOutputType type = context.typeMapper.outputTypeFor(objectSpec);  // setter returns void, so will return target instead.
+        GraphQLOutputType type = context.typeMapper.outputTypeFor(objectSpec, SchemaType.RICH);  // setter returns void, so will return target instead.
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name(fieldName(objectSpec, oneToOneAssociation))
@@ -152,14 +154,14 @@ public class GqlvMutationForProperty extends GqlvAbstract {
         fieldBuilder.argument(
                 GraphQLArgument.newArgument()
                         .name(targetArgName)
-                        .type(context.typeMapper.inputTypeFor(objectSpec))
+                        .type(context.typeMapper.inputTypeFor(objectSpec, SchemaType.RICH))
                         .build()
         );
 
         fieldBuilder.argument(
                 GraphQLArgument.newArgument()
                         .name(oneToOneAssociation.getId())
-                        .type(context.typeMapper.inputTypeFor(oneToOneAssociation, TypeMapper.InputContext.INVOKE))
+                        .type(context.typeMapper.inputTypeFor(oneToOneAssociation, TypeMapper.InputContext.INVOKE, SchemaType.RICH))
                         .build());
     }
 }

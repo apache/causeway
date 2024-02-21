@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
@@ -53,7 +54,7 @@ public class GqlvPropertySet extends GqlvAbstract {
         this.holder = holder;
 
         // setters return void, so we return the domain object instead
-        val graphQLOutputType = this.context.typeMapper.outputTypeFor(holder.getObjectSpecification());
+        val graphQLOutputType = this.context.typeMapper.outputTypeFor(holder.getObjectSpecification(), SchemaType.RICH);
 
         val fieldBuilder = newFieldDefinition()
                 .name("set")

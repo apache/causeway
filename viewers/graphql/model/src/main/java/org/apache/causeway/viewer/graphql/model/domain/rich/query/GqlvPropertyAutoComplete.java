@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
@@ -55,7 +56,7 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
                     .name("autoComplete")
-                    .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType)));
+                    .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, SchemaType.RICH)));
             fieldBuilder.argument(GraphQLArgument.newArgument()
                             .name(SEARCH_PARAM_NAME)
                             .type(nonNull(context.typeMapper.outputTypeFor(String.class))))

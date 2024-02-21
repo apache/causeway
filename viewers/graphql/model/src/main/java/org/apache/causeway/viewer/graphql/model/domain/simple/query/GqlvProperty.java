@@ -138,7 +138,7 @@ public class GqlvProperty
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneAssociation.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneAssociation, inputContext))
+                .type(context.typeMapper.inputTypeFor(oneToOneAssociation, inputContext, SchemaType.RICH))
                 .build();
     }
 

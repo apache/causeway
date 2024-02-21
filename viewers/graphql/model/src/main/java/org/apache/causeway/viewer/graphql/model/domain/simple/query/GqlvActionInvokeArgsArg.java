@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
@@ -60,7 +61,7 @@ public class GqlvActionInvokeArgsArg
 
         val elementType = objectActionParameter.getElementType();;
 
-        val gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType);
+        val gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType, holder.getSchemaType());
         if (gqlObjectTypeForElementType != null) {
             val gqlOutputType = objectActionParameter.isPlural()
                     ? GraphQLList.list(gqlObjectTypeForElementType)

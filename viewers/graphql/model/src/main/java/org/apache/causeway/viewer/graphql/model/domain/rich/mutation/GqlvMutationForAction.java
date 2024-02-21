@@ -64,6 +64,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvMutationForAction extends GqlvAbstract {
 
+    private static final SchemaType SCHEMA_TYPE = SchemaType.RICH;
+
     private final ObjectSpecification objectSpec;
     private final ObjectAction objectAction;
     private String argumentName;
@@ -109,7 +111,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
                     return null;
                 }
                 val objectSpecificationOfCollectionElement = facet.elementSpec();
-                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement);
+                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, SCHEMA_TYPE);
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
                             objectSpecificationOfCollectionElement.getFullIdentifier(),
@@ -122,7 +124,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
             case ENTITY:
             case VIEW_MODEL:
             default:
-                return context.typeMapper.outputTypeFor(objectSpecification);
+                return context.typeMapper.outputTypeFor(objectSpecification, SchemaType.RICH);
 
         }
     }
@@ -204,7 +206,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
             arguments.add(
                     GraphQLArgument.newArgument()
                             .name(argName)
-                            .type(context.typeMapper.inputTypeFor(objectSpec))
+                            .type(context.typeMapper.inputTypeFor(objectSpec, SchemaType.RICH))
                             .build()
             );
         }
@@ -230,7 +232,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
     GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, TypeMapper.InputContext.INVOKE))
+                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, TypeMapper.InputContext.INVOKE, SchemaType.RICH))
                 .build();
     }
 
@@ -238,7 +240,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
     GraphQLArgument gqlArgumentFor(final OneToManyActionParameter oneToManyActionParameter) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter))
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, SchemaType.RICH))
                 .build();
     }
 

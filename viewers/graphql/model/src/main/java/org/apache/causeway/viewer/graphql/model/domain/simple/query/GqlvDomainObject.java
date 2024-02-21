@@ -157,7 +157,7 @@ public class GqlvDomainObject
 
         return newFieldDefinition()
                 .name(fieldName)
-                .type(this.context.typeMapper.outputTypeFor(objectSpec))
+                .type(this.context.typeMapper.outputTypeFor(objectSpec, getSchemaType()))
                 .argument(GraphQLArgument.newArgument()
                         .name(lookupConfig.getArgument())   // eg "object"
                         .type(gqlInputObjectType)

@@ -61,7 +61,7 @@ public class GqlvActionInvokeArgsArg
 
         val elementType = objectActionParameter.getElementType();;
 
-        val gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType);
+        val gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType, holder.getSchemaType());
         if (gqlObjectTypeForElementType != null) {
             val gqlOutputType = objectActionParameter.isPlural()
                     ? GraphQLList.list(gqlObjectTypeForElementType)

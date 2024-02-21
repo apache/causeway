@@ -75,9 +75,11 @@ public class GraphQLTypeRegistry {
     }
 
 
-    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(final Class<?> typeToAdd) {
+    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
+            final Class<?> typeToAdd,
+            final SchemaType schemaType) {
         val objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
-        val typeName = TypeNames.enumTypeNameFor(objectSpec, SchemaType.RICH);
+        val typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
         val enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
         if (enumTypeIfAny.isPresent()) {
             return enumTypeIfAny.get();
