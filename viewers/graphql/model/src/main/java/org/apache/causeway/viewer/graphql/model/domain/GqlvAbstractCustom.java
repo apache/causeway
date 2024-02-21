@@ -111,6 +111,9 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
         return this.gqlObjectType;
     }
 
+    /**
+     * Implemented by top-level queries only.
+     */
     public void addDataFetchers() {
     }
 

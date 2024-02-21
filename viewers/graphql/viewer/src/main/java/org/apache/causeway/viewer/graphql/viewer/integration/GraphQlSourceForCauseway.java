@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelMutation;
-import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvTopLevelRich;
+import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvTopLevelRichSchema;
 
 import lombok.val;
 
@@ -102,19 +102,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        GqlvAbstractCustom topLevelQuery;
-        switch (graphqlConfiguration.getSchemaStyle()) {
-            case SIMPLE_ONLY:
-                throw new IllegalStateException("SIMPLE_ONLY not yet supported");
-            case RICH_ONLY:
-                topLevelQuery = new GqlvTopLevelRich(context);
-                break;
-            case SIMPLE_AND_RICH:
-            default:
-                topLevelQuery = new GqlvTopLevelQueryForSimpleAndRich(context);
-                break;
-        }
-
+        val topLevelQuery = determineTopLevelQueryFrom(graphqlConfiguration.getSchemaStyle());
         val topLevelMutation = new GqlvTopLevelMutation(context);
 
         topLevelQuery.addDataFetchers();
@@ -130,6 +118,22 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
                 .codeRegistry(codeRegistry)
                 .build();
+    }
+
+    private GqlvAbstractCustom determineTopLevelQueryFrom(
+            final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
+        switch (schemaStyle) {
+            case SIMPLE_ONLY:
+                throw new IllegalStateException("SIMPLE_ONLY not yet supported");
+            case RICH_ONLY:
+                return new GqlvTopLevelRichSchema(context);
+            case SIMPLE_AND_RICH:
+                return new GqlvTopLevelQueryForSimpleAndRich(context);
+            default:
+                // shouldn't happen
+                throw new IllegalStateException(String.format(
+                        "Configured SchemaStyle '%s' not recognised", schemaStyle));
+        }
     }
 
 

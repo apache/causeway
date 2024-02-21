@@ -79,6 +79,11 @@ public class GqlvTopLevelMutation
     }
 
     public void addDataFetchers() {
+        addDataFetchersForChildren();
+    }
+
+    @Override
+    protected void addDataFetchersForChildren() {
         actions.forEach(gqlvMutationForAction -> gqlvMutationForAction.addDataFetcher(this));
         properties.forEach(gqlvMutationForProperty -> gqlvMutationForProperty.addDataFetcher(this));
     }

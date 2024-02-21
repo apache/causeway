@@ -2379,12 +2379,15 @@ public class CausewayConfiguration {
                 public boolean isRich() {
                     return this == RICH_ONLY || this == SIMPLE_AND_RICH;
                 }
+                public boolean isSimple() {
+                    return this == SIMPLE_ONLY || this == SIMPLE_AND_RICH;
+                }
             }
 
             /**
              * Which {@link SchemaStyle} to expose.
              */
-            private SchemaStyle schemaStyle = SchemaStyle.RICH_ONLY;
+            private SchemaStyle schemaStyle = SchemaStyle.SIMPLE_AND_RICH;
 
             /**
              * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the

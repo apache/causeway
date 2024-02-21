@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLObjectType;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -12,7 +13,7 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
-public class GqlvTopLevelRich
+public class GqlvTopLevelRichSchema
         extends GqlvAbstractCustom
         implements Parent {
 
@@ -23,8 +24,8 @@ public class GqlvTopLevelRich
 
     private final GqlvScenario scenario;
 
-    public GqlvTopLevelRich(final Context context) {
-        super("Query", context);
+    public GqlvTopLevelRichSchema(final Context context) {
+        super("RichSchema", context);
 
         graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
@@ -61,26 +62,25 @@ public class GqlvTopLevelRich
         }
 
         buildObjectType();
+
+        // the field is used if the schemaStyle is 'SIMPLE_AND_RICH', but is ignored/unused otherwise
+        setField(newFieldDefinition()
+                .name(graphqlConfiguration.getTopLevelFieldNameForRich())
+                .type(getGqlObjectType())
+                .build());
     }
 
-    /**
-     * Never used.
-     *
-     * @param environment
-     * @return
-     */
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        return null;
-    }
-
-    @Override
-    public GraphQLObjectType getGqlObjectType() {
-        return super.getGqlObjectType();
+        return environment;
     }
 
     public void addDataFetchers() {
+        addDataFetchersForChildren();
+    }
 
+    @Override
+    protected void addDataFetchersForChildren() {
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
             if (actionsAdded) {
