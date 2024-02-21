@@ -56,7 +56,7 @@ public final class PropertyChangeRecord {
     public static PropertyChangeRecord ofCurrent(
             final @NonNull PropertyChangeRecordId pcrId) {
         return new PropertyChangeRecord(pcrId)
-                        .withPreValueSetToCurrent();
+                        .withPreValueSetToCurrentElseUnknown();
     }
 
     public static PropertyChangeRecord ofCurrent(
@@ -69,8 +69,8 @@ public final class PropertyChangeRecord {
     public static PropertyChangeRecord ofDeleting(
             final @NonNull PropertyChangeRecordId id) {
         return new PropertyChangeRecord(id)
-                        .withPreValueSetToCurrent()
-                        .withPostValueSetToDeleted();
+                .withPreValueSetToCurrentElseUnknown()
+                .withPostValueSetToDeleted();
     }
 
     private PropertyChangeRecord(final @NonNull PropertyChangeRecordId id) {
@@ -83,25 +83,49 @@ public final class PropertyChangeRecord {
         return target.getLogicalTypeName() + "#" + propertyId;
     }
 
-    public PropertyChangeRecord withPreValueSetToNew() {
-        return withPreValueSetTo(PropertyValuePlaceholder.NEW);
+    public PropertyChangeRecord withPreValueSetToCurrentElseUnknown() {
+        try {
+            return withPreValueSetToCurrent();
+        } catch (Exception ex) {
+            return withPreValueSetToUnknown();
+        }
     }
 
-    public PropertyChangeRecord withPreValueSetToCurrent() {
+    private PropertyChangeRecord withPreValueSetToCurrent() {
         return withPreValueSetTo(getPropertyValue());
     }
 
-    public PropertyChangeRecord withPostValueSetToCurrent() {
-        return withPostValueSetTo(getPropertyValue());
+    private PropertyChangeRecord withPreValueSetToUnknown() {
+        return withPreValueSetTo(PropertyValuePlaceholder.UNKNOWN);
+    }
+
+    private PropertyChangeRecord withPreValueSetToNew() {
+        return withPreValueSetTo(PropertyValuePlaceholder.NEW);
+    }
+
+    private PropertyChangeRecord withPreValueSetTo(Object preValue) {
+        this.preAndPostValue = PreAndPostValue.pre(preValue);
+        return this;
+    }
+
+    public PropertyChangeRecord withPostValueSetToCurrentElseUnknown() {
+        try {
+            return withPostValueSetToCurrent();
+        } catch (Exception ex) {
+            return withPostValueSetToUnknown();
+        }
     }
 
     public PropertyChangeRecord withPostValueSetToDeleted() {
         return withPostValueSetTo(PropertyValuePlaceholder.DELETED);
     }
 
-    private PropertyChangeRecord withPreValueSetTo(Object preValue) {
-        this.preAndPostValue = PreAndPostValue.pre(preValue);
-        return this;
+    private PropertyChangeRecord withPostValueSetToCurrent() {
+        return withPostValueSetTo(getPropertyValue());
+    }
+
+    private PropertyChangeRecord withPostValueSetToUnknown() {
+        return withPostValueSetTo(PropertyValuePlaceholder.UNKNOWN);
     }
 
     private PropertyChangeRecord withPostValueSetTo(Object postValue) {
