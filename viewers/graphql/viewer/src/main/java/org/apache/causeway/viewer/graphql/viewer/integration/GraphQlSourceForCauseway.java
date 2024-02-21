@@ -24,6 +24,8 @@ import graphql.GraphQL;
 import graphql.execution.SimpleDataFetcherExceptionHandler;
 import graphql.schema.GraphQLSchema;
 
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelSimpleSchema;
+
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -122,8 +124,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
         switch (schemaStyle) {
             case SIMPLE_ONLY:
-//                return new GqlvTopLevelSimpleSchema(context);
-                throw new IllegalStateException("Not yet implemented");
+                return new GqlvTopLevelSimpleSchema(context);
             case RICH_ONLY:
                 return new GqlvTopLevelRichSchema(context);
             case SIMPLE_AND_RICH:
@@ -134,6 +135,4 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                         "Configured SchemaStyle '%s' not recognised", schemaStyle));
         }
     }
-
-
 }

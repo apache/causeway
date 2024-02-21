@@ -5,17 +5,18 @@ import graphql.schema.DataFetchingEnvironment;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvTopLevelRichSchema;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelSimpleSchema;
 
 public class GqlvTopLevelForSimpleAndRich extends GqlvAbstractCustom {
 
     private final GqlvTopLevelRichSchema richSchema;
-//    private final GqlvTopLevelSimpleSchema simpleSchema;
+    private final GqlvTopLevelSimpleSchema simpleSchema;
 
     public GqlvTopLevelForSimpleAndRich(final Context context) {
         super("SimpleAndRich", context);
 
         addChildFieldFor(richSchema = new GqlvTopLevelRichSchema(context));
-//        addChildFieldFor(simpleSchema = new GqlvTopLevelSimpleSchema(context));
+        addChildFieldFor(simpleSchema = new GqlvTopLevelSimpleSchema(context));
 
         buildObjectType();
     }
@@ -28,7 +29,7 @@ public class GqlvTopLevelForSimpleAndRich extends GqlvAbstractCustom {
     @Override
     protected void addDataFetchersForChildren() {
         richSchema.addDataFetcher(this);
-//        simpleSchema.addDataFetcher(this);
+        simpleSchema.addDataFetcher(this);
     }
 
     @Override

@@ -61,8 +61,8 @@ public class Context {
     public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvDomainService> richDomainServiceBySpec = new LinkedHashMap<>();
     public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvDomainObject> richDomainObjectBySpec = new LinkedHashMap<>();
 
-//    public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvDomainService> simpleDomainServiceBySpec = new LinkedHashMap<>();
-//    public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvDomainObject> simpleDomainObjectBySpec = new LinkedHashMap<>();
+    public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvDomainService> simpleDomainServiceBySpec = new LinkedHashMap<>();
+    public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvDomainObject> simpleDomainObjectBySpec = new LinkedHashMap<>();
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()
