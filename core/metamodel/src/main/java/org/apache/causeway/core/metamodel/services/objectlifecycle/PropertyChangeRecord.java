@@ -69,8 +69,8 @@ public final class PropertyChangeRecord {
     public static PropertyChangeRecord ofDeleting(
             final @NonNull PropertyChangeRecordId id) {
         return new PropertyChangeRecord(id)
-                        .withPreValueSetToCurrent()
-                        .withPostValueSetToDeleted();
+                .withPreValueSetToCurrentElseUnknown()
+                .withPostValueSetToDeleted();
     }
 
     private PropertyChangeRecord(final @NonNull PropertyChangeRecordId id) {
@@ -89,6 +89,18 @@ public final class PropertyChangeRecord {
 
     public PropertyChangeRecord withPreValueSetToCurrent() {
         return withPreValueSetTo(getPropertyValue());
+    }
+
+    private PropertyChangeRecord withPreValueSetToCurrentElseUnknown() {
+        try {
+            return withPreValueSetToCurrent();
+        } catch (Exception ex) {
+            return withPreValueSetToUnknown();
+        }
+    }
+
+    private PropertyChangeRecord withPreValueSetToUnknown() {
+        return withPreValueSetTo(PropertyValuePlaceholder.UNKNOWN);
     }
 
     public PropertyChangeRecord withPostValueSetToCurrent() {
