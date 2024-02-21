@@ -1,4 +1,4 @@
-package org.apache.causeway.viewer.graphql.model.toplevel;
+package org.apache.causeway.viewer.graphql.model.domain.simple.mutation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +14,17 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
-import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvMutationForAction;
-import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvMutationForProperty;
 
 import lombok.val;
 
-public class GqlvTopLevelMutation
+public class GqlvTopLevelMutationSimpleSchema
                 extends GqlvAbstractCustom
                 implements Parent {
 
     private final List<GqlvMutationForAction> actions = new ArrayList<>();
     private final List<GqlvMutationForProperty> properties = new ArrayList<>();
 
-    public GqlvTopLevelMutation(final Context context) {
+    public GqlvTopLevelMutationSimpleSchema(final Context context) {
         super("Mutation", context);
 
         if (isBuilt()) {

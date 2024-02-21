@@ -13,7 +13,7 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
-public class GqlvTopLevelRichSchema
+public class GqlvTopLevelQueryRichSchema
         extends GqlvAbstractCustom
         implements Parent {
 
@@ -24,7 +24,7 @@ public class GqlvTopLevelRichSchema
 
     private final GqlvScenario scenario;
 
-    public GqlvTopLevelRichSchema(final Context context) {
+    public GqlvTopLevelQueryRichSchema(final Context context) {
         super("RichSchema", context);
 
         graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();

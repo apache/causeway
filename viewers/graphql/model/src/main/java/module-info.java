@@ -11,6 +11,7 @@ module org.apache.causeway.incubator.viewer.graphql.model {
     exports org.apache.causeway.viewer.graphql.model.domain.rich.query;
     exports org.apache.causeway.viewer.graphql.model.domain.rich.mutation;
     exports org.apache.causeway.viewer.graphql.model.domain.simple.query;
+    exports org.apache.causeway.viewer.graphql.model.domain.simple.mutation;
 
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.incubator.viewer.graphql.applib;

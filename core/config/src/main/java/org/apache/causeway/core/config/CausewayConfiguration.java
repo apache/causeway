@@ -2363,31 +2363,49 @@ public class CausewayConfiguration {
                  * an action is hidden or disabled).
                  *
                  * <p>
+                 *     Optionally, fields for Scenario (given/when/then) testing may also be added if the
+                 *     {@link #isIncludeTestingFieldInRich()} config property is set.
+                 * </p>
+                 * <p>
                  *     Suitable for clients where the application logic and state remains in the backend, within the
                  *     domain model hosted by Causeway.
                  * </p>
                  */
                 RICH_ONLY,
                 /**
-                 * Exposes both the simple and rich schemas, with each under a field as defined by
+                 * Exposes both the simple and rich schemas, for the query have each under a field as defined by
                  * {@link #getTopLevelFieldNameForSimple()} (by default &quot;simple&quot;) and
                  * {@link #getTopLevelFieldNameForRich()} (by default &quot;rich&quot;).
+                 *
+                 * <p>
+                 *     For mutations, use the <i>simple</i> schema types.
+                 * </p>
                  */
                 SIMPLE_AND_RICH,
+                /**
+                 * Exposes both the simple and rich schemas, for the query have each under a field as defined by
+                 * {@link #getTopLevelFieldNameForSimple()} (by default &quot;simple&quot;) and
+                 * {@link #getTopLevelFieldNameForRich()} (by default &quot;rich&quot;).
+                 *
+                 * <p>
+                 *     For mutations, use the <i>rich</i> schema types.
+                 * </p>
+                 */
+                RICH_AND_SIMPLE,
                 ;
 
                 public boolean isRich() {
-                    return this == RICH_ONLY || this == SIMPLE_AND_RICH;
+                    return this == RICH_ONLY || this == SIMPLE_AND_RICH || this == RICH_AND_SIMPLE;
                 }
                 public boolean isSimple() {
-                    return this == SIMPLE_ONLY || this == SIMPLE_AND_RICH;
+                    return this == SIMPLE_ONLY || this == SIMPLE_AND_RICH || this == RICH_AND_SIMPLE;
                 }
             }
 
             /**
              * Which {@link SchemaStyle} to expose.
              */
-            private SchemaStyle schemaStyle = SchemaStyle.SIMPLE_AND_RICH;
+            private SchemaStyle schemaStyle = SchemaStyle.RICH_AND_SIMPLE;
 
             /**
              * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
