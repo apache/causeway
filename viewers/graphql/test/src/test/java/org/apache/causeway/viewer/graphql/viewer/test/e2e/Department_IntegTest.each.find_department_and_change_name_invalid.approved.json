@@ -8,7 +8,7 @@
               "changeName" : {
                 "params" : {
                   "newName" : {
-                    "datatype" : "java_lang_String"
+                    "datatype" : "rich__java_lang_String"
                   }
                 },
                 "validate" : "Name cannot contain '!' character"

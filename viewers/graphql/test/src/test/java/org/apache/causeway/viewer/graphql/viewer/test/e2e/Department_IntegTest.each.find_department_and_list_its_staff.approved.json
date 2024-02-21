@@ -9,7 +9,7 @@
                 "get" : "Classics"
               },
               "staffMembers" : {
-                "datatype" : "university_dept_StaffMember",
+                "datatype" : "rich__university_dept_StaffMember",
                 "get" : [ {
                   "name" : {
                     "get" : "Gerry Jones"

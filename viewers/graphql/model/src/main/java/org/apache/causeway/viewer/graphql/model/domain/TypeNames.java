@@ -29,54 +29,89 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class TypeNames {
 
-    public static String objectTypeNameFor(ObjectSpecification objectSpecification) {
+    public static String objectTypeFieldNameFor(
+            final ObjectSpecification objectSpecification) {
         return sanitized(objectSpecification.getLogicalTypeName());
     }
 
-    public static String metaTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__gqlv_meta";
+    public static String objectTypeNameFor(
+            final ObjectSpecification objectSpecification,
+            final SchemaType schemaType) {
+        return schemaType.name().toLowerCase() + "__" + sanitized(objectSpecification.getLogicalTypeName());
     }
 
-    public static String inputTypeNameFor(ObjectSpecification objectSpecification) {
-        return objectTypeNameFor(objectSpecification) + "__gqlv_input";
+    public static String metaTypeNameFor(
+            final ObjectSpecification objectSpecification,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_meta";
     }
 
-    public static String enumTypeNameFor(ObjectSpecification objectSpec) {
-        return objectTypeNameFor(objectSpec) + "__gqlv_enum";
+    public static String inputTypeNameFor(
+            final ObjectSpecification objectSpecification,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_input";
     }
 
-    public static String actionTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
-        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action";
+    public static String enumTypeNameFor(
+            final ObjectSpecification objectSpec,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(objectSpec, schemaType) + "__gqlv_enum";
+    }
+
+    public static String actionTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectAction objectAction,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + objectAction.getId() + "__gqlv_action";
     }
 
     public static String actionInvokeTypeNameFor(
             final ObjectSpecification owningType,
-            final ObjectAction objectAction) {
-        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action_invoke";
+            final ObjectAction objectAction,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + objectAction.getId() + "__gqlv_action_invoke";
     }
 
-    public static String actionParamsTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
-        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action_params";
+    public static String actionParamsTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectAction objectAction,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + objectAction.getId() + "__gqlv_action_params";
     }
 
-    public static String actionArgsTypeNameFor(ObjectSpecification owningType, ObjectAction objectAction) {
-        return objectTypeNameFor(owningType) + "__" + objectAction.getId() + "__gqlv_action_args";
+    public static String actionArgsTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectAction objectAction,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + objectAction.getId() + "__gqlv_action_args";
     }
 
-    public static String actionParamTypeNameFor(ObjectSpecification owningType, ObjectActionParameter objectActionParameter) {
-        return objectTypeNameFor(owningType) + "__" + objectActionParameter.getAction().getId() + "__" + objectActionParameter.getId() + "__gqlv_action_parameter";
+    public static String actionParamTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectActionParameter objectActionParameter,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + objectActionParameter.getAction().getId() + "__" + objectActionParameter.getId() + "__gqlv_action_parameter";
     }
 
-    public static String propertyTypeNameFor(ObjectSpecification owningType, OneToOneAssociation oneToOneAssociation) {
-        return objectTypeNameFor(owningType) + "__" + oneToOneAssociation.getId() + "__gqlv_property";
+    public static String propertyTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToOneAssociation oneToOneAssociation,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + oneToOneAssociation.getId() + "__gqlv_property";
     }
 
-    public static String propertyBlobTypeNameFor(ObjectSpecification owningType, OneToOneAssociation oneToOneAssociation) {
-        return objectTypeNameFor(owningType) + "__" + oneToOneAssociation.getId() + "__gqlv_property_blob";
+    public static String propertyBlobTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToOneAssociation oneToOneAssociation,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + oneToOneAssociation.getId() + "__gqlv_property_blob";
     }
 
-    public static String collectionTypeNameFor(ObjectSpecification owningType, OneToManyAssociation objectMember) {
-        return objectTypeNameFor(owningType) + "__" + objectMember.getId() + "__gqlv_collection";
+    public static String collectionTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToManyAssociation objectMember,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + objectMember.getId() + "__gqlv_collection";
     }
 
     private static String sanitized(final String name) {

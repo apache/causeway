@@ -7,7 +7,7 @@
             "results" : [ {
               "name" : {
                 "get" : "Civil Engineering",
-                "datatype" : "java_lang_String"
+                "datatype" : "rich__java_lang_String"
               },
               "_meta" : {
                 "logicalTypeName" : "university.dept.Department",
@@ -16,7 +16,7 @@
             }, {
               "name" : {
                 "get" : "Classics",
-                "datatype" : "java_lang_String"
+                "datatype" : "rich__java_lang_String"
               },
               "_meta" : {
                 "logicalTypeName" : "university.dept.Department",
@@ -25,7 +25,7 @@
             }, {
               "name" : {
                 "get" : "Mathematics",
-                "datatype" : "java_lang_String"
+                "datatype" : "rich__java_lang_String"
               },
               "_meta" : {
                 "logicalTypeName" : "university.dept.Department",
@@ -34,7 +34,7 @@
             }, {
               "name" : {
                 "get" : "Pathology",
-                "datatype" : "java_lang_String"
+                "datatype" : "rich__java_lang_String"
               },
               "_meta" : {
                 "logicalTypeName" : "university.dept.Department",
@@ -43,7 +43,7 @@
             }, {
               "name" : {
                 "get" : "Physics",
-                "datatype" : "java_lang_String"
+                "datatype" : "rich__java_lang_String"
               },
               "_meta" : {
                 "logicalTypeName" : "university.dept.Department",
@@ -52,7 +52,7 @@
             }, {
               "name" : {
                 "get" : "Textiles",
-                "datatype" : "java_lang_String"
+                "datatype" : "rich__java_lang_String"
               },
               "_meta" : {
                 "logicalTypeName" : "university.dept.Department",

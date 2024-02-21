@@ -14,8 +14,8 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
-import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvMutationForAction;
-import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvMutationForProperty;
+import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvMutationForAction;
+import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvMutationForProperty;
 
 import lombok.val;
 

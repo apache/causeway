@@ -24,10 +24,6 @@ import graphql.GraphQL;
 import graphql.execution.SimpleDataFetcherExceptionHandler;
 import graphql.schema.GraphQLSchema;
 
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-
-import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQueryForSimpleAndRich;
-
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +32,11 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvTopLevelRichSchema;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
+import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelForSimpleAndRich;
 import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelMutation;
-import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvTopLevelRichSchema;
 
 import lombok.val;
 
@@ -124,11 +122,12 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
         switch (schemaStyle) {
             case SIMPLE_ONLY:
-                throw new IllegalStateException("SIMPLE_ONLY not yet supported");
+//                return new GqlvTopLevelSimpleSchema(context);
+                throw new IllegalStateException("Not yet implemented");
             case RICH_ONLY:
                 return new GqlvTopLevelRichSchema(context);
             case SIMPLE_AND_RICH:
-                return new GqlvTopLevelQueryForSimpleAndRich(context);
+                return new GqlvTopLevelForSimpleAndRich(context);
             default:
                 // shouldn't happen
                 throw new IllegalStateException(String.format(

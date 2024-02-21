@@ -30,6 +30,8 @@ import graphql.schema.GraphQLTypeReference;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
 
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -97,7 +99,7 @@ public class TypeMapperDefault implements TypeMapper {
             case VIEW_MODEL:
             case ENTITY:
 
-                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec));
+                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec, SchemaType.RICH));
                 return oneToOneFeature.isOptional()
                         ? fieldTypeRef
                         : nonNull(fieldTypeRef);
@@ -121,7 +123,7 @@ public class TypeMapperDefault implements TypeMapper {
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return typeRef(TypeNames.objectTypeNameFor(objectSpecification));
+                return typeRef(TypeNames.objectTypeNameFor(objectSpecification, SchemaType.RICH));
 
             case VALUE:
                 return outputTypeFor(objectSpecification.getCorrespondingClass());
@@ -147,7 +149,7 @@ public class TypeMapperDefault implements TypeMapper {
         switch (elementType.getBeanSort()) {
             case VIEW_MODEL:
             case ENTITY:
-                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType)));
+                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType, SchemaType.RICH)));
             case VALUE:
                 return GraphQLList.list(outputTypeFor(elementType.getCorrespondingClass()));
         }
@@ -169,7 +171,7 @@ public class TypeMapperDefault implements TypeMapper {
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec));
+                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, SchemaType.RICH));
 
             case VALUE:
                 return inputTypeFor(elementObjectSpec.getCorrespondingClass());
@@ -194,7 +196,7 @@ public class TypeMapperDefault implements TypeMapper {
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementType));
+                return typeRef(TypeNames.inputTypeNameFor(elementType, SchemaType.RICH));
 
             case VALUE:
                 return inputTypeFor(elementType.getCorrespondingClass());

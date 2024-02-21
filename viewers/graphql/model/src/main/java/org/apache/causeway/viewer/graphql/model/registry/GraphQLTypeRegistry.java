@@ -37,6 +37,8 @@ import graphql.schema.GraphQLType;
 import static graphql.schema.GraphQLEnumType.newEnum;
 import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -75,7 +77,7 @@ public class GraphQLTypeRegistry {
 
     public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(final Class<?> typeToAdd) {
         val objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
-        val typeName = TypeNames.enumTypeNameFor(objectSpec);
+        val typeName = TypeNames.enumTypeNameFor(objectSpec, SchemaType.RICH);
         val enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
         if (enumTypeIfAny.isPresent()) {
             return enumTypeIfAny.get();

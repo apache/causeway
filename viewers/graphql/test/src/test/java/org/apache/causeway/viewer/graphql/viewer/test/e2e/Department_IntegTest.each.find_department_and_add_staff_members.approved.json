@@ -35,7 +35,7 @@
                   "addStaffMembers" : {
                     "params" : {
                       "staffMembers" : {
-                        "datatype" : "university_dept_StaffMember",
+                        "datatype" : "rich__university_dept_StaffMember",
                         "choices" : [ {
                           "_meta" : {
                             "saveAs" : "staff-member"

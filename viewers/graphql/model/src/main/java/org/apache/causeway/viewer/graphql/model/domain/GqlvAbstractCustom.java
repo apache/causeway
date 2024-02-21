@@ -31,7 +31,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 
 public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent {

@@ -38,8 +38,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.rich.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -59,8 +57,12 @@ public class Context {
     public final ObjectManager objectManager;
     public final GraphQLTypeRegistry graphQLTypeRegistry;
 
-    public final Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec = new LinkedHashMap<>();
-    public final Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec = new LinkedHashMap<>();
+
+    public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvDomainService> richDomainServiceBySpec = new LinkedHashMap<>();
+    public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvDomainObject> richDomainObjectBySpec = new LinkedHashMap<>();
+
+//    public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvDomainService> simpleDomainServiceBySpec = new LinkedHashMap<>();
+//    public final Map<ObjectSpecification, org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvDomainObject> simpleDomainObjectBySpec = new LinkedHashMap<>();
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()
