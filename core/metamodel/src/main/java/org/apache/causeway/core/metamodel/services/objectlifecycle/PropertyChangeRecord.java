@@ -83,15 +83,7 @@ public final class PropertyChangeRecord {
         return target.getLogicalTypeName() + "#" + propertyId;
     }
 
-    public PropertyChangeRecord withPreValueSetToNew() {
-        return withPreValueSetTo(PropertyValuePlaceholder.NEW);
-    }
-
-    public PropertyChangeRecord withPreValueSetToCurrent() {
-        return withPreValueSetTo(getPropertyValue());
-    }
-
-    private PropertyChangeRecord withPreValueSetToCurrentElseUnknown() {
+    public PropertyChangeRecord withPreValueSetToCurrentElseUnknown() {
         try {
             return withPreValueSetToCurrent();
         } catch (Exception ex) {
@@ -99,21 +91,41 @@ public final class PropertyChangeRecord {
         }
     }
 
+    private PropertyChangeRecord withPreValueSetToCurrent() {
+        return withPreValueSetTo(getPropertyValue());
+    }
+
     private PropertyChangeRecord withPreValueSetToUnknown() {
         return withPreValueSetTo(PropertyValuePlaceholder.UNKNOWN);
     }
 
-    public PropertyChangeRecord withPostValueSetToCurrent() {
-        return withPostValueSetTo(getPropertyValue());
+    private PropertyChangeRecord withPreValueSetToNew() {
+        return withPreValueSetTo(PropertyValuePlaceholder.NEW);
+    }
+
+    private PropertyChangeRecord withPreValueSetTo(Object preValue) {
+        this.preAndPostValue = PreAndPostValue.pre(preValue);
+        return this;
+    }
+
+    public PropertyChangeRecord withPostValueSetToCurrentElseUnknown() {
+        try {
+            return withPostValueSetToCurrent();
+        } catch (Exception ex) {
+            return withPostValueSetToUnknown();
+        }
     }
 
     public PropertyChangeRecord withPostValueSetToDeleted() {
         return withPostValueSetTo(PropertyValuePlaceholder.DELETED);
     }
 
-    private PropertyChangeRecord withPreValueSetTo(Object preValue) {
-        this.preAndPostValue = PreAndPostValue.pre(preValue);
-        return this;
+    private PropertyChangeRecord withPostValueSetToCurrent() {
+        return withPostValueSetTo(getPropertyValue());
+    }
+
+    private PropertyChangeRecord withPostValueSetToUnknown() {
+        return withPostValueSetTo(PropertyValuePlaceholder.UNKNOWN);
     }
 
     private PropertyChangeRecord withPostValueSetTo(Object postValue) {
