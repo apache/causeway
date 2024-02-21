@@ -1,10 +1,12 @@
 {
-  university_dept_DeptHeads {
-    findHeadByName {
-      invoke(name: "Prof. Dicky Horwich") {
-        results {
-          changeName {
-            validate(newName: "Prof. Dicky Horwich!")
+  rich {
+    university_dept_DeptHeads {
+      findHeadByName {
+        invoke(name: "Prof. Dicky Horwich") {
+          results {
+            changeName {
+              validate(newName: "Prof. Dicky Horwich!")
+            }
           }
         }
       }

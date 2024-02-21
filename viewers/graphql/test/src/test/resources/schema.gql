@@ -1,3 +1,8 @@
+schema {
+  query: SimpleAndRich
+  mutation: Mutation
+}
+
 "Marks the field, argument, input field or enum value as deprecated"
 directive @deprecated(
     "The reason for the deprecation"
@@ -66,7 +71,7 @@ type Mutation {
   university_dept_Staff__createStaffMember(department: university_dept_Department__gqlv_input!, name: String!): university_dept_StaffMember
 }
 
-type Query {
+type RichSchema {
   Scenario(name: String): Scenario
   causeway_applib_DomainObjectList(object: causeway_applib_DomainObjectList__gqlv_input): causeway_applib_DomainObjectList
   causeway_applib_FacetGroupNode(object: causeway_applib_FacetGroupNode__gqlv_input): causeway_applib_FacetGroupNode
@@ -175,6 +180,10 @@ type ScenarioStep {
   university_dept_Person(object: university_dept_Person__gqlv_input): university_dept_Person
   university_dept_Staff: university_dept_Staff
   university_dept_StaffMember(object: university_dept_StaffMember__gqlv_input): university_dept_StaffMember
+}
+
+type SimpleAndRich {
+  rich: RichSchema
 }
 
 type causeway_applib_DomainObjectList {

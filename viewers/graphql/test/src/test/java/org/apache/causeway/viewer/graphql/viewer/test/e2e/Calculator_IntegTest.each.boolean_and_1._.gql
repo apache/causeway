@@ -1,8 +1,10 @@
 {
-  university_calc_Calculator {
-    and {
-      invoke(x: true, y: true) {
-        results
+  rich {
+    university_calc_Calculator {
+      and {
+        invoke(x: true, y: true) {
+          results
+        }
       }
     }
   }

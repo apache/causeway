@@ -1,7 +1,9 @@
 {
-  university_dept_Department(object: {id: "$departmentId"}) {
-    changeName {
-      hidden
+  rich {
+    university_dept_Department(object: {id: "$departmentId"}) {
+      changeName {
+        hidden
+      }
     }
   }
 }

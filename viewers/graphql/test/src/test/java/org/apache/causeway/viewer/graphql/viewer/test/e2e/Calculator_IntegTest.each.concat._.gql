@@ -1,8 +1,10 @@
 {
-  university_calc_Calculator {
-    concat {
-      invoke(prefix: "Fizz", suffix: "Buzz") {
-        results
+  rich {
+    university_calc_Calculator {
+      concat {
+        invoke(prefix: "Fizz", suffix: "Buzz") {
+          results
+        }
       }
     }
   }
