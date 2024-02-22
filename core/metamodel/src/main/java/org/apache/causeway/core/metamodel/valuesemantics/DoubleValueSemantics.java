@@ -101,7 +101,7 @@ implements
 
     @Override
     public Double parseTextRepresentation(final Context context, final String text) {
-        return _Doubles.convertToDouble(super.parseDecimal(context, text))
+        return _Doubles.convertToDouble(super.parseDecimal(context, text, GroupingSeparatorPolicy.ALLOW))
                 .orElse(null);
     }
 

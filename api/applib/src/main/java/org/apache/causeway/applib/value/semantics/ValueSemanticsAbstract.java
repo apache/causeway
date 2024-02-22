@@ -21,6 +21,7 @@ package org.apache.causeway.applib.value.semantics;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -223,20 +224,37 @@ ValueSemanticsProvider<T> {
             return Optional.empty();
         }
         try {
-            return parseDecimal(context, input)
+            return parseDecimal(context, input, GroupingSeparatorPolicy.ALLOW)
                     .map(BigDecimal::toBigIntegerExact);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not an integer value " + text, e);
         }
     }
 
+    protected enum GroupingSeparatorPolicy {
+        ALLOW,
+        DISALLOW,
+        ;
+    }
+
     protected Optional<BigDecimal> parseDecimal(
-            final @Nullable ValueSemanticsProvider.Context context,
-            final @Nullable String text) {
+            final @Nullable Context context,
+            final @Nullable String text,
+            final GroupingSeparatorPolicy groupingSeparatorPolicy) {
         val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return Optional.empty();
         }
+
+        if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
+            val userLocale = getUserLocale(context);
+            val decimalFormatSymbols = new DecimalFormatSymbols(userLocale.getNumberFormatLocale());
+            val groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
+            if (input.contains(""+groupingSeparatorChar)) {
+                throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
+            }
+        }
+
         val format = getNumberFormat(context, FormatUsageFor.PARSING);
         format.setParseBigDecimal(true);
 
