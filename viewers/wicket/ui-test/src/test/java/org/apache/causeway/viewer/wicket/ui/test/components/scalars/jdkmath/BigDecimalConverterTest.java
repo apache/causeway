@@ -36,6 +36,8 @@ import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTes
 import lombok.Getter;
 import lombok.Setter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class BigDecimalConverterTest {
 
     final BigDecimal bd_123_45_scale2 = new BigDecimal("123.45").setScale(2);
@@ -81,7 +83,18 @@ class BigDecimalConverterTest {
     }
 
     @Test
-    void scale2_english_withThousandSeparators() {
+    void scale2_english_withThousandSeparators_not_allowed() {
+        assertThat(converterTester.getConfigurationForBigDecimalValueType().isAllowGroupingSeparatorWhenParse()).isFalse();
+
+        converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale2.class));
+        converterTester.assertConversionFailure("789,123.45", "Invalid value '789,123.45'; do not use the ',' grouping separator");
+    }
+
+    @Test
+    void scale2_english_withThousandSeparators_allowed() {
+        converterTester.getConfigurationForBigDecimalValueType().setAllowGroupingSeparatorWhenParse(true);
+        assertThat(converterTester.getConfigurationForBigDecimalValueType().isAllowGroupingSeparatorWhenParse()).isTrue();
+
         converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale2.class));
         converterTester.assertRoundtrip(bd_789123_45_scale2, "789,123.45");
     }
