@@ -25,6 +25,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaFetcher;
 
 public class GqlvMetaCssClass extends GqlvAbstract {
 
@@ -36,7 +37,7 @@ public class GqlvMetaCssClass extends GqlvAbstract {
 
     @Override
     protected String fetchData(DataFetchingEnvironment environment) {
-        return environment.<GqlvMeta.Fetcher>getSource().cssClass();
+        return environment.<GqlvMetaFetcher>getSource().cssClass();
     }
 
 }

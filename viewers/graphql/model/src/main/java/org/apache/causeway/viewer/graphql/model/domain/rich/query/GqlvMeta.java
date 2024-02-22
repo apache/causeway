@@ -35,7 +35,9 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaFetcher;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaHolder;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaSaveAs;
 
 import lombok.val;
 
@@ -125,106 +127,9 @@ public class GqlvMeta extends GqlvAbstractCustom {
     @Override
     public Object fetchData(final DataFetchingEnvironment environment) {
         return context.bookmarkService.bookmarkFor(environment.getSource())
-                .map(bookmark -> new Fetcher(bookmark, context.bookmarkService, context.objectManager, context.causewayConfiguration))
+                .map(bookmark -> new GqlvMetaFetcher(bookmark, context.bookmarkService, context.objectManager, context.causewayConfiguration))
                 .orElseThrow();
     }
 
-
-    /**
-     * Metadata for every domain object.
-     */
-    static class Fetcher {
-
-        private final Bookmark bookmark;
-        private final BookmarkService bookmarkService;
-        private final ObjectManager objectManager;
-        private final CausewayConfiguration causewayConfiguration;
-        private final String graphqlPath;
-
-        Fetcher(
-                final Bookmark bookmark,
-                final BookmarkService bookmarkService,
-                final ObjectManager objectManager,
-                final CausewayConfiguration causewayConfiguration
-        ) {
-            this.bookmark = bookmark;
-            this.bookmarkService = bookmarkService;
-            this.objectManager = objectManager;
-            this.causewayConfiguration = causewayConfiguration;
-            this.graphqlPath = causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
-        }
-
-        public String logicalTypeName(){
-            return bookmark.getLogicalTypeName();
-        }
-
-        public String id(){
-            return bookmark.getIdentifier();
-        }
-
-        public String version(){
-            return managedObject()
-                    .map(managedObject -> {
-                        val domainPojo = managedObject.getPojo();
-                        val entityFacet = managedObject.getSpecification().getFacet(EntityFacet.class);
-                        if (entityFacet != null) {
-                            val object = entityFacet.versionOf(domainPojo);
-                            return object != null ? object.toString() : null;
-                        } else {
-                            return null;
-                        }
-                    }).orElse(null);
-        }
-
-        public Bookmark bookmark() {
-            return bookmark;
-        }
-
-        public String title() {
-            return managedObject()
-                    .map(ManagedObject::getTitle)
-                    .orElse(null);
-        }
-
-        public String cssClass() {
-            return managedObject()
-                    .map(managedObject -> {
-                        val facet = managedObject.getSpecification().getFacet(CssClassFacet.class);
-                        return facet != null ? facet.cssClass(managedObject) : null;
-                    })
-                    .orElse(null);
-        }
-
-        public String layout() {
-            return managedObject()
-                    .map(managedObject -> {
-                        val facet = managedObject.getSpecification().getFacet(LayoutFacet.class);
-                        return facet != null ? facet.layout(managedObject) : null;
-                    })
-                    .orElse(null);
-        }
-
-        public String grid() {
-            return resource("grid");
-        }
-
-        public String icon() {
-            return resource("icon");
-        }
-
-        private String resource(String resource) {
-            return managedObject()
-                    .flatMap(Bookmarkable::getBookmark
-                    ).map(bookmark -> String.format(
-                            "//%s/object/%s:%s/%s/%s",
-                            graphqlPath, bookmark.getLogicalTypeName(), bookmark.getIdentifier(), causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName(), resource) )
-                    .orElse(null);
-        }
-
-        private Optional<ManagedObject> managedObject() {
-            return bookmarkService.lookup(bookmark)
-                    .map(objectManager::adapt);
-        }
-    }
 
 }

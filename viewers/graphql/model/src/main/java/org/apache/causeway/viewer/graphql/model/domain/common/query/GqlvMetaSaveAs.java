@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
 import graphql.GraphQLContext;
 import graphql.Scalars;
@@ -27,6 +27,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaFetcher;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
@@ -48,7 +49,7 @@ public class GqlvMetaSaveAs extends GqlvAbstract {
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
         String ref = environment.getArgument("ref");
-        GqlvMeta.Fetcher source = environment.getSource();
+        GqlvMetaFetcher source = environment.getSource();
         String originalKey = GvqlActionUtils.keyFor(ref);
         GraphQLContext graphQlContext = environment.getGraphQlContext();
 
