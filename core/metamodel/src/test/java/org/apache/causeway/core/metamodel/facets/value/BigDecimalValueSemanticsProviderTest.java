@@ -18,8 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.value;
 
+import lombok.val;
+
 import java.math.BigDecimal;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +45,9 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);
 
-        setSemantics(value = new BigDecimalValueSemantics());
+        BigDecimalValueSemantics valueSemantics = new BigDecimalValueSemantics();
+        valueSemantics.setCausewayConfiguration(new CausewayConfiguration(null, null));
+        setSemantics(value = valueSemantics);
     }
 
     @Test
@@ -56,6 +63,48 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
             fail();
         } catch (final TextEntryParseException expected) {
         }
+    }
+
+    @Test
+    void parseInvalidStringWithGroupingSeparator() throws Exception {
+        try {
+            value.parseTextRepresentation(null, "123,999.01");
+            fail();
+        } catch (final TextEntryParseException expected) {
+        }
+    }
+
+    @Test
+    void parseValidStringWithGroupingSeparatorIfConfiguredToAllow() throws Exception {
+        val causewayConfiguration = new CausewayConfiguration(null, null);
+        causewayConfiguration.getValueTypes().getBigDecimal().setAllowGroupingSeparatorWhenParse(true);
+        value.setCausewayConfiguration(causewayConfiguration);
+
+        value.parseTextRepresentation(null, "123,999.01");
+    }
+
+    @Test
+    void demonstrateTheRiskOfAllowingGroupingSeparatorIfConfiguredToAllow() throws Exception {
+
+        // default disallows grouping separator
+        try {
+            value.parseTextRepresentation(null, "1239,99");
+            fail();
+        } catch (final TextEntryParseException expected) {
+        }
+
+        // but if we allow it...
+        val causewayConfiguration = new CausewayConfiguration(null, null);
+        causewayConfiguration.getValueTypes().getBigDecimal().setAllowGroupingSeparatorWhenParse(true);
+        value.setCausewayConfiguration(causewayConfiguration);
+
+        BigDecimal bigDecimal = value.parseTextRepresentation(null, "1239,99");
+        Assertions.assertThat(bigDecimal).isEqualTo(new BigDecimal(123999));
+    }
+
+    @Test
+    void parseValidStringWithNoGroupingSeparator() throws Exception {
+        value.parseTextRepresentation(null, "123999.01");
     }
 
     @Test

@@ -3263,6 +3263,29 @@ public class CausewayConfiguration {
              * either {@link Digits#fraction()} or an ORM semantic such as the (JPA) {@link Column#scale()}.
              */
             private Integer minScale = null;
+
+            /**
+             * A common use of {@link java.math.BigDecimal} is as a money value.  In some locales (eg English), the
+             * &quot;,&quot; (comma) is the grouping (thousands) separator wihle the &quot;.&quot; (period) acts as a
+             * decimal point, but in others (eg France, Italy) it is the other way around.
+             *
+             * <p>
+             *     Surprisingly perhaps, a string such as "123,99", when parsed ((by {@link java.text.DecimalFormat})
+             *     in an English locale, is not rejected but instead is evaluated as the value 12399L.  That's almost
+             *     certainly not what the end-user would have expected, and results in a money value 100x too large.
+             * </p>
+             *
+             * <p>
+             *     The purpose of this configuration property is to remove the confusion by simply disallowing the
+             *     thousands separator from being part of the input string.
+             * </p>
+             *
+             * <p>
+             *     For maximum safety, allowing the grouping separator is disallowed, but the alternate (original)
+             *     behaviour can be reinstated by setting this config property back to <code>true</code>.
+             * </p>
+             */
+            private boolean allowGroupingSeparatorWhenParse = false;
         }
 
         private final Kroki kroki = new Kroki();

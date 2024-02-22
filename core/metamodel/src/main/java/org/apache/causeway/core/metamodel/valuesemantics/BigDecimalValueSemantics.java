@@ -130,7 +130,10 @@ implements
 
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        return super.parseDecimal(context, text)
+        val parsePolicy = causewayConfiguration.getValueTypes().getBigDecimal().isAllowGroupingSeparatorWhenParse()
+                                ? GroupingSeparatorWhenParsePolicy.ALLOW
+                                : GroupingSeparatorWhenParsePolicy.DISALLOW;
+        return super.parseDecimal(context, text, parsePolicy)
                 .orElse(null);
     }
 
