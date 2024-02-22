@@ -131,8 +131,8 @@ implements
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         val parsePolicy = causewayConfiguration.getValueTypes().getBigDecimal().isUseGroupingSeparator()
-                                ? GroupingSeparatorWhenParsePolicy.ALLOW
-                                : GroupingSeparatorWhenParsePolicy.DISALLOW;
+                                ? GroupingSeparatorPolicy.ALLOW
+                                : GroupingSeparatorPolicy.DISALLOW;
         return super.parseDecimal(context, text, parsePolicy)
                 .orElse(null);
     }

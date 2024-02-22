@@ -101,7 +101,7 @@ implements
 
     @Override
     public Float parseTextRepresentation(final Context context, final String text) {
-        return _Floats.convertToFloat(super.parseDecimal(context, text, GroupingSeparatorWhenParsePolicy.ALLOW))
+        return _Floats.convertToFloat(super.parseDecimal(context, text, GroupingSeparatorPolicy.ALLOW))
                 .orElse(null);
     }
 

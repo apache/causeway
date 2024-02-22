@@ -224,14 +224,14 @@ ValueSemanticsProvider<T> {
             return Optional.empty();
         }
         try {
-            return parseDecimal(context, input, GroupingSeparatorWhenParsePolicy.ALLOW)
+            return parseDecimal(context, input, GroupingSeparatorPolicy.ALLOW)
                     .map(BigDecimal::toBigIntegerExact);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not an integer value " + text, e);
         }
     }
 
-    protected enum GroupingSeparatorWhenParsePolicy {
+    protected enum GroupingSeparatorPolicy {
         ALLOW,
         DISALLOW,
         ;
@@ -240,13 +240,13 @@ ValueSemanticsProvider<T> {
     protected Optional<BigDecimal> parseDecimal(
             final @Nullable Context context,
             final @Nullable String text,
-            final GroupingSeparatorWhenParsePolicy parsePolicy) {
+            final GroupingSeparatorPolicy groupingSeparatorPolicy) {
         val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return Optional.empty();
         }
 
-        if (parsePolicy == GroupingSeparatorWhenParsePolicy.DISALLOW) {
+        if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
             val userLocale = getUserLocale(context);
             val decimalFormatSymbols = new DecimalFormatSymbols(userLocale.getNumberFormatLocale());
             val groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
