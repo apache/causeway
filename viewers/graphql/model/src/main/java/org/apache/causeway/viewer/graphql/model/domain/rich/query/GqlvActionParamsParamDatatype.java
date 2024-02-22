@@ -31,10 +31,10 @@ import lombok.val;
 
 public class GqlvActionParamsParamDatatype extends GqlvAbstract {
 
-    private final HolderActionParamsParamDatatype holder;
+    private final HolderActionParamDetails holder;
 
     public GqlvActionParamsParamDatatype(
-            final HolderActionParamsParamDatatype holder,
+            final HolderActionParamDetails holder,
             final Context context) {
         super(context);
         this.holder = holder;

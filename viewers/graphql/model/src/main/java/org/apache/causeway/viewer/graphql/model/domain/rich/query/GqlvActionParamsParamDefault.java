@@ -39,10 +39,10 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionParamsParamDefault extends GqlvAbstract {
-    private final HolderActionParamsParamDefault holder;
+    private final HolderActionParamDetails holder;
 
     public GqlvActionParamsParamDefault(
-            final HolderActionParamsParamDefault holder,
+            final HolderActionParamDetails holder,
             final Context context) {
         super(context);
         this.holder = holder;

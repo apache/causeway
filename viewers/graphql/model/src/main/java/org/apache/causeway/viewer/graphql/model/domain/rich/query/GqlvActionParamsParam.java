@@ -33,6 +33,8 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
@@ -41,12 +43,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParamsParam
         extends GqlvAbstractCustom
-        implements HolderActionParamsParamHidden,
-        HolderActionParamsParamDisabled,
-        HolderActionParamsParamDetails,
-        HolderActionParamsParamDefault,
-        HolderActionParamsParamValidate,
-        HolderActionParamsParamDatatype {
+        implements HolderActionParamDetails,
+        ObjectActionParameterProvider, SchemaTypeProvider {
 
     @Getter private final HolderActionParams holder;
     @Getter private final ObjectActionParameter objectActionParameter;

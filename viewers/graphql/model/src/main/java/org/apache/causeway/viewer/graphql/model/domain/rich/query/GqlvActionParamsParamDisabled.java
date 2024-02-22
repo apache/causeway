@@ -38,10 +38,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParamsParamDisabled extends GqlvAbstract {
 
-    private final HolderActionParamsParamDisabled holder;
+    private final HolderActionParamDetails holder;
 
     public GqlvActionParamsParamDisabled(
-            final HolderActionParamsParamDisabled holder,
+            final HolderActionParamDetails holder,
             final Context context) {
         super(context);
         this.holder = holder;

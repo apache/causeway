@@ -37,10 +37,10 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 @Log4j2
 public class GqlvActionParamsParamHidden extends GqlvAbstract {
 
-    private final HolderActionParamsParamHidden holder;
+    private final HolderActionParamDetails holder;
 
     public GqlvActionParamsParamHidden(
-            final HolderActionParamsParamHidden holder,
+            final HolderActionParamDetails holder,
             final Context context) {
         super(context);
         this.holder = holder;
