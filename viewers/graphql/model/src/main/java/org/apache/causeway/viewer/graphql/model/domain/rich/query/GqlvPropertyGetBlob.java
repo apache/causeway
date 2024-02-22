@@ -33,10 +33,10 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 public class GqlvPropertyGetBlob
         extends GqlvAbstractCustom
-        implements HolderPropertyGetBlobAbstract
+        implements HolderPropertyGetXlobDetails
 {
 
-    final HolderGetPropertyBlob holder;
+    final HolderPropertyGetXlob holder;
     final GqlvPropertyGetBlobBytes blobName;
     final GqlvPropertyGetBlobMimeType blobMimeType;
     final GqlvPropertyGetBlobName blobBytes;
@@ -44,7 +44,7 @@ public class GqlvPropertyGetBlob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetBlob(
-            final HolderGetPropertyBlob holder,
+            final HolderPropertyGetXlob holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;

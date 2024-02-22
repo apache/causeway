@@ -5,9 +5,9 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationPro
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
-public interface HolderPropertyGetClob
+public interface HolderPropertyGetXlob
         extends ObjectSpecificationProvider,
-        ObjectAssociationProvider<OneToOneAssociation>,
-        SchemaTypeProvider {
+                ObjectAssociationProvider<OneToOneAssociation>,
+                SchemaTypeProvider {
 
 }

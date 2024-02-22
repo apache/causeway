@@ -30,7 +30,7 @@ public class GqlvPropertyGetClobChars extends GqlvPropertyGetClobAbstract {
     private final String graphqlPath;
 
     public GqlvPropertyGetClobChars(
-            final HolderPropertyGetClobAbstract holder,
+            final HolderPropertyGetXlobDetails holder,
             final Context context) {
         super(holder, context, "chars");
 

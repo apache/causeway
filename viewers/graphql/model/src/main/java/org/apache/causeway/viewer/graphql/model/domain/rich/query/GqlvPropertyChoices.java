@@ -37,10 +37,10 @@ import lombok.val;
 
 public class GqlvPropertyChoices extends GqlvAbstract {
 
-    final HolderPropertyChoices holder;
+    final HolderPropertySet holder;
 
     public GqlvPropertyChoices(
-            final HolderPropertyChoices holder,
+            final HolderPropertySet holder,
             final Context context) {
         super(context);
         this.holder = holder;

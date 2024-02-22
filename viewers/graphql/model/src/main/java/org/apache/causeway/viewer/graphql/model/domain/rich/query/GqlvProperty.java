@@ -29,6 +29,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -38,13 +39,11 @@ public class GqlvProperty
         implements
         HolderMember<OneToOneAssociation>,
         HolderPropertyGet,
-        HolderPropertyChoices,
         HolderPropertyAutoComplete,
-        HolderPropertyValidate,
         HolderPropertySet,
         HolderAssociationDatatype<OneToOneAssociation>,
-        HolderGetPropertyBlob,
-        HolderPropertyGetClob, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<OneToOneAssociation>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider {
+        HolderPropertyGetXlob,
+        org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<OneToOneAssociation>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider, ObjectAssociationProvider<OneToOneAssociation> {
 
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;

@@ -13,5 +13,8 @@ public interface HolderPropertySet
         OneToOneAssociationProvider,
         SchemaTypeProvider {
 
-    void addGqlArgument(OneToOneAssociation oneToOneAssociation, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
+    void addGqlArgument(
+            OneToOneAssociation otoa,
+            GraphQLFieldDefinition.Builder fieldBuilder,
+            TypeMapper.InputContext inputContext);
 }

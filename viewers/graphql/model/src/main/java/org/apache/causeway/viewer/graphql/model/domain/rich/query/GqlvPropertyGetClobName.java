@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 public class GqlvPropertyGetClobName extends GqlvPropertyGetClobAbstract {
 
     public GqlvPropertyGetClobName(
-            final HolderPropertyGetClobAbstract holder,
+            final HolderPropertyGetXlobDetails holder,
             final Context context) {
         super(holder, context, "name");
     }
