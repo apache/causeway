@@ -130,7 +130,7 @@ implements
 
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val parsePolicy = causewayConfiguration.getValueTypes().getBigDecimal().isAllowGroupingSeparatorWhenParse()
+        val parsePolicy = causewayConfiguration.getValueTypes().getBigDecimal().isUseGroupingSeparator()
                                 ? GroupingSeparatorWhenParsePolicy.ALLOW
                                 : GroupingSeparatorWhenParsePolicy.DISALLOW;
         return super.parseDecimal(context, text, parsePolicy)
@@ -145,6 +145,9 @@ implements
     @Override
     protected void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
+
+        format.setGroupingUsed(causewayConfiguration.getValueTypes().getBigDecimal().isUseGroupingSeparator());
+
         if(context==null) {
             return;
         }

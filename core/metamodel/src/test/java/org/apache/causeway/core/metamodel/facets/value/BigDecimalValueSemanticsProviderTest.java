@@ -37,6 +37,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantic
 class BigDecimalValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
+    private final CausewayConfiguration causewayConfiguration = new CausewayConfiguration(null, null);
     private BigDecimalValueSemantics value;
     private BigDecimal bigDecimal;
 
@@ -46,7 +47,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
         allowMockAdapterToReturn(bigDecimal);
 
         BigDecimalValueSemantics valueSemantics = new BigDecimalValueSemantics();
-        valueSemantics.setCausewayConfiguration(new CausewayConfiguration(null, null));
+        valueSemantics.setCausewayConfiguration(causewayConfiguration);
         setSemantics(value = valueSemantics);
     }
 
@@ -76,9 +77,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     @Test
     void parseValidStringWithGroupingSeparatorIfConfiguredToAllow() throws Exception {
-        val causewayConfiguration = new CausewayConfiguration(null, null);
-        causewayConfiguration.getValueTypes().getBigDecimal().setAllowGroupingSeparatorWhenParse(true);
-        value.setCausewayConfiguration(causewayConfiguration);
+        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
 
         value.parseTextRepresentation(null, "123,999.01");
     }
@@ -94,9 +93,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
         }
 
         // but if we allow it...
-        val causewayConfiguration = new CausewayConfiguration(null, null);
-        causewayConfiguration.getValueTypes().getBigDecimal().setAllowGroupingSeparatorWhenParse(true);
-        value.setCausewayConfiguration(causewayConfiguration);
+        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
 
         BigDecimal bigDecimal = value.parseTextRepresentation(null, "1239,99");
         Assertions.assertThat(bigDecimal).isEqualTo(new BigDecimal(123999));
@@ -109,6 +106,13 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     @Test
     void titleOf() {
+        assertEquals("34132.199", value.titlePresentation(null, bigDecimal));
+    }
+
+    @Test
+    void titleOfWhenUseGroupingSeparator() {
+        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
+
         assertEquals("34,132.199", value.titlePresentation(null, bigDecimal));
     }
 

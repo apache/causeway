@@ -247,14 +247,13 @@ ValueSemanticsProvider<T> {
         }
 
         if (parsePolicy == GroupingSeparatorWhenParsePolicy.DISALLOW) {
-            UserLocale userLocale = getUserLocale(context);
+            val userLocale = getUserLocale(context);
             val decimalFormatSymbols = new DecimalFormatSymbols(userLocale.getNumberFormatLocale());
-            char groupingSeparator = decimalFormatSymbols.getGroupingSeparator();
-            if (input.contains(""+groupingSeparator)) {
-                throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparator + "' grouping separator");
+            val groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
+            if (input.contains(""+groupingSeparatorChar)) {
+                throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
             }
         }
-
 
         val format = getNumberFormat(context, FormatUsageFor.PARSING);
         format.setParseBigDecimal(true);

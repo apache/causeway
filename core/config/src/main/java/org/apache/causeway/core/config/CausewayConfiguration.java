@@ -3284,8 +3284,12 @@ public class CausewayConfiguration {
              *     For maximum safety, allowing the grouping separator is disallowed, but the alternate (original)
              *     behaviour can be reinstated by setting this config property back to <code>true</code>.
              * </p>
+             *
+             * <p>
+             *     The same configuration property is also used for rendering the value.
+             * </p>
              */
-            private boolean allowGroupingSeparatorWhenParse = false;
+            private boolean useGroupingSeparator = false;
         }
 
         private final Kroki kroki = new Kroki();

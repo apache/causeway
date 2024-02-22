@@ -593,6 +593,7 @@ extends MetaModelContext {
             ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
             .installValueFacet(valueClass, Can.of(valueSemantics), primitiveTypeSpec);
         }
+        serviceInjector.injectServicesInto(valueSemantics);
         return this;
     }
 
