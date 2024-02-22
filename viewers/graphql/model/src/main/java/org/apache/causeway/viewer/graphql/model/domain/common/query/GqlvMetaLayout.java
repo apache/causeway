@@ -16,29 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLNonNull.nonNull;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaFetcher;
 
-public class GqlvMetaTitle extends GqlvAbstract {
+public class GqlvMetaLayout extends GqlvAbstract {
 
-    public GqlvMetaTitle(final Context context) {
+    public GqlvMetaLayout(final Context context) {
         super(context);
 
-        setField(newFieldDefinition().name("title").type(nonNull(Scalars.GraphQLString)).build());
+        setField(newFieldDefinition().name("layout").type(Scalars.GraphQLString).build());
     }
 
     @Override
     protected String fetchData(DataFetchingEnvironment environment) {
-        return environment.<GqlvMetaFetcher>getSource().title();
+        return environment.<GqlvMetaFetcher>getSource().layout();
     }
 
 }

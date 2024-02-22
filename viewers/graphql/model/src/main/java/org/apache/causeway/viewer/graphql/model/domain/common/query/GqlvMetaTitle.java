@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.rich.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;

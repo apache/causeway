@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.rich.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
@@ -27,17 +27,17 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaFetcher;
 
-public class GqlvMetaVersion extends GqlvAbstract {
+public class GqlvMetaIcon extends GqlvAbstract {
 
-    public GqlvMetaVersion(final Context context) {
+    public GqlvMetaIcon(final Context context) {
         super(context);
 
-        setField(newFieldDefinition().name("version").type(Scalars.GraphQLString).build());
+        setField(newFieldDefinition().name("icon").type(Scalars.GraphQLString).build());
     }
 
     @Override
     protected String fetchData(DataFetchingEnvironment environment) {
-        return environment.<GqlvMetaFetcher>getSource().version();
+        return environment.<GqlvMetaFetcher>getSource().icon();
     }
 
 }

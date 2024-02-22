@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
 import graphql.schema.DataFetchingEnvironment;
 
@@ -25,9 +25,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaFetcher;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaHolder;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaSaveAs;
 
 import lombok.val;
 
