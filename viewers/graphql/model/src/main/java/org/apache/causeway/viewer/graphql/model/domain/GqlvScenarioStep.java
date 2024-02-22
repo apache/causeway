@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import graphql.schema.DataFetchingEnvironment;
 
+import lombok.val;
+
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
@@ -37,7 +39,9 @@ public class GqlvScenarioStep
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(addChildFieldFor(schemaStrategy.domainObjectFor(objectSpec, context)));
+                    val gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
+                    addChildField(gqlvDomainObject.newField());
+                    domainObjects.add(gqlvDomainObject);
 
                     break;
             }
@@ -52,6 +56,7 @@ public class GqlvScenarioStep
 
         buildObjectType();
     }
+
 
 
     protected void addDataFetchersForChildren() {

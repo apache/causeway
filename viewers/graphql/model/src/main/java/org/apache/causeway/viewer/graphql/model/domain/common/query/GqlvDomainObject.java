@@ -37,6 +37,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
+import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
@@ -82,11 +83,6 @@ public class GqlvDomainObject
         this.schemaStrategy = schemaStrategy;
         this.objectSpecification = objectSpecification;
 
-        if(isBuilt()) {
-            this.meta = null;
-            this.gqlInputObjectType = null;
-            return;
-        }
         gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
         addChildFieldFor(this.meta = schemaStrategy.newGqlvMeta(this, context));
@@ -114,7 +110,8 @@ public class GqlvDomainObject
         ;
         gqlInputObjectType = inputObjectTypeBuilder.build();
 
-        setField(buildFieldDefinition(gqlInputObjectType));
+        // hmm..
+        setField(newField());
 
         addMembers();
 
@@ -125,13 +122,30 @@ public class GqlvDomainObject
 
     }
 
-    private GraphQLFieldDefinition buildFieldDefinition(final GraphQLInputObjectType gqlInputObjectType) {
+    public GraphQLFieldDefinition newField(
+            final String fieldName,
+            final String description) {
+        return buildFieldDefinition(fieldName, gqlInputObjectType);
+    }
+
+    public GraphQLFieldDefinition newField() {
+
+        // add domain object lookup to top-level query
+        val lookupConfig = this.context.causewayConfiguration.getViewer().getGraphql().getLookup();
+        val fieldName = String.format("%s%s%s",
+                lookupConfig.getFieldNamePrefix(),  // eg "_gqlv_lookup__"
+                TypeNames.objectTypeFieldNameFor(objectSpecification),
+                lookupConfig.getFieldNameSuffix());
+
+        return buildFieldDefinition(fieldName, gqlInputObjectType);
+    }
+
+    private GraphQLFieldDefinition buildFieldDefinition(
+            final String fieldName,
+            final GraphQLInputObjectType gqlInputObjectType
+    ) {
         val lookupConfig = this.context.causewayConfiguration.getViewer().getGraphql().getLookup();
         val objectSpec = getObjectSpecification();
-        val fieldName = String.format("%s%s%s",
-                lookupConfig.getFieldNamePrefix(),          // eg "_gqlv_lookup__"
-                TypeNames.objectTypeFieldNameFor(objectSpec),
-                lookupConfig.getFieldNameSuffix());
 
         return newFieldDefinition()
                 .name(fieldName)

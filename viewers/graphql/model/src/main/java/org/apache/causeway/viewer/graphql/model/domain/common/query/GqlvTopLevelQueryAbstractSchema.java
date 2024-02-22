@@ -10,6 +10,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 
 import lombok.Getter;
@@ -30,7 +31,6 @@ public abstract class GqlvTopLevelQueryAbstractSchema
         super(schemaStrategy.getSchemaType().name() + "Schema", context);
         this.schemaStrategy = schemaStrategy;
 
-        // add domain object lookup to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
 
@@ -38,8 +38,9 @@ public abstract class GqlvTopLevelQueryAbstractSchema
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(addChildFieldFor(schemaStrategy.domainObjectFor(objectSpec, context)));
-
+                    val gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
+                    addChildField(gqlvDomainObject.newField());
+                    domainObjects.add(gqlvDomainObject);
                     break;
             }
         });

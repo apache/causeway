@@ -72,7 +72,7 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
         return hasField;
     }
 
-    void addChildField(GraphQLFieldDefinition childField) {
+    protected void addChildField(GraphQLFieldDefinition childField) {
         if (isBuilt()) {
             // the type was built already
             return;
