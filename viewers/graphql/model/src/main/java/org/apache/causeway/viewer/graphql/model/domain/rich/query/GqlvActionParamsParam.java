@@ -43,8 +43,7 @@ public class GqlvActionParamsParam
         extends GqlvAbstractCustom
         implements HolderActionParamsParamHidden,
         HolderActionParamsParamDisabled,
-        HolderActionParamsParamChoices,
-        HolderActionParamsParamAutoComplete,
+        HolderActionParamsParamDetails,
         HolderActionParamsParamDefault,
         HolderActionParamsParamValidate,
         HolderActionParamsParamDatatype {

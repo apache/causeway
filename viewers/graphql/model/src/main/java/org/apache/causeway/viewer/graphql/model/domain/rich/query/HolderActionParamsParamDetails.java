@@ -13,7 +13,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-public interface HolderActionParamsParamAutoComplete
+public interface HolderActionParamsParamDetails
         extends ObjectSpecificationProvider,
         ObjectActionProvider,
         ObjectActionParameterProvider,

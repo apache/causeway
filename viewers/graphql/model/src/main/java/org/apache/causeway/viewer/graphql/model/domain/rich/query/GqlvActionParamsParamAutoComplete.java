@@ -48,10 +48,10 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
      private static final String SEARCH_PARAM_NAME = "search";
 
-     private final HolderActionParamsParamAutoComplete holder;
+     private final HolderActionParamsParamDetails holder;
 
      public GqlvActionParamsParamAutoComplete(
-             final HolderActionParamsParamAutoComplete holder,
+             final HolderActionParamsParamDetails holder,
              final Context context) {
          super(context);
          this.holder = holder;
