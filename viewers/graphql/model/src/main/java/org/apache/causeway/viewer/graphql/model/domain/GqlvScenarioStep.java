@@ -37,7 +37,7 @@ public class GqlvScenarioStep
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(addChildFieldFor(GqlvTopLevelQuerySimpleSchema.of(schemaStrategy, objectSpec, context)));
+                    domainObjects.add(addChildFieldFor(schemaStrategy.domainObjectFor(objectSpec, context)));
 
                     break;
             }
@@ -46,7 +46,7 @@ public class GqlvScenarioStep
         context.objectSpecifications().forEach(objectSpec -> {
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
                 context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                        .ifPresent(servicePojo -> domainServices.add(addChildFieldFor(GqlvTopLevelQuerySimpleSchema.of(schemaStrategy, objectSpec, servicePojo, context))));
+                        .ifPresent(servicePojo -> domainServices.add(addChildFieldFor(schemaStrategy.domainServiceFor(objectSpec, servicePojo, context))));
             }
         });
 

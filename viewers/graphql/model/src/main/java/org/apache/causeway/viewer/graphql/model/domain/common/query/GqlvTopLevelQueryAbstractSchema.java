@@ -5,14 +5,12 @@ import java.util.List;
 
 import graphql.schema.DataFetchingEnvironment;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelQuerySimpleSchema;
 
 import lombok.Getter;
 import lombok.val;
@@ -40,7 +38,7 @@ public abstract class GqlvTopLevelQueryAbstractSchema
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(addChildFieldFor(schemaStrategy.newGqlvDomainObject(objectSpec, context)));
+                    domainObjects.add(addChildFieldFor(schemaStrategy.domainObjectFor(objectSpec, context)));
 
                     break;
             }
@@ -53,14 +51,14 @@ public abstract class GqlvTopLevelQueryAbstractSchema
                     context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
                             .ifPresent(servicePojo ->
                                     domainServices.add(
-                                            addChildFieldFor(GqlvTopLevelQuerySimpleSchema.of(schemaStrategy, objectSpec, servicePojo, context))));
+                                            addChildFieldFor(schemaStrategy.domainServiceFor(objectSpec, servicePojo, context))));
                     break;
             }
         });
 
     }
 
-    protected static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {
+    public static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {
         val superclasses = new ArrayList<ObjectSpecification>();
         ObjectSpecification superclass = objectSpecification.superclass();
         while (superclass != null && superclass.getCorrespondingClass() != Object.class) {

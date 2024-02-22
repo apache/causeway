@@ -42,13 +42,6 @@ public class SchemaStrategySimple implements SchemaStrategy {
         return graphqlConfiguration.getTopLevelFieldNameForSimple();
     }
 
-    public GqlvAbstractCustom newGqlvDomainObject(
-            final ObjectSpecification objectSpecification,
-            final Context context
-    ) {
-        return new GqlvDomainObject(this, objectSpecification, context);
-    }
-
     public GqlvAbstractCustom newGqlvProperty(
             final GqlvMemberHolder holder,
             final OneToOneAssociation otoa,

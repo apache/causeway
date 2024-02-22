@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvAction;
 
 import lombok.Getter;
 import lombok.val;
@@ -88,7 +87,7 @@ public class GqlvDomainService
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||
                         apiVariant != CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_ONLY    // the other variants have an entry for all actions.
                 )
-                .forEach(act -> actions.add(addChildFieldFor(new GqlvAction(this, act, context))));
+                .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newGqlvAction(this, act, context))));
     }
 
 

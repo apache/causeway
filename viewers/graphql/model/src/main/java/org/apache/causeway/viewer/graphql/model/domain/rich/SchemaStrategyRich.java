@@ -42,13 +42,6 @@ public class SchemaStrategyRich implements SchemaStrategy {
         return graphqlConfiguration.getTopLevelFieldNameForRich();
     }
 
-    public GqlvAbstractCustom newGqlvDomainObject(
-            final ObjectSpecification objectSpecification,
-            final Context context
-    ) {
-        return new GqlvDomainObject(this, objectSpecification, context);
-    }
-
     public GqlvAbstractCustom newGqlvProperty(
             final GqlvMemberHolder holder,
             final OneToOneAssociation otoa,

@@ -30,41 +30,4 @@ public class GqlvTopLevelQuerySimpleSchema
                 .build());
     }
 
-    public static GqlvDomainObject of(
-            final SchemaStrategy schemaStrategy,
-            final ObjectSpecification objectSpecification,
-            final Context context) {
-
-        mapSuperclassesIfNecessary(schemaStrategy, objectSpecification, context);
-        return computeIfAbsentGqlvDomainObject(schemaStrategy, objectSpecification, context);
-    }
-
-    private static void mapSuperclassesIfNecessary(
-            final SchemaStrategy schemaStrategy,
-            final ObjectSpecification objectSpecification,
-            final Context context) {
-        // no need to map if the target subclass has already been built
-        if(schemaStrategy.domainObjectBySpec(context).containsKey(objectSpecification)) {
-            return;
-        }
-        val superclasses = superclassesOf(objectSpecification);
-        superclasses.forEach(objectSpec -> computeIfAbsentGqlvDomainObject(schemaStrategy, objectSpec, context));
-    }
-
-    private static GqlvDomainObject computeIfAbsentGqlvDomainObject(
-            final SchemaStrategy schemaStrategy,
-            final ObjectSpecification objectSpec,
-            final Context context) {
-        return schemaStrategy.domainObjectBySpec(context).computeIfAbsent(objectSpec, spec -> new GqlvDomainObject(schemaStrategy, spec, context));
-    }
-
-
-    public static GqlvDomainService of(
-            final SchemaStrategy schemaStrategy,
-            final ObjectSpecification objectSpecification,
-            final Object servicePojo,
-            final Context context) {
-        return schemaStrategy.domainServiceBySpec(context).computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(schemaStrategy, spec, servicePojo, context));
-    }
-
 }

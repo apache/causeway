@@ -1,7 +1,5 @@
 package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
-import lombok.val;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,8 +14,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMetaSaveAs;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+
+import lombok.val;
 
 public class GvqlActionUtils {
 
