@@ -25,6 +25,7 @@ import graphql.schema.GraphQLArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -38,12 +39,13 @@ public class GqlvScenario
     private final GqlvScenarioStep scenarioStep;
 
     public GqlvScenario(
+            final SchemaStrategy schemaStrategy,
             final Context context) {
         super("Scenario", context);
 
         addChildFieldFor(this.scenarioName = new GqlvScenarioName(context));
 
-        this.scenarioStep = new GqlvScenarioStep(context);
+        this.scenarioStep = new GqlvScenarioStep(schemaStrategy, context);
         addChildField(scenarioStep.newField("Given", "Given the system under test has this initial state"));
         addChildField(scenarioStep.newField("When", "When the system is changed in some particular way"));
         addChildField(scenarioStep.newField("Then", "Then the system has this resultant state"));

@@ -30,8 +30,8 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvAction;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMember;
 
 import lombok.Getter;
 import lombok.val;
@@ -41,33 +41,30 @@ import lombok.val;
  */
 public class GqlvDomainService
         extends GqlvAbstractCustom
-        implements GqlvMember.Holder {
+        implements GqlvMemberHolder {
 
+    @Getter private final SchemaStrategy schemaStrategy;
     @Getter private final ObjectSpecification objectSpecification;
     @Getter private final Object servicePojo;
-    @Getter private final SchemaType schemaType;
 
-    private final List<GqlvAction> actions = new ArrayList<>();
-
-
-    public static GqlvDomainService of(
-            final SchemaType schemaType,
-            final ObjectSpecification objectSpecification,
-            final Object servicePojo,
-            final Context context) {
-        return context.simpleDomainServiceBySpec.computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(schemaType, spec, servicePojo, context));
+    @Override
+    public SchemaType getSchemaType() {
+        return schemaStrategy.getSchemaType();
     }
 
+    private final List<GqlvAbstractCustom> actions = new ArrayList<>();
+
+
     public GqlvDomainService(
-            final SchemaType schemaType,
+            final SchemaStrategy schemaStrategy,
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
-        super(TypeNames.objectTypeNameFor(objectSpecification, schemaType), context);
+        super(TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType()), context);
+        this.schemaStrategy = schemaStrategy;
 
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
-        this.schemaType = schemaType;
 
         if(isBuilt()) {
             return;

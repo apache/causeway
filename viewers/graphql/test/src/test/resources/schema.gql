@@ -71,7 +71,7 @@ type Mutation {
   university_dept_Staff__createStaffMember(department: rich__university_dept_Department__gqlv_input!, name: String!): rich__university_dept_StaffMember
 }
 
-type RichSchema {
+type RICHSchema {
   Scenario(name: String): Scenario
   causeway_applib_DomainObjectList(object: rich__causeway_applib_DomainObjectList__gqlv_input): rich__causeway_applib_DomainObjectList
   causeway_applib_FacetGroupNode(object: rich__causeway_applib_FacetGroupNode__gqlv_input): rich__causeway_applib_FacetGroupNode
@@ -120,6 +120,56 @@ type RichSchema {
   university_dept_Person(object: rich__university_dept_Person__gqlv_input): rich__university_dept_Person
   university_dept_Staff: rich__university_dept_Staff
   university_dept_StaffMember(object: rich__university_dept_StaffMember__gqlv_input): rich__university_dept_StaffMember
+}
+
+type SIMPLESchema {
+  causeway_applib_DomainObjectList(object: simple__causeway_applib_DomainObjectList__gqlv_input): simple__causeway_applib_DomainObjectList
+  causeway_applib_FacetGroupNode(object: simple__causeway_applib_FacetGroupNode__gqlv_input): simple__causeway_applib_FacetGroupNode
+  causeway_applib_ParameterNode(object: simple__causeway_applib_ParameterNode__gqlv_input): simple__causeway_applib_ParameterNode
+  causeway_applib_PropertyNode(object: simple__causeway_applib_PropertyNode__gqlv_input): simple__causeway_applib_PropertyNode
+  causeway_applib_RoleMemento(object: simple__causeway_applib_RoleMemento__gqlv_input): simple__causeway_applib_RoleMemento
+  causeway_applib_TypeNode(object: simple__causeway_applib_TypeNode__gqlv_input): simple__causeway_applib_TypeNode
+  causeway_applib_UserMemento(object: simple__causeway_applib_UserMemento__gqlv_input): simple__causeway_applib_UserMemento
+  causeway_applib_UserMenu: simple__causeway_applib_UserMenu
+  causeway_applib_node_ActionNode(object: simple__causeway_applib_node_ActionNode__gqlv_input): simple__causeway_applib_node_ActionNode
+  causeway_applib_node_CollectionNode(object: simple__causeway_applib_node_CollectionNode__gqlv_input): simple__causeway_applib_node_CollectionNode
+  causeway_applib_node_FacetAttrNode(object: simple__causeway_applib_node_FacetAttrNode__gqlv_input): simple__causeway_applib_node_FacetAttrNode
+  causeway_applib_node_FacetNode(object: simple__causeway_applib_node_FacetNode__gqlv_input): simple__causeway_applib_node_FacetNode
+  causeway_conf_ConfigurationMenu: simple__causeway_conf_ConfigurationMenu
+  causeway_conf_ConfigurationProperty(object: simple__causeway_conf_ConfigurationProperty__gqlv_input): simple__causeway_conf_ConfigurationProperty
+  causeway_conf_ConfigurationViewmodel(object: simple__causeway_conf_ConfigurationViewmodel__gqlv_input): simple__causeway_conf_ConfigurationViewmodel
+  causeway_feat_ApplicationFeatureViewModel(object: simple__causeway_feat_ApplicationFeatureViewModel__gqlv_input): simple__causeway_feat_ApplicationFeatureViewModel
+  causeway_feat_ApplicationNamespace(object: simple__causeway_feat_ApplicationNamespace__gqlv_input): simple__causeway_feat_ApplicationNamespace
+  causeway_feat_ApplicationType(object: simple__causeway_feat_ApplicationType__gqlv_input): simple__causeway_feat_ApplicationType
+  causeway_feat_ApplicationTypeAction(object: simple__causeway_feat_ApplicationTypeAction__gqlv_input): simple__causeway_feat_ApplicationTypeAction
+  causeway_feat_ApplicationTypeCollection(object: simple__causeway_feat_ApplicationTypeCollection__gqlv_input): simple__causeway_feat_ApplicationTypeCollection
+  causeway_feat_ApplicationTypeMember(object: simple__causeway_feat_ApplicationTypeMember__gqlv_input): simple__causeway_feat_ApplicationTypeMember
+  causeway_feat_ApplicationTypeProperty(object: simple__causeway_feat_ApplicationTypeProperty__gqlv_input): simple__causeway_feat_ApplicationTypeProperty
+  causeway_schema_metamodel_v2_DomainClassDto(object: simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): simple__causeway_schema_metamodel_v2_DomainClassDto
+  causeway_security_LoginRedirect(object: simple__causeway_security_LoginRedirect__gqlv_input): simple__causeway_security_LoginRedirect
+  causeway_security_LogoutMenu: simple__causeway_security_LogoutMenu
+  causeway_testing_fixtures_FixtureResult(object: simple__causeway_testing_fixtures_FixtureResult__gqlv_input): simple__causeway_testing_fixtures_FixtureResult
+  java_lang_Runnable(object: simple__java_lang_Runnable__gqlv_input): simple__java_lang_Runnable
+  java_util_Map(object: simple__java_util_Map__gqlv_input): simple__java_util_Map
+  java_util_SortedMap(object: simple__java_util_SortedMap__gqlv_input): simple__java_util_SortedMap
+  java_util_concurrent_Callable(object: simple__java_util_concurrent_Callable__gqlv_input): simple__java_util_concurrent_Callable
+  java_util_function_BiFunction(object: simple__java_util_function_BiFunction__gqlv_input): simple__java_util_function_BiFunction
+  java_util_function_Consumer(object: simple__java_util_function_Consumer__gqlv_input): simple__java_util_function_Consumer
+  java_util_function_Function(object: simple__java_util_function_Function__gqlv_input): simple__java_util_function_Function
+  java_util_stream_Stream(object: simple__java_util_stream_Stream__gqlv_input): simple__java_util_stream_Stream
+  org_apache_causeway_core_metamodel_inspect_model_MMNode(object: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MMNode
+  org_apache_causeway_core_metamodel_inspect_model_MemberNode(object: simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
+  university_admin_AdminMenu: simple__university_admin_AdminMenu
+  university_calc_Calculator: simple__university_calc_Calculator
+  university_dept_Department(object: simple__university_dept_Department__gqlv_input): simple__university_dept_Department
+  university_dept_Departments: simple__university_dept_Departments
+  university_dept_DeptHead(object: simple__university_dept_DeptHead__gqlv_input): simple__university_dept_DeptHead
+  university_dept_DeptHeads: simple__university_dept_DeptHeads
+  university_dept_People: simple__university_dept_People
+  university_dept_Person(object: simple__university_dept_Person__gqlv_input): simple__university_dept_Person
+  university_dept_Staff: simple__university_dept_Staff
+  university_dept_StaffMember(object: simple__university_dept_StaffMember__gqlv_input): simple__university_dept_StaffMember
 }
 
 type Scenario {
@@ -183,59 +233,8 @@ type ScenarioStep {
 }
 
 type SimpleAndRich {
-  rich: RichSchema
-  simple: SimpleSchema
-}
-
-type SimpleSchema {
-  Scenario(name: String): Scenario
-  causeway_applib_DomainObjectList(object: rich__causeway_applib_DomainObjectList__gqlv_input): rich__causeway_applib_DomainObjectList
-  causeway_applib_FacetGroupNode(object: rich__causeway_applib_FacetGroupNode__gqlv_input): rich__causeway_applib_FacetGroupNode
-  causeway_applib_ParameterNode(object: rich__causeway_applib_ParameterNode__gqlv_input): rich__causeway_applib_ParameterNode
-  causeway_applib_PropertyNode(object: rich__causeway_applib_PropertyNode__gqlv_input): rich__causeway_applib_PropertyNode
-  causeway_applib_RoleMemento(object: rich__causeway_applib_RoleMemento__gqlv_input): rich__causeway_applib_RoleMemento
-  causeway_applib_TypeNode(object: rich__causeway_applib_TypeNode__gqlv_input): rich__causeway_applib_TypeNode
-  causeway_applib_UserMemento(object: rich__causeway_applib_UserMemento__gqlv_input): rich__causeway_applib_UserMemento
-  causeway_applib_UserMenu: rich__causeway_applib_UserMenu
-  causeway_applib_node_ActionNode(object: rich__causeway_applib_node_ActionNode__gqlv_input): rich__causeway_applib_node_ActionNode
-  causeway_applib_node_CollectionNode(object: rich__causeway_applib_node_CollectionNode__gqlv_input): rich__causeway_applib_node_CollectionNode
-  causeway_applib_node_FacetAttrNode(object: rich__causeway_applib_node_FacetAttrNode__gqlv_input): rich__causeway_applib_node_FacetAttrNode
-  causeway_applib_node_FacetNode(object: rich__causeway_applib_node_FacetNode__gqlv_input): rich__causeway_applib_node_FacetNode
-  causeway_conf_ConfigurationMenu: rich__causeway_conf_ConfigurationMenu
-  causeway_conf_ConfigurationProperty(object: rich__causeway_conf_ConfigurationProperty__gqlv_input): rich__causeway_conf_ConfigurationProperty
-  causeway_conf_ConfigurationViewmodel(object: rich__causeway_conf_ConfigurationViewmodel__gqlv_input): rich__causeway_conf_ConfigurationViewmodel
-  causeway_feat_ApplicationFeatureViewModel(object: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): rich__causeway_feat_ApplicationFeatureViewModel
-  causeway_feat_ApplicationNamespace(object: rich__causeway_feat_ApplicationNamespace__gqlv_input): rich__causeway_feat_ApplicationNamespace
-  causeway_feat_ApplicationType(object: rich__causeway_feat_ApplicationType__gqlv_input): rich__causeway_feat_ApplicationType
-  causeway_feat_ApplicationTypeAction(object: rich__causeway_feat_ApplicationTypeAction__gqlv_input): rich__causeway_feat_ApplicationTypeAction
-  causeway_feat_ApplicationTypeCollection(object: rich__causeway_feat_ApplicationTypeCollection__gqlv_input): rich__causeway_feat_ApplicationTypeCollection
-  causeway_feat_ApplicationTypeMember(object: rich__causeway_feat_ApplicationTypeMember__gqlv_input): rich__causeway_feat_ApplicationTypeMember
-  causeway_feat_ApplicationTypeProperty(object: rich__causeway_feat_ApplicationTypeProperty__gqlv_input): rich__causeway_feat_ApplicationTypeProperty
-  causeway_schema_metamodel_v2_DomainClassDto(object: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_security_LoginRedirect(object: rich__causeway_security_LoginRedirect__gqlv_input): rich__causeway_security_LoginRedirect
-  causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
-  causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
-  java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
-  java_util_Map(object: rich__java_util_Map__gqlv_input): rich__java_util_Map
-  java_util_SortedMap(object: rich__java_util_SortedMap__gqlv_input): rich__java_util_SortedMap
-  java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
-  java_util_function_BiFunction(object: rich__java_util_function_BiFunction__gqlv_input): rich__java_util_function_BiFunction
-  java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
-  java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
-  java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
-  org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MemberNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
-  org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
-  university_admin_AdminMenu: rich__university_admin_AdminMenu
-  university_calc_Calculator: rich__university_calc_Calculator
-  university_dept_Department(object: rich__university_dept_Department__gqlv_input): rich__university_dept_Department
-  university_dept_Departments: rich__university_dept_Departments
-  university_dept_DeptHead(object: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_DeptHead
-  university_dept_DeptHeads: rich__university_dept_DeptHeads
-  university_dept_People: rich__university_dept_People
-  university_dept_Person(object: rich__university_dept_Person__gqlv_input): rich__university_dept_Person
-  university_dept_Staff: rich__university_dept_Staff
-  university_dept_StaffMember(object: rich__university_dept_StaffMember__gqlv_input): rich__university_dept_StaffMember
+  rich: RICHSchema
+  simple: SIMPLESchema
 }
 
 type rich__causeway_applib_DomainObjectList {
@@ -4082,6 +4081,3850 @@ type rich__university_dept_Staff__findStaffMemberByName__name__gqlv_action_param
   validity: String
 }
 
+type simple__causeway_applib_DomainObjectList {
+  "Object metadata"
+  _meta: simple__causeway_applib_DomainObjectList__gqlv_meta
+  "Action Arguments"
+  actionArguments: simple__causeway_applib_DomainObjectList__actionArguments__gqlv_property
+  "Action Id"
+  actionId: simple__causeway_applib_DomainObjectList__actionId__gqlv_property
+  "Action Owning Fqcn"
+  actionOwningFqcn: simple__causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property
+  "Element Type Fqcn"
+  elementTypeFqcn: simple__causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property
+  "Objects"
+  objects: simple__causeway_applib_DomainObjectList__objects__gqlv_collection
+  "Title"
+  title: simple__causeway_applib_DomainObjectList__title__gqlv_property
+}
+
+type simple__causeway_applib_DomainObjectList__actionArguments__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(actionArguments: String): rich__causeway_applib_DomainObjectList
+  validate(actionArguments: String): String
+}
+
+type simple__causeway_applib_DomainObjectList__actionId__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(actionId: String): rich__causeway_applib_DomainObjectList
+  validate(actionId: String): String
+}
+
+type simple__causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(actionOwningFqcn: String): rich__causeway_applib_DomainObjectList
+  validate(actionOwningFqcn: String): String
+}
+
+type simple__causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(elementTypeFqcn: String!): rich__causeway_applib_DomainObjectList
+  validate(elementTypeFqcn: String): String
+}
+
+type simple__causeway_applib_DomainObjectList__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_DomainObjectList__objects__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_DomainObjectList__title__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(title: String!): rich__causeway_applib_DomainObjectList
+  validate(title: String): String
+}
+
+type simple__causeway_applib_FacetGroupNode {
+  "Object metadata"
+  _meta: simple__causeway_applib_FacetGroupNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__causeway_applib_FacetGroupNode__childNodes__gqlv_collection
+  "Facets"
+  facets: simple__causeway_applib_FacetGroupNode__facets__gqlv_property
+  "Parent Node"
+  parentNode: simple__causeway_applib_FacetGroupNode__parentNode__gqlv_property
+}
+
+type simple__causeway_applib_FacetGroupNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_FacetGroupNode__facets__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(facets: String!): rich__causeway_applib_FacetGroupNode
+  validate(facets: String): String
+}
+
+type simple__causeway_applib_FacetGroupNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_FacetGroupNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_FacetGroupNode
+  validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
+}
+
+type simple__causeway_applib_ParameterNode {
+  "Object metadata"
+  _meta: simple__causeway_applib_ParameterNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__causeway_applib_ParameterNode__childNodes__gqlv_collection
+  "Parameter"
+  parameter: simple__causeway_applib_ParameterNode__parameter__gqlv_property
+  "Parent Node"
+  parentNode: simple__causeway_applib_ParameterNode__parentNode__gqlv_property
+}
+
+type simple__causeway_applib_ParameterNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_ParameterNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_ParameterNode__parameter__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(parameter: String!): rich__causeway_applib_ParameterNode
+  validate(parameter: String): String
+}
+
+type simple__causeway_applib_ParameterNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  get: simple__causeway_applib_node_ActionNode!
+  hidden: Boolean
+  set(parentNode: rich__causeway_applib_node_ActionNode__gqlv_input!): rich__causeway_applib_ParameterNode
+  validate(parentNode: rich__causeway_applib_node_ActionNode__gqlv_input): String
+}
+
+type simple__causeway_applib_PropertyNode {
+  "Object metadata"
+  _meta: simple__causeway_applib_PropertyNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__causeway_applib_PropertyNode__childNodes__gqlv_collection
+  "Mixed In"
+  mixedIn: simple__causeway_applib_PropertyNode__mixedIn__gqlv_property
+  "Parent Node"
+  parentNode: simple__causeway_applib_PropertyNode__parentNode__gqlv_property
+  "Property"
+  property: simple__causeway_applib_PropertyNode__property__gqlv_property
+}
+
+type simple__causeway_applib_PropertyNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_PropertyNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_PropertyNode__mixedIn__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(mixedIn: Boolean!): rich__causeway_applib_PropertyNode
+  validate(mixedIn: Boolean): String
+}
+
+type simple__causeway_applib_PropertyNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  get: simple__causeway_applib_TypeNode!
+  hidden: Boolean
+  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_PropertyNode
+  validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
+}
+
+type simple__causeway_applib_PropertyNode__property__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(property: String!): rich__causeway_applib_PropertyNode
+  validate(property: String): String
+}
+
+type simple__causeway_applib_RoleMemento {
+  "Object metadata"
+  _meta: simple__causeway_applib_RoleMemento__gqlv_meta
+  "Description"
+  description: simple__causeway_applib_RoleMemento__description__gqlv_property
+  "Name"
+  name: simple__causeway_applib_RoleMemento__name__gqlv_property
+}
+
+type simple__causeway_applib_RoleMemento__description__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(description: String!): rich__causeway_applib_RoleMemento
+  validate(description: String): String
+}
+
+type simple__causeway_applib_RoleMemento__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_RoleMemento__name__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(name: String!): rich__causeway_applib_RoleMemento
+  validate(name: String): String
+}
+
+type simple__causeway_applib_TypeNode {
+  "Object metadata"
+  _meta: simple__causeway_applib_TypeNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__causeway_applib_TypeNode__childNodes__gqlv_collection
+  "Domain Class Dto"
+  domainClassDto: simple__causeway_applib_TypeNode__domainClassDto__gqlv_property
+  "Parent Node"
+  parentNode: simple__causeway_applib_TypeNode__parentNode__gqlv_property
+}
+
+type simple__causeway_applib_TypeNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_TypeNode__domainClassDto__gqlv_property {
+  datatype: String
+  disabled: String
+  get: simple__causeway_schema_metamodel_v2_DomainClassDto!
+  hidden: Boolean
+  set(domainClassDto: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input!): rich__causeway_applib_TypeNode
+  validate(domainClassDto: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): String
+}
+
+type simple__causeway_applib_TypeNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_TypeNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_TypeNode
+  validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
+}
+
+type simple__causeway_applib_UserMemento {
+  "Object metadata"
+  _meta: simple__causeway_applib_UserMemento__gqlv_meta
+  "Authentication Code"
+  authenticationCode: simple__causeway_applib_UserMemento__authenticationCode__gqlv_property
+  "Authentication Source"
+  authenticationSource: simple__causeway_applib_UserMemento__authenticationSource__gqlv_property
+  "Avatar Url"
+  avatarUrl: simple__causeway_applib_UserMemento__avatarUrl__gqlv_property
+  "Impersonating"
+  impersonating: simple__causeway_applib_UserMemento__impersonating__gqlv_property
+  "Language Locale"
+  languageLocale: simple__causeway_applib_UserMemento__languageLocale__gqlv_property
+  "Multi Tenancy Token"
+  multiTenancyToken: simple__causeway_applib_UserMemento__multiTenancyToken__gqlv_property
+  "Name"
+  name: simple__causeway_applib_UserMemento__name__gqlv_property
+  "Number Format Locale"
+  numberFormatLocale: simple__causeway_applib_UserMemento__numberFormatLocale__gqlv_property
+  "Real Name"
+  realName: simple__causeway_applib_UserMemento__realName__gqlv_property
+  "Roles"
+  roles: simple__causeway_applib_UserMemento__roles__gqlv_collection
+  "Time Format Locale"
+  timeFormatLocale: simple__causeway_applib_UserMemento__timeFormatLocale__gqlv_property
+}
+
+type simple__causeway_applib_UserMemento__authenticationCode__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(authenticationCode: String!): rich__causeway_applib_UserMemento
+  validate(authenticationCode: String): String
+}
+
+type simple__causeway_applib_UserMemento__authenticationSource__gqlv_property {
+  choices(authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum): [rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum]
+  datatype: String
+  disabled: String
+  get: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!
+  hidden: Boolean
+  set(authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!): rich__causeway_applib_UserMemento
+  validate(authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum): String
+}
+
+type simple__causeway_applib_UserMemento__avatarUrl__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(avatarUrl: String): rich__causeway_applib_UserMemento
+  validate(avatarUrl: String): String
+}
+
+type simple__causeway_applib_UserMemento__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_UserMemento__impersonating__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(impersonating: Boolean!): rich__causeway_applib_UserMemento
+  validate(impersonating: Boolean): String
+}
+
+type simple__causeway_applib_UserMemento__languageLocale__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(languageLocale: String): rich__causeway_applib_UserMemento
+  validate(languageLocale: String): String
+}
+
+type simple__causeway_applib_UserMemento__multiTenancyToken__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(multiTenancyToken: String): rich__causeway_applib_UserMemento
+  validate(multiTenancyToken: String): String
+}
+
+type simple__causeway_applib_UserMemento__name__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(name: String!): rich__causeway_applib_UserMemento
+  validate(name: String): String
+}
+
+type simple__causeway_applib_UserMemento__numberFormatLocale__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(numberFormatLocale: String): rich__causeway_applib_UserMemento
+  validate(numberFormatLocale: String): String
+}
+
+type simple__causeway_applib_UserMemento__realName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(realName: String): rich__causeway_applib_UserMemento
+  validate(realName: String): String
+}
+
+type simple__causeway_applib_UserMemento__roles__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [simple__causeway_applib_RoleMemento]
+  hidden: Boolean
+}
+
+type simple__causeway_applib_UserMemento__timeFormatLocale__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(timeFormatLocale: String): rich__causeway_applib_UserMemento
+  validate(timeFormatLocale: String): String
+}
+
+type simple__causeway_applib_UserMenu {
+  "Returns your user account details"
+  me: simple__causeway_applib_UserMenu__me__gqlv_action
+}
+
+"Returns your user account details"
+type simple__causeway_applib_UserMenu__me__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__causeway_applib_UserMenu__me__gqlv_action_invoke
+  validate: String
+}
+
+type simple__causeway_applib_UserMenu__me__gqlv_action_invoke {
+  results: simple__causeway_applib_UserMemento
+}
+
+type simple__causeway_applib_node_ActionNode {
+  "Object metadata"
+  _meta: simple__causeway_applib_node_ActionNode__gqlv_meta
+  "Action"
+  action: simple__causeway_applib_node_ActionNode__action__gqlv_property
+  "Child Nodes"
+  childNodes: simple__causeway_applib_node_ActionNode__childNodes__gqlv_collection
+  "Mixed In"
+  mixedIn: simple__causeway_applib_node_ActionNode__mixedIn__gqlv_property
+  "Parent Node"
+  parentNode: simple__causeway_applib_node_ActionNode__parentNode__gqlv_property
+}
+
+type simple__causeway_applib_node_ActionNode__action__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(action: String!): rich__causeway_applib_node_ActionNode
+  validate(action: String): String
+}
+
+type simple__causeway_applib_node_ActionNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_node_ActionNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_node_ActionNode__mixedIn__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(mixedIn: Boolean!): rich__causeway_applib_node_ActionNode
+  validate(mixedIn: Boolean): String
+}
+
+type simple__causeway_applib_node_ActionNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  get: simple__causeway_applib_TypeNode!
+  hidden: Boolean
+  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_node_ActionNode
+  validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
+}
+
+type simple__causeway_applib_node_CollectionNode {
+  "Object metadata"
+  _meta: simple__causeway_applib_node_CollectionNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__causeway_applib_node_CollectionNode__childNodes__gqlv_collection
+  "Collection"
+  collection: simple__causeway_applib_node_CollectionNode__collection__gqlv_property
+  "Mixed In"
+  mixedIn: simple__causeway_applib_node_CollectionNode__mixedIn__gqlv_property
+  "Parent Node"
+  parentNode: simple__causeway_applib_node_CollectionNode__parentNode__gqlv_property
+}
+
+type simple__causeway_applib_node_CollectionNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_node_CollectionNode__collection__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(collection: String!): rich__causeway_applib_node_CollectionNode
+  validate(collection: String): String
+}
+
+type simple__causeway_applib_node_CollectionNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_node_CollectionNode__mixedIn__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(mixedIn: Boolean!): rich__causeway_applib_node_CollectionNode
+  validate(mixedIn: Boolean): String
+}
+
+type simple__causeway_applib_node_CollectionNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  get: simple__causeway_applib_TypeNode!
+  hidden: Boolean
+  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_node_CollectionNode
+  validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
+}
+
+type simple__causeway_applib_node_FacetAttrNode {
+  "Object metadata"
+  _meta: simple__causeway_applib_node_FacetAttrNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection
+  "Facet Attr"
+  facetAttr: simple__causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property
+  "Parent Node"
+  parentNode: simple__causeway_applib_node_FacetAttrNode__parentNode__gqlv_property
+}
+
+type simple__causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(facetAttr: String!): rich__causeway_applib_node_FacetAttrNode
+  validate(facetAttr: String): String
+}
+
+type simple__causeway_applib_node_FacetAttrNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_node_FacetAttrNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  get: simple__causeway_applib_node_FacetNode!
+  hidden: Boolean
+  set(parentNode: rich__causeway_applib_node_FacetNode__gqlv_input!): rich__causeway_applib_node_FacetAttrNode
+  validate(parentNode: rich__causeway_applib_node_FacetNode__gqlv_input): String
+}
+
+type simple__causeway_applib_node_FacetNode {
+  "Object metadata"
+  _meta: simple__causeway_applib_node_FacetNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__causeway_applib_node_FacetNode__childNodes__gqlv_collection
+  "Facet"
+  facet: simple__causeway_applib_node_FacetNode__facet__gqlv_property
+  "Parent Node"
+  parentNode: simple__causeway_applib_node_FacetNode__parentNode__gqlv_property
+  "Shadowed"
+  shadowed: simple__causeway_applib_node_FacetNode__shadowed__gqlv_property
+}
+
+type simple__causeway_applib_node_FacetNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_applib_node_FacetNode__facet__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(facet: String!): rich__causeway_applib_node_FacetNode
+  validate(facet: String): String
+}
+
+type simple__causeway_applib_node_FacetNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_applib_node_FacetNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_node_FacetNode
+  validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
+}
+
+type simple__causeway_applib_node_FacetNode__shadowed__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(shadowed: Boolean!): rich__causeway_applib_node_FacetNode
+  validate(shadowed: Boolean): String
+}
+
+type simple__causeway_conf_ConfigurationMenu {
+  "Configuration"
+  configuration: simple__causeway_conf_ConfigurationMenu__configuration__gqlv_action
+}
+
+type simple__causeway_conf_ConfigurationMenu__configuration__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__causeway_conf_ConfigurationMenu__configuration__gqlv_action_invoke
+  validate: String
+}
+
+type simple__causeway_conf_ConfigurationMenu__configuration__gqlv_action_invoke {
+  results: simple__causeway_conf_ConfigurationViewmodel
+}
+
+type simple__causeway_conf_ConfigurationProperty {
+  "Object metadata"
+  _meta: simple__causeway_conf_ConfigurationProperty__gqlv_meta
+  "Key"
+  key: simple__causeway_conf_ConfigurationProperty__key__gqlv_property
+  "Value"
+  value: simple__causeway_conf_ConfigurationProperty__value__gqlv_property
+}
+
+type simple__causeway_conf_ConfigurationProperty__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_conf_ConfigurationProperty__key__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(key: String!): rich__causeway_conf_ConfigurationProperty
+  validate(key: String): String
+}
+
+type simple__causeway_conf_ConfigurationProperty__value__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(value: String!): rich__causeway_conf_ConfigurationProperty
+  validate(value: String): String
+}
+
+type simple__causeway_conf_ConfigurationViewmodel {
+  "Object metadata"
+  _meta: simple__causeway_conf_ConfigurationViewmodel__gqlv_meta
+  "Environment"
+  environment: simple__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection
+  "Primary"
+  primary: simple__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection
+  "Secondary"
+  secondary: simple__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection
+}
+
+type simple__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [simple__causeway_conf_ConfigurationProperty]
+  hidden: Boolean
+}
+
+type simple__causeway_conf_ConfigurationViewmodel__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [simple__causeway_conf_ConfigurationProperty]
+  hidden: Boolean
+}
+
+type simple__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [simple__causeway_conf_ConfigurationProperty]
+  hidden: Boolean
+}
+
+type simple__causeway_feat_ApplicationFeatureViewModel {
+  "Object metadata"
+  _meta: simple__causeway_feat_ApplicationFeatureViewModel__gqlv_meta
+  "Member Name"
+  memberName: simple__causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property
+  "Namespace Name"
+  namespaceName: simple__causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property
+  "Parent"
+  parent: simple__causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property
+  "Type Simple Name"
+  typeSimpleName: simple__causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property
+}
+
+type simple__causeway_feat_ApplicationFeatureViewModel__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(memberName: String!): rich__causeway_feat_ApplicationFeatureViewModel
+  validate(memberName: String): String
+}
+
+type simple__causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(namespaceName: String!): rich__causeway_feat_ApplicationFeatureViewModel
+  validate(namespaceName: String): String
+}
+
+type simple__causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationFeatureViewModel
+  validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
+}
+
+type simple__causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationFeatureViewModel
+  validate(typeSimpleName: String): String
+}
+
+type simple__causeway_feat_ApplicationNamespace {
+  "Object metadata"
+  _meta: simple__causeway_feat_ApplicationNamespace__gqlv_meta
+  "Contents"
+  contents: simple__causeway_feat_ApplicationNamespace__contents__gqlv_collection
+  "Member Name"
+  memberName: simple__causeway_feat_ApplicationNamespace__memberName__gqlv_property
+  "Namespace Name"
+  namespaceName: simple__causeway_feat_ApplicationNamespace__namespaceName__gqlv_property
+  "Parent"
+  parent: simple__causeway_feat_ApplicationNamespace__parent__gqlv_property
+  "Type Simple Name"
+  typeSimpleName: simple__causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property
+}
+
+type simple__causeway_feat_ApplicationNamespace__contents__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__causeway_feat_ApplicationNamespace__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_feat_ApplicationNamespace__memberName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(memberName: String!): rich__causeway_feat_ApplicationNamespace
+  validate(memberName: String): String
+}
+
+type simple__causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(namespaceName: String!): rich__causeway_feat_ApplicationNamespace
+  validate(namespaceName: String): String
+}
+
+type simple__causeway_feat_ApplicationNamespace__parent__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationNamespace
+  validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
+}
+
+type simple__causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationNamespace
+  validate(typeSimpleName: String): String
+}
+
+type simple__causeway_feat_ApplicationType {
+  "Object metadata"
+  _meta: simple__causeway_feat_ApplicationType__gqlv_meta
+  "Actions"
+  actions: simple__causeway_feat_ApplicationType__actions__gqlv_collection
+  "Collections"
+  collections: simple__causeway_feat_ApplicationType__collections__gqlv_collection
+  "Member Name"
+  memberName: simple__causeway_feat_ApplicationType__memberName__gqlv_property
+  "Namespace Name"
+  namespaceName: simple__causeway_feat_ApplicationType__namespaceName__gqlv_property
+  "Parent"
+  parent: simple__causeway_feat_ApplicationType__parent__gqlv_property
+  "Properties"
+  properties: simple__causeway_feat_ApplicationType__properties__gqlv_collection
+  "Type Simple Name"
+  typeSimpleName: simple__causeway_feat_ApplicationType__typeSimpleName__gqlv_property
+}
+
+type simple__causeway_feat_ApplicationTypeAction {
+  "Object metadata"
+  _meta: simple__causeway_feat_ApplicationTypeAction__gqlv_meta
+  "Action Semantics"
+  actionSemantics: simple__causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property
+  "Member Name"
+  memberName: simple__causeway_feat_ApplicationTypeAction__memberName__gqlv_property
+  "Namespace Name"
+  namespaceName: simple__causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property
+  "Parent"
+  parent: simple__causeway_feat_ApplicationTypeAction__parent__gqlv_property
+  "Return Type"
+  returnType: simple__causeway_feat_ApplicationTypeAction__returnType__gqlv_property
+  "Type Simple Name"
+  typeSimpleName: simple__causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property
+}
+
+type simple__causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
+  choices(actionSemantics: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum): [rich__causeway_applib_annotation_SemanticsOf__gqlv_enum]
+  datatype: String
+  disabled: String
+  get: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum!
+  hidden: Boolean
+  set(actionSemantics: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum!): rich__causeway_feat_ApplicationTypeAction
+  validate(actionSemantics: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum): String
+}
+
+type simple__causeway_feat_ApplicationTypeAction__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_feat_ApplicationTypeAction__memberName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(memberName: String!): rich__causeway_feat_ApplicationTypeAction
+  validate(memberName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeAction
+  validate(namespaceName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeAction__parent__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeAction
+  validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
+}
+
+type simple__causeway_feat_ApplicationTypeAction__returnType__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(returnType: String!): rich__causeway_feat_ApplicationTypeAction
+  validate(returnType: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeAction
+  validate(typeSimpleName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeCollection {
+  "Object metadata"
+  _meta: simple__causeway_feat_ApplicationTypeCollection__gqlv_meta
+  "Derived"
+  derived: simple__causeway_feat_ApplicationTypeCollection__derived__gqlv_property
+  "Element Type"
+  elementType: simple__causeway_feat_ApplicationTypeCollection__elementType__gqlv_property
+  "Member Name"
+  memberName: simple__causeway_feat_ApplicationTypeCollection__memberName__gqlv_property
+  "Namespace Name"
+  namespaceName: simple__causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property
+  "Parent"
+  parent: simple__causeway_feat_ApplicationTypeCollection__parent__gqlv_property
+  "Type Simple Name"
+  typeSimpleName: simple__causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property
+}
+
+type simple__causeway_feat_ApplicationTypeCollection__derived__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(derived: Boolean!): rich__causeway_feat_ApplicationTypeCollection
+  validate(derived: Boolean): String
+}
+
+type simple__causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(elementType: String!): rich__causeway_feat_ApplicationTypeCollection
+  validate(elementType: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeCollection__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_feat_ApplicationTypeCollection__memberName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(memberName: String!): rich__causeway_feat_ApplicationTypeCollection
+  validate(memberName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeCollection
+  validate(namespaceName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeCollection__parent__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeCollection
+  validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
+}
+
+type simple__causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeCollection
+  validate(typeSimpleName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeMember {
+  "Object metadata"
+  _meta: simple__causeway_feat_ApplicationTypeMember__gqlv_meta
+  "Member Name"
+  memberName: simple__causeway_feat_ApplicationTypeMember__memberName__gqlv_property
+  "Namespace Name"
+  namespaceName: simple__causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property
+  "Parent"
+  parent: simple__causeway_feat_ApplicationTypeMember__parent__gqlv_property
+  "Type Simple Name"
+  typeSimpleName: simple__causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property
+}
+
+type simple__causeway_feat_ApplicationTypeMember__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_feat_ApplicationTypeMember__memberName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(memberName: String!): rich__causeway_feat_ApplicationTypeMember
+  validate(memberName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeMember
+  validate(namespaceName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeMember__parent__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeMember
+  validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
+}
+
+type simple__causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeMember
+  validate(typeSimpleName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeProperty {
+  "Object metadata"
+  _meta: simple__causeway_feat_ApplicationTypeProperty__gqlv_meta
+  "Derived"
+  derived: simple__causeway_feat_ApplicationTypeProperty__derived__gqlv_property
+  "Max Length"
+  maxLength: simple__causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property
+  "Member Name"
+  memberName: simple__causeway_feat_ApplicationTypeProperty__memberName__gqlv_property
+  "Namespace Name"
+  namespaceName: simple__causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property
+  "Parent"
+  parent: simple__causeway_feat_ApplicationTypeProperty__parent__gqlv_property
+  "Return Type"
+  returnType: simple__causeway_feat_ApplicationTypeProperty__returnType__gqlv_property
+  "Type Simple Name"
+  typeSimpleName: simple__causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property
+  "Typical Length"
+  typicalLength: simple__causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(derived: Boolean!): rich__causeway_feat_ApplicationTypeProperty
+  validate(derived: Boolean): String
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Int
+  hidden: Boolean
+  set(maxLength: Int): rich__causeway_feat_ApplicationTypeProperty
+  validate(maxLength: Int): String
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__memberName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(memberName: String!): rich__causeway_feat_ApplicationTypeProperty
+  validate(memberName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeProperty
+  validate(namespaceName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__parent__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeProperty
+  validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__returnType__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(returnType: String!): rich__causeway_feat_ApplicationTypeProperty
+  validate(returnType: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeProperty
+  validate(typeSimpleName: String): String
+}
+
+type simple__causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Int
+  hidden: Boolean
+  set(typicalLength: Int): rich__causeway_feat_ApplicationTypeProperty
+  validate(typicalLength: Int): String
+}
+
+type simple__causeway_feat_ApplicationType__actions__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [simple__causeway_feat_ApplicationTypeAction]
+  hidden: Boolean
+}
+
+type simple__causeway_feat_ApplicationType__collections__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [simple__causeway_feat_ApplicationTypeCollection]
+  hidden: Boolean
+}
+
+type simple__causeway_feat_ApplicationType__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_feat_ApplicationType__memberName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(memberName: String!): rich__causeway_feat_ApplicationType
+  validate(memberName: String): String
+}
+
+type simple__causeway_feat_ApplicationType__namespaceName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(namespaceName: String!): rich__causeway_feat_ApplicationType
+  validate(namespaceName: String): String
+}
+
+type simple__causeway_feat_ApplicationType__parent__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationType
+  validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
+}
+
+type simple__causeway_feat_ApplicationType__properties__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [simple__causeway_feat_ApplicationTypeProperty]
+  hidden: Boolean
+}
+
+type simple__causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationType
+  validate(typeSimpleName: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto {
+  "Object metadata"
+  _meta: simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta
+  "Actions"
+  actions: simple__causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property
+  "Annotations"
+  annotations: simple__causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property
+  "Collections"
+  collections: simple__causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property
+  "Facets"
+  facets: simple__causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property
+  "Id"
+  id: simple__causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property
+  "Major Version"
+  majorVersion: simple__causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property
+  "Minor Version"
+  minorVersion: simple__causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property
+  "Properties"
+  properties: simple__causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property
+  "Service"
+  service: simple__causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(actions: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(actions: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(annotations: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(annotations: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(collections: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(collections: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(facets: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(facets: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(id: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(id: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(majorVersion: String): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(majorVersion: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(minorVersion: String): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(minorVersion: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(properties: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(properties: String): String
+}
+
+type simple__causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(service: Boolean!): rich__causeway_schema_metamodel_v2_DomainClassDto
+  validate(service: Boolean): String
+}
+
+type simple__causeway_schema_metamodel_v2_FacetHolder {
+  "Object metadata"
+  _meta: simple__causeway_schema_metamodel_v2_FacetHolder__gqlv_meta
+}
+
+type simple__causeway_schema_metamodel_v2_FacetHolder__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_security_LoginRedirect {
+  "Object metadata"
+  _meta: simple__causeway_security_LoginRedirect__gqlv_meta
+}
+
+type simple__causeway_security_LoginRedirect__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_security_LogoutMenu {
+  "Logout"
+  logout: simple__causeway_security_LogoutMenu__logout__gqlv_action
+}
+
+type simple__causeway_security_LogoutMenu__logout__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__causeway_security_LogoutMenu__logout__gqlv_action_invoke
+  validate: String
+}
+
+type simple__causeway_security_LogoutMenu__logout__gqlv_action_invoke {
+  results: String
+}
+
+type simple__causeway_testing_fixtures_FixtureResult {
+  "Object metadata"
+  _meta: simple__causeway_testing_fixtures_FixtureResult__gqlv_meta
+  "Result class"
+  className: simple__causeway_testing_fixtures_FixtureResult__className__gqlv_property
+  "Fixture script"
+  fixtureScriptClassName: simple__causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_property
+  "Key"
+  key: simple__causeway_testing_fixtures_FixtureResult__key__gqlv_property
+  "Result"
+  object: simple__causeway_testing_fixtures_FixtureResult__object__gqlv_property
+}
+
+type simple__causeway_testing_fixtures_FixtureResult__className__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(className: String!): rich__causeway_testing_fixtures_FixtureResult
+  validate(className: String): String
+}
+
+type simple__causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(fixtureScriptClassName: String): rich__causeway_testing_fixtures_FixtureResult
+  validate(fixtureScriptClassName: String): String
+}
+
+type simple__causeway_testing_fixtures_FixtureResult__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_testing_fixtures_FixtureResult__key__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(key: String!): rich__causeway_testing_fixtures_FixtureResult
+  validate(key: String): String
+}
+
+type simple__causeway_testing_fixtures_FixtureResult__object__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(object: String!): rich__causeway_testing_fixtures_FixtureResult
+  validate(object: String): String
+}
+
+type simple__java_lang_Runnable {
+  "Object metadata"
+  _meta: simple__java_lang_Runnable__gqlv_meta
+}
+
+type simple__java_lang_Runnable__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__java_util_Map {
+  "Object metadata"
+  _meta: simple__java_util_Map__gqlv_meta
+}
+
+type simple__java_util_Map__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__java_util_SortedMap {
+  "Object metadata"
+  _meta: simple__java_util_SortedMap__gqlv_meta
+}
+
+type simple__java_util_SortedMap__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__java_util_concurrent_Callable {
+  "Object metadata"
+  _meta: simple__java_util_concurrent_Callable__gqlv_meta
+}
+
+type simple__java_util_concurrent_Callable__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__java_util_function_BiFunction {
+  "Object metadata"
+  _meta: simple__java_util_function_BiFunction__gqlv_meta
+}
+
+type simple__java_util_function_BiFunction__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__java_util_function_Consumer {
+  "Object metadata"
+  _meta: simple__java_util_function_Consumer__gqlv_meta
+}
+
+type simple__java_util_function_Consumer__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__java_util_function_Function {
+  "Object metadata"
+  _meta: simple__java_util_function_Function__gqlv_meta
+}
+
+type simple__java_util_function_Function__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__java_util_stream_Stream {
+  "Object metadata"
+  _meta: simple__java_util_stream_Stream__gqlv_meta
+}
+
+type simple__java_util_stream_Stream__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode {
+  "Object metadata"
+  _meta: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_collection
+  "Parent Node"
+  parentNode: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
+  validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode {
+  "Object metadata"
+  _meta: simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta
+  "Child Nodes"
+  childNodes: simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gqlv_collection
+  "Mixed In"
+  mixedIn: simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property
+  "Parent Node"
+  parentNode: simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gqlv_collection {
+  datatype: String
+  disabled: String
+  hidden: Boolean
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Boolean!
+  hidden: Boolean
+  set(mixedIn: Boolean!): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  validate(mixedIn: Boolean): String
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property {
+  datatype: String
+  disabled: String
+  get: simple__causeway_applib_TypeNode!
+  hidden: Boolean
+  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
+}
+
+type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
+  "Object metadata"
+  _meta: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta
+  "Friendly Name"
+  friendlyName: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__gqlv_property
+  "Qualified Name"
+  qualifiedName: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__gqlv_property
+}
+
+type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(friendlyName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
+  validate(friendlyName: String): String
+}
+
+type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__qualifiedName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(qualifiedName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
+  validate(qualifiedName: String): String
+}
+
+type simple__university_admin_AdminMenu {
+  "Action With Disabled Param"
+  actionWithDisabledParam: simple__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action
+  "Action With Hidden Param"
+  actionWithHiddenParam: simple__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action
+  "Admin Action"
+  adminAction: simple__university_admin_AdminMenu__adminAction__gqlv_action
+  "Other Admin Action"
+  otherAdminAction: simple__university_admin_AdminMenu__otherAdminAction__gqlv_action
+}
+
+type simple__university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter {
+  datatype: String
+  disabled(firstParam: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent(firstParam: String!, secondParam: String!, thirdParameter: String!): simple__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params
+  validate(firstParam: String, secondParam: String, thirdParameter: String): String
+}
+
+type simple__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_args {
+  firstParam: String
+  secondParam: String
+  thirdParameter: String
+}
+
+type simple__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_args
+  results: String
+}
+
+type simple__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params {
+  "First Param"
+  firstParam: simple__university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv_action_parameter
+  "Second Param"
+  secondParam: simple__university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter
+  "Third Parameter"
+  thirdParameter: simple__university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter
+}
+
+type simple__university_admin_AdminMenu__actionWithDisabledParam__secondParam__gqlv_action_parameter {
+  datatype: String
+  disabled(firstParam: String, secondParam: String): String
+  hidden(firstParam: String): Boolean
+  validity: String
+}
+
+type simple__university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter {
+  datatype: String
+  disabled(firstParam: String, secondParam: String, thirdParameter: String): String
+  hidden(firstParam: String, secondParam: String): Boolean
+  validity: String
+}
+
+type simple__university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter {
+  datatype: String
+  disabled(firstParam: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent(firstParam: String!, secondParam: String!): simple__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params
+  validate(firstParam: String, secondParam: String): String
+}
+
+type simple__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_args {
+  firstParam: String
+  secondParam: String
+}
+
+type simple__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_args
+  results: String
+}
+
+type simple__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params {
+  "First Param"
+  firstParam: simple__university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter
+  "Second Param"
+  secondParam: simple__university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter
+}
+
+type simple__university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_action_parameter {
+  datatype: String
+  disabled(firstParam: String, secondParam: String): String
+  hidden(firstParam: String): Boolean
+  validity: String
+}
+
+type simple__university_admin_AdminMenu__adminAction__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent: simple__university_admin_AdminMenu__adminAction__gqlv_action_invoke
+  validate: String
+}
+
+type simple__university_admin_AdminMenu__adminAction__gqlv_action_invoke {
+  results: String
+}
+
+type simple__university_admin_AdminMenu__otherAdminAction__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent: simple__university_admin_AdminMenu__otherAdminAction__gqlv_action_invoke
+  validate: String
+}
+
+type simple__university_admin_AdminMenu__otherAdminAction__gqlv_action_invoke {
+  results: String
+}
+
+type simple__university_calc_Calculator {
+  "Add Big Decimals"
+  addBigDecimals: simple__university_calc_Calculator__addBigDecimals__gqlv_action
+  "Add Big Integers"
+  addBigIntegers: simple__university_calc_Calculator__addBigIntegers__gqlv_action
+  "Add Byte Wrappers"
+  addByteWrappers: simple__university_calc_Calculator__addByteWrappers__gqlv_action
+  "Add Bytes"
+  addBytes: simple__university_calc_Calculator__addBytes__gqlv_action
+  "Add Double Wrappers"
+  addDoubleWrappers: simple__university_calc_Calculator__addDoubleWrappers__gqlv_action
+  "Add Doubles"
+  addDoubles: simple__university_calc_Calculator__addDoubles__gqlv_action
+  "Add Float Wrappers"
+  addFloatWrappers: simple__university_calc_Calculator__addFloatWrappers__gqlv_action
+  "Add Floats"
+  addFloats: simple__university_calc_Calculator__addFloats__gqlv_action
+  "Add Integer Wrappers"
+  addIntegerWrappers: simple__university_calc_Calculator__addIntegerWrappers__gqlv_action
+  "Add Integers"
+  addIntegers: simple__university_calc_Calculator__addIntegers__gqlv_action
+  "Add Short Wrappers"
+  addShortWrappers: simple__university_calc_Calculator__addShortWrappers__gqlv_action
+  "Add Shorts"
+  addShorts: simple__university_calc_Calculator__addShorts__gqlv_action
+  "And"
+  and: simple__university_calc_Calculator__and__gqlv_action
+  "Concat"
+  concat: simple__university_calc_Calculator__concat__gqlv_action
+  "Jdk 8 Local Plus Days"
+  jdk8LocalPlusDays: simple__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action
+  "Jdk 8 Local Plus Hours And Minutes"
+  jdk8LocalPlusHoursAndMinutes: simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action
+  "Jdk 8 Offset Plus Days And Hours And Minutes"
+  jdk8OffsetPlusDaysAndHoursAndMinutes: simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action
+  "Jdk 8 Offset Plus Hours And Minutes"
+  jdk8OffsetPlusHoursAndMinutes: simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action
+  "Jdk 8 Zoned Plus Days And Hours And Minutes"
+  jdk8ZonedPlusDaysAndHoursAndMinutes: simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action
+  "Joda Local Plus Days"
+  jodaLocalPlusDays: simple__university_calc_Calculator__jodaLocalPlusDays__gqlv_action
+  "Joda Local Plus Hours And Minutes"
+  jodaLocalPlusHoursAndMinutes: simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action
+  "Joda Plus Days And Hours And Minutes"
+  jodaPlusDaysAndHoursAndMinutes: simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action
+  "Next Month"
+  nextMonth: simple__university_calc_Calculator__nextMonth__gqlv_action
+  "Not"
+  not: simple__university_calc_Calculator__not__gqlv_action
+  "Or"
+  or: simple__university_calc_Calculator__or__gqlv_action
+  "Some Locale"
+  someLocale: simple__university_calc_Calculator__someLocale__gqlv_action
+  "Some Url"
+  someUrl: simple__university_calc_Calculator__someUrl__gqlv_action
+  "Some Uuid"
+  someUuid: simple__university_calc_Calculator__someUuid__gqlv_action
+}
+
+type simple__university_calc_Calculator__addBigDecimals__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: String!, y: String): simple__university_calc_Calculator__addBigDecimals__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addBigDecimals__gqlv_action_params
+  validate(x: String, y: String): String
+}
+
+type simple__university_calc_Calculator__addBigDecimals__gqlv_action_args {
+  x: String
+  y: String
+}
+
+type simple__university_calc_Calculator__addBigDecimals__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addBigDecimals__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__addBigDecimals__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addBigDecimals__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addBigDecimals__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: String, y: String): String
+  hidden(x: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addBigIntegers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: String!, y: String): simple__university_calc_Calculator__addBigIntegers__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addBigIntegers__gqlv_action_params
+  validate(x: String, y: String): String
+}
+
+type simple__university_calc_Calculator__addBigIntegers__gqlv_action_args {
+  x: String
+  y: String
+}
+
+type simple__university_calc_Calculator__addBigIntegers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addBigIntegers__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__addBigIntegers__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addBigIntegers__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addBigIntegers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: String, y: String): String
+  hidden(x: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addByteWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Byte!, y: Byte): simple__university_calc_Calculator__addByteWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addByteWrappers__gqlv_action_params
+  validate(x: Byte, y: Byte): String
+}
+
+type simple__university_calc_Calculator__addByteWrappers__gqlv_action_args {
+  x: Byte
+  y: Byte
+}
+
+type simple__university_calc_Calculator__addByteWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addByteWrappers__gqlv_action_args
+  results: Int
+}
+
+type simple__university_calc_Calculator__addByteWrappers__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addByteWrappers__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addByteWrappers__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addByteWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Byte): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addByteWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Byte, y: Byte): String
+  hidden(x: Byte): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addBytes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Byte!, y: Byte!): simple__university_calc_Calculator__addBytes__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addBytes__gqlv_action_params
+  validate(x: Byte, y: Byte): String
+}
+
+type simple__university_calc_Calculator__addBytes__gqlv_action_args {
+  x: Byte
+  y: Byte
+}
+
+type simple__university_calc_Calculator__addBytes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addBytes__gqlv_action_args
+  results: Byte
+}
+
+type simple__university_calc_Calculator__addBytes__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addBytes__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addBytes__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addBytes__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Byte): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addBytes__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Byte, y: Byte): String
+  hidden(x: Byte): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addDoubleWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float): simple__university_calc_Calculator__addDoubleWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addDoubleWrappers__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type simple__university_calc_Calculator__addDoubleWrappers__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
+type simple__university_calc_Calculator__addDoubleWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addDoubleWrappers__gqlv_action_args
+  results: Float
+}
+
+type simple__university_calc_Calculator__addDoubleWrappers__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addDoubleWrappers__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addDoubleWrappers__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addDoubleWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addDoubleWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addDoubles__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float!): simple__university_calc_Calculator__addDoubles__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addDoubles__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type simple__university_calc_Calculator__addDoubles__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
+type simple__university_calc_Calculator__addDoubles__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addDoubles__gqlv_action_args
+  results: Float
+}
+
+type simple__university_calc_Calculator__addDoubles__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addDoubles__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addDoubles__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addDoubles__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addDoubles__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addFloatWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float): simple__university_calc_Calculator__addFloatWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addFloatWrappers__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type simple__university_calc_Calculator__addFloatWrappers__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
+type simple__university_calc_Calculator__addFloatWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addFloatWrappers__gqlv_action_args
+  results: Float
+}
+
+type simple__university_calc_Calculator__addFloatWrappers__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addFloatWrappers__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addFloatWrappers__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addFloatWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addFloatWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addFloats__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float!): simple__university_calc_Calculator__addFloats__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addFloats__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type simple__university_calc_Calculator__addFloats__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
+type simple__university_calc_Calculator__addFloats__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addFloats__gqlv_action_args
+  results: Float
+}
+
+type simple__university_calc_Calculator__addFloats__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addFloats__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addFloats__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addFloats__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addFloats__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addIntegerWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Int!, y: Int): simple__university_calc_Calculator__addIntegerWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addIntegerWrappers__gqlv_action_params
+  validate(x: Int, y: Int): String
+}
+
+type simple__university_calc_Calculator__addIntegerWrappers__gqlv_action_args {
+  x: Int
+  y: Int
+}
+
+type simple__university_calc_Calculator__addIntegerWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addIntegerWrappers__gqlv_action_args
+  results: Int
+}
+
+type simple__university_calc_Calculator__addIntegerWrappers__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addIntegerWrappers__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addIntegerWrappers__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addIntegerWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Int): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addIntegerWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Int, y: Int): String
+  hidden(x: Int): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addIntegers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Int!, y: Int!): simple__university_calc_Calculator__addIntegers__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addIntegers__gqlv_action_params
+  validate(x: Int, y: Int): String
+}
+
+type simple__university_calc_Calculator__addIntegers__gqlv_action_args {
+  x: Int
+  y: Int
+}
+
+type simple__university_calc_Calculator__addIntegers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addIntegers__gqlv_action_args
+  results: Int
+}
+
+type simple__university_calc_Calculator__addIntegers__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addIntegers__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addIntegers__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addIntegers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Int): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addIntegers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Int, y: Int): String
+  hidden(x: Int): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addShortWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Short!, y: Short): simple__university_calc_Calculator__addShortWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addShortWrappers__gqlv_action_params
+  validate(x: Short, y: Short): String
+}
+
+type simple__university_calc_Calculator__addShortWrappers__gqlv_action_args {
+  x: Short
+  y: Short
+}
+
+type simple__university_calc_Calculator__addShortWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addShortWrappers__gqlv_action_args
+  results: Short
+}
+
+type simple__university_calc_Calculator__addShortWrappers__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addShortWrappers__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addShortWrappers__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addShortWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Short): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addShortWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Short, y: Short): String
+  hidden(x: Short): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addShorts__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Short!, y: Short!): simple__university_calc_Calculator__addShorts__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__addShorts__gqlv_action_params
+  validate(x: Short, y: Short): String
+}
+
+type simple__university_calc_Calculator__addShorts__gqlv_action_args {
+  x: Short
+  y: Short
+}
+
+type simple__university_calc_Calculator__addShorts__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__addShorts__gqlv_action_args
+  results: Short
+}
+
+type simple__university_calc_Calculator__addShorts__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__addShorts__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__addShorts__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__addShorts__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Short): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__addShorts__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Short, y: Short): String
+  hidden(x: Short): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__and__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!, y: Boolean!): simple__university_calc_Calculator__and__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__and__gqlv_action_params
+  validate(x: Boolean, y: Boolean): String
+}
+
+type simple__university_calc_Calculator__and__gqlv_action_args {
+  x: Boolean
+  y: Boolean
+}
+
+type simple__university_calc_Calculator__and__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__and__gqlv_action_args
+  results: Boolean
+}
+
+type simple__university_calc_Calculator__and__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__and__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__and__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__and__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__and__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean, y: Boolean): String
+  hidden(x: Boolean): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__concat__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(prefix: String!, suffix: String): simple__university_calc_Calculator__concat__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__concat__gqlv_action_params
+  validate(prefix: String, suffix: String): String
+}
+
+type simple__university_calc_Calculator__concat__gqlv_action_args {
+  prefix: String
+  suffix: String
+}
+
+type simple__university_calc_Calculator__concat__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__concat__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__concat__gqlv_action_params {
+  "Prefix"
+  prefix: simple__university_calc_Calculator__concat__prefix__gqlv_action_parameter
+  "Suffix"
+  suffix: simple__university_calc_Calculator__concat__suffix__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__concat__prefix__gqlv_action_parameter {
+  datatype: String
+  disabled(prefix: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__concat__suffix__gqlv_action_parameter {
+  datatype: String
+  disabled(prefix: String, suffix: String): String
+  hidden(prefix: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(date: String!, numDays: Int!): simple__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params
+  validate(date: String, numDays: Int): String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_args {
+  date: String
+  numDays: Int
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params {
+  "Date"
+  date: simple__university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_parameter
+  "Num Days"
+  numDays: simple__university_calc_Calculator__jdk8LocalPlusDays__numDays__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusDays__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String, numDays: Int): String
+  hidden(date: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: String): String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
+  numHours: simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
+  time: simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: String): String
+  hidden(time: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: String): String
+  hidden(numHours: Int, time: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: DateTime
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args
+  results: DateTime
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
+  dateTime: simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
+  numDays: simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
+  numHours: simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int): String
+  hidden(dateTime: DateTime): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
+  hidden(dateTime: DateTime, numDays: Int): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: Time!): simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: Time): String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: Time
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args
+  results: Time
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
+  numHours: simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
+  time: simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: Time): String
+  hidden(time: Time): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: Time): String
+  hidden(numHours: Int, time: Time): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: Time): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
+type simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
+  dateTime: simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
+  numDays: simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
+  numHours: simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int): String
+  hidden(dateTime: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int): String
+  hidden(dateTime: String, numDays: Int): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusDays__date__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusDays__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(date: String!, numDays: Int!): simple__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params
+  validate(date: String, numDays: Int): String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_args {
+  date: String
+  numDays: Int
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params {
+  "Date"
+  date: simple__university_calc_Calculator__jodaLocalPlusDays__date__gqlv_action_parameter
+  "Num Days"
+  numDays: simple__university_calc_Calculator__jodaLocalPlusDays__numDays__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusDays__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String, numDays: Int): String
+  hidden(date: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: String): String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
+  numHours: simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
+  time: simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: String): String
+  hidden(time: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: String): String
+  hidden(numHours: Int, time: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
+type simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args
+  results: String
+}
+
+type simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
+  dateTime: simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
+  numDays: simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
+  numHours: simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int): String
+  hidden(dateTime: String): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int): String
+  hidden(dateTime: String, numDays: Int): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__nextMonth__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): simple__university_calc_Calculator__nextMonth__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__nextMonth__gqlv_action_params
+  validate(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
+}
+
+type simple__university_calc_Calculator__nextMonth__gqlv_action_args {
+  month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
+}
+
+type simple__university_calc_Calculator__nextMonth__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__nextMonth__gqlv_action_args
+  results: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
+}
+
+type simple__university_calc_Calculator__nextMonth__gqlv_action_params {
+  "Month"
+  month: simple__university_calc_Calculator__nextMonth__month__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__nextMonth__month__gqlv_action_parameter {
+  choices: [rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum]
+  datatype: String
+  disabled(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__not__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!): simple__university_calc_Calculator__not__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__not__gqlv_action_params
+  validate(x: Boolean): String
+}
+
+type simple__university_calc_Calculator__not__gqlv_action_args {
+  x: Boolean
+}
+
+type simple__university_calc_Calculator__not__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__not__gqlv_action_args
+  results: Boolean
+}
+
+type simple__university_calc_Calculator__not__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__not__x__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__not__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__or__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!, y: Boolean!): simple__university_calc_Calculator__or__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_calc_Calculator__or__gqlv_action_params
+  validate(x: Boolean, y: Boolean): String
+}
+
+type simple__university_calc_Calculator__or__gqlv_action_args {
+  x: Boolean
+  y: Boolean
+}
+
+type simple__university_calc_Calculator__or__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_calc_Calculator__or__gqlv_action_args
+  results: Boolean
+}
+
+type simple__university_calc_Calculator__or__gqlv_action_params {
+  "X"
+  x: simple__university_calc_Calculator__or__x__gqlv_action_parameter
+  "Y"
+  y: simple__university_calc_Calculator__or__y__gqlv_action_parameter
+}
+
+type simple__university_calc_Calculator__or__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__or__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean, y: Boolean): String
+  hidden(x: Boolean): Boolean
+  validity: String
+}
+
+type simple__university_calc_Calculator__someLocale__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__university_calc_Calculator__someLocale__gqlv_action_invoke
+  validate: String
+}
+
+type simple__university_calc_Calculator__someLocale__gqlv_action_invoke {
+  results: String
+}
+
+type simple__university_calc_Calculator__someUrl__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__university_calc_Calculator__someUrl__gqlv_action_invoke
+  validate: String
+}
+
+type simple__university_calc_Calculator__someUrl__gqlv_action_invoke {
+  results: String
+}
+
+type simple__university_calc_Calculator__someUuid__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__university_calc_Calculator__someUuid__gqlv_action_invoke
+  validate: String
+}
+
+type simple__university_calc_Calculator__someUuid__gqlv_action_invoke {
+  results: UUID
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Department {
+  "Object metadata"
+  _meta: simple__university_dept_Department__gqlv_meta
+  "University department specializing in a field of study"
+  addStaffMember: simple__university_dept_Department__addStaffMember__gqlv_action
+  "University department specializing in a field of study"
+  addStaffMembers: simple__university_dept_Department__addStaffMembers__gqlv_action
+  "University department specializing in a field of study"
+  changeDeptHead: simple__university_dept_Department__changeDeptHead__gqlv_action
+  "University department specializing in a field of study"
+  changeName: simple__university_dept_Department__changeName__gqlv_action
+  "Departmental head, responsible for curriculum, research, funding and staff"
+  deptHead: simple__university_dept_Department__deptHead__gqlv_property
+  "Name"
+  name: simple__university_dept_Department__name__gqlv_property
+  "University department specializing in a field of study"
+  removeStaffMember: simple__university_dept_Department__removeStaffMember__gqlv_action
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  staffMembers: simple__university_dept_Department__staffMembers__gqlv_collection
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Department__addStaffMember__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(staffMember: simple__university_dept_StaffMember__gqlv_input!): simple__university_dept_Department__addStaffMember__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Department__addStaffMember__gqlv_action_params
+  validate(staffMember: simple__university_dept_StaffMember__gqlv_input): String
+}
+
+type simple__university_dept_Department__addStaffMember__gqlv_action_args {
+  staffMember: simple__university_dept_StaffMember
+}
+
+type simple__university_dept_Department__addStaffMember__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Department__addStaffMember__gqlv_action_args
+  results: simple__university_dept_Department
+}
+
+type simple__university_dept_Department__addStaffMember__gqlv_action_params {
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  staffMember: simple__university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter
+}
+
+type simple__university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter {
+  autoComplete(search: String!): [simple__university_dept_StaffMember]
+  datatype: String
+  disabled(staffMember: simple__university_dept_StaffMember__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Department__addStaffMembers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(staffMembers: [simple__university_dept_StaffMember__gqlv_input]): simple__university_dept_Department__addStaffMembers__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Department__addStaffMembers__gqlv_action_params
+  validate(staffMembers: [simple__university_dept_StaffMember__gqlv_input]): String
+}
+
+type simple__university_dept_Department__addStaffMembers__gqlv_action_args {
+  staffMembers: [simple__university_dept_StaffMember]
+}
+
+type simple__university_dept_Department__addStaffMembers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Department__addStaffMembers__gqlv_action_args
+  results: simple__university_dept_Department
+}
+
+type simple__university_dept_Department__addStaffMembers__gqlv_action_params {
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  staffMembers: simple__university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter
+}
+
+type simple__university_dept_Department__addStaffMembers__staffMembers__gqlv_action_parameter {
+  choices: [simple__university_dept_StaffMember]
+  datatype: String
+  disabled(staffMembers: [simple__university_dept_StaffMember__gqlv_input]): String
+  hidden: Boolean
+  validity: String
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Department__changeDeptHead__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(newDeptHead: simple__university_dept_DeptHead__gqlv_input!): simple__university_dept_Department__changeDeptHead__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Department__changeDeptHead__gqlv_action_params
+  validate(newDeptHead: simple__university_dept_DeptHead__gqlv_input): String
+}
+
+type simple__university_dept_Department__changeDeptHead__gqlv_action_args {
+  newDeptHead: simple__university_dept_DeptHead
+}
+
+type simple__university_dept_Department__changeDeptHead__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Department__changeDeptHead__gqlv_action_args
+  results: simple__university_dept_Department
+}
+
+type simple__university_dept_Department__changeDeptHead__gqlv_action_params {
+  "Departmental head, responsible for curriculum, research, funding and staff"
+  newDeptHead: simple__university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter
+}
+
+type simple__university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter {
+  autoComplete(search: String!): [simple__university_dept_DeptHead]
+  datatype: String
+  default: simple__university_dept_DeptHead
+  disabled(newDeptHead: simple__university_dept_DeptHead__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Department__changeName__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(newName: String!): simple__university_dept_Department__changeName__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Department__changeName__gqlv_action_params
+  validate(newName: String): String
+}
+
+type simple__university_dept_Department__changeName__gqlv_action_args {
+  newName: String
+}
+
+type simple__university_dept_Department__changeName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Department__changeName__gqlv_action_args
+  results: simple__university_dept_Department
+}
+
+type simple__university_dept_Department__changeName__gqlv_action_params {
+  "New Name"
+  newName: simple__university_dept_Department__changeName__newName__gqlv_action_parameter
+}
+
+type simple__university_dept_Department__changeName__newName__gqlv_action_parameter {
+  datatype: String
+  default: String
+  disabled(newName: String): String
+  hidden: Boolean
+  validity: String
+}
+
+"Departmental head, responsible for curriculum, research, funding and staff"
+type simple__university_dept_Department__deptHead__gqlv_property {
+  autoComplete(search: String!): [rich__university_dept_DeptHead]
+  datatype: String
+  disabled: String
+  get: simple__university_dept_DeptHead
+  hidden: Boolean
+  set(deptHead: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_Department
+  validate(deptHead: rich__university_dept_DeptHead__gqlv_input): String
+}
+
+type simple__university_dept_Department__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+  version: String
+}
+
+type simple__university_dept_Department__name__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(name: String!): rich__university_dept_Department
+  validate(name: String): String
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Department__removeStaffMember__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(staffMember: simple__university_dept_StaffMember__gqlv_input!): simple__university_dept_Department__removeStaffMember__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Department__removeStaffMember__gqlv_action_params
+  validate(staffMember: simple__university_dept_StaffMember__gqlv_input): String
+}
+
+type simple__university_dept_Department__removeStaffMember__gqlv_action_args {
+  staffMember: simple__university_dept_StaffMember
+}
+
+type simple__university_dept_Department__removeStaffMember__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Department__removeStaffMember__gqlv_action_args
+  results: simple__university_dept_Department
+}
+
+type simple__university_dept_Department__removeStaffMember__gqlv_action_params {
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  staffMember: simple__university_dept_Department__removeStaffMember__staffMember__gqlv_action_parameter
+}
+
+type simple__university_dept_Department__removeStaffMember__staffMember__gqlv_action_parameter {
+  choices: [simple__university_dept_StaffMember]
+  datatype: String
+  disabled(staffMember: simple__university_dept_StaffMember__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type simple__university_dept_Department__staffMembers__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [simple__university_dept_StaffMember]
+  hidden: Boolean
+}
+
+type simple__university_dept_Departments {
+  "University department specializing in a field of study"
+  createDepartment: simple__university_dept_Departments__createDepartment__gqlv_action
+  "University department specializing in a field of study"
+  findAllDepartments: simple__university_dept_Departments__findAllDepartments__gqlv_action
+  "University department specializing in a field of study"
+  findDepartmentByName: simple__university_dept_Departments__findDepartmentByName__gqlv_action
+}
+
+type simple__university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
+  autoComplete(name: String, search: String!): [simple__university_dept_DeptHead]
+  datatype: String
+  disabled(deptHead: simple__university_dept_DeptHead__gqlv_input, name: String): String
+  hidden(name: String): Boolean
+  validity: String
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Departments__createDepartment__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent(deptHead: simple__university_dept_DeptHead__gqlv_input, name: String!): simple__university_dept_Departments__createDepartment__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Departments__createDepartment__gqlv_action_params
+  validate(deptHead: simple__university_dept_DeptHead__gqlv_input, name: String): String
+}
+
+type simple__university_dept_Departments__createDepartment__gqlv_action_args {
+  deptHead: simple__university_dept_DeptHead
+  name: String
+}
+
+type simple__university_dept_Departments__createDepartment__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Departments__createDepartment__gqlv_action_args
+  results: simple__university_dept_Department
+}
+
+type simple__university_dept_Departments__createDepartment__gqlv_action_params {
+  "Departmental head, responsible for curriculum, research, funding and staff"
+  deptHead: simple__university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter
+  "Name"
+  name: simple__university_dept_Departments__createDepartment__name__gqlv_action_parameter
+}
+
+type simple__university_dept_Departments__createDepartment__name__gqlv_action_parameter {
+  datatype: String
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Departments__findAllDepartments__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__university_dept_Departments__findAllDepartments__gqlv_action_invoke
+  validate: String
+}
+
+type simple__university_dept_Departments__findAllDepartments__gqlv_action_invoke {
+  results: [simple__university_dept_Department]
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_Departments__findDepartmentByName__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(name: String!): simple__university_dept_Departments__findDepartmentByName__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Departments__findDepartmentByName__gqlv_action_params
+  validate(name: String): String
+}
+
+type simple__university_dept_Departments__findDepartmentByName__gqlv_action_args {
+  name: String
+}
+
+type simple__university_dept_Departments__findDepartmentByName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Departments__findDepartmentByName__gqlv_action_args
+  results: simple__university_dept_Department
+}
+
+type simple__university_dept_Departments__findDepartmentByName__gqlv_action_params {
+  "Name"
+  name: simple__university_dept_Departments__findDepartmentByName__name__gqlv_action_parameter
+}
+
+type simple__university_dept_Departments__findDepartmentByName__name__gqlv_action_parameter {
+  datatype: String
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
+}
+
+"Departmental head, responsible for curriculum, research, funding and staff"
+type simple__university_dept_DeptHead {
+  "Object metadata"
+  _meta: simple__university_dept_DeptHead__gqlv_meta
+  "Departmental head, responsible for curriculum, research, funding and staff"
+  changeDepartment: simple__university_dept_DeptHead__changeDepartment__gqlv_action
+  "Departmental head, responsible for curriculum, research, funding and staff"
+  changeName: simple__university_dept_DeptHead__changeName__gqlv_action
+  "University department specializing in a field of study"
+  department: simple__university_dept_DeptHead__department__gqlv_property
+  "Name"
+  name: simple__university_dept_DeptHead__name__gqlv_property
+}
+
+type simple__university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter {
+  choices: [simple__university_dept_Department]
+  datatype: String
+  disabled(department: simple__university_dept_Department__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+"Departmental head, responsible for curriculum, research, funding and staff"
+type simple__university_dept_DeptHead__changeDepartment__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(department: simple__university_dept_Department__gqlv_input!): simple__university_dept_DeptHead__changeDepartment__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_DeptHead__changeDepartment__gqlv_action_params
+  validate(department: simple__university_dept_Department__gqlv_input): String
+}
+
+type simple__university_dept_DeptHead__changeDepartment__gqlv_action_args {
+  department: simple__university_dept_Department
+}
+
+type simple__university_dept_DeptHead__changeDepartment__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_DeptHead__changeDepartment__gqlv_action_args
+  results: simple__university_dept_DeptHead
+}
+
+type simple__university_dept_DeptHead__changeDepartment__gqlv_action_params {
+  "University department specializing in a field of study"
+  department: simple__university_dept_DeptHead__changeDepartment__department__gqlv_action_parameter
+}
+
+"Departmental head, responsible for curriculum, research, funding and staff"
+type simple__university_dept_DeptHead__changeName__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeIdempotent(newName: String!): simple__university_dept_DeptHead__changeName__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_DeptHead__changeName__gqlv_action_params
+  validate(newName: String): String
+}
+
+type simple__university_dept_DeptHead__changeName__gqlv_action_args {
+  newName: String
+}
+
+type simple__university_dept_DeptHead__changeName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_DeptHead__changeName__gqlv_action_args
+  results: simple__university_dept_DeptHead
+}
+
+type simple__university_dept_DeptHead__changeName__gqlv_action_params {
+  "New Name"
+  newName: simple__university_dept_DeptHead__changeName__newName__gqlv_action_parameter
+}
+
+type simple__university_dept_DeptHead__changeName__newName__gqlv_action_parameter {
+  datatype: String
+  default: String
+  disabled(newName: String): String
+  hidden: Boolean
+  validity: String
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_DeptHead__department__gqlv_property {
+  choices(department: rich__university_dept_Department__gqlv_input): [rich__university_dept_Department]
+  datatype: String
+  disabled: String
+  get: simple__university_dept_Department
+  hidden: Boolean
+  set(department: rich__university_dept_Department__gqlv_input): rich__university_dept_DeptHead
+  validate(department: rich__university_dept_Department__gqlv_input): String
+}
+
+type simple__university_dept_DeptHead__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+  version: String
+}
+
+type simple__university_dept_DeptHead__name__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String
+  hidden: Boolean
+  set(name: String): rich__university_dept_DeptHead
+  validate(name: String): String
+}
+
+type simple__university_dept_DeptHeads {
+  "Departmental head, responsible for curriculum, research, funding and staff"
+  findAllHeads: simple__university_dept_DeptHeads__findAllHeads__gqlv_action
+  "Departmental head, responsible for curriculum, research, funding and staff"
+  findHeadByName: simple__university_dept_DeptHeads__findHeadByName__gqlv_action
+}
+
+"Departmental head, responsible for curriculum, research, funding and staff"
+type simple__university_dept_DeptHeads__findAllHeads__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__university_dept_DeptHeads__findAllHeads__gqlv_action_invoke
+  validate: String
+}
+
+type simple__university_dept_DeptHeads__findAllHeads__gqlv_action_invoke {
+  results: [simple__university_dept_DeptHead]
+}
+
+"Departmental head, responsible for curriculum, research, funding and staff"
+type simple__university_dept_DeptHeads__findHeadByName__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(name: String!): simple__university_dept_DeptHeads__findHeadByName__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_DeptHeads__findHeadByName__gqlv_action_params
+  validate(name: String): String
+}
+
+type simple__university_dept_DeptHeads__findHeadByName__gqlv_action_args {
+  name: String
+}
+
+type simple__university_dept_DeptHeads__findHeadByName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_DeptHeads__findHeadByName__gqlv_action_args
+  results: simple__university_dept_DeptHead
+}
+
+type simple__university_dept_DeptHeads__findHeadByName__gqlv_action_params {
+  "Name"
+  name: simple__university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter
+}
+
+type simple__university_dept_DeptHeads__findHeadByName__name__gqlv_action_parameter {
+  datatype: String
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_dept_People {
+  "Find Named"
+  findNamed: simple__university_dept_People__findNamed__gqlv_action
+  "Name Of"
+  nameOf: simple__university_dept_People__nameOf__gqlv_action
+}
+
+type simple__university_dept_People__findNamed__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(name: String!): simple__university_dept_People__findNamed__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_People__findNamed__gqlv_action_params
+  validate(name: String): String
+}
+
+type simple__university_dept_People__findNamed__gqlv_action_args {
+  name: String
+}
+
+type simple__university_dept_People__findNamed__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_People__findNamed__gqlv_action_args
+  results: simple__university_dept_Person
+}
+
+type simple__university_dept_People__findNamed__gqlv_action_params {
+  "Name"
+  name: simple__university_dept_People__findNamed__name__gqlv_action_parameter
+}
+
+type simple__university_dept_People__findNamed__name__gqlv_action_parameter {
+  datatype: String
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_dept_People__nameOf__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(person: simple__university_dept_Person__gqlv_input!): simple__university_dept_People__nameOf__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_People__nameOf__gqlv_action_params
+  validate(person: simple__university_dept_Person__gqlv_input): String
+}
+
+type simple__university_dept_People__nameOf__gqlv_action_args {
+  person: simple__university_dept_Person
+}
+
+type simple__university_dept_People__nameOf__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_People__nameOf__gqlv_action_args
+  results: String
+}
+
+type simple__university_dept_People__nameOf__gqlv_action_params {
+  "Person"
+  person: simple__university_dept_People__nameOf__person__gqlv_action_parameter
+}
+
+type simple__university_dept_People__nameOf__person__gqlv_action_parameter {
+  datatype: String
+  disabled(person: simple__university_dept_Person__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+type simple__university_dept_Person {
+  "Object metadata"
+  _meta: simple__university_dept_Person__gqlv_meta
+  "Name"
+  name: simple__university_dept_Person__name__gqlv_property
+}
+
+type simple__university_dept_Person__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__university_dept_Person__name__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(name: String!): rich__university_dept_Person
+  validate(name: String): String
+}
+
+type simple__university_dept_Staff {
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  createStaffMember: simple__university_dept_Staff__createStaffMember__gqlv_action
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  findAllStaffMembers: simple__university_dept_Staff__findAllStaffMembers__gqlv_action
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  findStaffMemberByName: simple__university_dept_Staff__findStaffMemberByName__gqlv_action
+}
+
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type simple__university_dept_StaffMember {
+  "Object metadata"
+  _meta: simple__university_dept_StaffMember__gqlv_meta
+  "University department specializing in a field of study"
+  department: simple__university_dept_StaffMember__department__gqlv_property
+  "Grade"
+  grade: simple__university_dept_StaffMember__grade__gqlv_property
+  "Name"
+  name: simple__university_dept_StaffMember__name__gqlv_property
+  "Photo"
+  photo: simple__university_dept_StaffMember__photo__gqlv_property
+}
+
+"University department specializing in a field of study"
+type simple__university_dept_StaffMember__department__gqlv_property {
+  choices(department: rich__university_dept_Department__gqlv_input): [rich__university_dept_Department]
+  datatype: String
+  disabled: String
+  get: simple__university_dept_Department
+  hidden: Boolean
+  set(department: rich__university_dept_Department__gqlv_input): rich__university_dept_StaffMember
+  validate(department: rich__university_dept_Department__gqlv_input): String
+}
+
+type simple__university_dept_StaffMember__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+  version: String
+}
+
+type simple__university_dept_StaffMember__grade__gqlv_property {
+  choices(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): [rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum]
+  datatype: String
+  disabled: String
+  get: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!
+  hidden: Boolean
+  set(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): rich__university_dept_StaffMember
+  validate(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): String
+}
+
+type simple__university_dept_StaffMember__name__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(name: String!): rich__university_dept_StaffMember
+  validate(name: String): String
+}
+
+type simple__university_dept_StaffMember__photo__gqlv_property {
+  datatype: String
+  disabled: String
+  get: simple__university_dept_StaffMember__photo__gqlv_property_blob
+  hidden: Boolean
+  set(photo: String): rich__university_dept_StaffMember
+  validate(photo: String): String
+}
+
+type simple__university_dept_StaffMember__photo__gqlv_property_blob {
+  bytes: String
+  mimeType: String
+  name: String
+}
+
+type simple__university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
+  choices(name: String): [simple__university_dept_Department]
+  datatype: String
+  disabled(department: simple__university_dept_Department__gqlv_input, name: String): String
+  hidden(name: String): Boolean
+  validity: String
+}
+
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type simple__university_dept_Staff__createStaffMember__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent(department: simple__university_dept_Department__gqlv_input!, name: String!): simple__university_dept_Staff__createStaffMember__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Staff__createStaffMember__gqlv_action_params
+  validate(department: simple__university_dept_Department__gqlv_input, name: String): String
+}
+
+type simple__university_dept_Staff__createStaffMember__gqlv_action_args {
+  department: simple__university_dept_Department
+  name: String
+}
+
+type simple__university_dept_Staff__createStaffMember__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Staff__createStaffMember__gqlv_action_args
+  results: simple__university_dept_StaffMember
+}
+
+type simple__university_dept_Staff__createStaffMember__gqlv_action_params {
+  "University department specializing in a field of study"
+  department: simple__university_dept_Staff__createStaffMember__department__gqlv_action_parameter
+  "Name"
+  name: simple__university_dept_Staff__createStaffMember__name__gqlv_action_parameter
+}
+
+type simple__university_dept_Staff__createStaffMember__name__gqlv_action_parameter {
+  datatype: String
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
+}
+
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type simple__university_dept_Staff__findAllStaffMembers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: simple__university_dept_Staff__findAllStaffMembers__gqlv_action_invoke
+  validate: String
+}
+
+type simple__university_dept_Staff__findAllStaffMembers__gqlv_action_invoke {
+  results: [simple__university_dept_StaffMember]
+}
+
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type simple__university_dept_Staff__findStaffMemberByName__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(name: String!): simple__university_dept_Staff__findStaffMemberByName__gqlv_action_invoke
+  "Parameters of this action"
+  params: simple__university_dept_Staff__findStaffMemberByName__gqlv_action_params
+  validate(name: String): String
+}
+
+type simple__university_dept_Staff__findStaffMemberByName__gqlv_action_args {
+  name: String
+}
+
+type simple__university_dept_Staff__findStaffMemberByName__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: simple__university_dept_Staff__findStaffMemberByName__gqlv_action_args
+  results: simple__university_dept_StaffMember
+}
+
+type simple__university_dept_Staff__findStaffMemberByName__gqlv_action_params {
+  "Name"
+  name: simple__university_dept_Staff__findStaffMemberByName__name__gqlv_action_parameter
+}
+
+type simple__university_dept_Staff__findStaffMemberByName__name__gqlv_action_parameter {
+  datatype: String
+  disabled(name: String): String
+  hidden: Boolean
+  validity: String
+}
+
 enum rich__causeway_applib_annotation_SemanticsOf__gqlv_enum {
   IDEMPOTENT
   IDEMPOTENT_ARE_YOU_SURE
@@ -4478,6 +8321,357 @@ input rich__university_dept_Person__gqlv_input {
 }
 
 input rich__university_dept_StaffMember__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_DomainObjectList__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_FacetGroupNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_ParameterNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_PropertyNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_RoleMemento__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_TypeNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_UserMemento__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_node_ActionNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_node_CollectionNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_node_FacetAttrNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_applib_node_FacetNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_conf_ConfigurationProperty__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_conf_ConfigurationViewmodel__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_feat_ApplicationFeatureViewModel__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_feat_ApplicationNamespace__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_feat_ApplicationTypeAction__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_feat_ApplicationTypeCollection__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_feat_ApplicationTypeMember__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_feat_ApplicationTypeProperty__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_feat_ApplicationType__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_schema_metamodel_v2_FacetHolder__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_security_LoginRedirect__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_testing_fixtures_FixtureResult__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__java_lang_Runnable__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__java_util_Map__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__java_util_SortedMap__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__java_util_concurrent_Callable__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__java_util_function_BiFunction__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__java_util_function_Consumer__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__java_util_function_Function__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__java_util_stream_Stream__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__university_dept_Department__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__university_dept_DeptHead__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__university_dept_Person__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: String
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__university_dept_StaffMember__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"

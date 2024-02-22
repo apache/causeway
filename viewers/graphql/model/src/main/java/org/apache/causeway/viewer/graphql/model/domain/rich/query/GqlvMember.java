@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.Getter;
 
-public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Holder>
+public abstract class GqlvMember<T extends ObjectMember, H extends ObjectSpecificationProvider & SchemaTypeProvider>
     extends GqlvAbstractCustom {
 
     @Getter final H holder;
@@ -57,9 +57,4 @@ public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMember.Ho
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    SchemaTypeProvider {
-
-    }
 }

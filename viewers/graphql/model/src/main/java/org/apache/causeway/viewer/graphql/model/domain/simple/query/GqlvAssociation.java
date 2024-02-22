@@ -20,8 +20,9 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
 
-public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvMember.Holder>
+public abstract class GqlvAssociation<T extends ObjectAssociation, H extends GqlvMemberHolder>
         extends GqlvMember<T, H> {
 
     public GqlvAssociation(

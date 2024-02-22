@@ -1,103 +1,73 @@
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.val;
 
-import graphql.schema.DataFetchingEnvironment;
+import java.util.Map;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
-import org.apache.causeway.viewer.graphql.model.domain.Parent;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
+import org.apache.causeway.viewer.graphql.model.domain.simple.SchemaStrategySimple;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvTopLevelQueryAbstractSchema;
 
 public class GqlvTopLevelQuerySimpleSchema
-        extends GqlvAbstractCustom
-        implements Parent {
+        extends GqlvTopLevelQueryAbstractSchema {
 
-    private static final SchemaType SCHEMA_TYPE = SchemaType.SIMPLE;
-
-    private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
-
-    private final List<GqlvDomainService> domainServices = new ArrayList<>();
-    private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
-
-    private final GqlvScenario scenario;
+    private static final SchemaStrategy STRATEGY_SIMPLE = new SchemaStrategySimple();
 
     public GqlvTopLevelQuerySimpleSchema(final Context context) {
-        super("SimpleSchema", context);
+        super(STRATEGY_SIMPLE, context);
 
-        graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
-
-        // add domain object lookup to top-level query
-        context.objectSpecifications().forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-
-                case ABSTRACT:
-                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:     // @DomainObject(nature=ENTITY)
-
-                    domainObjects.add(addChildFieldFor(GqlvDomainObject.of(SCHEMA_TYPE, objectSpec, context)));
-
-                    break;
-            }
-        });
-
-        // add services to top-level query
-        context.objectSpecifications().forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-                case MANAGED_BEAN_CONTRIBUTING: // @DomainService
-                    context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
-                            .ifPresent(servicePojo ->
-                                    domainServices.add(
-                                            addChildFieldFor(GqlvDomainService.of(SCHEMA_TYPE, objectSpec, servicePojo, context))));
-                    break;
-            }
-        });
-
-        if (graphqlConfiguration.isIncludeTestingFieldInRich()) {
-            addChildFieldFor(scenario = new GqlvScenario(context));
-        } else {
-            scenario = null;
-        }
+        var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
         buildObjectType();
 
-        // the field is used if the configured schemaStyle is 'SIMPLE_AND_RICH'; its is ignored/unused otherwise
+        // the field is used if the schemaStyle is 'SIMPLE_AND_RICH', but is ignored/unused otherwise
         setField(newFieldDefinition()
-                .name(graphqlConfiguration.getTopLevelFieldNameForSimple())
+                .name(STRATEGY_SIMPLE.topLevelFieldNameFrom(graphqlConfiguration))
                 .type(getGqlObjectType())
                 .build());
     }
 
-    @Override
-    protected Object fetchData(DataFetchingEnvironment environment) {
-        return environment;
+    public static GqlvDomainObject of(
+            final SchemaStrategy schemaStrategy,
+            final ObjectSpecification objectSpecification,
+            final Context context) {
+
+        mapSuperclassesIfNecessary(schemaStrategy, objectSpecification, context);
+        return computeIfAbsentGqlvDomainObject(schemaStrategy, objectSpecification, context);
     }
 
-    public void addDataFetchers() {
-        addDataFetchersForChildren();
-    }
-
-    @Override
-    protected void addDataFetchersForChildren() {
-        domainServices.forEach(domainService -> {
-            boolean actionsAdded = domainService.hasActions();
-            if (actionsAdded) {
-                domainService.addDataFetcher(this);
-            }
-        });
-
-
-        domainObjects.forEach(domainObject -> domainObject.addDataFetcher(this));
-
-        if (scenario != null) {
-            scenario.addDataFetcher(this);
+    private static void mapSuperclassesIfNecessary(
+            final SchemaStrategy schemaStrategy,
+            final ObjectSpecification objectSpecification,
+            final Context context) {
+        // no need to map if the target subclass has already been built
+        if(schemaStrategy.domainObjectBySpec(context).containsKey(objectSpecification)) {
+            return;
         }
+        val superclasses = superclassesOf(objectSpecification);
+        superclasses.forEach(objectSpec -> computeIfAbsentGqlvDomainObject(schemaStrategy, objectSpec, context));
     }
+
+    private static GqlvDomainObject computeIfAbsentGqlvDomainObject(
+            final SchemaStrategy schemaStrategy,
+            final ObjectSpecification objectSpec,
+            final Context context) {
+        return schemaStrategy.domainObjectBySpec(context).computeIfAbsent(objectSpec, spec -> new GqlvDomainObject(schemaStrategy, spec, context));
+    }
+
+
+    public static GqlvDomainService of(
+            final SchemaStrategy schemaStrategy,
+            final ObjectSpecification objectSpecification,
+            final Object servicePojo,
+            final Context context) {
+        return schemaStrategy.domainServiceBySpec(context).computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(schemaStrategy, spec, servicePojo, context));
+    }
+
 }

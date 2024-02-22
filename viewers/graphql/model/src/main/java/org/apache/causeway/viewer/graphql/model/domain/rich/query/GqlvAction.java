@@ -40,6 +40,7 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -48,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvAction
-        extends GqlvMember<ObjectAction, GqlvMember.Holder>
+        extends GqlvMember<ObjectAction, GqlvMemberHolder>
         implements GqlvMemberHidden.Holder<ObjectAction>,
                    GqlvMemberDisabled.Holder<ObjectAction>,
                    GqlvActionInvoke.Holder,
@@ -69,7 +70,7 @@ public class GqlvAction
     private final GqlvActionParams params;
 
     public GqlvAction(
-            final Holder holder,
+            final GqlvMemberHolder holder,
             final ObjectAction objectAction,
             final Context context) {
         super(holder, objectAction, TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction, holder.getSchemaType()), context);

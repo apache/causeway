@@ -39,11 +39,9 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvAction;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvCollection;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMember;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMeta;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvProperty;
 
 import lombok.Getter;
 import lombok.val;
@@ -53,67 +51,32 @@ import lombok.val;
  */
 public class GqlvDomainObject
         extends GqlvAbstractCustom
-        implements GqlvMember.Holder, GqlvMeta.Holder {
+        implements GqlvMemberHolder, GqlvMeta.Holder {
 
+    private final SchemaStrategy schemaStrategy;
     @Getter private final ObjectSpecification objectSpecification;
-    @Getter private final SchemaType schemaType;
 
-    private final GqlvMeta meta;
+    @Override
+    public SchemaType getSchemaType() {
+        return schemaStrategy.getSchemaType();
+    }
 
-    private final List<GqlvProperty> properties = new ArrayList<>();
-    private final List<GqlvCollection> collections = new ArrayList<>();
-    private final List<GqlvAction> actions = new ArrayList<>();
+    private final GqlvAbstractCustom meta;
 
+    private final List<GqlvAbstractCustom> properties = new ArrayList<>();
+    private final List<GqlvAbstractCustom> collections = new ArrayList<>();
+    private final List<GqlvAbstractCustom> actions = new ArrayList<>();
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
-    public static GqlvDomainObject of(
-            final SchemaType schemaType,
+    public GqlvDomainObject(
+            final SchemaStrategy schemaStrategy,
             final ObjectSpecification objectSpecification,
             final Context context) {
-
-        mapSuperclassesIfNecessary(schemaType, objectSpecification, context);
-
-        return computeIfAbsentGqlvDomainObject(schemaType, objectSpecification, context);
-    }
-
-    private static void mapSuperclassesIfNecessary(
-            final SchemaType schemaType,
-            final ObjectSpecification objectSpecification,
-            final Context context) {
-        // no need to map if the target subclass has already been built
-        if(context.simpleDomainObjectBySpec.containsKey(objectSpecification)) {
-            return;
-        }
-        val superclasses = superclassesOf(objectSpecification);
-        superclasses.forEach(objectSpec -> computeIfAbsentGqlvDomainObject(schemaType, objectSpec, context));
-    }
-
-    private static GqlvDomainObject computeIfAbsentGqlvDomainObject(
-            final SchemaType schemaType,
-            final ObjectSpecification objectSpec,
-            final Context context) {
-        return context.simpleDomainObjectBySpec.computeIfAbsent(objectSpec, spec -> new GqlvDomainObject(schemaType, spec, context));
-    }
-
-    private static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {
-        val superclasses = new ArrayList<ObjectSpecification>();
-        ObjectSpecification superclass = objectSpecification.superclass();
-        while (superclass != null && superclass.getCorrespondingClass() != Object.class) {
-            superclasses.add(0, superclass);
-            superclass = superclass.superclass();
-        }
-        return superclasses;
-    }
-
-    private GqlvDomainObject(
-            final SchemaType schemaType,
-            final ObjectSpecification objectSpecification,
-            final Context context) {
-        super(TypeNames.objectTypeNameFor(objectSpecification, schemaType), context);
+        super(TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType()), context);
+        this.schemaStrategy = schemaStrategy;
 
         this.objectSpecification = objectSpecification;
-        this.schemaType = schemaType;
         gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
         if(isBuilt()) {
@@ -180,11 +143,11 @@ public class GqlvDomainObject
     private void addMembers() {
 
         objectSpecification.streamProperties(MixedIn.INCLUDED)
-                .forEach(prop -> properties.add(addChildFieldFor(new GqlvProperty(this, prop, context))));
+                .forEach(prop -> properties.add(addChildFieldFor(schemaStrategy.newGqlvProperty(this, prop, context))));
         objectSpecification.streamCollections(MixedIn.INCLUDED)
-                .forEach(coll -> collections.add(addChildFieldFor(new GqlvCollection(this, coll, context))));
+                .forEach(coll -> collections.add(addChildFieldFor(schemaStrategy.newGqlvCollection(this, coll, context))));
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
-                .forEach(act -> actions.add(addChildFieldFor(new GqlvAction(this, act, context))));
+                .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newGqlvAction(this, act, context))));
     }
 
     @SuppressWarnings("unused")
