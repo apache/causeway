@@ -18,7 +18,7 @@ public interface HolderActionParamsParamChoices
         ObjectActionProvider,
         ObjectActionParameterProvider,
         SchemaTypeProvider {
-    HolderActionParamsParam getHolder();
+    HolderActionParams getHolder();
 
     void addGqlArguments(
             ObjectAction objectAction,
