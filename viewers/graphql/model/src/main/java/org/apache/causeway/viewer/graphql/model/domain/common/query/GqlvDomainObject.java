@@ -40,8 +40,8 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvAction;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMeta;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.Getter;
 import lombok.val;
@@ -51,7 +51,7 @@ import lombok.val;
  */
 public class GqlvDomainObject
         extends GqlvAbstractCustom
-        implements GqlvMemberHolder, GqlvMeta.Holder {
+        implements GqlvMetaHolder, GqlvMemberHolder, ObjectSpecificationProvider, SchemaTypeProvider {
 
     private final SchemaStrategy schemaStrategy;
     @Getter private final ObjectSpecification objectSpecification;
@@ -75,17 +75,16 @@ public class GqlvDomainObject
             final Context context) {
         super(TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType()), context);
         this.schemaStrategy = schemaStrategy;
-
         this.objectSpecification = objectSpecification;
-        gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
         if(isBuilt()) {
             this.meta = null;
             this.gqlInputObjectType = null;
             return;
         }
+        gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
-        addChildFieldFor(this.meta = new GqlvMeta(this, context));
+        addChildFieldFor(this.meta = schemaStrategy.newGqlvMeta(this, context));
 
         val inputObjectTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification, getSchemaType()));
         inputObjectTypeBuilder
@@ -172,7 +171,7 @@ public class GqlvDomainObject
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         Object target = dataFetchingEnvironment.getArgument("object");
-        return GqlvAction.asPojo(getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
+        return GvqlActionUtils.asPojo(schemaStrategy, getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
                 .orElse(null);
     }
 

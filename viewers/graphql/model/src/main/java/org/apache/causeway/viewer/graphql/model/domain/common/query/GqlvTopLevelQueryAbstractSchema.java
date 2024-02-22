@@ -5,18 +5,17 @@ import java.util.List;
 
 import graphql.schema.DataFetchingEnvironment;
 
-import lombok.Getter;
-import lombok.val;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelQuerySimpleSchema;
+
+import lombok.Getter;
+import lombok.val;
 
 public abstract class GqlvTopLevelQueryAbstractSchema
         extends GqlvAbstractCustom
@@ -24,18 +23,14 @@ public abstract class GqlvTopLevelQueryAbstractSchema
 
     @Getter private final SchemaStrategy schemaStrategy;
 
-    private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
-
-    private final List<GqlvDomainService> domainServices = new ArrayList<>();
-    private final List<GqlvDomainObject> domainObjects = new ArrayList<>();
+    private final List<GqlvAbstract> domainServices = new ArrayList<>();
+    private final List<GqlvAbstractCustom> domainObjects = new ArrayList<>();
 
     public GqlvTopLevelQueryAbstractSchema(
             final SchemaStrategy schemaStrategy,
             final Context context) {
         super(schemaStrategy.getSchemaType().name() + "Schema", context);
         this.schemaStrategy = schemaStrategy;
-
-        graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
         // add domain object lookup to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
@@ -45,7 +40,7 @@ public abstract class GqlvTopLevelQueryAbstractSchema
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    domainObjects.add(addChildFieldFor(GqlvTopLevelQuerySimpleSchema.of(schemaStrategy, objectSpec, context)));
+                    domainObjects.add(addChildFieldFor(schemaStrategy.newGqlvDomainObject(objectSpec, context)));
 
                     break;
             }
@@ -86,14 +81,7 @@ public abstract class GqlvTopLevelQueryAbstractSchema
 
     @Override
     protected void addDataFetchersForChildren() {
-        domainServices.forEach(domainService -> {
-            boolean actionsAdded = domainService.hasActions();
-            if (actionsAdded) {
-                domainService.addDataFetcher(this);
-            }
-        });
-
+        domainServices.forEach(domainService -> domainService.addDataFetcher(this));
         domainObjects.forEach(domainObject -> domainObject.addDataFetcher(this));
-
     }
 }

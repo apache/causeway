@@ -6,22 +6,21 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvTopLevelQueryAbstractSchema;
-import org.apache.causeway.viewer.graphql.model.domain.rich.SchemaStrategyRich;
 
 public class GqlvTopLevelQueryRichSchema
         extends GqlvTopLevelQueryAbstractSchema {
 
-    private static final SchemaStrategy STRATEGY_RICH = new SchemaStrategyRich();
+    private static final SchemaStrategy SCHEMA_STRATEGY = SchemaStrategy.RICH;
 
     private final GqlvScenario scenario;
 
     public GqlvTopLevelQueryRichSchema(final Context context) {
-        super(STRATEGY_RICH, context);
+        super(SCHEMA_STRATEGY, context);
 
         var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
         if (graphqlConfiguration.isIncludeTestingFieldInRich()) {
-            addChildFieldFor(scenario = new GqlvScenario(STRATEGY_RICH, context));
+            addChildFieldFor(scenario = new GqlvScenario(SCHEMA_STRATEGY, context));
         } else {
             scenario = null;
         }
@@ -30,7 +29,7 @@ public class GqlvTopLevelQueryRichSchema
 
         // the field is used if the schemaStyle is 'SIMPLE_AND_RICH', but is ignored/unused otherwise
         setField(newFieldDefinition()
-                .name(STRATEGY_RICH.topLevelFieldNameFrom(graphqlConfiguration))
+                .name(SCHEMA_STRATEGY.topLevelFieldNameFrom(graphqlConfiguration))
                 .type(getGqlObjectType())
                 .build());
     }

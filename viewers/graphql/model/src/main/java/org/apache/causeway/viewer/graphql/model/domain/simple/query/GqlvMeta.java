@@ -35,14 +35,13 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaHolder;
 
 import lombok.val;
 
 public class GqlvMeta extends GqlvAbstractCustom {
 
-    private final Holder holder;
+    private final GqlvMetaHolder holder;
     private final GqlvMetaId metaId;
     private final GqlvMetaLogicalTypeName metaLogicalTypeName;
     private final GqlvMetaVersion metaVersion;
@@ -56,7 +55,7 @@ public class GqlvMeta extends GqlvAbstractCustom {
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvMeta(
-            final Holder holder,
+            final GqlvMetaHolder holder,
             final Context context
     ) {
         super(TypeNames.metaTypeNameFor(holder.getObjectSpecification(), holder.getSchemaType()), context);
@@ -228,9 +227,4 @@ public class GqlvMeta extends GqlvAbstractCustom {
         }
     }
 
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    SchemaTypeProvider {
-
-    }
 }

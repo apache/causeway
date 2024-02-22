@@ -16,7 +16,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainSe
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvAction;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvCollection;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMeta;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvProperty;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelQuerySimpleSchema;
 
 public class SchemaStrategySimple implements SchemaStrategy {
 
@@ -68,4 +70,10 @@ public class SchemaStrategySimple implements SchemaStrategy {
     ) {
         return new GqlvAction(holder, objectAction, context);
     }
+
+    @Override
+    public GqlvAbstractCustom newGqlvMeta(GqlvDomainObject gqlvDomainObject, Context context) {
+        return new GqlvMeta(gqlvDomainObject, context);
+    }
+
 }

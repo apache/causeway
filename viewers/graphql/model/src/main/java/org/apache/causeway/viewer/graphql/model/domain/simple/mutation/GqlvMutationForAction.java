@@ -32,8 +32,8 @@ import graphql.schema.GraphQLType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvAction;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMetaSaveAs;
+import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 
 import org.springframework.lang.Nullable;
 
@@ -158,7 +158,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
             } else {
                 String refValue = argumentValue.get("ref");
                 if (refValue != null) {
-                    String key = GqlvMetaSaveAs.keyFor(refValue);
+                    String key = GvqlActionUtils.keyFor(refValue);
                     BookmarkedPojo value = ((Environment) environment).getGraphQlContext().get(key);
                     result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
                 } else {
@@ -246,7 +246,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
     private Can<ManagedObject> argumentManagedObjectsFor(
             final Environment dataFetchingEnvironment,
             final ObjectAction objectAction) {
-        return GqlvAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
+        return GvqlActionUtils.argumentManagedObjectsFor(SchemaStrategy.SIMPLE, dataFetchingEnvironment, objectAction, context);
     }
 
 

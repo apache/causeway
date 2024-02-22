@@ -13,8 +13,13 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
+import org.apache.causeway.viewer.graphql.model.domain.rich.SchemaStrategyRich;
+import org.apache.causeway.viewer.graphql.model.domain.simple.SchemaStrategySimple;
 
 public interface SchemaStrategy {
+
+    SchemaStrategy RICH = new SchemaStrategyRich();
+    SchemaStrategy SIMPLE  = new SchemaStrategySimple();
 
     SchemaType getSchemaType();
 
@@ -42,4 +47,8 @@ public interface SchemaStrategy {
             final ObjectAction objectAction,
             final Context context
     );
+
+    GqlvAbstractCustom newGqlvMeta(
+            final GqlvDomainObject gqlvDomainObject,
+            final Context context);
 }
