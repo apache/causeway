@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 public class GqlvCollection
         extends GqlvAssociation<OneToManyAssociation, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
         implements HolderAssociationGet<OneToManyAssociation>,
-        GqlvMemberHolder<OneToManyAssociation>,
+        HolderMember<OneToManyAssociation>,
         HolderAssociationDatatype<OneToManyAssociation>, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<OneToManyAssociation>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider {
 
     private final GqlvMemberHidden<OneToManyAssociation> hidden;

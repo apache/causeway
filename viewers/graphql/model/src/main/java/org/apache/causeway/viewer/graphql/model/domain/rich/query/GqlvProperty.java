@@ -36,7 +36,7 @@ import lombok.val;
 public class GqlvProperty
         extends GqlvAssociation<OneToOneAssociation, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
         implements
-        GqlvMemberHolder<OneToOneAssociation>,
+        HolderMember<OneToOneAssociation>,
         HolderPropertyGet,
         HolderPropertyChoices,
         HolderPropertyAutoComplete,

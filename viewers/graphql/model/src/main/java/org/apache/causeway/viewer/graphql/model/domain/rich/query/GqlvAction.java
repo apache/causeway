@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvAction
         extends GqlvMember<ObjectAction, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
         implements
-        GqlvMemberHolder<ObjectAction>,
+        HolderMember<ObjectAction>,
         HolderActionInvoke,
         HolderActionValidity,
         HolderActionParams,

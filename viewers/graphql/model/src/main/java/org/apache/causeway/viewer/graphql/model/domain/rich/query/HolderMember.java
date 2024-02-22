@@ -5,7 +5,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
-public interface GqlvMemberHolder<T extends ObjectMember>
+public interface HolderMember<T extends ObjectMember>
         extends ObjectSpecificationProvider,
         ObjectMemberProvider<T>,
         SchemaTypeProvider {
