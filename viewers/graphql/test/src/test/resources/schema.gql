@@ -1665,22 +1665,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
   validate(service: Boolean): String
 }
 
-type rich__causeway_schema_metamodel_v2_FacetHolder {
-  "Object metadata"
-  _meta: rich__causeway_schema_metamodel_v2_FacetHolder__gqlv_meta
-}
-
-type rich__causeway_schema_metamodel_v2_FacetHolder__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
 type rich__causeway_security_LoginRedirect {
   "Object metadata"
   _meta: rich__causeway_security_LoginRedirect__gqlv_meta
@@ -5509,22 +5493,6 @@ type simple__causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property
   validate(service: Boolean): String
 }
 
-type simple__causeway_schema_metamodel_v2_FacetHolder {
-  "Object metadata"
-  _meta: simple__causeway_schema_metamodel_v2_FacetHolder__gqlv_meta
-}
-
-type simple__causeway_schema_metamodel_v2_FacetHolder__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
 type simple__causeway_security_LoginRedirect {
   "Object metadata"
   _meta: simple__causeway_security_LoginRedirect__gqlv_meta
@@ -8167,15 +8135,6 @@ input rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input {
   ref: String
 }
 
-input rich__causeway_schema_metamodel_v2_FacetHolder__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: String
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__causeway_security_LoginRedirect__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -8510,15 +8469,6 @@ input simple__causeway_feat_ApplicationType__gqlv_input {
 }
 
 input simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: String
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__causeway_schema_metamodel_v2_FacetHolder__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"

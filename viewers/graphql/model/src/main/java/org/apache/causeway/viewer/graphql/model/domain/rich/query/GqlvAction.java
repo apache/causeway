@@ -41,6 +41,7 @@ import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -202,7 +203,7 @@ public class GqlvAction
 
         val refValue = argumentValue.get("ref");
         if (refValue != null) {
-            String key = GqlvMetaSaveAs.keyFor(refValue);
+            String key = GvqlActionUtils.keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
             if (bookmarkedPojo == null) {
                 throw new IllegalArgumentException(String.format(

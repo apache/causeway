@@ -18,23 +18,12 @@ import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvCollecti
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvMeta;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvProperty;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelQuerySimpleSchema;
 
 public class SchemaStrategySimple implements SchemaStrategy {
 
     @Override
     public SchemaType getSchemaType() {
         return SchemaType.SIMPLE;
-    }
-
-    @Override
-    public Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec(Context context) {
-        return context.simpleDomainObjectBySpec;
-    }
-
-    @Override
-    public Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec(Context context) {
-        return context.simpleDomainServiceBySpec;
     }
 
     @Override

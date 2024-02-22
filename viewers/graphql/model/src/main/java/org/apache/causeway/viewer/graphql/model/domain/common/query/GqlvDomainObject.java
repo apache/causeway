@@ -69,11 +69,16 @@ public class GqlvDomainObject
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
+    public static String typeNameFor(SchemaStrategy schemaStrategy, ObjectSpecification objectSpecification) {
+        return TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType());
+    }
+
     public GqlvDomainObject(
             final SchemaStrategy schemaStrategy,
+            final String typeName,
             final ObjectSpecification objectSpecification,
             final Context context) {
-        super(TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType()), context);
+        super(typeName, context);
         this.schemaStrategy = schemaStrategy;
         this.objectSpecification = objectSpecification;
 
@@ -171,7 +176,7 @@ public class GqlvDomainObject
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         Object target = dataFetchingEnvironment.getArgument("object");
-        return GvqlActionUtils.asPojo(schemaStrategy, getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
+        return GvqlActionUtils.asPojo(getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
                 .orElse(null);
     }
 

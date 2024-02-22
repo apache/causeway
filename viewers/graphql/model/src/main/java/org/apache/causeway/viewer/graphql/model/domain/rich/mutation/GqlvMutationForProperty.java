@@ -39,6 +39,7 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvMetaSaveAs;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
@@ -110,7 +111,7 @@ public class GqlvMutationForProperty extends GqlvAbstract {
         } else {
             String refValue = argumentValue1.get("ref");
             if (refValue != null) {
-                String key = GqlvMetaSaveAs.keyFor(refValue);
+                String key = GvqlActionUtils.keyFor(refValue);
                 BookmarkedPojo value = environment.getGraphQlContext().get(key);
                 result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
             } else {

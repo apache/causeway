@@ -13,7 +13,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
-import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
@@ -21,7 +20,6 @@ import lombok.val;
 public class GvqlActionUtils {
 
     public static Optional<Object> asPojo(
-            final SchemaStrategy schemaStrategy,
             final ObjectSpecification elementType,
             final Object argumentValueObj,
             final Environment environment,
@@ -82,14 +80,12 @@ public class GvqlActionUtils {
     }
 
     /**
-     * @param schemaStrategy
      * @param environment
      * @param objectAction
      * @param context
      * @return
      */
     public static Can<ManagedObject> argumentManagedObjectsFor(
-            SchemaStrategy schemaStrategy,
             final Environment environment,
             final ObjectAction objectAction,
             final Context context) {
@@ -119,12 +115,12 @@ public class GvqlActionUtils {
                             if (argumentValue instanceof List) {
                                 val argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
-                                        .map(value -> asPojo(schemaStrategy, oap.getElementType(), value, environment, context))
+                                        .map(value -> asPojo(oap.getElementType(), value, environment, context))
                                         .filter(Optional::isPresent)
                                         .map(Optional::get)
                                         .collect(Collectors.toList());
                             } else {
-                                pojoOrPojoList = asPojo(schemaStrategy, oap.getElementType(), argumentValue, environment, context).orElse(null);
+                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, environment, context).orElse(null);
                             }
                             return ManagedObject.adaptParameter(oap, pojoOrPojoList);
 

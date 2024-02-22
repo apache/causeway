@@ -43,7 +43,7 @@ public class Person_IntegTest extends AbstractDynamic_IntegTest {
 
     @Override
     @TestFactory
-    Iterable<DynamicTest> each() throws IOException, URISyntaxException {
+    public Iterable<DynamicTest> each() throws IOException, URISyntaxException {
         return super.each();
     }
 

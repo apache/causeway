@@ -48,7 +48,7 @@ public abstract class AbstractDynamic_IntegTest extends Abstract_IntegTest {
         this("._.gql");
     }
 
-    Iterable<DynamicTest> each() throws IOException, URISyntaxException {
+    protected Iterable<DynamicTest> each() throws IOException, URISyntaxException {
 
         val integClassName = getClass().getSimpleName();
         val classUrl = getClass().getResource(integClassName + ".class");

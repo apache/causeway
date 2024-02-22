@@ -53,13 +53,17 @@ public class GqlvDomainService
 
     private final List<GqlvAbstractCustom> actions = new ArrayList<>();
 
+    public static String typeNameFor(SchemaStrategy schemaStrategy, ObjectSpecification objectSpecification) {
+        return TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType());
+    }
 
     public GqlvDomainService(
             final SchemaStrategy schemaStrategy,
+            final String typeName,
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
-        super(TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType()), context);
+        super(typeName, context);
         this.schemaStrategy = schemaStrategy;
 
         this.objectSpecification = objectSpecification;

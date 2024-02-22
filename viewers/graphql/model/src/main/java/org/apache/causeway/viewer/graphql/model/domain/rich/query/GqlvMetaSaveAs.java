@@ -27,6 +27,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 public class GqlvMetaSaveAs extends GqlvAbstract {
@@ -48,7 +49,7 @@ public class GqlvMetaSaveAs extends GqlvAbstract {
     protected Object fetchData(DataFetchingEnvironment environment) {
         String ref = environment.getArgument("ref");
         GqlvMeta.Fetcher source = environment.getSource();
-        String originalKey = keyFor(ref);
+        String originalKey = GvqlActionUtils.keyFor(ref);
         GraphQLContext graphQlContext = environment.getGraphQlContext();
 
         // we ensure the key hasn't been used already
@@ -59,10 +60,6 @@ public class GqlvMetaSaveAs extends GqlvAbstract {
         }
         graphQlContext.put(key, new BookmarkedPojo(source.bookmark(), context.bookmarkService));
         return ref;
-    }
-
-    public static String keyFor(String ref) {
-        return GqlvMetaSaveAs.class.getName() + "#" + ref;
     }
 
 }

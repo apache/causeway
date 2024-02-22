@@ -36,7 +36,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -112,7 +111,7 @@ public class GqlvAction
             final ObjectAction objectAction,
             final BookmarkService bookmarkService) {
 
-        return GvqlActionUtils.argumentManagedObjectsFor(SchemaStrategy.SIMPLE, dataFetchingEnvironment, objectAction, context);
+        return GvqlActionUtils.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }
 
 

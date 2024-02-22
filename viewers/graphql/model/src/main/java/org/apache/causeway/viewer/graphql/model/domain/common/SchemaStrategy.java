@@ -32,18 +32,17 @@ public interface SchemaStrategy {
             final Context context) {
 
         mapSuperclassesIfNecessary(this, objectSpecification, context);
-        return this.domainObjectBySpec(context).computeIfAbsent(objectSpecification, spec -> new GqlvDomainObject(this, spec, context));
+        val typeNameFor = GqlvDomainObject.typeNameFor(this, objectSpecification);
+        return context.domainObjectByTypeName.computeIfAbsent(typeNameFor, typeName -> new GqlvDomainObject(this, typeName, objectSpecification, context));
     }
 
     default GqlvDomainService domainServiceFor(
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
-        return this.domainServiceBySpec(context).computeIfAbsent(objectSpecification, spec -> new GqlvDomainService(this, spec, servicePojo, context));
+        val typeNameFor = GqlvDomainService.typeNameFor(this, objectSpecification);
+        return context.domainServiceByTypeName.computeIfAbsent(typeNameFor, typeName -> new GqlvDomainService(this, typeName, objectSpecification, servicePojo, context));
     }
-
-    Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec(Context context);
-    Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec(Context context);
 
 
     String topLevelFieldNameFrom(CausewayConfiguration.Viewer.Graphql graphqlConfiguration);
@@ -73,11 +72,15 @@ public interface SchemaStrategy {
             final ObjectSpecification objectSpecification,
             final Context context) {
         // no need to map if the target subclass has already been built
-        if(schemaStrategy.domainObjectBySpec(context).containsKey(objectSpecification)) {
+        val typeName = GqlvDomainObject.typeNameFor(schemaStrategy, objectSpecification);
+        if(context.domainObjectByTypeName.containsKey(typeName)) {
             return;
         }
         val superclasses = superclassesOf(objectSpecification);
-        superclasses.forEach(objectSpec -> schemaStrategy.domainObjectBySpec(context).computeIfAbsent(objectSpec, spec -> new GqlvDomainObject(schemaStrategy, spec, context)));
+        superclasses.forEach(objectSpec -> {
+            val typeNameForSuperclass = GqlvDomainObject.typeNameFor(schemaStrategy, objectSpecification);
+            context.domainObjectByTypeName.computeIfAbsent(typeNameForSuperclass, typeNm -> new GqlvDomainObject(schemaStrategy, typeNm, objectSpecification, context));
+        });
     }
 
 

@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.TestFactory;
 
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -43,7 +44,8 @@ import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(110)
+@Order(900)
+@DirtiesContext // yucky workaround
 @ActiveProfiles("test")
 public class DepartmentMutating_IntegTest extends Abstract_IntegTest {
 

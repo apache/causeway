@@ -32,7 +32,6 @@ import graphql.schema.GraphQLType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
-import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 
 import org.springframework.lang.Nullable;
@@ -246,7 +245,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
     private Can<ManagedObject> argumentManagedObjectsFor(
             final Environment dataFetchingEnvironment,
             final ObjectAction objectAction) {
-        return GvqlActionUtils.argumentManagedObjectsFor(SchemaStrategy.SIMPLE, dataFetchingEnvironment, objectAction, context);
+        return GvqlActionUtils.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }
 
 

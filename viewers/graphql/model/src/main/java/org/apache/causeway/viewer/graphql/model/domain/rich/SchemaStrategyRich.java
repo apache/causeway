@@ -28,16 +28,6 @@ public class SchemaStrategyRich implements SchemaStrategy {
     }
 
     @Override
-    public Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec(Context context) {
-        return context.richDomainObjectBySpec;
-    }
-
-    @Override
-    public Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec(Context context) {
-        return context.richDomainServiceBySpec;
-    }
-
-    @Override
     public String topLevelFieldNameFrom(CausewayConfiguration.Viewer.Graphql graphqlConfiguration) {
         return graphqlConfiguration.getTopLevelFieldNameForRich();
     }

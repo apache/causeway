@@ -61,11 +61,8 @@ public class Context {
     public final GraphQLTypeRegistry graphQLTypeRegistry;
 
 
-    public final Map<ObjectSpecification, GqlvDomainService> richDomainServiceBySpec = new LinkedHashMap<>();
-    public final Map<ObjectSpecification, GqlvDomainObject> richDomainObjectBySpec = new LinkedHashMap<>();
-
-    public final Map<ObjectSpecification, GqlvDomainService> simpleDomainServiceBySpec = new LinkedHashMap<>();
-    public final Map<ObjectSpecification, GqlvDomainObject> simpleDomainObjectBySpec = new LinkedHashMap<>();
+    public final Map<String, GqlvDomainService> domainServiceByTypeName = new LinkedHashMap<>();
+    public final Map<String, GqlvDomainObject> domainObjectByTypeName = new LinkedHashMap<>();
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()
