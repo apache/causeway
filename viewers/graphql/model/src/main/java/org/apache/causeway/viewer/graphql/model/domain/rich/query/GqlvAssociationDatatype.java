@@ -26,19 +26,16 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.val;
 
 public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> extends GqlvAbstract {
 
-    private final Holder<T> holder;
+    private final HolderAssociationDatatype<T> holder;
 
     public GqlvAssociationDatatype(
-            final Holder<T> holder,
+            final HolderAssociationDatatype<T> holder,
             final Context context) {
         super(context);
         this.holder = holder;
@@ -53,11 +50,6 @@ public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> exten
     protected Object fetchData(DataFetchingEnvironment environment) {
         val returnType = holder.getObjectAssociation().getElementType();
         return TypeNames.objectTypeNameFor(returnType, holder.getSchemaType());
-    }
-
-    public interface Holder<T extends ObjectAssociation>
-            extends ObjectAssociationProvider<T>,
-                    SchemaTypeProvider {
     }
 
 }

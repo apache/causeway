@@ -30,16 +30,13 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public class GqlvPropertyGetBlob
         extends GqlvAbstractCustom
-        implements GqlvPropertyGetBlobBytes.Holder
+        implements HolderPropertyGetBlobAbstract
 {
 
-    final Holder holder;
+    final HolderGetPropertyBlob holder;
     final GqlvPropertyGetBlobBytes blobName;
     final GqlvPropertyGetBlobMimeType blobMimeType;
     final GqlvPropertyGetBlobName blobBytes;
@@ -47,7 +44,7 @@ public class GqlvPropertyGetBlob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetBlob(
-            final Holder holder,
+            final HolderGetPropertyBlob holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;
@@ -113,10 +110,4 @@ public class GqlvPropertyGetBlob
         return holder.getSchemaType();
     }
 
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectAssociationProvider<OneToOneAssociation>,
-                    SchemaTypeProvider {
-
-    }
 }

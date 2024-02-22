@@ -29,23 +29,22 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 
 public class GqlvProperty
-        extends GqlvAssociation<OneToOneAssociation, GqlvMemberHolder>
-        implements GqlvMemberHidden.Holder<OneToOneAssociation>,
-        GqlvMemberDisabled.Holder<OneToOneAssociation>,
-        GqlvPropertyGet.Holder,
-        GqlvPropertyChoices.Holder,
-        GqlvPropertyAutoComplete.Holder,
-        GqlvPropertyValidate.Holder,
-        GqlvPropertySet.Holder,
-        GqlvAssociationDatatype.Holder<OneToOneAssociation>,
-        GqlvPropertyGetBlob.Holder,
-        GqlvPropertyGetClob.Holder {
+        extends GqlvAssociation<OneToOneAssociation, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
+        implements
+        GqlvMemberHolder<OneToOneAssociation>,
+        HolderPropertyGet,
+        HolderPropertyChoices,
+        HolderPropertyAutoComplete,
+        HolderPropertyValidate,
+        HolderPropertySet,
+        HolderAssociationDatatype<OneToOneAssociation>,
+        HolderGetPropertyBlob,
+        HolderPropertyGetClob, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<OneToOneAssociation>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider {
 
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;
@@ -67,7 +66,7 @@ public class GqlvProperty
     private final GqlvPropertyDatatype datatype;
 
     public GqlvProperty(
-            final GqlvMemberHolder holder,
+            final org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder holder,
             final OneToOneAssociation otoa,
             final Context context) {
         super(holder, otoa, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), otoa, holder.getSchemaType()), context);

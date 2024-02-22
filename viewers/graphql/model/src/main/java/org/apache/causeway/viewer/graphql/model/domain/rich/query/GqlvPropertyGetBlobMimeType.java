@@ -25,7 +25,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 public class GqlvPropertyGetBlobMimeType extends GqlvPropertyGetBlobAbstract {
 
     public GqlvPropertyGetBlobMimeType(
-            final Holder holder,
+            final HolderPropertyGetBlobAbstract holder,
             final Context context) {
         super(holder, context, "mimeType");
 

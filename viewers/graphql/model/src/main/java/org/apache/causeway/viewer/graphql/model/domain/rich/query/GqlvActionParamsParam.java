@@ -33,9 +33,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
@@ -44,15 +41,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParamsParam
         extends GqlvAbstractCustom
-        implements GqlvActionParamsParamHidden.Holder,
-                   GqlvActionParamsParamDisabled.Holder,
-                   GqlvActionParamsParamChoices.Holder,
-                   GqlvActionParamsParamAutoComplete.Holder,
-                   GqlvActionParamsParamDefault.Holder,
-                   GqlvActionParamsParamValidate.Holder,
-                   GqlvActionParamsParamDatatype.Holder {
+        implements HolderActionParamsParamHidden,
+        HolderActionParamsParamDisabled,
+        HolderActionParamsParamChoices,
+        HolderActionParamsParamAutoComplete,
+        HolderActionParamsParamDefault,
+        HolderActionParamsParamValidate,
+        HolderActionParamsParamDatatype {
 
-    @Getter private final Holder holder;
+    @Getter private final HolderActionParamsParam holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
@@ -74,7 +71,7 @@ public class GqlvActionParamsParam
     private final GqlvActionParamsParamDatatype datatype;
 
     public GqlvActionParamsParam(
-            final Holder holder,
+            final HolderActionParamsParam holder,
             final ObjectActionParameter oap,
             final Context context,
             final int paramNum) {
@@ -182,20 +179,4 @@ public class GqlvActionParamsParam
         return holder.getSchemaType();
     }
 
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectActionProvider,
-                    SchemaTypeProvider {
-
-        void addGqlArguments(
-                ObjectAction objectAction,
-                GraphQLFieldDefinition.Builder fieldBuilder,
-                TypeMapper.InputContext inputContext,
-                int paramNum);
-
-        Can<ManagedObject> argumentManagedObjectsFor(
-                Environment dataFetchingEnvironment,
-                ObjectAction objectAction,
-                BookmarkService bookmarkService);
-    }
 }

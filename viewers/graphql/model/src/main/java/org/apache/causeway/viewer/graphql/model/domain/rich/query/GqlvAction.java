@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -50,13 +49,13 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvAction
-        extends GqlvMember<ObjectAction, GqlvMemberHolder>
-        implements GqlvMemberHidden.Holder<ObjectAction>,
-                   GqlvMemberDisabled.Holder<ObjectAction>,
-                   GqlvActionInvoke.Holder,
-                   GqlvActionValidity.Holder,
-                   GqlvActionParams.Holder,
-                   Parent {
+        extends GqlvMember<ObjectAction, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
+        implements
+        GqlvMemberHolder<ObjectAction>,
+        HolderActionInvoke,
+        HolderActionValidity,
+        HolderActionParams,
+                   Parent, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<ObjectAction>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider {
 
     private final GqlvMemberHidden<ObjectAction> hidden;
     private final GqlvMemberDisabled<ObjectAction> disabled;
@@ -71,7 +70,7 @@ public class GqlvAction
     private final GqlvActionParams params;
 
     public GqlvAction(
-            final GqlvMemberHolder holder,
+            final org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder holder,
             final ObjectAction objectAction,
             final Context context) {
         super(holder, objectAction, TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction, holder.getSchemaType()), context);

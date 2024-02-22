@@ -30,16 +30,15 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.val;
 
 public abstract class GqlvPropertyGetBlobAbstract extends GqlvAbstract {
 
-    final Holder holder;
+    final HolderPropertyGetBlobAbstract holder;
 
     public GqlvPropertyGetBlobAbstract(
-            final Holder holder,
+            final HolderPropertyGetBlobAbstract holder,
             final Context context, String name) {
         super(context);
         this.holder = holder;
@@ -70,11 +69,6 @@ public abstract class GqlvPropertyGetBlobAbstract extends GqlvAbstract {
                 .map(Blob.class::cast)
                 .map(mapper)
                 .orElse(null);
-    }
-
-    public interface Holder
-            extends GqlvPropertyGet.Holder,
-                    SchemaTypeProvider {
     }
 
 }

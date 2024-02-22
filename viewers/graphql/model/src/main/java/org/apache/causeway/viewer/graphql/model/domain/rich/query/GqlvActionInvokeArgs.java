@@ -35,9 +35,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.Getter;
 import lombok.val;
@@ -46,14 +43,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvokeArgs
         extends GqlvAbstractCustom
-        implements GqlvActionInvokeArgsArg.Holder {
+        implements HolderActionInvokeArgsArg {
 
-    @Getter private final Holder holder;
+    @Getter private final HolderActionInvokeArgs holder;
 
     private final List<GqlvActionInvokeArgsArg> args = new ArrayList<>();
 
     public GqlvActionInvokeArgs(
-            final Holder holder,
+            final HolderActionInvokeArgs holder,
             final Context context) {
         super(TypeNames.actionArgsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
         this.holder = holder;
@@ -110,14 +107,4 @@ public class GqlvActionInvokeArgs
         return holder.getSchemaType();
     }
 
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectActionProvider,
-                    SchemaTypeProvider {
-
-        Can<ManagedObject> argumentManagedObjectsFor(
-                Environment dataFetchingEnvironment,
-                ObjectAction objectAction,
-                BookmarkService bookmarkService);
-    }
 }

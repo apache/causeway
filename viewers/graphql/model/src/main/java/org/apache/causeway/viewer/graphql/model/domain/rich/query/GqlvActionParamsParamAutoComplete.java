@@ -24,29 +24,20 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
  import graphql.schema.DataFetchingEnvironment;
  import graphql.schema.GraphQLArgument;
- import graphql.schema.GraphQLFieldDefinition;
  import graphql.schema.GraphQLList;
 
  import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
  import static graphql.schema.GraphQLNonNull.nonNull;
 
  import org.apache.causeway.applib.annotation.Where;
- import org.apache.causeway.applib.services.bookmark.BookmarkService;
- import org.apache.causeway.commons.collections.Can;
  import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
  import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
  import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
  import org.apache.causeway.core.metamodel.object.ManagedObject;
- import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  import org.apache.causeway.viewer.graphql.model.context.Context;
  import org.apache.causeway.viewer.graphql.model.domain.Environment;
  import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
- import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
  import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
- import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
- import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
- import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
- import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
  import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
  import lombok.val;
@@ -57,10 +48,10 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
      private static final String SEARCH_PARAM_NAME = "search";
 
-     private final Holder holder;
+     private final HolderActionParamsParamAutoComplete holder;
 
      public GqlvActionParamsParamAutoComplete(
-             final Holder holder,
+             final HolderActionParamsParamAutoComplete holder,
              final Context context) {
          super(context);
          this.holder = holder;
@@ -107,22 +98,4 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
                     .collect(Collectors.toList());
      }
 
-     public interface Holder
-             extends ObjectSpecificationProvider,
-                     ObjectActionProvider,
-                     ObjectActionParameterProvider,
-                    SchemaTypeProvider {
-         GqlvActionParamsParam.Holder getHolder();
-
-         void addGqlArguments(
-                 ObjectAction objectAction,
-                 GraphQLFieldDefinition.Builder fieldBuilder,
-                 TypeMapper.InputContext inputContext,
-                 int paramNum);
-
-         Can<ManagedObject> argumentManagedObjectsFor(
-                 Environment environment,
-                 ObjectAction objectAction,
-                 BookmarkService bookmarkService);
-     }
  }

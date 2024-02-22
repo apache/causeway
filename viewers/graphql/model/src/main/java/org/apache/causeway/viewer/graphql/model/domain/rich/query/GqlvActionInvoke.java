@@ -34,9 +34,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -45,15 +42,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvoke
         extends GqlvAbstractCustom
-        implements GqlvActionInvokeResult.Holder,
-                   GqlvActionInvokeArgs.Holder {
+        implements HolderActionInvokeResult,
+        HolderActionInvokeArgs {
 
-    private final Holder holder;
+    private final HolderActionInvoke holder;
     private final GqlvActionInvokeResult result;
     private final GqlvActionInvokeArgs args;
 
     public GqlvActionInvoke(
-            final Holder holder,
+            final HolderActionInvoke holder,
             final Context context) {
         super(TypeNames.actionInvokeTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
 
@@ -139,24 +136,6 @@ public class GqlvActionInvoke
     @Override
     public ObjectSpecification getObjectSpecification() {
         return holder.getObjectSpecification();
-    }
-
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectActionProvider,
-                    SchemaTypeProvider {
-
-        void addGqlArguments(
-                final ObjectAction objectAction,
-                final GraphQLFieldDefinition.Builder fieldBuilder,
-                final TypeMapper.InputContext inputContext,
-                final int parameterCount);
-
-        Can<ManagedObject> argumentManagedObjectsFor(
-                Environment dataFetchingEnvironment,
-                ObjectAction objectAction,
-                BookmarkService bookmarkService);
-
     }
 
     @Override

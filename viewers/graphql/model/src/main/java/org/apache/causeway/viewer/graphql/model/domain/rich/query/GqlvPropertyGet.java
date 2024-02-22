@@ -22,29 +22,21 @@ import graphql.schema.GraphQLOutputType;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.val;
 
 public class GqlvPropertyGet extends GqlvAssociationGet<OneToOneAssociation> {
 
     public GqlvPropertyGet(
-            final Holder holder,
+            final HolderPropertyGet holder,
             final Context context) {
         super(holder, context);
     }
 
     @Override
-    GraphQLOutputType outputTypeFor(GqlvAssociationGet.Holder<OneToOneAssociation> holder) {
+    GraphQLOutputType outputTypeFor(HolderAssociationGet<OneToOneAssociation> holder) {
         val oneToOneAssociation = holder.getObjectAssociation();
         return context.typeMapper.outputTypeFor(oneToOneAssociation, holder.getSchemaType());
     }
 
-    public interface Holder
-            extends GqlvAssociationGet.Holder<OneToOneAssociation>,
-                    SchemaTypeProvider {
-
-        @Override
-        OneToOneAssociation getObjectAssociation();
-    }
 }

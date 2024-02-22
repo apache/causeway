@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
@@ -29,15 +28,9 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
-
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -46,9 +39,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -56,10 +46,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvokeResult extends GqlvAbstract {
 
-    private final GqlvActionInvokeResult.Holder holder;
+    private final HolderActionInvokeResult holder;
 
     public GqlvActionInvokeResult(
-            final GqlvActionInvokeResult.Holder holder,
+            final HolderActionInvokeResult holder,
             final Context context) {
         super(context);
 
@@ -146,22 +136,5 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
         return resultManagedObject.getPojo();
     }
 
-
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectActionProvider,
-                    SchemaTypeProvider {
-
-        void addGqlArguments(
-                final ObjectAction objectAction,
-                final GraphQLFieldDefinition.Builder fieldBuilder,
-                final TypeMapper.InputContext inputContext,
-                final int parameterCount);
-
-        Can<ManagedObject> argumentManagedObjectsFor(
-                Environment dataFetchingEnvironment,
-                ObjectAction objectAction,
-                BookmarkService bookmarkService);
-    }
 
 }

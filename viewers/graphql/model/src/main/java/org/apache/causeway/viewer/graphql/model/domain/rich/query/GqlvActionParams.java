@@ -36,9 +36,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
@@ -48,14 +45,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParams
         extends GqlvAbstractCustom
-        implements GqlvActionParamsParam.Holder {
+        implements HolderActionParamsParam {
 
-    @Getter private final Holder holder;
+    @Getter private final HolderActionParams holder;
 
     private final List<GqlvActionParamsParam> params = new ArrayList<>();
 
     public GqlvActionParams(
-            final Holder holder,
+            final HolderActionParams holder,
             final Context context) {
         super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
         this.holder = holder;
@@ -120,20 +117,4 @@ public class GqlvActionParams
         return holder.getSchemaType();
     }
 
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectActionProvider,
-                    SchemaTypeProvider {
-
-        void addGqlArguments(
-                ObjectAction objectAction,
-                GraphQLFieldDefinition.Builder fieldBuilder,
-                TypeMapper.InputContext inputContext,
-                int paramNum);
-
-        Can<ManagedObject> argumentManagedObjectsFor(
-                Environment dataFetchingEnvironment,
-                ObjectAction objectAction,
-                BookmarkService bookmarkService);
-    }
 }

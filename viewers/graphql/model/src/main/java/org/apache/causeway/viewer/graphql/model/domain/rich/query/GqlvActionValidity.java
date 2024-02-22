@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 import java.util.Map;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -35,9 +34,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -46,10 +42,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionValidity extends GqlvAbstract {
 
-    private final Holder holder;
+    private final HolderActionValidity holder;
 
     public GqlvActionValidity(
-            final Holder holder,
+            final HolderActionValidity holder,
             final Context context
     ) {
         super(context);
@@ -96,15 +92,4 @@ public class GqlvActionValidity extends GqlvAbstract {
         return consent.isVetoed() ? consent.getReasonAsString().orElse("Invalid") : null;
     }
 
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectActionProvider,
-                    SchemaTypeProvider {
-
-        void addGqlArguments(
-                ObjectAction objectAction,
-                GraphQLFieldDefinition.Builder fieldBuilder,
-                TypeMapper.InputContext inputContext,
-                int parameterCount);
-    }
 }
