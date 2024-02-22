@@ -52,6 +52,10 @@ public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIn
     @Inject private SpecificationLoader specificationLoader;
     @Inject private GraphQlSourceForCauseway graphQlSourceForCauseway;
 
+    public GqlSchema_print_IntegTest() {
+        super("._.gql");
+    }
+
     @BeforeEach
     protected void beforeEach() {
         assertNotNull(causewaySystemEnvironment);

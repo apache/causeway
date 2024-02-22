@@ -39,7 +39,7 @@ import lombok.val;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(50)
 @ActiveProfiles("test")
-public class Person_IntegTest extends AbstractDynamic_IntegTest {
+public class Person_IntegTest extends Abstract_IntegTest {
 
     @Override
     @TestFactory

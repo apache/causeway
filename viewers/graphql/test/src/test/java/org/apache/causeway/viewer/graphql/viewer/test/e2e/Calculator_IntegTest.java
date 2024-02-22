@@ -48,7 +48,7 @@ import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(30)
 @ActiveProfiles("test")
-public class Calculator_IntegTest extends AbstractDynamic_IntegTest {
+public class Calculator_IntegTest extends Abstract_IntegTest {
 
     @Override
     @TestFactory

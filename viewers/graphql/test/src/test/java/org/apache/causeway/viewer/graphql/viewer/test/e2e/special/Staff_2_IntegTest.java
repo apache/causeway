@@ -26,8 +26,6 @@ import java.net.http.HttpResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.AbstractDynamic_IntegTest;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;

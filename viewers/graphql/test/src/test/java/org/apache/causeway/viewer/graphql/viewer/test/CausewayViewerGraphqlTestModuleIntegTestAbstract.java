@@ -18,23 +18,36 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
+
+import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
+import org.approvaltests.integrations.junit5.JupiterApprovals;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
@@ -48,6 +61,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.graphql.test.tester.HttpGraphQlTester;
 import org.springframework.lang.Nullable;
@@ -88,6 +102,15 @@ import lombok.val;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
 public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
+
+    private final String suffix;
+
+    protected CausewayViewerGraphqlTestModuleIntegTestAbstract(String suffix) {
+        this.suffix = suffix;
+    }
+    protected CausewayViewerGraphqlTestModuleIntegTestAbstract() {
+        this("._.gql");
+    }
 
     /**
      * Compared to the production app manifest <code>domainapp.webapp.AppManifest</code>,
@@ -280,6 +303,62 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
                     }
                 })
                 .forFile().withExtension(".json");
+    }
+
+
+
+    protected Iterable<DynamicTest> each() throws IOException, URISyntaxException {
+
+        val integClassName = getClass().getSimpleName();
+        val classUrl = getClass().getResource(integClassName + ".class");
+        Path classPath = Paths.get(classUrl.toURI());
+        Path directoryPath = classPath.getParent();
+
+        return Files.walk(directoryPath)
+                .filter(Files::isRegularFile)
+                .filter(file -> {
+                    String fileName = file.getFileName().toString();
+                    return fileName.startsWith(integClassName) && fileName.endsWith(suffix);
+                })
+                .map(file -> {
+                    String fileName = file.getFileName().toString();
+                    String testName = fileName.substring(integClassName.length() + ".each.".length()).replace(suffix, "");
+                    return JupiterApprovals.dynamicTest(
+                            testName,
+                            options -> {
+                                try {
+                                    Approvals.verify(submitFileNamed(fileName), jsonOptions(options));
+                                } finally {
+                                    afterEach();
+                                    beforeEach();
+                                }
+                            });
+                })
+                .collect(Collectors.toList());
+    }
+
+    protected void beforeEach() {}
+
+    protected void afterEach() {}
+
+    protected static Blob asPdfBlob(String fileName) {
+        val bytes = toBytes(fileName);
+        return new Blob(fileName, "application/pdf", bytes);
+    }
+
+    @SneakyThrows
+    protected static byte[] toBytes(String fileName){
+        InputStream inputStream = new ClassPathResource(fileName, Abstract_IntegTest.class).getInputStream();
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        int nRead;
+        byte[] data = new byte[16384];
+
+        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+
+        return buffer.toByteArray();
     }
 
 
