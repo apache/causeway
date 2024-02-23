@@ -35,6 +35,9 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+
+import graphql.schema.GraphQLFieldDefinition;
 
 import lombok.Getter;
 import lombok.val;
@@ -43,14 +46,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvokeArgs
         extends GqlvAbstractCustom
-        implements HolderActionInvokeArgs {
+        implements HolderActionInvoke {
 
-    @Getter private final HolderActionInvokeArgs holder;
+    @Getter private final HolderActionInvoke holder;
 
     private final List<GqlvActionInvokeArgsArg> args = new ArrayList<>();
 
     public GqlvActionInvokeArgs(
-            final HolderActionInvokeArgs holder,
+            final HolderActionInvoke holder,
             final Context context) {
         super(TypeNames.actionArgsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
         this.holder = holder;
@@ -72,6 +75,17 @@ public class GqlvActionInvokeArgs
         buildObjectTypeAndField("args", "Arguments used to invoke this action");
     }
 
+
+    @Override
+    protected void addDataFetchersForChildren() {
+        args.forEach(param -> param.addDataFetcher(this));
+    }
+
+    @Override
+    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+    }
+
     @Override
     public ObjectSpecification getObjectSpecification() {
         return holder.getObjectSpecification();
@@ -88,13 +102,12 @@ public class GqlvActionInvokeArgs
     }
 
     @Override
-    protected void addDataFetchersForChildren() {
-        args.forEach(param -> param.addDataFetcher(this));
-    }
-
-    @Override
-    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
-        return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+    public void addGqlArguments(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder fieldBuilder,
+            final TypeMapper.InputContext inputContext,
+            final int parameterCount) {
+        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, parameterCount);
     }
 
     @Override
@@ -106,5 +119,6 @@ public class GqlvActionInvokeArgs
     public SchemaType getSchemaType() {
         return holder.getSchemaType();
     }
+
 
 }

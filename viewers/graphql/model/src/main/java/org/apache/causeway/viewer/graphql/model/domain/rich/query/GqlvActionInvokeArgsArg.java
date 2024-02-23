@@ -37,12 +37,12 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvActionInvokeArgsArg
         extends GqlvAbstract {
 
-    @Getter private final HolderActionInvokeArgs holder;
+    @Getter private final HolderActionInvoke holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
     public GqlvActionInvokeArgsArg(
-            final HolderActionInvokeArgs holder,
+            final HolderActionInvoke holder,
             final ObjectActionParameter objectActionParameter,
             final Context context,
             final int paramNum) {

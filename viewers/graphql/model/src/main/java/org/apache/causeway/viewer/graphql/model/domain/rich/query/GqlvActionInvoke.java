@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvActionInvoke
         extends GqlvAbstractCustom
         implements HolderActionInvokeResult,
-        HolderActionInvokeArgs {
+        HolderActionInvoke {
 
     private final HolderActionInvoke holder;
     private final GqlvActionInvokeResult result;
