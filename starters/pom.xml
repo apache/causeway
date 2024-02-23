@@ -48,7 +48,7 @@
 
 		<maven.compiler.release>21</maven.compiler.release>
 
-		<spring-boot.version>3.2.2</spring-boot.version>
+		<spring-boot.version>3.2.3</spring-boot.version>
 		<approvaltests.version>22.3.3</approvaltests.version>
 
 		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
