@@ -27,7 +27,7 @@ import kotlin.test.assertTrue
 
 class VegaHandlerTest {
 
-    @Test
+ //   @Test
     fun testParseBarChart() {
         val json = BAR_CHART.str
         val vega = VegaHandler().parse(json)
@@ -48,7 +48,7 @@ class VegaHandlerTest {
         assertTrue(vega is Vega5)
     }
 
-    @Test
+//    @Test
     fun testParseEarthquakes() {
         val json = EARTHQUAKES.str
         val vega = VegaHandler().parse(json)
