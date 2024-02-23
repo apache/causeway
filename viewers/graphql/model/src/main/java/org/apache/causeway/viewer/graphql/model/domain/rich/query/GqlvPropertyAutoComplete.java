@@ -41,10 +41,10 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
 
     private static final String SEARCH_PARAM_NAME = "search";
 
-    private final HolderMember<OneToOneAssociation> holder;
+    private final HolderMemberDetails<OneToOneAssociation> holder;
 
     public GqlvPropertyAutoComplete(
-            final HolderMember<OneToOneAssociation> holder,
+            final HolderMemberDetails<OneToOneAssociation> holder,
             final Context context) {
         super(context);
         this.holder = holder;

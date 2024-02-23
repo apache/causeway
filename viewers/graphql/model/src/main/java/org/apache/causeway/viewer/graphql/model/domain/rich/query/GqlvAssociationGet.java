@@ -33,10 +33,10 @@ import lombok.val;
 
 public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends GqlvAbstract {
 
-    final HolderMember<T> holder;
+    final HolderMemberDetails<T> holder;
 
     public GqlvAssociationGet(
-            final HolderMember<T> holder,
+            final HolderMemberDetails<T> holder,
             final Context context) {
         super(context);
         this.holder = holder;
@@ -52,7 +52,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
         }
     }
 
-    abstract GraphQLOutputType outputTypeFor(HolderMember<T> holder);
+    abstract GraphQLOutputType outputTypeFor(HolderMemberDetails<T> holder);
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment environment) {

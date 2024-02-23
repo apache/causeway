@@ -31,7 +31,7 @@ public class GqlvPropertyGetBlobBytes extends GqlvPropertyGetBlobAbstract {
     private final String graphqlPath;
 
     public GqlvPropertyGetBlobBytes(
-            final HolderMember<OneToOneAssociation> holder,
+            final HolderMemberDetails<OneToOneAssociation> holder,
             final Context context) {
         super(holder, context, "bytes");
 

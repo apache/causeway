@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvAction
         extends GqlvMember<ObjectAction, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
-        implements HolderMember<ObjectAction>,
+        implements HolderMemberDetails<ObjectAction>,
                    HolderActionDetails,
                    Parent, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<ObjectAction>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider {
 

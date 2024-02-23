@@ -36,10 +36,10 @@ import lombok.val;
 
 public abstract class GqlvPropertyGetBlobAbstract extends GqlvAbstract {
 
-    final HolderMember<OneToOneAssociation> holder;
+    final HolderMemberDetails<OneToOneAssociation> holder;
 
     public GqlvPropertyGetBlobAbstract(
-            final HolderMember<OneToOneAssociation> holder,
+            final HolderMemberDetails<OneToOneAssociation> holder,
             final Context context, String name) {
         super(context);
         this.holder = holder;

@@ -26,7 +26,7 @@ public class GqlvPropertyDatatype extends GqlvAssociationDatatype<OneToOneAssoci
     public GqlvPropertyDatatype(
             final HolderPropertyDetails holder,
             final Context context) {
-        super(holder, context);
+        super(holder.asHolderMemberDetails(), context);
     }
 
 }

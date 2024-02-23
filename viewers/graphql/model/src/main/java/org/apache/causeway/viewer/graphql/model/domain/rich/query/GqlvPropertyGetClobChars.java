@@ -31,7 +31,7 @@ public class GqlvPropertyGetClobChars extends GqlvPropertyGetClobAbstract {
     private final String graphqlPath;
 
     public GqlvPropertyGetClobChars(
-            final HolderMember<OneToOneAssociation> holder,
+            final HolderMemberDetails<OneToOneAssociation> holder,
             final Context context) {
         super(holder, context, "chars");
 

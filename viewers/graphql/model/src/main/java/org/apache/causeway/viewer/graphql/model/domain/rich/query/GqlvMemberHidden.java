@@ -37,10 +37,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvMemberHidden<T extends ObjectMember> extends GqlvAbstract {
 
-    private final HolderMember<T> holder;
+    private final HolderMemberDetails<T> holder;
 
     public GqlvMemberHidden(
-            final HolderMember<T> holder,
+            final HolderMemberDetails<T> holder,
             final Context context
     ) {
         super(context);

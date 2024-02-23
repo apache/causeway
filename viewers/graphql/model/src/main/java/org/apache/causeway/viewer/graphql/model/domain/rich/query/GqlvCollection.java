@@ -30,7 +30,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public class GqlvCollection
         extends GqlvAssociation<OneToManyAssociation, GqlvMemberHolder>
-        implements HolderMember<OneToManyAssociation>,
+        implements HolderMemberDetails<OneToManyAssociation>,
                     ObjectSpecificationProvider, ObjectMemberProvider<OneToManyAssociation>, SchemaTypeProvider {
 
     private final GqlvMemberHidden<OneToManyAssociation> hidden;

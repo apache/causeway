@@ -34,10 +34,10 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public class GqlvPropertyGetClob
         extends GqlvAbstractCustom
-        implements HolderMember<OneToOneAssociation>,
+        implements HolderMemberDetails<OneToOneAssociation>,
                    SchemaTypeProvider {
 
-    final HolderMember<OneToOneAssociation> holder;
+    final HolderMemberDetails<OneToOneAssociation> holder;
     final GqlvPropertyGetClobName clobName;
     final GqlvPropertyGetClobMimeType clobMimeType;
     final GqlvPropertyGetClobChars clobChars;
@@ -45,7 +45,7 @@ public class GqlvPropertyGetClob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetClob(
-            final HolderMember<OneToOneAssociation> holder,
+            final HolderMemberDetails<OneToOneAssociation> holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;
