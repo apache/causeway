@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 public class GqlvPropertyGetBlob
         extends GqlvAbstractCustom
-        implements HolderPropertyGetXlobDetails
+        implements HolderMember<OneToOneAssociation>
 {
 
     final HolderPropertyGetXlob holder;

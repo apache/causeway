@@ -20,12 +20,13 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import graphql.schema.DataFetchingEnvironment;
 
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 public class GqlvPropertyGetBlobMimeType extends GqlvPropertyGetBlobAbstract {
 
     public GqlvPropertyGetBlobMimeType(
-            final HolderPropertyGetXlobDetails holder,
+            final HolderMember<OneToOneAssociation> holder,
             final Context context) {
         super(holder, context, "mimeType");
 

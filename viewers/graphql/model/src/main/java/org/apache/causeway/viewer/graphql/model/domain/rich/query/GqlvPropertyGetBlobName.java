@@ -21,12 +21,13 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 import graphql.schema.DataFetchingEnvironment;
 
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 public class GqlvPropertyGetBlobName extends GqlvPropertyGetBlobAbstract {
 
     public GqlvPropertyGetBlobName(
-            final HolderPropertyGetXlobDetails holder,
+            final HolderMember<OneToOneAssociation> holder,
             final Context context) {
         super(holder, context, "name");
     }

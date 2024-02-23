@@ -28,13 +28,13 @@ import lombok.val;
 public class GqlvCollectionGet extends GqlvAssociationGet<OneToManyAssociation> {
 
     public GqlvCollectionGet(
-            final HolderAssociationGet holder,
+            final HolderMember<OneToManyAssociation> holder,
             final Context context) {
         super(holder, context);
     }
 
     @Override
-    GraphQLOutputType outputTypeFor(HolderAssociationGet<OneToManyAssociation> holder) {
+    GraphQLOutputType outputTypeFor(HolderMember<OneToManyAssociation> holder) {
         val oneToManyAssociation = holder.getObjectMember();
         return context.typeMapper.listTypeForElementTypeOf(oneToManyAssociation, holder.getSchemaType());
     }

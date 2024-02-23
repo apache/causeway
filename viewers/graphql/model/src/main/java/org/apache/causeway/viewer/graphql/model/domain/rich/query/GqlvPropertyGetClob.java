@@ -34,7 +34,8 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public class GqlvPropertyGetClob
         extends GqlvAbstractCustom
-        implements HolderPropertyGet, HolderPropertyGetXlobDetails, SchemaTypeProvider {
+        implements HolderMember<OneToOneAssociation>,
+                   SchemaTypeProvider {
 
     final HolderPropertyGetXlob holder;
     final GqlvPropertyGetClobName clobName;
