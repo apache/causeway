@@ -53,7 +53,6 @@ public class GqlvAction
         implements
         HolderMember<ObjectAction>,
         HolderActionDetails,
-        HolderActionValidity,
                    Parent, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<ObjectAction>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider {
 
     private final GqlvMemberHidden<ObjectAction> hidden;

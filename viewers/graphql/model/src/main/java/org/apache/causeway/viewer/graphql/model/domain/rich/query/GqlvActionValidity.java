@@ -42,10 +42,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionValidity extends GqlvAbstract {
 
-    private final HolderActionValidity holder;
+    private final HolderActionDetails holder;
 
     public GqlvActionValidity(
-            final HolderActionValidity holder,
+            final HolderActionDetails holder,
             final Context context
     ) {
         super(context);
