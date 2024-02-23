@@ -31,8 +31,11 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
+
+import org.springframework.beans.factory.ObjectProvider;
 
 public class GqlvPropertyGetBlob
         extends GqlvAbstractCustom
@@ -110,7 +113,7 @@ public class GqlvPropertyGetBlob
 
     public interface Holder
             extends ObjectSpecificationProvider,
-                    ObjectAssociationProvider<OneToOneAssociation>,
+                    ObjectMemberProvider<OneToOneAssociation>,
                     SchemaTypeProvider {
 
     }

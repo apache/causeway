@@ -20,6 +20,8 @@ package org.apache.causeway.viewer.graphql.model.mmproviders;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-public interface OneToOneAssociationProvider extends ObjectAssociationProvider<OneToOneAssociation> {
+import org.springframework.beans.factory.ObjectProvider;
+
+public interface OneToOneAssociationProvider extends ObjectMemberProvider<OneToOneAssociation> {
     OneToOneAssociation getOneToOneAssociation();
 }

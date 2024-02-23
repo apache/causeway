@@ -28,6 +28,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectAssociationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.val;
@@ -55,7 +56,7 @@ public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> exten
     }
 
     public interface Holder<T extends ObjectAssociation>
-            extends ObjectAssociationProvider<T>,
+            extends ObjectMemberProvider<T>,
                     SchemaTypeProvider {
     }
 
