@@ -46,7 +46,7 @@ public class GqlvActionParamsParam
         implements HolderActionParamDetails,
         ObjectActionParameterProvider, SchemaTypeProvider {
 
-    @Getter private final HolderActionParams holder;
+    @Getter private final HolderActionDetails holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
@@ -68,7 +68,7 @@ public class GqlvActionParamsParam
     private final GqlvActionParamsParamDatatype datatype;
 
     public GqlvActionParamsParam(
-            final HolderActionParams holder,
+            final HolderActionDetails holder,
             final ObjectActionParameter oap,
             final Context context,
             final int paramNum) {

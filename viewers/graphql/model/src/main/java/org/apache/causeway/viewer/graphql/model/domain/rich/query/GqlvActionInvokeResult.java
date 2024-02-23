@@ -46,10 +46,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvokeResult extends GqlvAbstract {
 
-    private final HolderActionInvoke holder;
+    private final HolderActionDetails holder;
 
     public GqlvActionInvokeResult(
-            final HolderActionInvoke holder,
+            final HolderActionDetails holder,
             final Context context) {
         super(context);
 

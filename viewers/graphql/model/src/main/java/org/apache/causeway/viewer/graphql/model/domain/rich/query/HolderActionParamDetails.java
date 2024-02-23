@@ -7,10 +7,10 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParamete
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 public interface HolderActionParamDetails
-        extends HolderActionParams,
-        ObjectActionParameterProvider{
+        extends HolderActionDetails,
+                ObjectActionParameterProvider{
 
-    HolderActionParams getHolder();
+    HolderActionDetails getHolder();
 
     void addGqlArgument(
             ObjectAction objectAction,

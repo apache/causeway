@@ -12,10 +12,10 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-public interface HolderActionInvoke
+public interface HolderActionDetails
         extends ObjectSpecificationProvider,
-        ObjectActionProvider,
-        SchemaTypeProvider {
+                ObjectActionProvider,
+                SchemaTypeProvider {
 
     void addGqlArguments(
             final ObjectAction objectAction,

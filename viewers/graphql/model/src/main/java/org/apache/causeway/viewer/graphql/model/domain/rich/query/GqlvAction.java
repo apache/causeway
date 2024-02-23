@@ -52,9 +52,8 @@ public class GqlvAction
         extends GqlvMember<ObjectAction, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
         implements
         HolderMember<ObjectAction>,
-        HolderActionInvoke,
+        HolderActionDetails,
         HolderActionValidity,
-        HolderActionParams,
                    Parent, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<ObjectAction>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider {
 
     private final GqlvMemberHidden<ObjectAction> hidden;

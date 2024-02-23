@@ -42,14 +42,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvoke
         extends GqlvAbstractCustom
-        implements HolderActionInvoke {
+        implements HolderActionDetails {
 
-    private final HolderActionInvoke holder;
+    private final HolderActionDetails holder;
     private final GqlvActionInvokeResult result;
     private final GqlvActionInvokeArgs args;
 
     public GqlvActionInvoke(
-            final HolderActionInvoke holder,
+            final HolderActionDetails holder,
             final Context context) {
         super(TypeNames.actionInvokeTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
 

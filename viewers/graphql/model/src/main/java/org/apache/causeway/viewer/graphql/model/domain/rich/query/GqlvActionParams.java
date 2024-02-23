@@ -45,14 +45,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParams
         extends GqlvAbstractCustom
-        implements HolderActionParams {
+        implements HolderActionDetails {
 
-    @Getter private final HolderActionParams holder;
+    @Getter private final HolderActionDetails holder;
 
     private final List<GqlvActionParamsParam> params = new ArrayList<>();
 
     public GqlvActionParams(
-            final HolderActionParams holder,
+            final HolderActionDetails holder,
             final Context context) {
         super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
         this.holder = holder;
