@@ -30,8 +30,6 @@ public class GqlvCollection
         extends GqlvAssociation<OneToManyAssociation, ObjectInteractor>
         implements MemberInteractor<OneToManyAssociation> {
 
-    private final GqlvMemberHidden<OneToManyAssociation> hidden;
-    private final GqlvMemberDisabled<OneToManyAssociation> disabled;
     private final GqlvCollectionGet get;
     private final GqlvCollectionDatatype datatype;
 
@@ -43,14 +41,10 @@ public class GqlvCollection
         super(objectInteractor, otma, TypeNames.collectionTypeNameFor(objectInteractor.getObjectSpecification(), otma, objectInteractor.getSchemaType()), context);
 
         if(isBuilt()) {
-            this.hidden = null;
-            this.disabled = null;
             this.get = null;
             this.datatype = null;
             return;
         }
-        addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
-        addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
         addChildFieldFor(this.get = new GqlvCollectionGet(this, context));
         addChildFieldFor(this.datatype = new GqlvCollectionDatatype(this, context));
 
@@ -65,11 +59,6 @@ public class GqlvCollection
 
     @Override
     protected void addDataFetchersForChildren() {
-        if(hidden == null) {
-            return;
-        }
-        hidden.addDataFetcher(this);
-        disabled.addDataFetcher(this);
         get.addDataFetcher(this);
         datatype.addDataFetcher(this);
     }

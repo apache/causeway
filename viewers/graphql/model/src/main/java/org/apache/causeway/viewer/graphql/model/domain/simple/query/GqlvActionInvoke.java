@@ -38,7 +38,6 @@ public class GqlvActionInvoke
         extends GqlvAbstractCustom {
 
     private final GqlvActionInvokeResult result;
-    private final GqlvActionInvokeArgs args;
 
     public GqlvActionInvoke(
             final ActionInteractor actionInteractor,
@@ -47,12 +46,10 @@ public class GqlvActionInvoke
 
         if(isBuilt()) {
             this.result = null;
-            this.args = null;
             return;
         }
 
         addChildFieldFor(this.result = new GqlvActionInvokeResult(actionInteractor, context));
-        addChildFieldFor(this.args = new GqlvActionInvokeArgs(actionInteractor, context));
 
         val gqlObjectType = buildObjectType();
         val objectAction = actionInteractor.getObjectMember();
@@ -92,7 +89,6 @@ public class GqlvActionInvoke
     @Override
     protected void addDataFetchersForChildren() {
         result.addDataFetcher(this);
-        args.addDataFetcher(this);
     }
 
 }

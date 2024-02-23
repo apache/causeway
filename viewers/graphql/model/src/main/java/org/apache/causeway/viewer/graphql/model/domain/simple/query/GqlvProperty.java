@@ -32,6 +32,11 @@ import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.PropertyInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvPropertyAutoComplete;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvPropertyChoices;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvPropertyDatatype;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvPropertySet;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvPropertyValidate;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
@@ -46,24 +51,7 @@ public class GqlvProperty
         PropertyInteractor,
         ObjectSpecificationProvider, ObjectMemberProvider<OneToOneAssociation>, SchemaTypeProvider {
 
-    private final GqlvMemberHidden<OneToOneAssociation> hidden;
-    private final GqlvMemberDisabled<OneToOneAssociation> disabled;
     private final GqlvAbstract get;
-    /**
-     * Populated iff there are choices
-     */
-    private final GqlvPropertyChoices choices;
-    /**
-     * Populated iff there is an autoComplete
-     */
-    private final GqlvPropertyAutoComplete autoComplete;
-    private final GqlvPropertyValidate validate;
-    /**
-     * Populated iff the API variant allows for it.
-     */
-    private final GqlvPropertySet set;
-
-    private final GqlvPropertyDatatype datatype;
 
     public GqlvProperty(
             final ObjectInteractor holder,
@@ -72,18 +60,9 @@ public class GqlvProperty
         super(holder, otoa, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), otoa, holder.getSchemaType()), context);
 
         if (isBuilt()) {
-            this.hidden = null;
-            this.disabled = null;
-            this.choices = null;
-            this.autoComplete = null;
-            this.validate = null;
-            this.set = null;
-            this.datatype = null;
             this.get = null;
             return;
         }
-        addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
-        addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
 
         addChildFieldFor(
                 this.get = isBlob()
@@ -92,12 +71,6 @@ public class GqlvProperty
                                 ? new GqlvPropertyGetClob(this, context)
                                 : new GqlvPropertyGet(this, context)
         );
-
-        addChildFieldFor(this.validate = new GqlvPropertyValidate(this, context));
-        addChildFieldFor(this.choices = new GqlvPropertyChoices(this, context));
-        addChildFieldFor(this.autoComplete = new GqlvPropertyAutoComplete(this, context));
-        addChildFieldFor(this.set = isSetterAllowed() ? new GqlvPropertySet(this, context) : null);
-        addChildFieldFor(this.datatype = new GqlvPropertyDatatype(this, context));
 
         buildObjectTypeAndField(otoa.getId(), otoa.getCanonicalDescription().orElse(otoa.getCanonicalFriendlyName()));
     }
@@ -154,25 +127,7 @@ public class GqlvProperty
 
     @Override
     protected void addDataFetchersForChildren() {
-        hidden.addDataFetcher(this);
-        disabled.addDataFetcher(this);
-
         get.addDataFetcher(this);
-
-        if(choices != null) {
-            choices.addDataFetcher(this);
-        }
-
-        if(autoComplete != null) {
-            autoComplete.addDataFetcher(this);
-        }
-        validate.addDataFetcher(this);
-
-        if (set != null) {
-            set.addDataFetcher(this);
-        }
-
-        datatype.addDataFetcher(this);
     }
 
     @Override

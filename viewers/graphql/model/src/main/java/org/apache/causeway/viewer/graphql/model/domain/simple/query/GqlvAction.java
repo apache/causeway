@@ -55,17 +55,10 @@ public class GqlvAction
         implements ActionInteractor,
                    Parent {
 
-    private final GqlvMemberHidden<ObjectAction> hidden;
-    private final GqlvMemberDisabled<ObjectAction> disabled;
-    private final GqlvActionValidity validate;
     /**
      * Populated iff the API variant allows for it.
      */
     private final GqlvActionInvoke invoke;
-    /**
-     * Populated iif there are params for this action.
-     */
-    private final GqlvActionParams params;
 
     public GqlvAction(
             final ObjectInteractor objectInteractor,
@@ -74,22 +67,14 @@ public class GqlvAction
         super(objectInteractor, objectAction, TypeNames.actionTypeNameFor(objectInteractor.getObjectSpecification(), objectAction, objectInteractor.getSchemaType()), context);
 
         if(isBuilt()) {
-            this.hidden = null;
-            this.disabled = null;
-            this.validate = null;
             this.invoke = null;
-            this.params = null;
             return;
         }
-        addChildFieldFor(this.hidden = new GqlvMemberHidden<>(this, context));
-        addChildFieldFor(this.disabled = new GqlvMemberDisabled<>(this, context));
-        addChildFieldFor(this.validate = new GqlvActionValidity(this, context));
 
         addChildFieldFor(
                 this.invoke = isInvokeAllowed(objectAction)
                     ? new GqlvActionInvoke(this, context)
                     : null);
-        addChildFieldFor(this.params = new GqlvActionParams(this, context));
 
         buildObjectTypeAndField(objectAction.getId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
     }
@@ -300,17 +285,8 @@ public class GqlvAction
 
     @Override
     protected void addDataFetchersForChildren() {
-        if(hidden == null) {
-            return;
-        }
-        hidden.addDataFetcher(this);
-        disabled.addDataFetcher(this);
-        validate.addDataFetcher(this);
         if (invoke != null) {
             invoke.addDataFetcher(this);
-        }
-        if (params != null) {
-            params.addDataFetcher(this);
         }
     }
 
