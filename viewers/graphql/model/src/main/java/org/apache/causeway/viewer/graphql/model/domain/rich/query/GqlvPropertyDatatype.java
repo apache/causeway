@@ -24,7 +24,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 public class GqlvPropertyDatatype extends GqlvAssociationDatatype<OneToOneAssociation> {
 
     public GqlvPropertyDatatype(
-            final HolderAssociationDatatype<OneToOneAssociation> holder,
+            final HolderPropertyDetails holder,
             final Context context) {
         super(holder, context);
     }

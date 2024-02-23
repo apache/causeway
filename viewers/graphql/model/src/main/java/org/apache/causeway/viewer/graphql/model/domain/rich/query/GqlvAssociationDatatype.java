@@ -32,10 +32,10 @@ import lombok.val;
 
 public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> extends GqlvAbstract {
 
-    private final HolderAssociationDatatype<T> holder;
+    private final HolderPropertyDetails holder;
 
     public GqlvAssociationDatatype(
-            final HolderAssociationDatatype<T> holder,
+            final HolderPropertyDetails holder,
             final Context context) {
         super(context);
         this.holder = holder;

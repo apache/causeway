@@ -29,6 +29,7 @@ import static graphql.schema.GraphQLNonNull.nonNull;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
@@ -40,10 +41,10 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
 
     private static final String SEARCH_PARAM_NAME = "search";
 
-    private final HolderPropertyAutoComplete holder;
+    private final HolderMember<OneToOneAssociation> holder;
 
     public GqlvPropertyAutoComplete(
-            final HolderPropertyAutoComplete holder,
+            final HolderMember<OneToOneAssociation> holder,
             final Context context) {
         super(context);
         this.holder = holder;

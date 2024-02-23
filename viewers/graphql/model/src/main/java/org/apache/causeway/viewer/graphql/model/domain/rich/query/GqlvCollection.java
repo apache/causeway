@@ -23,11 +23,15 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public class GqlvCollection
-        extends GqlvAssociation<OneToManyAssociation, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
+        extends GqlvAssociation<OneToManyAssociation, GqlvMemberHolder>
         implements HolderMember<OneToManyAssociation>,
-        HolderAssociationDatatype<OneToManyAssociation>, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider, org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider<OneToManyAssociation>, org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider {
+                    ObjectSpecificationProvider, ObjectMemberProvider<OneToManyAssociation>, SchemaTypeProvider {
 
     private final GqlvMemberHidden<OneToManyAssociation> hidden;
     private final GqlvMemberDisabled<OneToManyAssociation> disabled;
@@ -35,7 +39,7 @@ public class GqlvCollection
     private final GqlvCollectionDatatype datatype;
 
     public GqlvCollection(
-            final org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder holder,
+            final GqlvMemberHolder holder,
             final OneToManyAssociation otma,
             final Context context
     ) {

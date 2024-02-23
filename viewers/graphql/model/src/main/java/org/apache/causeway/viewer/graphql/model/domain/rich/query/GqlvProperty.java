@@ -40,9 +40,7 @@ public class GqlvProperty
         extends GqlvAssociation<OneToOneAssociation, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
         implements
                 HolderMember<OneToOneAssociation>,
-                HolderPropertyAutoComplete,
-                HolderPropertySet,
-                HolderAssociationDatatype<OneToOneAssociation>,
+        HolderPropertyDetails,
         ObjectSpecificationProvider, ObjectMemberProvider<OneToOneAssociation>, SchemaTypeProvider {
 
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
