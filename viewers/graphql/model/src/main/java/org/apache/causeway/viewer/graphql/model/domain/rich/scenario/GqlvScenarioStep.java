@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain;
+package org.apache.causeway.viewer.graphql.model.domain.rich.scenario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,8 @@ import lombok.val;
 
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
+import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;

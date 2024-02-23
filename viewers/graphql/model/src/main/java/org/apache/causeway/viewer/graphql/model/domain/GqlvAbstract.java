@@ -22,6 +22,7 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.rich.scenario.GqlvScenarioStep;
 
 import lombok.Getter;
 

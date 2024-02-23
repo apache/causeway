@@ -18,6 +18,7 @@ module org.apache.causeway.incubator.viewer.graphql.model {
     exports org.apache.causeway.viewer.graphql.model.registry;
     exports org.apache.causeway.viewer.graphql.model.toplevel;
     exports org.apache.causeway.viewer.graphql.model.types;
+    exports org.apache.causeway.viewer.graphql.model.domain.rich.scenario;
 
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;

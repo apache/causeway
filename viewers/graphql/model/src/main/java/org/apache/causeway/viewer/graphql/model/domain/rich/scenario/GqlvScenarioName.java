@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain;
+package org.apache.causeway.viewer.graphql.model.domain.rich.scenario;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
@@ -24,6 +24,7 @@ import graphql.schema.DataFetchingEnvironment;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 
 import lombok.val;
 
