@@ -45,8 +45,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionInvokeArgs
-        extends GqlvAbstractCustom
-        implements HolderActionDetails {
+        extends GqlvAbstractCustom {
 
     @Getter private final HolderActionDetails holder;
 
@@ -65,7 +64,7 @@ public class GqlvActionInvokeArgs
 
         val idx = new AtomicInteger(0);
         holder.getObjectMember().getParameters().forEach(objectActionParameter -> {
-            args.add(addChildFieldFor(new GqlvActionInvokeArgsArg(this, objectActionParameter, this.context, idx.getAndIncrement())));
+            args.add(addChildFieldFor(new GqlvActionInvokeArgsArg(holder, objectActionParameter, this.context, idx.getAndIncrement())));
         });
 
         if (args.isEmpty()) {
@@ -85,35 +84,5 @@ public class GqlvActionInvokeArgs
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
-
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
-    }
-
-    @Override
-    public ObjectAction getObjectMember() {
-        return holder.getObjectMember();
-    }
-
-    @Override
-    public void addGqlArguments(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition.Builder fieldBuilder,
-            final TypeMapper.InputContext inputContext,
-            final int parameterCount) {
-        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, parameterCount);
-    }
-
-    @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(Environment dataFetchingEnvironment, ObjectAction objectAction, BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
-    }
-
-    @Override
-    public SchemaType getSchemaType() {
-        return holder.getSchemaType();
-    }
-
 
 }
