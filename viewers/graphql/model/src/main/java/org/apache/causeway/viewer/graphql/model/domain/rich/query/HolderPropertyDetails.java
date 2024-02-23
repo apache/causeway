@@ -11,7 +11,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 public interface HolderPropertyDetails
-        extends HolderAssociationDetails<OneToOneAssociation> {
+        extends SchemaTypeProvider, ObjectSpecificationProvider, ObjectMemberProvider<OneToOneAssociation> {
 
     void addGqlArgument(
             OneToOneAssociation otoa,
