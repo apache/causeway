@@ -43,7 +43,7 @@ public class GqlvPropertyGetBlobBytes extends GqlvPropertyGetBlobAbstract {
 
         val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> String.format(
-                "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), holder.getObjectAssociation().getId())).orElse(null);
+                "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), holder.getObjectMember().getId())).orElse(null);
 
     }
 

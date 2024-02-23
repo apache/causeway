@@ -91,11 +91,6 @@ public class GqlvPropertyGetClob
     }
 
     @Override
-    public OneToOneAssociation getObjectAssociation() {
-        return holder.getObjectAssociation();
-    }
-
-    @Override
     public OneToOneAssociation getObjectMember() {
         return holder.getObjectMember();
     }

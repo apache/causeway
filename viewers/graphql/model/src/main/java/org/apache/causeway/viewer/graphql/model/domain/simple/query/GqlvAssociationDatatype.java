@@ -50,7 +50,7 @@ public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> exten
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val returnType = holder.getObjectAssociation().getElementType();
+        val returnType = holder.getObjectMember().getElementType();
         return TypeNames.objectTypeNameFor(returnType, holder.getSchemaType());
     }
 

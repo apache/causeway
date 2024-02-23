@@ -148,7 +148,7 @@ public class GqlvProperty
     }
 
     public OneToOneAssociation getOneToOneAssociation() {
-        return getObjectAssociation();
+        return getObjectMember();
     }
 
     @Override

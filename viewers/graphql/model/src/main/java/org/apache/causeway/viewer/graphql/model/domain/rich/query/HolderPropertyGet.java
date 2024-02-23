@@ -7,6 +7,4 @@ public interface HolderPropertyGet
         extends HolderAssociationGet<OneToOneAssociation>,
         SchemaTypeProvider {
 
-    @Override
-    OneToOneAssociation getObjectAssociation();
 }

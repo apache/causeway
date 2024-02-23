@@ -35,11 +35,4 @@ public abstract class GqlvAssociation<T extends ObjectAssociation, H extends Obj
     }
 
 
-    /**
-     * @see #getObjectMember()
-     */
-    public T getObjectAssociation() {
-        return getObjectMember();
-    }
-
 }

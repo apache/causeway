@@ -70,7 +70,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
             return null;
         }
 
-        val association = holder.getObjectAssociation();
+        val association = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 

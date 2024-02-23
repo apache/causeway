@@ -21,5 +21,4 @@ package org.apache.causeway.viewer.graphql.model.mmproviders;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 public interface ObjectAssociationProvider<T extends ObjectAssociation> extends ObjectMemberProvider<T> {
-    T getObjectAssociation();
 }
