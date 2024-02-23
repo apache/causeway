@@ -36,11 +36,11 @@ public class GqlvCollection
     private final GqlvCollectionDatatype datatype;
 
     public GqlvCollection(
-            final ObjectInteractor holder,
+            final ObjectInteractor objectInteractor,
             final OneToManyAssociation otma,
             final Context context
     ) {
-        super(holder, otma, TypeNames.collectionTypeNameFor(holder.getObjectSpecification(), otma, holder.getSchemaType()), context);
+        super(objectInteractor, otma, TypeNames.collectionTypeNameFor(objectInteractor.getObjectSpecification(), otma, objectInteractor.getSchemaType()), context);
 
         if(isBuilt()) {
             this.hidden = null;
@@ -59,7 +59,7 @@ public class GqlvCollection
 
     @Override
     public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
+        return interactor.getObjectSpecification();
     }
 
 
@@ -76,7 +76,7 @@ public class GqlvCollection
 
     @Override
     public SchemaType getSchemaType() {
-        return holder.getSchemaType();
+        return interactor.getSchemaType();
     }
 
 }

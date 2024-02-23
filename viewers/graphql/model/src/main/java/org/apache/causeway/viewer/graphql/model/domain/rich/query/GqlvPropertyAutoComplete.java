@@ -42,15 +42,15 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
 
     private static final String SEARCH_PARAM_NAME = "search";
 
-    private final MemberInteractor<OneToOneAssociation> holder;
+    private final MemberInteractor<OneToOneAssociation> memberInteractor;
 
     public GqlvPropertyAutoComplete(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.memberInteractor = memberInteractor;
 
-        val otoa = holder.getObjectMember();
+        val otoa = memberInteractor.getObjectMember();
         if (otoa.hasAutoComplete()) {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
@@ -76,7 +76,7 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getObjectMember();
+        val association = memberInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);

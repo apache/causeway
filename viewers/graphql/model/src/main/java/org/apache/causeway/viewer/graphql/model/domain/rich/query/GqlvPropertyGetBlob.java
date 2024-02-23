@@ -33,7 +33,8 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 public class GqlvPropertyGetBlob
         extends GqlvAbstractCustom {
 
-    final MemberInteractor<OneToOneAssociation> holder;
+    final MemberInteractor<OneToOneAssociation> memberInteractor;
+
     final GqlvPropertyGetBlobBytes blobName;
     final GqlvPropertyGetBlobMimeType blobMimeType;
     final GqlvPropertyGetBlobName blobBytes;
@@ -41,10 +42,10 @@ public class GqlvPropertyGetBlob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetBlob(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
-        super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
-        this.holder = holder;
+        super(TypeNames.propertyBlobTypeNameFor(memberInteractor.getObjectSpecification(), memberInteractor.getObjectMember(), memberInteractor.getSchemaType()), context);
+        this.memberInteractor = memberInteractor;
 
         this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
@@ -56,9 +57,9 @@ public class GqlvPropertyGetBlob
             return;
         }
 
-        addChildFieldFor(blobName = new GqlvPropertyGetBlobBytes(holder, context));
-        addChildFieldFor(blobMimeType = new GqlvPropertyGetBlobMimeType(holder, context));
-        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new GqlvPropertyGetBlobName(holder, context) : null);
+        addChildFieldFor(blobName = new GqlvPropertyGetBlobBytes(memberInteractor, context));
+        addChildFieldFor(blobMimeType = new GqlvPropertyGetBlobMimeType(memberInteractor, context));
+        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new GqlvPropertyGetBlobName(memberInteractor, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")

@@ -25,13 +25,23 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.GqlvMetaHolder;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaCssClass;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaFetcher;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaGrid;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaIcon;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaId;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaLayout;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaLogicalTypeName;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaSaveAs;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaTitle;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaVersion;
 
 import lombok.val;
 
 public class GqlvMeta extends GqlvAbstractCustom {
 
-    private final GqlvMetaHolder holder;
+    private final ObjectInteractor holder;
     private final GqlvMetaId metaId;
     private final GqlvMetaLogicalTypeName metaLogicalTypeName;
     private final GqlvMetaVersion metaVersion;
@@ -45,11 +55,11 @@ public class GqlvMeta extends GqlvAbstractCustom {
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvMeta(
-            final GqlvMetaHolder holder,
+            final ObjectInteractor objectInteractor,
             final Context context
     ) {
-        super(TypeNames.metaTypeNameFor(holder.getObjectSpecification(), holder.getSchemaType()), context);
-        this.holder = holder;
+        super(TypeNames.metaTypeNameFor(objectInteractor.getObjectSpecification(), objectInteractor.getSchemaType()), context);
+        this.holder = objectInteractor;
 
         this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 

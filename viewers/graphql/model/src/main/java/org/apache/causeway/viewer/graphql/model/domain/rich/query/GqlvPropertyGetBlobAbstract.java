@@ -37,13 +37,13 @@ import lombok.val;
 
 public abstract class GqlvPropertyGetBlobAbstract extends GqlvAbstract {
 
-    final MemberInteractor<OneToOneAssociation> holder;
+    final MemberInteractor<OneToOneAssociation> memberInteractor;
 
     public GqlvPropertyGetBlobAbstract(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context, String name) {
         super(context);
-        this.holder = holder;
+        this.memberInteractor = memberInteractor;
 
         setField(GraphQLFieldDefinition.newFieldDefinition()
                     .name(name)
@@ -61,7 +61,7 @@ public abstract class GqlvPropertyGetBlobAbstract extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getObjectMember();
+        val association = memberInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 

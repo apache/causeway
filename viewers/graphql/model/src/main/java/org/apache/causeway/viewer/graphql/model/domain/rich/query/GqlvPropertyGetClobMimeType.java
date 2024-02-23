@@ -27,9 +27,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Member
 public class GqlvPropertyGetClobMimeType extends GqlvPropertyGetClobAbstract {
 
     public GqlvPropertyGetClobMimeType(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
-        super(holder, context, "mimeType");
+        super(memberInteractor, context, "mimeType");
 
     }
 

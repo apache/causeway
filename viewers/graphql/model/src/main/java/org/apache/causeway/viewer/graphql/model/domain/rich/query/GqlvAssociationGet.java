@@ -34,15 +34,15 @@ import lombok.val;
 
 public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends GqlvAbstract {
 
-    final MemberInteractor<T> holder;
+    final MemberInteractor<T> memberInteractor;
 
     public GqlvAssociationGet(
-            final MemberInteractor<T> holder,
+            final MemberInteractor<T> memberInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.memberInteractor = memberInteractor;
 
-        GraphQLOutputType type = outputTypeFor(holder);
+        GraphQLOutputType type = outputTypeFor(memberInteractor);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("get")
@@ -68,7 +68,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
             return null;
         }
 
-        val association = holder.getObjectMember();
+        val association = memberInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 

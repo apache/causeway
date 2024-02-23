@@ -32,9 +32,9 @@ public class GqlvPropertyGetBlobBytes extends GqlvPropertyGetBlobAbstract {
     private final String graphqlPath;
 
     public GqlvPropertyGetBlobBytes(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
-        super(holder, context, "bytes");
+        super(memberInteractor, context, "bytes");
 
         this.graphqlPath = context.causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
     }
@@ -45,7 +45,7 @@ public class GqlvPropertyGetBlobBytes extends GqlvPropertyGetBlobAbstract {
 
         val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> String.format(
-                "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), holder.getObjectMember().getId())).orElse(null);
+                "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), memberInteractor.getObjectMember().getId())).orElse(null);
 
     }
 

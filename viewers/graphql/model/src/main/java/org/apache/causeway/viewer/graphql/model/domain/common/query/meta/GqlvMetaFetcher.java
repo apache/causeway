@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.common.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query.meta;
 
 import lombok.val;
 

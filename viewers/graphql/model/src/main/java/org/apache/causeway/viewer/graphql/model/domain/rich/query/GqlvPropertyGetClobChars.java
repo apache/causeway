@@ -32,9 +32,9 @@ public class GqlvPropertyGetClobChars extends GqlvPropertyGetClobAbstract {
     private final String graphqlPath;
 
     public GqlvPropertyGetClobChars(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
-        super(holder, context, "chars");
+        super(memberInteractor, context, "chars");
 
         this.graphqlPath = context.causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
     }

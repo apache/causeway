@@ -41,21 +41,21 @@ import lombok.val;
 
 public class GqlvPropertySet extends GqlvAbstract {
 
-    final PropertyInteractor holder;
+    final PropertyInteractor propertyInteractor;
 
     public GqlvPropertySet(
-            final PropertyInteractor holder,
+            final PropertyInteractor propertyInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.propertyInteractor = propertyInteractor;
 
         // setters return void, so we return the domain object instead
-        val graphQLOutputType = this.context.typeMapper.outputTypeFor(holder.getObjectSpecification(), SchemaType.RICH);
+        val graphQLOutputType = this.context.typeMapper.outputTypeFor(propertyInteractor.getObjectSpecification(), SchemaType.RICH);
 
         val fieldBuilder = newFieldDefinition()
                 .name("set")
                 .type(graphQLOutputType);
-        holder.addGqlArgument(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.INVOKE);
+        propertyInteractor.addGqlArgument(propertyInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.INVOKE);
         setField(fieldBuilder.build());
     }
 
@@ -70,7 +70,7 @@ public class GqlvPropertySet extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getObjectMember();
+        val association = propertyInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();

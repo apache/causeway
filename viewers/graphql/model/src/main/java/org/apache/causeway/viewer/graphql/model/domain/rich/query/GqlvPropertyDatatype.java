@@ -25,9 +25,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Proper
 public class GqlvPropertyDatatype extends GqlvAssociationDatatype<OneToOneAssociation> {
 
     public GqlvPropertyDatatype(
-            final PropertyInteractor holder,
+            final PropertyInteractor propertyInteractor,
             final Context context) {
-        super(holder.asHolderMemberDetails(), context);
+        super(propertyInteractor.asHolderMemberDetails(), context);
     }
 
 }

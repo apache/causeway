@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 public class GqlvPropertyGetClob
         extends GqlvAbstractCustom {
 
-    final MemberInteractor<OneToOneAssociation> holder;
+    final MemberInteractor<OneToOneAssociation> memberInteractor;
     final GqlvPropertyGetClobName clobName;
     final GqlvPropertyGetClobMimeType clobMimeType;
     final GqlvPropertyGetClobChars clobChars;
@@ -41,10 +41,10 @@ public class GqlvPropertyGetClob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetClob(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
-        super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
-        this.holder = holder;
+        super(TypeNames.propertyBlobTypeNameFor(memberInteractor.getObjectSpecification(), memberInteractor.getObjectMember(), memberInteractor.getSchemaType()), context);
+        this.memberInteractor = memberInteractor;
 
         this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
@@ -56,9 +56,9 @@ public class GqlvPropertyGetClob
             return;
         }
 
-        addChildFieldFor(clobName = new GqlvPropertyGetClobName(holder, context));
-        addChildFieldFor(clobMimeType = new GqlvPropertyGetClobMimeType(holder, context));
-        addChildFieldFor(clobChars = isResourceNotForbidden() ? new GqlvPropertyGetClobChars(holder, context) : null);
+        addChildFieldFor(clobName = new GqlvPropertyGetClobName(memberInteractor, context));
+        addChildFieldFor(clobMimeType = new GqlvPropertyGetClobMimeType(memberInteractor, context));
+        addChildFieldFor(clobChars = isResourceNotForbidden() ? new GqlvPropertyGetClobChars(memberInteractor, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")

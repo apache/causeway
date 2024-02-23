@@ -29,9 +29,9 @@ import lombok.val;
 public class GqlvCollectionGet extends GqlvAssociationGet<OneToManyAssociation> {
 
     public GqlvCollectionGet(
-            final MemberInteractor<OneToManyAssociation> holder,
+            final MemberInteractor<OneToManyAssociation> memberInteractor,
             final Context context) {
-        super(holder, context);
+        super(memberInteractor, context);
     }
 
     @Override

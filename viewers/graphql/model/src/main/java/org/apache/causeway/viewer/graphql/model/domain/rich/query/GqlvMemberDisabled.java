@@ -38,14 +38,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
 
-    private final MemberInteractor<T> holder;
+    private final MemberInteractor<T> memberInteractor;
 
     public GqlvMemberDisabled(
-            final MemberInteractor<T> holder,
+            final MemberInteractor<T> memberInteractor,
             final Context context
     ) {
         super(context);
-        this.holder = holder;
+        this.memberInteractor = memberInteractor;
 
         setField(newFieldDefinition()
                 .name("disabled")
@@ -64,7 +64,7 @@ public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
             return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
         }
 
-        val objectMember = holder.getObjectMember();
+        val objectMember = memberInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);

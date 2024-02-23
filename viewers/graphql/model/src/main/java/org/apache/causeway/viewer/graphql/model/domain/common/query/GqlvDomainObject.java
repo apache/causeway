@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.GqlvMetaHolder;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
@@ -53,7 +52,7 @@ import lombok.val;
  */
 public class GqlvDomainObject
         extends GqlvAbstractCustom
-        implements GqlvMetaHolder, ObjectInteractor, ObjectSpecificationProvider, SchemaTypeProvider {
+        implements ObjectInteractor, ObjectSpecificationProvider, SchemaTypeProvider {
 
     private final SchemaStrategy schemaStrategy;
     @Getter private final ObjectSpecification objectSpecification;

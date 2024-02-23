@@ -16,13 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.common.interactors;
+package org.apache.causeway.viewer.graphql.model.domain.common.query.meta;
 
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
 
-public interface GqlvMetaHolder
-        extends ObjectSpecificationProvider,
-                SchemaTypeProvider {
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLNonNull.nonNull;
+
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+
+public class GqlvMetaId extends GqlvAbstract {
+
+    public GqlvMetaId(final Context context) {
+        super(context);
+
+        setField(newFieldDefinition().name("id").type(nonNull(Scalars.GraphQLString)).build());
+    }
+
+    @Override
+    protected String fetchData(DataFetchingEnvironment environment) {
+        return environment.<GqlvMetaFetcher>getSource().id();
+    }
 
 }

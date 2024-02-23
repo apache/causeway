@@ -68,10 +68,10 @@ public class GqlvAction
     private final GqlvActionParams params;
 
     public GqlvAction(
-            final ObjectInteractor holder,
+            final ObjectInteractor objectInteractor,
             final ObjectAction objectAction,
             final Context context) {
-        super(holder, objectAction, TypeNames.actionTypeNameFor(holder.getObjectSpecification(), objectAction, holder.getSchemaType()), context);
+        super(objectInteractor, objectAction, TypeNames.actionTypeNameFor(objectInteractor.getObjectSpecification(), objectAction, objectInteractor.getSchemaType()), context);
 
         if(isBuilt()) {
             this.hidden = null;
@@ -295,7 +295,7 @@ public class GqlvAction
 
     @Override
     public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
+        return interactor.getObjectSpecification();
     }
 
     @Override
@@ -316,7 +316,7 @@ public class GqlvAction
 
     @Override
     public SchemaType getSchemaType() {
-        return holder.getSchemaType();
+        return interactor.getSchemaType();
     }
 
 }

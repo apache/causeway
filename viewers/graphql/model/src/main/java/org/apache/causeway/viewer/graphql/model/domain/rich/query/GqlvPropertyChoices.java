@@ -38,21 +38,21 @@ import lombok.val;
 
 public class GqlvPropertyChoices extends GqlvAbstract {
 
-    final PropertyInteractor holder;
+    final PropertyInteractor propertyInteractor;
 
     public GqlvPropertyChoices(
-            final PropertyInteractor holder,
+            final PropertyInteractor propertyInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.propertyInteractor = propertyInteractor;
 
-        val otoa = holder.getObjectMember();
+        val otoa = propertyInteractor.getObjectMember();
         if (otoa.hasChoices()) {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
                     .name("choices")
                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, SchemaType.RICH)));
-            holder.addGqlArgument(otoa, fieldBuilder, TypeMapper.InputContext.CHOICES);
+            propertyInteractor.addGqlArgument(otoa, fieldBuilder, TypeMapper.InputContext.CHOICES);
             setField(fieldBuilder.build());
         } else {
             setField(null);
@@ -69,7 +69,7 @@ public class GqlvPropertyChoices extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getObjectMember();
+        val association = propertyInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val choicesManagedObject = association.getChoices(managedObject, InteractionInitiatedBy.USER);

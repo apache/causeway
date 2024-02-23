@@ -28,7 +28,7 @@ public interface ActionParamInteractor
         extends ActionInteractor,
                 ObjectActionParameterProvider{
 
-    ActionInteractor getHolder();
+    ActionInteractor getActionInteractor();
 
     void addGqlArgument(
             ObjectAction objectAction,

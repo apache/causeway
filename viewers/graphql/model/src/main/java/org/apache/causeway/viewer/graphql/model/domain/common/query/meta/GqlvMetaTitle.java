@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.common.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query.meta;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
@@ -26,7 +26,6 @@ import static graphql.schema.GraphQLNonNull.nonNull;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMetaFetcher;
 
 public class GqlvMetaTitle extends GqlvAbstract {
 

@@ -38,24 +38,24 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvActionInvokeArgsArg
         extends GqlvAbstract {
 
-    @Getter private final ActionInteractor holder;
+    @Getter private final ActionInteractor actionInteractor;
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
     public GqlvActionInvokeArgsArg(
-            final ActionInteractor holder,
+            final ActionInteractor actionInteractor,
             final ObjectActionParameter objectActionParameter,
             final Context context,
             final int paramNum) {
         super(context);
 
-        this.holder = holder;
+        this.actionInteractor = actionInteractor;
         this.objectActionParameter = objectActionParameter;
         this.paramNum = paramNum;
 
         val elementType = objectActionParameter.getElementType();;
 
-        val gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType, holder.getSchemaType());
+        val gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType, actionInteractor.getSchemaType());
         if (gqlObjectTypeForElementType != null) {
             val gqlOutputType = objectActionParameter.isPlural()
                     ? GraphQLList.list(gqlObjectTypeForElementType)
@@ -74,7 +74,7 @@ public class GqlvActionInvokeArgsArg
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         val environment = new Environment.ForTunnelled(dataFetchingEnvironment);
-        val managedObjects = holder.argumentManagedObjectsFor(environment, holder.getObjectMember(), context.bookmarkService);
+        val managedObjects = actionInteractor.argumentManagedObjectsFor(environment, actionInteractor.getObjectMember(), context.bookmarkService);
         return managedObjects.get(paramNum).map(ManagedObject::getPojo).orElse(null);
     }
 

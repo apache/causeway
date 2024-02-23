@@ -39,18 +39,18 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParamsParamDisabled extends GqlvAbstract {
 
-    private final ActionParamInteractor holder;
+    private final ActionParamInteractor actionParamInteractor;
 
     public GqlvActionParamsParamDisabled(
-            final ActionParamInteractor holder,
+            final ActionParamInteractor actionParamInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.actionParamInteractor = actionParamInteractor;
 
         val fieldBuilder = newFieldDefinition()
                 .name("disabled")
                 .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
-        holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum()+1);
+        actionParamInteractor.addGqlArguments(actionParamInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, actionParamInteractor.getParamNum()+1);
         setField(fieldBuilder.build());
     }
 
@@ -63,12 +63,12 @@ public class GqlvActionParamsParamDisabled extends GqlvAbstract {
             return "Disabled";
         }
 
-        val objectAction = holder.getObjectMember();
+        val objectAction = actionParamInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
-        val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
+        val objectActionParameter = objectAction.getParameterById(actionParamInteractor.getObjectActionParameter().getId());
+        val argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
         val usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;

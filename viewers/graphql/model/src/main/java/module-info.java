@@ -5,6 +5,7 @@ module org.apache.causeway.incubator.viewer.graphql.model {
     exports org.apache.causeway.viewer.graphql.model.domain.common;
     exports org.apache.causeway.viewer.graphql.model.domain.common.interactors;
     exports org.apache.causeway.viewer.graphql.model.domain.common.query;
+    exports org.apache.causeway.viewer.graphql.model.domain.common.query.meta;
     exports org.apache.causeway.viewer.graphql.model.domain.rich;
     exports org.apache.causeway.viewer.graphql.model.domain.rich.query;
     exports org.apache.causeway.viewer.graphql.model.domain.rich.mutation;

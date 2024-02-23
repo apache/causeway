@@ -32,13 +32,13 @@ import lombok.val;
 
 public class GqlvActionParamsParamDatatype extends GqlvAbstract {
 
-    private final ActionParamInteractor holder;
+    private final ActionParamInteractor actionParamInteractor;
 
     public GqlvActionParamsParamDatatype(
-            final ActionParamInteractor holder,
+            final ActionParamInteractor actionParamInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.actionParamInteractor = actionParamInteractor;
 
         setField(newFieldDefinition()
                     .name("datatype")
@@ -48,8 +48,8 @@ public class GqlvActionParamsParamDatatype extends GqlvAbstract {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val returnType = holder.getObjectActionParameter().getElementType();
-        return TypeNames.objectTypeNameFor(returnType, holder.getSchemaType());
+        val returnType = actionParamInteractor.getObjectActionParameter().getElementType();
+        return TypeNames.objectTypeNameFor(returnType, actionParamInteractor.getSchemaType());
     }
 
 }

@@ -47,7 +47,7 @@ public class GqlvActionParamsParam
         implements ActionParamInteractor,
                    ObjectActionParameterProvider {
 
-    @Getter private final ActionInteractor holder;
+    @Getter private final ActionInteractor actionInteractor;
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
@@ -74,7 +74,7 @@ public class GqlvActionParamsParam
             final Context context,
             final int paramNum) {
         super(TypeNames.actionParamTypeNameFor(holder.getObjectSpecification(), oap, holder.getSchemaType()), context);
-        this.holder = holder;
+        this.actionInteractor = holder;
         this.objectActionParameter = oap;
         this.paramNum = paramNum;
 
@@ -105,12 +105,12 @@ public class GqlvActionParamsParam
 
     @Override
     public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
+        return actionInteractor.getObjectSpecification();
     }
 
     @Override
     public ObjectAction getObjectMember() {
-        return holder.getObjectMember();
+        return actionInteractor.getObjectMember();
     }
 
     @Override
@@ -151,7 +151,7 @@ public class GqlvActionParamsParam
             final GraphQLFieldDefinition.Builder fieldBuilder,
             final TypeMapper.InputContext inputContext,
             final int paramNum) {
-        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum);
+        actionInteractor.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum);
     }
 
     @Override
@@ -159,7 +159,7 @@ public class GqlvActionParamsParam
             final Environment environment,
             final ObjectAction objectAction,
             final BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(environment, objectAction, bookmarkService);
+        return actionInteractor.argumentManagedObjectsFor(environment, objectAction, bookmarkService);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class GqlvActionParamsParam
 
     @Override
     public SchemaType getSchemaType() {
-        return holder.getSchemaType();
+        return actionInteractor.getSchemaType();
     }
 
 }

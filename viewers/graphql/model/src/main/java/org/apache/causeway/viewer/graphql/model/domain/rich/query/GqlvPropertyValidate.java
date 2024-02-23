@@ -38,15 +38,15 @@ public class GqlvPropertyValidate extends GqlvAbstract {
     final PropertyInteractor holder;
 
     public GqlvPropertyValidate(
-            final PropertyInteractor holder,
+            final PropertyInteractor propertyInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.holder = propertyInteractor;
 
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
                 .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
-        holder.addGqlArgument(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
+        propertyInteractor.addGqlArgument(propertyInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
         setField(fieldBuilder.build());
     }
