@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
@@ -107,7 +107,7 @@ public class GqlvActionInvokeArgs
 
     public interface Holder
             extends ObjectSpecificationProvider,
-                    ObjectActionProvider,
+                    ObjectMemberProvider<ObjectAction>,
                     SchemaTypeProvider {
 
         Can<ManagedObject> argumentManagedObjectsFor(

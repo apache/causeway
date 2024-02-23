@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -85,7 +85,7 @@ public class GqlvActionParamsParamValidate extends GqlvAbstract {
 
     public interface Holder
             extends ObjectSpecificationProvider,
-                    ObjectActionProvider,
+                    ObjectMemberProvider<ObjectAction>,
                     ObjectActionParameterProvider,
             SchemaTypeProvider {
 
