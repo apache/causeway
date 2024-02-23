@@ -27,19 +27,17 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.val;
 
 public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends GqlvAbstract {
 
-    final Holder<T> holder;
+    final MemberInteractor<T> holder;
 
     public GqlvAssociationGet(
-            final Holder<T> holder,
+            final MemberInteractor<T> holder,
             final Context context) {
         super(context);
         this.holder = holder;
@@ -55,7 +53,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
         }
     }
 
-    abstract GraphQLOutputType outputTypeFor(Holder<T> holder);
+    abstract GraphQLOutputType outputTypeFor(MemberInteractor<T> holder);
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment environment) {
@@ -79,10 +77,4 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
                 : null;
     }
 
-    public interface Holder<T extends ObjectAssociation>
-            extends ObjectSpecificationProvider,
-                    ObjectMemberProvider<T>,
-                    SchemaTypeProvider {
-
-    }
 }

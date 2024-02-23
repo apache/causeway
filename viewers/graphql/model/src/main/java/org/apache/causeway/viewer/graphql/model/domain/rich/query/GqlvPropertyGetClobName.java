@@ -23,11 +23,12 @@ import graphql.schema.DataFetchingEnvironment;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 
 public class GqlvPropertyGetClobName extends GqlvPropertyGetClobAbstract {
 
     public GqlvPropertyGetClobName(
-            final HolderMemberDetails<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> holder,
             final Context context) {
         super(holder, context, "name");
     }

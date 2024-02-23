@@ -29,6 +29,9 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.PropertyInteractor;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
@@ -37,10 +40,10 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 import lombok.val;
 
 public class GqlvProperty
-        extends GqlvAssociation<OneToOneAssociation, org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder>
+        extends GqlvAssociation<OneToOneAssociation, ObjectInteractor>
         implements
-        HolderMemberDetails<OneToOneAssociation>,
-        HolderPropertyDetails,
+        MemberInteractor<OneToOneAssociation>,
+        PropertyInteractor,
         ObjectSpecificationProvider, ObjectMemberProvider<OneToOneAssociation>, SchemaTypeProvider {
 
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
@@ -63,7 +66,7 @@ public class GqlvProperty
     private final GqlvPropertyDatatype datatype;
 
     public GqlvProperty(
-            final org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder holder,
+            final ObjectInteractor holder,
             final OneToOneAssociation otoa,
             final Context context) {
         super(holder, otoa, TypeNames.propertyTypeNameFor(holder.getObjectSpecification(), otoa, holder.getSchemaType()), context);

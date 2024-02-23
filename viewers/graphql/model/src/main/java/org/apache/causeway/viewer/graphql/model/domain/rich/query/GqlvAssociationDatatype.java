@@ -24,19 +24,19 @@ import graphql.schema.DataFetchingEnvironment;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 
 import lombok.val;
 
 public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> extends GqlvAbstract {
 
-    private final HolderMemberDetails<T> holder;
+    private final MemberInteractor<T> holder;
 
     public GqlvAssociationDatatype(
-            final HolderMemberDetails<T> holder,
+            final MemberInteractor<T> holder,
             final Context context) {
         super(context);
         this.holder = holder;

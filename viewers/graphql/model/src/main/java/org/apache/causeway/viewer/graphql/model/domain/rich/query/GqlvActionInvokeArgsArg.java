@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 
 import lombok.Getter;
 import lombok.val;
@@ -37,12 +38,12 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvActionInvokeArgsArg
         extends GqlvAbstract {
 
-    @Getter private final HolderActionDetails holder;
+    @Getter private final ActionInteractor holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
     public GqlvActionInvokeArgsArg(
-            final HolderActionDetails holder,
+            final ActionInteractor holder,
             final ObjectActionParameter objectActionParameter,
             final Context context,
             final int paramNum) {

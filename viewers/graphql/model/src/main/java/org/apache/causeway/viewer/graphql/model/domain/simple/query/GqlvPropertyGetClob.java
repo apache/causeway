@@ -23,23 +23,17 @@ import graphql.schema.DataFetchingEnvironment;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public class GqlvPropertyGetClob
-        extends GqlvAbstractCustom
-        implements GqlvPropertyGetClobChars.Holder
-{
+        extends GqlvAbstractCustom {
 
-    final Holder holder;
+    final MemberInteractor<OneToOneAssociation> holder;
     final GqlvPropertyGetClobName clobName;
     final GqlvPropertyGetClobMimeType clobMimeType;
     final GqlvPropertyGetClobChars clobChars;
@@ -47,7 +41,7 @@ public class GqlvPropertyGetClob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetClob(
-            final Holder holder,
+            final MemberInteractor<OneToOneAssociation> holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;
@@ -62,9 +56,9 @@ public class GqlvPropertyGetClob
             return;
         }
 
-        addChildFieldFor(clobName = new GqlvPropertyGetClobName(this, context));
-        addChildFieldFor(clobMimeType = new GqlvPropertyGetClobMimeType(this, context));
-        addChildFieldFor(clobChars = isResourceNotForbidden() ? new GqlvPropertyGetClobChars(this, context) : null);
+        addChildFieldFor(clobName = new GqlvPropertyGetClobName(holder, context));
+        addChildFieldFor(clobMimeType = new GqlvPropertyGetClobMimeType(holder, context));
+        addChildFieldFor(clobChars = isResourceNotForbidden() ? new GqlvPropertyGetClobChars(holder, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")
@@ -93,25 +87,4 @@ public class GqlvPropertyGetClob
         }
     }
 
-    @Override
-    public OneToOneAssociation getObjectMember() {
-        return holder.getObjectMember();
-    }
-
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
-    }
-
-    @Override
-    public SchemaType getSchemaType() {
-        return holder.getSchemaType();
-    }
-
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectMemberProvider<OneToOneAssociation>,
-                    SchemaTypeProvider {
-
-    }
 }

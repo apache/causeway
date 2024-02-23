@@ -33,6 +33,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -42,10 +43,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionValidity extends GqlvAbstract {
 
-    private final HolderActionDetails holder;
+    private final ActionInteractor holder;
 
     public GqlvActionValidity(
-            final HolderActionDetails holder,
+            final ActionInteractor holder,
             final Context context
     ) {
         super(context);

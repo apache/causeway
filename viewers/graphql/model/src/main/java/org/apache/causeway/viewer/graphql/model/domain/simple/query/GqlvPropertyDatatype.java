@@ -20,13 +20,14 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.PropertyInteractor;
 
 public class GqlvPropertyDatatype extends GqlvAssociationDatatype<OneToOneAssociation> {
 
     public GqlvPropertyDatatype(
-            final Holder<OneToOneAssociation> holder,
+            final PropertyInteractor holder,
             final Context context) {
-        super(holder, context);
+        super(holder.asHolderMemberDetails(), context);
     }
 
 }

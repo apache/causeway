@@ -24,20 +24,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import graphql.schema.DataFetchingEnvironment;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.Getter;
 import lombok.val;
@@ -45,15 +36,14 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionInvokeArgs
-        extends GqlvAbstractCustom
-        implements GqlvActionInvokeArgsArg.Holder {
+        extends GqlvAbstractCustom {
 
-    @Getter private final Holder holder;
+    @Getter private final ActionInteractor holder;
 
     private final List<GqlvActionInvokeArgsArg> args = new ArrayList<>();
 
     public GqlvActionInvokeArgs(
-            final Holder holder,
+            final ActionInteractor holder,
             final Context context) {
         super(TypeNames.actionArgsTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;
@@ -65,7 +55,7 @@ public class GqlvActionInvokeArgs
 
         val idx = new AtomicInteger(0);
         holder.getObjectMember().getParameters().forEach(objectActionParameter -> {
-            args.add(addChildFieldFor(new GqlvActionInvokeArgsArg(this, objectActionParameter, this.context, idx.getAndIncrement())));
+            args.add(addChildFieldFor(new GqlvActionInvokeArgsArg(holder, objectActionParameter, this.context, idx.getAndIncrement())));
         });
 
         if (args.isEmpty()) {
@@ -75,15 +65,6 @@ public class GqlvActionInvokeArgs
         buildObjectTypeAndField("args", "Arguments used to invoke this action");
     }
 
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
-    }
-
-    @Override
-    public ObjectAction getObjectMember() {
-        return holder.getObjectMember();
-    }
 
     @Override
     protected void addDataFetchersForChildren() {
@@ -95,24 +76,4 @@ public class GqlvActionInvokeArgs
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 
-    @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(Environment dataFetchingEnvironment, ObjectAction objectAction, BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
-    }
-
-    @Override
-    public SchemaType getSchemaType() {
-        return holder.getSchemaType();
-    }
-
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectMemberProvider<ObjectAction>,
-                    SchemaTypeProvider {
-
-        Can<ManagedObject> argumentManagedObjectsFor(
-                Environment dataFetchingEnvironment,
-                ObjectAction objectAction,
-                BookmarkService bookmarkService);
-    }
 }

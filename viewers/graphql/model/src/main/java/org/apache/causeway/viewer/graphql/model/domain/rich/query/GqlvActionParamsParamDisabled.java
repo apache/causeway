@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -38,10 +39,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParamsParamDisabled extends GqlvAbstract {
 
-    private final HolderActionParamDetails holder;
+    private final ActionParamInteractor holder;
 
     public GqlvActionParamsParamDisabled(
-            final HolderActionParamDetails holder,
+            final ActionParamInteractor holder,
             final Context context) {
         super(context);
         this.holder = holder;

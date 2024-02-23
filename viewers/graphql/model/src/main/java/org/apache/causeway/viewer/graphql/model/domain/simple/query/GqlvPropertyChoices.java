@@ -21,31 +21,27 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 import java.util.stream.Collectors;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.PropertyInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
 
 public class GqlvPropertyChoices extends GqlvAbstract {
 
-    final Holder holder;
+    final PropertyInteractor holder;
 
     public GqlvPropertyChoices(
-            final Holder holder,
+            final PropertyInteractor holder,
             final Context context) {
         super(context);
         this.holder = holder;
@@ -82,11 +78,4 @@ public class GqlvPropertyChoices extends GqlvAbstract {
                     .collect(Collectors.toList());
     }
 
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectMemberProvider<OneToOneAssociation>,
-                    SchemaTypeProvider {
-
-        void addGqlArgument(OneToOneAssociation otoa, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
-    }
 }

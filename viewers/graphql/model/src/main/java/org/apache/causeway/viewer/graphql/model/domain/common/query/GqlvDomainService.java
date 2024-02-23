@@ -31,6 +31,7 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 
 import lombok.Getter;
 import lombok.val;
@@ -40,7 +41,7 @@ import lombok.val;
  */
 public class GqlvDomainService
         extends GqlvAbstractCustom
-        implements GqlvMemberHolder {
+        implements ObjectInteractor {
 
     @Getter private final SchemaStrategy schemaStrategy;
     @Getter private final ObjectSpecification objectSpecification;

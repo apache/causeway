@@ -20,7 +20,9 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
 import graphql.schema.DataFetchingEnvironment;
 
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
@@ -30,7 +32,7 @@ public class GqlvPropertyGetClobChars extends GqlvPropertyGetClobAbstract {
     private final String graphqlPath;
 
     public GqlvPropertyGetClobChars(
-            final Holder holder,
+            final MemberInteractor<OneToOneAssociation> holder,
             final Context context) {
         super(holder, context, "chars");
 

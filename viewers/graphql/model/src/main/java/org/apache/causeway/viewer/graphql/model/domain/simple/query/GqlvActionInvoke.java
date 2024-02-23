@@ -19,24 +19,15 @@
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.val;
@@ -44,16 +35,14 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionInvoke
-        extends GqlvAbstractCustom
-        implements GqlvActionInvokeResult.Holder,
-                   GqlvActionInvokeArgs.Holder {
+        extends GqlvAbstractCustom {
 
-    private final Holder holder;
+    private final ActionInteractor holder;
     private final GqlvActionInvokeResult result;
     private final GqlvActionInvokeArgs args;
 
     public GqlvActionInvoke(
-            final Holder holder,
+            final ActionInteractor holder,
             final Context context) {
         super(TypeNames.actionInvokeTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
 
@@ -65,8 +54,8 @@ public class GqlvActionInvoke
             return;
         }
 
-        addChildFieldFor(this.result = new GqlvActionInvokeResult(this, context));
-        addChildFieldFor(this.args = new GqlvActionInvokeArgs(this, context));
+        addChildFieldFor(this.result = new GqlvActionInvokeResult(holder, context));
+        addChildFieldFor(this.args = new GqlvActionInvokeArgs(holder, context));
 
         val gqlObjectType = buildObjectType();
         val objectAction = holder.getObjectMember();
@@ -107,56 +96,6 @@ public class GqlvActionInvoke
     protected void addDataFetchersForChildren() {
         result.addDataFetcher(this);
         args.addDataFetcher(this);
-    }
-
-    @Override
-    public void addGqlArguments(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition.Builder fieldBuilder,
-            final TypeMapper.InputContext inputContext,
-            final int parameterCount) {
-        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, parameterCount);
-    }
-
-    @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(
-            final Environment environment,
-            final ObjectAction objectAction,
-            final BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(environment, objectAction, bookmarkService);
-    }
-
-    @Override
-    public ObjectAction getObjectMember() {
-        return holder.getObjectMember();
-    }
-
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
-    }
-
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectMemberProvider<ObjectAction>,
-                    SchemaTypeProvider {
-
-        void addGqlArguments(
-                final ObjectAction objectAction,
-                final GraphQLFieldDefinition.Builder fieldBuilder,
-                final TypeMapper.InputContext inputContext,
-                final int parameterCount);
-
-        Can<ManagedObject> argumentManagedObjectsFor(
-                Environment dataFetchingEnvironment,
-                ObjectAction objectAction,
-                BookmarkService bookmarkService);
-
-    }
-
-    @Override
-    public SchemaType getSchemaType() {
-        return holder.getSchemaType();
     }
 
 }

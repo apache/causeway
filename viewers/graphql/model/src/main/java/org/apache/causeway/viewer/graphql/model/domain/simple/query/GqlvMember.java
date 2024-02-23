@@ -23,12 +23,13 @@ import graphql.schema.DataFetchingEnvironment;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.Getter;
 
-public abstract class GqlvMember<T extends ObjectMember, H extends GqlvMemberHolder>
+public abstract class GqlvMember<T extends ObjectMember, H extends ObjectSpecificationProvider & SchemaTypeProvider>
     extends GqlvAbstractCustom {
 
     @Getter final H holder;

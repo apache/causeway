@@ -20,11 +20,12 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 
 public class GqlvCollectionDatatype extends GqlvAssociationDatatype<OneToManyAssociation> {
 
     public GqlvCollectionDatatype(
-            final HolderMemberDetails<OneToManyAssociation> holder,
+            final MemberInteractor<OneToManyAssociation> holder,
             final Context context) {
         super(holder, context);
     }

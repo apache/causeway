@@ -28,6 +28,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -46,10 +47,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvokeResult extends GqlvAbstract {
 
-    private final HolderActionDetails holder;
+    private final ActionInteractor holder;
 
     public GqlvActionInvokeResult(
-            final HolderActionDetails holder,
+            final ActionInteractor holder,
             final Context context) {
         super(context);
 

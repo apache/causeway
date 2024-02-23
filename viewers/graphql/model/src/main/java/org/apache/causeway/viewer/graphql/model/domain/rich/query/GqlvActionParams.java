@@ -23,20 +23,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
 import lombok.val;
@@ -46,12 +38,12 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvActionParams
         extends GqlvAbstractCustom {
 
-    @Getter private final HolderActionDetails holder;
+    @Getter private final ActionInteractor holder;
 
     private final List<GqlvActionParamsParam> params = new ArrayList<>();
 
     public GqlvActionParams(
-            final HolderActionDetails holder,
+            final ActionInteractor holder,
             final Context context) {
         super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;

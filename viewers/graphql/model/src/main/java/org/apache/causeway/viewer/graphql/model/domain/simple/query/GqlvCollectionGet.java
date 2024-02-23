@@ -22,20 +22,20 @@ import graphql.schema.GraphQLOutputType;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 
 import lombok.val;
 
 public class GqlvCollectionGet extends GqlvAssociationGet<OneToManyAssociation> {
 
     public GqlvCollectionGet(
-            final Holder holder,
+            final MemberInteractor<OneToManyAssociation> holder,
             final Context context) {
         super(holder, context);
     }
 
     @Override
-    GraphQLOutputType outputTypeFor(Holder<OneToManyAssociation> holder) {
+    GraphQLOutputType outputTypeFor(MemberInteractor<OneToManyAssociation> holder) {
         val oneToManyAssociation = holder.getObjectMember();
         return context.typeMapper.listTypeForElementTypeOf(oneToManyAssociation, holder.getSchemaType());
     }

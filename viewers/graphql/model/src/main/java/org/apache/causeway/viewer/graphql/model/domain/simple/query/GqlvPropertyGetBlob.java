@@ -23,23 +23,17 @@ import graphql.schema.DataFetchingEnvironment;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public class GqlvPropertyGetBlob
-        extends GqlvAbstractCustom
-        implements GqlvPropertyGetBlobBytes.Holder
-{
+        extends GqlvAbstractCustom {
 
-    final Holder holder;
+    final MemberInteractor<OneToOneAssociation> holder;
     final GqlvPropertyGetBlobBytes blobName;
     final GqlvPropertyGetBlobMimeType blobMimeType;
     final GqlvPropertyGetBlobName blobBytes;
@@ -47,7 +41,7 @@ public class GqlvPropertyGetBlob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetBlob(
-            final Holder holder,
+            final MemberInteractor<OneToOneAssociation> holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;
@@ -62,9 +56,9 @@ public class GqlvPropertyGetBlob
             return;
         }
 
-        addChildFieldFor(blobName = new GqlvPropertyGetBlobBytes(this, context));
-        addChildFieldFor(blobMimeType = new GqlvPropertyGetBlobMimeType(this, context));
-        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new GqlvPropertyGetBlobName(this, context) : null);
+        addChildFieldFor(blobName = new GqlvPropertyGetBlobBytes(holder, context));
+        addChildFieldFor(blobMimeType = new GqlvPropertyGetBlobMimeType(holder, context));
+        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new GqlvPropertyGetBlobName(holder, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")
@@ -93,25 +87,4 @@ public class GqlvPropertyGetBlob
         }
     }
 
-    @Override
-    public OneToOneAssociation getObjectMember() {
-        return holder.getObjectMember();
-    }
-
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
-    }
-
-    @Override
-    public SchemaType getSchemaType() {
-        return holder.getSchemaType();
-    }
-
-    public interface Holder
-            extends ObjectSpecificationProvider,
-                    ObjectMemberProvider<OneToOneAssociation>,
-                    SchemaTypeProvider {
-
-    }
 }

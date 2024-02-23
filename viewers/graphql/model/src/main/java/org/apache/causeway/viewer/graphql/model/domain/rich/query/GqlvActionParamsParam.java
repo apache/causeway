@@ -32,9 +32,10 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
@@ -43,10 +44,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionParamsParam
         extends GqlvAbstractCustom
-        implements HolderActionParamDetails,
+        implements ActionParamInteractor,
                    ObjectActionParameterProvider {
 
-    @Getter private final HolderActionDetails holder;
+    @Getter private final ActionInteractor holder;
     @Getter private final ObjectActionParameter objectActionParameter;
     @Getter private final int paramNum;
 
@@ -68,7 +69,7 @@ public class GqlvActionParamsParam
     private final GqlvActionParamsParamDatatype datatype;
 
     public GqlvActionParamsParam(
-            final HolderActionDetails holder,
+            final ActionInteractor holder,
             final ObjectActionParameter oap,
             final Context context,
             final int paramNum) {

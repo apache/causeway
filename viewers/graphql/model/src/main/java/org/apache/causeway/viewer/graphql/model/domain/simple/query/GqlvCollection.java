@@ -23,14 +23,12 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMemberHolder;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 
 public class GqlvCollection
-        extends GqlvAssociation<OneToManyAssociation, GqlvMemberHolder>
-        implements GqlvAssociationGet.Holder<OneToManyAssociation>,
-                   GqlvMemberHidden.Holder<OneToManyAssociation>,
-                   GqlvMemberDisabled.Holder<OneToManyAssociation>,
-                   GqlvAssociationDatatype.Holder<OneToManyAssociation> {
+        extends GqlvAssociation<OneToManyAssociation, ObjectInteractor>
+        implements MemberInteractor<OneToManyAssociation> {
 
     private final GqlvMemberHidden<OneToManyAssociation> hidden;
     private final GqlvMemberDisabled<OneToManyAssociation> disabled;
@@ -38,7 +36,7 @@ public class GqlvCollection
     private final GqlvCollectionDatatype datatype;
 
     public GqlvCollection(
-            final GqlvMemberHolder holder,
+            final ObjectInteractor holder,
             final OneToManyAssociation otma,
             final Context context
     ) {

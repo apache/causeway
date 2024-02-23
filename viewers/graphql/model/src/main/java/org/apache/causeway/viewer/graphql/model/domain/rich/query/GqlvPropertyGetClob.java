@@ -23,19 +23,17 @@ import graphql.schema.DataFetchingEnvironment;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public class GqlvPropertyGetClob
         extends GqlvAbstractCustom {
 
-    final HolderMemberDetails<OneToOneAssociation> holder;
+    final MemberInteractor<OneToOneAssociation> holder;
     final GqlvPropertyGetClobName clobName;
     final GqlvPropertyGetClobMimeType clobMimeType;
     final GqlvPropertyGetClobChars clobChars;
@@ -43,7 +41,7 @@ public class GqlvPropertyGetClob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetClob(
-            final HolderMemberDetails<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;

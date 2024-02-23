@@ -26,15 +26,16 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 
 import lombok.val;
 
 public class GqlvActionParamsParamDatatype extends GqlvAbstract {
 
-    private final HolderActionParamDetails holder;
+    private final ActionParamInteractor holder;
 
     public GqlvActionParamsParamDatatype(
-            final HolderActionParamDetails holder,
+            final ActionParamInteractor holder,
             final Context context) {
         super(context);
         this.holder = holder;

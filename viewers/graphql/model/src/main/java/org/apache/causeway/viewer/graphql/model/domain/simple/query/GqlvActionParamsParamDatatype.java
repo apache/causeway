@@ -26,17 +26,16 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 
 import lombok.val;
 
 public class GqlvActionParamsParamDatatype extends GqlvAbstract {
 
-    private final Holder holder;
+    private final ActionParamInteractor holder;
 
     public GqlvActionParamsParamDatatype(
-            final Holder holder,
+            final ActionParamInteractor holder,
             final Context context) {
         super(context);
         this.holder = holder;
@@ -51,11 +50,6 @@ public class GqlvActionParamsParamDatatype extends GqlvAbstract {
     protected Object fetchData(DataFetchingEnvironment environment) {
         val returnType = holder.getObjectActionParameter().getElementType();
         return TypeNames.objectTypeNameFor(returnType, holder.getSchemaType());
-    }
-
-    public interface Holder
-            extends ObjectActionParameterProvider,
-                    SchemaTypeProvider {
     }
 
 }

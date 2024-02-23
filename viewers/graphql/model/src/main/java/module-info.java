@@ -3,6 +3,7 @@ module org.apache.causeway.incubator.viewer.graphql.model {
     exports org.apache.causeway.viewer.graphql.model.context;
     exports org.apache.causeway.viewer.graphql.model.domain;
     exports org.apache.causeway.viewer.graphql.model.domain.common;
+    exports org.apache.causeway.viewer.graphql.model.domain.common.interactors;
     exports org.apache.causeway.viewer.graphql.model.domain.common.query;
     exports org.apache.causeway.viewer.graphql.model.domain.rich;
     exports org.apache.causeway.viewer.graphql.model.domain.rich.query;
@@ -18,8 +19,8 @@ module org.apache.causeway.incubator.viewer.graphql.model {
     exports org.apache.causeway.viewer.graphql.model.types;
 
     requires org.apache.causeway.core.config;
-    requires org.apache.causeway.incubator.viewer.graphql.applib;
     requires org.apache.causeway.core.metamodel;
+    requires org.apache.causeway.incubator.viewer.graphql.applib;
     requires spring.boot.autoconfigure;
     requires spring.context;
     requires com.graphqljava;

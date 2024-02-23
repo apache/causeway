@@ -29,10 +29,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -40,10 +38,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
 
-    private final Holder<T> holder;
+    private final MemberInteractor<T> holder;
 
     public GqlvMemberDisabled(
-            final Holder<T> holder,
+            final MemberInteractor<T> holder,
             final Context context
     ) {
         super(context);
@@ -73,9 +71,4 @@ public class GqlvMemberDisabled<T extends ObjectMember> extends GqlvAbstract {
         return usable.getReasonAsString().orElse(null);
     }
 
-    public interface Holder<T extends ObjectMember>
-            extends ObjectSpecificationProvider,
-                    ObjectMemberProvider<T>,
-                    SchemaTypeProvider {
-    }
 }

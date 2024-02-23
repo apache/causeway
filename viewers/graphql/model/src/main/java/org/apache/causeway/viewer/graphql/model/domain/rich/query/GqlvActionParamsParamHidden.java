@@ -28,6 +28,7 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
  import org.apache.causeway.viewer.graphql.model.context.Context;
  import org.apache.causeway.viewer.graphql.model.domain.Environment;
  import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
  import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
  import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -37,10 +38,10 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 @Log4j2
 public class GqlvActionParamsParamHidden extends GqlvAbstract {
 
-    private final HolderActionParamDetails holder;
+    private final ActionParamInteractor holder;
 
     public GqlvActionParamsParamHidden(
-            final HolderActionParamDetails holder,
+            final ActionParamInteractor holder,
             final Context context) {
         super(context);
         this.holder = holder;

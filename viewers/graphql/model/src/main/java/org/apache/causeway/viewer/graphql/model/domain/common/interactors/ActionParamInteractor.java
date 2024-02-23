@@ -16,18 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.interactors;
 
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import graphql.schema.GraphQLFieldDefinition;
 
-public class GqlvCollectionDatatype extends GqlvAssociationDatatype<OneToManyAssociation> {
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-    public GqlvCollectionDatatype(
-            final MemberInteractor<OneToManyAssociation> holder,
-            final Context context) {
-        super(holder, context);
-    }
+public interface ActionParamInteractor
+        extends ActionInteractor,
+                ObjectActionParameterProvider{
 
+    ActionInteractor getHolder();
+
+    void addGqlArgument(
+            ObjectAction objectAction,
+            GraphQLFieldDefinition.Builder fieldBuilder,
+            TypeMapper.InputContext inputContext,
+            int paramNum);
 }

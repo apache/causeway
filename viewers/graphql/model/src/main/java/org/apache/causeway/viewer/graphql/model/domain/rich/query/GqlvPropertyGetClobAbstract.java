@@ -30,16 +30,17 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
 
 public abstract class GqlvPropertyGetClobAbstract extends GqlvAbstract {
 
-    final HolderMemberDetails<OneToOneAssociation> holder;
+    final MemberInteractor<OneToOneAssociation> holder;
 
     public GqlvPropertyGetClobAbstract(
-            final HolderMemberDetails<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> holder,
             final Context context, String name) {
         super(context);
         this.holder = holder;
