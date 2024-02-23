@@ -81,14 +81,17 @@ public class GraphQLTypeRegistry {
         val objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
         val typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
         val enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
+
         if (enumTypeIfAny.isPresent()) {
             return enumTypeIfAny.get();
         }
+
+        val enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
         val enumType = newEnum()
                 .name(typeName)
-                .values(Stream.of(typeToAdd.getEnumConstants())
+                .values(Stream.of(enumTypeToAdd.getEnumConstants())
                         .map(enumValue -> newEnumValueDefinition()
-                                .name(enumValue.toString())
+                                .name(enumValue.name())
                                 .value(enumValue)
                                 .build()).collect(Collectors.toList())
                 )
