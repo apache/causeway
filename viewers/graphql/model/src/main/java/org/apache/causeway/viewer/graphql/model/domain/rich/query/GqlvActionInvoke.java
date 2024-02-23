@@ -41,8 +41,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionInvoke
-        extends GqlvAbstractCustom
-        implements HolderActionDetails {
+        extends GqlvAbstractCustom {
 
     private final HolderActionDetails holder;
     private final GqlvActionInvokeResult result;
@@ -61,8 +60,8 @@ public class GqlvActionInvoke
             return;
         }
 
-        addChildFieldFor(this.result = new GqlvActionInvokeResult(this, context));
-        addChildFieldFor(this.args = new GqlvActionInvokeArgs(this, context));
+        addChildFieldFor(this.result = new GqlvActionInvokeResult(holder, context));
+        addChildFieldFor(this.args = new GqlvActionInvokeArgs(holder, context));
 
         val gqlObjectType = buildObjectType();
         val objectAction = holder.getObjectMember();
@@ -103,38 +102,6 @@ public class GqlvActionInvoke
     protected void addDataFetchersForChildren() {
         result.addDataFetcher(this);
         args.addDataFetcher(this);
-    }
-
-    @Override
-    public void addGqlArguments(
-            final ObjectAction objectAction,
-            final GraphQLFieldDefinition.Builder fieldBuilder,
-            final TypeMapper.InputContext inputContext,
-            final int parameterCount) {
-        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, parameterCount);
-    }
-
-    @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(
-            final Environment environment,
-            final ObjectAction objectAction,
-            final BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(environment, objectAction, bookmarkService);
-    }
-
-    @Override
-    public ObjectAction getObjectMember() {
-        return holder.getObjectMember();
-    }
-
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
-    }
-
-    @Override
-    public SchemaType getSchemaType() {
-        return holder.getSchemaType();
     }
 
 }
