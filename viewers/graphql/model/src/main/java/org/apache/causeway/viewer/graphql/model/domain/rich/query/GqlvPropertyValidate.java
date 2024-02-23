@@ -45,7 +45,7 @@ public class GqlvPropertyValidate extends GqlvAbstract {
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
                 .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
-        holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
+        holder.addGqlArgument(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
         setField(fieldBuilder.build());
     }
@@ -60,7 +60,7 @@ public class GqlvPropertyValidate extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getOneToOneAssociation();
+        val association = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val arguments = dataFetchingEnvironment.getArguments();

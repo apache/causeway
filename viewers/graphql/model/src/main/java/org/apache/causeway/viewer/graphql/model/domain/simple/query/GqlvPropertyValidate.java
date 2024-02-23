@@ -30,8 +30,8 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -50,7 +50,7 @@ public class GqlvPropertyValidate extends GqlvAbstract {
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
                 .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
-        holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
+        holder.addGqlArgument(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
         setField(fieldBuilder.build());
     }
@@ -65,7 +65,7 @@ public class GqlvPropertyValidate extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getOneToOneAssociation();
+        val association = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val arguments = dataFetchingEnvironment.getArguments();
@@ -78,7 +78,7 @@ public class GqlvPropertyValidate extends GqlvAbstract {
 
     public interface Holder
             extends ObjectSpecificationProvider,
-                    OneToOneAssociationProvider,
+                    ObjectMemberProvider<OneToOneAssociation>,
                     SchemaTypeProvider {
 
         void addGqlArgument(OneToOneAssociation oneToOneAssociation, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);

@@ -45,7 +45,7 @@ public class GqlvPropertyChoices extends GqlvAbstract {
         super(context);
         this.holder = holder;
 
-        val otoa = holder.getOneToOneAssociation();
+        val otoa = holder.getObjectMember();
         if (otoa.hasChoices()) {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
@@ -68,7 +68,7 @@ public class GqlvPropertyChoices extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getOneToOneAssociation();
+        val association = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val choicesManagedObject = association.getChoices(managedObject, InteractionInitiatedBy.USER);

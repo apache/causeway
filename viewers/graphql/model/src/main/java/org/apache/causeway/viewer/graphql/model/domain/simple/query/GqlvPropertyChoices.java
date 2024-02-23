@@ -33,8 +33,8 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -50,7 +50,7 @@ public class GqlvPropertyChoices extends GqlvAbstract {
         super(context);
         this.holder = holder;
 
-        val otoa = holder.getOneToOneAssociation();
+        val otoa = holder.getObjectMember();
         if (otoa.hasChoices()) {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
@@ -73,7 +73,7 @@ public class GqlvPropertyChoices extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getOneToOneAssociation();
+        val association = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val choicesManagedObject = association.getChoices(managedObject, InteractionInitiatedBy.USER);
@@ -84,7 +84,7 @@ public class GqlvPropertyChoices extends GqlvAbstract {
 
     public interface Holder
             extends ObjectSpecificationProvider,
-                    OneToOneAssociationProvider,
+                    ObjectMemberProvider<OneToOneAssociation>,
                     SchemaTypeProvider {
 
         void addGqlArgument(OneToOneAssociation otoa, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);

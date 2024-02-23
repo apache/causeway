@@ -29,12 +29,13 @@ import static graphql.schema.GraphQLNonNull.nonNull;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.val;
@@ -51,7 +52,7 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
         super(context);
         this.holder = holder;
 
-        val otoa = holder.getOneToOneAssociation();
+        val otoa = holder.getObjectMember();
         if (otoa.hasAutoComplete()) {
             val elementType = otoa.getElementType();
             val fieldBuilder = newFieldDefinition()
@@ -77,7 +78,7 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getOneToOneAssociation();
+        val association = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
@@ -90,7 +91,7 @@ public class GqlvPropertyAutoComplete extends GqlvAbstract {
 
     public interface Holder
             extends ObjectSpecificationProvider,
-                    OneToOneAssociationProvider,
+                    ObjectMemberProvider<OneToOneAssociation>,
                     SchemaTypeProvider {
 
     }

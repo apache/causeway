@@ -36,8 +36,8 @@ import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
-import org.apache.causeway.viewer.graphql.model.mmproviders.OneToOneAssociationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -59,7 +59,7 @@ public class GqlvPropertySet extends GqlvAbstract {
         val fieldBuilder = newFieldDefinition()
                 .name("set")
                 .type(graphQLOutputType);
-        holder.addGqlArgument(holder.getOneToOneAssociation(), fieldBuilder, TypeMapper.InputContext.INVOKE);
+        holder.addGqlArgument(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.INVOKE);
         setField(fieldBuilder.build());
     }
 
@@ -74,7 +74,7 @@ public class GqlvPropertySet extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getOneToOneAssociation();
+        val association = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
@@ -103,7 +103,7 @@ public class GqlvPropertySet extends GqlvAbstract {
 
     public interface Holder
             extends ObjectSpecificationProvider,
-                    OneToOneAssociationProvider,
+                    ObjectMemberProvider<OneToOneAssociation>,
                     SchemaTypeProvider {
 
         void addGqlArgument(OneToOneAssociation oneToOneAssociation, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext);
