@@ -31,7 +31,6 @@ public class GqlvCollection
         implements MemberInteractor<OneToManyAssociation> {
 
     private final GqlvCollectionGet get;
-    private final GqlvCollectionDatatype datatype;
 
     public GqlvCollection(
             final ObjectInteractor objectInteractor,
@@ -42,11 +41,9 @@ public class GqlvCollection
 
         if(isBuilt()) {
             this.get = null;
-            this.datatype = null;
             return;
         }
         addChildFieldFor(this.get = new GqlvCollectionGet(this, context));
-        addChildFieldFor(this.datatype = new GqlvCollectionDatatype(this, context));
 
         buildObjectTypeAndField(otma.getId(), otma.getCanonicalDescription().orElse(otma.getCanonicalFriendlyName()));
     }
@@ -60,7 +57,6 @@ public class GqlvCollection
     @Override
     protected void addDataFetchersForChildren() {
         get.addDataFetcher(this);
-        datatype.addDataFetcher(this);
     }
 
     @Override
