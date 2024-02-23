@@ -9,9 +9,9 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 public interface HolderActionValidity
-        extends ObjectSpecificationProvider,
-        ObjectActionProvider,
-        SchemaTypeProvider {
+        extends SchemaTypeProvider,
+                ObjectSpecificationProvider,
+                ObjectActionProvider {
 
     void addGqlArguments(
             ObjectAction objectAction,
