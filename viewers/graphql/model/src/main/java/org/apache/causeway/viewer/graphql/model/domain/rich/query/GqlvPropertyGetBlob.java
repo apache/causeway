@@ -36,7 +36,7 @@ public class GqlvPropertyGetBlob
         implements HolderMember<OneToOneAssociation>
 {
 
-    final HolderPropertyGetXlob holder;
+    final HolderMember<OneToOneAssociation> holder;
     final GqlvPropertyGetBlobBytes blobName;
     final GqlvPropertyGetBlobMimeType blobMimeType;
     final GqlvPropertyGetBlobName blobBytes;
@@ -44,7 +44,7 @@ public class GqlvPropertyGetBlob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetBlob(
-            final HolderPropertyGetXlob holder,
+            final HolderMember<OneToOneAssociation> holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;

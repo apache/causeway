@@ -43,8 +43,7 @@ public class GqlvProperty
                 HolderPropertyAutoComplete,
                 HolderPropertySet,
                 HolderAssociationDatatype<OneToOneAssociation>,
-                HolderPropertyGetXlob,
-                ObjectSpecificationProvider, ObjectMemberProvider<OneToOneAssociation>, SchemaTypeProvider {
+        ObjectSpecificationProvider, ObjectMemberProvider<OneToOneAssociation>, SchemaTypeProvider {
 
     private final GqlvMemberHidden<OneToOneAssociation> hidden;
     private final GqlvMemberDisabled<OneToOneAssociation> disabled;

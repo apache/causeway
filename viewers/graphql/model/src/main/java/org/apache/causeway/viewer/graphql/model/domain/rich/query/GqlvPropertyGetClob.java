@@ -37,7 +37,7 @@ public class GqlvPropertyGetClob
         implements HolderMember<OneToOneAssociation>,
                    SchemaTypeProvider {
 
-    final HolderPropertyGetXlob holder;
+    final HolderMember<OneToOneAssociation> holder;
     final GqlvPropertyGetClobName clobName;
     final GqlvPropertyGetClobMimeType clobMimeType;
     final GqlvPropertyGetClobChars clobChars;
@@ -45,7 +45,7 @@ public class GqlvPropertyGetClob
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     public GqlvPropertyGetClob(
-            final HolderPropertyGetXlob holder,
+            final HolderMember<OneToOneAssociation> holder,
             final Context context) {
         super(TypeNames.propertyBlobTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;
