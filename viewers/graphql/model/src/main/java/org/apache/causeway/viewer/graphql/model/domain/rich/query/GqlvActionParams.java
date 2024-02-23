@@ -44,8 +44,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionParams
-        extends GqlvAbstractCustom
-        implements HolderActionDetails {
+        extends GqlvAbstractCustom {
 
     @Getter private final HolderActionDetails holder;
 
@@ -64,23 +63,13 @@ public class GqlvActionParams
 
         val idx = new AtomicInteger(0);
         holder.getObjectMember().getParameters()
-                .forEach(oap -> params.add(addChildFieldFor(new GqlvActionParamsParam(this, oap, this.context, idx.getAndIncrement()))));
+                .forEach(oap -> params.add(addChildFieldFor(new GqlvActionParamsParam(holder, oap, this.context, idx.getAndIncrement()))));
 
         if (params.isEmpty()) {
             return;
         }
 
         buildObjectTypeAndField("params", "Parameters of this action");
-    }
-
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
-    }
-
-    @Override
-    public ObjectAction getObjectMember() {
-        return holder.getObjectMember();
     }
 
     @Override
@@ -91,25 +80,6 @@ public class GqlvActionParams
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
-    }
-
-    @Override
-    public void addGqlArguments(
-            ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
-        holder.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum);
-    }
-
-    @Override
-    public Can<ManagedObject> argumentManagedObjectsFor(
-            Environment dataFetchingEnvironment,
-            ObjectAction objectAction,
-            BookmarkService bookmarkService) {
-        return holder.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, bookmarkService);
-    }
-
-    @Override
-    public SchemaType getSchemaType() {
-        return holder.getSchemaType();
     }
 
 }
