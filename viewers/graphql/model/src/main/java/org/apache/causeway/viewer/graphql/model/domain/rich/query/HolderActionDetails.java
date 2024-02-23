@@ -13,7 +13,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 public interface HolderActionDetails
-        extends SchemaTypeProvider,
+        extends HolderSchemaTypeProvider,
                 ObjectSpecificationProvider,
                 ObjectMemberProvider<ObjectAction> {
 

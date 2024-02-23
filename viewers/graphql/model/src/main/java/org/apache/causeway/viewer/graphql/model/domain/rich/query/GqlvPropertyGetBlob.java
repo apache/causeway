@@ -32,9 +32,7 @@ import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 public class GqlvPropertyGetBlob
-        extends GqlvAbstractCustom
-        implements HolderMemberDetails<OneToOneAssociation>
-{
+        extends GqlvAbstractCustom {
 
     final HolderMemberDetails<OneToOneAssociation> holder;
     final GqlvPropertyGetBlobBytes blobName;
@@ -59,9 +57,9 @@ public class GqlvPropertyGetBlob
             return;
         }
 
-        addChildFieldFor(blobName = new GqlvPropertyGetBlobBytes(this, context));
-        addChildFieldFor(blobMimeType = new GqlvPropertyGetBlobMimeType(this, context));
-        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new GqlvPropertyGetBlobName(this, context) : null);
+        addChildFieldFor(blobName = new GqlvPropertyGetBlobBytes(holder, context));
+        addChildFieldFor(blobMimeType = new GqlvPropertyGetBlobMimeType(holder, context));
+        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new GqlvPropertyGetBlobName(holder, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")
@@ -88,21 +86,6 @@ public class GqlvPropertyGetBlob
         if (blobBytes != null) {
             blobBytes.addDataFetcher(this);
         }
-    }
-
-    @Override
-    public OneToOneAssociation getObjectMember() {
-        return holder.getObjectMember();
-    }
-
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
-    }
-
-    @Override
-    public SchemaType getSchemaType() {
-        return holder.getSchemaType();
     }
 
 }
