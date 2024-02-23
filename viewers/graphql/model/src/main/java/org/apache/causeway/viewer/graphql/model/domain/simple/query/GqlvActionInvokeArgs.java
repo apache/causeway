@@ -38,15 +38,15 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvActionInvokeArgs
         extends GqlvAbstractCustom {
 
-    @Getter private final ActionInteractor holder;
+    @Getter private final ActionInteractor actionInteractor;
 
     private final List<GqlvActionInvokeArgsArg> args = new ArrayList<>();
 
     public GqlvActionInvokeArgs(
-            final ActionInteractor holder,
+            final ActionInteractor actionInteractor,
             final Context context) {
-        super(TypeNames.actionArgsTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
-        this.holder = holder;
+        super(TypeNames.actionArgsTypeNameFor(actionInteractor.getObjectSpecification(), actionInteractor.getObjectMember(), actionInteractor.getSchemaType()), context);
+        this.actionInteractor = actionInteractor;
 
         if (isBuilt()) {
             // nothing else to be done
@@ -54,8 +54,8 @@ public class GqlvActionInvokeArgs
         }
 
         val idx = new AtomicInteger(0);
-        holder.getObjectMember().getParameters().forEach(objectActionParameter -> {
-            args.add(addChildFieldFor(new GqlvActionInvokeArgsArg(holder, objectActionParameter, this.context, idx.getAndIncrement())));
+        actionInteractor.getObjectMember().getParameters().forEach(objectActionParameter -> {
+            args.add(addChildFieldFor(new GqlvActionInvokeArgsArg(actionInteractor, objectActionParameter, this.context, idx.getAndIncrement())));
         });
 
         if (args.isEmpty()) {

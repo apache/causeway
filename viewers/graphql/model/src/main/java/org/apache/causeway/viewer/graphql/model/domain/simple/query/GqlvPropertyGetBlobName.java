@@ -28,9 +28,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Member
 public class GqlvPropertyGetBlobName extends GqlvPropertyGetBlobAbstract {
 
     public GqlvPropertyGetBlobName(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
-        super(holder, context, "name");
+        super(memberInteractor, context, "name");
     }
 
     @Override

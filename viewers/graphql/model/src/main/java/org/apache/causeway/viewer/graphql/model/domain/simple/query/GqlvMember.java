@@ -32,17 +32,17 @@ import lombok.Getter;
 public abstract class GqlvMember<T extends ObjectMember, H extends ObjectSpecificationProvider & SchemaTypeProvider>
     extends GqlvAbstractCustom {
 
-    @Getter final H holder;
+    @Getter final H interactor;
     @Getter private final T objectMember;
 
     public GqlvMember(
-            final H holder,
+            final H interactor,
             final T objectMember,
             final String typeName,
             final Context context
     ) {
         super(typeName, context);
-        this.holder = holder;
+        this.interactor = interactor;
         this.objectMember = objectMember;
 
         objectMember.getCanonicalDescription().ifPresent(gqlObjectTypeBuilder::description);

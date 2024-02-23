@@ -40,20 +40,21 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class GqlvActionParamsParamDefault extends GqlvAbstract {
-    private final ActionParamInteractor holder;
+
+    private final ActionParamInteractor actionParamInteractor;
 
     public GqlvActionParamsParamDefault(
-            final ActionParamInteractor holder,
+            final ActionParamInteractor actionParamInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
-        val objectActionParameter = holder.getObjectActionParameter();
+        this.actionParamInteractor = actionParamInteractor;
+        val objectActionParameter = actionParamInteractor.getObjectActionParameter();
         if (objectActionParameter.hasDefaults()) {
             val elementType = objectActionParameter.getElementType();
             val fieldBuilder = newFieldDefinition()
                     .name("default")
-                    .type(context.typeMapper.outputTypeFor(elementType, holder.getSchemaType()));
-            holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DEFAULT, holder.getParamNum());
+                    .type(context.typeMapper.outputTypeFor(elementType, actionParamInteractor.getSchemaType()));
+            actionParamInteractor.addGqlArguments(actionParamInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DEFAULT, actionParamInteractor.getParamNum());
             setField(fieldBuilder.build());
         } else {
             setField(null);
@@ -67,10 +68,10 @@ public class GqlvActionParamsParamDefault extends GqlvAbstract {
         if (objectSpecification == null) {
             return Collections.emptyList();
         }
-        val objectAction = holder.getObjectMember();
+        val objectAction = actionParamInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
+        val objectActionParameter = objectAction.getParameterById(actionParamInteractor.getObjectActionParameter().getId());
+        val argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
         val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
         val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
         val defaultManagedObject = objectActionParameter.getDefault(pendingArgs);

@@ -25,9 +25,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Member
 public class GqlvCollectionDatatype extends GqlvAssociationDatatype<OneToManyAssociation> {
 
     public GqlvCollectionDatatype(
-            final MemberInteractor<OneToManyAssociation> holder,
+            final MemberInteractor<OneToManyAssociation> memberInteractor,
             final Context context) {
-        super(holder, context);
+        super(memberInteractor, context);
     }
 
 }

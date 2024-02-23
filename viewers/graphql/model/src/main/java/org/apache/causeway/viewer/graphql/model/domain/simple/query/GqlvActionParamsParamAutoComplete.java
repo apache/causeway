@@ -49,21 +49,21 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
      private static final String SEARCH_PARAM_NAME = "search";
 
-     private final ActionParamInteractor holder;
+     private final ActionParamInteractor actionParamInteractor;
 
      public GqlvActionParamsParamAutoComplete(
-             final ActionParamInteractor holder,
+             final ActionParamInteractor actionParamInteractor,
              final Context context) {
          super(context);
-         this.holder = holder;
+         this.actionParamInteractor = actionParamInteractor;
 
-         val objectActionParameter = holder.getObjectActionParameter();
+         val objectActionParameter = actionParamInteractor.getObjectActionParameter();
          if (objectActionParameter.hasAutoComplete()) {
              val elementType = objectActionParameter.getElementType();
              val fieldBuilder = newFieldDefinition()
                      .name("autoComplete")
-                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, holder.getSchemaType())));
-             holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
+                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, actionParamInteractor.getSchemaType())));
+             actionParamInteractor.addGqlArguments(actionParamInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, actionParamInteractor.getParamNum());
              fieldBuilder.argument(GraphQLArgument.newArgument()
                      .name(SEARCH_PARAM_NAME)
                      .type(nonNull(context.typeMapper.outputTypeFor(String.class))))
@@ -83,11 +83,11 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
              return Collections.emptyList();
          }
 
-         val objectAction = holder.getObjectMember();
+         val objectAction = actionParamInteractor.getObjectMember();
          val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
-         val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
+         val objectActionParameter = objectAction.getParameterById(actionParamInteractor.getObjectActionParameter().getId());
+         val argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
          val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);

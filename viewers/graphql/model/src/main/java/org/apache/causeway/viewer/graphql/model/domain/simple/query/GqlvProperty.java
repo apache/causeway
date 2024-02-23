@@ -145,7 +145,7 @@ public class GqlvProperty
 
     @Override
     public ObjectSpecification getObjectSpecification() {
-        return holder.getObjectSpecification();
+        return interactor.getObjectSpecification();
     }
 
     public OneToOneAssociation getOneToOneAssociation() {
@@ -177,7 +177,7 @@ public class GqlvProperty
 
     @Override
     public SchemaType getSchemaType() {
-        return holder.getSchemaType();
+        return interactor.getSchemaType();
     }
 
 }

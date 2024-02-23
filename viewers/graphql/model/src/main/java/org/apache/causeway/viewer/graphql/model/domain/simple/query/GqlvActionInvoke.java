@@ -37,16 +37,13 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvActionInvoke
         extends GqlvAbstractCustom {
 
-    private final ActionInteractor holder;
     private final GqlvActionInvokeResult result;
     private final GqlvActionInvokeArgs args;
 
     public GqlvActionInvoke(
-            final ActionInteractor holder,
+            final ActionInteractor actionInteractor,
             final Context context) {
-        super(TypeNames.actionInvokeTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
-
-        this.holder = holder;
+        super(TypeNames.actionInvokeTypeNameFor(actionInteractor.getObjectSpecification(), actionInteractor.getObjectMember(), actionInteractor.getSchemaType()), context);
 
         if(isBuilt()) {
             this.result = null;
@@ -54,15 +51,15 @@ public class GqlvActionInvoke
             return;
         }
 
-        addChildFieldFor(this.result = new GqlvActionInvokeResult(holder, context));
-        addChildFieldFor(this.args = new GqlvActionInvokeArgs(holder, context));
+        addChildFieldFor(this.result = new GqlvActionInvokeResult(actionInteractor, context));
+        addChildFieldFor(this.args = new GqlvActionInvokeArgs(actionInteractor, context));
 
         val gqlObjectType = buildObjectType();
-        val objectAction = holder.getObjectMember();
+        val objectAction = actionInteractor.getObjectMember();
         val fieldBuilder = newFieldDefinition()
                 .name(fieldNameForSemanticsOf(objectAction))
                 .type(gqlObjectType);
-        holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
+        actionInteractor.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
         setField(fieldBuilder.build());
     }
 

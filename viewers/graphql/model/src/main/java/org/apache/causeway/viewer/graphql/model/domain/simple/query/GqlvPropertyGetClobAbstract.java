@@ -40,10 +40,10 @@ public abstract class GqlvPropertyGetClobAbstract extends GqlvAbstract {
     final MemberInteractor<OneToOneAssociation> holder;
 
     public GqlvPropertyGetClobAbstract(
-            final MemberInteractor<OneToOneAssociation> holder,
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context, String name) {
         super(context);
-        this.holder = holder;
+        this.holder = memberInteractor;
 
         setField(GraphQLFieldDefinition.newFieldDefinition()
                     .name(name)

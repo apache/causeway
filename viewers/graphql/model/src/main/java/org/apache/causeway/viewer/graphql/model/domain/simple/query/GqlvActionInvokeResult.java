@@ -46,16 +46,16 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionInvokeResult extends GqlvAbstract {
 
-    private final ActionInteractor holder;
+    private final ActionInteractor actionInteractor;
 
     public GqlvActionInvokeResult(
-            final ActionInteractor holder,
+            final ActionInteractor actionInteractor,
             final Context context) {
         super(context);
 
-        this.holder = holder;
+        this.actionInteractor = actionInteractor;
 
-        val objectAction = holder.getObjectMember();
+        val objectAction = actionInteractor.getObjectMember();
 
         val graphQLOutputType = typeFor(objectAction);
         if (graphQLOutputType != null) {
@@ -81,7 +81,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
                     return null;
                 }
                 val objectSpecificationOfCollectionElement = facet.elementSpec();
-                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, holder.getSchemaType());
+                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, actionInteractor.getSchemaType());
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
                             objectSpecificationOfCollectionElement.getFullIdentifier(),
@@ -94,7 +94,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
             case ENTITY:
             case VIEW_MODEL:
             default:
-                return context.typeMapper.outputTypeFor(objectSpecification, holder.getSchemaType());
+                return context.typeMapper.outputTypeFor(objectSpecification, actionInteractor.getSchemaType());
 
         }
     }
@@ -111,7 +111,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
             return null;
         }
 
-        val objectAction = holder.getObjectMember();
+        val objectAction = actionInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
@@ -125,7 +125,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
         }
 
         val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
+        val argumentManagedObjects = actionInteractor.argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
 
         val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {

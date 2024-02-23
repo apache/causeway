@@ -43,29 +43,29 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GqlvActionValidity extends GqlvAbstract {
 
-    private final ActionInteractor holder;
+    private final ActionInteractor actionInteractor;
 
     public GqlvActionValidity(
-            final ActionInteractor holder,
+            final ActionInteractor actionInteractor,
             final Context context
     ) {
         super(context);
-        this.holder = holder;
+        this.actionInteractor = actionInteractor;
 
-        val objectAction = holder.getObjectMember();
+        val objectAction = actionInteractor.getObjectMember();
 
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
                 .type((GraphQLOutputType) this.context.typeMapper.outputTypeFor(String.class));
 
-        holder.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
+        actionInteractor.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
         setField(fieldBuilder.build());
     }
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getObjectMember();
+        final ObjectAction objectAction = actionInteractor.getObjectMember();
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLOutputType;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import lombok.val;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -30,19 +30,19 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends GqlvAbstract {
 
-    final MemberInteractor<T> holder;
+    final MemberInteractor<T> memberInteractor;
 
     public GqlvAssociationGet(
-            final MemberInteractor<T> holder,
+            final MemberInteractor<T> memberInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.memberInteractor = memberInteractor;
 
-        GraphQLOutputType type = outputTypeFor(holder);
+        GraphQLOutputType type = outputTypeFor(memberInteractor);
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("get")
@@ -68,7 +68,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
             return null;
         }
 
-        val association = holder.getObjectMember();
+        val association = memberInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 

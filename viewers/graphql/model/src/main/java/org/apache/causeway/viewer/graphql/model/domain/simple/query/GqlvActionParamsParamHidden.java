@@ -1,4 +1,4 @@
-/*
+ /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
  *  distributed with this work for additional information
@@ -38,18 +38,18 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 @Log4j2
 public class GqlvActionParamsParamHidden extends GqlvAbstract {
 
-    private final ActionParamInteractor holder;
+    private final ActionParamInteractor actionParamInteractor;
 
     public GqlvActionParamsParamHidden(
-            final ActionParamInteractor holder,
+            final ActionParamInteractor actionParamInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.actionParamInteractor = actionParamInteractor;
 
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")
                 .type(context.typeMapper.outputTypeFor(boolean.class));
-        holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
+        actionParamInteractor.addGqlArguments(actionParamInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, actionParamInteractor.getParamNum());
         setField(fieldBuilder.build());
     }
 
@@ -65,13 +65,13 @@ public class GqlvActionParamsParamHidden extends GqlvAbstract {
             return true;
         }
 
-        val objectAction = holder.getObjectMember();
+        val objectAction = actionParamInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
-        val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
+        val objectActionParameter = objectAction.getParameterById(actionParamInteractor.getObjectActionParameter().getId());
 
-        val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
+        val argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
         val visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return visible.isVetoed();

@@ -33,13 +33,13 @@ import lombok.val;
 
 public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> extends GqlvAbstract {
 
-    private final MemberInteractor<T> holder;
+    private final MemberInteractor<T> memberInteractor;
 
     public GqlvAssociationDatatype(
-            final MemberInteractor<T> holder,
+            final MemberInteractor<T> memberInteractor,
             final Context context) {
         super(context);
-        this.holder = holder;
+        this.memberInteractor = memberInteractor;
 
         setField(newFieldDefinition()
                     .name("datatype")
@@ -49,8 +49,8 @@ public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> exten
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val returnType = holder.getObjectMember().getElementType();
-        return TypeNames.objectTypeNameFor(returnType, holder.getSchemaType());
+        val returnType = memberInteractor.getObjectMember().getElementType();
+        return TypeNames.objectTypeNameFor(returnType, memberInteractor.getSchemaType());
     }
 
 }
