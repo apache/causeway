@@ -63,7 +63,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
 
         this.holder = holder;
 
-        val objectAction = holder.getObjectAction();
+        val objectAction = holder.getObjectMember();
 
         val graphQLOutputType = typeFor(objectAction);
         if (graphQLOutputType != null) {
@@ -119,7 +119,7 @@ public class GqlvActionInvokeResult extends GqlvAbstract {
             return null;
         }
 
-        val objectAction = holder.getObjectAction();
+        val objectAction = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);

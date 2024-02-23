@@ -57,7 +57,7 @@ public class GqlvActionParams
     public GqlvActionParams(
             final Holder holder,
             final Context context) {
-        super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
+        super(TypeNames.actionParamsTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;
 
         if (isBuilt()) {
@@ -66,7 +66,7 @@ public class GqlvActionParams
         }
 
         val idx = new AtomicInteger(0);
-        holder.getObjectAction().getParameters()
+        holder.getObjectMember().getParameters()
                 .forEach(oap -> params.add(addChildFieldFor(new GqlvActionParamsParam(this, oap, this.context, idx.getAndIncrement()))));
 
         if (params.isEmpty()) {
@@ -83,12 +83,7 @@ public class GqlvActionParams
 
     @Override
     public ObjectAction getObjectMember() {
-        return getObjectAction();
-    }
-
-    @Override
-    public ObjectAction getObjectAction() {
-        return holder.getObjectAction();
+        return holder.getObjectMember();
     }
 
     @Override

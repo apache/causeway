@@ -67,7 +67,7 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
              val fieldBuilder = newFieldDefinition()
                      .name("choices")
                      .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, holder.getSchemaType())));
-             holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.CHOICES, holder.getParamNum());
+             holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.CHOICES, holder.getParamNum());
              setField(fieldBuilder.build());
          } else {
              setField(null);
@@ -83,7 +83,7 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
              return Collections.emptyList();
          }
 
-         val objectAction = holder.getObjectAction();
+         val objectAction = holder.getObjectMember();
          val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
          val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());

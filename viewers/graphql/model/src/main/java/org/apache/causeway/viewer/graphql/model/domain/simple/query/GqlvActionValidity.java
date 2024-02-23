@@ -55,7 +55,7 @@ public class GqlvActionValidity extends GqlvAbstract {
         super(context);
         this.holder = holder;
 
-        val objectAction = holder.getObjectAction();
+        val objectAction = holder.getObjectMember();
 
         val fieldBuilder = newFieldDefinition()
                 .name("validate")
@@ -68,7 +68,7 @@ public class GqlvActionValidity extends GqlvAbstract {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        final ObjectAction objectAction = holder.getObjectAction();
+        final ObjectAction objectAction = holder.getObjectMember();
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 

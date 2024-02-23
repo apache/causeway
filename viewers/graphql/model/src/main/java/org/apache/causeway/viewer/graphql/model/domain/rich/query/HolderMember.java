@@ -6,7 +6,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 public interface HolderMember<T extends ObjectMember>
-        extends ObjectSpecificationProvider,
-        ObjectMemberProvider<T>,
-        SchemaTypeProvider {
+        extends SchemaTypeProvider,
+                ObjectSpecificationProvider,
+                ObjectMemberProvider<T> {
 }

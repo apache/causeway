@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.mmproviders;
 
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
-public interface ObjectActionParameterProvider extends ObjectActionProvider {
+public interface ObjectActionParameterProvider extends ObjectMemberProvider<ObjectAction> {
     ObjectActionParameter getObjectActionParameter();
 
     /**

@@ -80,7 +80,7 @@ public class GqlvActionInvokeArgsArg
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         val environment = new Environment.ForTunnelled(dataFetchingEnvironment);
-        val managedObjects = holder.argumentManagedObjectsFor(environment, holder.getObjectAction(), context.bookmarkService);
+        val managedObjects = holder.argumentManagedObjectsFor(environment, holder.getObjectMember(), context.bookmarkService);
         return managedObjects.get(paramNum).map(ManagedObject::getPojo).orElse(null);
     }
 

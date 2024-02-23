@@ -62,7 +62,7 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
              val fieldBuilder = newFieldDefinition()
                      .name("autoComplete")
                      .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, holder.getSchemaType())));
-             holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
+             holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, holder.getParamNum());
              fieldBuilder.argument(GraphQLArgument.newArgument()
                      .name(SEARCH_PARAM_NAME)
                      .type(nonNull(context.typeMapper.outputTypeFor(String.class))))
@@ -82,7 +82,7 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
              return Collections.emptyList();
          }
 
-         val objectAction = holder.getObjectAction();
+         val objectAction = holder.getObjectMember();
          val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
          val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());

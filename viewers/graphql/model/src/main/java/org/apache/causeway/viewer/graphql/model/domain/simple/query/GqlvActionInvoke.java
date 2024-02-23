@@ -55,7 +55,7 @@ public class GqlvActionInvoke
     public GqlvActionInvoke(
             final Holder holder,
             final Context context) {
-        super(TypeNames.actionInvokeTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
+        super(TypeNames.actionInvokeTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
 
         this.holder = holder;
 
@@ -69,7 +69,7 @@ public class GqlvActionInvoke
         addChildFieldFor(this.args = new GqlvActionInvokeArgs(this, context));
 
         val gqlObjectType = buildObjectType();
-        val objectAction = holder.getObjectAction();
+        val objectAction = holder.getObjectMember();
         val fieldBuilder = newFieldDefinition()
                 .name(fieldNameForSemanticsOf(objectAction))
                 .type(gqlObjectType);
@@ -124,11 +124,6 @@ public class GqlvActionInvoke
             final ObjectAction objectAction,
             final BookmarkService bookmarkService) {
         return holder.argumentManagedObjectsFor(environment, objectAction, bookmarkService);
-    }
-
-    @Override
-    public ObjectAction getObjectAction() {
-        return holder.getObjectAction();
     }
 
     @Override

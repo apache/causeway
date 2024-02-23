@@ -56,7 +56,7 @@ public class GqlvActionParamsParamValidate extends GqlvAbstract {
         val fieldBuilder = newFieldDefinition()
                 .name("validity")
                 .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
-        holder.addGqlArgument(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
+        holder.addGqlArgument(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         setField(fieldBuilder.build());
     }
 
@@ -71,7 +71,7 @@ public class GqlvActionParamsParamValidate extends GqlvAbstract {
             return "Invalid";
         }
 
-        val objectAction = holder.getObjectAction();
+        val objectAction = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 

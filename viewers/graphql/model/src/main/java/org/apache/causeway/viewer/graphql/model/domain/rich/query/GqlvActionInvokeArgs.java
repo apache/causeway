@@ -55,7 +55,7 @@ public class GqlvActionInvokeArgs
     public GqlvActionInvokeArgs(
             final HolderActionDetails holder,
             final Context context) {
-        super(TypeNames.actionArgsTypeNameFor(holder.getObjectSpecification(), holder.getObjectAction(), holder.getSchemaType()), context);
+        super(TypeNames.actionArgsTypeNameFor(holder.getObjectSpecification(), holder.getObjectMember(), holder.getSchemaType()), context);
         this.holder = holder;
 
         if (isBuilt()) {
@@ -64,7 +64,7 @@ public class GqlvActionInvokeArgs
         }
 
         val idx = new AtomicInteger(0);
-        holder.getObjectAction().getParameters().forEach(objectActionParameter -> {
+        holder.getObjectMember().getParameters().forEach(objectActionParameter -> {
             args.add(addChildFieldFor(new GqlvActionInvokeArgsArg(this, objectActionParameter, this.context, idx.getAndIncrement())));
         });
 
@@ -93,12 +93,7 @@ public class GqlvActionInvokeArgs
 
     @Override
     public ObjectAction getObjectMember() {
-        return getObjectAction();
-    }
-
-    @Override
-    public ObjectAction getObjectAction() {
-        return holder.getObjectAction();
+        return holder.getObjectMember();
     }
 
     @Override

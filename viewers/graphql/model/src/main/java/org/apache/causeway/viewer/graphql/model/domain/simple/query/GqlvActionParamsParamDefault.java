@@ -61,7 +61,7 @@ public class GqlvActionParamsParamDefault extends GqlvAbstract {
             val fieldBuilder = newFieldDefinition()
                     .name("default")
                     .type(context.typeMapper.outputTypeFor(elementType, holder.getSchemaType()));
-            holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DEFAULT, holder.getParamNum());
+            holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DEFAULT, holder.getParamNum());
             setField(fieldBuilder.build());
         } else {
             setField(null);
@@ -75,7 +75,7 @@ public class GqlvActionParamsParamDefault extends GqlvAbstract {
         if (objectSpecification == null) {
             return Collections.emptyList();
         }
-        val objectAction = holder.getObjectAction();
+        val objectAction = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val objectActionParameter = objectAction.getParameterById(holder.getObjectActionParameter().getId());
         val argumentManagedObjects = holder.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);

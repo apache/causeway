@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 public class GqlvActionParamsParam
         extends GqlvAbstractCustom
         implements HolderActionParamDetails,
-        ObjectActionParameterProvider, SchemaTypeProvider {
+                   ObjectActionParameterProvider {
 
     @Getter private final HolderActionDetails holder;
     @Getter private final ObjectActionParameter objectActionParameter;
@@ -109,12 +109,7 @@ public class GqlvActionParamsParam
 
     @Override
     public ObjectAction getObjectMember() {
-        return getObjectAction();
-    }
-
-    @Override
-    public ObjectAction getObjectAction() {
-        return holder.getObjectAction();
+        return holder.getObjectMember();
     }
 
     @Override

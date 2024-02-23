@@ -115,12 +115,7 @@ public class GqlvActionParamsParam
 
     @Override
     public ObjectAction getObjectMember() {
-        return getObjectAction();
-    }
-
-    @Override
-    public ObjectAction getObjectAction() {
-        return holder.getObjectAction();
+        return holder.getObjectMember();
     }
 
     @Override

@@ -163,11 +163,6 @@ public class GqlvAction
     }
 
     @Override
-    public ObjectAction getObjectAction() {
-        return getObjectMember();
-    }
-
-    @Override
     protected void addDataFetchersForChildren() {
         if(hidden == null) {
             return;

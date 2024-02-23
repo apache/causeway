@@ -49,7 +49,7 @@ public class GqlvActionParamsParamDisabled extends GqlvAbstract {
         val fieldBuilder = newFieldDefinition()
                 .name("disabled")
                 .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
-        holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum()+1);
+        holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum()+1);
         setField(fieldBuilder.build());
     }
 
@@ -62,7 +62,7 @@ public class GqlvActionParamsParamDisabled extends GqlvAbstract {
             return "Disabled";
         }
 
-        val objectAction = holder.getObjectAction();
+        val objectAction = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 

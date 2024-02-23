@@ -21,5 +21,4 @@ package org.apache.causeway.viewer.graphql.model.mmproviders;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 public interface ObjectActionProvider extends ObjectMemberProvider<ObjectAction> {
-    ObjectAction getObjectAction();
 }

@@ -55,7 +55,7 @@ public class GqlvActionParamsParamHidden extends GqlvAbstract {
         GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
                 .name("hidden")
                 .type(context.typeMapper.outputTypeFor(boolean.class));
-        holder.addGqlArguments(holder.getObjectAction(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
+        holder.addGqlArguments(holder.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, holder.getParamNum());
         setField(fieldBuilder.build());
     }
 
@@ -71,7 +71,7 @@ public class GqlvActionParamsParamHidden extends GqlvAbstract {
             return true;
         }
 
-        val objectAction = holder.getObjectAction();
+        val objectAction = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
