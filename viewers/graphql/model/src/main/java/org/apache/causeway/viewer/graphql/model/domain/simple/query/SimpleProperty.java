@@ -57,7 +57,9 @@ public class SimpleProperty
             final Context context) {
         super(objectInteractor, otoa, context);
 
-        if (isBuilt()) {
+        final GraphQLOutputType outputType;
+        if (isBuilt() ||
+            (outputType = outputType(otoa)) == null) {
             lobName = null;
             lobMimeType = null;
             lobBytes = null;
@@ -65,21 +67,20 @@ public class SimpleProperty
             return;
         }
 
-        GraphQLOutputType type = outputType(otoa);
         val fieldBuilder = newFieldDefinition()
                 .name(getId())
-                .type(type);
+                .type(outputType);
         setField(fieldBuilder.build());
 
         if(isBlobOrClob()) {
-            lobName = new SimplePropertyLobName(this, context);
-            lobMimeType = new SimplePropertyLobMimeType(this, context);
+            addChildFieldFor(lobName = new SimplePropertyLobName(this, context));
+            addChildFieldFor(lobMimeType = new SimplePropertyLobMimeType(this, context));
 
             if(isBlob()) {
-                lobBytes = new SimplePropertyLobBytes(this, context);
+                addChildFieldFor(lobBytes = new SimplePropertyLobBytes(this, context));
                 lobChars = null;
             } else {
-                lobChars = new SimplePropertyLobChars(this, context);
+                addChildFieldFor(lobChars = new SimplePropertyLobChars(this, context));
                 lobBytes = null;
             }
         } else {
@@ -88,6 +89,7 @@ public class SimpleProperty
             lobBytes = null;
             lobChars = null;
         }
+        buildObjectType();
     }
 
     GraphQLOutputType outputType(final OneToOneAssociation otoa) {

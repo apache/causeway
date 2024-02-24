@@ -56,6 +56,8 @@ public class SimpleCollection
         } else {
             setField(null);
         }
+
+        buildObjectType();
     }
 
     @Override

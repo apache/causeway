@@ -79,6 +79,7 @@ public class SimpleAction
         addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
 
         setField(fieldBuilder.build());
+        buildObjectType();
     }
 
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
