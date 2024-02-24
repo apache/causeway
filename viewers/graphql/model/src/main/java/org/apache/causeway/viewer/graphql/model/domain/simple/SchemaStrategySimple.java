@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple;
 
+import lombok.val;
+
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -70,6 +72,22 @@ public class SchemaStrategySimple implements SchemaStrategy {
     @Override
     public GqlvAbstractCustom newGqlvMeta(GqlvDomainObject gqlvDomainObject, Context context) {
         return new GqlvMeta(gqlvDomainObject, context);
+    }
+
+    @Override
+    public boolean shouldInclude(
+            final CausewayConfiguration.Viewer.Graphql.ApiVariant apiVariant,
+            final ObjectAction objectAction) {
+        switch (apiVariant) {
+            case QUERY_ONLY:
+            case QUERY_AND_MUTATIONS:
+                return objectAction.getSemantics().isSafeInNature();
+            case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT:
+                return true;
+            default:
+                // shouldn't happen
+                throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
+        }
     }
 
 }

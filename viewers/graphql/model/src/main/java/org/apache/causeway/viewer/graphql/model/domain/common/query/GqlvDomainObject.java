@@ -31,6 +31,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -131,11 +132,10 @@ public class GqlvDomainObject
     public GraphQLFieldDefinition newField() {
 
         // add domain object lookup to top-level query
-        val lookupConfig = this.context.causewayConfiguration.getViewer().getGraphql().getLookup();
         val fieldName = String.format("%s%s%s",
-                lookupConfig.getFieldNamePrefix(),  // eg "_gqlv_lookup__"
+                graphqlConfiguration.getLookup().getFieldNamePrefix(),  // eg "_gqlv_lookup__"
                 TypeNames.objectTypeFieldNameFor(objectSpecification),
-                lookupConfig.getFieldNameSuffix());
+                graphqlConfiguration.getLookup().getFieldNameSuffix());
 
         return buildFieldDefinition(fieldName, gqlInputObjectType);
     }
@@ -144,14 +144,13 @@ public class GqlvDomainObject
             final String fieldName,
             final GraphQLInputObjectType gqlInputObjectType
     ) {
-        val lookupConfig = this.context.causewayConfiguration.getViewer().getGraphql().getLookup();
         val objectSpec = getObjectSpecification();
 
         return newFieldDefinition()
                 .name(fieldName)
                 .type(this.context.typeMapper.outputTypeFor(objectSpec, getSchemaType()))
                 .argument(GraphQLArgument.newArgument()
-                        .name(lookupConfig.getArgument())   // eg "object"
+                        .name(graphqlConfiguration.getLookup().getArgument())   // eg "object"
                         .type(gqlInputObjectType)
                         .build())
                 .build();
@@ -165,6 +164,7 @@ public class GqlvDomainObject
         objectSpecification.streamCollections(MixedIn.INCLUDED)
                 .forEach(coll -> collections.add(addChildFieldFor(schemaStrategy.newGqlvCollection(this, coll, context))));
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                .filter(act -> schemaStrategy.shouldInclude(graphqlConfiguration.getApiVariant(), act))
                 .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newGqlvAction(this, act, context))));
     }
 

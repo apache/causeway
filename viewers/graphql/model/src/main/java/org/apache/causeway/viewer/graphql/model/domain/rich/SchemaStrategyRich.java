@@ -72,4 +72,20 @@ public class SchemaStrategyRich implements SchemaStrategy {
         return new GqlvMeta(gqlvDomainObject, context);
     }
 
+    /**
+     * Irrespective of the {@link org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant API variant},
+     * the rich schema will always include all actions (to show additional facets such as whether the action is hidden
+     * or disabled).
+     *
+     * <p>
+     *  What <i>might be</i> suppressed under the rich schema is whether the action can be invoked or not.
+     * </p>
+     */
+    @Override
+    public boolean shouldInclude(
+            final CausewayConfiguration.Viewer.Graphql.ApiVariant apiVariant,
+            final ObjectAction objectAction) {
+        return true;
+    }
+
 }

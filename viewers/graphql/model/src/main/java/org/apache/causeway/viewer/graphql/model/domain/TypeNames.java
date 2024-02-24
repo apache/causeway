@@ -101,11 +101,11 @@ public final class TypeNames {
         return objectTypeNameFor(owningType, schemaType) + "__" + oneToOneAssociation.getId() + "__gqlv_property";
     }
 
-    public static String propertyBlobTypeNameFor(
+    public static String propertyLobTypeNameFor(
             final ObjectSpecification owningType,
             final OneToOneAssociation oneToOneAssociation,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + oneToOneAssociation.getId() + "__gqlv_property_blob";
+        return objectTypeNameFor(owningType, schemaType) + "__" + oneToOneAssociation.getId() + "__gqlv_property_lob";
     }
 
     public static String collectionTypeNameFor(

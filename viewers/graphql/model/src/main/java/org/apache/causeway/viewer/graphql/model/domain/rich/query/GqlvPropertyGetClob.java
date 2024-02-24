@@ -43,7 +43,7 @@ public class GqlvPropertyGetClob
     public GqlvPropertyGetClob(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
-        super(TypeNames.propertyBlobTypeNameFor(memberInteractor.getObjectSpecification(), memberInteractor.getObjectMember(), memberInteractor.getSchemaType()), context);
+        super(TypeNames.propertyLobTypeNameFor(memberInteractor.getObjectSpecification(), memberInteractor.getObjectMember(), memberInteractor.getSchemaType()), context);
         this.memberInteractor = memberInteractor;
 
         this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();

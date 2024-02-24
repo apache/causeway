@@ -19,24 +19,19 @@
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLOutputType;
-
-import lombok.val;
-
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+
+import lombok.val;
+
 public class SimpleCollection
-        extends SimpleMember<OneToManyAssociation>
-        implements MemberInteractor<OneToManyAssociation> {
+        extends SimpleMember<OneToManyAssociation> {
 
     public SimpleCollection(
             final ObjectInteractor objectInteractor,
@@ -48,22 +43,15 @@ public class SimpleCollection
         if (isBuilt()) {
             return;
         }
-        GraphQLOutputType type = outputType();
-        val fieldBuilder = newFieldDefinition()
-                .name(getId())
-                .type(type);
-        setField(fieldBuilder.build());
 
-    }
+        val objectType = this.context.typeMapper.listTypeForElementTypeOf(otma, objectInteractor.getSchemaType());
 
-    GraphQLOutputType outputType() {
-        val oneToManyAssociation = this.getObjectMember();
-        return context.typeMapper.listTypeForElementTypeOf(oneToManyAssociation, getSchemaType());
-    }
-
-    @Override
-    public ObjectSpecification getObjectSpecification() {
-        return objectInteractor.getObjectSpecification();
+        setField(newFieldDefinition()
+                    .name(getId())
+                    .description(otma.getCanonicalDescription().orElse(otma.getCanonicalFriendlyName()))
+                    .type(objectType)
+                    .build()
+        );
     }
 
     @Override
@@ -78,20 +66,12 @@ public class SimpleCollection
             return null;
         }
 
-        val association = getObjectMember();
+        val otma = getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = association.get(managedObject);
+        val resultManagedObject = otma.get(managedObject);
 
         return resultManagedObject != null
                 ? resultManagedObject.getPojo()
                 : null;
     }
-
-
-
-    @Override
-    public SchemaType getSchemaType() {
-        return objectInteractor.getSchemaType();
-    }
-
 }

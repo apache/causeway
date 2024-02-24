@@ -26,6 +26,11 @@ import java.util.stream.Collectors;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -48,16 +53,8 @@ import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import org.springframework.lang.Nullable;
-
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
 public class SimpleAction
@@ -76,15 +73,14 @@ public class SimpleAction
         val graphQLOutputType = typeFor(objectAction);
 
         val fieldBuilder = newFieldDefinition()
-                .name(fieldNameForSemanticsOf(objectAction))
+                .name(getId())
                 .description(objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()))
                 .type(graphQLOutputType);
         addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
-        setField(fieldBuilder.build());
 
+        setField(fieldBuilder.build());
     }
 
-    @Nullable
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
 
         val objectSpecification = objectAction.getReturnType();
@@ -112,40 +108,9 @@ public class SimpleAction
             case VIEW_MODEL:
             default:
                 return context.typeMapper.outputTypeFor(objectSpecification, objectInteractor.getSchemaType());
-
         }
     }
 
-
-    private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
-        switch (objectAction.getSemantics()) {
-            case SAFE_AND_REQUEST_CACHEABLE:
-            case SAFE:
-                return "invoke";
-            case IDEMPOTENT:
-            case IDEMPOTENT_ARE_YOU_SURE:
-                return "invokeIdempotent";
-            case NON_IDEMPOTENT:
-            case NON_IDEMPOTENT_ARE_YOU_SURE:
-            case NOT_SPECIFIED:
-            default:
-                return "invokeNonIdempotent";
-        }
-    }
-
-    private boolean isInvokeAllowed(ObjectAction objectAction) {
-        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        switch (apiVariant) {
-            case QUERY_ONLY:
-            case QUERY_AND_MUTATIONS:
-                return objectAction.getSemantics().isSafeInNature();
-            case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT:
-                return true;
-            default:
-                // shouldn't happen
-                throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
-        }
-    }
 
     public Can<ManagedObject> argumentManagedObjectsFor(
             final Environment dataFetchingEnvironment,

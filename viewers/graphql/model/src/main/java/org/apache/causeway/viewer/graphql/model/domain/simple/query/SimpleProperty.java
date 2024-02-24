@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
@@ -38,6 +39,7 @@ import graphql.schema.GraphQLOutputType;
 import lombok.val;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
 
 public class SimpleProperty
         extends SimpleMember<OneToOneAssociation> {
@@ -61,7 +63,7 @@ public class SimpleProperty
             return;
         }
 
-        GraphQLOutputType type = outputType();
+        GraphQLOutputType type = outputType(otoa);
         val fieldBuilder = newFieldDefinition()
                 .name(getId())
                 .type(type);
@@ -91,51 +93,18 @@ public class SimpleProperty
         }
     }
 
+    GraphQLOutputType outputType(OneToOneAssociation otoa) {
 
-
-    // TODO
-    GraphQLOutputType outputType() {
-
-        if(isBlob()) {
-            // new GqlvPropertyGetBlob(this, context)
-
-        } else if (isClob()) {
-            // new GqlvPropertyGetClob(this, context)
-
+        if(isBlobOrClob()) {
+            val typeName = TypeNames.propertyLobTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType());
+            return newObject()
+                    .name(typeName)
+                    .build();
         } else {
-
+            return context.typeMapper.outputTypeFor(otoa, objectInteractor.getSchemaType());
         }
-
-        return null;
     }
 
-    private boolean isBlobOrClob() {
-        return isBlob() || isClob();
-    }
-
-    private boolean isBlob() {
-        return getObjectMember().getElementType().getCorrespondingClass() == Blob.class;
-    }
-
-    private boolean isClob() {
-        return getObjectMember().getElementType().getCorrespondingClass() == Clob.class;
-    }
-
-    public void addGqlArgument(
-            final OneToOneAssociation oneToOneAssociation,
-            final GraphQLFieldDefinition.Builder builder,
-            final TypeMapper.InputContext inputContext) {
-        builder.argument(gqlArgumentFor(oneToOneAssociation, inputContext));
-    }
-
-    private GraphQLArgument gqlArgumentFor(
-            final OneToOneAssociation oneToOneAssociation,
-            final TypeMapper.InputContext inputContext) {
-        return GraphQLArgument.newArgument()
-                .name(oneToOneAssociation.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneAssociation, inputContext, SchemaType.RICH))
-                .build();
-    }
 
     @Override
     protected void addDataFetchersForChildren() {
@@ -153,30 +122,41 @@ public class SimpleProperty
         }
     }
 
-    GraphQLOutputType outputTypeFor(MemberInteractor<OneToOneAssociation> holder) {
-        val oneToOneAssociation = holder.getObjectMember();
-        return context.typeMapper.outputTypeFor(oneToOneAssociation, holder.getSchemaType());
-    }
 
     @Override
-    protected Object fetchData(final DataFetchingEnvironment environment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+        if(isBlobOrClob()) {
+            return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+        } else {
+            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
-            return null;
+            val sourcePojoClass = sourcePojo.getClass();
+            val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+            if (objectSpecification == null) {
+                // not expected
+                return null;
+            }
+
+            val association = getObjectMember();
+            val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+            val resultManagedObject = association.get(managedObject);
+
+            return resultManagedObject != null
+                    ? resultManagedObject.getPojo()
+                    : null;
         }
-
-        val association = getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = association.get(managedObject);
-
-        return resultManagedObject != null
-                ? resultManagedObject.getPojo()
-                : null;
     }
 
+    private boolean isBlobOrClob() {
+        return isBlob() || isClob();
+    }
+
+    private boolean isBlob() {
+        return getObjectMember().getElementType().getCorrespondingClass() == Blob.class;
+    }
+
+    private boolean isClob() {
+        return getObjectMember().getElementType().getCorrespondingClass() == Clob.class;
+    }
 }

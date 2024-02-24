@@ -40,7 +40,7 @@ import static org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvT
 public interface SchemaStrategy {
 
     SchemaStrategy RICH = new SchemaStrategyRich();
-    SchemaStrategy SIMPLE  = new SchemaStrategySimple();
+    SchemaStrategy SIMPLE = new SchemaStrategySimple();
 
     SchemaType getSchemaType();
 
@@ -69,11 +69,13 @@ public interface SchemaStrategy {
             final OneToOneAssociation otoa,
             final Context context
     );
+
     GqlvAbstractCustom newGqlvCollection(
             final ObjectInteractor holder,
             final OneToManyAssociation otma,
             final Context context
     );
+
     GqlvAbstractCustom newGqlvAction(
             final ObjectInteractor holder,
             final ObjectAction objectAction,
@@ -90,7 +92,7 @@ public interface SchemaStrategy {
             final Context context) {
         // no need to map if the target subclass has already been built
         val typeName = GqlvDomainObject.typeNameFor(schemaStrategy, objectSpecification);
-        if(context.domainObjectByTypeName.containsKey(typeName)) {
+        if (context.domainObjectByTypeName.containsKey(typeName)) {
             return;
         }
         val superclasses = superclassesOf(objectSpecification);
@@ -100,5 +102,7 @@ public interface SchemaStrategy {
         });
     }
 
-
+    boolean shouldInclude(
+            final CausewayConfiguration.Viewer.Graphql.ApiVariant apiVariant,
+            final ObjectAction objectAction);
 }

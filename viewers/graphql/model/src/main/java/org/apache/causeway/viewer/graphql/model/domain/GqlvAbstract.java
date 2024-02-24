@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.rich.scenario.GqlvScenarioStep;
 
@@ -29,6 +30,7 @@ import lombok.Getter;
 public abstract class GqlvAbstract {
 
     protected final Context context;
+    protected final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     /**
      * Usually populated, being the field that will be added to the parent's type
@@ -43,6 +45,7 @@ public abstract class GqlvAbstract {
 
     protected GqlvAbstract(final Context context) {
         this.context = context;
+        this.graphqlConfiguration = this.context.causewayConfiguration.getViewer().getGraphql();
     }
 
     protected final GraphQLFieldDefinition setField(final GraphQLFieldDefinition field) {
