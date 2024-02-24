@@ -46,12 +46,16 @@ public class SimpleCollection
 
         val objectType = this.context.typeMapper.listTypeForElementTypeOf(otma, objectInteractor.getSchemaType());
 
-        setField(newFieldDefinition()
-                    .name(getId())
-                    .description(otma.getCanonicalDescription().orElse(otma.getCanonicalFriendlyName()))
-                    .type(objectType)
-                    .build()
-        );
+        if(objectType != null) {
+            setField(newFieldDefinition()
+                        .name(getId())
+                        .description(otma.getCanonicalDescription().orElse(otma.getCanonicalFriendlyName()))
+                        .type(objectType)
+                        .build()
+            );
+        } else {
+            setField(null);
+        }
     }
 
     @Override

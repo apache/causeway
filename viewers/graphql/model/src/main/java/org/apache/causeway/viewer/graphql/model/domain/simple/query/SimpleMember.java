@@ -45,7 +45,7 @@ public abstract class SimpleMember<T extends ObjectMember>
     }
 
     public String getId() {
-        return objectMember.getFeatureIdentifier().getFullIdentityString();
+        return objectMember.getFeatureIdentifier().getMemberLogicalName();
     }
 
 }

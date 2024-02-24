@@ -25,6 +25,7 @@ import graphql.schema.GraphQLFieldDefinition;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
@@ -42,7 +43,8 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 public class SimpleProperty
-        extends SimpleMember<OneToOneAssociation> {
+        extends SimpleMember<OneToOneAssociation>
+        implements MemberInteractor<OneToOneAssociation> {
 
     final SimplePropertyLobName lobName;
     final SimplePropertyLobMimeType lobMimeType;
@@ -70,19 +72,14 @@ public class SimpleProperty
         setField(fieldBuilder.build());
 
         if(isBlobOrClob()) {
-
-            lobName = null;  // TODO
-            lobMimeType = null;  // TODO
+            lobName = new SimplePropertyLobName(this, context);
+            lobMimeType = new SimplePropertyLobMimeType(this, context);
 
             if(isBlob()) {
-                // new GqlvPropertyGetBlob(this, context)
-                lobBytes = null;  // TODO
-
+                lobBytes = new SimplePropertyLobBytes(this, context);
                 lobChars = null;
             } else {
-                // new GqlvPropertyGetClob(this, context)
-                lobChars = null;  // TODO
-
+                lobChars = new SimplePropertyLobChars(this, context);
                 lobBytes = null;
             }
         } else {
@@ -93,7 +90,7 @@ public class SimpleProperty
         }
     }
 
-    GraphQLOutputType outputType(OneToOneAssociation otoa) {
+    GraphQLOutputType outputType(final OneToOneAssociation otoa) {
 
         if(isBlobOrClob()) {
             val typeName = TypeNames.propertyLobTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType());
@@ -158,5 +155,15 @@ public class SimpleProperty
 
     private boolean isClob() {
         return getObjectMember().getElementType().getCorrespondingClass() == Clob.class;
+    }
+
+    @Override
+    public ObjectSpecification getObjectSpecification() {
+        return objectInteractor.getObjectSpecification();
+    }
+
+    @Override
+    public SchemaType getSchemaType() {
+        return objectInteractor.getSchemaType();
     }
 }
