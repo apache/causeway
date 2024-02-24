@@ -309,7 +309,7 @@ public class SimpleAction
 
         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val environment = new Environment.ForTunnelled(dataFetchingEnvironment);
+        val environment = new Environment.For(dataFetchingEnvironment);
 
         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
         if (objectSpecification == null) {
