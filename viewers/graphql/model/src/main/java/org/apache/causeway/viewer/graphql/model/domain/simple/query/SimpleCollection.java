@@ -18,19 +18,24 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLOutputType;
 
 import lombok.val;
 
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 public class SimpleCollection
-        extends SimpleAssociation<OneToManyAssociation, ObjectInteractor>
+        extends SimpleMember<OneToManyAssociation>
         implements MemberInteractor<OneToManyAssociation> {
 
     public SimpleCollection(
@@ -39,6 +44,21 @@ public class SimpleCollection
             final Context context
     ) {
         super(objectInteractor, otma, context);
+
+        if (isBuilt()) {
+            return;
+        }
+        GraphQLOutputType type = outputType();
+        val fieldBuilder = newFieldDefinition()
+                .name(getId())
+                .type(type);
+        setField(fieldBuilder.build());
+
+    }
+
+    GraphQLOutputType outputType() {
+        val oneToManyAssociation = this.getObjectMember();
+        return context.typeMapper.listTypeForElementTypeOf(oneToManyAssociation, getSchemaType());
     }
 
     @Override
@@ -47,10 +67,27 @@ public class SimpleCollection
     }
 
     @Override
-    GraphQLOutputType outputType() {
-        val oneToManyAssociation = this.getObjectMember();
-        return context.typeMapper.listTypeForElementTypeOf(oneToManyAssociation, getSchemaType());
+    protected Object fetchData(final DataFetchingEnvironment environment) {
+
+        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+
+        val sourcePojoClass = sourcePojo.getClass();
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        if (objectSpecification == null) {
+            // not expected
+            return null;
+        }
+
+        val association = getObjectMember();
+        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        val resultManagedObject = association.get(managedObject);
+
+        return resultManagedObject != null
+                ? resultManagedObject.getPojo()
+                : null;
     }
+
+
 
     @Override
     public SchemaType getSchemaType() {

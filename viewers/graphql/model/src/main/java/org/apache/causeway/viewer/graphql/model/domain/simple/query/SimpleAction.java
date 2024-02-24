@@ -69,6 +69,10 @@ public class SimpleAction
             final Context context) {
         super(objectInteractor, objectAction, context);
 
+        if (isBuilt()) {
+            return;
+        }
+
         val graphQLOutputType = typeFor(objectAction);
 
         val fieldBuilder = newFieldDefinition()

@@ -32,6 +32,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import lombok.Getter;
+import lombok.val;
 
 public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent {
 
@@ -46,8 +47,8 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
             final Context context) {
         super(context);
         this.typeName = typeName;
-        Optional<GraphQLObjectType> typeIfAny =
-                context.graphQLTypeRegistry.lookup(typeName, GraphQLObjectType.class);
+
+        val typeIfAny = context.graphQLTypeRegistry.lookup(typeName, GraphQLObjectType.class);
         if(typeIfAny.isPresent()) {
             this.gqlObjectType = typeIfAny.get();
             this.gqlObjectTypeBuilder = null;
