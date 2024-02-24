@@ -35,18 +35,19 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
 
-public abstract class GqlvPropertyGetClobAbstract extends GqlvAbstract {
+public abstract class SimplePropertyLobAbstract extends GqlvAbstract {
 
-    final MemberInteractor<OneToOneAssociation> holder;
+    final MemberInteractor<OneToOneAssociation> memberInteractor;
 
-    public GqlvPropertyGetClobAbstract(
+    public SimplePropertyLobAbstract(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
-            final Context context, String name) {
+            final Context context,
+            final String fieldName) {
         super(context);
-        this.holder = memberInteractor;
+        this.memberInteractor = memberInteractor;
 
         setField(GraphQLFieldDefinition.newFieldDefinition()
-                    .name(name)
+                    .name(fieldName)
                     .type(Scalars.GraphQLString)
                     .build());
     }
@@ -61,7 +62,7 @@ public abstract class GqlvPropertyGetClobAbstract extends GqlvAbstract {
             return null;
         }
 
-        val association = holder.getObjectMember();
+        val association = memberInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 

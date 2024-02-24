@@ -22,19 +22,19 @@ import graphql.schema.DataFetchingEnvironment;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvTopLevelQueryRichSchema;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelQuerySimpleSchema;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichTopLevelQuery;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLevelQuery;
 
 public class GqlvTopLevelQueryBothSchemas extends GqlvAbstractCustom {
 
-    private final GqlvTopLevelQueryRichSchema richSchema;
-    private final GqlvTopLevelQuerySimpleSchema simpleSchema;
+    private final RichTopLevelQuery richSchema;
+    private final SimpleTopLevelQuery simpleSchema;
 
     public GqlvTopLevelQueryBothSchemas(final Context context) {
         super("SimpleAndRich", context);
 
-        addChildFieldFor(richSchema = new GqlvTopLevelQueryRichSchema(context));
-        addChildFieldFor(simpleSchema = new GqlvTopLevelQuerySimpleSchema(context));
+        addChildFieldFor(richSchema = new RichTopLevelQuery(context));
+        addChildFieldFor(simpleSchema = new SimpleTopLevelQuery(context));
 
         buildObjectType();
     }

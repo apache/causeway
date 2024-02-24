@@ -24,9 +24,9 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 
-public class GqlvPropertyGetBlobMimeType extends GqlvPropertyGetBlobAbstract {
+public class SimplePropertyLobMimeType extends SimplePropertyLobAbstract {
 
-    public GqlvPropertyGetBlobMimeType(
+    public SimplePropertyLobMimeType(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
         super(memberInteractor, context, "mimeType");

@@ -18,24 +18,29 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
-import graphql.schema.DataFetchingEnvironment;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvTopLevelQueryAbstractSchema;
 
-public class GqlvPropertyGetClobMimeType extends GqlvPropertyGetClobAbstract {
+public class SimpleTopLevelQuery
+        extends GqlvTopLevelQueryAbstractSchema {
 
-    public GqlvPropertyGetClobMimeType(
-            final MemberInteractor<OneToOneAssociation> memberInteractor,
-            final Context context) {
-        super(memberInteractor, context, "mimeType");
+    private static final SchemaStrategy SCHEMA_STRATEGY = SchemaStrategy.SIMPLE;
 
-    }
+    public SimpleTopLevelQuery(final Context context) {
+        super(SCHEMA_STRATEGY, context);
 
-    @Override
-    protected Object fetchData(DataFetchingEnvironment environment) {
-        return fetchDataFromBlob(environment, blob -> blob.getMimeType().toString());
+        var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+
+        buildObjectType();
+
+        // the field is used if the schemaStyle is 'SIMPLE_AND_RICH', but is ignored/unused otherwise
+        setField(newFieldDefinition()
+                .name(SCHEMA_STRATEGY.topLevelFieldNameFrom(graphqlConfiguration))
+                .type(getGqlObjectType())
+                .build());
     }
 
 }

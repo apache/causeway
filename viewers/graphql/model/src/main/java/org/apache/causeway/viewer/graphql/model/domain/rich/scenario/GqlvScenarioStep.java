@@ -33,7 +33,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelQuerySimpleSchema;
 
 public class GqlvScenarioStep
         extends GqlvAbstractCustom

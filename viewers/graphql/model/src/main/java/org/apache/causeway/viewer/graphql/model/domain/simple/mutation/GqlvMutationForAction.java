@@ -193,7 +193,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
     }
 
 
-    // TODO: adapted from GqlvAction - rationalize?
+    // TODO: adapted from SimpleAction - rationalize?
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
         val arguments = new ArrayList<GraphQLArgument>();
@@ -219,14 +219,14 @@ public class GqlvMutationForAction extends GqlvAbstract {
         }
     }
 
-    // adapted from GqlvAction
+    // adapted from SimpleAction
     GraphQLArgument gqlArgumentFor(final ObjectActionParameter objectActionParameter) {
         return objectActionParameter.isPlural()
                 ? gqlArgumentFor((OneToManyActionParameter) objectActionParameter)
                 : gqlArgumentFor((OneToOneActionParameter) objectActionParameter);
     }
 
-    // adapted from GqlvAction
+    // adapted from SimpleAction
     GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneActionParameter.getId())
@@ -234,7 +234,7 @@ public class GqlvMutationForAction extends GqlvAbstract {
                 .build();
     }
 
-    // adapted from GqlvAction
+    // adapted from SimpleAction
     GraphQLArgument gqlArgumentFor(final OneToManyActionParameter oneToManyActionParameter) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())

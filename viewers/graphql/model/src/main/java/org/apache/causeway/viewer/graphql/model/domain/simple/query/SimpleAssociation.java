@@ -26,23 +26,23 @@ import lombok.val;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
+import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends GqlvAbstract {
+public abstract class SimpleAssociation<T extends ObjectAssociation, H extends ObjectSpecificationProvider & SchemaTypeProvider>
+        extends SimpleMember<T> {
 
-    final MemberInteractor<T> memberInteractor;
-
-    public GqlvAssociationGet(
-            final MemberInteractor<T> memberInteractor,
+    public SimpleAssociation(
+            final ObjectInteractor objectInteractor,
+            final T objectAssociation,
             final Context context) {
-        super(context);
-        this.memberInteractor = memberInteractor;
+        super(objectInteractor, objectAssociation, context);
 
-        GraphQLOutputType type = outputTypeFor(memberInteractor);
+        GraphQLOutputType type = outputType();
         if (type != null) {
             val fieldBuilder = newFieldDefinition()
                     .name("get")
@@ -53,12 +53,12 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
         }
     }
 
-    abstract GraphQLOutputType outputTypeFor(MemberInteractor<T> holder);
+
+    abstract GraphQLOutputType outputType();
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment environment) {
 
-        // TODO: introduce evaluator
         val sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
         val sourcePojoClass = sourcePojo.getClass();
@@ -68,7 +68,7 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
             return null;
         }
 
-        val association = memberInteractor.getObjectMember();
+        val association = getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 
@@ -76,5 +76,6 @@ public abstract class GqlvAssociationGet<T extends ObjectAssociation> extends Gq
                 ? resultManagedObject.getPojo()
                 : null;
     }
+
 
 }

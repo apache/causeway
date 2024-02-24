@@ -16,28 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.rich.scenario.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvTopLevelQueryAbstractSchema;
 
-import lombok.val;
-
-public class GqlvTopLevelQuerySimpleSchema
+public class RichTopLevelQuery
         extends GqlvTopLevelQueryAbstractSchema {
 
-    private static final SchemaStrategy SCHEMA_STRATEGY = SchemaStrategy.SIMPLE;
+    private static final SchemaStrategy SCHEMA_STRATEGY = SchemaStrategy.RICH;
 
-    public GqlvTopLevelQuerySimpleSchema(final Context context) {
+    private final GqlvScenario scenario;
+
+    public RichTopLevelQuery(final Context context) {
         super(SCHEMA_STRATEGY, context);
 
         var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+
+        if (graphqlConfiguration.isIncludeTestingFieldInRich()) {
+            addChildFieldFor(scenario = new GqlvScenario(SCHEMA_STRATEGY, context));
+        } else {
+            scenario = null;
+        }
 
         buildObjectType();
 
@@ -48,4 +52,13 @@ public class GqlvTopLevelQuerySimpleSchema
                 .build());
     }
 
+    @Override
+    protected void addDataFetchersForChildren() {
+
+        super.addDataFetchersForChildren();
+
+        if (scenario != null) {
+            scenario.addDataFetcher(this);
+        }
+    }
 }

@@ -23,12 +23,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -37,46 +41,92 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
-import org.apache.causeway.viewer.graphql.model.domain.Parent;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
-import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
+import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
+import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+
+import org.springframework.lang.Nullable;
+
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 @Log4j2
-public class GqlvAction
-        extends GqlvMember<ObjectAction, ObjectInteractor>
-        implements ActionInteractor,
-                   Parent {
+public class SimpleAction
+        extends SimpleMember<ObjectAction> {
 
-    /**
-     * Populated iff the API variant allows for it.
-     */
-    private final GqlvActionInvoke invoke;
-
-    public GqlvAction(
+    public SimpleAction(
             final ObjectInteractor objectInteractor,
             final ObjectAction objectAction,
             final Context context) {
-        super(objectInteractor, objectAction, TypeNames.actionTypeNameFor(objectInteractor.getObjectSpecification(), objectAction, objectInteractor.getSchemaType()), context);
+        super(objectInteractor, objectAction, context);
 
-        if(isBuilt()) {
-            this.invoke = null;
-            return;
+        val graphQLOutputType = typeFor(objectAction);
+
+        val fieldBuilder = newFieldDefinition()
+                .name(fieldNameForSemanticsOf(objectAction))
+                .description(objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()))
+                .type(graphQLOutputType);
+        addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
+        setField(fieldBuilder.build());
+
+    }
+
+    @Nullable
+    private GraphQLOutputType typeFor(final ObjectAction objectAction){
+
+        val objectSpecification = objectAction.getReturnType();
+        switch (objectSpecification.getBeanSort()){
+
+            case COLLECTION:
+
+                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
+                if (facet == null) {
+                    log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
+                    return null;
+                }
+                val objectSpecificationOfCollectionElement = facet.elementSpec();
+                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, objectInteractor.getSchemaType());
+                if (wrappedType == null) {
+                    log.warn("Unable to create wrapped type of for {} for action {}",
+                            objectSpecificationOfCollectionElement.getFullIdentifier(),
+                            objectAction.getFeatureIdentifier().getFullIdentityString());
+                    return null;
+                }
+                return GraphQLList.list(wrappedType);
+
+            case VALUE:
+            case ENTITY:
+            case VIEW_MODEL:
+            default:
+                return context.typeMapper.outputTypeFor(objectSpecification, objectInteractor.getSchemaType());
+
         }
+    }
 
-        addChildFieldFor(
-                this.invoke = isInvokeAllowed(objectAction)
-                    ? new GqlvActionInvoke(this, context)
-                    : null);
 
-        buildObjectTypeAndField(objectAction.getId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
+    private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
+        switch (objectAction.getSemantics()) {
+            case SAFE_AND_REQUEST_CACHEABLE:
+            case SAFE:
+                return "invoke";
+            case IDEMPOTENT:
+            case IDEMPOTENT_ARE_YOU_SURE:
+                return "invokeIdempotent";
+            case NON_IDEMPOTENT:
+            case NON_IDEMPOTENT_ARE_YOU_SURE:
+            case NOT_SPECIFIED:
+            default:
+                return "invokeNonIdempotent";
+        }
     }
 
     private boolean isInvokeAllowed(ObjectAction objectAction) {
@@ -265,7 +315,7 @@ public class GqlvAction
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext, getSchemaType()))
+                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext, objectInteractor.getSchemaType()))
                 .build();
     }
 
@@ -274,25 +324,45 @@ public class GqlvAction
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, getSchemaType()))
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, objectInteractor.getSchemaType()))
                 .build();
     }
 
     @Override
-    public ObjectSpecification getObjectSpecification() {
-        return interactor.getObjectSpecification();
-    }
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-    @Override
-    protected void addDataFetchersForChildren() {
-        if (invoke != null) {
-            invoke.addDataFetcher(this);
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+
+        val environment = new Environment.ForTunnelled(dataFetchingEnvironment);
+
+        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+        if (objectSpecification == null) {
+            return null;
         }
-    }
 
-    @Override
-    public SchemaType getSchemaType() {
-        return interactor.getSchemaType();
+        val objectAction = getObjectMember();
+        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+
+        val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (visibleConsent.isVetoed()) {
+            throw new HiddenException(objectAction.getFeatureIdentifier());
+        }
+
+        val usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (usableConsent.isVetoed()) {
+            throw new DisabledException(objectAction.getFeatureIdentifier());
+        }
+
+        val head = objectAction.interactionHead(managedObject);
+        val argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
+
+        val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        if (validityConsent.isVetoed()) {
+            throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
+        }
+
+        val resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        return resultManagedObject.getPojo();
     }
 
 }

@@ -50,10 +50,6 @@ public abstract class GqlvAbstract {
         return field;
     }
 
-    public boolean isFieldDefined() {
-        return getField() != null;
-    }
-
     public final void addDataFetcher(Parent parent) {
         if (getField() != null) {
             // in some cases there might not be a field, eg GqlvCollectionGet for DomainObjectList#objects

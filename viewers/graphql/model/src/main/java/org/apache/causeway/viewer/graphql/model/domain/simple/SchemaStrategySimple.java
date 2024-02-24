@@ -29,9 +29,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMeta;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvAction;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvCollection;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvProperty;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleAction;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleCollection;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleProperty;
 
 public class SchemaStrategySimple implements SchemaStrategy {
 
@@ -50,21 +50,21 @@ public class SchemaStrategySimple implements SchemaStrategy {
             final OneToOneAssociation otoa,
             final Context context
     ) {
-        return new GqlvProperty(holder, otoa, context);
+        return new SimpleProperty(holder, otoa, context);
     };
     public GqlvAbstractCustom newGqlvCollection(
             final ObjectInteractor holder,
             final OneToManyAssociation otma,
             final Context context
     ) {
-        return new GqlvCollection(holder, otma, context);
+        return new SimpleCollection(holder, otma, context);
     }
     public GqlvAbstractCustom newGqlvAction(
             final ObjectInteractor holder,
             final ObjectAction objectAction,
             final Context context
     ) {
-        return new GqlvAction(holder, objectAction, context);
+        return new SimpleAction(holder, objectAction, context);
     }
 
     @Override

@@ -25,7 +25,7 @@ import graphql.execution.SimpleDataFetcherExceptionHandler;
 import graphql.schema.GraphQLSchema;
 
 import org.apache.causeway.viewer.graphql.model.domain.simple.mutation.GqlvTopLevelMutationSimpleSchema;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.GqlvTopLevelQuerySimpleSchema;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLevelQuery;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvTopLevelQueryRichSchema;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQueryBothSchemas;
 import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvTopLevelMutationRichSchema;
@@ -125,9 +125,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
         switch (schemaStyle) {
             case SIMPLE_ONLY:
-                return new GqlvTopLevelQuerySimpleSchema(context);
+                return new SimpleTopLevelQuery(context);
             case RICH_ONLY:
-                return new GqlvTopLevelQueryRichSchema(context);
+                return new RichTopLevelQuery(context);
             case SIMPLE_AND_RICH:
             case RICH_AND_SIMPLE:
                 return new GqlvTopLevelQueryBothSchemas(context);

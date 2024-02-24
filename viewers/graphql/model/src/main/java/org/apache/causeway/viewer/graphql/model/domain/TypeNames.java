@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.graphql.model.domain;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -112,6 +113,13 @@ public final class TypeNames {
             final OneToManyAssociation objectMember,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + objectMember.getId() + "__gqlv_collection";
+    }
+
+    public static String memberTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectMember objectMember,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(owningType, schemaType) + "__" + objectMember.getId() + "__gqlv_member";
     }
 
     private static String sanitized(final String name) {

@@ -20,33 +20,22 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
 import graphql.schema.DataFetchingEnvironment;
 
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
+public class SimplePropertyLobName extends SimplePropertyLobAbstract {
 
-public class GqlvPropertyGetBlobBytes extends GqlvPropertyGetBlobAbstract {
-
-    private final String graphqlPath;
-
-    public GqlvPropertyGetBlobBytes(
+    public SimplePropertyLobName(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
-        super(memberInteractor, context, "bytes");
-
-        this.graphqlPath = context.causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
+        super(memberInteractor, context, "name");
     }
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
-
-        val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
-        return bookmarkIfAny.map(x -> String.format(
-                "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), memberInteractor.getObjectMember().getId())).orElse(null);
-
+        return fetchDataFromBlob(environment, Blob::getName);
     }
 
 }
