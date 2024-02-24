@@ -1,0 +1,15 @@
+{
+  simple {
+    university_dept_Departments {
+      createDepartment(name: "Astrophysics") {
+        name
+      }
+      findAllDepartments {
+        name
+      }
+      findDepartmentByName(name: "Astrophysics") {
+        name
+      }
+    }
+  }
+}

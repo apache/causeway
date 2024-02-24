@@ -1,8 +1,10 @@
 {
-  university_calc_Calculator {
-    someUrl {
-      invoke {
-        results
+  rich {
+    university_calc_Calculator {
+      someUrl {
+        invoke {
+          results
+        }
       }
     }
   }

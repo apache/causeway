@@ -1,0 +1,29 @@
+{
+  "data" : {
+    "simple" : {
+      "university_dept_Departments" : {
+        "createDepartment" : {
+          "name" : "Astrophysics"
+        },
+        "findAllDepartments" : [ {
+          "name" : "Astrophysics"
+        }, {
+          "name" : "Civil Engineering"
+        }, {
+          "name" : "Classics"
+        }, {
+          "name" : "Mathematics"
+        }, {
+          "name" : "Pathology"
+        }, {
+          "name" : "Physics"
+        }, {
+          "name" : "Textiles"
+        } ],
+        "findDepartmentByName" : {
+          "name" : "Astrophysics"
+        }
+      }
+    }
+  }
+}

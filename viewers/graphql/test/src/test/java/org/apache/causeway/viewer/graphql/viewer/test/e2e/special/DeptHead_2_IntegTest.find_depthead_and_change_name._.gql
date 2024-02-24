@@ -1,13 +1,15 @@
 {
-  university_dept_DeptHeads {
-    findHeadByName {
-      invoke(name: "Prof. Dicky Horwich") {
-        results {
-          changeName {
-            invokeIdempotent(newName: "Prof. Richard Horwich") {
-              results {
-                name {
-                  get
+  rich {
+    university_dept_DeptHeads {
+      findHeadByName {
+        invoke(name: "Prof. Dicky Horwich") {
+          results {
+            changeName {
+              invokeIdempotent(newName: "Prof. Richard Horwich") {
+                results {
+                  name {
+                    get
+                  }
                 }
               }
             }

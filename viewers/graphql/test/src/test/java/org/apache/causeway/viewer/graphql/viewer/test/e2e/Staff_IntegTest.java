@@ -61,32 +61,10 @@ import lombok.val;
 @ActiveProfiles("test")
 public class Staff_IntegTest extends Abstract_IntegTest {
 
+    @Override
     @TestFactory
-    Iterable<DynamicTest> each() throws IOException, URISyntaxException {
-
-        val integClassName = getClass().getSimpleName();
-        val classUrl = getClass().getResource(integClassName + ".class");
-        Path classPath = Paths.get(classUrl.toURI());
-        Path directoryPath = classPath.getParent();
-
-        return Files.walk(directoryPath)
-                .filter(Files::isRegularFile)
-                .filter(file -> {
-                    String fileName = file.getFileName().toString();
-                    return fileName.startsWith(integClassName) && fileName.endsWith("._.gql");
-                })
-                .map(file -> {
-                    String fileName = file.getFileName().toString();
-                    String testName = fileName.substring(integClassName.length() + ".each.".length()).replace("._.gql", "");
-                    return JupiterApprovals.dynamicTest(
-                            testName,
-                            options -> {
-                                Approvals.verify(submitFileNamed(fileName), jsonOptions(options));
-                                afterEach();
-                                beforeEach();
-                            });
-                })
-                .collect(Collectors.toList());
+    public Iterable<DynamicTest> each() throws IOException, URISyntaxException {
+        return super.each();
     }
 
 

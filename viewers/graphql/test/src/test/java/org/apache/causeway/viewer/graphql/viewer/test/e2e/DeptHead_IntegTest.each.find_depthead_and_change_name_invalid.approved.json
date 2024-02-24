@@ -1,11 +1,13 @@
 {
   "data" : {
-    "university_dept_DeptHeads" : {
-      "findHeadByName" : {
-        "invoke" : {
-          "results" : {
-            "changeName" : {
-              "validate" : "Name cannot contain '!' character"
+    "rich" : {
+      "university_dept_DeptHeads" : {
+        "findHeadByName" : {
+          "invoke" : {
+            "results" : {
+              "changeName" : {
+                "validate" : "Name cannot contain '!' character"
+              }
             }
           }
         }

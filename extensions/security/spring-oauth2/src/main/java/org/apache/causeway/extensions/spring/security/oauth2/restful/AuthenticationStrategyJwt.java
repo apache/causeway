@@ -55,7 +55,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
  *
  *
  */
-public class AuthenticationStrategyJwt extends AuthenticationStrategyAbstract {
+public class    AuthenticationStrategyJwt extends AuthenticationStrategyAbstract {
 
     @Override
     public InteractionContext lookupValid(

@@ -1,9 +1,12 @@
 {
-  "data" : {
-    "university_dept_Person" : {
-      "name" : {
-        "get" : "Letitia Leadbetter"
-      }
+  "errors" : [ {
+    "message" : "Validation error (FieldUndefined@[university_dept_Person]) : Field 'university_dept_Person' in type 'SimpleAndRich' is undefined",
+    "locations" : [ {
+      "line" : 2,
+      "column" : 3
+    } ],
+    "extensions" : {
+      "classification" : "ValidationError"
     }
-  }
+  } ]
 }

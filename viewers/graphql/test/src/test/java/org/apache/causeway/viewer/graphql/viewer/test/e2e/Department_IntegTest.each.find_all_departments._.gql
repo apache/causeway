@@ -1,15 +1,17 @@
 {
-  university_dept_Departments {
-    findAllDepartments {
-      invoke {
-        results {
-          name {
-            get
-            datatype
-          }
-          _meta {
-            logicalTypeName
-            version
+  rich {
+    university_dept_Departments {
+      findAllDepartments {
+        invoke {
+          results {
+            name {
+              get
+              datatype
+            }
+            _meta {
+              logicalTypeName
+              version
+            }
           }
         }
       }

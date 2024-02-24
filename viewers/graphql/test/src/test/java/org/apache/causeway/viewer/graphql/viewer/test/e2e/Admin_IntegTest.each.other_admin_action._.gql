@@ -1,8 +1,10 @@
 {
-  university_admin_AdminMenu {
-    otherAdminAction {
-      hidden
-      disabled
+  rich {
+    university_admin_AdminMenu {
+      otherAdminAction {
+        hidden
+        disabled
+      }
     }
   }
 }

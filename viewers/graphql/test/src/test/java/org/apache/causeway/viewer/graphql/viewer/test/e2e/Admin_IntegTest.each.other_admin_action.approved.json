@@ -1,9 +1,11 @@
 {
   "data" : {
-    "university_admin_AdminMenu" : {
-      "otherAdminAction" : {
-        "hidden" : false,
-        "disabled" : "yup, disabled!"
+    "rich" : {
+      "university_admin_AdminMenu" : {
+        "otherAdminAction" : {
+          "hidden" : false,
+          "disabled" : "yup, disabled!"
+        }
       }
     }
   }

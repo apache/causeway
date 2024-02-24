@@ -1,13 +1,15 @@
 {
   "data" : {
-    "university_admin_AdminMenu" : {
-      "actionWithHiddenParam" : {
-        "params" : {
-          "firstParam" : {
-            "hidden" : true
-          },
-          "secondParam" : {
-            "hidden" : false
+    "rich" : {
+      "university_admin_AdminMenu" : {
+        "actionWithHiddenParam" : {
+          "params" : {
+            "firstParam" : {
+              "hidden" : true
+            },
+            "secondParam" : {
+              "hidden" : false
+            }
           }
         }
       }

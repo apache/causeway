@@ -25,6 +25,9 @@ import java.util.Map;
 
 import graphql.schema.GraphQLCodeRegistry;
 
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.HasLogicalType;
@@ -38,8 +41,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -59,8 +60,9 @@ public class Context {
     public final ObjectManager objectManager;
     public final GraphQLTypeRegistry graphQLTypeRegistry;
 
-    public final Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec = new LinkedHashMap<>();
-    public final Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec = new LinkedHashMap<>();
+
+    public final Map<String, GqlvDomainService> domainServiceByTypeName = new LinkedHashMap<>();
+    public final Map<String, GqlvDomainObject> domainObjectByTypeName = new LinkedHashMap<>();
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()

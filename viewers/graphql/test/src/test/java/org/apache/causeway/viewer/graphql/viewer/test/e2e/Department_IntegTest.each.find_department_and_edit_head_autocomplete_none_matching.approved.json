@@ -1,11 +1,13 @@
 {
   "data" : {
-    "university_dept_Departments" : {
-      "findDepartmentByName" : {
-        "invoke" : {
-          "results" : {
-            "deptHead" : {
-              "autoComplete" : [ ]
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "deptHead" : {
+                "autoComplete" : [ ]
+              }
             }
           }
         }

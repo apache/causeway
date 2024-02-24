@@ -1,23 +1,25 @@
 {
   "errors" : [ {
-    "message" : "Exception while fetching data (/university_dept_DeptHeads/findHeadByName/invoke/results/changeName/invokeIdempotent/results) : Name cannot contain '!' character",
+    "message" : "Exception while fetching data (/rich/university_dept_DeptHeads/findHeadByName/invoke/results/changeName/invokeIdempotent/results) : Name cannot contain '!' character",
     "locations" : [ {
-      "line" : 8,
-      "column" : 15
+      "line" : 9,
+      "column" : 17
     } ],
-    "path" : [ "university_dept_DeptHeads", "findHeadByName", "invoke", "results", "changeName", "invokeIdempotent", "results" ],
+    "path" : [ "rich", "university_dept_DeptHeads", "findHeadByName", "invoke", "results", "changeName", "invokeIdempotent", "results" ],
     "extensions" : {
       "classification" : "DataFetchingException"
     }
   } ],
   "data" : {
-    "university_dept_DeptHeads" : {
-      "findHeadByName" : {
-        "invoke" : {
-          "results" : {
-            "changeName" : {
-              "invokeIdempotent" : {
-                "results" : null
+    "rich" : {
+      "university_dept_DeptHeads" : {
+        "findHeadByName" : {
+          "invoke" : {
+            "results" : {
+              "changeName" : {
+                "invokeIdempotent" : {
+                  "results" : null
+                }
               }
             }
           }

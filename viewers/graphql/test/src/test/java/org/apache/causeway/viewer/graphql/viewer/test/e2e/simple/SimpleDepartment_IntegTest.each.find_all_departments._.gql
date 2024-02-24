@@ -1,0 +1,15 @@
+{
+  simple {
+    university_dept_Departments {
+      findAllDepartments {
+        name
+        staffMembers {
+          name
+          department {
+            name
+          }
+        }
+      }
+    }
+  }
+}

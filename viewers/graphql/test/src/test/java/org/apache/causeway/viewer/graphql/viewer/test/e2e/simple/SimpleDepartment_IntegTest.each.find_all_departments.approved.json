@@ -1,0 +1,52 @@
+{
+  "data" : {
+    "simple" : {
+      "university_dept_Departments" : {
+        "findAllDepartments" : [ {
+          "name" : "Civil Engineering",
+          "staffMembers" : [ ]
+        }, {
+          "name" : "Classics",
+          "staffMembers" : [ {
+            "name" : "Gerry Jones",
+            "department" : {
+              "name" : "Classics"
+            }
+          }, {
+            "name" : "Letitia Leadbetter",
+            "department" : {
+              "name" : "Classics"
+            }
+          } ]
+        }, {
+          "name" : "Mathematics",
+          "staffMembers" : [ ]
+        }, {
+          "name" : "Pathology",
+          "staffMembers" : [ ]
+        }, {
+          "name" : "Physics",
+          "staffMembers" : [ {
+            "name" : "John Gartner",
+            "department" : {
+              "name" : "Physics"
+            }
+          }, {
+            "name" : "Margaret Randall",
+            "department" : {
+              "name" : "Physics"
+            }
+          }, {
+            "name" : "Mervin Hughes",
+            "department" : {
+              "name" : "Physics"
+            }
+          } ]
+        }, {
+          "name" : "Textiles",
+          "staffMembers" : [ ]
+        } ]
+      }
+    }
+  }
+}

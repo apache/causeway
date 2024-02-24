@@ -1,14 +1,16 @@
 {
   "data" : {
-    "university_dept_DeptHeads" : {
-      "findHeadByName" : {
-        "invoke" : {
-          "results" : {
-            "changeName" : {
-              "invokeIdempotent" : {
-                "results" : {
-                  "name" : {
-                    "get" : "Prof. Richard Horwich"
+    "rich" : {
+      "university_dept_DeptHeads" : {
+        "findHeadByName" : {
+          "invoke" : {
+            "results" : {
+              "changeName" : {
+                "invokeIdempotent" : {
+                  "results" : {
+                    "name" : {
+                      "get" : "Prof. Richard Horwich"
+                    }
                   }
                 }
               }

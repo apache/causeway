@@ -57,7 +57,7 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
         val jsonNodeRoot = objectMapper.readTree(response);
 
         val gridUrl = jsonNodeRoot
-                .at("/data/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/grid")
+                .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/grid")
                 .asText();
 
         assertThat(gridUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/grid");
@@ -69,7 +69,7 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
 
 
         val photoBytesUrl = jsonNodeRoot
-                .at("/data/university_dept_Staff/findStaffMemberByName/invoke/results/photo/get/bytes")
+                .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/photo/get/bytes")
                 .asText();
 
         assertThat(photoBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/photo/blobBytes");
@@ -80,7 +80,7 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
 
 
         val iconBytesUrl = jsonNodeRoot
-                .at("/data/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/icon")
+                .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/icon")
                 .asText();
 
         assertThat(iconBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/icon");

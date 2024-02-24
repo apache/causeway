@@ -2346,6 +2346,96 @@ public class CausewayConfiguration {
         @Data
         public static class Graphql {
 
+            public enum SchemaStyle {
+                /**
+                 * Expose only the &quot;simple&quot; schema, defining only fields that return the state of the domain
+                 * objects but with no fields to represent additional facets of state (such as whether
+                 * an action is hidden or disabled).
+                 *
+                 * <p>
+                 *     Suitable for clients where the application logic and state is the responsibility of the client.
+                 * </p>
+                 */
+                SIMPLE_ONLY,
+                /**
+                 * Expose only the &quot;rich&quot; schema, exposing not only fields that return the state of the domain
+                 * objects but <i>also</i> with fields to represent additional facets of state (such as whether
+                 * an action is hidden or disabled).
+                 *
+                 * <p>
+                 *     Optionally, fields for Scenario (given/when/then) testing may also be added if the
+                 *     {@link #isIncludeTestingFieldInRich()} config property is set.
+                 * </p>
+                 * <p>
+                 *     Suitable for clients where the application logic and state remains in the backend, within the
+                 *     domain model hosted by Causeway.
+                 * </p>
+                 */
+                RICH_ONLY,
+                /**
+                 * Exposes both the simple and rich schemas, for the query have each under a field as defined by
+                 * {@link #getTopLevelFieldNameForSimple()} (by default &quot;simple&quot;) and
+                 * {@link #getTopLevelFieldNameForRich()} (by default &quot;rich&quot;).
+                 *
+                 * <p>
+                 *     For mutations, use the <i>simple</i> schema types.
+                 * </p>
+                 */
+                SIMPLE_AND_RICH,
+                /**
+                 * Exposes both the simple and rich schemas, for the query have each under a field as defined by
+                 * {@link #getTopLevelFieldNameForSimple()} (by default &quot;simple&quot;) and
+                 * {@link #getTopLevelFieldNameForRich()} (by default &quot;rich&quot;).
+                 *
+                 * <p>
+                 *     For mutations, use the <i>rich</i> schema types.
+                 * </p>
+                 */
+                RICH_AND_SIMPLE,
+                ;
+
+                public boolean isRich() {
+                    return this == RICH_ONLY || this == SIMPLE_AND_RICH || this == RICH_AND_SIMPLE;
+                }
+                public boolean isSimple() {
+                    return this == SIMPLE_ONLY || this == SIMPLE_AND_RICH || this == RICH_AND_SIMPLE;
+                }
+            }
+
+            /**
+             * Which {@link SchemaStyle} to expose.
+             */
+            private SchemaStyle schemaStyle = SchemaStyle.RICH_AND_SIMPLE;
+
+            /**
+             * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
+             * top-level field under which the &quot;simple&quot; schema resides.
+             *
+             * <p>
+             *     Ignored for any other {@link #getSchemaStyle()}.
+             * </p>
+             */
+            private String topLevelFieldNameForSimple = "simple";
+            /**
+             * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
+             * top-level field under which the &quot;rich&quot; schema resides.
+             *
+             * <p>
+             *     Ignored for any other {@link #getSchemaStyle()}.
+             * </p>
+             */
+            private String topLevelFieldNameForRich = "rich";
+            /**
+             * If the {@link #getSchemaStyle()} is set to either {@link SchemaStyle#RICH_ONLY} or
+             * {@link SchemaStyle#SIMPLE_AND_RICH}, then determines whether the &quot;Scenario&quot; field is included
+             * in order to allow given/when/then tests to be expressed.
+             *
+             * <p>
+             *     Ignored if the {@link #getSchemaStyle()} is {@link SchemaStyle#SIMPLE_ONLY}.
+             * </p>
+             */
+            private boolean includeTestingFieldInRich = true;
+
             public enum ApiVariant {
                 /**
                  * Exposes only a Query API, of properties, collections and safe (query-onl) actions.

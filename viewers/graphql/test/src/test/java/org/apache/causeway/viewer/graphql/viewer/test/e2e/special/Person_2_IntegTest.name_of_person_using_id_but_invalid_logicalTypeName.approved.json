@@ -1,16 +1,12 @@
 {
   "errors" : [ {
-    "message" : "Exception while fetching data (/university_dept_Person) : The 'logicalTypeName' of 'university.dept.XXX' is unknown in the metamodel",
+    "message" : "Validation error (FieldUndefined@[university_dept_Person]) : Field 'university_dept_Person' in type 'SimpleAndRich' is undefined",
     "locations" : [ {
       "line" : 2,
       "column" : 3
     } ],
-    "path" : [ "university_dept_Person" ],
     "extensions" : {
-      "classification" : "DataFetchingException"
+      "classification" : "ValidationError"
     }
-  } ],
-  "data" : {
-    "university_dept_Person" : null
-  }
+  } ]
 }

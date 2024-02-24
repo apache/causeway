@@ -1,15 +1,17 @@
 {
-  university_dept_Departments {
-    createDepartment {
-      params {
-        name {
-          disabled
-        }
-      }
-      invokeNonIdempotent(name: "newbie") {
-        results {
+  rich {
+    university_dept_Departments {
+      createDepartment {
+        params {
           name {
-            get
+            disabled
+          }
+        }
+        invokeNonIdempotent(name: "newbie") {
+          results {
+            name {
+              get
+            }
           }
         }
       }

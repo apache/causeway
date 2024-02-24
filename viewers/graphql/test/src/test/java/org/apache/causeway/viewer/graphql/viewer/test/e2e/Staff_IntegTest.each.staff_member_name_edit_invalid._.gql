@@ -1,12 +1,14 @@
 {
-  university_dept_Staff {
-    findStaffMemberByName {
-      invoke(name: "Gerry Jones") {
-        results {
-          name {
-            set(name: "Gerry!") {
-              name {
-                get
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            name {
+              set(name: "Gerry!") {
+                name {
+                  get
+                }
               }
             }
           }

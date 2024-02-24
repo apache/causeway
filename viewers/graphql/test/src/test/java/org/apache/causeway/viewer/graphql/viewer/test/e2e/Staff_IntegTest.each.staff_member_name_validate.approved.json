@@ -1,11 +1,13 @@
 {
   "data" : {
-    "university_dept_Staff" : {
-      "findStaffMemberByName" : {
-        "invoke" : {
-          "results" : {
-            "name" : {
-              "validate" : "Name cannot contain '!' character"
+    "rich" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "invoke" : {
+            "results" : {
+              "name" : {
+                "validate" : "Name cannot contain '!' character"
+              }
             }
           }
         }

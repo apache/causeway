@@ -37,6 +37,8 @@ import graphql.schema.GraphQLType;
 import static graphql.schema.GraphQLEnumType.newEnum;
 import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -73,18 +75,23 @@ public class GraphQLTypeRegistry {
     }
 
 
-    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(final Class<?> typeToAdd) {
+    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
+            final Class<?> typeToAdd,
+            final SchemaType schemaType) {
         val objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
-        val typeName = TypeNames.enumTypeNameFor(objectSpec);
+        val typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
         val enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
+
         if (enumTypeIfAny.isPresent()) {
             return enumTypeIfAny.get();
         }
+
+        val enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
         val enumType = newEnum()
                 .name(typeName)
-                .values(Stream.of(typeToAdd.getEnumConstants())
+                .values(Stream.of(enumTypeToAdd.getEnumConstants())
                         .map(enumValue -> newEnumValueDefinition()
-                                .name(enumValue.toString())
+                                .name(enumValue.name())
                                 .value(enumValue)
                                 .build()).collect(Collectors.toList())
                 )

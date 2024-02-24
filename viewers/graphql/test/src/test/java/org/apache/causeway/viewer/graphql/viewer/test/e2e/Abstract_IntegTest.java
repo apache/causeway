@@ -68,18 +68,13 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
             deptHeadRepository.create("Dr. George Harwood", civilEngineering);
 
             // staff
-            staffMemberRepository.create("Letitia Leadbetter", classics, asBlob("StaffMember-photo-Foo.pdf"));
-            staffMemberRepository.create("Gerry Jones", classics, asBlob("StaffMember-photo-Bar.pdf"));
-            staffMemberRepository.create("Mervin Hughes", physics, asBlob("StaffMember-photo-Fizz.pdf"));
+            staffMemberRepository.create("Letitia Leadbetter", classics, asPdfBlob("StaffMember-photo-Foo.pdf"));
+            staffMemberRepository.create("Gerry Jones", classics, asPdfBlob("StaffMember-photo-Bar.pdf"));
+            staffMemberRepository.create("Mervin Hughes", physics, asPdfBlob("StaffMember-photo-Fizz.pdf"));
             staffMemberRepository.create("John Gartner", physics);
             staffMemberRepository.create("Margaret Randall", physics);
 
         });
-    }
-
-    protected Blob asBlob(String fileName) {
-        val bytes = toBytes(fileName);
-        return new Blob(fileName, "application/pdf", bytes);
     }
 
     @AfterEach
@@ -92,21 +87,5 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
             departmentRepository.removeAll();
         });
     }
-
-    @SneakyThrows
-    private byte[] toBytes(String fileName){
-        InputStream inputStream = new ClassPathResource(fileName, Abstract_IntegTest.class).getInputStream();
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-        int nRead;
-        byte[] data = new byte[16384];
-
-        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-            buffer.write(data, 0, nRead);
-        }
-
-        return buffer.toByteArray();
-    }
-
 
 }

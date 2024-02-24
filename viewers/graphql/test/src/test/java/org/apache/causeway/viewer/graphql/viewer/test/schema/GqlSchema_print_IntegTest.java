@@ -45,12 +45,15 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertNotN
 import lombok.val;
 
 @Transactional
-@DirtiesContext
 public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private GraphQlSourceForCauseway graphQlSourceForCauseway;
+
+    public GqlSchema_print_IntegTest() {
+        super("._.gql");
+    }
 
     @BeforeEach
     protected void beforeEach() {

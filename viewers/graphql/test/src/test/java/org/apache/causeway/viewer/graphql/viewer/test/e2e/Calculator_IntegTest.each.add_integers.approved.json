@@ -1,9 +1,11 @@
 {
   "data" : {
-    "university_calc_Calculator" : {
-      "addIntegers" : {
-        "invoke" : {
-          "results" : 3
+    "rich" : {
+      "university_calc_Calculator" : {
+        "addIntegers" : {
+          "invoke" : {
+            "results" : 3
+          }
         }
       }
     }

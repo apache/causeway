@@ -1,11 +1,13 @@
 {
-  Scenario(name: "Obtain name of person that's a non-existent StaffMember") {
-    Name
-    When {
-      university_dept_People {
-        nameOf {
-          invoke(person: {id: "123456", logicalTypeName: "university.dept.StaffMember"}) {
-            results
+  rich {
+    Scenario(name: "Obtain name of person that's a non-existent StaffMember") {
+      Name
+      When {
+        university_dept_People {
+          nameOf {
+            invoke(person: {id: "123456", logicalTypeName: "university.dept.StaffMember"}) {
+              results
+            }
           }
         }
       }
