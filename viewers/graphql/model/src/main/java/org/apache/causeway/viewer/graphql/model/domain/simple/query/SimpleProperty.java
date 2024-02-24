@@ -102,10 +102,14 @@ public class SimpleProperty
             lobChars = null;
         }
 
-        val fieldBuilder = newFieldDefinition()
-                .name(otoa.getId())
-                .type(gqlOutputType);
-        setField(fieldBuilder.build());
+        if (gqlOutputType != null) {
+            val fieldBuilder = newFieldDefinition()
+                    .name(otoa.getId())
+                    .type(gqlOutputType);
+            setField(fieldBuilder.build());
+        } else {
+            setField(null);
+        }
     }
 
     private static GraphQLOutputType outputType(
