@@ -1,0 +1,9 @@
+{
+  simple {
+    university_dept_Departments {
+      createDepartment(name: "Astrophysics") {
+        name
+      }
+    }
+  }
+}
