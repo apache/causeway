@@ -27,6 +27,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
@@ -52,7 +53,7 @@ public class GqlvDomainService
         return schemaStrategy.getSchemaType();
     }
 
-    private final List<GqlvAbstractCustom> actions = new ArrayList<>();
+    private final List<GqlvAbstract> actions = new ArrayList<>();
 
     public static String typeNameFor(SchemaStrategy schemaStrategy, ObjectSpecification objectSpecification) {
         return TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType());
