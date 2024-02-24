@@ -25,27 +25,28 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
 
 public class SimpleCollection
-        extends SimpleMember<OneToManyAssociation> {
+        extends GqlvAbstract {
+
+    final ObjectInteractor objectInteractor;
+    private final OneToManyAssociation objectMember;
 
     public SimpleCollection(
             final ObjectInteractor objectInteractor,
             final OneToManyAssociation otma,
             final Context context
     ) {
-        super(objectInteractor, otma, context);
-
-        if (isBuilt()) {
-            return;
-        }
+        super(context);
+        this.objectInteractor = objectInteractor;
+        this.objectMember = otma;
 
         val objectType = this.context.typeMapper.listTypeForElementTypeOf(otma, objectInteractor.getSchemaType());
-
         if(objectType != null) {
             setField(newFieldDefinition()
                         .name(getId())
@@ -56,8 +57,10 @@ public class SimpleCollection
         } else {
             setField(null);
         }
+    }
 
-        buildObjectType();
+    public String getId() {
+        return objectMember.getId();
     }
 
     @Override
@@ -72,7 +75,7 @@ public class SimpleCollection
             return null;
         }
 
-        val otma = getObjectMember();
+        val otma = objectMember;
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = otma.get(managedObject);
 

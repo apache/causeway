@@ -46,6 +46,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
@@ -53,22 +54,25 @@ import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class SimpleAction
-        extends SimpleMember<ObjectAction> {
+        extends GqlvAbstract {
+
+    @Getter final ObjectInteractor objectInteractor;
+    @Getter private final ObjectAction objectMember;
 
     public SimpleAction(
             final ObjectInteractor objectInteractor,
             final ObjectAction objectAction,
             final Context context) {
-        super(objectInteractor, objectAction, context);
+        super(context);
 
-        if (isBuilt()) {
-            return;
-        }
+        this.objectInteractor = objectInteractor;
+        this.objectMember = objectAction;
 
         val graphQLOutputType = typeFor(objectAction);
 
@@ -79,7 +83,10 @@ public class SimpleAction
         addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
 
         setField(fieldBuilder.build());
-        buildObjectType();
+    }
+
+    public String getId() {
+        return objectMember.getId();
     }
 
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
@@ -111,7 +118,6 @@ public class SimpleAction
                 return context.typeMapper.outputTypeFor(objectSpecification, objectInteractor.getSchemaType());
         }
     }
-
 
     public Can<ManagedObject> argumentManagedObjectsFor(
             final Environment dataFetchingEnvironment,

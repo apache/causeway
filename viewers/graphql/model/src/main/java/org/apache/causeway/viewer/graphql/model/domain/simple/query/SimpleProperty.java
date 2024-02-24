@@ -19,8 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
@@ -28,23 +26,39 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 
+import lombok.Getter;
 import lombok.val;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 public class SimpleProperty
-        extends SimpleMember<OneToOneAssociation>
-        implements MemberInteractor<OneToOneAssociation> {
+        extends GqlvAbstract
+        implements MemberInteractor<OneToOneAssociation>, Parent {
+
+    @Getter final ObjectInteractor objectInteractor;
+    @Getter private final OneToOneAssociation objectMember;
+
+    /**
+     * Only populated if there are child fields.
+     */
+    final GraphQLObjectType gqlObjectType;
+    String getTypeName() {
+        return gqlObjectType != null ? gqlObjectType.getName() : null;
+    }
 
     final SimplePropertyLobName lobName;
     final SimplePropertyLobMimeType lobMimeType;
@@ -55,46 +69,51 @@ public class SimpleProperty
             final ObjectInteractor objectInteractor,
             final OneToOneAssociation otoa,
             final Context context) {
-        super(objectInteractor, otoa, context);
 
-        final GraphQLOutputType outputType;
-        if (isBuilt() ||
-            (outputType = outputType(otoa)) == null) {
+        super(context);
+        this.objectInteractor = objectInteractor;
+        this.objectMember = otoa;
+
+        final GraphQLOutputType gqlOutputType;
+        if (isBlobOrClob(otoa)) {
+            val glqObjectTypeBuilder = newObject()
+                    .name(TypeNames.memberTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType()))
+                    .description(otoa.getCanonicalDescription().orElse(otoa.getCanonicalFriendlyName()))
+                    ;
+
+            addChildFieldFor(glqObjectTypeBuilder, lobName = new SimplePropertyLobName(this, context));
+            addChildFieldFor(glqObjectTypeBuilder, lobMimeType = new SimplePropertyLobMimeType(this, context));
+
+            if(isBlob(getObjectMember())) {
+                addChildFieldFor(glqObjectTypeBuilder, lobBytes = new SimplePropertyLobBytes(this, context));
+                lobChars = null;
+            } else {
+                addChildFieldFor(glqObjectTypeBuilder, lobChars = new SimplePropertyLobChars(this, context));
+                lobBytes = null;
+            }
+
+            gqlOutputType = gqlObjectType = glqObjectTypeBuilder.build();
+        } else {
+            gqlObjectType = null;
+            gqlOutputType = outputType(objectInteractor, otoa, context);
             lobName = null;
             lobMimeType = null;
             lobBytes = null;
             lobChars = null;
-            return;
         }
 
         val fieldBuilder = newFieldDefinition()
-                .name(getId())
-                .type(outputType);
+                .name(otoa.getId())
+                .type(gqlOutputType);
         setField(fieldBuilder.build());
-
-        if(isBlobOrClob()) {
-            addChildFieldFor(lobName = new SimplePropertyLobName(this, context));
-            addChildFieldFor(lobMimeType = new SimplePropertyLobMimeType(this, context));
-
-            if(isBlob()) {
-                addChildFieldFor(lobBytes = new SimplePropertyLobBytes(this, context));
-                lobChars = null;
-            } else {
-                addChildFieldFor(lobChars = new SimplePropertyLobChars(this, context));
-                lobBytes = null;
-            }
-        } else {
-            lobName = null;
-            lobMimeType = null;
-            lobBytes = null;
-            lobChars = null;
-        }
-        buildObjectType();
     }
 
-    GraphQLOutputType outputType(final OneToOneAssociation otoa) {
+    private static GraphQLOutputType outputType(
+            final ObjectInteractor objectInteractor,
+            final OneToOneAssociation otoa,
+            final Context context) {
 
-        if(isBlobOrClob()) {
+        if(isBlobOrClob(otoa)) {
             val typeName = TypeNames.propertyLobTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType());
             return newObject()
                     .name(typeName)
@@ -104,6 +123,14 @@ public class SimpleProperty
         }
     }
 
+    static <T extends GqlvAbstract> void addChildFieldFor(
+            final GraphQLObjectType.Builder glqObjectTypeBuilder,
+            final T hasField) {
+        GraphQLFieldDefinition childField = hasField.getField();
+        if (childField != null) {
+            glqObjectTypeBuilder.field(childField);
+        }
+    }
 
     @Override
     protected void addDataFetchersForChildren() {
@@ -125,7 +152,7 @@ public class SimpleProperty
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        if(isBlobOrClob()) {
+        if(isBlobOrClob(getObjectMember())) {
             return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
         } else {
             val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
@@ -147,16 +174,16 @@ public class SimpleProperty
         }
     }
 
-    private boolean isBlobOrClob() {
-        return isBlob() || isClob();
+    private static boolean isBlobOrClob(OneToOneAssociation otota) {
+        return isBlob(otota) || isClob(otota);
     }
 
-    private boolean isBlob() {
-        return getObjectMember().getElementType().getCorrespondingClass() == Blob.class;
+    private static boolean isBlob(OneToOneAssociation otoa) {
+        return otoa.getElementType().getCorrespondingClass() == Blob.class;
     }
 
-    private boolean isClob() {
-        return getObjectMember().getElementType().getCorrespondingClass() == Clob.class;
+    private static boolean isClob(OneToOneAssociation otoa) {
+        return otoa.getElementType().getCorrespondingClass() == Clob.class;
     }
 
     @Override
@@ -168,4 +195,21 @@ public class SimpleProperty
     public SchemaType getSchemaType() {
         return objectInteractor.getSchemaType();
     }
+
+    public final FieldCoordinates coordinatesFor(final GraphQLFieldDefinition field) {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(
+                    String.format("GQL Object Type for '%s' not yet built", getTypeName()));
+        }
+        return FieldCoordinates.coordinates(gqlObjectType, field);
+    }
+
+    public final FieldCoordinates coordinatesFor(final String fieldName) {
+        if (gqlObjectType == null) {
+            throw new IllegalStateException(
+                    String.format("GQL Object Type for '%s' not yet built", getTypeName()));
+        }
+        return FieldCoordinates.coordinates(gqlObjectType, fieldName);
+    }
+
 }

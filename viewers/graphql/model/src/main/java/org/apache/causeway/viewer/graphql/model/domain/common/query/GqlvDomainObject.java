@@ -31,12 +31,12 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
@@ -65,9 +65,9 @@ public class GqlvDomainObject
 
     private final GqlvAbstractCustom meta;
 
-    private final List<GqlvAbstractCustom> properties = new ArrayList<>();
-    private final List<GqlvAbstractCustom> collections = new ArrayList<>();
-    private final List<GqlvAbstractCustom> actions = new ArrayList<>();
+    private final List<GqlvAbstract> properties = new ArrayList<>();
+    private final List<GqlvAbstract> collections = new ArrayList<>();
+    private final List<GqlvAbstract> actions = new ArrayList<>();
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 

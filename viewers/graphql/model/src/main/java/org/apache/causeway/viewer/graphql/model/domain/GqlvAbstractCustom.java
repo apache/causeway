@@ -31,16 +31,40 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
+
 import lombok.Getter;
 import lombok.val;
 
-public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent {
+/**
+ * A custom type that has children.
+ */
+public abstract class GqlvAbstractCustom
+        extends GqlvAbstract
+        implements Parent {
 
-    protected final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final String typeName;
 
-    @Getter
-    private GraphQLObjectType gqlObjectType;
+    /**
+     * If set, then {@link #getGqlObjectType()}  will not be set.
+     *
+     * <p>
+     *     Represents the case when we are currently still in the process of building a custom
+     *     {@link #getGqlObjectType()}.
+     * </p>
+     */
+    protected final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+
+    /**
+     * If set, then the builder will not be set.
+     *
+     * <p>
+     *     Represents the case when this custom type was previously created and has been found, so doesn't need to be
+     *     re-built.
+     * </p>
+     */
+    @Getter private GraphQLObjectType gqlObjectType;
 
     protected GqlvAbstractCustom(
             final String typeName,
