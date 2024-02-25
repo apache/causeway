@@ -40,6 +40,7 @@ import com.structurizr.view.AutomaticLayout.RankDirection;
 
 import org.apache.commons.lang3.builder.EqualsExclude;
 import org.asciidoctor.ast.Document;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -67,15 +68,16 @@ import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.he
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.row;
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.table;
 
-import guru.nidi.codeassert.config.Language;
-import guru.nidi.codeassert.model.CodeClass;
-import guru.nidi.codeassert.model.Model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+
+import guru.nidi.codeassert.config.Language;
+import guru.nidi.codeassert.model.CodeClass;
+import guru.nidi.codeassert.model.Model;
 
 /**
  * Acts both as a model and a writer (adoc).

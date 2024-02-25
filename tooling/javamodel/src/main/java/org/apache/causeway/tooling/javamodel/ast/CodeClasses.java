@@ -22,9 +22,10 @@ import java.util.function.Predicate;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
-import guru.nidi.codeassert.model.CodeClass;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+
+import guru.nidi.codeassert.model.CodeClass;
 
 @Log4j2
 public final class CodeClasses {

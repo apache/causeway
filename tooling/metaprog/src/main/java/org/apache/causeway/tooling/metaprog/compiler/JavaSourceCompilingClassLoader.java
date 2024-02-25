@@ -31,9 +31,9 @@ import javax.tools.ToolProvider;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.functions._Functions;
+import org.apache.causeway.commons.io.FileUtils;
 
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;

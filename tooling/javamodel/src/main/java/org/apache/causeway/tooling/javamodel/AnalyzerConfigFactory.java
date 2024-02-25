@@ -24,10 +24,11 @@ import java.util.List;
 
 import org.apache.causeway.commons.io.FileUtils;
 
+import lombok.experimental.UtilityClass;
+
 import guru.nidi.codeassert.config.AnalyzerConfig;
 import guru.nidi.codeassert.config.Language;
 import guru.nidi.codeassert.config.ProjectLayout.Maven;
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class AnalyzerConfigFactory {

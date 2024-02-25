@@ -36,9 +36,10 @@ import org.apache.causeway.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocWriter;
 
-import guru.nidi.codeassert.config.Language;
 import lombok.NonNull;
 import lombok.val;
+
+import guru.nidi.codeassert.config.Language;
 
 class J2AdocTest {
 

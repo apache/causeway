@@ -32,10 +32,11 @@ import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.causeway.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.causeway.tooling.javamodel.ast.CompilationUnits;
 
+import lombok.val;
+
 import guru.nidi.codeassert.config.Language;
 import guru.nidi.codeassert.model.CodeClass;
 import guru.nidi.codeassert.model.Model;
-import lombok.val;
 
 class AnalyzerTest {
 

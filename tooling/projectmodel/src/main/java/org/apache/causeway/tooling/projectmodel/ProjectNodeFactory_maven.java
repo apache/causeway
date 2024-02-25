@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.maven.model.Model;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
