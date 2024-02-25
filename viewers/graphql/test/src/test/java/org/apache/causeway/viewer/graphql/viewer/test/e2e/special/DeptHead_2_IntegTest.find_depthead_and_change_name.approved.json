@@ -1,0 +1,23 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_DeptHeads" : {
+        "findHeadByName" : {
+          "invoke" : {
+            "results" : {
+              "changeName" : {
+                "invokeIdempotent" : {
+                  "results" : {
+                    "name" : {
+                      "get" : "Prof. Richard Horwich"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

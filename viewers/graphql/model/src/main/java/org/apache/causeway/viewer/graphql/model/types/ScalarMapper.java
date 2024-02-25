@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
-import graphql.schema.*;
+import graphql.schema.GraphQLScalarType;
 
 /**
  * Internal SPI.

@@ -20,4 +20,8 @@ public enum Month {
         int nextMonthOrdinal = (currentMonthOrdinal + 1) % Month.values().length;
         return Month.values()[nextMonthOrdinal];
     }
+
+    public String toString() {
+        return "Month of " + ("" + name().charAt(0)).toUpperCase() + (name().substring(1).toLowerCase());
+    }
 }

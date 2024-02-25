@@ -18,28 +18,37 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
+import org.approvaltests.integrations.junit5.JupiterApprovals;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
@@ -48,12 +57,15 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.graphql.test.tester.HttpGraphQlTester;
+import org.springframework.lang.Nullable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -66,9 +78,11 @@ import org.apache.causeway.viewer.graphql.viewer.CausewayModuleViewerGraphqlView
 import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
+import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 
@@ -86,6 +100,15 @@ import lombok.val;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
 public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
+
+    private final String suffix;
+
+    protected CausewayViewerGraphqlTestModuleIntegTestAbstract(String suffix) {
+        this.suffix = suffix;
+    }
+    protected CausewayViewerGraphqlTestModuleIntegTestAbstract() {
+        this("._.gql");
+    }
 
     /**
      * Compared to the production app manifest <code>domainapp.webapp.AppManifest</code>,
@@ -157,21 +180,29 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
      * @return the response body as a string
      * @throws Exception if an error occurs during the submission
      */
-    protected String submit() throws Exception{
+    protected String submit() {
         return submit(Collections.emptyMap());
     }
 
-    protected String submit(Map<String,String> replacements) throws Exception{
+    @SneakyThrows
+    protected String submit(Map<String,String> replacements) {
         val httpRequest = buildRequest(testInfo, "._.gql", replacements);
         return submitRequest(httpRequest);
     }
 
-    protected String submit(String variant) throws Exception{
+    protected String submit(String variant) {
         return submit(variant, Collections.emptyMap());
     }
 
-    protected String submit(String variant, Map<String,String> replacements) throws Exception{
+    @SneakyThrows
+    protected String submit(String variant, Map<String,String> replacements) {
         val httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
+        return submitRequest(httpRequest);
+    }
+
+    @SneakyThrows
+    protected String submitFileNamed(final String fileName) {
+        val httpRequest = buildRequest(fileName, Collections.emptyMap());
         return submitRequest(httpRequest);
     }
 
@@ -180,13 +211,19 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
         String query;
     }
 
+    @SneakyThrows
     protected HttpRequest buildRequest(
             final TestInfo testInfo,
             final String resourceSuffix,
-            final Map<String, String> replacements) throws IOException {
+            final Map<String, String> replacements) {
 
         val testMethodName = testInfo.getTestMethod().map(Method::getName).get();
         val resourceName = getClass().getSimpleName() + "." + testMethodName + resourceSuffix;
+        return buildRequest(resourceName, replacements);
+    }
+
+    @SneakyThrows
+    protected HttpRequest buildRequest(String resourceName, Map<String, String> replacements) {
         String resourceContents = readResource(resourceName);
         String resourceContent = replace(resourceContents, replacements);
 
@@ -230,15 +267,96 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
         return _Resources.loadAsString(getClass(), resourceName, StandardCharsets.UTF_8);
     }
 
+    public enum BookmarkOptions {
+        SCRUB,
+        PRESERVE,
+        ;
+    }
+
     protected Options jsonOptions() {
-        return new Options().withScrubber(s -> {
-            try {
-                return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        })
-        .forFile().withExtension(".json");
+        return jsonOptions(null, BookmarkOptions.SCRUB);
+    }
+
+    protected Options jsonOptions(BookmarkOptions bookmarkOptions) {
+        return jsonOptions(null, bookmarkOptions);
+    }
+
+    public Options jsonOptions(Options options) {
+        return jsonOptions(options, BookmarkOptions.SCRUB);
+    }
+
+    public Options jsonOptions(@Nullable Options options, BookmarkOptions bookmarkOptions) {
+        if (options == null) {
+            options = new Options();
+        }
+        return options.withScrubber(s -> {
+                    try {
+                        String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
+                        if (bookmarkOptions == BookmarkOptions.SCRUB) {
+                            prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
+                        }
+                        return prettyJson;
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .forFile().withExtension(".json");
+    }
+
+
+
+    protected Iterable<DynamicTest> each() throws IOException, URISyntaxException {
+
+        val integClassName = getClass().getSimpleName();
+        val classUrl = getClass().getResource(integClassName + ".class");
+        Path classPath = Paths.get(classUrl.toURI());
+        Path directoryPath = classPath.getParent();
+
+        return Files.walk(directoryPath)
+                .filter(Files::isRegularFile)
+                .filter(file -> {
+                    String fileName = file.getFileName().toString();
+                    return fileName.startsWith(integClassName) && fileName.endsWith(suffix);
+                })
+                .map(file -> {
+                    String fileName = file.getFileName().toString();
+                    String testName = fileName.substring(integClassName.length() + ".each.".length()).replace(suffix, "");
+                    return JupiterApprovals.dynamicTest(
+                            testName,
+                            options -> {
+                                try {
+                                    Approvals.verify(submitFileNamed(fileName), jsonOptions(options));
+                                } finally {
+                                    afterEach();
+                                    beforeEach();
+                                }
+                            });
+                })
+                .collect(Collectors.toList());
+    }
+
+    protected void beforeEach() {}
+
+    protected void afterEach() {}
+
+    protected static Blob asPdfBlob(String fileName) {
+        val bytes = toBytes(fileName);
+        return new Blob(fileName, "application/pdf", bytes);
+    }
+
+    @SneakyThrows
+    protected static byte[] toBytes(String fileName){
+        InputStream inputStream = new ClassPathResource(fileName, Abstract_IntegTest.class).getInputStream();
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        int nRead;
+        byte[] data = new byte[16384];
+
+        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+
+        return buffer.toByteArray();
     }
 
 

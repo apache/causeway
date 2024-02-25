@@ -1,0 +1,86 @@
+{
+  rich {
+    Scenario(name: "can add staff members") {
+      Name
+      Given {
+        university_dept_Departments {
+          findDepartmentByName {
+            invoke(name: "Classics") {
+              args {
+                name
+              }
+              results {
+                staffMembers {
+                  get {
+                    name {
+                      get
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      When {
+        university_dept_Departments {
+          findDepartmentByName {
+            invoke(name: "Classics") {
+              results {
+                addStaffMembers {
+                  params {
+                    staffMembers {
+                      datatype
+                      choices {
+                        _meta {
+                          saveAs(ref: "staff-member")
+                        }
+                        name {
+                          get
+                        }
+                      }
+                    }
+                  }
+                  invokeIdempotent(staffMembers: [{ref: "staff-member"}, {ref: "staff-member-2"}]) {
+                    results {
+                      name {
+                        get
+                      }
+                      staffMembers {
+                        get {
+                          name {
+                            get
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      Then {
+        university_dept_Departments {
+          findDepartmentByName {
+            invoke(name: "Classics") {
+              args {
+                name
+              }
+              results {
+                staffMembers {
+                  get {
+                    name {
+                      get
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -56,7 +56,7 @@ import lombok.val;
  *
  *
  */
-public class AuthenticationStrategyJwt extends AuthenticationStrategyAbstract {
+public class    AuthenticationStrategyJwt extends AuthenticationStrategyAbstract {
 
     @Override
     public InteractionContext lookupValid(

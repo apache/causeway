@@ -116,6 +116,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <error_prone_annotations.version>2.25.0</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
+        <graphql-java-extended-scalars.version>21.0</graphql-java-extended-scalars.version>
         <guava.version>33.0.0-jre</guava.version>
 
         <htmlparser.version>2.1</htmlparser.version>
@@ -1518,6 +1519,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 	            <artifactId>jaxb-impl</artifactId>
 	            <version>4.0.4</version>
 	        </dependency>
+	        <dependency>
+                <groupId>com.graphql-java</groupId>
+                <artifactId>graphql-java-extended-scalars</artifactId>
+                <version>${graphql-java-extended-scalars.version}</version>
+            </dependency>
 
 			<dependency>
 				<groupId>org.ow2.asm</groupId>

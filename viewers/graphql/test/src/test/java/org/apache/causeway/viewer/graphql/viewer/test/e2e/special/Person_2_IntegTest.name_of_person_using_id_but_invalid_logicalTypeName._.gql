@@ -1,0 +1,7 @@
+{
+  university_dept_Person(object: {id: "$staffMemberId", logicalTypeName: "university.dept.XXX"}) {
+    name {
+      get
+    }
+  }
+}

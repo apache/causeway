@@ -1,0 +1,83 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Staff" : {
+        "findAllStaffMembers" : {
+          "invoke" : {
+            "results" : [ {
+              "name" : {
+                "get" : "Gerry Jones"
+              },
+              "grade" : {
+                "get" : "LECTURER"
+              },
+              "photo" : {
+                "get" : {
+                  "name" : "StaffMember-photo-Bar.pdf",
+                  "mimeType" : "application/pdf",
+                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                }
+              }
+            }, {
+              "name" : {
+                "get" : "John Gartner"
+              },
+              "grade" : {
+                "get" : "LECTURER"
+              },
+              "photo" : {
+                "get" : {
+                  "name" : null,
+                  "mimeType" : null,
+                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                }
+              }
+            }, {
+              "name" : {
+                "get" : "Letitia Leadbetter"
+              },
+              "grade" : {
+                "get" : "LECTURER"
+              },
+              "photo" : {
+                "get" : {
+                  "name" : "StaffMember-photo-Foo.pdf",
+                  "mimeType" : "application/pdf",
+                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                }
+              }
+            }, {
+              "name" : {
+                "get" : "Margaret Randall"
+              },
+              "grade" : {
+                "get" : "LECTURER"
+              },
+              "photo" : {
+                "get" : {
+                  "name" : null,
+                  "mimeType" : null,
+                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                }
+              }
+            }, {
+              "name" : {
+                "get" : "Mervin Hughes"
+              },
+              "grade" : {
+                "get" : "LECTURER"
+              },
+              "photo" : {
+                "get" : {
+                  "name" : "StaffMember-photo-Fizz.pdf",
+                  "mimeType" : "application/pdf",
+                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                }
+              }
+            } ]
+          }
+        }
+      }
+    }
+  }
+}

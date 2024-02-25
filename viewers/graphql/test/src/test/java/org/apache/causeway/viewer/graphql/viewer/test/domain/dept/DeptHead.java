@@ -58,7 +58,7 @@ import lombok.Setter;
 )
 @DomainObjectLayout(describedAs = "Departmental head, responsible for curriculum, research, funding and staff")
 @NoArgsConstructor
-public class DeptHead implements Comparable<DeptHead> {
+public class DeptHead extends Person implements Comparable<DeptHead>  {
 
     public DeptHead(String name) {
         this.name = name;

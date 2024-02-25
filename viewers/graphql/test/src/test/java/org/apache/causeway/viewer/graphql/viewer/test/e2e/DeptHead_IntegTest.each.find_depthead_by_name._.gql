@@ -1,0 +1,22 @@
+{
+  rich {
+    university_dept_DeptHeads {
+      findHeadByName {
+        invoke(name: "Dr. Barney Jones") {
+          results {
+            name {
+              get
+            }
+            department {
+              get {
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

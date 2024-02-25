@@ -118,7 +118,7 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
 
-        if(!domainObjectIfAny.isPresent()) {
+        if(domainObjectIfAny.isEmpty()) {
             return;
         }
 

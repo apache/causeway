@@ -1,0 +1,37 @@
+{
+  "data" : {
+    "rich" : {
+      "Scenario" : {
+        "Name" : "Obtain name of person that's a DeptHead",
+        "Given" : {
+          "university_dept_DeptHeads" : {
+            "findHeadByName" : {
+              "invoke" : {
+                "args" : {
+                  "name" : "Dr. Helen Johansen"
+                },
+                "results" : {
+                  "name" : {
+                    "get" : "Dr. Helen Johansen"
+                  },
+                  "_meta" : {
+                    "saveAs" : "dept-head"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "When" : {
+          "university_dept_People" : {
+            "nameOf" : {
+              "invoke" : {
+                "results" : "Dr. Helen Johansen"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

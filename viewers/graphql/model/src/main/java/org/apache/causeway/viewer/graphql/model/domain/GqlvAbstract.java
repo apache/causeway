@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.rich.scenario.GqlvScenarioStep;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
@@ -27,13 +29,14 @@ import lombok.Getter;
 public abstract class GqlvAbstract {
 
     protected final Context context;
+    protected final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
     /**
      * Usually populated, being the field that will be added to the parent's type
      *
      * <p>
      *     However, {@link GqlvScenarioStep} is an exception; it doesn't populate this field - instead
-     *     {@link GqlvAbstractCustom#newField(String)} is used to create multiple fields for the type.
+     *     {@link GqlvAbstractCustom#newField(String, String)} is used to create multiple fields for the type.
      * </p>
      */
     @Getter
@@ -41,15 +44,12 @@ public abstract class GqlvAbstract {
 
     protected GqlvAbstract(final Context context) {
         this.context = context;
+        this.graphqlConfiguration = this.context.causewayConfiguration.getViewer().getGraphql();
     }
 
     protected final GraphQLFieldDefinition setField(final GraphQLFieldDefinition field) {
         this.field = field;
         return field;
-    }
-
-    public boolean isFieldDefined() {
-        return getField() != null;
     }
 
     public final void addDataFetcher(Parent parent) {

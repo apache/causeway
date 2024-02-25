@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
@@ -29,18 +28,21 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
+import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvTopLevelMutationRichSchema;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichTopLevelQuery;
+import org.apache.causeway.viewer.graphql.model.domain.simple.mutation.GqlvTopLevelMutationSimpleSchema;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelMutation;
-import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQuery;
+import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQueryBothSchemas;
 
 import graphql.GraphQL;
 import graphql.execution.SimpleDataFetcherExceptionHandler;
 import graphql.schema.GraphQLSchema;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service()
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+//@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GraphQlSourceForCauseway implements GraphQlSource {
 
     private final CausewayConfiguration causewayConfiguration;
@@ -48,8 +50,26 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     private final SpecificationLoader specificationLoader;
     private final GraphQLTypeRegistry graphQLTypeRegistry;
     private final Context context;
-
     private final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy;
+
+    private CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
+
+    public GraphQlSourceForCauseway(
+            final CausewayConfiguration causewayConfiguration,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final SpecificationLoader specificationLoader,
+            final GraphQLTypeRegistry graphQLTypeRegistry,
+            final Context context,
+            final AsyncExecutionStrategyResolvingWithinInteraction executionStrategy) {
+        this.causewayConfiguration = causewayConfiguration;
+        this.causewaySystemEnvironment = causewaySystemEnvironment;
+        this.specificationLoader = specificationLoader;
+        this.graphQLTypeRegistry = graphQLTypeRegistry;
+        this.context = context;
+        this.executionStrategy = executionStrategy;
+
+        this.graphqlConfiguration = causewayConfiguration.getViewer().getGraphql();
+    }
 
     @PostConstruct
     public void init() {
@@ -81,11 +101,9 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        // top-level query and mutation type
-        val topLevelQuery = new GqlvTopLevelQuery(context);
-        val topLevelMutation = new GqlvTopLevelMutation(context);
+        val topLevelQuery = determineTopLevelQueryFrom(graphqlConfiguration.getSchemaStyle());
+        val topLevelMutation = determineTopLevelMutationFrom(graphqlConfiguration.getSchemaStyle());
 
-        // add the data fetchers
         topLevelQuery.addDataFetchers();
         topLevelMutation.addDataFetchers();
 
@@ -101,5 +119,37 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .build();
     }
 
-
+    private GqlvAbstractCustom determineTopLevelQueryFrom(
+            final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
+        switch (schemaStyle) {
+            case SIMPLE_ONLY:
+                return new SimpleTopLevelQuery(context);
+            case RICH_ONLY:
+                return new RichTopLevelQuery(context);
+            case SIMPLE_AND_RICH:
+            case RICH_AND_SIMPLE:
+                return new GqlvTopLevelQueryBothSchemas(context);
+            default:
+                // shouldn't happen
+                throw new IllegalStateException(String.format(
+                        "Configured SchemaStyle '%s' not recognised", schemaStyle));
+        }
+    }
+    private GqlvAbstractCustom determineTopLevelMutationFrom(
+            final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
+        switch (schemaStyle) {
+            case SIMPLE_ONLY:
+                return new GqlvTopLevelMutationSimpleSchema(context);
+            case RICH_ONLY:
+                return new GqlvTopLevelMutationRichSchema(context);
+            case SIMPLE_AND_RICH:
+                return new GqlvTopLevelMutationSimpleSchema(context);
+            case RICH_AND_SIMPLE:
+                return new GqlvTopLevelMutationRichSchema(context);
+            default:
+                // shouldn't happen
+                throw new IllegalStateException(String.format(
+                        "Configured SchemaStyle '%s' not recognised", schemaStyle));
+        }
+    }
 }

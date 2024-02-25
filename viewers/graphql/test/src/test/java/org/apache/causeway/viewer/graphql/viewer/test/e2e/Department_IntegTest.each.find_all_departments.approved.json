@@ -1,0 +1,67 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "findAllDepartments" : {
+          "invoke" : {
+            "results" : [ {
+              "name" : {
+                "get" : "Civil Engineering",
+                "datatype" : "rich__java_lang_String"
+              },
+              "_meta" : {
+                "logicalTypeName" : "university.dept.Department",
+                "version" : null
+              }
+            }, {
+              "name" : {
+                "get" : "Classics",
+                "datatype" : "rich__java_lang_String"
+              },
+              "_meta" : {
+                "logicalTypeName" : "university.dept.Department",
+                "version" : null
+              }
+            }, {
+              "name" : {
+                "get" : "Mathematics",
+                "datatype" : "rich__java_lang_String"
+              },
+              "_meta" : {
+                "logicalTypeName" : "university.dept.Department",
+                "version" : null
+              }
+            }, {
+              "name" : {
+                "get" : "Pathology",
+                "datatype" : "rich__java_lang_String"
+              },
+              "_meta" : {
+                "logicalTypeName" : "university.dept.Department",
+                "version" : null
+              }
+            }, {
+              "name" : {
+                "get" : "Physics",
+                "datatype" : "rich__java_lang_String"
+              },
+              "_meta" : {
+                "logicalTypeName" : "university.dept.Department",
+                "version" : null
+              }
+            }, {
+              "name" : {
+                "get" : "Textiles",
+                "datatype" : "rich__java_lang_String"
+              },
+              "_meta" : {
+                "logicalTypeName" : "university.dept.Department",
+                "version" : null
+              }
+            } ]
+          }
+        }
+      }
+    }
+  }
+}

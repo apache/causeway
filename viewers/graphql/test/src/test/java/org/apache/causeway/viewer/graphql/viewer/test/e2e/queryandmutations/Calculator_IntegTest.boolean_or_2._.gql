@@ -1,7 +1,0 @@
-{
-  university_calc_Calculator {
-    or {
-      invoke(x: true, y: false)
-    }
-  }
-}

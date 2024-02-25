@@ -1,0 +1,19 @@
+{
+  rich {
+    university_dept_Departments {
+      findDepartmentByName {
+        invoke(name: "Classics") {
+          results {
+            staffMembers {
+              get {
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

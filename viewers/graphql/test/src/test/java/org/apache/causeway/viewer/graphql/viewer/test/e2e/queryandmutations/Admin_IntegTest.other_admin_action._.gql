@@ -1,8 +1,0 @@
-{
-  university_admin_AdminMenu {
-    otherAdminAction {
-      hidden
-      disabled
-    }
-  }
-}

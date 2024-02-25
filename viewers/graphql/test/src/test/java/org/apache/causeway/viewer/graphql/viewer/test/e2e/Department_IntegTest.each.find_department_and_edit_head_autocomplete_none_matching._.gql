@@ -1,0 +1,19 @@
+{
+  rich {
+    university_dept_Departments {
+      findDepartmentByName {
+        invoke(name: "Classics") {
+          results {
+            deptHead {
+              autoComplete(search: "XXX") {
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

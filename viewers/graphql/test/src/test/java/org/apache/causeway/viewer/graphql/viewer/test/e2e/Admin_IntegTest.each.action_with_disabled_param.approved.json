@@ -1,0 +1,22 @@
+{
+  "data" : {
+    "rich" : {
+      "university_admin_AdminMenu" : {
+        "actionWithDisabledParam" : {
+          "disabled" : null,
+          "params" : {
+            "firstParam" : {
+              "disabled" : "yup, disabled!"
+            },
+            "secondParam" : {
+              "disabled" : null
+            },
+            "thirdParameter" : {
+              "disabled" : "Disabled because secondParam is not empty"
+            }
+          }
+        }
+      }
+    }
+  }
+}

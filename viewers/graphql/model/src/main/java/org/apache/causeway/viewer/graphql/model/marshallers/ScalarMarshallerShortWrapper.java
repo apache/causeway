@@ -18,19 +18,16 @@
  */
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
-import graphql.Scalars;
-
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-
-import org.apache.causeway.core.config.CausewayConfiguration;
-
-import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
-
 import org.springframework.stereotype.Component;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
+
+import graphql.scalars.ExtendedScalars;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
@@ -38,11 +35,11 @@ public class ScalarMarshallerShortWrapper extends ScalarMarshallerAbstract<Short
 
     @Inject
     public ScalarMarshallerShortWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Short.class, Scalars.GraphQLInt, causewayConfiguration);
+        super(Short.class, ExtendedScalars.GraphQLShort, causewayConfiguration);
     }
 
     @Override
-    public Short unmarshal(Object graphValue, Class<?> targetType) {
+    public Short unmarshal(final Object graphValue, final Class<?> targetType) {
         return ((Integer)graphValue).shortValue();
     }
 

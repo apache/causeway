@@ -1,7 +1,0 @@
-{
-  university_calc_Calculator {
-    addFloatWrappers {
-      invoke(x: 1.1, y: 2.2)
-    }
-  }
-}

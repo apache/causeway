@@ -18,7 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.context;
 
-import graphql.schema.GraphQLCodeRegistry;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -31,19 +36,13 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import org.springframework.stereotype.Component;
-
+import graphql.schema.GraphQLCodeRegistry;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -59,8 +58,9 @@ public class Context {
     public final ObjectManager objectManager;
     public final GraphQLTypeRegistry graphQLTypeRegistry;
 
-    public final Map<ObjectSpecification, GqlvDomainService> domainServiceBySpec = new LinkedHashMap<>();
-    public final Map<ObjectSpecification, GqlvDomainObject> domainObjectBySpec = new LinkedHashMap<>();
+
+    public final Map<String, GqlvDomainService> domainServiceByTypeName = new LinkedHashMap<>();
+    public final Map<String, GqlvDomainObject> domainObjectByTypeName = new LinkedHashMap<>();
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()

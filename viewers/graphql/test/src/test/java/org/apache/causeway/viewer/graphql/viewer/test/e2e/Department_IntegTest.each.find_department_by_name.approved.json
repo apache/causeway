@@ -1,0 +1,25 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "staffMembers" : {
+                "get" : [ {
+                  "name" : {
+                    "get" : "Gerry Jones"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Letitia Leadbetter"
+                  }
+                } ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

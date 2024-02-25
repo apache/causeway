@@ -1,0 +1,18 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "invoke" : {
+            "results" : {
+              "grade" : {
+                "disabled" : null,
+                "choices" : [ "PROFESSOR", "READER", "SENIOR_LECTURER", "LECTURER", "RESEARCH_ASSISTANT" ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

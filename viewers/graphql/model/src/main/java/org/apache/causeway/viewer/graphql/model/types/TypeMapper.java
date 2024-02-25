@@ -24,6 +24,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
@@ -42,24 +43,24 @@ public interface TypeMapper {
 
     GraphQLInputType inputTypeFor(final Class<?> c);
 
-    GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature);
+    GraphQLOutputType outputTypeFor(final OneToOneFeature oneToOneFeature, SchemaType schemaType);
 
     @Nullable
-    GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification);
+    GraphQLOutputType outputTypeFor(final ObjectSpecification objectSpecification, SchemaType schemaType);
 
     @Nullable
-    GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation);
+    GraphQLList listTypeForElementTypeOf(OneToManyAssociation oneToManyAssociation, SchemaType schemaType);
 
     @Nullable
-    GraphQLList listTypeFor(ObjectSpecification elementType);
+    GraphQLList listTypeFor(ObjectSpecification elementType, SchemaType schemaType);
 
     GraphQLInputType inputTypeFor(
             final OneToOneFeature oneToOneFeature,
-            final InputContext inputContext);
+            final InputContext inputContext, SchemaType schemaType);
 
-    GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter);
+    GraphQLList inputTypeFor(final OneToManyActionParameter oneToManyActionParameter, SchemaType schemaType);
 
-    GraphQLInputType inputTypeFor(final ObjectSpecification elementType);
+    GraphQLInputType inputTypeFor(final ObjectSpecification elementType, SchemaType schemaType);
 
     Object unmarshal(
             final Object argumentValue,

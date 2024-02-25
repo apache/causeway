@@ -1,0 +1,37 @@
+{
+  "data" : {
+    "rich" : {
+      "Scenario" : {
+        "Name" : "Obtain name of person that's a StaffMember",
+        "Given" : {
+          "university_dept_Staff" : {
+            "findStaffMemberByName" : {
+              "invoke" : {
+                "args" : {
+                  "name" : "Letitia Leadbetter"
+                },
+                "results" : {
+                  "name" : {
+                    "get" : "Letitia Leadbetter"
+                  },
+                  "_meta" : {
+                    "saveAs" : "staff-member"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "When" : {
+          "university_dept_People" : {
+            "nameOf" : {
+              "invoke" : {
+                "results" : "Letitia Leadbetter"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

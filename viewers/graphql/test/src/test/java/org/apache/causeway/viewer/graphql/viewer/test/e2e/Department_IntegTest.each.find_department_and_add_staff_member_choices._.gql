@@ -1,0 +1,37 @@
+{
+  rich {
+    Scenario(name: "checks choice 'saveAs' reference numbering") {
+      Given {
+        university_dept_Departments {
+          findDepartmentByName {
+            invoke(name: "Classics") {
+              results {
+                addStaffMembers {
+                  params {
+                    staffMembers {
+                      choices {
+                        _meta {
+                          saveAs(ref: "staff-member-choices")
+                        }
+                        name {
+                          get
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      Then {
+        university_dept_StaffMember(object: {ref: "staff-member-choices-2"}) {
+          name {
+            get
+          }
+        }
+      }
+    }
+  }
+}

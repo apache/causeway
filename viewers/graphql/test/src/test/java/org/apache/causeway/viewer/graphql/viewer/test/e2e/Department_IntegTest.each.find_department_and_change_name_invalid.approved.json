@@ -1,0 +1,22 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "changeName" : {
+                "params" : {
+                  "newName" : {
+                    "datatype" : "rich__java_lang_String"
+                  }
+                },
+                "validate" : "Name cannot contain '!' character"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

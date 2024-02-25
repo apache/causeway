@@ -1,0 +1,11 @@
+{
+  rich {
+    university_calc_Calculator {
+      someLocale {
+        invoke {
+          results
+        }
+      }
+    }
+  }
+}

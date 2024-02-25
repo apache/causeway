@@ -1,0 +1,16 @@
+{
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            grade {
+              disabled
+              choices
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -21,14 +21,13 @@ package org.apache.causeway.viewer.graphql.model.marshallers;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
-import graphql.Scalars;
-
-import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
-
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
+
+import graphql.scalars.ExtendedScalars;
 
 
 @Component
@@ -37,7 +36,7 @@ public class ScalarMarshallerCharacterWrapper extends ScalarMarshallerAbstract<C
 
     @Inject
     public ScalarMarshallerCharacterWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Character.class, Scalars.GraphQLString, causewayConfiguration);
+        super(Character.class, ExtendedScalars.GraphQLChar, causewayConfiguration);
     }
 
     @Override

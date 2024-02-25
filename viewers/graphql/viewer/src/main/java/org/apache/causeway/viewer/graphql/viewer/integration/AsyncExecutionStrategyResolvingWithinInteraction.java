@@ -26,12 +26,11 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
-import lombok.val;
-
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.execution.ExecutionContext;
 import graphql.execution.ExecutionStrategyParameters;
 import graphql.execution.FieldValueInfo;
+import lombok.val;
 
 @Service
 public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecutionStrategy {

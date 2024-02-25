@@ -186,7 +186,7 @@ implements
                     if(MmEntityUtils.getEntityState(rec.getEntity()).isTransientOrRemoved()) {
                         rec.withPostValueSetToDeleted();
                     } else {
-                        rec.withPostValueSetToCurrent();
+                        rec.withPostValueSetToCurrentElseUnknown();
                     }
                 })
                 .filter(managedProperty-> shouldPublish(managedProperty.getPreAndPostValue()))
@@ -375,7 +375,7 @@ implements
                         .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
                         .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
                         .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
-                        .forEach(PropertyChangeRecord::withPreValueSetToCurrent);
+                        .forEach(PropertyChangeRecord::withPreValueSetToCurrentElseUnknown);
             }
         });
     }

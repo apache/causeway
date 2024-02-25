@@ -18,18 +18,16 @@
  */
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
-import graphql.Scalars;
-
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
-
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
 
-import org.springframework.stereotype.Component;
+import graphql.Scalars;
 
 
 @Component
@@ -42,7 +40,7 @@ public class ScalarMarshallerBooleanPrimitive extends ScalarMarshallerAbstract<B
     }
 
     @Override
-    public Boolean unmarshal(Object graphValue, Class<?> targetType) {
+    public Boolean unmarshal(final Object graphValue, final Class<?> targetType) {
         return (Boolean)graphValue;
     }
 }

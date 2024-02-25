@@ -1,0 +1,35 @@
+{
+  rich {
+    Scenario(name: "Obtain name of person that's a DeptHead") {
+      Name
+      Given {
+        university_dept_DeptHeads {
+          findHeadByName {
+            invoke(name: "Dr. Helen Johansen") {
+              args {
+                name
+              }
+              results {
+                name {
+                  get
+                }
+                _meta {
+                  saveAs(ref: "dept-head")
+                }
+              }
+            }
+          }
+        }
+      }
+      When {
+        university_dept_People {
+          nameOf {
+            invoke(person: {ref: "dept-head"}) {
+              results
+            }
+          }
+        }
+      }
+    }
+  }
+}

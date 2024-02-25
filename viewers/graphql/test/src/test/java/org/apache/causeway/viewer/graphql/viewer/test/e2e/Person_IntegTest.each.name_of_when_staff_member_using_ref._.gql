@@ -1,0 +1,35 @@
+{
+  rich {
+    Scenario(name: "Obtain name of person that's a StaffMember") {
+      Name
+      Given {
+        university_dept_Staff {
+          findStaffMemberByName {
+            invoke(name: "Letitia Leadbetter") {
+              args {
+                name
+              }
+              results {
+                name {
+                  get
+                }
+                _meta {
+                  saveAs(ref: "staff-member")
+                }
+              }
+            }
+          }
+        }
+      }
+      When {
+        university_dept_People {
+          nameOf {
+            invoke(person: {ref: "staff-member"}) {
+              results
+            }
+          }
+        }
+      }
+    }
+  }
+}

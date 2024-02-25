@@ -18,35 +18,55 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import lombok.AccessLevel;
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
 import lombok.Getter;
+import lombok.val;
 
-import java.util.Optional;
+/**
+ * A custom type that has children.
+ */
+public abstract class GqlvAbstractCustom
+        extends GqlvAbstract
+        implements Parent {
 
-public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent {
-
-    protected final GraphQLObjectType.Builder gqlObjectTypeBuilder;
     private final String typeName;
 
-    @Getter(AccessLevel.PROTECTED)
-    private GraphQLObjectType gqlObjectType;
+    /**
+     * If set, then {@link #getGqlObjectType()}  will not be set.
+     *
+     * <p>
+     *     Represents the case when we are currently still in the process of building a custom
+     *     {@link #getGqlObjectType()}.
+     * </p>
+     */
+    protected final GraphQLObjectType.Builder gqlObjectTypeBuilder;
+
+    /**
+     * If set, then the builder will not be set.
+     *
+     * <p>
+     *     Represents the case when this custom type was previously created and has been found, so doesn't need to be
+     *     re-built.
+     * </p>
+     */
+    @Getter private GraphQLObjectType gqlObjectType;
 
     protected GqlvAbstractCustom(
             final String typeName,
             final Context context) {
         super(context);
         this.typeName = typeName;
-        Optional<GraphQLObjectType> typeIfAny =
-                context.graphQLTypeRegistry.lookup(typeName, GraphQLObjectType.class);
+
+        val typeIfAny = context.graphQLTypeRegistry.lookup(typeName, GraphQLObjectType.class);
         if(typeIfAny.isPresent()) {
             this.gqlObjectType = typeIfAny.get();
             this.gqlObjectTypeBuilder = null;
@@ -59,27 +79,44 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
         return gqlObjectType != null;
     }
 
-    protected final void addChildField(GraphQLFieldDefinition childField) {
+    protected final <T extends GqlvAbstract> T addChildFieldFor(@Nullable T hasField) {
         if (isBuilt()) {
+            // the type was built already
+            return hasField;
+        }
+        if (hasField == null) {
+            return hasField;
+        }
+        addChildField(hasField.getField());
+        return hasField;
+    }
+
+    protected void addChildField(GraphQLFieldDefinition childField) {
+        if (isBuilt()) {
+            // the type was built already
             return;
         }
-
         if (childField != null) {
             gqlObjectTypeBuilder.field(childField);
         }
     }
 
-    protected void buildObjectTypeAndField(String fieldName) {
+    protected void buildObjectTypeAndField(
+            final String fieldName,
+            final String description) {
         if (!isBuilt()) {
             buildObjectType();
         }
 
-        setField(newField(fieldName));
+        setField(newField(fieldName, description));
     }
 
-    public GraphQLFieldDefinition newField(String fieldName) {
+    public GraphQLFieldDefinition newField(
+            final String fieldName,
+            final String description) {
         return newFieldDefinition()
                 .name(fieldName)
+                .description(description)
                 .type(getGqlObjectType())
                 .build();
     }
@@ -90,6 +127,12 @@ public abstract class GqlvAbstractCustom extends GqlvAbstract implements Parent 
             context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(this.gqlObjectType);
         }
         return this.gqlObjectType;
+    }
+
+    /**
+     * Implemented by top-level queries only.
+     */
+    public void addDataFetchers() {
     }
 
     public final FieldCoordinates coordinatesFor(final GraphQLFieldDefinition field) {

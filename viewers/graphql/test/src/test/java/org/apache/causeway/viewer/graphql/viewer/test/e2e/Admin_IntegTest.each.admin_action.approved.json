@@ -1,0 +1,12 @@
+{
+  "data" : {
+    "rich" : {
+      "university_admin_AdminMenu" : {
+        "adminAction" : {
+          "hidden" : true,
+          "disabled" : null
+        }
+      }
+    }
+  }
+}

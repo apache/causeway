@@ -1,0 +1,20 @@
+{
+  rich {
+    university_dept_Departments {
+      findDepartmentByName {
+        invoke(name: "Classics") {
+          results {
+            changeName {
+              params {
+                newName {
+                  datatype
+                }
+              }
+              validate(newName: "A Funny Thing Happened on the Way to the Forum !")
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+mutation {
+  university_dept_StaffMember__name(
+      _target: {id: "$staffMemberId"},
+      name: "Jonathon Gartner"
+  ) {
+    name {
+      get
+    }
+  }
+}

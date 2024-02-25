@@ -1,0 +1,22 @@
+{
+  "data" : {
+    "rich" : {
+      "Scenario" : {
+        "Name" : "Fizz and buzz are concatenated together",
+        "When" : {
+          "university_calc_Calculator" : {
+            "concat" : {
+              "invoke" : {
+                "args" : {
+                  "prefix" : "Fizz",
+                  "suffix" : "Buzz"
+                },
+                "results" : "FizzBuzz"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

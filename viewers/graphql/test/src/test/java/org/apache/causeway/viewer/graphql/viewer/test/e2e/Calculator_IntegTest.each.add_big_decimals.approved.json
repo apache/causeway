@@ -1,0 +1,17 @@
+{
+  "data" : {
+    "rich" : {
+      "university_calc_Calculator" : {
+        "addBigDecimals" : {
+          "invoke" : {
+            "args" : {
+              "x" : "1.1",
+              "y" : "2.2"
+            },
+            "results" : "3.3"
+          }
+        }
+      }
+    }
+  }
+}

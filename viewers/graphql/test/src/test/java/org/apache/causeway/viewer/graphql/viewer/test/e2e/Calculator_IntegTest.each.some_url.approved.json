@@ -1,0 +1,13 @@
+{
+  "data" : {
+    "rich" : {
+      "university_calc_Calculator" : {
+        "someUrl" : {
+          "invoke" : {
+            "results" : "https://causeway.apache.org"
+          }
+        }
+      }
+    }
+  }
+}

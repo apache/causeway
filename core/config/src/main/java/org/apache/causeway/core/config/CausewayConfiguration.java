@@ -2346,6 +2346,96 @@ public class CausewayConfiguration {
         @Data
         public static class Graphql {
 
+            public enum SchemaStyle {
+                /**
+                 * Expose only the &quot;simple&quot; schema, defining only fields that return the state of the domain
+                 * objects but with no fields to represent additional facets of state (such as whether
+                 * an action is hidden or disabled).
+                 *
+                 * <p>
+                 *     Suitable for clients where the application logic and state is the responsibility of the client.
+                 * </p>
+                 */
+                SIMPLE_ONLY,
+                /**
+                 * Expose only the &quot;rich&quot; schema, exposing not only fields that return the state of the domain
+                 * objects but <i>also</i> with fields to represent additional facets of state (such as whether
+                 * an action is hidden or disabled).
+                 *
+                 * <p>
+                 *     Optionally, fields for Scenario (given/when/then) testing may also be added if the
+                 *     {@link #isIncludeTestingFieldInRich()} config property is set.
+                 * </p>
+                 * <p>
+                 *     Suitable for clients where the application logic and state remains in the backend, within the
+                 *     domain model hosted by Causeway.
+                 * </p>
+                 */
+                RICH_ONLY,
+                /**
+                 * Exposes both the simple and rich schemas, for the query have each under a field as defined by
+                 * {@link #getTopLevelFieldNameForSimple()} (by default &quot;simple&quot;) and
+                 * {@link #getTopLevelFieldNameForRich()} (by default &quot;rich&quot;).
+                 *
+                 * <p>
+                 *     For mutations, use the <i>simple</i> schema types.
+                 * </p>
+                 */
+                SIMPLE_AND_RICH,
+                /**
+                 * Exposes both the simple and rich schemas, for the query have each under a field as defined by
+                 * {@link #getTopLevelFieldNameForSimple()} (by default &quot;simple&quot;) and
+                 * {@link #getTopLevelFieldNameForRich()} (by default &quot;rich&quot;).
+                 *
+                 * <p>
+                 *     For mutations, use the <i>rich</i> schema types.
+                 * </p>
+                 */
+                RICH_AND_SIMPLE,
+                ;
+
+                public boolean isRich() {
+                    return this == RICH_ONLY || this == SIMPLE_AND_RICH || this == RICH_AND_SIMPLE;
+                }
+                public boolean isSimple() {
+                    return this == SIMPLE_ONLY || this == SIMPLE_AND_RICH || this == RICH_AND_SIMPLE;
+                }
+            }
+
+            /**
+             * Which {@link SchemaStyle} to expose.
+             */
+            private SchemaStyle schemaStyle = SchemaStyle.RICH_AND_SIMPLE;
+
+            /**
+             * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
+             * top-level field under which the &quot;simple&quot; schema resides.
+             *
+             * <p>
+             *     Ignored for any other {@link #getSchemaStyle()}.
+             * </p>
+             */
+            private String topLevelFieldNameForSimple = "simple";
+            /**
+             * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
+             * top-level field under which the &quot;rich&quot; schema resides.
+             *
+             * <p>
+             *     Ignored for any other {@link #getSchemaStyle()}.
+             * </p>
+             */
+            private String topLevelFieldNameForRich = "rich";
+            /**
+             * If the {@link #getSchemaStyle()} is set to either {@link SchemaStyle#RICH_ONLY} or
+             * {@link SchemaStyle#SIMPLE_AND_RICH}, then determines whether the &quot;Scenario&quot; field is included
+             * in order to allow given/when/then tests to be expressed.
+             *
+             * <p>
+             *     Ignored if the {@link #getSchemaStyle()} is {@link SchemaStyle#SIMPLE_ONLY}.
+             * </p>
+             */
+            private boolean includeTestingFieldInRich = true;
+
             public enum ApiVariant {
                 /**
                  * Exposes only a Query API, of properties, collections and safe (query-onl) actions.
@@ -2389,7 +2479,7 @@ public class CausewayConfiguration {
                  * Note that field names <i>cannot</i> being with &quot;__&quot;, as that is reserved by the
                  * underlying GraphQL implementation.
                  */
-                private String fieldName = "_gqlv_meta";
+                private String fieldName = "_meta";
             }
 
             private final Lookup lookup = new Lookup();
@@ -2412,7 +2502,7 @@ public class CausewayConfiguration {
                 /**
                  * The name of the synthetic argument of mutators representing the target domain object.
                  */
-                private String targetArgName = "_gqlv_target";
+                private String targetArgName = "_target";
             }
 
             private final ScalarMarshaller scalarMarshaller = new ScalarMarshaller();
@@ -2420,13 +2510,66 @@ public class CausewayConfiguration {
             public static class ScalarMarshaller {
 
                 /**
+                 * For both JDK8's {@link java.time.LocalTime} and JodaTime's {@link org.joda.time.LocalTime}
+                 */
+                private String localTimeFormat = "HH:mm:ss";
+                /**
                  * For both JDK8's {@link java.time.LocalDate} and JodaTime's {@link org.joda.time.LocalDate}
                  */
                 private String localDateFormat = "yyyy-MM-dd";
                 /**
                  * for JDK8's {@link java.time.ZonedDateTime} and JodaTime's {@link org.joda.time.DateTime}
                  */
-                private String zonedDateTimeFormat = "yyyy-MM-dd HH:mm:ss z";
+                private String zonedDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ssXXX";
+            }
+
+            /**
+             * The different ways in which resources ({@link org.apache.causeway.applib.value.Blob} bytes,
+             * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
+             * resource controller.
+             */
+            public enum ResponseType {
+                /**
+                 * Do not allow the resources to be downloaded at all.  This is the default.
+                 *
+                 * <p>
+                 *     In this case any {@link org.apache.causeway.applib.value.Blob} and
+                 *     {@link org.apache.causeway.applib.value.Clob} properties will <i>not</i> provide a link to
+                 *     the URL.  Attempting to download from the resource controller will result in a 403 (forbidden).
+                 * </p>
+                 */
+                FORBIDDEN,
+                /**
+                 * Allows resources to be downloaded directly.
+                 *
+                 * <p>
+                 *     <b>IMPORTANT: </b> if enabling this configuration property, make sure that the <code>ResourcesController</code> endpoints
+                 *     are secured appropriately.
+                 * </p>
+                 */
+                DIRECT,
+                /**
+                 * Allows resources to be downloaded as attachments (using <code>Content-Disposition</code> header).
+                 *
+                 * <p>
+                 *     <b>IMPORTANT: </b> if enabling this configuration property, make sure that the <code>ResourcesController</code> endpoints
+                 *     are secured appropriately.
+                 * </p>
+                 */
+                ATTACHMENT,
+                ;
+            }
+
+            @Getter
+            private final Resources resources = new Resources();
+            @Data
+            public static class Resources {
+                /**
+                 * How resources ({@link org.apache.causeway.applib.value.Blob} bytes,
+                 * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
+                 * resource controller.
+                 */
+                private ResponseType responseType = ResponseType.FORBIDDEN;
             }
 
             @Getter
@@ -2450,7 +2593,6 @@ public class CausewayConfiguration {
                     private List<String> roles;
                 }
             }
-
         }
 
         private final Restfulobjects restfulobjects = new Restfulobjects();
@@ -3211,6 +3353,33 @@ public class CausewayConfiguration {
              * either {@link Digits#fraction()} or an ORM semantic such as the (JPA) {@link Column#scale()}.
              */
             private Integer minScale = null;
+
+            /**
+             * A common use of {@link java.math.BigDecimal} is as a money value.  In some locales (eg English), the
+             * &quot;,&quot; (comma) is the grouping (thousands) separator wihle the &quot;.&quot; (period) acts as a
+             * decimal point, but in others (eg France, Italy) it is the other way around.
+             *
+             * <p>
+             *     Surprisingly perhaps, a string such as "123,99", when parsed ((by {@link java.text.DecimalFormat})
+             *     in an English locale, is not rejected but instead is evaluated as the value 12399L.  That's almost
+             *     certainly not what the end-user would have expected, and results in a money value 100x too large.
+             * </p>
+             *
+             * <p>
+             *     The purpose of this configuration property is to remove the confusion by simply disallowing the
+             *     thousands separator from being part of the input string.
+             * </p>
+             *
+             * <p>
+             *     For maximum safety, allowing the grouping separator is disallowed, but the alternate (original)
+             *     behaviour can be reinstated by setting this config property back to <code>true</code>.
+             * </p>
+             *
+             * <p>
+             *     The same configuration property is also used for rendering the value.
+             * </p>
+             */
+            private boolean useGroupingSeparator = false;
         }
 
         private final Kroki kroki = new Kroki();

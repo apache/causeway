@@ -1,0 +1,58 @@
+{
+  rich {
+    Scenario(name: "New member of staff") {
+      Name
+      Given {
+        university_dept_Departments {
+          findDepartmentByName {
+            invoke(name: "Classics") {
+              args {
+                name
+              }
+              results {
+                _meta {
+                  saveAs(ref: "classics")
+                }
+              }
+            }
+          }
+        }
+      }
+      When {
+        university_dept_Staff {
+          createStaffMember {
+            invokeNonIdempotent(name: "Dr. Georgina McGovern", department: { ref: "classics"}) {
+              args {
+                name
+                department {
+                  name {
+                    get
+                  }
+                }
+              }
+              results {
+                name {
+                  get
+                }
+                department {
+                  get {
+                    name {
+                      get
+                    }
+                  }
+                }
+                _meta {
+                  title
+                  logicalTypeName
+                  version
+                  cssClass
+                  icon
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

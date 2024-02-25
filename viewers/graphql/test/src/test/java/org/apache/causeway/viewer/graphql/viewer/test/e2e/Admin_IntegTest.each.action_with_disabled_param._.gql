@@ -1,0 +1,20 @@
+{
+  rich {
+    university_admin_AdminMenu {
+      actionWithDisabledParam {
+        disabled
+        params {
+          firstParam {
+            disabled
+          }
+          secondParam {
+            disabled(firstParam: null)
+          }
+          thirdParameter {
+            disabled(firstParam: null, secondParam: "not blank")
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  rich {
+    Scenario(name: "Obtain name of person but forget to specify the logicalTypeName") {
+      Name
+      When {
+        university_dept_People {
+          nameOf {
+            invoke(person: {id: "123"}) {
+              results
+            }
+          }
+        }
+      }
+    }
+  }
+}

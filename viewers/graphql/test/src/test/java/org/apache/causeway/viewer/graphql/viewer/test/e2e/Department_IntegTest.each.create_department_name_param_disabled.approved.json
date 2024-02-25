@@ -1,0 +1,22 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "createDepartment" : {
+          "params" : {
+            "name" : {
+              "disabled" : null
+            }
+          },
+          "invokeNonIdempotent" : {
+            "results" : {
+              "name" : {
+                "get" : "newbie"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

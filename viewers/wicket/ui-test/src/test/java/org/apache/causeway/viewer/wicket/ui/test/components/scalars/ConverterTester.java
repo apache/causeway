@@ -23,6 +23,8 @@ import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Objects;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
+
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
 import org.mockito.Mockito;
@@ -132,6 +134,10 @@ public class ConverterTester<T extends Serializable> {
             final @NonNull T value,
             final @NonNull String valueAsText) {
         assertRoundtrip(value, valueAsText, valueAsText);
+    }
+
+    public CausewayConfiguration.ValueTypes.BigDecimal getConfigurationForBigDecimalValueType() {
+        return mmc.getConfiguration().getValueTypes().getBigDecimal();
     }
 
     /**

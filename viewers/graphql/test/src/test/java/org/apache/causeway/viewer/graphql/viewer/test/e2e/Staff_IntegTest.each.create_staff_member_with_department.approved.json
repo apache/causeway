@@ -1,0 +1,60 @@
+{
+  "data" : {
+    "rich" : {
+      "Scenario" : {
+        "Name" : "New member of staff",
+        "Given" : {
+          "university_dept_Departments" : {
+            "findDepartmentByName" : {
+              "invoke" : {
+                "args" : {
+                  "name" : "Classics"
+                },
+                "results" : {
+                  "_meta" : {
+                    "saveAs" : "classics"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "When" : {
+          "university_dept_Staff" : {
+            "createStaffMember" : {
+              "invokeNonIdempotent" : {
+                "args" : {
+                  "name" : "Dr. Georgina McGovern",
+                  "department" : {
+                    "name" : {
+                      "get" : "Classics"
+                    }
+                  }
+                },
+                "results" : {
+                  "name" : {
+                    "get" : "Dr. Georgina McGovern"
+                  },
+                  "department" : {
+                    "get" : {
+                      "name" : {
+                        "get" : "Classics"
+                      }
+                    }
+                  },
+                  "_meta" : {
+                    "title" : "Untitled Staff Member",
+                    "logicalTypeName" : "university.dept.StaffMember",
+                    "version" : null,
+                    "cssClass" : null,
+                    "icon" : "///graphql/object/university.dept.StaffMember:NNN/_meta/icon"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

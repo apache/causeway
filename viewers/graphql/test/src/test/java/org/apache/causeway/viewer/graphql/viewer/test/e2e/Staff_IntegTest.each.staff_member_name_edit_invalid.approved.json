@@ -1,0 +1,28 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/rich/university_dept_Staff/findStaffMemberByName/invoke/results/name/set) : Name cannot contain '!' character",
+    "locations" : [ {
+      "line" : 8,
+      "column" : 15
+    } ],
+    "path" : [ "rich", "university_dept_Staff", "findStaffMemberByName", "invoke", "results", "name", "set" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "rich" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "invoke" : {
+            "results" : {
+              "name" : {
+                "set" : null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.registry;
 
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -25,26 +28,24 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+
+import org.springframework.stereotype.Component;
+
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
-
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -73,18 +74,23 @@ public class GraphQLTypeRegistry {
     }
 
 
-    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(final Class<?> typeToAdd) {
+    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
+            final Class<?> typeToAdd,
+            final SchemaType schemaType) {
         val objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
-        val typeName = TypeNames.enumTypeNameFor(objectSpec);
+        val typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
         val enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
+
         if (enumTypeIfAny.isPresent()) {
             return enumTypeIfAny.get();
         }
+
+        val enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
         val enumType = newEnum()
                 .name(typeName)
-                .values(Stream.of(typeToAdd.getEnumConstants())
+                .values(Stream.of(enumTypeToAdd.getEnumConstants())
                         .map(enumValue -> newEnumValueDefinition()
-                                .name(enumValue.toString())
+                                .name(enumValue.name())
                                 .value(enumValue)
                                 .build()).collect(Collectors.toList())
                 )
@@ -171,7 +177,7 @@ public class GraphQLTypeRegistry {
     }
 
 
-    private void add(GraphQLType typeToAdd) {
+    private void add(final GraphQLType typeToAdd) {
         graphQLTypes.add(typeToAdd);
     }
 

@@ -18,27 +18,18 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHeadRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMemberRepository;
-
-import lombok.SneakyThrows;
-import lombok.val;
 
 
 public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
@@ -48,6 +39,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
     @Inject protected StaffMemberRepository staffMemberRepository;
     @Inject protected BookmarkService bookmarkService;
 
+    @Override
     @BeforeEach
     protected void beforeEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
@@ -68,20 +60,16 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
             deptHeadRepository.create("Dr. George Harwood", civilEngineering);
 
             // staff
-            staffMemberRepository.create("Letitia Leadbetter", classics, asBlob("StaffMember-photo-Foo.pdf"));
-            staffMemberRepository.create("Gerry Jones", classics, asBlob("StaffMember-photo-Bar.pdf"));
-            staffMemberRepository.create("Mervin Hughes", physics, asBlob("StaffMember-photo-Fizz.pdf"));
+            staffMemberRepository.create("Letitia Leadbetter", classics, asPdfBlob("StaffMember-photo-Foo.pdf"));
+            staffMemberRepository.create("Gerry Jones", classics, asPdfBlob("StaffMember-photo-Bar.pdf"));
+            staffMemberRepository.create("Mervin Hughes", physics, asPdfBlob("StaffMember-photo-Fizz.pdf"));
             staffMemberRepository.create("John Gartner", physics);
             staffMemberRepository.create("Margaret Randall", physics);
 
         });
     }
 
-    protected Blob asBlob(String fileName) {
-        val bytes = toBytes(fileName);
-        return new Blob(fileName, "application/pdf", bytes);
-    }
-
+    @Override
     @AfterEach
     protected void afterEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
@@ -92,21 +80,5 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModule
             departmentRepository.removeAll();
         });
     }
-
-    @SneakyThrows
-    private byte[] toBytes(String fileName){
-        InputStream inputStream = new ClassPathResource(fileName, Abstract_IntegTest.class).getInputStream();
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-        int nRead;
-        byte[] data = new byte[16384];
-
-        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-            buffer.write(data, 0, nRead);
-        }
-
-        return buffer.toByteArray();
-    }
-
 
 }

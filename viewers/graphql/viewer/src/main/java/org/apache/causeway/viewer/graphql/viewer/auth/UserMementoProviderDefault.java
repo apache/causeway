@@ -30,11 +30,10 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import graphql.execution.ExecutionContext;
 import graphql.execution.ExecutionStrategyParameters;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserMementoProviderDefault implements UserMementoProvider {
