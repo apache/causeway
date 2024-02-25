@@ -21,17 +21,15 @@ package org.apache.causeway.extensions.secman.integration.permissions;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.RequiredArgsConstructor;
-
-import lombok.val;
-
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import javax.inject.Inject;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

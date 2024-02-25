@@ -18,18 +18,19 @@
  */
 package org.apache.causeway.extensions.spring.security.oauth2.restful;
 
-import lombok.val;
-
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyAbstract;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
+
+import lombok.val;
 
 /**
  * This class enables support for JWT for Restful clients.

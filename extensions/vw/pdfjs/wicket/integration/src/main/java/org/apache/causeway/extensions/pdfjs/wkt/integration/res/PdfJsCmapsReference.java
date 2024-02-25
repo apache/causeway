@@ -24,10 +24,11 @@ import org.apache.wicket.util.string.Strings;
 
 import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.val;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class PdfJsCmapsReference
 extends WebjarsJavaScriptResourceReference {

@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.extensions.secman.integration.permissions;
 
+import java.util.Collection;
+
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
-
-import java.util.Collection;
 
 /**
  * Created as a service, if required, by {@link ApplicationFeatureIdTransformerIdentityAutoConfiguration}.

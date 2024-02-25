@@ -20,8 +20,9 @@
 
 package org.apache.causeway.extensions.sessionlog.jpa.dom;
 
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepositoryAbstract;
 import org.springframework.stereotype.Service;
+
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepositoryAbstract;
 
 @Service
 public class SessionLogEntryRepository extends SessionLogEntryRepositoryAbstract<SessionLogEntry> {

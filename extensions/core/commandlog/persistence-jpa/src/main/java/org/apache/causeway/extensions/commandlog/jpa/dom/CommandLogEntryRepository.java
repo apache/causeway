@@ -20,11 +20,11 @@ package org.apache.causeway.extensions.commandlog.jpa.dom;
 
 import javax.inject.Named;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
 
 /**

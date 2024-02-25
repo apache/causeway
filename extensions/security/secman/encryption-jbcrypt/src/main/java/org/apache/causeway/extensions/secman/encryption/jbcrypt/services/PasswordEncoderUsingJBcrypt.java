@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.secman.encryption.jbcrypt.services;
 import javax.inject.Named;
 
 import org.mindrot.jbcrypt.BCrypt;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -21,11 +21,12 @@ package org.apache.causeway.extensions.commandreplay.secondary.fetch;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;

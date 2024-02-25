@@ -18,14 +18,16 @@
  */
 package org.apache.causeway.extensions.pdfjs.metamodel;
 
-import org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.PropDomain;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+
+import org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.PropDomain;
 
 @SpringBootTest(
         classes = {PdfjsViewer_PropDomainWithPdfjsViewer_IntegTest.AppManifest.class},

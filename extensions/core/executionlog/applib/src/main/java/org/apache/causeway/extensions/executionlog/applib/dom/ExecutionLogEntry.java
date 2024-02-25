@@ -32,8 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.Digits;
 
-import org.apache.causeway.applib.annotation.ValueSemantics;
-
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -46,6 +44,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.mixins.system.HasInteractionIdAndSequence;

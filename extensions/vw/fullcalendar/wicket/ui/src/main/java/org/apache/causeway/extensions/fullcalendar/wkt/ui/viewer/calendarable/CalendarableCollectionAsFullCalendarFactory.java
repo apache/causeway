@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.calendarable;
 
 import org.apache.wicket.Component;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.extensions.fullcalendar.applib.Calendarable;

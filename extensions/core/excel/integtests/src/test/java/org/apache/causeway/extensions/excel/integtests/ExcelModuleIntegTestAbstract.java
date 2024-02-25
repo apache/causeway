@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.extensions.excel.integtests;
 
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -32,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.excel.fixtures.CausewayModuleExtExcelFixtures;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;

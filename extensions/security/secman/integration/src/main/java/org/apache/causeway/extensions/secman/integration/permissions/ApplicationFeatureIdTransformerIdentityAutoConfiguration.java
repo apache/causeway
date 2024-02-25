@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.extensions.secman.integration.permissions;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 
 @AutoConfigureOrder(PriorityPrecedence.LATE)
 @Configuration

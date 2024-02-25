@@ -18,19 +18,25 @@
  */
 package org.apache.causeway.extensions.sse.wicket.services;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -40,8 +46,12 @@ import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
 import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Server-sent events.

@@ -32,8 +32,9 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.C
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 final class FullCalendarWithEventHandling extends FullCalendar
 implements HasMetaModelContext {

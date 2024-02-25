@@ -22,16 +22,15 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

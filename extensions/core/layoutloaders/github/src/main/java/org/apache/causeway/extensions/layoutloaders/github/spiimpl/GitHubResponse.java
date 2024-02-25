@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.extensions.layoutloaders.github.spiimpl;
 
-import lombok.Data;
-
 import java.util.List;
+
+import lombok.Data;
 
 @Data
 public class GitHubResponse {

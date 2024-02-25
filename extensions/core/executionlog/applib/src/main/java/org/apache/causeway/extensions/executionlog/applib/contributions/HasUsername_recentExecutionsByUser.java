@@ -30,6 +30,7 @@ import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

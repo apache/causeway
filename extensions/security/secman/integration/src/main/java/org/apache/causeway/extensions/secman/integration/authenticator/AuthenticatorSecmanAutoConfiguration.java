@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.secman.integration.authenticator;
 
-import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -28,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.security.authentication.Authenticator;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 /**

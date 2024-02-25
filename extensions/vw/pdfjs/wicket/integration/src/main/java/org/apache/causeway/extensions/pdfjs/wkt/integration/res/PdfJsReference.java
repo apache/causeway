@@ -23,9 +23,10 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
 import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class PdfJsReference
 extends WebjarsJavaScriptResourceReference {
