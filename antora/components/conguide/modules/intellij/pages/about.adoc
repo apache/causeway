@@ -6,7 +6,8 @@
 
 Additional configuration of IntelliJ for contributors (and committers).
 
-* Set up the link:{attachmentsdir}/Apache-Causeway-importorder.xml[import order].
+* Recommended way to setup your editor is via `.editorconfig` file located at the project's very root, which requires IntelliJ integration for link:https://editorconfig.org/[editorconfig.org]. 
+* As an alternative you can just set up the link:{attachmentsdir}/Apache-Causeway-importorder.xml[import order].
 
 == Prepare for Build
 
