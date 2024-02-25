@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.h2console.ui.services;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.Optional;
 
 import javax.annotation.Priority;
@@ -27,11 +25,21 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.DomainServiceLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.RestrictTo;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi;
 import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}

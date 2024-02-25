@@ -20,10 +20,11 @@ package org.apache.causeway.testing.integtestsupport.applib;
 
 import java.util.concurrent.Callable;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Convenient base class to extend for integration tests.

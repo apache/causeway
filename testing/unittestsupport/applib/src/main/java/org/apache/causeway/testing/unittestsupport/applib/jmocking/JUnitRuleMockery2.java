@@ -44,8 +44,9 @@ import static org.junit.Assert.fail;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import junit.framework.AssertionFailedError;
 import lombok.RequiredArgsConstructor;
+
+import junit.framework.AssertionFailedError;
 
 
 /**
