@@ -81,9 +81,10 @@ import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.CausewayWicke
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 
-import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
+
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link UiComponentType}s.

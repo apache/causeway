@@ -22,8 +22,9 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.util.string.Strings;
-import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;

@@ -22,6 +22,7 @@ import jakarta.inject.Inject;
 
 import org.apache.wicket.devutils.debugbar.DebugBarInitializer;
 import org.apache.wicket.protocol.http.WebApplication;
+
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.core.config.CausewayConfiguration;

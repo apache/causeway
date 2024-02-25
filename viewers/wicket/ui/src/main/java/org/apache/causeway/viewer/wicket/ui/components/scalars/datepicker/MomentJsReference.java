@@ -21,9 +21,10 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class MomentJsReference extends WebjarsJavaScriptResourceReference {
 

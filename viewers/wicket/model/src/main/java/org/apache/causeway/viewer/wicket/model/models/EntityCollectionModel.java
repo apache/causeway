@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

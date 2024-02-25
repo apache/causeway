@@ -26,6 +26,8 @@ import jakarta.validation.constraints.Digits;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -35,8 +37,6 @@ import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTes
 
 import lombok.Getter;
 import lombok.Setter;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class BigDecimalConverterTest {
 

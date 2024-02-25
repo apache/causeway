@@ -18,8 +18,15 @@
  */
 package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
+
 import org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +40,6 @@ import org.apache.causeway.core.webapp.modules.WebModuleContext;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.ServletException;
 import lombok.Getter;
 import lombok.val;
 

@@ -27,6 +27,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.wicket.Component;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ import org.apache.causeway.viewer.commons.applib.services.tabular.CollectionCont
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.causeway.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanelFactory;

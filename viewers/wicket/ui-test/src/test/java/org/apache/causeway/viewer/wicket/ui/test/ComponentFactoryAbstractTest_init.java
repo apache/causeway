@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 class ComponentFactoryAbstractTest_init {

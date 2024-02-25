@@ -29,6 +29,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.TransactionalException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -43,15 +53,6 @@ import org.apache.causeway.core.webapp.modules.templresources.TemplateResourceCa
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategy;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyUsingSession;
 
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.TransactionalException;
 import lombok.val;
 
 /**

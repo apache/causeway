@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.app.logout;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;

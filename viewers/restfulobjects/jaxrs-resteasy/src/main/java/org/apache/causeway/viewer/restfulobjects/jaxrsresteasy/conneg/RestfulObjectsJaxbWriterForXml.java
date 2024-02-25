@@ -21,17 +21,19 @@ package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.conneg;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.ext.Provider;
 import jakarta.xml.bind.Marshaller;
+
+import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
+
+import org.springframework.stereotype.Component;
+
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+
 import lombok.val;
 
 /**

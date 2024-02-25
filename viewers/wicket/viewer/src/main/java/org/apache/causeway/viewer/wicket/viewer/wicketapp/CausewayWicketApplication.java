@@ -46,6 +46,7 @@ import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;

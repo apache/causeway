@@ -27,6 +27,7 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
 import lombok.Getter;

@@ -22,6 +22,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jakarta.inject.Named;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.ContainerResponseContext;
+import jakarta.ws.rs.container.ContainerResponseFilter;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.ext.Provider;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -33,14 +41,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
-import jakarta.inject.Named;
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.container.ContainerRequestFilter;
-import jakarta.ws.rs.container.ContainerResponseContext;
-import jakarta.ws.rs.container.ContainerResponseFilter;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.ext.Provider;
 
 /**
  * @since 1.x {@index}

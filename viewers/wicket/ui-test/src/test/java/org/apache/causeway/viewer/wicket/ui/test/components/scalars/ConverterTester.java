@@ -23,8 +23,6 @@ import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Objects;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
 import org.mockito.Mockito;
@@ -47,6 +45,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

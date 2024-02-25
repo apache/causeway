@@ -32,8 +32,9 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public class JavaAwtImagePanel
 extends PanelAbstract<ManagedObject, ScalarModel> {

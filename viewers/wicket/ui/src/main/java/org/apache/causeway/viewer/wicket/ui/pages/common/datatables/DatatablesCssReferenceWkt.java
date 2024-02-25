@@ -21,9 +21,10 @@ package org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
 public class DatatablesCssReferenceWkt extends WebjarsCssResourceReference {
     private static final long serialVersionUID = 1L;

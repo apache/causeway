@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.protocol.http.WebApplication;
+
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;

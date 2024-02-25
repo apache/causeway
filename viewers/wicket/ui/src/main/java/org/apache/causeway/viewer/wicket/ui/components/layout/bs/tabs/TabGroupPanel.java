@@ -35,8 +35,9 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
 public class TabGroupPanel

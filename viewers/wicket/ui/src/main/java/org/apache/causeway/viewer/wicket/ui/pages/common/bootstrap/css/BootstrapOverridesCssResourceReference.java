@@ -27,11 +27,12 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * A CSS resource reference that provides CSS rules which override the CSS rules

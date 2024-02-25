@@ -25,17 +25,17 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Named;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.schema.CausewayModuleSchema;
-import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
 
 @Component
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".TaggerDefault")

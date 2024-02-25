@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker;
 
+import static de.agilecoders.wicket.jquery.JQuery.$;
+
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -43,8 +45,6 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6I
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerJsReference;
 import de.agilecoders.wicket.jquery.Config;
-
-import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
  * A text input field that is used as a date or date/time picker.

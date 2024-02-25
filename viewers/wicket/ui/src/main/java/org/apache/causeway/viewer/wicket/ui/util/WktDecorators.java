@@ -45,11 +45,12 @@ import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.FontAwesomeBehavior;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 import lombok.Getter;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 /**
  *

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars.markup;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
