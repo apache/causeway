@@ -1,0 +1,23 @@
+# Eclipse Organize Import Order
+# Keep in sync with .editorconfig -> ij_java_imports_layout
+0=java
+1=\#java
+2=javax
+3=\#javax
+4=jakarta
+5=\#jakarta
+6=com
+7=\#com
+8=graphql
+9=\#graphql
+10=org
+11=\#org
+12=org.springframework
+13=\#org.springframework
+14=org.apache.causeway
+15=\#org.apache.causeway
+16=org.apache.isis
+17=\#org.apache.isis
+18=lombok
+19=\#lombok
+20=demoapp
