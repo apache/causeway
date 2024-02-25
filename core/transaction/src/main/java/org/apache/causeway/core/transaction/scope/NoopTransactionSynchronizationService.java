@@ -15,10 +15,10 @@
  */
 package org.apache.causeway.core.transaction.scope;
 
-import org.apache.causeway.applib.annotation.TransactionScope;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
+
+import org.apache.causeway.applib.annotation.TransactionScope;
 
 /**
  * This service, which does nothing in and of itself, exists in order to ensure that the {@link StackedTransactionScope}

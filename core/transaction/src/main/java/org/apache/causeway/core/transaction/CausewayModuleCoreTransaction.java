@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.transaction;
 
-import org.apache.causeway.core.transaction.scope.NoopTransactionSynchronizationService;
-import org.apache.causeway.core.transaction.scope.TransactionScopeBeanFactoryPostProcessor;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.core.transaction.changetracking.events.TimestampService;
+import org.apache.causeway.core.transaction.scope.NoopTransactionSynchronizationService;
+import org.apache.causeway.core.transaction.scope.TransactionScopeBeanFactoryPostProcessor;
 
 @Configuration
 @Import({

@@ -34,6 +34,7 @@ import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryServiceAbstract;
 
 import lombok.val;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ImplementationDefinition;

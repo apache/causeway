@@ -74,11 +74,11 @@ import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacets
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;

@@ -32,7 +32,12 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.val;
 
 /**
  * Immutable serializable value held by {@link UserMemento}.

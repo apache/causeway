@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.applib.services.user;
 
-import org.apache.causeway.applib.services.sudo.SudoService;
-import org.apache.causeway.commons.collections.Can;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import org.apache.causeway.applib.services.sudo.SudoService;
+import org.apache.causeway.commons.collections.Can;
 
 class UserMemento_contains_Test {
 

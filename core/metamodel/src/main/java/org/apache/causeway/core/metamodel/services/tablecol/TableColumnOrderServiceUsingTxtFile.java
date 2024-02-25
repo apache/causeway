@@ -25,11 +25,10 @@ import java.util.Optional;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.annotation.CollectionLayout;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;

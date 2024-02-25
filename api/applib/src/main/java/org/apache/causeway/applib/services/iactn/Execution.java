@@ -22,6 +22,8 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
@@ -37,8 +39,6 @@ import org.apache.causeway.schema.common.v2.PeriodDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.MetricsDto;
 import org.apache.causeway.schema.ixn.v2.ObjectCountsDto;
-
-import org.springframework.lang.Nullable;
 
 import lombok.Getter;
 import lombok.val;

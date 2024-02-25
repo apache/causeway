@@ -53,6 +53,7 @@ import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -61,7 +62,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.causeway.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;

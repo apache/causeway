@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.services;
 
 import org.junit.jupiter.api.Disabled;
 import org.mockito.Mockito;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

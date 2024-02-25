@@ -20,9 +20,10 @@ package org.apache.causeway.core.metamodel;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

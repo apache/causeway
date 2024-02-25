@@ -24,8 +24,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
 import org.apache.causeway.commons.internal.testing._DocumentTester;
+import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
 
 class BlobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Blob> {
