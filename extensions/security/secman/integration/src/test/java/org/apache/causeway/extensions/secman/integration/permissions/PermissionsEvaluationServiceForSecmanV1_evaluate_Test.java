@@ -18,12 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.integration.permissions;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
-
-import org.apache.causeway.extensions.secman.integration.permissions.exampledomain.Customer;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,8 +27,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.lenient;
+
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
+import org.apache.causeway.extensions.secman.integration.permissions.exampledomain.Customer;
 
 import static org.apache.causeway.applib.services.appfeat.ApplicationFeatureId.*;
 import static org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman.PermissionsEvaluationPolicy.ALLOW_BEATS_VETO;
@@ -40,9 +42,6 @@ import static org.apache.causeway.extensions.secman.applib.permission.dom.Applic
 import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode.VIEWING;
 import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule.ALLOW;
 import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule.VETO;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 class PermissionsEvaluationServiceForSecmanV1_evaluate_Test {

@@ -25,13 +25,14 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.causeway.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
-import org.springframework.stereotype.Component;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

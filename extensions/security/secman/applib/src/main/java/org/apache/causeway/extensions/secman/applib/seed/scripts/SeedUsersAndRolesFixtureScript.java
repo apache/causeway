@@ -23,8 +23,6 @@ import java.util.function.Supplier;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtLayoutLoadersRoleAndPermissions;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -46,6 +44,7 @@ import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtDocgenR
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtExecutionLogRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtExecutionOutboxRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtH2ConsoleRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtLayoutLoadersRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanAdminRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanRegularUserRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSessionLogRoleAndPermissions;

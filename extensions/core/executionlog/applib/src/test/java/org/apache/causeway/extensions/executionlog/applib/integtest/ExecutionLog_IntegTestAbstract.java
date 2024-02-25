@@ -25,7 +25,6 @@ import java.util.UUID;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,6 +44,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.CounterRepository;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter_bumpUsingMixin;

@@ -19,9 +19,18 @@
 package org.apache.causeway.extensions.commandreplay.secondary;
 
 
-import lombok.val;
-
 import jakarta.inject.Inject;
+
+import org.quartz.JobDetail;
+import org.quartz.SimpleTrigger;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
+import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
@@ -36,15 +45,8 @@ import org.apache.causeway.extensions.commandreplay.secondary.mixins.Object_open
 import org.apache.causeway.extensions.commandreplay.secondary.ui.CommandReplayOnSecondaryService;
 import org.apache.causeway.schema.CausewayModuleSchema;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.quartz.JobDetail;
-import org.quartz.SimpleTrigger;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.quartz.JobDetailFactoryBean;
-import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
+
+import lombok.val;
 
 /**
  * Activates with <i>Spring profile</i> 'commandreplay-secondary'.

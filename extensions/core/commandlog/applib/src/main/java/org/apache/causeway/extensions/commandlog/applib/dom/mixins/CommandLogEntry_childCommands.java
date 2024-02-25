@@ -20,15 +20,16 @@ package org.apache.causeway.extensions.commandlog.applib.dom.mixins;
 
 import java.util.List;
 
+import jakarta.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import lombok.RequiredArgsConstructor;
 
-import jakarta.inject.Inject;
+import lombok.RequiredArgsConstructor;
 
 
 /**

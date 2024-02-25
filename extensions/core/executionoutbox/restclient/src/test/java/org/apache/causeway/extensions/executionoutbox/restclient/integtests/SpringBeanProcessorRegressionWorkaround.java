@@ -39,6 +39,7 @@ import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.jboss.resteasy.springboot.JAXRSResourcesAndProvidersScannerPostProcessor;
 import org.jboss.resteasy.springboot.ResteasyApplicationBuilder;
 import org.jboss.resteasy.springboot.ResteasyEmbeddedServletInitializer;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;

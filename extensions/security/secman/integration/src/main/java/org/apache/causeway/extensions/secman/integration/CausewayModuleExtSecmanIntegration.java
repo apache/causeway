@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.extensions.secman.integration;
 
-import org.apache.causeway.extensions.secman.integration.permissions.ApplicationFeatureIdTransformerIdentity;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.integration.authorizor.AuthorizorSecman;
 import org.apache.causeway.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor;
+import org.apache.causeway.extensions.secman.integration.permissions.ApplicationFeatureIdTransformerIdentity;
 import org.apache.causeway.extensions.secman.integration.permissions.PermissionsEvaluationServiceForSecman;
 import org.apache.causeway.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman;
 import org.apache.causeway.extensions.secman.integration.spiimpl.TableColumnVisibilityServiceForSecman;

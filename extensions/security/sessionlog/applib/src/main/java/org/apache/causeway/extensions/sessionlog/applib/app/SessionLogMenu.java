@@ -26,8 +26,6 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -40,6 +38,8 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+
 import lombok.RequiredArgsConstructor;
 
 

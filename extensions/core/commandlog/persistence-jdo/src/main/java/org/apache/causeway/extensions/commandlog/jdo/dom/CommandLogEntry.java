@@ -20,7 +20,6 @@ package org.apache.causeway.extensions.commandlog.jdo.dom;
 
 import java.util.UUID;
 
-import jakarta.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Index;
@@ -30,6 +29,8 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
+
+import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.Domain;

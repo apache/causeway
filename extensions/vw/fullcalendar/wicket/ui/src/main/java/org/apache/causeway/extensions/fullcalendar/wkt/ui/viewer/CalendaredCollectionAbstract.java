@@ -36,8 +36,9 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel

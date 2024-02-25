@@ -18,18 +18,19 @@
  */
 package org.apache.causeway.extensions.commandlog.jdo.integtests;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
-import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
-import org.apache.causeway.extensions.commandlog.jdo.integtests.model.CounterRepository;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
+import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
+import org.apache.causeway.extensions.commandlog.jdo.integtests.model.CounterRepository;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration

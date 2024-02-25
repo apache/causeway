@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.extensions.spring.security.oauth2.authconverters;
 
-import lombok.NonNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.stereotype.Component;
+
+import lombok.NonNull;
 
 /**
  * Applies if {@link Authentication} holds a principal of type {@link Jwt}.

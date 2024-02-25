@@ -21,9 +21,10 @@ package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.res;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
 public class FullCalendarCssReference
 extends WebjarsCssResourceReference {

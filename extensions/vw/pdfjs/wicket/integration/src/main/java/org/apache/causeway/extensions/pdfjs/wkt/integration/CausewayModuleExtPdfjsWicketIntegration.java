@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.pdfjs.wkt.integration;
 
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.protocol.http.WebApplication;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

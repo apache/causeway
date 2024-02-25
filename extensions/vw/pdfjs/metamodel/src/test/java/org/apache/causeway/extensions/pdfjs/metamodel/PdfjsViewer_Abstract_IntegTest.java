@@ -23,9 +23,8 @@ import java.util.Collections;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
-
 import org.approvaltests.Approvals;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
@@ -41,6 +40,7 @@ import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;

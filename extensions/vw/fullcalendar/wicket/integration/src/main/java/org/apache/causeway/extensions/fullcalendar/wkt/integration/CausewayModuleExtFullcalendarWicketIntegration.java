@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.integration;
 
-import org.apache.causeway.extensions.fullcalendar.applib.CausewayModuleExtFullCalendarApplib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.fullcalendar.applib.CausewayModuleExtFullCalendarApplib;
 
 /**
  * @since 2.0 {@index}

@@ -32,8 +32,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.validation.constraints.Digits;
 
-import org.apache.causeway.applib.annotation.ValueSemantics;
-
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -46,7 +44,9 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
+import org.apache.causeway.applib.mixins.system.DomainChangeRecord.ChangeType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

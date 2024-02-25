@@ -28,6 +28,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

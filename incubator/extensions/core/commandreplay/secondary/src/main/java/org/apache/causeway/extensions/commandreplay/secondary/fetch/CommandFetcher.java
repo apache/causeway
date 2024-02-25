@@ -27,7 +27,6 @@ import jakarta.inject.Named;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 
-import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +39,7 @@ import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryCo
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 import org.apache.causeway.extensions.commandreplay.secondary.status.StatusException;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
