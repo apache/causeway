@@ -6,7 +6,9 @@
 
 Additional configuration of Eclipse for contributors (and committers):
 
-* Set up the link:{attachmentsdir}/Apache-Causeway.importorder[import order]
+* Recommended way to setup your editor is via `.editorconfig` file located at the project's very root. 
+However, at the time of writing we could not find any Eclipse integration for link:https://editorconfig.org/[editorconfig.org],
+hence an _import order_ configuration file `.editorconfig.eclipse.importorder` for Eclipse is provided (located at the project's very root).
 
 Also:
 
