@@ -18,9 +18,20 @@
  */
 package org.apache.causeway.persistence.jpa.applib.integration;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostRemove;
+import jakarta.persistence.PostUpdate;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreRemove;
+import jakarta.persistence.PreUpdate;
+
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 import org.eclipse.persistence.sessions.changesets.ObjectChangeSet;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -33,15 +44,6 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyc
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-import jakarta.persistence.PostLoad;
-import jakarta.persistence.PostPersist;
-import jakarta.persistence.PostRemove;
-import jakarta.persistence.PostUpdate;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreRemove;
-import jakarta.persistence.PreUpdate;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 

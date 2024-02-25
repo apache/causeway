@@ -25,10 +25,11 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import jakarta.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
+
+import jakarta.inject.Inject;
 
 import org.datanucleus.api.jdo.JDOQuery;
 import org.datanucleus.enhancement.Persistable;
@@ -54,6 +55,7 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;

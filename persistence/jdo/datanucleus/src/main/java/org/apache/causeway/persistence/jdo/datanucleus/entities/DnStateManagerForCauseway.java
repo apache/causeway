@@ -29,6 +29,7 @@ import org.datanucleus.identity.SingleFieldId;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.state.ReferentialStateManagerImpl;
 import org.datanucleus.store.FieldValues;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;

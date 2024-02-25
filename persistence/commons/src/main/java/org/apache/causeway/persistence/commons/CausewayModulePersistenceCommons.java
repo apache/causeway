@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.persistence.commons;
 
-import org.apache.causeway.persistence.commons.integration.repository.RepositoryServiceDefault;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.persistence.commons.integration.changetracking.EntityChangeTrackerDefault;
 import org.apache.causeway.persistence.commons.integration.changetracking.PreAndPostValueEvaluatorServiceDefault;
+import org.apache.causeway.persistence.commons.integration.repository.RepositoryServiceDefault;
 
 @Configuration
 @Import({

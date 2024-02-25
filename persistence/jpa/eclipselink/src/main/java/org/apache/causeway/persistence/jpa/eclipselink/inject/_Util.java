@@ -23,10 +23,6 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Set;
 
-import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import jakarta.enterprise.context.spi.Contextual;
 import jakarta.enterprise.context.spi.CreationalContext;
 import jakarta.enterprise.inject.spi.AnnotatedConstructor;
@@ -37,6 +33,11 @@ import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.enterprise.inject.spi.InjectionTarget;
 import jakarta.enterprise.inject.spi.InjectionTargetFactory;
 import jakarta.inject.Provider;
+
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+
 import lombok.SneakyThrows;
 
 final class _Util {

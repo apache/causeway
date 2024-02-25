@@ -23,9 +23,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import jakarta.el.ELResolver;
 import jakarta.el.ExpressionFactory;
 import jakarta.enterprise.context.spi.Context;
@@ -51,6 +48,10 @@ import jakarta.enterprise.inject.spi.Interceptor;
 import jakarta.enterprise.inject.spi.ObserverMethod;
 import jakarta.enterprise.inject.spi.ProducerFactory;
 import jakarta.inject.Provider;
+
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+
 import lombok.RequiredArgsConstructor;
 
 /**

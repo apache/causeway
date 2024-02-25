@@ -22,6 +22,7 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
 import org.datanucleus.identity.StringId;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;

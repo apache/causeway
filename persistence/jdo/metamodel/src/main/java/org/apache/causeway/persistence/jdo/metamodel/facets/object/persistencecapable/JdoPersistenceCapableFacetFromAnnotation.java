@@ -24,6 +24,7 @@ import java.util.function.BiConsumer;
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 

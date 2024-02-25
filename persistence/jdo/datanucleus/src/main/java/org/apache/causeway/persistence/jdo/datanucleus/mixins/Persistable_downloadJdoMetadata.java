@@ -21,9 +21,10 @@ package org.apache.causeway.persistence.jdo.datanucleus.mixins;
 
 import java.io.IOException;
 
-import jakarta.inject.Inject;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
+
+import jakarta.inject.Inject;
 import jakarta.xml.bind.JAXBException;
 
 import org.datanucleus.enhancement.Persistable;

@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.notpersistent;
 
-import jakarta.inject.Inject;
 import javax.jdo.annotations.NotPersistent;
+
+import jakarta.inject.Inject;
 import jakarta.persistence.Transient;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

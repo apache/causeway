@@ -21,8 +21,9 @@ package org.apache.causeway.persistence.jpa.eclipselink;
 import java.sql.SQLException;
 import java.util.Map;
 
-import jakarta.inject.Inject;
 import javax.sql.DataSource;
+
+import jakarta.inject.Inject;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;

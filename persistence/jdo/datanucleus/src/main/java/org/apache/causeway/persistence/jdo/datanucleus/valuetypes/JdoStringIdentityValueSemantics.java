@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.valuetypes;
 
+import javax.jdo.identity.StringIdentity;
+
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
-import javax.jdo.identity.StringIdentity;
 
 import org.springframework.stereotype.Component;
 

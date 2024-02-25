@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.object.version;
 
-import jakarta.inject.Inject;
 import javax.jdo.annotations.Version;
+
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Annotations;

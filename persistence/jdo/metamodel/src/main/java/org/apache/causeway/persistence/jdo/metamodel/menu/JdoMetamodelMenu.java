@@ -20,9 +20,10 @@ package org.apache.causeway.persistence.jdo.metamodel.menu;
 
 import java.io.File;
 
+import javax.jdo.PersistenceManagerFactory;
+
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
