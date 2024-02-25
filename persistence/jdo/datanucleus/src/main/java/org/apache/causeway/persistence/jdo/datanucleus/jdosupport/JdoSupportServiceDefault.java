@@ -38,6 +38,7 @@ import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
 
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;

@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.persistence.commons.metamodel.facets.prop.column;
 
-import lombok.experimental.UtilityClass;
-
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil {

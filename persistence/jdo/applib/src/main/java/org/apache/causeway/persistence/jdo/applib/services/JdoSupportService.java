@@ -29,6 +29,7 @@ import javax.jdo.Query;
 import javax.jdo.query.BooleanExpression;
 
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
+
 import org.springframework.lang.Nullable;
 
 /**

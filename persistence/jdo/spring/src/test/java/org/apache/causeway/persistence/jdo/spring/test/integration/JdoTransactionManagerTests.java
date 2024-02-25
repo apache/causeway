@@ -37,16 +37,6 @@ import javax.transaction.UserTransaction;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.datasource.ConnectionHandle;
-import org.springframework.jdbc.datasource.ConnectionHolder;
-import org.springframework.jdbc.datasource.SimpleConnectionHandle;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.jta.JtaTransactionManager;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -58,6 +48,17 @@ import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import org.springframework.jdbc.datasource.ConnectionHandle;
+import org.springframework.jdbc.datasource.ConnectionHolder;
+import org.springframework.jdbc.datasource.SimpleConnectionHandle;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.jta.JtaTransactionManager;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.persistence.jdo.spring.exceptions.JdoResourceFailureException;
 import org.apache.causeway.persistence.jdo.spring.integration.JdoDialect;

@@ -18,18 +18,17 @@
  */
 package org.apache.causeway.persistence.commons.integration.version;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Priority(PriorityPrecedence.LAST)

@@ -31,6 +31,7 @@ import javax.persistence.PreUpdate;
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 import org.eclipse.persistence.sessions.changesets.ObjectChangeSet;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;

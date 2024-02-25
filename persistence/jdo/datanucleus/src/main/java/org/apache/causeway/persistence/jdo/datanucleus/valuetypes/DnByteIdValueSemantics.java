@@ -21,6 +21,7 @@ package org.apache.causeway.persistence.jdo.datanucleus.valuetypes;
 import javax.annotation.Priority;
 
 import org.datanucleus.identity.ByteId;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;

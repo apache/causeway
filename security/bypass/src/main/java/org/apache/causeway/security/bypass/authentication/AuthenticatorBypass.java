@@ -20,13 +20,13 @@ package org.apache.causeway.security.bypass.authentication;
 
 import javax.inject.Named;
 
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.standard.AuthenticatorAbstract;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 /**
  * Implementation that bypasses authentication.

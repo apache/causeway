@@ -23,14 +23,13 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.InteractionScope;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

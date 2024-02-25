@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
-import lombok.val;
-
 import java.math.BigDecimal;
 
 import javax.inject.Inject;
@@ -36,6 +34,8 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
+
+import lombok.val;
 
 public class BigDecimalFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract

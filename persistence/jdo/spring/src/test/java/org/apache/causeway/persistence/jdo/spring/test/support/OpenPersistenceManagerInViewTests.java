@@ -28,6 +28,14 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -37,13 +45,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.support.StaticWebApplicationContext;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.apache.causeway.persistence.jdo.spring.support.OpenPersistenceManagerInViewFilter;
 import org.apache.causeway.persistence.jdo.spring.support.OpenPersistenceManagerInViewInterceptor;

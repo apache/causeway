@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.store.rdbms.datasource.dbcp2.BasicDataSource;
+
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

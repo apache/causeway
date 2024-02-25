@@ -21,6 +21,7 @@
 package org.apache.causeway.persistence.jdo.datanucleus.bootfailureanalyzer;
 
 import org.datanucleus.exceptions.NucleusUserException;
+
 import org.springframework.boot.diagnostics.AbstractFailureAnalyzer;
 import org.springframework.boot.diagnostics.FailureAnalysis;
 
