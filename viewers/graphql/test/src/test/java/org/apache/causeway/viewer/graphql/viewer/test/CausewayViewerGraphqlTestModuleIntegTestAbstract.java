@@ -40,9 +40,6 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.integrations.junit5.JupiterApprovals;
@@ -52,7 +49,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
@@ -69,6 +65,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -81,6 +78,7 @@ import org.apache.causeway.viewer.graphql.viewer.CausewayModuleViewerGraphqlView
 import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 

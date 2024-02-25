@@ -1,7 +1,5 @@
 package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -12,6 +10,8 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.People")
 @DomainService(

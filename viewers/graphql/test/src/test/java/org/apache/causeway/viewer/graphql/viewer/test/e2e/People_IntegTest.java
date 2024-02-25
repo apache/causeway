@@ -20,20 +20,11 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
-import org.approvaltests.Approvals;
-import org.approvaltests.integrations.junit5.JupiterApprovals;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestFactory;
-
 import org.springframework.test.context.ActiveProfiles;
-
-import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise

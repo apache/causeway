@@ -18,11 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import java.util.Collections;
-
-import graphql.schema.DataFetchingEnvironment;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import java.util.Collections;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
@@ -35,6 +33,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import graphql.schema.DataFetchingEnvironment;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 

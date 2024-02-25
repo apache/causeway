@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
-import graphql.schema.DataFetchingEnvironment;
-
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -37,6 +35,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMet
 import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaTitle;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.GqlvMetaVersion;
 
+import graphql.schema.DataFetchingEnvironment;
 import lombok.val;
 
 public class GqlvMeta extends GqlvAbstractCustom {

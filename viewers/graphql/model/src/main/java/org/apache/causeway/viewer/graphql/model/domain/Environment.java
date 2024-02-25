@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.Map;
+
 import graphql.GraphQLContext;
 import graphql.schema.DataFetchingEnvironment;
-
 import lombok.RequiredArgsConstructor;
-
-import java.util.Map;
 
 public interface Environment {
 

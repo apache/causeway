@@ -21,10 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 import java.util.Optional;
 import java.util.function.Function;
 
-import graphql.Scalars;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
-
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -33,6 +29,9 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLFieldDefinition;
 import lombok.val;
 
 public abstract class GqlvPropertyGetClobAbstract extends GqlvAbstract {

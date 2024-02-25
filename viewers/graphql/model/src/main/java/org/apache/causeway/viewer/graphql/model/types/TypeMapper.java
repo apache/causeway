@@ -18,18 +18,17 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+
+import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
 
 /**
  * Internal SPI to map framework's own datatypes to GraphQL's types.

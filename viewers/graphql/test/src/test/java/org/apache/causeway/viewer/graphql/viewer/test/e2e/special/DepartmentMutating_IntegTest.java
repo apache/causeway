@@ -18,19 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e.special;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
-import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-
-import org.junit.jupiter.api.TestFactory;
-
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;

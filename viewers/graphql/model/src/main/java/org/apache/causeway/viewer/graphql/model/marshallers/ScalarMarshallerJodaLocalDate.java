@@ -18,22 +18,19 @@
  */
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
-import java.time.format.DateTimeFormatter;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import graphql.Scalars;
-
 import org.joda.time.LocalDate;
-
 import org.springframework.stereotype.Component;
+
+import static org.joda.time.format.DateTimeFormat.forPattern;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
 
-import static org.joda.time.format.DateTimeFormat.*;
+import graphql.Scalars;
 
 
 @Component

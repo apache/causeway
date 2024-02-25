@@ -20,17 +20,16 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import java.util.concurrent.CompletableFuture;
 
-import graphql.execution.AsyncExecutionStrategy;
-import graphql.execution.ExecutionContext;
-import graphql.execution.ExecutionStrategyParameters;
-import graphql.execution.FieldValueInfo;
-
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
+import graphql.execution.AsyncExecutionStrategy;
+import graphql.execution.ExecutionContext;
+import graphql.execution.ExecutionStrategyParameters;
+import graphql.execution.FieldValueInfo;
 import lombok.val;
 
 @Service

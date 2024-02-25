@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.common.query.meta;
 
-import lombok.val;
-
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -31,6 +29,8 @@ import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.causeway.core.metamodel.object.Bookmarkable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+
+import lombok.val;
 
 /**
  * Metadata for every domain object.

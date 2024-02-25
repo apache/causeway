@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple;
 
-import lombok.val;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -29,9 +27,9 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMeta;
-import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleAction;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleCollection;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleProperty;

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.common;
 
-import lombok.val;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -36,6 +34,8 @@ import org.apache.causeway.viewer.graphql.model.domain.rich.SchemaStrategyRich;
 import org.apache.causeway.viewer.graphql.model.domain.simple.SchemaStrategySimple;
 
 import static org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvTopLevelQueryAbstractSchema.superclassesOf;
+
+import lombok.val;
 
 public interface SchemaStrategy {
 

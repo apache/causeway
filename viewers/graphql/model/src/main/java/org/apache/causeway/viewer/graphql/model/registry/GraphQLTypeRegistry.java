@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.registry;
 
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -28,22 +31,17 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.springframework.stereotype.Component;
+
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
-
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
-
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
-
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

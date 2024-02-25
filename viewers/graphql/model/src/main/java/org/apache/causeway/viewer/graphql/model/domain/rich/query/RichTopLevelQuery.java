@@ -21,9 +21,9 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.rich.scenario.GqlvScenario;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvTopLevelQueryAbstractSchema;
+import org.apache.causeway.viewer.graphql.model.domain.rich.scenario.GqlvScenario;
 
 public class RichTopLevelQuery
         extends GqlvTopLevelQueryAbstractSchema {

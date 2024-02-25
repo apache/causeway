@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.mmproviders;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 
 public interface SchemaTypeProvider  {

@@ -18,14 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import java.util.stream.Collectors;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLList;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
+
+import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -36,6 +32,9 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLList;
 import lombok.val;
 
 public class GqlvPropertyAutoComplete extends GqlvAbstract {

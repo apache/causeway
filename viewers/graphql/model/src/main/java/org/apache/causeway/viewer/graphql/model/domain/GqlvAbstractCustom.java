@@ -18,12 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
-import java.util.Optional;
-
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
@@ -31,9 +25,9 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
 import lombok.Getter;
 import lombok.val;
 

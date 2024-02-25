@@ -24,8 +24,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import graphql.schema.GraphQLScalarType;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshaller;
 
+import graphql.schema.GraphQLScalarType;
 import lombok.RequiredArgsConstructor;
 
 /**

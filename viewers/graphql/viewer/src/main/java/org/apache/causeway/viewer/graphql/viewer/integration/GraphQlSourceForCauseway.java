@@ -20,13 +20,6 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import javax.annotation.PostConstruct;
 
-import graphql.GraphQL;
-import graphql.execution.SimpleDataFetcherExceptionHandler;
-import graphql.schema.GraphQLSchema;
-
-import org.apache.causeway.viewer.graphql.model.domain.simple.mutation.GqlvTopLevelMutationSimpleSchema;
-import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLevelQuery;
-
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +29,16 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
+import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvTopLevelMutationRichSchema;
 import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichTopLevelQuery;
+import org.apache.causeway.viewer.graphql.model.domain.simple.mutation.GqlvTopLevelMutationSimpleSchema;
+import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQueryBothSchemas;
-import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvTopLevelMutationRichSchema;
 
+import graphql.GraphQL;
+import graphql.execution.SimpleDataFetcherExceptionHandler;
+import graphql.schema.GraphQLSchema;
 import lombok.val;
 
 @Service()

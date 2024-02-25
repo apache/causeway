@@ -18,12 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import java.util.stream.Collectors;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLList;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import java.util.stream.Collectors;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -34,6 +31,8 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Proper
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLList;
 import lombok.val;
 
 public class GqlvPropertyChoices extends GqlvAbstract {

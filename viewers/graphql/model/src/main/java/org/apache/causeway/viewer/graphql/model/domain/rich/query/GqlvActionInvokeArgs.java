@@ -22,14 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import graphql.schema.DataFetchingEnvironment;
-
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
+import graphql.schema.DataFetchingEnvironment;
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

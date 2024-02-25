@@ -18,31 +18,30 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
- import java.util.Collections;
- import java.util.List;
- import java.util.stream.Collectors;
-
- import graphql.schema.DataFetchingEnvironment;
- import graphql.schema.GraphQLArgument;
- import graphql.schema.GraphQLList;
-
  import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
- import static graphql.schema.GraphQLNonNull.nonNull;
+import static graphql.schema.GraphQLNonNull.nonNull;
 
- import org.apache.causeway.applib.annotation.Where;
- import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
- import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
- import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
- import org.apache.causeway.core.metamodel.object.ManagedObject;
- import org.apache.causeway.viewer.graphql.model.context.Context;
- import org.apache.causeway.viewer.graphql.model.domain.Environment;
- import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
- import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
- import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
- import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
- import lombok.val;
- import lombok.extern.log4j.Log4j2;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.Environment;
+import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLList;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
  @Log4j2
  public class GqlvActionParamsParamAutoComplete extends GqlvAbstract {

@@ -23,14 +23,13 @@ import java.math.BigDecimal;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import graphql.Scalars;
-import graphql.scalars.ExtendedScalars;
-
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
+
+import graphql.Scalars;
 
 
 /**

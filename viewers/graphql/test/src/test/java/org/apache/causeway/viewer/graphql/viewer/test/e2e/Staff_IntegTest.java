@@ -19,41 +19,12 @@
 package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.approvaltests.Approvals;
-import org.approvaltests.integrations.junit5.JupiterApprovals;
-import org.approvaltests.reporters.DiffReporter;
-import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember;
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
-
-import lombok.val;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
