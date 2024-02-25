@@ -2438,7 +2438,7 @@ public class CausewayConfiguration {
 
             public enum ApiVariant {
                 /**
-                 * Exposes only a Query API, of properties, collections and safe (query-onl) actions.
+                 * Exposes only a Query API, of properties, collections and safe (query-only) actions.
                  * Any actions that mutate the state of the system (in other words are idempotent or non-idempotent)
                  * are excluded from the API, as is the ability to set properties.
                  */
