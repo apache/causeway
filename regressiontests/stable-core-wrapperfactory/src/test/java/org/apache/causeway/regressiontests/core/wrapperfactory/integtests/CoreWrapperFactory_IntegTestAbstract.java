@@ -21,6 +21,7 @@ package org.apache.causeway.regressiontests.core.wrapperfactory.integtests;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -20,6 +20,7 @@ package org.apache.causeway.testing.archtestsupport.applib.entity.jdo.dom;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;

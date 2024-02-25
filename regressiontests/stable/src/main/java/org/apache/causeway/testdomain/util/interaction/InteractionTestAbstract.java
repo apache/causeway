@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import org.springframework.lang.Nullable;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;

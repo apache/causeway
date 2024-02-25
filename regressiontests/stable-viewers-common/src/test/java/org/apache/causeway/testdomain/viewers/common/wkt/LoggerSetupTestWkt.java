@@ -21,11 +21,12 @@ package org.apache.causeway.testdomain.viewers.common.wkt;
 import org.apache.wicket.page.PartialPageUpdate;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 

@@ -21,6 +21,7 @@ package org.apache.causeway.testing.integtestsupport.applib;
 import java.util.Optional;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
+
 import org.springframework.context.ApplicationContext;
 
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;

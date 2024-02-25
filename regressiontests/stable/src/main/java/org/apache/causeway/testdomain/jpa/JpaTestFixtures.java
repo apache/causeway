@@ -21,9 +21,9 @@ package org.apache.causeway.testdomain.jpa;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.springframework.stereotype.Service;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.fixtures.InventoryJaxbVm;

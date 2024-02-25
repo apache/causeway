@@ -24,15 +24,11 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -40,6 +36,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.MemberAnnotationPolicy;
@@ -109,6 +108,7 @@ import org.apache.causeway.testdomain.model.good.ProperViewModelInferredFromNotB
 import org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
 import org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;

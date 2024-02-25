@@ -28,11 +28,11 @@ import java.util.stream.IntStream;
 
 import jakarta.inject.Inject;
 
-import org.springframework.beans.factory.DisposableBean;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.beans.factory.DisposableBean;
 
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

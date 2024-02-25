@@ -20,6 +20,7 @@ package org.apache.causeway.testing.fakedata.integtests.tests;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.testing.fakedata.integtests.FakeDataModuleIntegTestAbstract;

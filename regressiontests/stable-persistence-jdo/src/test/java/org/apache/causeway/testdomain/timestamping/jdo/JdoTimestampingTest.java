@@ -21,11 +21,12 @@ package org.apache.causeway.testdomain.timestamping.jdo;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;

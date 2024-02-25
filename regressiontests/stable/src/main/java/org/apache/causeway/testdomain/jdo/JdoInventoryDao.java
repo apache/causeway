@@ -20,12 +20,12 @@ package org.apache.causeway.testdomain.jdo;
 
 import jakarta.inject.Inject;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;

@@ -25,10 +25,10 @@ import java.util.concurrent.TimeoutException;
 
 import jakarta.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.factory.FactoryService;

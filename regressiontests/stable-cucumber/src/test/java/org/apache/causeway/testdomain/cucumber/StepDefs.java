@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.testdomain.cucumber;
 
-import org.springframework.boot.test.context.SpringBootTest;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.springframework.boot.test.context.SpringBootTest;
 
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 

@@ -21,12 +21,13 @@ package org.apache.causeway.testdomain.domainmodel;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.util.ReflectionUtils;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;

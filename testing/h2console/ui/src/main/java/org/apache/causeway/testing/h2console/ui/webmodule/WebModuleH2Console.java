@@ -26,6 +26,7 @@ import jakarta.servlet.ServletException;
 
 import org.h2.server.web.ConnectionInfo;
 import org.h2.server.web.H2WebServletForJakarta;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
+import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console.H2WebServlet;
 
 import lombok.Getter;
 import lombok.val;

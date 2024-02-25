@@ -21,6 +21,7 @@ package org.apache.causeway.testdomain.persistence.jpa;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 

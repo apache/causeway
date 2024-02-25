@@ -18,18 +18,18 @@
  */
 package org.apache.causeway.testdomain.transactions.jpa;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
 
 import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronization;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @TransactionScope

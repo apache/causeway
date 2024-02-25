@@ -20,10 +20,11 @@ package org.apache.causeway.testing.archtestsupport.applib.classrules;
 
 import java.util.Objects;
 
-import jakarta.inject.Inject;
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
+
+import jakarta.inject.Inject;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;

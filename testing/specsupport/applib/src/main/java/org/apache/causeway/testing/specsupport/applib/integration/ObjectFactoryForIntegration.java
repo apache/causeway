@@ -24,9 +24,10 @@ import java.util.Map;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.collections._Maps;
 
+import lombok.RequiredArgsConstructor;
+
 import io.cucumber.core.backend.ObjectFactory;
 import io.cucumber.core.exception.CucumberException;
-import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}
