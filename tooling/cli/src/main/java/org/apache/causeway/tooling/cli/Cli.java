@@ -26,6 +26,7 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.tooling.cli.projdoc.ProjectDocModel;
 
 import lombok.val;
+
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;

@@ -20,9 +20,9 @@ package org.apache.causeway.tooling.projectmodel.gradle;
 
 import java.io.File;
 
-import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.causeway.tooling.projectmodel.ProjectNode;
 import org.apache.causeway.tooling.projectmodel.ProjectNodeFactory;
