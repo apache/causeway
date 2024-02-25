@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacetAbstract;

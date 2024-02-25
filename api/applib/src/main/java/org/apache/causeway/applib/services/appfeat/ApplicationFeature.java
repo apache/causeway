@@ -23,11 +23,11 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedSet;
 
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Value;
-
-import jakarta.inject.Named;
 
 /**
  *

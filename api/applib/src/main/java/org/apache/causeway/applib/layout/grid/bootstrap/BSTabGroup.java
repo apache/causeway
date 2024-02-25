@@ -21,12 +21,12 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.Programmatic;
 
 /**
  * Represents a tab group containing one or more {@link BSTab tab}s.

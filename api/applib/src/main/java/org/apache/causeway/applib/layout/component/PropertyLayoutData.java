@@ -22,17 +22,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.causeway.applib.annotation.LabelPosition;
-import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.Repainting;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.layout.links.Link;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Repainting;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.links.Link;
 
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.causeway.applib.annotation.PropertyLayout} annotation.

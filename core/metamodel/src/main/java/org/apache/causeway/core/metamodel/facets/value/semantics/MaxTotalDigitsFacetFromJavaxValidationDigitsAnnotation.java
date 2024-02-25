@@ -20,11 +20,11 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
+import jakarta.validation.constraints.Digits;
+
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
-
-import jakarta.validation.constraints.Digits;
 
 public class MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
 extends MaxTotalDigitsFacetAbstract {

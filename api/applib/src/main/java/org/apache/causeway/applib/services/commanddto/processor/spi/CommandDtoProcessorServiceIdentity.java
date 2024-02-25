@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.applib.services.commanddto.processor.spi;
 
+import jakarta.inject.Named;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
-
-import jakarta.inject.Named;
 
 /**
  * At least one implementation is required.

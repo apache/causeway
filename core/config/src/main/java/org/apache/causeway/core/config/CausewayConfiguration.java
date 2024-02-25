@@ -108,7 +108,6 @@ import lombok.Getter;
 import lombok.Value;
 import lombok.val;
 
-
 /**
  * Configuration 'beans' with meta-data (IDE-support).
  *

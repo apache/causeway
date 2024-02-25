@@ -20,14 +20,15 @@ package org.apache.causeway.applib.layout.component;
 
 import java.io.Serializable;
 
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.applib.layout.links.Link;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.layout.links.Link;
+
 import lombok.Getter;
 import lombok.Setter;
 

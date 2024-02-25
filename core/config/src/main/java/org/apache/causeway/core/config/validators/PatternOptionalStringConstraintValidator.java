@@ -20,11 +20,12 @@ package org.apache.causeway.core.config.validators;
 
 import java.util.Optional;
 
-import org.hibernate.validator.internal.constraintvalidators.bv.PatternValidator;
-import org.springframework.stereotype.Component;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import org.hibernate.validator.internal.constraintvalidators.bv.PatternValidator;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class PatternOptionalStringConstraintValidator

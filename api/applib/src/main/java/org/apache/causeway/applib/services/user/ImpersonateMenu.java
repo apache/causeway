@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -36,8 +39,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.message.MessageService;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

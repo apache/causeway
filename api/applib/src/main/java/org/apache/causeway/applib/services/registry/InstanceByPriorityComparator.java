@@ -20,12 +20,13 @@ package org.apache.causeway.applib.services.registry;
 
 import java.util.Comparator;
 
+import jakarta.annotation.Priority;
+
 import org.springframework.context.annotation.Primary;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import jakarta.annotation.Priority;
 import lombok.val;
 
 /**

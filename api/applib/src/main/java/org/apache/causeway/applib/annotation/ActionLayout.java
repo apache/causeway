@@ -24,9 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.causeway.applib.layout.component.CssClassFaPosition;
-
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 /**
  * Layout hints for actions.

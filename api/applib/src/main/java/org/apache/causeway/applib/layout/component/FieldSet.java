@@ -22,14 +22,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 
 /**
  * A {@link MemberRegion region} of the page containing a set of

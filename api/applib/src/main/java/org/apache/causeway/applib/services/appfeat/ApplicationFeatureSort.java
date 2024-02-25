@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.applib.services.appfeat;
 
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
-
-import jakarta.inject.Named;
 
 /**
  *

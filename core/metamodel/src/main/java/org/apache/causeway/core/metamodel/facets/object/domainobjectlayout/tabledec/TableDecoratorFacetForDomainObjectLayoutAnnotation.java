@@ -19,14 +19,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
-
-import java.util.Optional;
 
 public class TableDecoratorFacetForDomainObjectLayoutAnnotation
 extends TableDecoratorFacetAbstract {

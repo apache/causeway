@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.UnaryOperator;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +38,6 @@ import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;

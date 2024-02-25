@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -52,8 +55,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;

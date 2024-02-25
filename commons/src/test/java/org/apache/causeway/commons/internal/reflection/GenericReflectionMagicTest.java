@@ -19,10 +19,11 @@
 package org.apache.causeway.commons.internal.reflection;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.core.GenericTypeResolver;
-import org.springframework.core.MethodParameter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.springframework.core.GenericTypeResolver;
+import org.springframework.core.MethodParameter;
 
 import org.apache.causeway.commons.collections.Can;
 

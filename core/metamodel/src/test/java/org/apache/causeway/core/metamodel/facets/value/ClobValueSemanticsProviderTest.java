@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.value;
 
-import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.core.metamodel.valuesemantics.ClobValueSemantics;
 
 class ClobValueSemanticsProviderTest

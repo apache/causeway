@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.applib.layout.component;
 
-import org.apache.causeway.applib.annotation.Where;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
+
+import org.apache.causeway.applib.annotation.Where;
 
 /**
  * @since 2.0 {@index}

@@ -22,7 +22,6 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -32,6 +31,7 @@ import org.apache.causeway.applib.mixins.updates.OnUpdatedAt;
 import org.apache.causeway.applib.mixins.updates.OnUpdatedBy;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
 
 import lombok.val;
 

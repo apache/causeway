@@ -20,10 +20,10 @@ package org.apache.causeway.applib.jaxb;
 
 import java.nio.charset.StandardCharsets;
 
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
-
-import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * @since 2.0 {@index}

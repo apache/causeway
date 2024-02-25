@@ -22,15 +22,6 @@ import java.util.UUID;
 
 import jakarta.inject.Named;
 
-import lombok.val;
-
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.causeway.core.metamodel.facets.AbstractTestWithMetaModelContext;
-import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
-import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +40,9 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
+import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facets.AbstractTestWithMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
@@ -66,6 +59,12 @@ import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.Ent
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
+import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
+
+import lombok.val;
 
 class DomainObjectAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {

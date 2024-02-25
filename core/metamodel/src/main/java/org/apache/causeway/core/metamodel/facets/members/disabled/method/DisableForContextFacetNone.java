@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.members.disabled.method;
 import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 

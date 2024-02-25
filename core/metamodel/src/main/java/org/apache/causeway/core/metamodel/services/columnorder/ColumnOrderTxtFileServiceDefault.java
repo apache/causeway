@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.services.columnorder;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -37,8 +37,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * since 2.0 {@index}

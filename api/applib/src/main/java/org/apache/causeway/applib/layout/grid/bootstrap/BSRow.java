@@ -21,14 +21,14 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlElementRefs;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.Programmatic;
 
 /**
  * Contains a row of content, either on the top-level {@link BSGrid page} or at any other lower-level element that can

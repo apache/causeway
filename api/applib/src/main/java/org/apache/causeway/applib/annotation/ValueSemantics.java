@@ -27,6 +27,8 @@ import java.math.BigDecimal;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
+import jakarta.persistence.Column;
+
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 
 /**

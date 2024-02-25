@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.named;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class MemberNamedFacetForStaticMemberName

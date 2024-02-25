@@ -21,6 +21,9 @@ package org.apache.causeway.applib.services.appfeatui;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -36,9 +39,6 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.collections._Lists;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 /**
  * @since 2.x  {@index}

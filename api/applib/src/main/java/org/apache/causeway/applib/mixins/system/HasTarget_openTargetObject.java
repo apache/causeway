@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.mixins.system;
 
+import jakarta.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -29,7 +31,6 @@ import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 
-import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 /**

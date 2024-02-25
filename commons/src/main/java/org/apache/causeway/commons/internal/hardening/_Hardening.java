@@ -20,6 +20,7 @@ package org.apache.causeway.commons.internal.hardening;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;

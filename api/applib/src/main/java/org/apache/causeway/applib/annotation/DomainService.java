@@ -24,12 +24,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
 
 /**
  * Indicates that the class should be automatically recognized as a domain service.

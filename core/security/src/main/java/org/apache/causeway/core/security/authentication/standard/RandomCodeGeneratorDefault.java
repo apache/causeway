@@ -23,11 +23,11 @@ import java.security.SecureRandom;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 
 @Component
 @Named(RandomCodeGeneratorDefault.LOGICAL_TYPE_NAME)

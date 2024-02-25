@@ -21,14 +21,15 @@ package org.apache.causeway.applib.services.session;
 import java.util.Date;
 import java.util.UUID;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 

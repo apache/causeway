@@ -24,12 +24,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
-import org.springframework.core.io.ByteArrayResource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.core.io.ByteArrayResource;
 
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;

@@ -21,10 +21,11 @@ package org.apache.causeway.applib.layout.menubars;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
+import jakarta.xml.bind.annotation.XmlTransient;
+
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 
-import jakarta.xml.bind.annotation.XmlTransient;
 import lombok.val;
 
 /**

@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlTransient;
+
+import org.apache.causeway.applib.annotation.Programmatic;
 
 /**
  * Common superclass for any content of a row.

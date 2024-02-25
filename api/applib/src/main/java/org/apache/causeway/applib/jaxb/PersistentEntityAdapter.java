@@ -16,12 +16,13 @@
  */
 package org.apache.causeway.applib.jaxb;
 
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.schema.common.v2.OidDto;
 
-import jakarta.inject.Inject;
-import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import lombok.val;
 
 /**

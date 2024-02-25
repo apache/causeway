@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.applib.services.clock;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +31,6 @@ import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
 import lombok.RequiredArgsConstructor;
 
 /**

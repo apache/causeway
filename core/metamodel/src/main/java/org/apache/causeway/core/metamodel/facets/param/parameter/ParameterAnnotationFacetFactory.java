@@ -24,6 +24,7 @@ import jakarta.validation.constraints.Pattern;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;

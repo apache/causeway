@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.applib.services.jaxb;
 
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
-
-import jakarta.inject.Named;
 
 /**
  * Controls whether, when generating {@link JaxbService#toXsd(Object, CausewaySchemas) XML schemas},

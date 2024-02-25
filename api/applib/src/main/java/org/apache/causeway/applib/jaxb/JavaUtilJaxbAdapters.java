@@ -21,6 +21,7 @@ package org.apache.causeway.applib.jaxb;
 import java.util.Date;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+
 import lombok.experimental.UtilityClass;
 
 /**

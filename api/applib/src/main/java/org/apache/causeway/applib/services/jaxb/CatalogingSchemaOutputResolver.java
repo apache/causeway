@@ -31,6 +31,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import jakarta.xml.bind.SchemaOutputResolver;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,8 +43,6 @@ import org.xml.sax.InputSource;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-
-import jakarta.xml.bind.SchemaOutputResolver;
 
 /**
  * An implementation of {@link SchemaOutputResolver} that keeps track of all the schemas for which it has

@@ -32,6 +32,7 @@ import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Ints.Range;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;

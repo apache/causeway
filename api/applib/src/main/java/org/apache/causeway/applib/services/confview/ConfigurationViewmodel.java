@@ -21,6 +21,8 @@ package org.apache.causeway.applib.services.confview;
 import java.util.Collections;
 import java.util.Set;
 
+import jakarta.inject.Named;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -29,8 +31,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService.Scope;
-
-import jakarta.inject.Named;
 
 /**
  * As returned by {@link ConfigurationMenu.configuration#act() ConfigurationMenu}.

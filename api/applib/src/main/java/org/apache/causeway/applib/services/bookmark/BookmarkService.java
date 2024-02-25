@@ -21,10 +21,10 @@ package org.apache.causeway.applib.services.bookmark;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
-
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 

@@ -25,6 +25,11 @@ import java.util.regex.Pattern;
 import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -37,11 +42,6 @@ import org.apache.causeway.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EmailNotificationServiceDefault")

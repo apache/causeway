@@ -26,10 +26,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
-
-import org.apache.causeway.core.metamodel.util.Facets;
-
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
@@ -85,6 +81,8 @@ import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
+import org.apache.causeway.core.metamodel.spec.Hierarchical.Depth;
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -92,6 +90,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 

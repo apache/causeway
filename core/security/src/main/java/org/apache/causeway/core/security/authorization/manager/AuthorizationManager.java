@@ -25,7 +25,6 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -38,6 +37,7 @@ import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authorization.Authorizor;
 
 /**

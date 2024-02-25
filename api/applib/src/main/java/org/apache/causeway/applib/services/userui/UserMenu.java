@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.applib.services.userui;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -31,8 +34,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;
 
 /**

@@ -22,13 +22,14 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import jakarta.activation.MimeType;
+import jakarta.activation.MimeTypeParseException;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import jakarta.activation.MimeType;
-import jakarta.activation.MimeTypeParseException;
 import lombok.Getter;
 import lombok.val;
 

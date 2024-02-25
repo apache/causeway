@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.services.bookmark;
 
+import jakarta.inject.Inject;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -25,7 +27,6 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 /**

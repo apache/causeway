@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -27,6 +25,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 
 public class IntrospectionState_comparable_Test {
 

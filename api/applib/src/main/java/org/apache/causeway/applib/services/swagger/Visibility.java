@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.services.swagger;
 
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -25,8 +27,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.Value;
-
-import jakarta.inject.Named;
 
 /**
  * Specifies which elements of the metamodel are included within the generated

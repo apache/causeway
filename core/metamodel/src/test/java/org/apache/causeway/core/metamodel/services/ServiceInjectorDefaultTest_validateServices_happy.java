@@ -21,14 +21,15 @@ package org.apache.causeway.core.metamodel.services;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;

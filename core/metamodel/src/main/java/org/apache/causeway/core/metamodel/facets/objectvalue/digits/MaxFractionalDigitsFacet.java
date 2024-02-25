@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
+import jakarta.validation.constraints.Digits;
+
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-
-import jakarta.validation.constraints.Digits;
 
 /**
  * The maximum allowed number of digits to the right of the decimal place (fractional part)

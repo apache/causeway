@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.applib.annotation;
 
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.util.Enums;
-
-import jakarta.inject.Named;
 
 /**
  * @since 1.x {@index}

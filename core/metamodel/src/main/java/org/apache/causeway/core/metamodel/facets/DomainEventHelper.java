@@ -55,8 +55,8 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "ofEventService")
 @Log4j2

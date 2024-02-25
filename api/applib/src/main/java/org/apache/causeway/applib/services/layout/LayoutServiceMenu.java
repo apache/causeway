@@ -22,6 +22,7 @@ import java.util.Set;
 
 import jakarta.activation.MimeType;
 import jakarta.activation.MimeTypeParseException;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -38,8 +39,6 @@ import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-
-import jakarta.inject.Named;
 
 /**
  * Provides a UI to allow layouts (obtained from {@link LayoutService}) to be downloaded.

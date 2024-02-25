@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlTransient;
+
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
@@ -32,8 +34,6 @@ import org.apache.causeway.applib.layout.component.FieldSetOwner;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutService;
-
-import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * All top-level page layout classes should implement this interface.

@@ -23,10 +23,11 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.core.ResolvableType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.springframework.core.ResolvableType;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.semantics.CollectionSemantics;

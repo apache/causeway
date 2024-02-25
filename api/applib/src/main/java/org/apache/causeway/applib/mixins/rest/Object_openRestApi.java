@@ -20,6 +20,8 @@ package org.apache.causeway.applib.mixins.rest;
 
 import java.util.Optional;
 
+import jakarta.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -30,7 +32,6 @@ import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.value.LocalResourcePath;
 
-import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

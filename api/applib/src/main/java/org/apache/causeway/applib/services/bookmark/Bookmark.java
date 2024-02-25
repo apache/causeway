@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
-
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;

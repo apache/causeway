@@ -26,14 +26,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import jakarta.inject.Named;
+import jakarta.persistence.Table;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 
-import jakarta.persistence.Table;
-import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Synchronized;

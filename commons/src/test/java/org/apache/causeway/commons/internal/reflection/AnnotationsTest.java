@@ -21,11 +21,12 @@ package org.apache.causeway.commons.internal.reflection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.ClassUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal._Constants;
 

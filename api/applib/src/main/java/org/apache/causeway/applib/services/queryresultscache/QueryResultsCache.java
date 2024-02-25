@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,8 +38,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

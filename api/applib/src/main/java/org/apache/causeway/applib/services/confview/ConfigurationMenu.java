@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.applib.services.confview;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -30,8 +33,6 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;
 
 /**
