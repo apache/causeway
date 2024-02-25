@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -27,7 +29,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import graphql.schema.DataFetchingEnvironment;
 import lombok.val;
 
 public class SimpleCollection

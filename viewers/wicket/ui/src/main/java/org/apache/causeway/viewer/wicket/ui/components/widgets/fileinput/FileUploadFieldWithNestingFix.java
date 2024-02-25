@@ -27,11 +27,12 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.wicket.ui.util.WktHeaderItems;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
 
 public class FileUploadFieldWithNestingFix extends BootstrapFileInputField {
 

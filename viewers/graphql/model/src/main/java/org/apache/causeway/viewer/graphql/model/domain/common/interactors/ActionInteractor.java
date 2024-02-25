@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.common.interactors;
 
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import graphql.schema.GraphQLFieldDefinition;
 
 public interface ActionInteractor
         extends MemberInteractor<ObjectAction> {

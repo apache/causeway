@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.wicket.model.ChainingModel;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;

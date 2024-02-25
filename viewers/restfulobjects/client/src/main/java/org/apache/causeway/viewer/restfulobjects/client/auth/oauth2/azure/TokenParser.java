@@ -22,9 +22,9 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.Data;
-
 import org.apache.causeway.commons.functional.Railway;
+
+import lombok.Data;
 
 class TokenParser {
 

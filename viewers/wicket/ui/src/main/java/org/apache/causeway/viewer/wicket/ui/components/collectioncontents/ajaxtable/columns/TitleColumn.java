@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;

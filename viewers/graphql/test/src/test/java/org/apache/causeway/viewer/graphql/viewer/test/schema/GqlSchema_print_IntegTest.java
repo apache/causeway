@@ -25,9 +25,12 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import graphql.schema.idl.SchemaPrinter;
+
 import org.approvaltests.core.Options;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.commons.io.TextUtils;
@@ -38,7 +41,6 @@ import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestM
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
-import graphql.schema.idl.SchemaPrinter;
 import lombok.val;
 
 @Transactional

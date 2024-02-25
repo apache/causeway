@@ -25,6 +25,7 @@ import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageRes
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.value.Blob;

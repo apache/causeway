@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.common.interactors;
 
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import graphql.schema.GraphQLFieldDefinition;
 
 public interface PropertyInteractor
         extends MemberInteractor<OneToOneAssociation> {

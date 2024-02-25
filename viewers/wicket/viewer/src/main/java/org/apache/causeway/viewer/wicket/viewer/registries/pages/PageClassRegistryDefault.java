@@ -25,14 +25,15 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.wicket.Page;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassList;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistrySpi;

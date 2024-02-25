@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 import java.util.Optional;
 
 import org.apache.wicket.model.IModel;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.binding._BindableAbstract;

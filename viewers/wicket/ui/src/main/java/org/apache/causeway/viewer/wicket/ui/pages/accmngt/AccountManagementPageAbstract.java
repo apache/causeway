@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.accmngt;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -42,12 +45,10 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.WebPageBase;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
-import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import lombok.val;
 
-import java.util.Arrays;
-import java.util.List;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
 /**
  * Boilerplate, pick up our HTML and CSS.

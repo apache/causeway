@@ -36,8 +36,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 import org.apache.causeway.viewer.restfulobjects.client.auth.AuthFilter;
+import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
 import lombok.NonNull;

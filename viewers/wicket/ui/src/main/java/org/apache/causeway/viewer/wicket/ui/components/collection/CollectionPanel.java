@@ -34,10 +34,11 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass

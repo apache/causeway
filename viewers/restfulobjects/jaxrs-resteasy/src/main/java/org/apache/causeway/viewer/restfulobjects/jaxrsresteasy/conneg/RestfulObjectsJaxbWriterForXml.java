@@ -28,6 +28,7 @@ import javax.ws.rs.ext.Provider;
 import javax.xml.bind.Marshaller;
 
 import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;

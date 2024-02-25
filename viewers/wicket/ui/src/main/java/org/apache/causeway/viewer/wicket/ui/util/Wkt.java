@@ -88,6 +88,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -115,6 +116,10 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoP
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
@@ -124,9 +129,6 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
 import de.agilecoders.wicket.jquery.Key;
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.

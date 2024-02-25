@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.i18n.LanguageProvider;

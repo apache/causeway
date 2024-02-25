@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure;
 
-import lombok.SneakyThrows;
-import lombok.val;
-
 import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.Oauth2Creds;
+
+import lombok.SneakyThrows;
+import lombok.val;
 
 public class AuthorizationHeaderFactoryOauth2Azure implements AuthorizationHeaderFactory {
 

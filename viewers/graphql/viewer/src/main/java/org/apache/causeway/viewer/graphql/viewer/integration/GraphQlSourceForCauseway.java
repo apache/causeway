@@ -20,6 +20,10 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import javax.annotation.PostConstruct;
 
+import graphql.GraphQL;
+import graphql.execution.SimpleDataFetcherExceptionHandler;
+import graphql.schema.GraphQLSchema;
+
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +40,6 @@ import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLev
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQueryBothSchemas;
 
-import graphql.GraphQL;
-import graphql.execution.SimpleDataFetcherExceptionHandler;
-import graphql.schema.GraphQLSchema;
 import lombok.val;
 
 @Service()

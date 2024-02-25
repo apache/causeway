@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -26,8 +29,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 
-import graphql.Scalars;
-import graphql.schema.DataFetchingEnvironment;
 import lombok.val;
 
 public abstract class GqlvAssociationDatatype<T extends ObjectAssociation> extends GqlvAbstract {

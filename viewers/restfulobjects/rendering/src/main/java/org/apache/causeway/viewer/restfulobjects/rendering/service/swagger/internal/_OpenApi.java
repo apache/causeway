@@ -21,6 +21,10 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 import java.util.List;
 import java.util.function.Consumer;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
@@ -33,9 +37,6 @@ import io.swagger.v3.oas.models.parameters.QueryParameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _OpenApi {

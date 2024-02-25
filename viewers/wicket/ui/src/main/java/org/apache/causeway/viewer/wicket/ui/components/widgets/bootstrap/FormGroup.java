@@ -25,8 +25,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.util.lang.Args;
 
-import de.agilecoders.wicket.core.util.Attributes;
 import lombok.Getter;
+
+import de.agilecoders.wicket.core.util.Attributes;
 
 /**
  * A container around Bootstrap form component that sets

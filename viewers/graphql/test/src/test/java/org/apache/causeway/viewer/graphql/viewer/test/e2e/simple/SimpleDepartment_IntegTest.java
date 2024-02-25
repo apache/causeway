@@ -24,6 +24,7 @@ import java.net.URISyntaxException;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestFactory;
+
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;

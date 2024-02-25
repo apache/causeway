@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure;
 
-import lombok.val;
-
 import java.time.ZonedDateTime;
 
 import javax.ws.rs.client.ClientBuilder;
@@ -31,6 +29,8 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.Oauth2Creds;
+
+import lombok.val;
 
 public class TokenCache {
 

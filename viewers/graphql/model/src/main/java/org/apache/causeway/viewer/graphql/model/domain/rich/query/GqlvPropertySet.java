@@ -18,9 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
 import java.util.Map;
+
+import graphql.schema.DataFetchingEnvironment;
+
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -35,7 +37,6 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.DataFetchingEnvironment;
 import lombok.val;
 
 public class GqlvPropertySet extends GqlvAbstract {

@@ -31,9 +31,10 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 

@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.toplevel;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLevelQuery;
-
-import graphql.schema.DataFetchingEnvironment;
 
 public class GqlvTopLevelQueryBothSchemas extends GqlvAbstractCustom {
 

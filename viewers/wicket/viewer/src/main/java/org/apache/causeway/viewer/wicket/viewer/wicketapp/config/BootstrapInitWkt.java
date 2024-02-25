@@ -23,16 +23,18 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.protocol.http.WebApplication;
+
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupport;
 
+import lombok.val;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
-import lombok.val;
 
 @Configuration
 public class BootstrapInitWkt implements WicketApplicationInitializer {

@@ -22,9 +22,10 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
 public class FontAwesomeCssReferenceWkt extends WebjarsCssResourceReference {
     private static final long serialVersionUID = 1L;

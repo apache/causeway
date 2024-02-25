@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -34,8 +37,6 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
 import lombok.val;
 
 public class GqlvProperty

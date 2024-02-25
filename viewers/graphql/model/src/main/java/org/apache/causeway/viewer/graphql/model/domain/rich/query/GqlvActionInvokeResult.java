@@ -18,6 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.springframework.lang.Nullable;
@@ -35,10 +40,6 @@ import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 

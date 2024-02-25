@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -25,8 +28,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 
-import graphql.Scalars;
-import graphql.schema.DataFetchingEnvironment;
 import lombok.val;
 
 public class GqlvActionParamsParamDatatype extends GqlvAbstract {

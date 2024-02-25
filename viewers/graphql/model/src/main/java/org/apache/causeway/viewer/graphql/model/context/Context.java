@@ -23,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import graphql.schema.GraphQLCodeRegistry;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.HasLogicalType;
@@ -41,7 +43,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainSe
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.GraphQLCodeRegistry;
 import lombok.RequiredArgsConstructor;
 
 @Component

@@ -21,6 +21,7 @@ import java.time.Duration;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
@@ -32,15 +33,16 @@ import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverConfig;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.OpenTrigger;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
 import de.agilecoders.wicket.jquery.Config;
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class WktTooltips {

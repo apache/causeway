@@ -30,6 +30,9 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
+import lombok.Getter;
+import lombok.val;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
@@ -40,8 +43,6 @@ import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.themes.markup.html.bootstrap.BootstrapThemeTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
-import lombok.Getter;
-import lombok.val;
 
 /**
  * A panel used as a Navbar item to change the application theme/skin

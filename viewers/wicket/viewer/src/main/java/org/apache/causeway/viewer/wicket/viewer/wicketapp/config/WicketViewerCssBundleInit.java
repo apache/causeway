@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.CssResourceReference;
+
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.commons.internal.collections._Sets;

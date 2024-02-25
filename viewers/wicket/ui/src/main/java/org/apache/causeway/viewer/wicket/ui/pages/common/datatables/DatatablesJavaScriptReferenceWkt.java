@@ -22,9 +22,10 @@ package org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class DatatablesJavaScriptReferenceWkt extends WebjarsJavaScriptResourceReference {
     private static final long serialVersionUID = 1L;

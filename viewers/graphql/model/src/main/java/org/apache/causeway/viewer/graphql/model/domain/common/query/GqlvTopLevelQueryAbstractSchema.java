@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.graphql.model.domain.common.query;
 import java.util.ArrayList;
 import java.util.List;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
@@ -28,7 +30,6 @@ import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 
-import graphql.schema.DataFetchingEnvironment;
 import lombok.Getter;
 import lombok.val;
 

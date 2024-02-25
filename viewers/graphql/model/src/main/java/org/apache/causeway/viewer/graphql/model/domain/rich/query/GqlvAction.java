@@ -23,6 +23,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
@@ -43,8 +46,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUt
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
