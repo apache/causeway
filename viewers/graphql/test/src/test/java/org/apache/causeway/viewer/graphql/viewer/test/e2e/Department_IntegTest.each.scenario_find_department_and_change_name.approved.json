@@ -12,7 +12,7 @@
                 },
                 "results" : {
                   "_meta" : {
-                    "saveAs" : "classics_dept"
+                    "saveAs" : "dept#1"
                   }
                 }
               }
@@ -21,6 +21,9 @@
         },
         "When" : {
           "university_dept_Department" : {
+            "name" : {
+              "get" : "Classics"
+            },
             "changeName" : {
               "invokeIdempotent" : {
                 "args" : {
@@ -32,6 +35,13 @@
                   }
                 }
               }
+            }
+          }
+        },
+        "Then" : {
+          "university_dept_Department" : {
+            "name" : {
+              "get" : "Ancient History"
             }
           }
         }
