@@ -71,25 +71,31 @@ For the top-level mutation, the "simple" schema is used.
 +
 For the top-level mutation, the "rich" schema is used.
 
+If only the simple or the rich schema is enabled (`SIMPLE_ONLY` or `RICH_ONLY`), then the set of types defined by each of these schemes is available at the root query.
+If both schemas are enabled (`SIMPLE_AND_RICH` or `RICH_AND_SIMPLE`), the these each reside under a top-level field, by default "simple" or "rich".
+The name of these fields can be configured to something else if required using xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-simple[causeway.viewer.graphql.top-level-field-name-for-simple] and xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-rich[causeway.viewer.graphql.top-level-field-name-for-rich] configuration properties.
 
 
 
 == Example
 
 How the viewer works is probably most easily explained by an example.
-The diagram below shows a simple domain footnote:[in fact, this is the domain used by the GraphQL viewer's own tests].
+The diagram below shows a simple domain (in fact, this is the domain used by the GraphQL viewer's own tests):
 
 image::test-domain.drawio.png[width=600]
 
 GraphQL distinguishes queries and mutations, so let's look at each.
+We'll assume here that the `SIMPLE_AND_RICH` schema style is in use.
 
 NOTE: GraphQL also defines the notion of subscriptions; the GraphQL viewer currently has no support for these.
 
-We'll assume here that the `SIMPLE_AND_RICH` schema style is in use:
 
-=== Queries
+== Queries
 
-To list all Departments, we can submit this query using either the "rich" schema or "simple" schema:
+Queries most often start at a domain service.
+In the example above, these would be `Departments`, `DeptHeadRepository`, or `Staff`.
+
+To list all ``Department``s, we can submit this query using either the "rich" schema or "simple" schema:
 
 [cols="1a,1a", options="header"]
 |===
@@ -161,7 +167,6 @@ To list all Departments, we can submit this query using either the "rich" schema
 Together, these make up the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object.
 
 
-
 But if using the "rich" schema, then as well as accessing properties and collections and invoking (safe) actions, the GraphQL viewer also allows access to the usual supporting semantics.
 For example:
 
@@ -215,10 +220,71 @@ There are also similar fields for properties:
 * `autoComplete` - for a property , is there an auto-complete?
 
 
+[#the-meta-fieldtype]
+== The Meta field/type
+
+As we saw in the previous section, the `_meta` field provides access to additional information about the domain object.
+The full list of fields provided are:
+
+* `logicalTypeName` and `id` : these are equivalent to the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object
+* `version` (if an entity and available)
+* `title` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-title[title()] supporting method)
+* `icon` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-icon[icon], normally the associated `.png` file) and `grid` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc[layout], normally the associated `.layout.xml` file )
++
+These can only be downloaded if configured, see xref:#resources-blobs-clobs-layouts-icons[resources] section below.
+
+* `cssClass` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-css-styling[cssClass()] supporting method)
+
+There is also one additional field, `saveAs`; this is discussed in the xref:#testing[testing] section below.
+
+
+== Queries that lookup a Domain Object
+
+Most queries will start with a domain service, but it is also possible to define a query that starts with a "lookup" of existing domain object:
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
+[source,graphql]
+----
+{
+  rich {
+    university_dept_Department(   #<.>
+      object: {id: "1"}           #<.>
+    ) {
+      name {
+        get
+      }
+    }
+  }
+}
+----
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_Department(   #<1>
+      object: {id: "1"}) {        #<2>
+      name
+    }
+  }
+}
+----
+
+|===
+<.> logical type name of the domain object
+<.> identifier of the domain object instance
+
 
 The next section explains how use mutations to change the state of the system.
 
-=== Mutations
+
+== Mutations
 
 Actions that mutate the state of the system (with idempotent or non-idempotent xref:refguide:applib:index/annotation/Action.adoc#semantics[@Action#semantics]) are exposed as mutations.
 Editable properties are also exposed as mutations.
@@ -347,7 +413,8 @@ mutation {
 <.> the `_target` argument specifies the target object
 <.> property setters are `void`, so as a convenience the mutator instead returns the target object.
 
-=== Mutations using Queries
+
+== Queries that are also Mutations
 
 According to the link:https://spec.graphql.org/June2018/#sec-Language.Operations[GraphQL specification], queries should be read-only; they must not change the state of the system.
 
@@ -503,20 +570,8 @@ Or, similarly to find a domain object and then set a property afterwards:
 ----
 
 |
-[source,graphql]
-----
-{
-  simple {
-    university_dept_Staff {
-      findStaffMemberByName(name: "Gerry Jones") {
-        name(name: "Gerald Johns") {
-          name
-        }
-      }
-    }
-  }
-}
-----
+Not supported by simple schema
+
 |===
 
 
@@ -524,7 +579,177 @@ This relaxed mode is specified using a configuration property, see xref:setup-an
 
 
 
-== See also
+[#resources-blobs-clobs-layouts-icons]
+== Resources (Blobs, Clobs, Layouts, Icons)
 
-As well as this viewer, Apache Causeway also provides the xref:vro::about.adoc[], which performs the same function, but using REST instead of GraphQL.
+Rather than returning the values of Blobs and Clobs inline within a response, instead the GraphQL viewer renders these as a URL to a resource controller.
+The client can then make a second call to this endpoint using a simple HTTP(s) GET.
+
+The same approach is used for both simple and rich schemas.
+
+For example:
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
+[source,graphql]
+----
+{
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            photo {
+              get {
+                bytes     # <.>
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+<.> requests a URL to download bytes
+
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_Staff {
+      findStaffMemberByName(name: "Gerry Jones") {
+        photo {
+          bytes           # <1>
+        }
+      }
+    }
+  }
+}
+----
+
+|
+resulting in a response such as:
+[source,json]
+----
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "invoke" : {
+            "results" : {
+              "photo" : {
+                "get" : {
+                  "bytes" : "///graphql/object/university.dept.StaffMember:123/photo/blobBytes"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+|
+resulting in a response such as:
+[source,json]
+----
+{
+  "data" : {
+    "simple" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "photo" : {
+            "bytes" : "///graphql/object/university.dept.StaffMember:123/photo/blobBytes"
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+|===
+
+[NOTE]
+====
+The viewer does _not_ currently provide any way to update Blobs or Clobs.
+One option is to implement a custom controller that the client can post to, analogous to the in-built resource controller.
+====
+
+
+The xref:#the-meta-fieldtype[meta field] mentioned earlier also allows the `icon` and `grid` (layout) files to be downloaded in a similar way:
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
+[source,graphql]
+----
+{
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            _meta {
+              icon        # <.>
+              grid        # <.>
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+<.> requests a URL to download bytes
+
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_Staff {
+      findStaffMemberByName(name: "Gerry Jones") {
+        _meta {
+          icon            # <1>
+          grid            # <2>
+        }
+      }
+    }
+  }
+}
+----
+
+|===
+<.> URL to download the icon (typically a `.png` file)
+<.> URL to download the grid layout (typically the `.layout.xml` file)
+
+
+Because the resource controller exposes information directly, these fields are suppressed by default.
+To enable, use the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[causeway.viewer.graphql.resources.response-type] configuration property.
+If you do this, then you should also make sure that the resource controller is made secure in some appropriate fashion.
+
+
+
+
+[#testing]
+== Testing
+
+Because the "rich" schema exposes pretty much all of the behaviour of the domain model, it's possible to use GraphQL queries as a way to write end-to-end tests.
+This works especially well with approval tests, which can be used to efficiently assert the contents of the returned response.
+
 

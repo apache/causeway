@@ -2568,6 +2568,12 @@ public class CausewayConfiguration {
                  * How resources ({@link org.apache.causeway.applib.value.Blob} bytes,
                  * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
                  * resource controller.
+                 *
+                 * <p>
+                 *     By default the download of these resources if {@link ResponseType#FORBIDDEN}, but alternatively
+                 *     they can be enabled to download either {@link ResponseType#DIRECT}ly or as an
+                 *     {@link ResponseType#ATTACHMENT}.
+                 * </p>
                  */
                 private ResponseType responseType = ResponseType.FORBIDDEN;
             }
