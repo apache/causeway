@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -35,19 +35,18 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
 
-public abstract class SimplePropertyLobAbstract extends Element {
+public abstract class RichPropertyGetBlobAbstract extends Element {
 
     final MemberInteractor<OneToOneAssociation> memberInteractor;
 
-    public SimplePropertyLobAbstract(
+    public RichPropertyGetBlobAbstract(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
-            final Context context,
-            final String fieldName) {
+            final Context context, String name) {
         super(context);
         this.memberInteractor = memberInteractor;
 
         setField(GraphQLFieldDefinition.newFieldDefinition()
-                    .name(fieldName)
+                    .name(name)
                     .type(Scalars.GraphQLString)
                     .build());
     }

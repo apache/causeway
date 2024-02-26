@@ -16,28 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -46,76 +37,74 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
-import org.apache.causeway.viewer.graphql.model.domain.Element;
+import org.apache.causeway.viewer.graphql.model.domain.Parent;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonActionUtils;
-import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
-import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class SimpleAction
-        extends Element {
+public class RichAction
+        extends RichMember<ObjectAction, ObjectInteractor>
+        implements ActionInteractor,
+                   Parent {
 
-    @Getter final ObjectInteractor objectInteractor;
-    @Getter private final ObjectAction objectMember;
+    private final RichMemberHidden<ObjectAction> hidden;
+    private final RichMemberDisabled<ObjectAction> disabled;
+    private final RichActionValidity validate;
+    /**
+     * Populated iff the API variant allows for it.
+     */
+    private final RichActionInvoke invoke;
+    /**
+     * Populated iif there are params for this action.
+     */
+    private final RichActionParams params;
 
-    public SimpleAction(
+    public RichAction(
             final ObjectInteractor objectInteractor,
             final ObjectAction objectAction,
             final Context context) {
-        super(context);
+        super(objectInteractor, objectAction, TypeNames.actionTypeNameFor(objectInteractor.getObjectSpecification(), objectAction, objectInteractor.getSchemaType()), context);
 
-        this.objectInteractor = objectInteractor;
-        this.objectMember = objectAction;
+        if(isBuilt()) {
+            this.hidden = null;
+            this.disabled = null;
+            this.validate = null;
+            this.invoke = null;
+            this.params = null;
+            return;
+        }
+        addChildFieldFor(this.hidden = new RichMemberHidden<>(this, context));
+        addChildFieldFor(this.disabled = new RichMemberDisabled<>(this, context));
+        addChildFieldFor(this.validate = new RichActionValidity(this, context));
 
-        val graphQLOutputType = typeFor(objectAction);
+        addChildFieldFor(
+                this.invoke = isInvokeAllowed(objectAction)
+                    ? new RichActionInvoke(this, context)
+                    : null);
+        addChildFieldFor(this.params = new RichActionParams(this, context));
 
-        val fieldBuilder = newFieldDefinition()
-                .name(getId())
-                .description(objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()))
-                .type(graphQLOutputType);
-        addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
-
-        setField(fieldBuilder.build());
+        buildObjectTypeAndField(objectAction.getId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
     }
 
-    public String getId() {
-        return objectMember.getId();
-    }
-
-    private GraphQLOutputType typeFor(final ObjectAction objectAction){
-
-        val objectSpecification = objectAction.getReturnType();
-        switch (objectSpecification.getBeanSort()){
-
-            case COLLECTION:
-
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
-                if (facet == null) {
-                    log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
-                    return null;
-                }
-                val objectSpecificationOfCollectionElement = facet.elementSpec();
-                GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, objectInteractor.getSchemaType());
-                if (wrappedType == null) {
-                    log.warn("Unable to create wrapped type of for {} for action {}",
-                            objectSpecificationOfCollectionElement.getFullIdentifier(),
-                            objectAction.getFeatureIdentifier().getFullIdentityString());
-                    return null;
-                }
-                return GraphQLList.list(wrappedType);
-
-            case VALUE:
-            case ENTITY:
-            case VIEW_MODEL:
+    private boolean isInvokeAllowed(ObjectAction objectAction) {
+        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        switch (apiVariant) {
+            case QUERY_ONLY:
+            case QUERY_AND_MUTATIONS:
+                return objectAction.getSemantics().isSafeInNature();
+            case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT:
+                return true;
             default:
-                return context.typeMapper.outputTypeFor(objectSpecification, objectInteractor.getSchemaType());
+                // shouldn't happen
+                throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
         }
     }
 
@@ -291,7 +280,7 @@ public class SimpleAction
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext, objectInteractor.getSchemaType()))
+                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext, getSchemaType()))
                 .build();
     }
 
@@ -300,45 +289,34 @@ public class SimpleAction
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
                 .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, objectInteractor.getSchemaType()))
+                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, getSchemaType()))
                 .build();
     }
 
     @Override
-    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+    public ObjectSpecification getObjectSpecification() {
+        return interactor.getObjectSpecification();
+    }
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-
-        val environment = new Environment.For(dataFetchingEnvironment);
-
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
-            return null;
+    @Override
+    protected void addDataFetchersForChildren() {
+        if(hidden == null) {
+            return;
         }
-
-        val objectAction = getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-
-        val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(objectAction.getFeatureIdentifier());
+        hidden.addDataFetcher(this);
+        disabled.addDataFetcher(this);
+        validate.addDataFetcher(this);
+        if (invoke != null) {
+            invoke.addDataFetcher(this);
         }
-
-        val usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(objectAction.getFeatureIdentifier());
+        if (params != null) {
+            params.addDataFetcher(this);
         }
+    }
 
-        val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
-
-        val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
-        }
-
-        val resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return resultManagedObject.getPojo();
+    @Override
+    public SchemaType getSchemaType() {
+        return interactor.getSchemaType();
     }
 
 }

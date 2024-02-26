@@ -16,31 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.common.query.meta;
+
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLNonNull.nonNull;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonTopLevelQueryAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.Element;
 
-public class SimpleTopLevelQuery
-        extends CommonTopLevelQueryAbstract {
+public class CommonMetaId extends Element {
 
-    private static final SchemaStrategy SCHEMA_STRATEGY = SchemaStrategy.SIMPLE;
+    public CommonMetaId(final Context context) {
+        super(context);
 
-    public SimpleTopLevelQuery(final Context context) {
-        super(SCHEMA_STRATEGY, context);
+        setField(newFieldDefinition().name("id").type(nonNull(Scalars.GraphQLString)).build());
+    }
 
-        var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
-
-        buildObjectType();
-
-        // the field is used if the schemaStyle is 'SIMPLE_AND_RICH', but is ignored/unused otherwise
-        setField(newFieldDefinition()
-                .name(SCHEMA_STRATEGY.topLevelFieldNameFrom(graphqlConfiguration))
-                .type(getGqlObjectType())
-                .build());
+    @Override
+    protected String fetchData(DataFetchingEnvironment environment) {
+        return environment.<CommonMetaFetcher>getSource().id();
     }
 
 }

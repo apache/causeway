@@ -22,15 +22,15 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvTopLevelQueryAbstractSchema;
-import org.apache.causeway.viewer.graphql.model.domain.rich.scenario.GqlvScenario;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonTopLevelQueryAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.rich.scenario.Scenario;
 
 public class RichTopLevelQuery
-        extends GqlvTopLevelQueryAbstractSchema {
+        extends CommonTopLevelQueryAbstract {
 
     private static final SchemaStrategy SCHEMA_STRATEGY = SchemaStrategy.RICH;
 
-    private final GqlvScenario scenario;
+    private final Scenario scenario;
 
     public RichTopLevelQuery(final Context context) {
         super(SCHEMA_STRATEGY, context);
@@ -38,7 +38,7 @@ public class RichTopLevelQuery
         var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
 
         if (graphqlConfiguration.isIncludeTestingFieldInRich()) {
-            addChildFieldFor(scenario = new GqlvScenario(SCHEMA_STRATEGY, context));
+            addChildFieldFor(scenario = new Scenario(SCHEMA_STRATEGY, context));
         } else {
             scenario = null;
         }

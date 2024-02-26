@@ -16,31 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.rich.scenario;
+
+import graphql.Scalars;
+import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonTopLevelQueryAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.Element;
 
-public class SimpleTopLevelQuery
-        extends CommonTopLevelQueryAbstract {
+import lombok.val;
 
-    private static final SchemaStrategy SCHEMA_STRATEGY = SchemaStrategy.SIMPLE;
+public class ScenarioName extends Element {
 
-    public SimpleTopLevelQuery(final Context context) {
-        super(SCHEMA_STRATEGY, context);
+    public ScenarioName(
+            final Context context) {
 
-        var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+        super(context);
 
-        buildObjectType();
-
-        // the field is used if the schemaStyle is 'SIMPLE_AND_RICH', but is ignored/unused otherwise
         setField(newFieldDefinition()
-                .name(SCHEMA_STRATEGY.topLevelFieldNameFrom(graphqlConfiguration))
-                .type(getGqlObjectType())
-                .build());
+                    .name("Name")
+                    .type(Scalars.GraphQLString)
+                    .build()
+        );
+    }
+
+    @Override
+    protected Object fetchData(DataFetchingEnvironment environment) {
+        val graphQlContext = environment.getGraphQlContext();
+        return graphQlContext.get(Scenario.KEY_SCENARIO_NAME);
     }
 
 }
