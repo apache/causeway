@@ -38,8 +38,8 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -60,8 +60,8 @@ public class Context {
     public final GraphQLTypeRegistry graphQLTypeRegistry;
 
 
-    public final Map<String, GqlvDomainService> domainServiceByTypeName = new LinkedHashMap<>();
-    public final Map<String, GqlvDomainObject> domainObjectByTypeName = new LinkedHashMap<>();
+    public final Map<String, CommonDomainService> domainServiceByTypeName = new LinkedHashMap<>();
+    public final Map<String, CommonDomainObject> domainObjectByTypeName = new LinkedHashMap<>();
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()

@@ -16,62 +16,59 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import java.util.Optional;
-import java.util.function.Function;
-
-import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLOutputType;
 
-import org.apache.causeway.applib.value.Blob;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-public abstract class SimplePropertyLobAbstract extends Element {
+@Log4j2
+public class RichMemberDisabled<T extends ObjectMember> extends Element {
 
-    final MemberInteractor<OneToOneAssociation> memberInteractor;
+    private final MemberInteractor<T> memberInteractor;
 
-    public SimplePropertyLobAbstract(
-            final MemberInteractor<OneToOneAssociation> memberInteractor,
-            final Context context,
-            final String fieldName) {
+    public RichMemberDisabled(
+            final MemberInteractor<T> memberInteractor,
+            final Context context
+    ) {
         super(context);
         this.memberInteractor = memberInteractor;
 
-        setField(GraphQLFieldDefinition.newFieldDefinition()
-                    .name(fieldName)
-                    .type(Scalars.GraphQLString)
-                    .build());
+        setField(newFieldDefinition()
+                .name("disabled")
+                .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class))
+                .build());
     }
 
-    protected Object fetchDataFromBlob(DataFetchingEnvironment environment, Function<Blob, ?> mapper) {
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+    @Override
+    protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+
+        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         val sourcePojoClass = sourcePojo.getClass();
         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
-            // not expected
-            return null;
+            return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
         }
 
-        val association = memberInteractor.getObjectMember();
+        val objectMember = memberInteractor.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = association.get(managedObject);
 
-        return Optional.ofNullable(resultManagedObject)
-                .map(ManagedObject::getPojo)
-                .filter(Blob.class::isInstance)
-                .map(Blob.class::cast)
-                .map(mapper)
-                .orElse(null);
+        val usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        return usable.getReasonAsString().orElse(null);
     }
 
 }

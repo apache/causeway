@@ -16,18 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.model.domain.simple.query;
+package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import java.util.Optional;
-import java.util.function.Function;
-
-import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLOutputType;
 
-import org.apache.causeway.applib.value.Blob;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
@@ -35,24 +32,33 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
 
-public abstract class SimplePropertyLobAbstract extends Element {
+public abstract class RichAssociationGet<T extends ObjectAssociation> extends Element {
 
-    final MemberInteractor<OneToOneAssociation> memberInteractor;
+    final MemberInteractor<T> memberInteractor;
 
-    public SimplePropertyLobAbstract(
-            final MemberInteractor<OneToOneAssociation> memberInteractor,
-            final Context context,
-            final String fieldName) {
+    public RichAssociationGet(
+            final MemberInteractor<T> memberInteractor,
+            final Context context) {
         super(context);
         this.memberInteractor = memberInteractor;
 
-        setField(GraphQLFieldDefinition.newFieldDefinition()
-                    .name(fieldName)
-                    .type(Scalars.GraphQLString)
-                    .build());
+        GraphQLOutputType type = outputTypeFor(memberInteractor);
+        if (type != null) {
+            val fieldBuilder = newFieldDefinition()
+                    .name("get")
+                    .type(type);
+            setField(fieldBuilder.build());
+        } else {
+            setField(null);
+        }
     }
 
-    protected Object fetchDataFromBlob(DataFetchingEnvironment environment, Function<Blob, ?> mapper) {
+    abstract GraphQLOutputType outputTypeFor(MemberInteractor<T> holder);
+
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment environment) {
+
+        // TODO: introduce evaluator
         val sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
         val sourcePojoClass = sourcePojo.getClass();
@@ -66,12 +72,9 @@ public abstract class SimplePropertyLobAbstract extends Element {
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val resultManagedObject = association.get(managedObject);
 
-        return Optional.ofNullable(resultManagedObject)
-                .map(ManagedObject::getPojo)
-                .filter(Blob.class::isInstance)
-                .map(Blob.class::cast)
-                .map(mapper)
-                .orElse(null);
+        return resultManagedObject != null
+                ? resultManagedObject.getPojo()
+                : null;
     }
 
 }

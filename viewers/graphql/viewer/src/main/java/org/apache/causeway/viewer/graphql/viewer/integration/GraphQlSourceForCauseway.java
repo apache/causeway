@@ -32,13 +32,13 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
-import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.GqlvTopLevelMutationRichSchema;
+import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
+import org.apache.causeway.viewer.graphql.model.domain.rich.mutation.RichTopLevelMutation;
 import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichTopLevelQuery;
-import org.apache.causeway.viewer.graphql.model.domain.simple.mutation.GqlvTopLevelMutationSimpleSchema;
+import org.apache.causeway.viewer.graphql.model.domain.simple.mutation.SimpleTopLevelMutation;
 import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLevelQuery;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
-import org.apache.causeway.viewer.graphql.model.toplevel.GqlvTopLevelQueryBothSchemas;
+import org.apache.causeway.viewer.graphql.model.toplevel.BothTopLevelQuery;
 
 import lombok.val;
 
@@ -120,7 +120,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .build();
     }
 
-    private GqlvAbstractCustom determineTopLevelQueryFrom(
+    private ElementCustom determineTopLevelQueryFrom(
             final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
         switch (schemaStyle) {
             case SIMPLE_ONLY:
@@ -129,24 +129,24 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 return new RichTopLevelQuery(context);
             case SIMPLE_AND_RICH:
             case RICH_AND_SIMPLE:
-                return new GqlvTopLevelQueryBothSchemas(context);
+                return new BothTopLevelQuery(context);
             default:
                 // shouldn't happen
                 throw new IllegalStateException(String.format(
                         "Configured SchemaStyle '%s' not recognised", schemaStyle));
         }
     }
-    private GqlvAbstractCustom determineTopLevelMutationFrom(
+    private ElementCustom determineTopLevelMutationFrom(
             final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
         switch (schemaStyle) {
             case SIMPLE_ONLY:
-                return new GqlvTopLevelMutationSimpleSchema(context);
+                return new SimpleTopLevelMutation(context);
             case RICH_ONLY:
-                return new GqlvTopLevelMutationRichSchema(context);
+                return new RichTopLevelMutation(context);
             case SIMPLE_AND_RICH:
-                return new GqlvTopLevelMutationSimpleSchema(context);
+                return new SimpleTopLevelMutation(context);
             case RICH_AND_SIMPLE:
-                return new GqlvTopLevelMutationRichSchema(context);
+                return new RichTopLevelMutation(context);
             default:
                 // shouldn't happen
                 throw new IllegalStateException(String.format(

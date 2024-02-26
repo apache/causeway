@@ -24,16 +24,16 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
+import org.apache.causeway.viewer.graphql.model.domain.Element;
+import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainService;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
 import org.apache.causeway.viewer.graphql.model.domain.rich.SchemaStrategyRich;
 import org.apache.causeway.viewer.graphql.model.domain.simple.SchemaStrategySimple;
 
-import static org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvTopLevelQueryAbstractSchema.superclassesOf;
+import static org.apache.causeway.viewer.graphql.model.domain.common.query.CommonTopLevelQueryAbstract.superclassesOf;
 
 import lombok.val;
 
@@ -44,46 +44,46 @@ public interface SchemaStrategy {
 
     SchemaType getSchemaType();
 
-    default GqlvDomainObject domainObjectFor(
+    default CommonDomainObject domainObjectFor(
             final ObjectSpecification objectSpecification,
             final Context context) {
 
         mapSuperclassesIfNecessary(this, objectSpecification, context);
-        val typeNameFor = GqlvDomainObject.typeNameFor(this, objectSpecification);
-        return context.domainObjectByTypeName.computeIfAbsent(typeNameFor, typeName -> new GqlvDomainObject(this, typeName, objectSpecification, context));
+        val typeNameFor = CommonDomainObject.typeNameFor(this, objectSpecification);
+        return context.domainObjectByTypeName.computeIfAbsent(typeNameFor, typeName -> new CommonDomainObject(this, typeName, objectSpecification, context));
     }
 
-    default GqlvDomainService domainServiceFor(
+    default CommonDomainService domainServiceFor(
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
-        val typeNameFor = GqlvDomainService.typeNameFor(this, objectSpecification);
-        return context.domainServiceByTypeName.computeIfAbsent(typeNameFor, typeName -> new GqlvDomainService(this, typeName, objectSpecification, servicePojo, context));
+        val typeNameFor = CommonDomainService.typeNameFor(this, objectSpecification);
+        return context.domainServiceByTypeName.computeIfAbsent(typeNameFor, typeName -> new CommonDomainService(this, typeName, objectSpecification, servicePojo, context));
     }
 
 
     String topLevelFieldNameFrom(CausewayConfiguration.Viewer.Graphql graphqlConfiguration);
 
-    GqlvAbstract newGqlvProperty(
+    Element newGqlvProperty(
             final ObjectInteractor holder,
             final OneToOneAssociation otoa,
             final Context context
     );
 
-    GqlvAbstract newGqlvCollection(
+    Element newGqlvCollection(
             final ObjectInteractor holder,
             final OneToManyAssociation otma,
             final Context context
     );
 
-    GqlvAbstract newGqlvAction(
+    Element newGqlvAction(
             final ObjectInteractor holder,
             final ObjectAction objectAction,
             final Context context
     );
 
-    GqlvAbstractCustom newGqlvMeta(
-            final GqlvDomainObject gqlvDomainObject,
+    ElementCustom newGqlvMeta(
+            final CommonDomainObject commonDomainObject,
             final Context context);
 
     private static void mapSuperclassesIfNecessary(
@@ -91,14 +91,14 @@ public interface SchemaStrategy {
             final ObjectSpecification objectSpecification,
             final Context context) {
         // no need to map if the target subclass has already been built
-        val typeName = GqlvDomainObject.typeNameFor(schemaStrategy, objectSpecification);
+        val typeName = CommonDomainObject.typeNameFor(schemaStrategy, objectSpecification);
         if (context.domainObjectByTypeName.containsKey(typeName)) {
             return;
         }
         val superclasses = superclassesOf(objectSpecification);
         superclasses.forEach(objectSpec -> {
-            val typeNameForSuperclass = GqlvDomainObject.typeNameFor(schemaStrategy, objectSpecification);
-            context.domainObjectByTypeName.computeIfAbsent(typeNameForSuperclass, typeNm -> new GqlvDomainObject(schemaStrategy, typeNm, objectSpecification, context));
+            val typeNameForSuperclass = CommonDomainObject.typeNameFor(schemaStrategy, objectSpecification);
+            context.domainObjectByTypeName.computeIfAbsent(typeNameForSuperclass, typeNm -> new CommonDomainObject(schemaStrategy, typeNm, objectSpecification, context));
         });
     }
 

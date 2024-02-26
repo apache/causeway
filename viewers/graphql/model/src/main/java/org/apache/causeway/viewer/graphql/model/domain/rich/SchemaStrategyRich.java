@@ -23,15 +23,15 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstractCustom;
+import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvDomainObject;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GqlvMeta;
-import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvAction;
-import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvCollection;
-import org.apache.causeway.viewer.graphql.model.domain.rich.query.GqlvProperty;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonMeta;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichAction;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichCollection;
+import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichProperty;
 
 public class SchemaStrategyRich implements SchemaStrategy {
 
@@ -45,31 +45,31 @@ public class SchemaStrategyRich implements SchemaStrategy {
         return graphqlConfiguration.getTopLevelFieldNameForRich();
     }
 
-    public GqlvAbstractCustom newGqlvProperty(
+    public ElementCustom newGqlvProperty(
             final ObjectInteractor holder,
             final OneToOneAssociation otoa,
             final Context context
     ) {
-        return new GqlvProperty(holder, otoa, context);
+        return new RichProperty(holder, otoa, context);
     };
-    public GqlvAbstractCustom newGqlvCollection(
+    public ElementCustom newGqlvCollection(
             final ObjectInteractor holder,
             final OneToManyAssociation otma,
             final Context context
     ) {
-        return new GqlvCollection(holder, otma, context);
+        return new RichCollection(holder, otma, context);
     }
-    public GqlvAbstractCustom newGqlvAction(
+    public ElementCustom newGqlvAction(
             final ObjectInteractor holder,
             final ObjectAction objectAction,
             final Context context
     ) {
-        return new GqlvAction(holder, objectAction, context);
+        return new RichAction(holder, objectAction, context);
     }
 
     @Override
-    public GqlvAbstractCustom newGqlvMeta(GqlvDomainObject gqlvDomainObject, Context context) {
-        return new GqlvMeta(gqlvDomainObject, context);
+    public ElementCustom newGqlvMeta(CommonDomainObject commonDomainObject, Context context) {
+        return new CommonMeta(commonDomainObject, context);
     }
 
     /**
