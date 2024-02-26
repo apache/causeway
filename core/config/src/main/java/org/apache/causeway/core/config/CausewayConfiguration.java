@@ -2493,7 +2493,10 @@ public class CausewayConfiguration {
                  * Lookup field suffix
                  */
                 private String fieldNameSuffix = "";
-                private String argument = "object";
+                /**
+                 * This is the name of the synthetic first argument used to locate the object to be looked up.
+                 */
+                private String argName = "object";
             }
 
             private final Mutation mutation = new Mutation();

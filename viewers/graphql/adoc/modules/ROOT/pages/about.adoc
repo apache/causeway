@@ -238,11 +238,12 @@ These can only be downloaded if configured, see xref:#resources-blobs-clobs-layo
 There is also one additional field, `saveAs`; this is discussed in the xref:#testing[testing] section below.
 
 
+[#queries-that-lookup-a-domain-object]
 == Queries that lookup a Domain Object
 
 Most queries will start with a domain service, but it is also possible to define a query that starts with a "lookup" of existing domain object:
 
-[cols="1a,1a", options="header"]
+[cols="1a,1a",options="header"]
 |===
 
 |Rich schema
@@ -749,7 +750,9 @@ If you do this, then you should also make sure that the resource controller is m
 [#testing]
 == Testing
 
-Because the "rich" schema exposes pretty much all of the behaviour of the domain model, it's possible to use GraphQL queries as a way to write end-to-end tests.
-This works especially well with approval tests, which can be used to efficiently assert the contents of the returned response.
+Because the "rich" schema exposes pretty much all the behaviour of the domain model, it's possible to use GraphQL queries as a way to write end-to-end tests.
+This works especially well with link:https://github.com/approvals/ApprovalTests.Java[approval tests], which can be used to efficiently assert the contents of the returned response.
+
+To enable testing support, use the
 
 

@@ -29,17 +29,19 @@ public class AppManifest {
 
 == Configuration Properties
 
-The configuration properties fall into a number of categories
+The xref:refguide:config:about.adoc[configuration properties] for the GraphQL viewer fall into a number of categories.
+
+(To make this section easier to read, the `causeway.viewer.graphql.` prefix of all of these configuration properties is omitted).
 
 === API variant and Schema Style
 
 The most important configuration properties are:
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.api-variant[causeway.viewer.graphql.api-variant]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.api-variant[api-variant]
 +
 Whether to support relaxed (but non-spec compliant) queries with mutations, or instead to expose an API that is query only.
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema-style[causeway.viewer.graphql.schema-style]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema-style[schema-style]
 +
 Whether to use the "simple" schema style (data only, client-driven), the "rich" schema style (includes supporting facets, server-driven) or both schema styles.
 
@@ -50,63 +52,73 @@ These were discussed on the xref:gqlv:ROOT:about.adoc[main page for GraphQL view
 A number of other configuration properties can customize the schema in various ways.
 Normally these can be left as their default:
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-simple[causeway.viewer.graphql.top-level-field-name-for-simple]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-simple[top-level-field-name-for-simple]
 +
 If using the `SIMPLE_AND_RICH` or `RICH_AND_SIMPLE` schema styles, this configuration defines the name of the top-level field that holds the rest of the _simple_ schema.
 +
-Defaults to "simple".
+It defaults to "`simple`".
 
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-rich[causeway.viewer.graphql.top-level-field-name-for-rich]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-rich[top-level-field-name-for-rich]
 +
 If using the `SIMPLE_AND_RICH` or `RICH_AND_SIMPLE` schema styles, this configuration defines the name of the top-level field that holds the rest of the _rich_ schema.
 +
-Defaults to "rich".
+It defaults to "`rich`".
 
-
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.lookup.argument[causeway.viewer.graphql.lookup.argument]
-+
-If looking up a domain object,
-
-
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.lookup.field-name-prefix[causeway.viewer.graphql.lookup.field-name-prefix]
-
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.lookup.field-name-suffix[causeway.viewer.graphql.lookup.field-name-suffix]
-
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.mutation.target-arg-name[causeway.viewer.graphql.mutation.target-arg-name]
-
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.meta-data.field-name[causeway.viewer.graphql.meta-data.field-name]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.meta-data.field-name[meta-data.field-name]
 +
 Defines the field name of the "meta data" structure used to expose the id, logical type name and (for entities) the version of a domain object.
 +
-The default value for this config property is "_meta".
-
-The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/causeway.viewer.graphql.adoc[section] for the GraphQL viewer.
+The default value for this config property is "`_meta`".
 
 
-Resource controller:
+The schema to xref:about.adoc#queries-that-lookup-a-domain-object[look up a domain object] can also be customized:
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[causeway.viewer.graphql.resources.response-type]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.lookup.arg-name[lookup.arg-name]
++
+This is the name of the synthetic first argument used to locate the object to be looked up.
++
+It defaults to "`object`".
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.lookup.field-name-prefix[lookup.field-name-prefix]
++
+Whether to prefix the field name of the domain object's type.
++
+This defaults to an empty string, in other words no prefix.
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.lookup.field-name-suffix[lookup.field-name-suffix]
++
+Whether to add a suffix to the field name of the domain object's type.
++
+This defaults to an empty string, in other words no suffix.
+
+If executing a mutation rather than a query:
+
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.mutation.target-arg-name[mutation.target-arg-name]
++
+This is the name of the synthetic first argument used to locate the object to be mutated.
++
+It defaults to "`_target`".
 
 
-Testing support:
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.include-testing-field-in-rich[causeway.viewer.graphql.include-testing-field-in-rich]
+The remaining configuration properties are explained in more detail elsewhere:
 
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[resources.response-type]
++
+Control whether the xref:about.adoc#resources-blobs-clobs-layouts-icons[Resource controller] is enabled
 
-For authentication SPI:
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.include-testing-field-in-rich[include-testing-field-in-rich]
++
+Enable xref:about.adoc#testing[testing support].
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.username[causeway.viewer.graphql.authentication.fallback.username]
-
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.roles[causeway.viewer.graphql.authentication.fallback.roles]
-
-
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.username[authentication.fallback.username] and xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.roles[authentication.fallback.roles]
++
+Are used by the default xref:spi-services.adoc#usermementoprovider[UserMementoProvider] for authentication.
 
 Marshalling SPI:
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format[causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format]
-
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.local-date-format[causeway.viewer.graphql.scalar-marshaller.local-date-format]
-
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.local-time-format[causeway.viewer.graphql.scalar-marshaller.local-time-format]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format[zoned-date-time-format], xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.local-date-format[scalar-marshaller.local-date-format] and xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.scalar-marshaller.local-time-format[scalar-marshaller.local-time-format]
++
+specify the format that dates and times should be specified as strings, eg "`yyyy-MM-dd`".
 

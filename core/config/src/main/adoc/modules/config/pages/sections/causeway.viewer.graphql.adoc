@@ -50,12 +50,12 @@ Ignored if the ``#getSchemaStyle()`` is ``SchemaStyle#SIMPLE_ONLY``.
 
 
 |
-[[causeway.viewer.graphql.lookup.argument]]
+[[causeway.viewer.graphql.lookup.arg-name]]
 causeway.viewer.graphql.lookup. +
-argument
+arg-name
 
 |  object
-| null
+| This is the name of the synthetic first argument used to locate the object to be looked up.
 
 
 |
@@ -101,6 +101,8 @@ response-type
 
 | 
 | How resources (``Blob`` bytes, ``Clob`` chars, grids and icons) can be downloaded from the resource controller.
+
+By default the download of these resources if ``ResponseType#FORBIDDEN``, but alternatively they can be enabled to download either ``ResponseType#DIRECT``ly or as an ``ResponseType#ATTACHMENT``.
 
 
 |
