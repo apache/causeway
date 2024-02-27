@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.registry;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Priority;
@@ -35,7 +36,6 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
@@ -88,16 +88,21 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     private Map<String, _SingletonBeanProvider> enumerateContributingDomainServices() {
         val managedBeanAdapterByName = _Maps.<String, _SingletonBeanProvider>newHashMap();
-        val managedBeansContributing = causewayBeanTypeRegistry.getManagedBeansContributing().keySet();
 
         causewaySystemEnvironment.getIocContainer()
         .streamAllBeans()
-        .filter(_NullSafe::isPresent)
-        .filter(bean->managedBeansContributing.contains(bean.getBeanClass())) // do not register unknown sort
-        .forEach(bean->
-            managedBeanAdapterByName.put(bean.getId(), bean));
+        .filter(contributes())
+        .forEach(singletonProvider->
+            managedBeanAdapterByName.put(singletonProvider.getId(), singletonProvider));
 
         return managedBeanAdapterByName;
+    }
+
+    private Predicate<_SingletonBeanProvider> contributes() {
+        var managedBeansContributing = causewayBeanTypeRegistry.getManagedBeansContributing().keySet();
+        return singletonProvider->singletonProvider!=null
+                ? managedBeansContributing.contains(singletonProvider.getBeanClass()) // do not register unknown sort
+                : false;
     }
 
 }

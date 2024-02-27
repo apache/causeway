@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
@@ -41,6 +44,7 @@ import org.apache.causeway.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -78,6 +82,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -587,17 +592,35 @@ implements
 
                     specsByLogicalTypeName.forEach((logicalTypeName, collidingSpecs)->{
                         if(isObjectTypeCollision(collidingSpecs)) {
-                            val csv = asCsv(collidingSpecs);
-                            collidingSpecs.stream()
-                                    .filter(this::logicalTypeNameIsNotIncludedInAliased)
-                                    .forEach(spec->{
-                                ValidationFailure.raiseFormatted(spec,
+
+                            // assuming, a check for proxies is only required when there is also a bean name collision
+                            // where the plain class and the proxied class collide having the same logical-type-name
+                            val proxies = proxiesIn(collidingSpecs);
+                            if(proxies.isNotEmpty()) {
+
+                                proxies.forEach(spec->{
+                                    ValidationFailure.raiseFormatted(spec,
+                                        ProgrammingModelConstants.Violation.PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE_TO_UI
+                                            .builder()
+                                            .addVariable("logicalTypeName", spec.getLogicalTypeName())
+                                            .addVariable("csv", asCsv(proxies.toList()))
+                                            .buildMessage());
+                                });
+
+                            } else {
+
+                                collidingSpecs.stream()
+                                .filter(this::logicalTypeNameIsNotIncludedInAliased)
+                                .forEach(spec->{
+                                    ValidationFailure.raiseFormatted(spec,
                                         ProgrammingModelConstants.Violation.NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
                                             .builder()
                                             .addVariable("logicalTypeName", spec.getLogicalTypeName())
-                                            .addVariable("csv", csv)
+                                            .addVariable("csv", asCsv(collidingSpecs))
                                             .buildMessage());
-                            });
+                                });
+
+                            }
                         }
                     });
 
@@ -605,7 +628,16 @@ implements
                     specsByLogicalTypeName.clear();
                 }
 
-                private boolean logicalTypeNameIsNotIncludedInAliased(ObjectSpecification objectSpecification) {
+                private boolean isProxy(final @NonNull ObjectSpecification spec) {
+                    val cls = spec.getCorrespondingClass();
+                    return !ClassUtils.getUserClass(cls).equals(cls);
+                }
+
+                private Can<ObjectSpecification> proxiesIn(final @Nullable List<ObjectSpecification> specs) {
+                    return stream(specs).filter(this::isProxy).collect(Can.toCan());
+                }
+
+                private boolean logicalTypeNameIsNotIncludedInAliased(final ObjectSpecification objectSpecification) {
                     if (getConfiguration().getCore().getMetaModel().getValidator().isAllowLogicalTypeNameAsAlias()) {
                         return objectSpecification.getAliases()
                                 .map(LogicalType::getLogicalTypeName).stream()
