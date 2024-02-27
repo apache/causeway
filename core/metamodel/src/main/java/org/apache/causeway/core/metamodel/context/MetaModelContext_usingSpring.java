@@ -40,7 +40,7 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ioc._IocContainer;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
@@ -203,11 +203,8 @@ class MetaModelContext_usingSpring extends MetaModelContext {
                         LinkedHashMap::new));
     }
 
-    private ManagedObject toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
-        val servicePojo = managedBeanAdapter.getInstance().getFirst()
-                .orElseThrow(()->_Exceptions.unrecoverable(
-                        "Cannot get service instance of type '%s'",
-                        managedBeanAdapter.getBeanClass()));
+    private ManagedObject toManagedObject(final _SingletonBeanProvider managedBeanAdapter) {
+        val servicePojo = managedBeanAdapter.getInstanceElseFail();
         return getSpecificationLoader()
                 .specForType(servicePojo.getClass())
                 .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo))

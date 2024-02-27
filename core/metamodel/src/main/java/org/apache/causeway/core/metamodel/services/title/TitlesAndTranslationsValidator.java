@@ -61,8 +61,7 @@ extends MetaModelValidatorAbstract {
         serviceRegistry.streamRegisteredBeans()
         .forEach(managedBeanAdapter->{
 
-            val serviceInstanceIfAny = managedBeanAdapter.getInstance().getFirst();
-            val domainService = serviceInstanceIfAny.orElse(null);
+            val domainService = managedBeanAdapter.lookupInstance().orElse(null);
             val logicalTypeName = managedBeanAdapter.getId();
 
             if(domainService == null) {

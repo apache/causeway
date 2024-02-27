@@ -37,7 +37,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ioc._IocContainer;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
@@ -52,7 +52,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     @NonNull private final MetaModelContext metaModelContext;
 
     @Getter @Setter private _IocContainer iocContainer;
-    private final Set<_ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
+    private final Set<_SingletonBeanProvider> registeredBeans = _Sets.newHashSet();
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
@@ -67,8 +67,8 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 //        }
 
         Optional<T> match = streamBeans()
-                .filter(beanAdapter->type.isAssignableFrom(beanAdapter.getBeanClass()))
-                .map(beanAdapter->beanAdapter.getInstance().getFirstElseFail())
+                .filter(_SingletonBeanProvider.satisfying(type))
+                .map(_SingletonBeanProvider::getInstanceElseFail)
                 .map(_Casts::<T>uncheckedCast)
                 .findFirst();
 
@@ -86,15 +86,15 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         return Can.empty();
     }
 
-    private final Map<String, _ManagedBeanAdapter> registeredBeanById = _Maps.newHashMap();
+    private final Map<String, _SingletonBeanProvider> registeredBeanById = _Maps.newHashMap();
 
     @Override
-    public Stream<_ManagedBeanAdapter> streamRegisteredBeans() {
+    public Stream<_SingletonBeanProvider> streamRegisteredBeans() {
         return registeredBeans().stream();
     }
 
     @Override
-    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final LogicalType id) {
+    public Optional<_SingletonBeanProvider> lookupRegisteredBeanById(final LogicalType id) {
         return Optional.ofNullable(registeredBeanById.get(id.getLogicalTypeName()));
     }
 
@@ -112,7 +112,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     // -- HELPER
 
-    private Set<_ManagedBeanAdapter> registeredBeans() {
+    private Set<_SingletonBeanProvider> registeredBeans() {
 
         AtomicBoolean triggerPostInit = new AtomicBoolean(false);
 
@@ -136,7 +136,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         return registeredBeans;
     }
 
-    private Stream<_ManagedBeanAdapter> streamBeans() {
+    private Stream<_SingletonBeanProvider> streamBeans() {
         // lookup the MetaModelContextBean's list of singletons
         val mmc = metaModelContext;
         if(mmc instanceof MetaModelContext_forTesting) {

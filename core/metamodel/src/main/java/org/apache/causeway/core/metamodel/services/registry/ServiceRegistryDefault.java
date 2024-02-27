@@ -37,7 +37,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -55,7 +55,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     @Override
-    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final LogicalType id) {
+    public Optional<_SingletonBeanProvider> lookupRegisteredBeanById(final LogicalType id) {
         return Optional.ofNullable(contributingDomainServicesById.get().get(id.getLogicalTypeName()));
     }
 
@@ -65,7 +65,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     }
 
     @Override
-    public Stream<_ManagedBeanAdapter> streamRegisteredBeans() {
+    public Stream<_SingletonBeanProvider> streamRegisteredBeans() {
         return contributingDomainServicesById.get().values().stream();
     }
 
@@ -83,11 +83,11 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     // -- HELPER
 
-    private final _Lazy<Map<String, _ManagedBeanAdapter>> contributingDomainServicesById =
+    private final _Lazy<Map<String, _SingletonBeanProvider>> contributingDomainServicesById =
             _Lazy.threadSafe(this::enumerateContributingDomainServices);
 
-    private Map<String, _ManagedBeanAdapter> enumerateContributingDomainServices() {
-        val managedBeanAdapterByName = _Maps.<String, _ManagedBeanAdapter>newHashMap();
+    private Map<String, _SingletonBeanProvider> enumerateContributingDomainServices() {
+        val managedBeanAdapterByName = _Maps.<String, _SingletonBeanProvider>newHashMap();
         val managedBeansContributing = causewayBeanTypeRegistry.getManagedBeansContributing().keySet();
 
         causewaySystemEnvironment.getIocContainer()

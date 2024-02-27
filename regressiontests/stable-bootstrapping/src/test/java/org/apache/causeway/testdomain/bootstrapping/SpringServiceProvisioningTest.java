@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -78,7 +78,7 @@ class SpringServiceProvisioningTest {
     void dump_all() throws IOException {
 
         final List<String> beans = causewaySystemEnvironment.getIocContainer().streamAllBeans()
-                .map(_ManagedBeanAdapter::getId)
+                .map(_SingletonBeanProvider::getId)
                 .sorted()
                 .collect(Collectors.toList());
 
@@ -92,7 +92,7 @@ class SpringServiceProvisioningTest {
     void builtInServices_shouldBeSetUp() throws IOException {
 
         val managedServices = serviceRegistry.streamRegisteredBeans()
-                .map(_ManagedBeanAdapter::getBeanClass)
+                .map(_SingletonBeanProvider::getBeanClass)
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 

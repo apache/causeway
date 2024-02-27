@@ -60,8 +60,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
@@ -203,7 +202,7 @@ extends MetaModelContext {
     private List<ValueSemanticsProvider<?>> valueSemantics;
 
     @Singular
-    private List<_ManagedBeanAdapter> singletonProviders;
+    private List<_SingletonBeanProvider> singletonProviders;
 
     // -- SERVICE SUPPORT
 
@@ -256,19 +255,19 @@ extends MetaModelContext {
                 .filter(_NullSafe::isPresent);
     }
 
-    Stream<_ManagedBeanAdapter> streamBeanAdapters() {
+    Stream<_SingletonBeanProvider> streamBeanAdapters() {
         return _Streams.concat(
-                streamSingletons().map(_ManagedBeanAdapter::forTesting),
+                streamSingletons().map(_SingletonBeanProvider::forTesting),
                 singletonProviders.stream(),
                 discoveredServices.stream(),
                 Stream.of(
                     // support for lazy bean providers,
-                    _ManagedBeanAdapter.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
-                    _ManagedBeanAdapter.forTestingLazy(GridService.class, this::getGridService),
-                    _ManagedBeanAdapter.forTestingLazy(JaxbService.class, this::getJaxbService),
-                    _ManagedBeanAdapter.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
-                    _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService),
-                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
+                    _SingletonBeanProvider.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
+                    _SingletonBeanProvider.forTestingLazy(GridService.class, this::getGridService),
+                    _SingletonBeanProvider.forTestingLazy(JaxbService.class, this::getJaxbService),
+                    _SingletonBeanProvider.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
+                    _SingletonBeanProvider.forTestingLazy(LayoutService.class, this::getLayoutService),
+                    _SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
                 )
                 );
     }
@@ -447,9 +446,9 @@ extends MetaModelContext {
     private final MenuBarsService menuBarsService = createMenuBarsService();
     private final MenuBarsService createMenuBarsService() {
         return getSingletonProviders().stream()
-                .filter(provider->provider.isCandidateFor(MenuBarsService.class))
+                .filter(_SingletonBeanProvider.satisfying(MenuBarsService.class))
                 .findFirst()
-                .map(provider->(MenuBarsService)provider.getInstance().getFirstElseFail())
+                .map(provider->(MenuBarsService)provider.getInstanceElseFail())
                 .orElseGet(MenuBarsService::forTesting);
     }
 
@@ -512,12 +511,12 @@ extends MetaModelContext {
     }
 
     @Builder.Default
-    private final Set<_ManagedBeanAdapter> discoveredServices = _Sets.newHashSet();
+    private final Set<_SingletonBeanProvider> discoveredServices = _Sets.newHashSet();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void registerAsService(final ServiceInstance serviceInstance) {
         val spec = serviceInstance.getSpecification();
-        discoveredServices.add(_ManagedBeanAdapter.forTestingLazy(
+        discoveredServices.add(_SingletonBeanProvider.forTestingLazy(
                 spec.getLogicalTypeName(),
                 (Class)spec.getCorrespondingClass(),
                 serviceInstance::getPojo));
@@ -547,11 +546,8 @@ extends MetaModelContext {
         return map;
     }
 
-    private Optional<ServiceInstance> toServiceInstance(final _ManagedBeanAdapter managedBeanAdapter) {
-        val servicePojo = managedBeanAdapter.getInstance().getFirst()
-                .orElseThrow(()->_Exceptions.unrecoverable(
-                        "Cannot get service instance of type '%s'",
-                        managedBeanAdapter.getBeanClass()));
+    private Optional<ServiceInstance> toServiceInstance(final _SingletonBeanProvider managedBeanAdapter) {
+        val servicePojo = managedBeanAdapter.getInstanceElseFail();
 
         if(ProgrammingModelConstants.TypeExcludeMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
             return Optional.empty();

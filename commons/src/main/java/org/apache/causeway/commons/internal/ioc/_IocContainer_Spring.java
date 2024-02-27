@@ -28,8 +28,8 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -61,23 +61,11 @@ final class _IocContainer_Spring implements _IocContainer {
     }
 
     @Override
-    public Stream<_ManagedBeanAdapter> streamAllBeans() {
-
-        val context = springContext;
-
-        return Stream.of(context.getBeanDefinitionNames())
+    public Stream<_SingletonBeanProvider> streamAllBeans() {
+        return Stream.of(springContext.getBeanDefinitionNames())
                 .map(name->{
-
-                    val type = context.getType(name);
-                    val id = name; // just reuse the bean's name
-
-                    //val scope = beanFactory.getBeanDefinition(name).getScope();
-
-                    val resolvableType = ResolvableType.forClass(type);
-                    val bean = context.getBeanProvider(resolvableType);
-
-                    val beanAdapter = _ManagedBeanAdapter_Spring.of(id, type, bean);
-
+                    val type = ClassUtils.getUserClass(springContext.getType(name));
+                    val beanAdapter = _SingletonBeanProvider.of(name, type, ()->springContext.getBean(name));
                     return beanAdapter;
                 });
     }
