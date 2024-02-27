@@ -44,7 +44,7 @@ import lombok.val;
  */
 public interface _IocContainer {
 
-    Stream<_ManagedBeanAdapter> streamAllBeans();
+    Stream<_SingletonBeanProvider> streamAllBeans();
 
     boolean containsBean(String id);
     Optional<?> lookupBean(String id);
@@ -79,7 +79,7 @@ public interface _IocContainer {
     <T> Can<T> select(Class<T> requiredType);
 
     /**
-     * Returns all available implementations of the service that matche the additional qualifiers, ordered by priority.
+     * Returns all available implementations of the service that match the additional qualifiers, ordered by priority.
      *
      * <p>
      *     If there is more than one implementation, then the one with the &quot;highest&quot;

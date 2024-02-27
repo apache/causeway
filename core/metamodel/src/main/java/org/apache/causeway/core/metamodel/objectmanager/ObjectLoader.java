@@ -22,10 +22,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -75,8 +74,7 @@ public interface ObjectLoader {
                 val logicalType = spec.getLogicalType();
                 val servicePojo = spec.getServiceRegistry()
                     .lookupRegisteredBeanById(logicalType)
-                    .map(_ManagedBeanAdapter::getInstance)
-                    .flatMap(Can::getFirst)
+                    .flatMap(_SingletonBeanProvider::lookupInstance)
                     .orElseThrow(()->_Exceptions.noSuchElement(
                             "loader: %s loading logicalType %s",
                             this.getClass().getName(), logicalType));

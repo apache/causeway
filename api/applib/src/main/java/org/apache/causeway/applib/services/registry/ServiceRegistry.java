@@ -29,7 +29,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 
 import lombok.val;
 
@@ -66,8 +66,7 @@ public interface ServiceRegistry {
     /**
      * Streams all registered bean adapters implementing the requested type.
      */
-    default Stream<_ManagedBeanAdapter> streamRegisteredBeansOfType(final Class<?> requiredType) {
-
+    default Stream<_SingletonBeanProvider> streamRegisteredBeansOfType(final Class<?> requiredType) {
         return streamRegisteredBeans()
                 .filter(beanAdapter->beanAdapter.isCandidateFor(requiredType));
     }
@@ -75,21 +74,21 @@ public interface ServiceRegistry {
     /**
      * Returns all bean adapters that have been registered.
      */
-    Stream<_ManagedBeanAdapter> streamRegisteredBeans();
+    Stream<_SingletonBeanProvider> streamRegisteredBeans();
 
     /**
      * Returns a registered bean of given {@code name}.
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(LogicalType id);
+    Optional<_SingletonBeanProvider> lookupRegisteredBeanById(LogicalType id);
 
     /**
      * Returns a registered bean of given {@code name}, or throws when no such bean.
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    default _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(final LogicalType id) {
+    default _SingletonBeanProvider lookupRegisteredBeanByIdElseFail(final LogicalType id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
                         "Failed to lookup BeanAdapter by id '" + id + "'"));

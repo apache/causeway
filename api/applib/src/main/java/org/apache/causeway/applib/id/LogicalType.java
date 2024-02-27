@@ -155,6 +155,8 @@ implements
             final @NonNull Class<?> correspondingClass,
             final @NonNull Supplier<String> logicalNameProvider) {
 
+        //[CAUSEWAY-3687] would allow CGLIB proxies to be added, but we decided to not allow this for UI contributing beans
+        //this.correspondingClass = ClassUtils.getUserClass(correspondingClass);
         this.correspondingClass = correspondingClass;
         this.logicalNameProvider = logicalNameProvider;
     }
@@ -163,6 +165,8 @@ implements
             final @NonNull Class<?> correspondingClass,
             final String logicalName) {
 
+        //[CAUSEWAY-3687] would allow CGLIB proxies to be added, but we decided to not allow this for UI contributing beans
+        //this.correspondingClass = ClassUtils.getUserClass(correspondingClass);
         this.correspondingClass = correspondingClass;
         this.logicalName = requireNonEmpty(logicalName);
         this.logicalNameProvider = null;

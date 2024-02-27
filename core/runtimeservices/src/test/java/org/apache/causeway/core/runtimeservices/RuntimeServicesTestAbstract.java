@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -71,7 +71,7 @@ implements HasMetaModelContext {
         onSetUp(mmcBuilder);
 
         mmcBuilder.singletonProvider(
-                _ManagedBeanAdapter
+                _SingletonBeanProvider
                 .forTestingLazy(MenuBarsMarshallerService.class, ()->{
                     val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
                     return new MenuBarsMarshallerServiceBootstrap(
@@ -80,7 +80,7 @@ implements HasMetaModelContext {
 
 
         mmcBuilder.singletonProvider(
-                _ManagedBeanAdapter
+                _SingletonBeanProvider
                 .forTestingLazy(MenuBarsLoaderService.class, ()->{
                     return new MenuBarsLoaderServiceDefault(
                             menubarsLayoutXmlResourceRef,
@@ -88,7 +88,7 @@ implements HasMetaModelContext {
                 }));
 
         mmcBuilder.singletonProvider(
-                _ManagedBeanAdapter
+                _SingletonBeanProvider
                 .forTestingLazy(MenuBarsService.class, ()->{
 
                     val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
