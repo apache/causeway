@@ -636,9 +636,10 @@ For example:
   }
 }
 ----
+|===
 
-|
-resulting in a response such as:
+This will result in a response (for the rich schema) such as:
+
 [source,json]
 ----
 {
@@ -662,26 +663,8 @@ resulting in a response such as:
 }
 ----
 
-|
-resulting in a response such as:
-[source,json]
-----
-{
-  "data" : {
-    "simple" : {
-      "university_dept_Staff" : {
-        "findStaffMemberByName" : {
-          "photo" : {
-            "bytes" : "///graphql/object/university.dept.StaffMember:123/photo/blobBytes"
-          }
-        }
-      }
-    }
-  }
-}
-----
+The simple schema's response is very similar.
 
-|===
 
 [NOTE]
 ====
