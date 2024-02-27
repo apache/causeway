@@ -2,42 +2,129 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The GraphQL viewer automatically exposes an Apache Causeway domain object model as a link:https://graphql.org/[graphql] API.
-It is implemented using link:https://spring.io/projects/spring-graphql[Spring GraphQL] project, which in turn is built on top of link:https://www.graphql-java.com/[GraphQL Java].
+The GraphQL viewer automatically exposes an Apache Causeway domain object model as a link:https://graphql.org/[GraphQL] API.
+The viewer iterates over the domain services and domain objects, with their actions, properties and collections represented as fields within the graph.
+Actions that take parameters are mapped to fields with arguments.
+
+The GraphQL viewer is implemented using link:https://spring.io/projects/spring-graphql[Spring GraphQL] project, which in turn is built on top of link:https://www.graphql-java.com/[GraphQL Java].
 This also means that it automatically provides the link:https://github.com/graphql/graphiql[GraphiQL] interactive query tool.
+
+== Concepts
+
+=== API Variants
+
+The GraphQL viewer supports 3 different API variants, controlled by the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.api-variant[causeway.viewer.graphql.api-variant] configuration property:
+
+* `QUERY_ONLY`
++
+Exposes only a Query API, of properties, collections and safe (query-onl) actions.
+Any actions that mutate the state of the system (in other words are idempotent or non-idempotent are excluded from the API, as is the ability to set properties.
+
+* `QUERY_AND_MUTATIONS`
++
+Exposes an API with Query for query/safe separate queries and field access, with mutating (idempotent and non-idempotent) actions and property setters instead surfaced as Mutations, as per the link:https://spec.graphql.org/June2018/#sec-Language.Operations[GraphQL spec].
+
+* `QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT`
++
+Exposes an API with both Query and Mutations, but relaxes the constraints for the Query API by also including idempotent and non-idempotent actions and property setters.
++
+Note that the actions _are_ also available through as Mutations (same as with `QUERY_AND_MUTATIONS` API variant).
++
+[IMPORTANT]
+Be aware that the resultant API is not compliant with the rules of the
+GraphQL spec; in particular, it violates link:https://spec.graphql.org/June2018/#sec-Language.Operations[2.3 Operations] which states: "query – [is] a read‐only fetch";
+
+So the API variant primarily relates to how mutating (non-safe) actions are handled.
+
+
+
+=== Rich vs Simple Schemas
+
+The viewer can represent the domain model as either a "rich" GraphQL schema, or a "simple" GraphQL schema; or indeed both can be supported ath the same time.
+
+The *rich schema* represents all the behaviour and structure of the Causeway domain model:
+
+* hidden, disabled, validate
+* choices, autoComplete, defaults
+* obtain ("get") the value
+
+In other words, it exposes not only the core data/behaviour but also of the supporting methods.
+
+The *simple schema* represents just the core data/behaviour, but does not include the supporting method facets.
+
+With the rich schema, the application logic and business domain logic remains the concern of the server, with the calling client app responsible only for presentation logic.
+In fact, the rich schemas is so rich that one could in theory implement a fully generic UI client.
+
+With the simple schema, although the main business domain logic remains the concern of the server, the application logic moves to the client.
+For example, if there is a drop-down list box, the client needs to know how to obtain the list of choices.
+But the benefit of the simple schema is, well, that it is simpler; in other words more "intuitive" and less "verbose".
+
+The xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema-style[causeway.viewer.graphql.schema-style] configuration property specifies which schema (or both) is supported:
+
+* `SIMPLE_ONLY` - exposes only the "simple" schema
+* `RICH_ONLY` - exposes only the "rich" schema
+* `SIMPLE_AND_RICH` - exposes both the simple and rich schemas, the top-level query for each residing under either the `simple` or `rich` field respectively.
++
+For the top-level mutation, the "simple" schema is used.
+
+* `RICH_AND_SIMPLE` - also exposes both the simple and rich schemas, the top-level query for each residing under either the `simple` or `rich` field respectively.
++
+For the top-level mutation, the "rich" schema is used.
+
+If only the simple or the rich schema is enabled (`SIMPLE_ONLY` or `RICH_ONLY`), then the set of types defined by each of these schemes is available at the root query.
+If both schemas are enabled (`SIMPLE_AND_RICH` or `RICH_AND_SIMPLE`), the these each reside under a top-level field, by default "simple" or "rich".
+The name of these fields can be configured to something else if required using xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-simple[causeway.viewer.graphql.top-level-field-name-for-simple] and xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-rich[causeway.viewer.graphql.top-level-field-name-for-rich] configuration properties.
+
+
 
 == Example
 
 How the viewer works is probably most easily explained by an example.
-The diagram below shows a simple domain footnote:[in fact, this is the domain used by the GraphQL viewer's own tests].
+The diagram below shows a simple domain (in fact, this is the domain used by the GraphQL viewer's own tests):
 
 image::test-domain.drawio.png[width=600]
 
 GraphQL distinguishes queries and mutations, so let's look at each.
+We'll assume here that the `SIMPLE_AND_RICH` schema style is in use.
 
 NOTE: GraphQL also defines the notion of subscriptions; the GraphQL viewer currently has no support for these.
 
-=== Queries
 
-To list all Departments, we can submit this query:
+== Queries
 
+Queries most often start at a domain service.
+In the example above, these would be `Departments`, `DeptHeadRepository`, or `Staff`.
+
+To list all ``Department``s, we can submit this query using either the "rich" schema or "simple" schema:
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
 [source,graphql]
 ----
 {
-  university_dept_Departments {
-    findAllDepartments {
-      invoke {                  #<.>
-        name {
-          get                   #<.>
-        }
-        staffMembers {
-          get {                 #<.>
+  rich {                          #<.>
+    university_dept_Departments { #<.>
+      findAllDepartments {        #<.>
+        invoke {                  #<.>
+          results {               #<.>
             name {
-              get               #<.>
+              get                 #<.>
             }
-            _gqlv_meta {
-              id                #<.>
-              logicalTypeName   #<5>
+            staffMembers {
+              get {               #<.>
+                name {
+                  get             #<.>
+                }
+                _meta {
+                  id              #<.>
+                  logicalTypeName #<9>
+                }
+              }
             }
           }
         }
@@ -46,33 +133,76 @@ To list all Departments, we can submit this query:
   }
 }
 ----
-<.> invokes the action, returning a list of ``Department``s
-<.> gets (accesses) the `name` property of each returned `Department`
-<.> also gets (accesses) the `staffMembers` collection of each returned `Department`, returning a list of ``StaffMember``s
-<.> gets the `name` prperty for each returned `StaffMember`
-<.> returns the internal id and logicalTypeName of each `StaffMember`.
-Together, these make up the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object.
 
-As well as accessing properties and collections and invoking (safe) actions, the GraphQL viewer also allows access to the usual supporting semantics.
-For example:
-
+|
 [source,graphql]
 ----
 {
-  university_dept_Departments {
-    findAllDepartments {
-      disabled          #<.>
-      invoke {
-        name {
-          hidden        #<.>
+  simple {                        #<1>
+    university_dept_Departments { #<2>
+      findAllDepartments {        #<3><4><5>
+        name                      #<6>
+        staffMembers {            #<7>
+          name                    #<8>
+          _meta {
+            id                    #<9>
+            logicalTypeName       #<9>
+          }
         }
       }
     }
   }
 }
 ----
+|===
+<.> specify schema style
+<.> domain service
+<.> action name
+<.> invokes the action
+<.> returning a list of ``Department``s
+<.> gets (accesses) the `name` property of each returned `Department`
+<.> also gets (accesses) the `staffMembers` collection of each returned `Department`, returning a list of ``StaffMember``s
+<.> gets the `name` prperty for each returned `StaffMember`
+<.> returns the internal id and logicalTypeName of each `StaffMember`.
+Together, these make up the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object.
+
+
+But if using the "rich" schema, then as well as accessing properties and collections and invoking (safe) actions, the GraphQL viewer also allows access to the usual supporting semantics.
+For example:
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
+[source,graphql]
+----
+{
+  rich {
+    university_dept_Departments {
+      findAllDepartments {
+        disabled          #<.>
+        invoke {
+          results {
+            name {
+              hidden        #<.>
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+|
+Not supported by simple schema.
+|===
+
 <.> whether this action is disabled
 <.> whether the property of the resultant object is hidden
+
 
 Similarly, there are fields for action parameters:
 
@@ -90,9 +220,72 @@ There are also similar fields for properties:
 * `autoComplete` - for a property , is there an auto-complete?
 
 
+[#the-meta-fieldtype]
+== The Meta field/type
+
+As we saw in the previous section, the `_meta` field provides access to additional information about the domain object.
+The full list of fields provided are:
+
+* `logicalTypeName` and `id` : these are equivalent to the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object
+* `version` (if an entity and available)
+* `title` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-title[title()] supporting method)
+* `icon` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-icon[icon], normally the associated `.png` file) and `grid` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc[layout], normally the associated `.layout.xml` file )
++
+These can only be downloaded if configured, see xref:#resources-blobs-clobs-layouts-icons[resources] section below.
+
+* `cssClass` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-css-styling[cssClass()] supporting method)
+
+There is also one additional field, `saveAs`; this is discussed in the xref:#testing[testing] section below.
+
+
+[#queries-that-lookup-a-domain-object]
+== Queries that lookup a Domain Object
+
+Most queries will start with a domain service, but it is also possible to define a query that starts with a "lookup" of existing domain object:
+
+[cols="1a,1a",options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
+[source,graphql]
+----
+{
+  rich {
+    university_dept_Department(   #<.>
+      object: {id: "1"}           #<.>
+    ) {
+      name {
+        get
+      }
+    }
+  }
+}
+----
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_Department(   #<1>
+      object: {id: "1"}) {        #<2>
+      name
+    }
+  }
+}
+----
+
+|===
+<.> logical type name of the domain object
+<.> identifier of the domain object instance
+
+
 The next section explains how use mutations to change the state of the system.
 
-=== Mutations
+
+== Mutations
 
 Actions that mutate the state of the system (with idempotent or non-idempotent xref:refguide:applib:index/annotation/Action.adoc#semantics[@Action#semantics]) are exposed as mutations.
 Editable properties are also exposed as mutations.
@@ -101,6 +294,13 @@ IF the action is on a domain service, then the target is implicit; but if the ac
 
 For example, to invoke a mutating action on a domain service:
 
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
 [source,graphql]
 ----
 mutation {
@@ -114,15 +314,38 @@ mutation {
   }
 }
 ----
+
+|
+[source,graphql]
+----
+mutation {
+  university_dept_Departments__createDepartment(
+      name: "Geophysics",
+      deptHead: null
+  ) {
+    name
+  }
+}
+----
+
+|===
 <.> derived from the logical type name of the domain service, and the action Id.
 
-For example, to invoke a mutating action on a domain object:
 
+For example, to invoke a mutating action on a domain object
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
 [source,graphql]
 ----
 mutation {
   university_dept_Department__changeName(     # <.>
-      _gqlv_target: {id : "1"},               # <.>
+      _target: {id : "1"},                     # <.>
       newName: "Classics and Ancient History"
   ) {
     name {
@@ -131,33 +354,68 @@ mutation {
   }
 }
 ----
+
+|
+[source,graphql]
+----
+mutation {
+  university_dept_Department__changeName(
+      _target: {id : "1"},
+      newName: "Classics and Ancient History"
+  ) {
+    name
+  }
+}
+----
+
+|===
 <.> derived from the logical type name of the domain object, and the action Id.
-<.> the `_gqlv_target` specifies the target object
+<.> the `object` argument specifies the target object
 
 
 Or, to set a property on a domain object:
 
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
 [source,graphql]
 ----
 mutation {
-  university_dept_StaffMember__name(    #<.>
-      _gqlv_target: {id: "1"},          #<.>
+  university_dept_StaffMember__name(  #<.>
+      _target: {id: "1"},             #<.>
       name: "Jonathon Gartner"
   ) {
-    name {                              #<.>
+    name {                            #<.>
       get
     }
   }
 }
 ----
+
+|
+[source,graphql]
+----
+mutation {
+  university_dept_StaffMember__name(
+      _target: {id: "1"},
+      name: "Jonathon Gartner"
+  ) {
+    name
+  }
+}
+----
+
+|===
 <.> derived from the logical type name of the domain object, and the property Id.
-<.> the `_gqlv_target` specifies the target object
+<.> the `_target` argument specifies the target object
 <.> property setters are `void`, so as a convenience the mutator instead returns the target object.
 
 
-
-
-=== Mutations using Queries
+== Queries that are also Mutations
 
 According to the link:https://spec.graphql.org/June2018/#sec-Language.Operations[GraphQL specification], queries should be read-only; they must not change the state of the system.
 
@@ -171,24 +429,35 @@ As specified by xref:refguide:applib:index/annotation/Action.adoc#semantics[@Act
 * `set` - to modify a property.
 
 
-For example, to invoke an action on a domain service
+For example, to invoke an action on a domain service:
 
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
 [source,graphql]
 ----
 {
-  university_dept_Staff {
-    createStaffMember {
-      invokeNonIdempotent(
-        name: "Dr. Georgina McGovern",
-        department: { id: "1"}
-    ) {
-        name {
-          get
-        }
-        department {
-          get {
+  rich {
+    university_dept_Staff {
+      createStaffMember {
+        invokeNonIdempotent(
+          name: "Dr. Georgina McGovern",
+          department: { id: "1"}
+      ) {
+          results {
             name {
               get
+            }
+            department {
+              get {
+                name {
+                  get
+                }
+              }
             }
           }
         }
@@ -196,21 +465,54 @@ For example, to invoke an action on a domain service
     }
   }
 }
-
 ----
+
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_Staff {
+      createStaffMember (
+          name: "Dr. Georgina McGovern",
+          department: { id: "1"}
+      ) {
+        name
+        department {
+          name
+        }
+      }
+    }
+  }
+}
+----
+|===
 
 Or, to find a domain object and then invoke a mutating action on it:
 
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
 [source,graphql]
 ----
 {
-  university_dept_DeptHeads {
-    findHeadByName {
-      invoke(name: "Prof. Dicky Horwich") {
-        changeName {
-          invokeIdempotent(newName: "Prof. Richard Horwich") {
-            name {
-              get
+  rich {
+    university_dept_DeptHeads {
+      findHeadByName {
+        invoke(name: "Prof. Dicky Horwich") {
+          results {
+            changeName {
+              invokeIdempotent(newName: "Prof. Richard Horwich") {
+                results {
+                  name {
+                    get
+                  }
+                }
+              }
             }
           }
         }
@@ -219,19 +521,46 @@ Or, to find a domain object and then invoke a mutating action on it:
   }
 }
 ----
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_DeptHeads {
+      findHeadByName(name: "Prof. Dicky Horwich") {
+        changeName(newName: "Prof. Richard Horwich") {
+          name
+        }
+      }
+    }
+  }
+}
+----
+|===
 
 Or, similarly to find a domain object and then set a property afterwards:
 
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
 [source,graphql]
 ----
 {
-  university_dept_Staff {
-    findStaffMemberByName {
-      invoke(name: "Gerry Jones") {
-        name {
-          set(name: "Gerald Johns") {
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
             name {
-              get
+              set(name: "Gerald Johns") {
+                name {
+                  get
+                }
+              }
             }
           }
         }
@@ -240,13 +569,323 @@ Or, similarly to find a domain object and then set a property afterwards:
   }
 }
 ----
+
+|
+Not supported by simple schema
+
+|===
 
 
 This relaxed mode is specified using a configuration property, see xref:setup-and-configuration.adoc[].
 
 
 
-== See also
+[#resources-blobs-clobs-layouts-icons]
+== Resources (Blobs, Clobs, Layouts, Icons)
 
-As well as this viewer, Apache Causeway also provides the xref:vro::about.adoc[], which performs the same function, but using REST instead of GraphQL.
+Rather than returning the values of Blobs and Clobs inline within a response, instead the GraphQL viewer renders these as a URL to a resource controller.
+The client can then make a second call to this endpoint using a simple HTTP(s) GET.
+
+The same approach is used for both simple and rich schemas.
+
+For example:
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
+[source,graphql]
+----
+{
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            photo {
+              get {
+                bytes     # <.>
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+<.> requests a URL to download bytes
+
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_Staff {
+      findStaffMemberByName(name: "Gerry Jones") {
+        photo {
+          bytes           # <1>
+        }
+      }
+    }
+  }
+}
+----
+
+|
+resulting in a response such as:
+[source,json]
+----
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "invoke" : {
+            "results" : {
+              "photo" : {
+                "get" : {
+                  "bytes" : "///graphql/object/university.dept.StaffMember:123/photo/blobBytes"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+|
+resulting in a response such as:
+[source,json]
+----
+{
+  "data" : {
+    "simple" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "photo" : {
+            "bytes" : "///graphql/object/university.dept.StaffMember:123/photo/blobBytes"
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+|===
+
+[NOTE]
+====
+The viewer does _not_ currently provide any way to update Blobs or Clobs.
+One option is to implement a custom controller that the client can post to, analogous to the in-built resource controller.
+====
+
+
+The xref:#the-meta-fieldtype[meta field] mentioned earlier also allows the `icon` and `grid` (layout) files to be downloaded in a similar way:
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
+[source,graphql]
+----
+{
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            _meta {
+              icon        # <.>
+              grid        # <.>
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+<.> requests a URL to download bytes
+
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_Staff {
+      findStaffMemberByName(name: "Gerry Jones") {
+        _meta {
+          icon            # <1>
+          grid            # <2>
+        }
+      }
+    }
+  }
+}
+----
+
+|===
+<.> URL to download the icon (typically a `.png` file)
+<.> URL to download the grid layout (typically the `.layout.xml` file)
+
+
+Because the resource controller exposes information directly, these fields are suppressed by default.
+To enable, use the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[causeway.viewer.graphql.resources.response-type] configuration property.
+If you do this, then you should also make sure that the resource controller is made secure in some appropriate fashion.
+
+
+
+
+[#testing]
+== Testing
+
+Because the "rich" schema exposes pretty much all the behaviour of the domain model, it's possible to use GraphQL queries as a way to write end-to-end tests.
+This works especially well with link:https://github.com/approvals/ApprovalTests.Java[approval tests], which can be used to efficiently assert the contents of the returned response.
+
+Testing support is enabled with the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.include-testing-field-in-rich[causeway.viewer.graphql.include-testing-field-in-rich] configuration property.
+This then allows the "`rich`" schema to include a new field "`Scenario`", which in turn can have three further fields, "`Given`", "`When`" and "`Then`".
+The scenario can also be named.
+
+Moreover, the testing support introduces a "saveAs" capability (within the xref:#the-meta-fieldtype[meta] field) to tag objects and then use them at a later stage.
+
+This is all probably most easily explained with an example:
+
+[source,graphql]
+----
+{
+  rich {
+    Scenario(name: "Find department and change its name"){    #<.>
+      Name                                                    #<1>
+
+      Given {                                                 #<.>
+        university_dept_Departments {
+          findDepartmentByName {
+            invoke(name: "Classics") {
+              args {
+                name
+              }
+              results {
+                _meta {
+                  saveAs(ref: "dept#1")                       #<.>
+                }
+              }
+            }
+          }
+        }
+      }
+
+      When {                                                  #<.>
+        university_dept_Department(
+            object: {ref: "dept#1"}                           #<.>
+        ) {
+          name {
+            get
+          }
+          changeName {
+            invokeIdempotent(newName: "Ancient History") {
+              args {
+                newName                                       #<.>
+              }
+              results {                                       #<.>
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Then {
+        university_dept_Department(object: {ref: "dept#1"}) {
+          name {
+            get                                               #<.>
+          }
+        }
+      }
+    }
+  }
+}
+----
+<.> We name the scenario.
+The `Name` field means that the scenario's name will be printed out in the response.
+<.> Under the `Given` field, we set up or locate the objects that are to be interacted with within the scenario.
+<.> Having found an object, we save it with some meaningful name.
+<.> Under the `When` field, we interact with the object.
+<.> We use the tag from before to locate the object
+<.> We request to print out the arguments
+<.> The object is changed
+<.> We assert on the results
+
+This will result in a response such as:
+
+[source,json]
+----
+{
+  "data" : {
+    "rich" : {
+      "Scenario" : {
+        "Name" : "Find department and change its name",
+        "Given" : {
+          "university_dept_Departments" : {
+            "findDepartmentByName" : {
+              "invoke" : {
+                "args" : {
+                  "name" : "Classics"
+                },
+                "results" : {
+                  "_meta" : {
+                    "saveAs" : "dept#1  "
+                  }
+                }
+              }
+            }
+          }
+        },
+        "When" : {
+          "university_dept_Department" : {
+            "name": {
+              "get": "Classics"
+            },
+            "changeName" : {
+              "invokeIdempotent" : {
+                "args" : {
+                  "newName" : "Ancient History"
+                },
+                "results" : {
+                  "name" : {
+                    "get" : "Ancient History"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Then" : {
+          "university_dept_Department" : {
+            "name" : {
+              "get" : "Ancient History"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+In this case you'll notice that the `Then` field doesn't actually show any additional assertions to those already in the `When` clause, so it could have been omitted.
+
+
 

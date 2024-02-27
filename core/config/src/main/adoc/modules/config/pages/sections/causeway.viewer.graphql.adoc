@@ -39,12 +39,23 @@ authentication.fallback.username
 
 
 |
-[[causeway.viewer.graphql.lookup.argument]]
+[[causeway.viewer.graphql.include-testing-field-in-rich]]
+causeway.viewer.graphql. +
+include-testing-field-in-rich
+
+|  true
+| If the ``#getSchemaStyle()`` is set to either ``SchemaStyle#RICH_ONLY`` or ``SchemaStyle#SIMPLE_AND_RICH``, then determines whether the "Scenario" field is included in order to allow given/when/then tests to be expressed.
+
+Ignored if the ``#getSchemaStyle()`` is ``SchemaStyle#SIMPLE_ONLY``.
+
+
+|
+[[causeway.viewer.graphql.lookup.arg-name]]
 causeway.viewer.graphql.lookup. +
-argument
+arg-name
 
 |  object
-| null
+| This is the name of the synthetic first argument used to locate the object to be looked up.
 
 
 |
@@ -52,7 +63,7 @@ argument
 causeway.viewer.graphql.lookup. +
 field-name-prefix
 
-|  _gqlv_lookup__
+| 
 | Lookup field prefix
 
 
@@ -70,7 +81,7 @@ field-name-suffix
 causeway.viewer.graphql.meta-data. +
 field-name
 
-|  _gqlv_meta
+|  _meta
 | Note that field names _cannot_ being with "__", as that is reserved by the underlying GraphQL implementation.
 
 
@@ -79,8 +90,19 @@ field-name
 causeway.viewer.graphql.mutation. +
 target-arg-name
 
-|  _gqlv_target
+|  _target
 | The name of the synthetic argument of mutators representing the target domain object.
+
+
+|
+[[causeway.viewer.graphql.resources.response-type]]
+causeway.viewer.graphql.resources. +
+response-type
+
+| 
+| How resources (``Blob`` bytes, ``Clob`` chars, grids and icons) can be downloaded from the resource controller.
+
+By default the download of these resources if ``ResponseType#FORBIDDEN``, but alternatively they can be enabled to download either ``ResponseType#DIRECT``ly or as an ``ResponseType#ATTACHMENT``.
 
 
 |
@@ -94,13 +116,54 @@ local-date-format
 
 
 |
+[[causeway.viewer.graphql.scalar-marshaller.local-time-format]]
+causeway.viewer.graphql. +
+scalar-marshaller. +
+local-time-format
+
+|  HH:mm:ss
+| For both JDK8's ``LocalTime`` and JodaTime's ``LocalTime``
+
+
+|
 [[causeway.viewer.graphql.scalar-marshaller.zoned-date-time-format]]
 causeway.viewer.graphql. +
 scalar-marshaller. +
 zoned-date-time-format
 
-|  yyyy-MM-dd HH:mm:ss z
+|  yyyy-MM-dd'T'HH:mm:ssXXX
 | for JDK8's ``ZonedDateTime`` and JodaTime's ``DateTime``
+
+
+|
+[[causeway.viewer.graphql.schema-style]]
+causeway.viewer.graphql. +
+schema-style
+
+| 
+| Which ``SchemaStyle`` to expose.
+
+
+|
+[[causeway.viewer.graphql.top-level-field-name-for-rich]]
+causeway.viewer.graphql. +
+top-level-field-name-for-rich
+
+|  rich
+| If the ``#getSchemaStyle()`` is set to ``SchemaStyle#SIMPLE_AND_RICH``, defines the name of the top-level field under which the "rich" schema resides.
+
+Ignored for any other ``#getSchemaStyle()``.
+
+
+|
+[[causeway.viewer.graphql.top-level-field-name-for-simple]]
+causeway.viewer.graphql. +
+top-level-field-name-for-simple
+
+|  simple
+| If the ``#getSchemaStyle()`` is set to ``SchemaStyle#SIMPLE_AND_RICH``, defines the name of the top-level field under which the "simple" schema resides.
+
+Ignored for any other ``#getSchemaStyle()``.
 
 
 

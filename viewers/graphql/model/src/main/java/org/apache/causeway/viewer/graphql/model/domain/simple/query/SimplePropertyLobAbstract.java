@@ -25,7 +25,7 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
@@ -34,7 +34,7 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 import lombok.val;
 
-public abstract class SimplePropertyLobAbstract extends GqlvAbstract {
+public abstract class SimplePropertyLobAbstract extends Element {
 
     final MemberInteractor<OneToOneAssociation> memberInteractor;
 

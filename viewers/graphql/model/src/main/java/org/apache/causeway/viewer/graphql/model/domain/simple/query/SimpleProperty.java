@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
@@ -44,7 +44,7 @@ import lombok.Getter;
 import lombok.val;
 
 public class SimpleProperty
-        extends GqlvAbstract
+        extends Element
         implements MemberInteractor<OneToOneAssociation>, Parent {
 
     @Getter final ObjectInteractor objectInteractor;
@@ -125,7 +125,7 @@ public class SimpleProperty
         }
     }
 
-    static <T extends GqlvAbstract> void addChildFieldFor(
+    static <T extends Element> void addChildFieldFor(
             final GraphQLObjectType.Builder glqObjectTypeBuilder,
             final T hasField) {
         GraphQLFieldDefinition childField = hasField.getField();

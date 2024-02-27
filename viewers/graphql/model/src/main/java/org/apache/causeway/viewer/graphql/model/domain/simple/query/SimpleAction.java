@@ -39,9 +39,9 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
-import org.apache.causeway.viewer.graphql.model.domain.GqlvAbstract;
+import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.GvqlActionUtils;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonActionUtils;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
@@ -59,7 +59,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class SimpleAction
-        extends GqlvAbstract {
+        extends Element {
 
     @Getter final ObjectInteractor objectInteractor;
     @Getter private final ObjectAction objectMember;
@@ -210,7 +210,7 @@ public class SimpleAction
 
         val refValue = argumentValue.get("ref");
         if (refValue != null) {
-            String key = GvqlActionUtils.keyFor(refValue);
+            String key = CommonActionUtils.keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
             if (bookmarkedPojo == null) {
                 throw new IllegalArgumentException(String.format(

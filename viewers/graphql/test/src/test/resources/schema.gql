@@ -4964,7 +4964,7 @@ enum rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gql
 "An 8-bit signed integer"
 scalar Byte
 
-"An RFC-3339 compliant DateTime Scalar"
+"A slightly refined version of RFC-3339 compliant DateTime Scalar"
 scalar DateTime
 
 "A 16-bit signed integer"

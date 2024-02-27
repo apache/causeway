@@ -6,6 +6,7 @@
 The GraphQL viewer defines a couple of services that are intended to act as SPI hooks for more sophisticated implementations.
 The viewer does provide default implementations.
 
+[#usermementoprovider]
 == UserMementoProvider
 
 The xref:refguide:viewer:index/graphql/applib/auth/UserMementoProvider.adoc[] SPI is used to obtain the xref:refguide:applib:index/services/user/UserMemento.adoc[] -- in other words the identity -- of the client executing the API.

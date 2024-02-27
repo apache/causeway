@@ -259,6 +259,7 @@ public class OrderSubscriptions {
 }
 ----
 
+[#object-css-styling]
 == Object CSS Styling
 
 It is also possible for an object to return a xref:refguide:applib-methods:ui-hints.adoc#cssClass[CSS class].

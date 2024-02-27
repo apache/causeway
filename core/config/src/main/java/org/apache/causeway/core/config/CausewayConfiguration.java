@@ -2437,7 +2437,7 @@ public class CausewayConfiguration {
 
             public enum ApiVariant {
                 /**
-                 * Exposes only a Query API, of properties, collections and safe (query-onl) actions.
+                 * Exposes only a Query API, of properties, collections and safe (query-only) actions.
                  * Any actions that mutate the state of the system (in other words are idempotent or non-idempotent)
                  * are excluded from the API, as is the ability to set properties.
                  */
@@ -2492,7 +2492,10 @@ public class CausewayConfiguration {
                  * Lookup field suffix
                  */
                 private String fieldNameSuffix = "";
-                private String argument = "object";
+                /**
+                 * This is the name of the synthetic first argument used to locate the object to be looked up.
+                 */
+                private String argName = "object";
             }
 
             private final Mutation mutation = new Mutation();
@@ -2567,6 +2570,12 @@ public class CausewayConfiguration {
                  * How resources ({@link org.apache.causeway.applib.value.Blob} bytes,
                  * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
                  * resource controller.
+                 *
+                 * <p>
+                 *     By default the download of these resources if {@link ResponseType#FORBIDDEN}, but alternatively
+                 *     they can be enabled to download either {@link ResponseType#DIRECT}ly or as an
+                 *     {@link ResponseType#ATTACHMENT}.
+                 * </p>
                  */
                 private ResponseType responseType = ResponseType.FORBIDDEN;
             }
