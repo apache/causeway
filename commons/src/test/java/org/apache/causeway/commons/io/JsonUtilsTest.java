@@ -30,6 +30,17 @@ import lombok.val;
 
 class JsonUtilsTest {
 
+    /*
+     * [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:testCompile 
+     *      on project causeway-commons: Compilation failure:
+     * [ERROR] package com.google.gson does not exist
+     * [ERROR] cannot find symbol
+     * [ERROR]   symbol:   class GsonBuilder
+     * [ERROR]   location: class org.approvaltests.JsonApprovals 
+     */
+    org.approvaltests.JsonApprovals dummy1; // references com.google.gson.GsonBuilder
+    com.google.gson.GsonBuilder dummy2; // Requires (GSON)[https://mvnrepository.com/artifact/com.google.code.gson/gson]
+    
     private Person person;
 
     @BeforeEach

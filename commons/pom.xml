@@ -229,12 +229,18 @@
             <artifactId>approvaltests</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+			<!-- required by com.approvaltests:test
+				(version manged by spring boot) -->
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <scope>test</scope>
+		</dependency>
 
 		<!-- provided -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 

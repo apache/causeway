@@ -38,7 +38,9 @@
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <java.version>17</java.version>
+        <!-- as a minimum requirement of
+		    org.springframework.graphql:spring-graphql-test:1.2.4 -->
+        <maven.compiler.release>17</maven.compiler.release>
 
         <datasource-proxy-spring-boot-starter.version>1.8.1</datasource-proxy-spring-boot-starter.version>
         <sql-formatter.version>2.0.4</sql-formatter.version>
@@ -56,22 +58,10 @@
 				<filtering>false</filtering>
 			</testResource>
 		</testResources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-        </plugins>
 	</build>
 
 	<dependencies>
 
     </dependencies>
-
 
 </project>
