@@ -11,6 +11,7 @@ This also means that it automatically provides the link:https://github.com/graph
 
 == Concepts
 
+[#api-variants]
 === API Variants
 
 The GraphQL viewer supports 3 different API variants, controlled by the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.api-variant[causeway.viewer.graphql.api-variant] configuration property:
@@ -26,15 +27,17 @@ Exposes an API with Query for query/safe separate queries and field access, with
 
 * `QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT`
 +
-Exposes an API with both Query and Mutations, but relaxes the constraints for the Query API by also including idempotent and non-idempotent actions and property setters.
+This variant exposes an API with both Query and Mutations, but relaxes the constraints for the Query API by also including idempotent and non-idempotent actions and property setters.
+The actions _are_ also available through as Mutations (same as with `QUERY_AND_MUTATIONS` API variant).
 +
-Note that the actions _are_ also available through as Mutations (same as with `QUERY_AND_MUTATIONS` API variant).
+Examples of using this API variant are provided in the xref:queries-that-are-also-mutations[Queries that are also Mutations] section, below.
 +
 [IMPORTANT]
 Be aware that the resultant API is not compliant with the rules of the
-GraphQL spec; in particular, it violates link:https://spec.graphql.org/June2018/#sec-Language.Operations[2.3 Operations] which states: "query – [is] a read‐only fetch";
+GraphQL spec; in particular, it violates link:https://spec.graphql.org/June2018/#sec-Language.Operations[2.3 Operations] which states: "a query [is] a read‐only fetch";
 
-So the API variant primarily relates to how mutating (non-safe) actions are handled.
+
+In summary, the API variant therefore relates to whether and how mutating (non-safe) actions are represented.
 
 
 
@@ -415,11 +418,12 @@ mutation {
 <.> property setters are `void`, so as a convenience the mutator instead returns the target object.
 
 
+[#queries-that-are-also-mutations]
 == Queries that are also Mutations
 
 According to the link:https://spec.graphql.org/June2018/#sec-Language.Operations[GraphQL specification], queries should be read-only; they must not change the state of the system.
 
-The GraphQL viewer (optionally) relaxes this rule, allowing actions to be invoked that _do_ change the state of the system, and -- indeed -- allowing properties to be modified.
+Enabling the `QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT` API variant (also mentioned xref:#api-variants[above]) relaxes this rule, allowing actions to be invoked that _do_ change the state of the system, and -- indeed -- allowing properties to be modified.
 This is done through these additional fields:
 
 * `invokeIdempotent` - to invoke an action whose action semantics are idempotent
@@ -575,8 +579,6 @@ Not supported by simple schema
 
 |===
 
-
-This relaxed mode is specified using a configuration property, see xref:setup-and-configuration.adoc[].
 
 
 
