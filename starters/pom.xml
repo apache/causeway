@@ -327,7 +327,7 @@
 				</property>
 			</activation>
 			<properties>
-				<jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
+				<jib-maven-plugin.version>3.4.1</jib-maven-plugin.version>
 			</properties>
 			<build>
 				<pluginManagement>
