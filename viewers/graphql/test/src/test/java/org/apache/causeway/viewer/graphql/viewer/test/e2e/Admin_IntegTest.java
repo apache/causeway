@@ -21,10 +21,13 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
+
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestFactory;
 
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 

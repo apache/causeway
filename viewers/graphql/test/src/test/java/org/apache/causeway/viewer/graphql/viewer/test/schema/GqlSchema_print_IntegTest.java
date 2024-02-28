@@ -37,7 +37,7 @@ import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
-import org.apache.causeway.viewer.graphql.viewer.test.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlTestModuleIntegTestAbstract;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
@@ -51,7 +51,7 @@ public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIn
     @Inject private GraphQlSourceForCauseway graphQlSourceForCauseway;
 
     public GqlSchema_print_IntegTest() {
-        super("._.gql");
+        super(GqlSchema_print_IntegTest.class);
     }
 
     @BeforeEach

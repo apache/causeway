@@ -259,7 +259,6 @@ type rich__causeway_applib_DomainObjectList__actionArguments__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(actionArguments: String): rich__causeway_applib_DomainObjectList
   validate(actionArguments: String): String
 }
 
@@ -268,7 +267,6 @@ type rich__causeway_applib_DomainObjectList__actionId__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(actionId: String): rich__causeway_applib_DomainObjectList
   validate(actionId: String): String
 }
 
@@ -277,7 +275,6 @@ type rich__causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(actionOwningFqcn: String): rich__causeway_applib_DomainObjectList
   validate(actionOwningFqcn: String): String
 }
 
@@ -286,7 +283,6 @@ type rich__causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(elementTypeFqcn: String!): rich__causeway_applib_DomainObjectList
   validate(elementTypeFqcn: String): String
 }
 
@@ -312,7 +308,6 @@ type rich__causeway_applib_DomainObjectList__title__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(title: String!): rich__causeway_applib_DomainObjectList
   validate(title: String): String
 }
 
@@ -338,7 +333,6 @@ type rich__causeway_applib_FacetGroupNode__facets__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(facets: String!): rich__causeway_applib_FacetGroupNode
   validate(facets: String): String
 }
 
@@ -357,7 +351,6 @@ type rich__causeway_applib_FacetGroupNode__parentNode__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_FacetGroupNode
   validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
@@ -394,7 +387,6 @@ type rich__causeway_applib_ParameterNode__parameter__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(parameter: String!): rich__causeway_applib_ParameterNode
   validate(parameter: String): String
 }
 
@@ -403,7 +395,6 @@ type rich__causeway_applib_ParameterNode__parentNode__gqlv_property {
   disabled: String
   get: rich__causeway_applib_node_ActionNode!
   hidden: Boolean
-  set(parentNode: rich__causeway_applib_node_ActionNode__gqlv_input!): rich__causeway_applib_ParameterNode
   validate(parentNode: rich__causeway_applib_node_ActionNode__gqlv_input): String
 }
 
@@ -442,7 +433,6 @@ type rich__causeway_applib_PropertyNode__mixedIn__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(mixedIn: Boolean!): rich__causeway_applib_PropertyNode
   validate(mixedIn: Boolean): String
 }
 
@@ -451,7 +441,6 @@ type rich__causeway_applib_PropertyNode__parentNode__gqlv_property {
   disabled: String
   get: rich__causeway_applib_TypeNode!
   hidden: Boolean
-  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_PropertyNode
   validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
 }
 
@@ -460,7 +449,6 @@ type rich__causeway_applib_PropertyNode__property__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(property: String!): rich__causeway_applib_PropertyNode
   validate(property: String): String
 }
 
@@ -478,7 +466,6 @@ type rich__causeway_applib_RoleMemento__description__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(description: String!): rich__causeway_applib_RoleMemento
   validate(description: String): String
 }
 
@@ -498,7 +485,6 @@ type rich__causeway_applib_RoleMemento__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(name: String!): rich__causeway_applib_RoleMemento
   validate(name: String): String
 }
 
@@ -524,7 +510,6 @@ type rich__causeway_applib_TypeNode__domainClassDto__gqlv_property {
   disabled: String
   get: rich__causeway_schema_metamodel_v2_DomainClassDto!
   hidden: Boolean
-  set(domainClassDto: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input!): rich__causeway_applib_TypeNode
   validate(domainClassDto: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): String
 }
 
@@ -543,7 +528,6 @@ type rich__causeway_applib_TypeNode__parentNode__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_TypeNode
   validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
@@ -579,7 +563,6 @@ type rich__causeway_applib_UserMemento__authenticationCode__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(authenticationCode: String!): rich__causeway_applib_UserMemento
   validate(authenticationCode: String): String
 }
 
@@ -589,7 +572,6 @@ type rich__causeway_applib_UserMemento__authenticationSource__gqlv_property {
   disabled: String
   get: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!
   hidden: Boolean
-  set(authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!): rich__causeway_applib_UserMemento
   validate(authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum): String
 }
 
@@ -598,7 +580,6 @@ type rich__causeway_applib_UserMemento__avatarUrl__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(avatarUrl: String): rich__causeway_applib_UserMemento
   validate(avatarUrl: String): String
 }
 
@@ -618,7 +599,6 @@ type rich__causeway_applib_UserMemento__impersonating__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(impersonating: Boolean!): rich__causeway_applib_UserMemento
   validate(impersonating: Boolean): String
 }
 
@@ -627,7 +607,6 @@ type rich__causeway_applib_UserMemento__languageLocale__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(languageLocale: String): rich__causeway_applib_UserMemento
   validate(languageLocale: String): String
 }
 
@@ -636,7 +615,6 @@ type rich__causeway_applib_UserMemento__multiTenancyToken__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(multiTenancyToken: String): rich__causeway_applib_UserMemento
   validate(multiTenancyToken: String): String
 }
 
@@ -645,7 +623,6 @@ type rich__causeway_applib_UserMemento__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(name: String!): rich__causeway_applib_UserMemento
   validate(name: String): String
 }
 
@@ -654,7 +631,6 @@ type rich__causeway_applib_UserMemento__numberFormatLocale__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(numberFormatLocale: String): rich__causeway_applib_UserMemento
   validate(numberFormatLocale: String): String
 }
 
@@ -663,7 +639,6 @@ type rich__causeway_applib_UserMemento__realName__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(realName: String): rich__causeway_applib_UserMemento
   validate(realName: String): String
 }
 
@@ -679,7 +654,6 @@ type rich__causeway_applib_UserMemento__timeFormatLocale__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(timeFormatLocale: String): rich__causeway_applib_UserMemento
   validate(timeFormatLocale: String): String
 }
 
@@ -718,7 +692,6 @@ type rich__causeway_applib_node_ActionNode__action__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(action: String!): rich__causeway_applib_node_ActionNode
   validate(action: String): String
 }
 
@@ -744,7 +717,6 @@ type rich__causeway_applib_node_ActionNode__mixedIn__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(mixedIn: Boolean!): rich__causeway_applib_node_ActionNode
   validate(mixedIn: Boolean): String
 }
 
@@ -753,7 +725,6 @@ type rich__causeway_applib_node_ActionNode__parentNode__gqlv_property {
   disabled: String
   get: rich__causeway_applib_TypeNode!
   hidden: Boolean
-  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_node_ActionNode
   validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
 }
 
@@ -781,7 +752,6 @@ type rich__causeway_applib_node_CollectionNode__collection__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(collection: String!): rich__causeway_applib_node_CollectionNode
   validate(collection: String): String
 }
 
@@ -801,7 +771,6 @@ type rich__causeway_applib_node_CollectionNode__mixedIn__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(mixedIn: Boolean!): rich__causeway_applib_node_CollectionNode
   validate(mixedIn: Boolean): String
 }
 
@@ -810,7 +779,6 @@ type rich__causeway_applib_node_CollectionNode__parentNode__gqlv_property {
   disabled: String
   get: rich__causeway_applib_TypeNode!
   hidden: Boolean
-  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_node_CollectionNode
   validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
 }
 
@@ -836,7 +804,6 @@ type rich__causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(facetAttr: String!): rich__causeway_applib_node_FacetAttrNode
   validate(facetAttr: String): String
 }
 
@@ -856,7 +823,6 @@ type rich__causeway_applib_node_FacetAttrNode__parentNode__gqlv_property {
   disabled: String
   get: rich__causeway_applib_node_FacetNode!
   hidden: Boolean
-  set(parentNode: rich__causeway_applib_node_FacetNode__gqlv_input!): rich__causeway_applib_node_FacetAttrNode
   validate(parentNode: rich__causeway_applib_node_FacetNode__gqlv_input): String
 }
 
@@ -884,7 +850,6 @@ type rich__causeway_applib_node_FacetNode__facet__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(facet: String!): rich__causeway_applib_node_FacetNode
   validate(facet: String): String
 }
 
@@ -903,7 +868,6 @@ type rich__causeway_applib_node_FacetNode__parentNode__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_node_FacetNode
   validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
@@ -912,7 +876,6 @@ type rich__causeway_applib_node_FacetNode__shadowed__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(shadowed: Boolean!): rich__causeway_applib_node_FacetNode
   validate(shadowed: Boolean): String
 }
 
@@ -957,7 +920,6 @@ type rich__causeway_conf_ConfigurationProperty__key__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(key: String!): rich__causeway_conf_ConfigurationProperty
   validate(key: String): String
 }
 
@@ -966,7 +928,6 @@ type rich__causeway_conf_ConfigurationProperty__value__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(value: String!): rich__causeway_conf_ConfigurationProperty
   validate(value: String): String
 }
 
@@ -1042,7 +1003,6 @@ type rich__causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property 
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationFeatureViewModel
   validate(memberName: String): String
 }
 
@@ -1051,7 +1011,6 @@ type rich__causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_proper
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationFeatureViewModel
   validate(namespaceName: String): String
 }
 
@@ -1059,7 +1018,6 @@ type rich__causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationFeatureViewModel
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -1068,7 +1026,6 @@ type rich__causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_prope
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationFeatureViewModel
   validate(typeSimpleName: String): String
 }
 
@@ -1109,7 +1066,6 @@ type rich__causeway_feat_ApplicationNamespace__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationNamespace
   validate(memberName: String): String
 }
 
@@ -1118,7 +1074,6 @@ type rich__causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationNamespace
   validate(namespaceName: String): String
 }
 
@@ -1126,7 +1081,6 @@ type rich__causeway_feat_ApplicationNamespace__parent__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationNamespace
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -1135,7 +1089,6 @@ type rich__causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationNamespace
   validate(typeSimpleName: String): String
 }
 
@@ -1181,7 +1134,6 @@ type rich__causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
   disabled: String
   get: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum!
   hidden: Boolean
-  set(actionSemantics: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum!): rich__causeway_feat_ApplicationTypeAction
   validate(actionSemantics: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum): String
 }
 
@@ -1201,7 +1153,6 @@ type rich__causeway_feat_ApplicationTypeAction__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationTypeAction
   validate(memberName: String): String
 }
 
@@ -1210,7 +1161,6 @@ type rich__causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeAction
   validate(namespaceName: String): String
 }
 
@@ -1218,7 +1168,6 @@ type rich__causeway_feat_ApplicationTypeAction__parent__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeAction
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -1227,7 +1176,6 @@ type rich__causeway_feat_ApplicationTypeAction__returnType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(returnType: String!): rich__causeway_feat_ApplicationTypeAction
   validate(returnType: String): String
 }
 
@@ -1236,7 +1184,6 @@ type rich__causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeAction
   validate(typeSimpleName: String): String
 }
 
@@ -1262,7 +1209,6 @@ type rich__causeway_feat_ApplicationTypeCollection__derived__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(derived: Boolean!): rich__causeway_feat_ApplicationTypeCollection
   validate(derived: Boolean): String
 }
 
@@ -1271,7 +1217,6 @@ type rich__causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(elementType: String!): rich__causeway_feat_ApplicationTypeCollection
   validate(elementType: String): String
 }
 
@@ -1291,7 +1236,6 @@ type rich__causeway_feat_ApplicationTypeCollection__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationTypeCollection
   validate(memberName: String): String
 }
 
@@ -1300,7 +1244,6 @@ type rich__causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeCollection
   validate(namespaceName: String): String
 }
 
@@ -1308,7 +1251,6 @@ type rich__causeway_feat_ApplicationTypeCollection__parent__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeCollection
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -1317,7 +1259,6 @@ type rich__causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_propert
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeCollection
   validate(typeSimpleName: String): String
 }
 
@@ -1350,7 +1291,6 @@ type rich__causeway_feat_ApplicationTypeMember__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationTypeMember
   validate(memberName: String): String
 }
 
@@ -1359,7 +1299,6 @@ type rich__causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeMember
   validate(namespaceName: String): String
 }
 
@@ -1367,7 +1306,6 @@ type rich__causeway_feat_ApplicationTypeMember__parent__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeMember
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -1376,7 +1314,6 @@ type rich__causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeMember
   validate(typeSimpleName: String): String
 }
 
@@ -1406,7 +1343,6 @@ type rich__causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(derived: Boolean!): rich__causeway_feat_ApplicationTypeProperty
   validate(derived: Boolean): String
 }
 
@@ -1426,7 +1362,6 @@ type rich__causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property {
   disabled: String
   get: Int
   hidden: Boolean
-  set(maxLength: Int): rich__causeway_feat_ApplicationTypeProperty
   validate(maxLength: Int): String
 }
 
@@ -1435,7 +1370,6 @@ type rich__causeway_feat_ApplicationTypeProperty__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationTypeProperty
   validate(memberName: String): String
 }
 
@@ -1444,7 +1378,6 @@ type rich__causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeProperty
   validate(namespaceName: String): String
 }
 
@@ -1452,7 +1385,6 @@ type rich__causeway_feat_ApplicationTypeProperty__parent__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeProperty
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -1461,7 +1393,6 @@ type rich__causeway_feat_ApplicationTypeProperty__returnType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(returnType: String!): rich__causeway_feat_ApplicationTypeProperty
   validate(returnType: String): String
 }
 
@@ -1470,7 +1401,6 @@ type rich__causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property 
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeProperty
   validate(typeSimpleName: String): String
 }
 
@@ -1479,7 +1409,6 @@ type rich__causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property {
   disabled: String
   get: Int
   hidden: Boolean
-  set(typicalLength: Int): rich__causeway_feat_ApplicationTypeProperty
   validate(typicalLength: Int): String
 }
 
@@ -1513,7 +1442,6 @@ type rich__causeway_feat_ApplicationType__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationType
   validate(memberName: String): String
 }
 
@@ -1522,7 +1450,6 @@ type rich__causeway_feat_ApplicationType__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationType
   validate(namespaceName: String): String
 }
 
@@ -1530,7 +1457,6 @@ type rich__causeway_feat_ApplicationType__parent__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationType
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -1546,7 +1472,6 @@ type rich__causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationType
   validate(typeSimpleName: String): String
 }
 
@@ -1578,7 +1503,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(actions: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(actions: String): String
 }
 
@@ -1587,7 +1511,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_proper
   disabled: String
   get: String!
   hidden: Boolean
-  set(annotations: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(annotations: String): String
 }
 
@@ -1596,7 +1519,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_proper
   disabled: String
   get: String!
   hidden: Boolean
-  set(collections: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(collections: String): String
 }
 
@@ -1605,7 +1527,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(facets: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(facets: String): String
 }
 
@@ -1625,7 +1546,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(id: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(id: String): String
 }
 
@@ -1634,7 +1554,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_prope
   disabled: String
   get: String
   hidden: Boolean
-  set(majorVersion: String): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(majorVersion: String): String
 }
 
@@ -1643,7 +1562,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_prope
   disabled: String
   get: String
   hidden: Boolean
-  set(minorVersion: String): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(minorVersion: String): String
 }
 
@@ -1652,7 +1570,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_propert
   disabled: String
   get: String!
   hidden: Boolean
-  set(properties: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(properties: String): String
 }
 
@@ -1661,7 +1578,6 @@ type rich__causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(service: Boolean!): rich__causeway_schema_metamodel_v2_DomainClassDto
   validate(service: Boolean): String
 }
 
@@ -1715,7 +1631,6 @@ type rich__causeway_testing_fixtures_FixtureResult__className__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(className: String!): rich__causeway_testing_fixtures_FixtureResult
   validate(className: String): String
 }
 
@@ -1724,7 +1639,6 @@ type rich__causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv
   disabled: String
   get: String
   hidden: Boolean
-  set(fixtureScriptClassName: String): rich__causeway_testing_fixtures_FixtureResult
   validate(fixtureScriptClassName: String): String
 }
 
@@ -1744,7 +1658,6 @@ type rich__causeway_testing_fixtures_FixtureResult__key__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(key: String!): rich__causeway_testing_fixtures_FixtureResult
   validate(key: String): String
 }
 
@@ -1752,7 +1665,6 @@ type rich__causeway_testing_fixtures_FixtureResult__object__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(object: String!): rich__causeway_testing_fixtures_FixtureResult
   validate(object: String): String
 }
 
@@ -1914,7 +1826,6 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__
   datatype: String
   disabled: String
   hidden: Boolean
-  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
   validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
@@ -1951,7 +1862,6 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn_
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(mixedIn: Boolean!): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
   validate(mixedIn: Boolean): String
 }
 
@@ -1960,7 +1870,6 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNo
   disabled: String
   get: rich__causeway_applib_TypeNode!
   hidden: Boolean
-  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
   validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
 }
 
@@ -1978,7 +1887,6 @@ type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScr
   disabled: String
   get: String!
   hidden: Boolean
-  set(friendlyName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   validate(friendlyName: String): String
 }
 
@@ -1998,7 +1906,6 @@ type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScr
   disabled: String
   get: String!
   hidden: Boolean
-  set(qualifiedName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   validate(qualifiedName: String): String
 }
 
@@ -2023,22 +1930,9 @@ type rich__university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv
 type rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(firstParam: String!, secondParam: String!, thirdParameter: String!): rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params
   validate(firstParam: String, secondParam: String, thirdParameter: String): String
-}
-
-type rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_args {
-  firstParam: String
-  secondParam: String
-  thirdParameter: String
-}
-
-type rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_args
-  results: String
 }
 
 type rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params {
@@ -2074,21 +1968,9 @@ type rich__university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_a
 type rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(firstParam: String!, secondParam: String!): rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params
   validate(firstParam: String, secondParam: String): String
-}
-
-type rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_args {
-  firstParam: String
-  secondParam: String
-}
-
-type rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_args
-  results: String
 }
 
 type rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params {
@@ -2108,23 +1990,13 @@ type rich__university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_
 type rich__university_admin_AdminMenu__adminAction__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent: rich__university_admin_AdminMenu__adminAction__gqlv_action_invoke
   validate: String
-}
-
-type rich__university_admin_AdminMenu__adminAction__gqlv_action_invoke {
-  results: String
 }
 
 type rich__university_admin_AdminMenu__otherAdminAction__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent: rich__university_admin_AdminMenu__otherAdminAction__gqlv_action_invoke
   validate: String
-}
-
-type rich__university_admin_AdminMenu__otherAdminAction__gqlv_action_invoke {
-  results: String
 }
 
 type rich__university_calc_Calculator {
@@ -3341,20 +3213,9 @@ type rich__university_dept_Department {
 type rich__university_dept_Department__addStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(staffMember: rich__university_dept_StaffMember__gqlv_input!): rich__university_dept_Department__addStaffMember__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_Department__addStaffMember__gqlv_action_params
   validate(staffMember: rich__university_dept_StaffMember__gqlv_input): String
-}
-
-type rich__university_dept_Department__addStaffMember__gqlv_action_args {
-  staffMember: rich__university_dept_StaffMember
-}
-
-type rich__university_dept_Department__addStaffMember__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_Department__addStaffMember__gqlv_action_args
-  results: rich__university_dept_Department
 }
 
 type rich__university_dept_Department__addStaffMember__gqlv_action_params {
@@ -3374,20 +3235,9 @@ type rich__university_dept_Department__addStaffMember__staffMember__gqlv_action_
 type rich__university_dept_Department__addStaffMembers__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(staffMembers: [rich__university_dept_StaffMember__gqlv_input]): rich__university_dept_Department__addStaffMembers__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_Department__addStaffMembers__gqlv_action_params
   validate(staffMembers: [rich__university_dept_StaffMember__gqlv_input]): String
-}
-
-type rich__university_dept_Department__addStaffMembers__gqlv_action_args {
-  staffMembers: [rich__university_dept_StaffMember]
-}
-
-type rich__university_dept_Department__addStaffMembers__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_Department__addStaffMembers__gqlv_action_args
-  results: rich__university_dept_Department
 }
 
 type rich__university_dept_Department__addStaffMembers__gqlv_action_params {
@@ -3407,20 +3257,9 @@ type rich__university_dept_Department__addStaffMembers__staffMembers__gqlv_actio
 type rich__university_dept_Department__changeDeptHead__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(newDeptHead: rich__university_dept_DeptHead__gqlv_input!): rich__university_dept_Department__changeDeptHead__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_Department__changeDeptHead__gqlv_action_params
   validate(newDeptHead: rich__university_dept_DeptHead__gqlv_input): String
-}
-
-type rich__university_dept_Department__changeDeptHead__gqlv_action_args {
-  newDeptHead: rich__university_dept_DeptHead
-}
-
-type rich__university_dept_Department__changeDeptHead__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_Department__changeDeptHead__gqlv_action_args
-  results: rich__university_dept_Department
 }
 
 type rich__university_dept_Department__changeDeptHead__gqlv_action_params {
@@ -3441,20 +3280,9 @@ type rich__university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_
 type rich__university_dept_Department__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(newName: String!): rich__university_dept_Department__changeName__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_Department__changeName__gqlv_action_params
   validate(newName: String): String
-}
-
-type rich__university_dept_Department__changeName__gqlv_action_args {
-  newName: String
-}
-
-type rich__university_dept_Department__changeName__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_Department__changeName__gqlv_action_args
-  results: rich__university_dept_Department
 }
 
 type rich__university_dept_Department__changeName__gqlv_action_params {
@@ -3477,7 +3305,6 @@ type rich__university_dept_Department__deptHead__gqlv_property {
   disabled: String
   get: rich__university_dept_DeptHead
   hidden: Boolean
-  set(deptHead: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_Department
   validate(deptHead: rich__university_dept_DeptHead__gqlv_input): String
 }
 
@@ -3498,7 +3325,6 @@ type rich__university_dept_Department__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(name: String!): rich__university_dept_Department
   validate(name: String): String
 }
 
@@ -3506,20 +3332,9 @@ type rich__university_dept_Department__name__gqlv_property {
 type rich__university_dept_Department__removeStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(staffMember: rich__university_dept_StaffMember__gqlv_input!): rich__university_dept_Department__removeStaffMember__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_Department__removeStaffMember__gqlv_action_params
   validate(staffMember: rich__university_dept_StaffMember__gqlv_input): String
-}
-
-type rich__university_dept_Department__removeStaffMember__gqlv_action_args {
-  staffMember: rich__university_dept_StaffMember
-}
-
-type rich__university_dept_Department__removeStaffMember__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_Department__removeStaffMember__gqlv_action_args
-  results: rich__university_dept_Department
 }
 
 type rich__university_dept_Department__removeStaffMember__gqlv_action_params {
@@ -3564,21 +3379,9 @@ type rich__university_dept_Departments__createDepartment__deptHead__gqlv_action_
 type rich__university_dept_Departments__createDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(deptHead: rich__university_dept_DeptHead__gqlv_input, name: String!): rich__university_dept_Departments__createDepartment__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_Departments__createDepartment__gqlv_action_params
   validate(deptHead: rich__university_dept_DeptHead__gqlv_input, name: String): String
-}
-
-type rich__university_dept_Departments__createDepartment__gqlv_action_args {
-  deptHead: rich__university_dept_DeptHead
-  name: String
-}
-
-type rich__university_dept_Departments__createDepartment__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_Departments__createDepartment__gqlv_action_args
-  results: rich__university_dept_Department
 }
 
 type rich__university_dept_Departments__createDepartment__gqlv_action_params {
@@ -3665,20 +3468,9 @@ type rich__university_dept_DeptHead__changeDepartment__department__gqlv_action_p
 type rich__university_dept_DeptHead__changeDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(department: rich__university_dept_Department__gqlv_input!): rich__university_dept_DeptHead__changeDepartment__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_DeptHead__changeDepartment__gqlv_action_params
   validate(department: rich__university_dept_Department__gqlv_input): String
-}
-
-type rich__university_dept_DeptHead__changeDepartment__gqlv_action_args {
-  department: rich__university_dept_Department
-}
-
-type rich__university_dept_DeptHead__changeDepartment__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_DeptHead__changeDepartment__gqlv_action_args
-  results: rich__university_dept_DeptHead
 }
 
 type rich__university_dept_DeptHead__changeDepartment__gqlv_action_params {
@@ -3690,20 +3482,9 @@ type rich__university_dept_DeptHead__changeDepartment__gqlv_action_params {
 type rich__university_dept_DeptHead__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeIdempotent(newName: String!): rich__university_dept_DeptHead__changeName__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_DeptHead__changeName__gqlv_action_params
   validate(newName: String): String
-}
-
-type rich__university_dept_DeptHead__changeName__gqlv_action_args {
-  newName: String
-}
-
-type rich__university_dept_DeptHead__changeName__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_DeptHead__changeName__gqlv_action_args
-  results: rich__university_dept_DeptHead
 }
 
 type rich__university_dept_DeptHead__changeName__gqlv_action_params {
@@ -3726,7 +3507,6 @@ type rich__university_dept_DeptHead__department__gqlv_property {
   disabled: String
   get: rich__university_dept_Department
   hidden: Boolean
-  set(department: rich__university_dept_Department__gqlv_input): rich__university_dept_DeptHead
   validate(department: rich__university_dept_Department__gqlv_input): String
 }
 
@@ -3747,7 +3527,6 @@ type rich__university_dept_DeptHead__name__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
-  set(name: String): rich__university_dept_DeptHead
   validate(name: String): String
 }
 
@@ -3894,7 +3673,6 @@ type rich__university_dept_Person__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(name: String!): rich__university_dept_Person
   validate(name: String): String
 }
 
@@ -3928,7 +3706,6 @@ type rich__university_dept_StaffMember__department__gqlv_property {
   disabled: String
   get: rich__university_dept_Department
   hidden: Boolean
-  set(department: rich__university_dept_Department__gqlv_input): rich__university_dept_StaffMember
   validate(department: rich__university_dept_Department__gqlv_input): String
 }
 
@@ -3950,7 +3727,6 @@ type rich__university_dept_StaffMember__grade__gqlv_property {
   disabled: String
   get: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!
   hidden: Boolean
-  set(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): rich__university_dept_StaffMember
   validate(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): String
 }
 
@@ -3959,7 +3735,6 @@ type rich__university_dept_StaffMember__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(name: String!): rich__university_dept_StaffMember
   validate(name: String): String
 }
 
@@ -3968,7 +3743,6 @@ type rich__university_dept_StaffMember__photo__gqlv_property {
   disabled: String
   get: rich__university_dept_StaffMember__photo__gqlv_property_lob
   hidden: Boolean
-  set(photo: String): rich__university_dept_StaffMember
   validate(photo: String): String
 }
 
@@ -3990,21 +3764,9 @@ type rich__university_dept_Staff__createStaffMember__department__gqlv_action_par
 type rich__university_dept_Staff__createStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(department: rich__university_dept_Department__gqlv_input!, name: String!): rich__university_dept_Staff__createStaffMember__gqlv_action_invoke
   "Parameters of this action"
   params: rich__university_dept_Staff__createStaffMember__gqlv_action_params
   validate(department: rich__university_dept_Department__gqlv_input, name: String): String
-}
-
-type rich__university_dept_Staff__createStaffMember__gqlv_action_args {
-  department: rich__university_dept_Department
-  name: String
-}
-
-type rich__university_dept_Staff__createStaffMember__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_dept_Staff__createStaffMember__gqlv_action_args
-  results: rich__university_dept_StaffMember
 }
 
 type rich__university_dept_Staff__createStaffMember__gqlv_action_params {
@@ -4793,18 +4555,8 @@ type simple__university_calc_Calculator {
 type simple__university_dept_Department {
   "Object metadata"
   _meta: simple__university_dept_Department__gqlv_meta
-  "University department specializing in a field of study"
-  addStaffMember(staffMember: simple__university_dept_StaffMember__gqlv_input!): simple__university_dept_Department
-  "University department specializing in a field of study"
-  addStaffMembers(staffMembers: [simple__university_dept_StaffMember__gqlv_input]): simple__university_dept_Department
-  "University department specializing in a field of study"
-  changeDeptHead(newDeptHead: simple__university_dept_DeptHead__gqlv_input!): simple__university_dept_Department
-  "University department specializing in a field of study"
-  changeName(newName: String!): simple__university_dept_Department
   deptHead: simple__university_dept_DeptHead
   name: String!
-  "University department specializing in a field of study"
-  removeStaffMember(staffMember: simple__university_dept_StaffMember__gqlv_input!): simple__university_dept_Department
   "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   staffMembers: [simple__university_dept_StaffMember]
 }
@@ -4834,10 +4586,6 @@ type simple__university_dept_Departments {
 type simple__university_dept_DeptHead {
   "Object metadata"
   _meta: simple__university_dept_DeptHead__gqlv_meta
-  "Departmental head, responsible for curriculum, research, funding and staff"
-  changeDepartment(department: simple__university_dept_Department__gqlv_input!): simple__university_dept_DeptHead
-  "Departmental head, responsible for curriculum, research, funding and staff"
-  changeName(newName: String!): simple__university_dept_DeptHead
   department: simple__university_dept_Department
   name: String
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test;
+package org.apache.causeway.viewer.graphql.viewer.testsupport;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -78,8 +78,6 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 import org.apache.causeway.viewer.graphql.viewer.CausewayModuleViewerGraphqlViewer;
 import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
@@ -91,10 +89,7 @@ import lombok.val;
         classes = {
                 CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
         },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {
-                "causeway.viewer.graphql.api-variant=QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT"
-        }
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureHttpGraphQlTester
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -102,13 +97,18 @@ import lombok.val;
 @ActiveProfiles("test")
 public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
+    private final Class<?> resourceBaseClazz;
     private final String suffix;
 
-    protected CausewayViewerGraphqlTestModuleIntegTestAbstract(String suffix) {
+    protected CausewayViewerGraphqlTestModuleIntegTestAbstract(
+            final Class<?> resourceBaseClazz,
+            final String suffix
+    ) {
+        this.resourceBaseClazz = resourceBaseClazz;
         this.suffix = suffix;
     }
-    protected CausewayViewerGraphqlTestModuleIntegTestAbstract() {
-        this("._.gql");
+    protected CausewayViewerGraphqlTestModuleIntegTestAbstract(final Class<?> resourceBaseClazz) {
+        this(resourceBaseClazz, "._.gql");
     }
 
     /**
@@ -126,7 +126,6 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
             CausewayModuleTestingFixturesApplib.class,
             CausewayModuleViewerGraphqlViewer.class,
 
-            UniversityModule.class
     })
     @PropertySources({
             @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
@@ -340,14 +339,14 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     protected void afterEach() {}
 
-    protected static Blob asPdfBlob(String fileName) {
+    protected Blob asPdfBlob(String fileName) {
         val bytes = toBytes(fileName);
         return new Blob(fileName, "application/pdf", bytes);
     }
 
     @SneakyThrows
-    protected static byte[] toBytes(String fileName){
-        InputStream inputStream = new ClassPathResource(fileName, Abstract_IntegTest.class).getInputStream();
+    protected byte[] toBytes(String fileName){
+        InputStream inputStream = new ClassPathResource(fileName, resourceBaseClazz).getInputStream();
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         int nRead;
