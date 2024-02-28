@@ -87,7 +87,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
+                CausewayViewerGraphqlIntegTestAbstract.TestApp.class
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
@@ -95,19 +95,19 @@ import lombok.val;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
-public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
+public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     private final Class<?> resourceBaseClazz;
     private final String suffix;
 
-    protected CausewayViewerGraphqlTestModuleIntegTestAbstract(
+    protected CausewayViewerGraphqlIntegTestAbstract(
             final Class<?> resourceBaseClazz,
             final String suffix
     ) {
         this.resourceBaseClazz = resourceBaseClazz;
         this.suffix = suffix;
     }
-    protected CausewayViewerGraphqlTestModuleIntegTestAbstract(final Class<?> resourceBaseClazz) {
+    protected CausewayViewerGraphqlIntegTestAbstract(final Class<?> resourceBaseClazz) {
         this(resourceBaseClazz, "._.gql");
     }
 

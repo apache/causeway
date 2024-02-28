@@ -32,7 +32,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlIntegTestAbstract;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHeadRepository;
@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMemberRep
 @Import({
         UniversityModule.class
 })
-public abstract class Abstract_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
+public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestAbstract {
 
     protected Abstract_IntegTest() {
         super(Abstract_IntegTest.class);

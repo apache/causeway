@@ -16,42 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.schema;
+package org.apache.causeway.viewer.graphql.viewer.testsupport.schema;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import graphql.schema.idl.SchemaPrinter;
 
-import org.approvaltests.core.Options;
+import org.apache.causeway.core.config.CausewayConfiguration;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
-import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlTestModuleIntegTestAbstract;
+import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlIntegTestAbstract;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
 import lombok.val;
 
 @Transactional
-public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIntegTestAbstract {
+public class PrintSchemaIntegTestAbstract extends CausewayViewerGraphqlIntegTestAbstract {
 
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private GraphQlSourceForCauseway graphQlSourceForCauseway;
 
-    public GqlSchema_print_IntegTest() {
-        super(GqlSchema_print_IntegTest.class);
+    public PrintSchemaIntegTestAbstract() {
+        super(PrintSchemaIntegTestAbstract.class);
+    }
+
+    @DynamicPropertySource
+    static void apiVariant(DynamicPropertyRegistry registry) {
+        registry.add("causeway.viewer.graphql.api-variant", CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
     }
 
     @BeforeEach
@@ -74,18 +80,6 @@ public class GqlSchema_print_IntegTest extends CausewayViewerGraphqlTestModuleIn
         File targetFile1 = new File("src/test/resources/schema.gql");
 
         Files.write(Paths.get(targetFile1.getPath()), submit.getBytes());
-    }
-
-    @SuppressWarnings("unused")
-    private Options gqlSchemaOptions() {
-        return new Options()
-                .withScrubber(this::unixLineEndings)
-                .forFile().withExtension(".gql");
-    }
-
-    private String unixLineEndings(final String input) {
-        return TextUtils.streamLines(input)
-                .collect(Collectors.joining("\n"));
     }
 
 }
