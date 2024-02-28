@@ -44,6 +44,19 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertNotN
 
 import lombok.val;
 
+/**
+ * Utility to print out the schema, to <code>src/test/resources</code> of the implementing subclass.
+ *
+ * <p>
+ *      IDEs can then detect this and use it to provide intellisense/code-completion for GraphQL queries,
+ *      eg used by tests.
+ * </p>
+ *
+ * <p>
+ *     If the {@link org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant ApiVariant} is to
+ *     be overridden from the framework's default, use for example Spring's @{@link DynamicPropertySource} annotation.
+ * </p>
+ */
 @Transactional
 public class PrintSchemaIntegTestAbstract extends CausewayViewerGraphqlIntegTestAbstract {
 
@@ -53,11 +66,6 @@ public class PrintSchemaIntegTestAbstract extends CausewayViewerGraphqlIntegTest
 
     public PrintSchemaIntegTestAbstract() {
         super(PrintSchemaIntegTestAbstract.class);
-    }
-
-    @DynamicPropertySource
-    static void apiVariant(DynamicPropertyRegistry registry) {
-        registry.add("causeway.viewer.graphql.api-variant", CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
     }
 
     @BeforeEach
