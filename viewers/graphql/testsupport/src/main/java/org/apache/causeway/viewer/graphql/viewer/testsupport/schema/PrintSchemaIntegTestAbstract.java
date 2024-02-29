@@ -57,6 +57,23 @@ import lombok.val;
  *     be overridden from the framework's default, use for example Spring's @{@link DynamicPropertySource} annotation.
  * </p>
  *
+ * <p>
+ * For example:
+ *
+ * <pre>
+ * import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql;
+ *
+ * public class PrintSchemaIntegTest extends PrintSchemaIntegTestAbstract {
+ *    {@literal @}DynamicPropertySource
+ *     static void apiVariant(DynamicPropertyRegistry registry) {
+ *         registry.add(
+ *              "causeway.viewer.graphql.api-variant",
+ *              Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
+ *     }
+ * }
+ * </pre>
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 @Transactional

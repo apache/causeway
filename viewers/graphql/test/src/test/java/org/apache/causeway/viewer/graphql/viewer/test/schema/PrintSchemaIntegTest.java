@@ -18,21 +18,18 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
-import org.apache.causeway.viewer.graphql.viewer.testsupport.schema.PrintSchemaIntegTestAbstract;
-
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.viewer.graphql.viewer.testsupport.schema.PrintSchemaIntegTestAbstract;
 
-import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
+import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant;
 
 public class PrintSchemaIntegTest extends PrintSchemaIntegTestAbstract {
 
     @DynamicPropertySource
     static void apiVariant(DynamicPropertyRegistry registry) {
-        registry.add("causeway.viewer.graphql.api-variant", CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
+        registry.add("causeway.viewer.graphql.api-variant", ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
     }
 
 }
