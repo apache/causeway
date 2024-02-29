@@ -85,6 +85,33 @@ import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 
+/**
+ * Intended as a base class for integration testing.
+ *
+ * <p>
+ *     Subclass and {@link Import} the Spring {@link org.springframework.context.annotation.Configuration}s (modules)
+ *     that hold the domain model.
+ * </p>
+ *
+ * <p>
+ *     Write tests as queries with a <code>._.gql</code> suffix (or specify a different suffix through the constructor).
+ *     Then override the {@link #each()} method trivially:
+ *
+ *     <pre>
+ *    {@literal @}TestFactory
+ *     public Iterable<DynamicTest> each() throws IOException, URISyntaxException {
+ *         return super.each();
+ *     }
+ *     </pre>
+ * </p>
+ *
+ * <p>
+ *     The class will use {@link Approvals approval} tests to assert the returned response is correct.
+ * </p>
+ *
+ *
+ * @since 2.0 {@index}
+ */
 @SpringBootTest(
         classes = {
                 CausewayViewerGraphqlIntegTestAbstract.TestApp.class

@@ -56,9 +56,11 @@ import lombok.val;
  *     If the {@link org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant ApiVariant} is to
  *     be overridden from the framework's default, use for example Spring's @{@link DynamicPropertySource} annotation.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 @Transactional
-public class PrintSchemaIntegTestAbstract extends CausewayViewerGraphqlIntegTestAbstract {
+public abstract class PrintSchemaIntegTestAbstract extends CausewayViewerGraphqlIntegTestAbstract {
 
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
