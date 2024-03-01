@@ -30,10 +30,7 @@ public class Integers extends AbstractRandomValueGenerator {
     }
 
     public int any() {
-        return fake.booleans().coinFlip()
-                ?   random().nextInt()
-                : - random().nextInt();
-
+        return random().nextInt();
     }
 
     public int upTo(final int upTo) {

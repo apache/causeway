@@ -26,12 +26,9 @@ import javax.inject.Inject;
 
 import graphql.schema.idl.SchemaPrinter;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,6 +84,7 @@ public abstract class PrintSchemaIntegTestAbstract extends CausewayViewerGraphql
         super(PrintSchemaIntegTestAbstract.class);
     }
 
+    @Override
     @BeforeEach
     protected void beforeEach() {
         assertNotNull(causewaySystemEnvironment);
