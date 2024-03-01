@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test;
+package org.apache.causeway.viewer.graphql.viewer.testsupport;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,6 +49,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
@@ -77,8 +78,6 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 import org.apache.causeway.viewer.graphql.viewer.CausewayModuleViewerGraphqlViewer;
 import org.apache.causeway.viewer.graphql.viewer.integration.ExecutionGraphQlServiceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCauseway;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
@@ -86,28 +85,57 @@ import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 
+/**
+ * Intended as a base class for integration testing.
+ *
+ * <p>
+ *     Subclass and {@link Import} the Spring {@link org.springframework.context.annotation.Configuration}s (modules)
+ *     that hold the domain model.
+ * </p>
+ *
+ * <p>
+ *     Write tests as queries with a <code>._.gql</code> suffix (or specify a different suffix through the constructor).
+ *     Then override the {@link #each()} method trivially:
+ *
+ *     <pre>
+ *    {@literal @}TestFactory
+ *     public Iterable<DynamicTest> each() throws IOException, URISyntaxException {
+ *         return super.each();
+ *     }
+ *     </pre>
+ * </p>
+ *
+ * <p>
+ *     The class will use {@link Approvals approval} tests to assert the returned response is correct.
+ * </p>
+ *
+ *
+ * @since 2.0 {@index}
+ */
 @SpringBootTest(
         classes = {
-                CausewayViewerGraphqlTestModuleIntegTestAbstract.TestApp.class
+                CausewayViewerGraphqlIntegTestAbstract.TestApp.class
         },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {
-                "causeway.viewer.graphql.api-variant=QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT"
-        }
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureHttpGraphQlTester
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
-public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
+public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
+    private final Class<?> resourceBaseClazz;
     private final String suffix;
 
-    protected CausewayViewerGraphqlTestModuleIntegTestAbstract(String suffix) {
+    protected CausewayViewerGraphqlIntegTestAbstract(
+            final Class<?> resourceBaseClazz,
+            final String suffix
+    ) {
+        this.resourceBaseClazz = resourceBaseClazz;
         this.suffix = suffix;
     }
-    protected CausewayViewerGraphqlTestModuleIntegTestAbstract() {
-        this("._.gql");
+    protected CausewayViewerGraphqlIntegTestAbstract(final Class<?> resourceBaseClazz) {
+        this(resourceBaseClazz, "._.gql");
     }
 
     /**
@@ -125,7 +153,6 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
             CausewayModuleTestingFixturesApplib.class,
             CausewayModuleViewerGraphqlViewer.class,
 
-            UniversityModule.class
     })
     @PropertySources({
             @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
@@ -185,17 +212,17 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
     }
 
     @SneakyThrows
-    protected String submit(Map<String,String> replacements) {
+    protected String submit(final Map<String,String> replacements) {
         val httpRequest = buildRequest(testInfo, "._.gql", replacements);
         return submitRequest(httpRequest);
     }
 
-    protected String submit(String variant) {
+    protected String submit(final String variant) {
         return submit(variant, Collections.emptyMap());
     }
 
     @SneakyThrows
-    protected String submit(String variant, Map<String,String> replacements) {
+    protected String submit(final String variant, final Map<String,String> replacements) {
         val httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
         return submitRequest(httpRequest);
     }
@@ -223,7 +250,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
     }
 
     @SneakyThrows
-    protected HttpRequest buildRequest(String resourceName, Map<String, String> replacements) {
+    protected HttpRequest buildRequest(final String resourceName, final Map<String, String> replacements) {
         String resourceContents = readResource(resourceName);
         String resourceContent = replace(resourceContents, replacements);
 
@@ -240,7 +267,7 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
                 build();
     }
 
-    private static String replace(String str, Map<String, String> replacements) {
+    private static String replace(final String str, final Map<String, String> replacements) {
         val builder = new StringBuilder(str);
         replacements.forEach((key, value) -> {
             int index;
@@ -277,15 +304,15 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
         return jsonOptions(null, BookmarkOptions.SCRUB);
     }
 
-    protected Options jsonOptions(BookmarkOptions bookmarkOptions) {
+    protected Options jsonOptions(final BookmarkOptions bookmarkOptions) {
         return jsonOptions(null, bookmarkOptions);
     }
 
-    public Options jsonOptions(Options options) {
+    public Options jsonOptions(final Options options) {
         return jsonOptions(options, BookmarkOptions.SCRUB);
     }
 
-    public Options jsonOptions(@Nullable Options options, BookmarkOptions bookmarkOptions) {
+    public Options jsonOptions(@Nullable Options options, final BookmarkOptions bookmarkOptions) {
         if (options == null) {
             options = new Options();
         }
@@ -339,14 +366,14 @@ public abstract class CausewayViewerGraphqlTestModuleIntegTestAbstract {
 
     protected void afterEach() {}
 
-    protected static Blob asPdfBlob(String fileName) {
+    protected Blob asPdfBlob(final String fileName) {
         val bytes = toBytes(fileName);
         return new Blob(fileName, "application/pdf", bytes);
     }
 
     @SneakyThrows
-    protected static byte[] toBytes(String fileName){
-        InputStream inputStream = new ClassPathResource(fileName, Abstract_IntegTest.class).getInputStream();
+    protected byte[] toBytes(final String fileName){
+        InputStream inputStream = new ClassPathResource(fileName, resourceBaseClazz).getInputStream();
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         int nRead;

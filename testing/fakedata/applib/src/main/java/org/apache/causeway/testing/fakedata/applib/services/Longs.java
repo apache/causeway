@@ -30,9 +30,7 @@ public class Longs extends AbstractRandomValueGenerator {
     }
 
     public long any() {
-        return fake.booleans().coinFlip()
-                ?   random().nextLong()
-                : - random().nextLong();
+        return random().nextLong();
     }
 
     public long upTo(final long upTo) {

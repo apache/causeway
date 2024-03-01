@@ -16,29 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.testing.fakedata.applib.services;
+package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
-/**
- * Returns random <code>int</code>eger values, optionally constrained within a range,
- *
- * @since 2.0 {@index}
- */
-public class Integers extends AbstractRandomValueGenerator {
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
-    public Integers(final FakeDataService fakeDataService) {
-        super(fakeDataService);
-    }
+import org.apache.causeway.viewer.graphql.viewer.testsupport.schema.PrintSchemaIntegTestAbstract;
 
-    public int any() {
-        return random().nextInt();
-    }
+import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant;
 
-    public int upTo(final int upTo) {
-        return fake.randomService.nextInt(upTo);
-    }
+public class PrintSchemaIntegTest extends PrintSchemaIntegTestAbstract {
 
-    public int between(final int min, final int max) {
-        return min + fake.randomService.nextInt(max - min);
+    @DynamicPropertySource
+    static void apiVariant(DynamicPropertyRegistry registry) {
+        registry.add("causeway.viewer.graphql.api-variant", ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
     }
 
 }
