@@ -16,29 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e;
+package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
-import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
+import org.apache.causeway.viewer.graphql.viewer.testsupport.schema.PrintSchemaIntegTestAbstract;
 
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestFactory;
+import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant;
 
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
+public class PrintSchemaIntegTest extends PrintSchemaIntegTestAbstract {
 
-
-//NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(20)
-@ActiveProfiles("test")
-public class Admin_IntegTest extends Abstract_IntegTest {
-
-    @Override
-    @TestFactory
-    public Iterable<DynamicTest> each() throws IOException, URISyntaxException {
-        return super.each();
+    @DynamicPropertySource
+    static void apiVariant(DynamicPropertyRegistry registry) {
+        registry.add("causeway.viewer.graphql.api-variant", ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
     }
+
 }
