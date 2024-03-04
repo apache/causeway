@@ -29,32 +29,22 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>causeway-regressiontests-incubating</artifactId>
-	<name>Apache Causeway - Regression Tests (incubating)</name>
+	<artifactId>causeway-regressiontests-rest</artifactId>
+	<name>Apache Causeway - Regression Tests - Rest</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
+
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.rest</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/rest</git-plugin.propertiesDir>
     </properties>
 
 	<dependencies>
-		<!-- causeway-regressiontests-stable has the domain to test against -->
+
 		<dependency>
 			<groupId>org.apache.causeway.regressiontests</groupId>
 			<artifactId>causeway-regressiontests-base</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.mavendeps</groupId>
-			<artifactId>causeway-mavendeps-webapp</artifactId>
-			<type>pom</type>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
 			<scope>test</scope>
 		</dependency>
 
@@ -71,59 +61,27 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.security</groupId>
-			<artifactId>causeway-security-shiro</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-secman-integration</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-secman-encryption-spring</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.causeway.viewer</groupId>
 			<artifactId>causeway-viewer-restfulobjects-client</artifactId>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
+			<groupId>org.apache.causeway.mavendeps</groupId>
+			<artifactId>causeway-mavendeps-webapp</artifactId>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.directory.server</groupId>
-			<artifactId>apacheds-test-framework</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-cors-impl</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-cors-impl</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.tooling</groupId>
-			<artifactId>causeway-tooling-model4adoc</artifactId>
-			<scope>test</scope>
-		</dependency>
+        </dependency>
 
 	</dependencies>
-
 </project>
