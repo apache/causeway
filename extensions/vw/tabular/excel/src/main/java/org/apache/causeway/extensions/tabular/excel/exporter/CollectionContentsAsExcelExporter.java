@@ -23,8 +23,8 @@ import java.io.File;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.core.metamodel.tabular.simple.CollectionContentsExporter;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
-import org.apache.causeway.viewer.commons.applib.services.tabular.CollectionContentsExporter;
 
 @Component
 public class CollectionContentsAsExcelExporter
