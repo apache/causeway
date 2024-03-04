@@ -23,7 +23,6 @@ module org.apache.causeway.viewer.commons.applib {
     exports org.apache.causeway.viewer.commons.applib.services.menu;
     exports org.apache.causeway.viewer.commons.applib;
     exports org.apache.causeway.viewer.commons.applib.mixins;
-    exports org.apache.causeway.viewer.commons.applib.services.tabular;
 
     requires java.inject;
     requires lombok;
