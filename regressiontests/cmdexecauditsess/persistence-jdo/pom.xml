@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>causeway-regressiontests-cmdexecauditsess-persistence-jdo</artifactId>
-    <name>Apache Causeway - Regression Tests - Cmd/Exec/Audit/Session - JDO</name>
+    <name>Apache Causeway Regression Tests - Cmd/Exec/Audit/Session - JDO</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

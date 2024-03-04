@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-viewers-jpa</artifactId>
-	<name>Apache Causeway - Regression Tests - Viewers JPA</name>
+	<name>Apache Causeway Regression Tests - Viewers JPA</name>
 
 	<properties>
 		<maven.install.skip>true</maven.install.skip>

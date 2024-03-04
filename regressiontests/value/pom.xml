@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-value</artifactId>
-	<name>Apache Causeway - Regression Tests - Value Types</name>
+	<name>Apache Causeway Regression Tests - Value Types</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

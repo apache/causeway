@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-viewers-jdo</artifactId>
-	<name>Apache Causeway - Regression Tests - Viewers JDO</name>
+	<name>Apache Causeway Regression Tests - Viewers JDO</name>
 
 	<properties>
 		<maven.install.skip>true</maven.install.skip>

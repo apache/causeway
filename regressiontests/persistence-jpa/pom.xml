@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-persistence-jpa</artifactId>
-	<name>Apache Causeway - Regression Tests - Persistence (JPA)</name>
+	<name>Apache Causeway Regression Tests - Persistence (JPA)</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

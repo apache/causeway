@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-cucumber</artifactId>
-	<name>Apache Causeway - Regression Tests - Cucumber</name>
+	<name>Apache Causeway Regression Tests - Cucumber</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

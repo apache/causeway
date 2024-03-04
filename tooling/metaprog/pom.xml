@@ -30,7 +30,7 @@
 
 	<artifactId>causeway-tooling-metaprog</artifactId>
 
-	<name>Apache Causeway - Tooling - Meta Programming</name>
+	<name>Apache Causeway Tooling - Meta Programming</name>
 	<description>
         Tools for Java meta-programming and runtime class generaton.
     </description>

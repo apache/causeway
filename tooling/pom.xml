@@ -32,7 +32,7 @@
 	<groupId>org.apache.causeway.tooling</groupId>
 	<artifactId>causeway-tooling</artifactId>
 
-	<name>Apache Causeway - Tooling</name>
+	<name>Apache Causeway Tooling</name>
 	<description>
         Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
         eg. code mining, automated documentation.
