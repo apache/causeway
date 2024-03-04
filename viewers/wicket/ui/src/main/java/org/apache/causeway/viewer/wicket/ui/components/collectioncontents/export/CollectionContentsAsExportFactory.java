@@ -27,7 +27,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.file.Files;
 
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.viewer.commons.applib.services.tabular.CollectionContentsExporter;
+import org.apache.causeway.core.metamodel.tabular.simple.CollectionContentsExporter;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;

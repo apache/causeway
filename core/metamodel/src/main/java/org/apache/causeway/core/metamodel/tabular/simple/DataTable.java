@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -224,6 +225,25 @@ public class DataTable implements Serializable {
             });
         }
         return this;
+    }
+
+    // -- EXPORT
+
+    /**
+     *
+     * Typical use-case:<br>
+     * <pre>{@code
+     * @Inject CollectionContentsAsExcelExporter excelExporter;
+     *
+     * Blob exportToExcel(List&lt;MyDomainObject&gt; myDomainObjects) {
+     *     var dataTable = DataTable.forDomainType(MyDomainObject.class);
+     *     dataTable.setDataElementPojos(myDomainObjects);
+     *     return dataTable.exportToBlob(excelExporter);
+     * }
+     * }</pre>
+     */
+    public Blob exportToBlob(final CollectionContentsExporter exporter) {
+        return exporter.exportToBlob(this, tableFriendlyName);
     }
 
     // -- SERIALIZATION PROXY

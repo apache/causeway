@@ -16,13 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.tabular;
+package org.apache.causeway.core.metamodel.tabular.simple;
 
 import java.io.File;
+import java.nio.file.Files;
 
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
+
+import lombok.SneakyThrows;
 
 /**
  * SPI to provide file export to table views.
@@ -40,6 +44,21 @@ public interface CollectionContentsExporter {
      * @param tempFile destination, this exporter writes its data to
      */
     void createExport(DataTable dataTable, File tempFile);
+
+    /**
+     * Writes given tabular data into a {@link Blob} of given name.
+     *
+     */
+    @SneakyThrows
+    default Blob exportToBlob(final DataTable dataTable, final String name) {
+        var tempFile = File.createTempFile(this.getClass().getCanonicalName(), name);
+        try {
+            createExport(dataTable, tempFile);
+            return Blob.of(name, getMimeType(), DataSource.ofFile(tempFile).bytes());
+        } finally {
+            Files.deleteIfExists(tempFile.toPath()); // cleanup
+        }
+    }
 
     CommonMimeType getMimeType();
 
