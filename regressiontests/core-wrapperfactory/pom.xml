@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>causeway-regressiontests-core-wrapperfactory</artifactId>
-    <name>Apache Causeway - Regression Tests - Core WrapperFactory</name>
+    <name>Apache Causeway Regression Tests - Core WrapperFactory</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-domainmodel</artifactId>
-	<name>Apache Causeway - Regression Tests - Domain Model</name>
+	<name>Apache Causeway Regression Tests - Domain Model</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

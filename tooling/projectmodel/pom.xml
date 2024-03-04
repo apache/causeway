@@ -30,7 +30,7 @@
 
 	<artifactId>causeway-tooling-projectmodel</artifactId>
 
-	<name>Apache Causeway - Tooling - Project Model (Code mining)</name>
+	<name>Apache Causeway Tooling - Project Model (Code mining)</name>
 	<description>
         Code mining library for Gradle/Maven project module tree introspection.
     </description>

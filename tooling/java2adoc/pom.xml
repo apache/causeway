@@ -30,7 +30,7 @@
 
 	<artifactId>causeway-tooling-java2adoc</artifactId>
 
-	<name>Apache Causeway - Tooling - Java to Asciidoc (Code Mining)</name>
+	<name>Apache Causeway Tooling - Java to Asciidoc (Code Mining)</name>
 	<description>
         Code mining library for Java source to Asciidoc conversion.
     </description>

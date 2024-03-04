@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-eventhandling</artifactId>
-	<name>Apache Causeway - Regression Tests - Event Handling</name>
+	<name>Apache Causeway Regression Tests - Event Handling</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

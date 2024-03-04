@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-rest</artifactId>
-	<name>Apache Causeway - Regression Tests - Rest</name>
+	<name>Apache Causeway Regression Tests - Rest</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

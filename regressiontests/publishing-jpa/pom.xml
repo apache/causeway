@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-publishing-jpa</artifactId>
-	<name>Apache Causeway - Regression Tests - Publishing (JPA)</name>
+	<name>Apache Causeway Regression Tests - Publishing (JPA)</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

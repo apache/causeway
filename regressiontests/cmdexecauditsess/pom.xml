@@ -29,7 +29,7 @@
     </parent>
 
     <artifactId>causeway-regressiontests-cmdexecauditsess</artifactId>
-    <name>Apache Causeway - Regression Tests - Cmd/Exec/Audit/Session</name>
+    <name>Apache Causeway Regression Tests - Cmd/Exec/Audit/Session</name>
 
     <packaging>pom</packaging>
 

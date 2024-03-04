@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>causeway-regressiontests-cmdexecauditsess-generic</artifactId>
-    <name>Apache Causeway - Regression Tests - Cmd/Exec/Audit/Session - Generic</name>
+    <name>Apache Causeway Regression Tests - Cmd/Exec/Audit/Session - Generic</name>
 
     <properties>
         <maven.install.skip>true</maven.install.skip>

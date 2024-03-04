@@ -30,7 +30,7 @@
 
 	<artifactId>causeway-tooling-c4modeling</artifactId>
 
-	<name>Apache Causeway - Tooling - C4 Modeling</name>
+	<name>Apache Causeway Tooling - C4 Modeling</name>
 	<description>
         Library for programmatic C4 Model generation.
 

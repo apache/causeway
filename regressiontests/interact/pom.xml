@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-interact</artifactId>
-	<name>Apache Causeway - Regression Tests - Interact</name>
+	<name>Apache Causeway Regression Tests - Interact</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

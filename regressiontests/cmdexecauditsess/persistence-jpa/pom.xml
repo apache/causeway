@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>causeway-regressiontests-cmdexecauditsess-persistence-jpa</artifactId>
-    <name>Apache Causeway - Regression Tests - Cmd/Exec/Audit/Session - JPA</name>
+    <name>Apache Causeway Regression Tests - Cmd/Exec/Audit/Session - JPA</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

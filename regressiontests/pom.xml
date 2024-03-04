@@ -32,7 +32,7 @@
 	<groupId>org.apache.causeway.regressiontests</groupId>
 	<artifactId>causeway-regressiontests</artifactId>
 
-	<name>Apache Causeway - Regression Tests</name>
+	<name>Apache Causeway Regression Tests</name>
 	<description>
         Collection of JUnit tests covering core functionalities of the framework.
     </description>

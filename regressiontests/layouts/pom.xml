@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>causeway-regressiontests-layouts</artifactId>
-    <name>Apache Causeway - Regression Tests - Layouts</name>
+    <name>Apache Causeway Regression Tests - Layouts</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>

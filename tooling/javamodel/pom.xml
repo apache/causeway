@@ -30,7 +30,7 @@
 
 	<artifactId>causeway-tooling-javamodel</artifactId>
 
-	<name>Apache Causeway - Tooling - Java Model (Code Mining)</name>
+	<name>Apache Causeway Tooling - Java Model (Code Mining)</name>
 	<description>
         Code mining library for Java bytecode introspection.
     </description>

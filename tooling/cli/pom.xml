@@ -30,7 +30,7 @@
 
 	<artifactId>causeway-tooling-cli</artifactId>
 
-	<name>Apache Causeway - Tooling - CLI (Command Line Interface)</name>
+	<name>Apache Causeway Tooling - CLI (Command Line Interface)</name>
 	<description>
 		Command Line Interface for the _Apache Causeway Tooling_ ecosystem.
     </description>
