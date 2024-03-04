@@ -252,7 +252,7 @@
 
 			<dependency>
 				<groupId>org.apache.causeway.regressiontests</groupId>
-				<artifactId>causeway-regressiontests-stable</artifactId>
+				<artifactId>causeway-regressiontests-base</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
@@ -364,26 +364,26 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>stable</module>
-		<module>stable-bootstrapping</module>
-		<module>stable-config</module>
-		<module>stable-core-wrapperfactory</module>
-		<module>stable-cucumber</module>
-		<module>stable-domainmodel</module>
-		<module>stable-eventhandling</module>
-		<module>stable-layouts</module>
-		<module>stable-factory</module>
-		<module>stable-interact</module>
-		<module>stable-persistence-jdo</module>
-		<module>stable-persistence-jpa</module>
-		<module>stable-cmdexecauditsess</module>
-		<!-- <module>stable-publishing-jdo</module> code is still incubating -->
-		<module>stable-publishing-jpa</module>
-		<module>stable-rest</module>
-		<module>stable-value</module>
-		<module>stable-viewers-common</module>
-		<module>stable-viewers-jdo</module>
-		<module>stable-viewers-jpa</module>
+		<module>base</module>
+		<module>bootstrapping</module>
+		<module>config</module>
+		<module>core-wrapperfactory</module>
+		<module>cucumber</module>
+		<module>domainmodel</module>
+		<module>eventhandling</module>
+		<module>layouts</module>
+		<module>factory</module>
+		<module>interact</module>
+		<module>persistence-jdo</module>
+		<module>persistence-jpa</module>
+		<module>cmdexecauditsess</module>
+		<!-- <module>publishing-jdo</module> code is still incubating -->
+		<module>publishing-jpa</module>
+		<module>rest</module>
+		<module>value</module>
+		<module>viewers-common</module>
+		<module>viewers-jdo</module>
+		<module>viewers-jpa</module>
 		<!-- <module>incubating</module> -->
 	</modules>
 
