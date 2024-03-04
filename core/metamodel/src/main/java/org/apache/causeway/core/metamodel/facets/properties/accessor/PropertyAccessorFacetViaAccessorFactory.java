@@ -69,7 +69,8 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public boolean isPropertyOrCollectionGetterCandidate(final ResolvedMethod method) {
-        return AccessorSemantics.isGetter(method);
+        return AccessorSemantics.isGetter(method)
+                || AccessorSemantics.isRecordComponentAccessor(method);
     }
 
     /**

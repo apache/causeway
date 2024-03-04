@@ -19,6 +19,7 @@
 package org.apache.causeway.testdomain.domainmodel;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -102,6 +103,8 @@ import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
+import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModel;
+import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelUsingAnnotations;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.causeway.testdomain.model.good.ProperViewModelInferredFromNotBeingAnEntity;
@@ -991,6 +994,54 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         assertHasAction(vmSpec, "myAction"); // regular action (just a sanity check)
         assertHasAction(vmSpec, actionName); // contributed action
         assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
+    }
+
+    // -- JAVA RECORD
+
+    @ParameterizedTest
+    @ValueSource(classes = {
+            ProperRecordAsViewModel.class,
+            ProperRecordAsViewModelUsingAnnotations.class})
+    void javaRecordAsViewModel(final Class<?> recordClass) {
+        final Object sample = switch(recordClass.getSimpleName()) {
+        case "ProperRecordAsViewModel" -> new ProperRecordAsViewModel("Hello!", 3, true);
+        case "ProperRecordAsViewModelUsingAnnotations" -> new ProperRecordAsViewModelUsingAnnotations("Hello!", 3, true);
+        default -> throw new IllegalArgumentException("Unexpected value: " + recordClass);
+        };
+
+        val isExpectedExplicitlyAnnotated = Objects.equals(recordClass, ProperRecordAsViewModelUsingAnnotations.class);
+
+        val additionalString = testerFactory
+                .propertyTester(sample, "additionalString");
+        additionalString.assertExists(true);
+        additionalString.assertVisibilityIsNotVetoed();
+        additionalString.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        additionalString.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        additionalString.assertValue("add Hello!");
+
+        val arbitraryString = testerFactory
+                .propertyTester(sample, "arbitraryString");
+        arbitraryString.assertExists(true);
+        arbitraryString.assertVisibilityIsNotVetoed();
+        arbitraryString.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        arbitraryString.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        arbitraryString.assertValue("Hello!");
+
+        val arbitraryInt = testerFactory
+                .propertyTester(sample, "arbitraryInt");
+        arbitraryInt.assertExists(true);
+        arbitraryInt.assertVisibilityIsNotVetoed();
+        arbitraryInt.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        arbitraryInt.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        arbitraryInt.assertValue(3);
+
+        val arbitraryBoolean = testerFactory
+                .propertyTester(sample, "arbitraryBoolean");
+        arbitraryBoolean.assertExists(true);
+        arbitraryBoolean.assertVisibilityIsNotVetoed();
+        arbitraryBoolean.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        arbitraryBoolean.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        arbitraryBoolean.assertValue(true);
     }
 
     // -- HELPER

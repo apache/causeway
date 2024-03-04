@@ -18,14 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import java.beans.Introspector;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 
 /**
@@ -50,13 +47,15 @@ public enum FeatureType {
     PROPERTY("Property") {
         @Override
         public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
-            return propertyIdentifierFor(typeIdentifier, method.asMethodElseFail()); // expected regular
+            return Identifier.propertyIdentifier(typeIdentifier,
+                    AccessorSemantics.associationIdentifierFor(method.asMethodElseFail())); // expected regular
         }
     },
     COLLECTION("Collection") {
         @Override
         public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
-            return collectionIdentifierFor(typeIdentifier, method.asMethodElseFail()); // expected regular
+            return Identifier.collectionIdentifier(typeIdentifier,
+                    AccessorSemantics.associationIdentifierFor(method.asMethodElseFail())); // expected regular
         }
     },
     ACTION("Action") {
@@ -118,22 +117,6 @@ public enum FeatureType {
 
     private FeatureType(final String name) {
         this.name = name;
-    }
-
-    private static Identifier propertyIdentifierFor(
-            final LogicalType typeIdentifier,
-            final ResolvedMethod method) {
-        final String capitalizedName = _Strings.baseName(method.name());
-        final String beanName = Introspector.decapitalize(capitalizedName);
-        return Identifier.propertyIdentifier(typeIdentifier, beanName);
-    }
-
-    private static Identifier collectionIdentifierFor(
-            final LogicalType typeIdentifier,
-            final ResolvedMethod method) {
-        final String capitalizedName = _Strings.baseName(method.name());
-        final String beanName = Introspector.decapitalize(capitalizedName);
-        return Identifier.collectionIdentifier(typeIdentifier, beanName);
     }
 
     public boolean isProperty() { return this == PROPERTY; }
