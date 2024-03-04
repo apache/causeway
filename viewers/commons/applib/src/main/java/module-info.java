@@ -24,7 +24,6 @@ module org.apache.causeway.viewer.commons.applib {
     exports org.apache.causeway.viewer.commons.applib.services.menu.model;
     exports org.apache.causeway.viewer.commons.applib;
     exports org.apache.causeway.viewer.commons.applib.mixins;
-    exports org.apache.causeway.viewer.commons.applib.services.tabular;
 
     requires static lombok;
 
