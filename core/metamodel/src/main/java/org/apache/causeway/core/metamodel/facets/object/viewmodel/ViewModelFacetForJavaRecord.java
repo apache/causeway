@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.memento._Mementos;
 import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -55,7 +56,8 @@ extends ViewModelFacetAbstract {
 
     private UrlEncodingService codec;
     private SerializingAdapter serializer;
-    private Constructor<?> canonicalConstructor;
+
+    private final Constructor<?> canonicalConstructor;
 
     protected ViewModelFacetForJavaRecord(
             final Class<?> recordClass,
@@ -84,7 +86,9 @@ extends ViewModelFacetAbstract {
             return associationPojo;
         }).toArray();
 
-        return getObjectManager().adapt(canonicalConstructor.newInstance(recordComponentPojos));
+        return ManagedObject.viewmodel(viewmodelSpec,
+                canonicalConstructor.newInstance(recordComponentPojos),
+                Optional.of(bookmark));
     }
 
     @Override
@@ -113,11 +117,13 @@ extends ViewModelFacetAbstract {
 
     // -- HELPER
 
+    private Can<ObjectAssociation> recordComponentsAsAssociations;
     private Stream<ObjectAssociation> streamRecordComponents(
             final @NonNull ObjectSpecification viewmodelSpec) {
-        return Stream.of(viewmodelSpec.getCorrespondingClass().getRecordComponents())
-            .map(RecordComponent::getName)
-            .map(memberId->viewmodelSpec.getAssociationElseFail(memberId, MixedIn.EXCLUDED));
+        if(recordComponentsAsAssociations==null) {
+            this.recordComponentsAsAssociations = recordComponentsAsAssociations(viewmodelSpec);
+        }
+        return recordComponentsAsAssociations.stream();
     }
 
     private void initDependencies() {
@@ -140,6 +146,14 @@ extends ViewModelFacetAbstract {
     private _Mementos.Memento parseMemento(final Bookmark bookmark) {
         ensureDependenciesInited();
         return _Mementos.parse(codec, serializer, bookmark.getIdentifier());
+    }
+
+    private static Can<ObjectAssociation> recordComponentsAsAssociations(
+            final @NonNull ObjectSpecification viewmodelSpec) {
+        return Arrays.stream(viewmodelSpec.getCorrespondingClass().getRecordComponents())
+                .map(RecordComponent::getName)
+                .map(memberId->viewmodelSpec.getAssociationElseFail(memberId, MixedIn.EXCLUDED))
+                .collect(Can.toCan());
     }
 
     @SneakyThrows
