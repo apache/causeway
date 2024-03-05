@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 
 /**
  * To be installed by facet-post-processing only,
- * which in any case must provide both noun-forms (non-empty).
+ * which in any case must provide the singular noun-form (non-empty).
  *
  * @since 2.0
  */
