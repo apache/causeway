@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.tabular.simple;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -63,14 +64,33 @@ public class DataTable implements Serializable {
     @Getter private @NonNull String tableFriendlyName;
 
     /**
-     * Returns an empty {@link DataTable} for given domain object type.
+     * Returns an empty {@link DataTable} for given domain object type,
+     * with all properties as columns, excluding mixed-in ones.
+     * (For more control on which columns to include,
+     * consider {@link #forDomainType(Class, Predicate)} or a constructor that fits.)
      * <p>
      * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
      * {@link #setDataElementPojos(Iterable)}.
      */
-    public static DataTable forDomainType(final Class<?> domainType) {
+    public static DataTable forDomainType(
+            final @NonNull Class<?> domainType) {
         val elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
         return new DataTable(elementType);
+    }
+
+    /**
+     * Returns an empty {@link DataTable} for given domain object type,
+     * with all (including mixed-in) associations as columns,
+     * that pass given {@code columnFilter}. If the filter is {@code null} it acts as a pass-through.
+     * <p>
+     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
+     * {@link #setDataElementPojos(Iterable)}.
+     */
+    public static DataTable forDomainType(
+            final @NonNull Class<?> domainType,
+            final @Nullable Predicate<ObjectAssociation> columnFilter) {
+        val elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
+        return new DataTable(elementType, columnFilter);
     }
 
     /**
@@ -94,18 +114,19 @@ public class DataTable implements Serializable {
     /**
      * Returns an empty {@link DataTable} for given domain object type,
      * with all (including mixed-in) associations as columns,
-     * that pass given {@code columnFilter}.
+     * that pass given {@code columnFilter}. If the filter is {@code null} it acts as a pass-through.
      * <p>
      * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
      * {@link #setDataElementPojos(Iterable)}.
      */
     public DataTable(
-            final @NonNull ObjectSpecification elementType, final Predicate<ObjectAssociation> columnFilter) {
+            final @NonNull ObjectSpecification elementType,
+            final @Nullable Predicate<ObjectAssociation> columnFilter) {
         this(elementType,
                 elementType.getSingularName(),
                 elementType
                     .streamAssociations(MixedIn.INCLUDED)
-                    .filter(columnFilter)
+                    .filter(Optional.ofNullable(columnFilter).orElseGet(_Predicates::alwaysTrue))
                     .collect(Can.toCan()),
                 Can.empty());
     }
