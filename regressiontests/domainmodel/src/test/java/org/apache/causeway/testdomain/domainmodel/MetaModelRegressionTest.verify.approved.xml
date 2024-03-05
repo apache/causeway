@@ -36073,9 +36073,9 @@
                 <mml:attr name="methods" value="public final java.lang.String org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelUsingAnnotations.toString()"/>
                 <mml:attr name="precedence" value="INFERRED"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
-                <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
-                <mml:attr name="precedence" value="LOW"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForJavaRecord">
+                <mml:attr name="facet" value="ViewModelFacetForJavaRecord"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
