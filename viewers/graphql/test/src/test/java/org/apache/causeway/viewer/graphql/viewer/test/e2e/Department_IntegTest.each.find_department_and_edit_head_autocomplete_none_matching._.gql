@@ -3,6 +3,7 @@
     university_dept_Departments {
       findDepartmentByName {
         invoke(name: "Classics") {
+          target
           results {
             deptHead {
               autoComplete(search: "XXX") {
