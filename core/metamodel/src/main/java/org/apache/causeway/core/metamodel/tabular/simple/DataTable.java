@@ -64,7 +64,9 @@ public class DataTable implements Serializable {
 
     /**
      * Returns an empty {@link DataTable} for given domain object type.
-     * It can be populated later on using {@link DataTable#setDataElements(Iterable)}.
+     * <p>
+     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
+     * {@link #setDataElementPojos(Iterable)}.
      */
     public static DataTable forDomainType(final Class<?> domainType) {
         val elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
@@ -72,8 +74,12 @@ public class DataTable implements Serializable {
     }
 
     /**
-     * Returns an empty {@link DataTable} for given domain object type.
-     * It can be populated later on using {@link DataTable#setDataElements(Iterable)}.
+     * Returns an empty {@link DataTable} for given domain object type,
+     * with all properties as columns, excluding mixed-in ones.
+     * (For more control on which columns to include, consider a different constructor.)
+     * <p>
+     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
+     * {@link #setDataElementPojos(Iterable)}.
      */
     public DataTable(
             final @NonNull ObjectSpecification elementType) {
@@ -81,14 +87,34 @@ public class DataTable implements Serializable {
                 elementType.getSingularName(),
                 elementType
                     .streamProperties(MixedIn.EXCLUDED)
-                    .filter(prop->prop.isIncludedWithSnapshots())
+                    .collect(Can.toCan()),
+                Can.empty());
+    }
+
+    /**
+     * Returns an empty {@link DataTable} for given domain object type,
+     * with all (including mixed-in) associations as columns,
+     * that pass given {@code columnFilter}.
+     * <p>
+     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
+     * {@link #setDataElementPojos(Iterable)}.
+     */
+    public DataTable(
+            final @NonNull ObjectSpecification elementType, final Predicate<ObjectAssociation> columnFilter) {
+        this(elementType,
+                elementType.getSingularName(),
+                elementType
+                    .streamAssociations(MixedIn.INCLUDED)
+                    .filter(columnFilter)
                     .collect(Can.toCan()),
                 Can.empty());
     }
 
     /**
      * Returns an empty {@link DataTable} for given domain object type.
-     * It can be populated later on using {@link DataTable#setDataElements(Iterable)}.
+     * <p>
+     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
+     * {@link #setDataElementPojos(Iterable)}.
      */
     public DataTable(
             final @NonNull ObjectSpecification elementType,
