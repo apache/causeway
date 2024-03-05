@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
+import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
+
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
@@ -25,6 +28,9 @@ import org.apache.causeway.viewer.graphql.viewer.testsupport.schema.PrintSchemaI
 
 import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant;
 
+@Import({
+        UniversityModule.class
+})
 public class PrintSchemaIntegTest extends PrintSchemaIntegTestAbstract {
 
     @DynamicPropertySource

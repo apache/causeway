@@ -93,7 +93,7 @@ public class CommonDomainService
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||
                         apiVariant != CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_ONLY    // the other variants have an entry for all actions.
                 )
-                .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newGqlvAction(this, act, context))));
+                .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newAction(this, act, context))));
     }
 
 
