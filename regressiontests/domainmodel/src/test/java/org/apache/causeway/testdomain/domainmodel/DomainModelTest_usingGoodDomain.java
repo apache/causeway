@@ -19,6 +19,7 @@
 package org.apache.causeway.testdomain.domainmodel;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,6 +56,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
@@ -62,6 +64,7 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForJavaRecord;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -1018,7 +1021,21 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @ParameterizedTest
     @EnumSource(RecordScenario.class)
     void javaRecordAsViewModel(final RecordScenario scenario) {
+        final Class<?> classUnderTest = scenario.recordClass;
         final Object sample = scenario.samples.getFirstElseFail();
+        val viewModel = MetaModelContext.instanceElseFail().getObjectManager().adapt(sample);
+        val elementType = viewModel.getSpecification();
+        val viewmodelFacet = elementType.getFacet(ViewModelFacet.class);
+
+        assertEquals(BeanSort.VIEW_MODEL, elementType.getBeanSort());
+        assertEquals(classUnderTest.getName(), elementType.getFeatureIdentifier().getLogicalTypeName());
+        assertTrue(ViewModelFacetForJavaRecord.class.isInstance(viewmodelFacet),
+                ()->"Record is expected to have a ViewModelFacetForJavaRecord");
+
+        val bookmark = viewmodelFacet.serializeToBookmark(viewModel);
+        val viewModelAfterRoundTrip = viewmodelFacet.instantiate(elementType, Optional.of(bookmark));
+        assertEquals(viewModel.getPojo(), viewModelAfterRoundTrip.getPojo());
+
         val isExpectedExplicitlyAnnotated = scenario == RecordScenario.ANNOTATED;
 
         val additionalString = testerFactory
@@ -1060,13 +1077,9 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         final Class<?> classUnderTest = scenario.recordClass;
 
         var dataTable = DataTable.forDomainType(classUnderTest);
-        var spec = dataTable.getElementType();
         dataTable.setDataElementPojos(scenario.samples);
 
-        assertEquals(BeanSort.VIEW_MODEL, spec.getBeanSort());
-        assertEquals(classUnderTest.getName(), spec.getFeatureIdentifier().getLogicalTypeName());
         assertEquals(scenario.classFriendlyName(), dataTable.getTableFriendlyName());
-
         assertEquals(scenario.samples.size(), dataTable.getDataRows().size());
         assertEquals(4, dataTable.getDataColumns().size());
 
