@@ -1,4 +1,5 @@
 
 * xref:gqlv:ROOT:setup-and-configuration.adoc[]
+* xref:gqlv:ROOT:testsupport.adoc[]
 * xref:gqlv:ROOT:spi-services.adoc[]
 

@@ -59,7 +59,7 @@ If using the `SIMPLE_AND_RICH` or `RICH_AND_SIMPLE` schema styles, this configur
 It defaults to "`simple`".
 
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema.simple.top-level-field-name[schema.simple.top-level-field-name]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema.rich.top-level-field-name[schema.rich.top-level-field-name]
 +
 If using the `SIMPLE_AND_RICH` or `RICH_AND_SIMPLE` schema styles, this configuration defines the name of the top-level field that holds the rest of the _rich_ schema.
 +

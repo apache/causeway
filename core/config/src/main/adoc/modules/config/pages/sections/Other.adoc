@@ -16,7 +16,7 @@ include::../section-hooks/Other~pre.adoc[]
 causeway.prototyping.h2-console. +
 generate-random-web-admin-password
 
-|  true
+| 
 | Whether to generate a random password for access to the H2 Web-Console advanced features.
 
 If a password is generated, it is logged to the logging subsystem (Log4j2).
