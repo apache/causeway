@@ -43,9 +43,9 @@ extends MetaModelPostProcessorAbstract {
     @Override
     public void postProcessObject(final ObjectSpecification objectSpecification) {
 
-        if((!objectSpecification.isEntityOrViewModelOrAbstract() && !objectSpecification.isInjectable())) {
-            return;
-        }
+        final boolean canProcess = objectSpecification.isEntityOrViewModelOrAbstract()
+                || objectSpecification.isInjectable();
+        if(!canProcess) return;
 
         val topRank = objectSpecification
                 .getFacetRanking(ObjectNamedFacet.class) // don't use lookupFacet, as that would search up the
