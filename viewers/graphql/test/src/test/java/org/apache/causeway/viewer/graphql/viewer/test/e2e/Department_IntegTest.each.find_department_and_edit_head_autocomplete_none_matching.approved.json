@@ -4,7 +4,6 @@
       "university_dept_Departments" : {
         "findDepartmentByName" : {
           "invoke" : {
-            "target" : "org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Departments@69fe8c75",
             "results" : {
               "deptHead" : {
                 "autoComplete" : [ ]
