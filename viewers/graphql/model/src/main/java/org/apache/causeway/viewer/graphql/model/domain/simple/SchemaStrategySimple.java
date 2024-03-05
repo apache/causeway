@@ -43,24 +43,24 @@ public class SchemaStrategySimple implements SchemaStrategy {
 
     @Override
     public String topLevelFieldNameFrom(CausewayConfiguration.Viewer.Graphql graphqlConfiguration) {
-        return graphqlConfiguration.getTopLevelFieldNameForSimple();
+        return graphqlConfiguration.getSchema().getSimple().getTopLevelFieldName();
     }
 
-    public Element newGqlvProperty(
+    public Element newProperty(
             final ObjectInteractor holder,
             final OneToOneAssociation otoa,
             final Context context
     ) {
         return new SimpleProperty(holder, otoa, context);
     };
-    public Element newGqlvCollection(
+    public Element newCollection(
             final ObjectInteractor holder,
             final OneToManyAssociation otma,
             final Context context
     ) {
         return new SimpleCollection(holder, otma, context);
     }
-    public Element newGqlvAction(
+    public Element newAction(
             final ObjectInteractor holder,
             final ObjectAction objectAction,
             final Context context
@@ -69,7 +69,7 @@ public class SchemaStrategySimple implements SchemaStrategy {
     }
 
     @Override
-    public ElementCustom newGqlvMeta(CommonDomainObject commonDomainObject, Context context) {
+    public ElementCustom newMeta(CommonDomainObject commonDomainObject, Context context) {
         return new CommonMeta(commonDomainObject, context);
     }
 

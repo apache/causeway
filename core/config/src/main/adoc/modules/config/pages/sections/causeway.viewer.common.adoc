@@ -58,7 +58,7 @@ This is expected to be a local resource.
 causeway.viewer.common.application. +
 menubars-layout-file
 
-|  menubars.layout.xml
+| 
 | Specifies the file name containing the menubars.
 
 This is expected to be a local resource.
@@ -69,7 +69,7 @@ This is expected to be a local resource.
 causeway.viewer.common.application. +
 name
 
-|  Apache Causeway ™
+| 
 | Identifies the application on the sign-in page (unless a sign-in image is configured) and on top-left in the header (unless a header image is configured).
 
 

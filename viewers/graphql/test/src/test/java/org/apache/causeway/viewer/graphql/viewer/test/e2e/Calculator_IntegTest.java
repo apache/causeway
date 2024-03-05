@@ -30,7 +30,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(30)
-@ActiveProfiles("test")
 public class Calculator_IntegTest extends Abstract_IntegTest {
 
     @Override

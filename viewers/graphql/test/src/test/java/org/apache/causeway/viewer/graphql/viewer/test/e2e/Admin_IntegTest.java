@@ -30,7 +30,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(20)
-@ActiveProfiles("test")
 public class Admin_IntegTest extends Abstract_IntegTest {
 
     @Override

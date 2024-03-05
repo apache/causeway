@@ -52,14 +52,14 @@ These were discussed on the xref:gqlv:ROOT:about.adoc[main page for GraphQL view
 A number of other configuration properties can customize the schema in various ways.
 Normally these can be left as their default:
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-simple[top-level-field-name-for-simple]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema.simple.top-level-field-name[schema.simple.top-level-field-name]
 +
 If using the `SIMPLE_AND_RICH` or `RICH_AND_SIMPLE` schema styles, this configuration defines the name of the top-level field that holds the rest of the _simple_ schema.
 +
 It defaults to "`simple`".
 
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.top-level-field-name-for-rich[top-level-field-name-for-rich]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema.rich.top-level-field-name[schema.rich.top-level-field-name]
 +
 If using the `SIMPLE_AND_RICH` or `RICH_AND_SIMPLE` schema styles, this configuration defines the name of the top-level field that holds the rest of the _rich_ schema.
 +
@@ -108,9 +108,9 @@ The remaining configuration properties are explained in more detail elsewhere:
 +
 Control whether the xref:about.adoc#resources-blobs-clobs-layouts-icons[Resource controller] is enabled
 
-* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.include-testing-field-in-rich[include-testing-field-in-rich]
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema.rich.enable-scenario-testing[schema.rich.enable-scenario-testing]
 +
-Enable xref:about.adoc#testing[testing support].
+Enable xref:testsupport.adoc#scenario-tests[scenario testing].
 
 * xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.username[authentication.fallback.username] and xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.authentication.fallback.roles[authentication.fallback.roles]
 +

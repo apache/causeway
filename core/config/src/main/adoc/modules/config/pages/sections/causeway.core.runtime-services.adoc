@@ -65,7 +65,7 @@ This configuration property is mandatory (for the default implementation of the 
 causeway.core.runtime-services. +
 email.throw-exception-on-fail
 
-|  true
+| 
 | If an email fails to send, whether to propagate the exception (meaning that potentially the end-user might see the exception), or whether instead to just indicate failure through the return value of the method (``EmailService#send(List, List, List, String, String, DataSource...)`` that's being called.
 
 
@@ -111,7 +111,7 @@ Replaces the former Servlet context parameter 'causeway.config.dir';
 causeway.core.runtime-services. +
 email.port
 
-|  587
+| 
 | null
 
 
@@ -147,7 +147,7 @@ email.sender.username
 causeway.core.runtime-services. +
 email.socket-connection-timeout
 
-|  2000
+| 
 | null
 
 
@@ -156,7 +156,7 @@ email.socket-connection-timeout
 causeway.core.runtime-services. +
 email.socket-timeout
 
-|  2000
+| 
 | null
 
 
@@ -165,7 +165,7 @@ email.socket-timeout
 causeway.core.runtime-services. +
 email.tls.enabled
 
-|  true
+| 
 | null
 
 

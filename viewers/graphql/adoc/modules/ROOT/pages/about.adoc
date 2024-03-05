@@ -41,6 +41,7 @@ In summary, the API variant therefore relates to whether and how mutating (non-s
 
 
 
+[#rich-vs-simple-schemas]
 === Rich vs Simple Schemas
 
 The viewer can represent the domain model as either a "rich" GraphQL schema, or a "simple" GraphQL schema; or indeed both can be supported ath the same time.
@@ -238,7 +239,7 @@ These can only be downloaded if configured, see xref:#resources-blobs-clobs-layo
 
 * `cssClass` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-css-styling[cssClass()] supporting method)
 
-There is also one additional field, `saveAs`; this is discussed in the xref:#testing[testing] section below.
+There is also one additional field, `saveAs`; this is discussed in the xref:testsupport.adoc[Test Support].
 
 
 [#queries-that-lookup-a-domain-object]
@@ -729,148 +730,6 @@ Because the resource controller exposes information directly, these fields are s
 To enable, use the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[causeway.viewer.graphql.resources.response-type] configuration property.
 If you do this, then you should also make sure that the resource controller is made secure in some appropriate fashion.
 
-
-
-
-[#testing]
-== Testing
-
-Because the "rich" schema exposes pretty much all the behaviour of the domain model, it's possible to use GraphQL queries as a way to write end-to-end tests.
-This works especially well with link:https://github.com/approvals/ApprovalTests.Java[approval tests], which can be used to efficiently assert the contents of the returned response.
-
-Testing support is enabled with the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.include-testing-field-in-rich[causeway.viewer.graphql.include-testing-field-in-rich] configuration property.
-This then allows the "`rich`" schema to include a new field "`Scenario`", which in turn can have three further fields, "`Given`", "`When`" and "`Then`".
-The scenario can also be named.
-
-Moreover, the testing support introduces a "saveAs" capability (within the xref:#the-meta-fieldtype[meta] field) to tag objects and then use them at a later stage.
-
-This is all probably most easily explained with an example:
-
-[source,graphql]
-----
-{
-  rich {
-    Scenario(name: "Find department and change its name"){    #<.>
-      Name                                                    #<1>
-
-      Given {                                                 #<.>
-        university_dept_Departments {
-          findDepartmentByName {
-            invoke(name: "Classics") {
-              args {
-                name
-              }
-              results {
-                _meta {
-                  saveAs(ref: "dept#1")                       #<.>
-                }
-              }
-            }
-          }
-        }
-      }
-
-      When {                                                  #<.>
-        university_dept_Department(
-            object: {ref: "dept#1"}                           #<.>
-        ) {
-          name {
-            get
-          }
-          changeName {
-            invokeIdempotent(newName: "Ancient History") {
-              args {
-                newName                                       #<.>
-              }
-              results {                                       #<.>
-                name {
-                  get
-                }
-              }
-            }
-          }
-        }
-      }
-
-      Then {
-        university_dept_Department(object: {ref: "dept#1"}) {
-          name {
-            get                                               #<.>
-          }
-        }
-      }
-    }
-  }
-}
-----
-<.> We name the scenario.
-The `Name` field means that the scenario's name will be printed out in the response.
-<.> Under the `Given` field, we set up or locate the objects that are to be interacted with within the scenario.
-<.> Having found an object, we save it with some meaningful name.
-<.> Under the `When` field, we interact with the object.
-<.> We use the tag from before to locate the object
-<.> We request to print out the arguments
-<.> The object is changed
-<.> We assert on the results
-
-This will result in a response such as:
-
-[source,json]
-----
-{
-  "data" : {
-    "rich" : {
-      "Scenario" : {
-        "Name" : "Find department and change its name",
-        "Given" : {
-          "university_dept_Departments" : {
-            "findDepartmentByName" : {
-              "invoke" : {
-                "args" : {
-                  "name" : "Classics"
-                },
-                "results" : {
-                  "_meta" : {
-                    "saveAs" : "dept#1  "
-                  }
-                }
-              }
-            }
-          }
-        },
-        "When" : {
-          "university_dept_Department" : {
-            "name": {
-              "get": "Classics"
-            },
-            "changeName" : {
-              "invokeIdempotent" : {
-                "args" : {
-                  "newName" : "Ancient History"
-                },
-                "results" : {
-                  "name" : {
-                    "get" : "Ancient History"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "Then" : {
-          "university_dept_Department" : {
-            "name" : {
-              "get" : "Ancient History"
-            }
-          }
-        }
-      }
-    }
-  }
-}
-----
-
-In this case you'll notice that the `Then` field doesn't actually show any additional assertions to those already in the `When` clause, so it could have been omitted.
 
 
 
