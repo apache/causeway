@@ -19,7 +19,6 @@
 package org.apache.causeway.testdomain.domainmodel;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +27,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -75,6 +75,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
@@ -114,6 +115,7 @@ import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @SpringBootTest(
@@ -996,20 +998,28 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
     }
 
-    // -- JAVA RECORD
+    // -- JAVA RECORD AS VIEWMODEL
+
+    @RequiredArgsConstructor
+    enum RecordScenario {
+        PLAIN(ProperRecordAsViewModel.class, Can.of(
+                    new ProperRecordAsViewModel("Hello!", 3, true)
+                )),
+        ANNOTATED(ProperRecordAsViewModelUsingAnnotations.class, Can.of(
+                    new ProperRecordAsViewModelUsingAnnotations("Hello!", 3, true)
+                ));
+        final Class<?> recordClass;
+        final Can<?> samples;
+        final String classFriendlyName() {
+            return _Strings.asNaturalName.apply(recordClass.getSimpleName());
+        }
+    }
 
     @ParameterizedTest
-    @ValueSource(classes = {
-            ProperRecordAsViewModel.class,
-            ProperRecordAsViewModelUsingAnnotations.class})
-    void javaRecordAsViewModel(final Class<?> recordClass) {
-        final Object sample = switch(recordClass.getSimpleName()) {
-        case "ProperRecordAsViewModel" -> new ProperRecordAsViewModel("Hello!", 3, true);
-        case "ProperRecordAsViewModelUsingAnnotations" -> new ProperRecordAsViewModelUsingAnnotations("Hello!", 3, true);
-        default -> throw new IllegalArgumentException("Unexpected value: " + recordClass);
-        };
-
-        val isExpectedExplicitlyAnnotated = Objects.equals(recordClass, ProperRecordAsViewModelUsingAnnotations.class);
+    @EnumSource(RecordScenario.class)
+    void javaRecordAsViewModel(final RecordScenario scenario) {
+        final Object sample = scenario.samples.getFirstElseFail();
+        val isExpectedExplicitlyAnnotated = scenario == RecordScenario.ANNOTATED;
 
         val additionalString = testerFactory
                 .propertyTester(sample, "additionalString");
@@ -1044,7 +1054,40 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         arbitraryBoolean.assertValue(true);
     }
 
+    @ParameterizedTest
+    @EnumSource(RecordScenario.class)
+    void javaRecordAsDataRowModel(final RecordScenario scenario) {
+        final Class<?> classUnderTest = scenario.recordClass;
+
+        var dataTable = DataTable.forDomainType(classUnderTest);
+        var spec = dataTable.getElementType();
+        dataTable.setDataElementPojos(scenario.samples);
+
+        assertEquals(BeanSort.VIEW_MODEL, spec.getBeanSort());
+        assertEquals(classUnderTest.getName(), spec.getFeatureIdentifier().getLogicalTypeName());
+        assertEquals(scenario.classFriendlyName(), dataTable.getTableFriendlyName());
+
+        assertEquals(scenario.samples.size(), dataTable.getDataRows().size());
+        assertEquals(4, dataTable.getDataColumns().size());
+
+        assertEquals("""
+                Additional String: add Hello!
+                Arbitrary Boolean: true
+                Arbitrary Int: 3
+                Arbitrary String: Hello!
+                """, tableToString(dataTable));
+    }
+
     // -- HELPER
+
+    private String tableToString(final DataTable dataTable) {
+        var sb = new StringBuilder();
+        dataTable.visit((column, cellValues) ->
+            sb.append(String.format("%s: %s\n",
+                    column.getColumnFriendlyName(),
+                    "" + cellValues.getFirstElseFail().getPojo())));
+        return sb.toString();
+    }
 
     private void assertHasProperty(final ObjectSpecification spec, final String propertyId) {
         spec.getPropertyElseFail(propertyId);

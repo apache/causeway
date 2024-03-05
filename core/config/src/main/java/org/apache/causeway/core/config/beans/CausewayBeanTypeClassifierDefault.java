@@ -154,6 +154,11 @@ implements CausewayBeanTypeClassifier {
             return CausewayBeanMetaData.indifferent(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, type);
         }
 
+        // unless explicitly declared otherwise, map records to viewmodels
+        if(type.isRecord()) {
+            return CausewayBeanMetaData.indifferent(BeanSort.VIEW_MODEL, type);
+        }
+
         if(Serializable.class.isAssignableFrom(type)) {
             return CausewayBeanMetaData.indifferent(BeanSort.VALUE, type);
         }
