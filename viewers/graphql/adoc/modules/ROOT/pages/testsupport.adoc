@@ -13,8 +13,8 @@ When writing tests, it can be useful to first generate the schema.
 You can then register the schema with a dedicated editor; this can then provide code-completion.
 Some IDEs (for example IntelliJ IDEA) also provide this capability.
 
-The `PrintSchemaIntegTestAbstract`
-To generate the schema, just include
+Subclass the `PrintSchemaIntegTestAbstract` and optionally specify the API variant.
+For example:
 
 [source,java]
 ----

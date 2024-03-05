@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
 
 import org.springframework.context.annotation.Import;
@@ -35,7 +36,9 @@ public class PrintSchemaIntegTest extends PrintSchemaIntegTestAbstract {
 
     @DynamicPropertySource
     static void apiVariant(DynamicPropertyRegistry registry) {
-        registry.add("causeway.viewer.graphql.api-variant", ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
+        registry.add("causeway.viewer.graphql.api-variant", CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
+        registry.add("causeway.viewer.graphql.schema.rich.enable-scenario-testing", () -> Boolean.TRUE);
+        registry.add("causeway.viewer.graphql.resources.response-type", CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT::name);
     }
 
 }
