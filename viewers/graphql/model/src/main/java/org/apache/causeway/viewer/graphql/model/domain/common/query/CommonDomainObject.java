@@ -86,7 +86,7 @@ public class CommonDomainObject
 
         gqlObjectTypeBuilder.description(objectSpecification.getDescription());
 
-        addChildFieldFor(this.meta = schemaStrategy.newGqlvMeta(this, context));
+        addChildFieldFor(this.meta = schemaStrategy.newMeta(this, context));
 
         val inputObjectTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification, getSchemaType()));
         inputObjectTypeBuilder
@@ -160,12 +160,12 @@ public class CommonDomainObject
     private void addMembers() {
 
         objectSpecification.streamProperties(MixedIn.INCLUDED)
-                .forEach(prop -> properties.add(addChildFieldFor(schemaStrategy.newGqlvProperty(this, prop, context))));
+                .forEach(prop -> properties.add(addChildFieldFor(schemaStrategy.newProperty(this, prop, context))));
         objectSpecification.streamCollections(MixedIn.INCLUDED)
-                .forEach(coll -> collections.add(addChildFieldFor(schemaStrategy.newGqlvCollection(this, coll, context))));
+                .forEach(coll -> collections.add(addChildFieldFor(schemaStrategy.newCollection(this, coll, context))));
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .filter(act -> schemaStrategy.shouldInclude(graphqlConfiguration.getApiVariant(), act))
-                .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newGqlvAction(this, act, context))));
+                .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newAction(this, act, context))));
     }
 
     @SuppressWarnings("unused")

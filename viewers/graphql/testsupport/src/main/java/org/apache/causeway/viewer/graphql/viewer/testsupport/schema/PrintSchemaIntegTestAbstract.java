@@ -102,9 +102,9 @@ public abstract class PrintSchemaIntegTestAbstract extends CausewayViewerGraphql
 
         val submit = printer.print(graphQLSchema);
 
-        File targetFile1 = new File("src/test/resources/schema.gql");
+        val targetFile = new File("src/test/resources/schema.gql");
 
-        Files.write(Paths.get(targetFile1.getPath()), submit.getBytes());
+        Files.write(Paths.get(targetFile.getPath()), submit.getBytes());
     }
 
 }

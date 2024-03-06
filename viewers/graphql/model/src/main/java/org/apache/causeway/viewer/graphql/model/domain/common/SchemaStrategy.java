@@ -64,25 +64,25 @@ public interface SchemaStrategy {
 
     String topLevelFieldNameFrom(CausewayConfiguration.Viewer.Graphql graphqlConfiguration);
 
-    Element newGqlvProperty(
+    Element newProperty(
             final ObjectInteractor holder,
             final OneToOneAssociation otoa,
             final Context context
     );
 
-    Element newGqlvCollection(
+    Element newCollection(
             final ObjectInteractor holder,
             final OneToManyAssociation otma,
             final Context context
     );
 
-    Element newGqlvAction(
+    Element newAction(
             final ObjectInteractor holder,
             final ObjectAction objectAction,
             final Context context
     );
 
-    ElementCustom newGqlvMeta(
+    ElementCustom newMeta(
             final CommonDomainObject commonDomainObject,
             final Context context);
 

@@ -1,0 +1,351 @@
+= Test Support
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+Because the xref:about.adoc#rich-vs-simple-schemas[rich] schema exposes pretty much all the behaviour of the domain model, it's possible to use GraphQL queries as a way to write end-to-end tests.
+This works especially well with link:https://github.com/approvals/ApprovalTests.Java[approval tests], which can be used to efficiently assert the contents of the returned response.
+
+
+== Print Schema
+
+When writing tests, it can be useful to first generate the schema.
+You can then register the schema with a dedicated editor; this can then provide code-completion.
+Some IDEs (for example IntelliJ IDEA) also provide this capability.
+
+Subclass the `PrintSchemaIntegTestAbstract` and optionally specify the API variant.
+For example:
+
+[source,java]
+----
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+
+import org.apache.causeway.viewer.graphql.viewer.testsupport.schema.PrintSchemaIntegTestAbstract;
+
+import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.ApiVariant;
+
+@Import({
+        UniversityModule.class                                      // <.>
+})
+public class PrintSchemaIntegTest
+    extends PrintSchemaIntegTestAbstract {                          // <.>
+
+    @DynamicPropertySource
+    static void apiVariant(DynamicPropertyRegistry registry) {      // <.>
+        registry.add("causeway.viewer.graphql.api-variant",
+            ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
+    }
+}
+----
+<.> specifies the domain module(s) to test
+<.> subclass from the superclass
+<.> optionally specify the API variant.
+You could also use `application-test.properties` or `application-test.yml`
+
+This will then write out a `schema.gql` file into `src/test/resources` of the maven module containing the test class.
+
+== Integration Test Support
+
+The `CausewayViewerGraphqlIntegTestAbstract` class is intended to be used as the base class for your integration tests.
+It spins up an instance of the app (listening on a random port), and then allows you to submit queries and mutations against the backend.
+
+Since most tests consist of a query and then checking a response, the superclass also provides some sophisticated support here.
+All you need to do is to save your queries in the same package as your subclass.
+These are automatically picked by the test class, submitted, and then the approval tests assertion library is used to compare the results.
+
+The first time you run the tests, they will of course fail because you will be missing the "approved" responses.
+Check that the received response is as expect, and then approve it.
+
+To use it subclass it, use `@Import` to specify the modules to be tested, and then save queries or mutations as files in the same package.
+
+For example:
+
+[source,java]
+.Calculator.java
+----
+@Named("calculator.Calculator")
+@DomainService(nature= NatureOfService.VIEW)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class Calculator {
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public boolean and(boolean x, boolean y) {
+        return x & y;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public String concat( String prefix, String suffix) {
+        return prefix + suffix;
+    }
+}
+----
+
+To test this service, we would use:
+
+[source,java]
+.Calculator_IntegTest.java
+----
+import org.apache.causeway.viewer.graphql.viewer.testsupport.PrintSchemaIntegTestAbstract;
+
+@Import({
+        CalculatorModule.class                              // <.>
+})
+public class Calculator_IntegTest
+    extends CausewayViewerGraphqlIntegTestAbstract {        // <.>
+
+    protected Calculator_IntegTest() {
+        super(Calculator_IntegTest.class);                  // <.>
+    }
+
+    @Override
+    @TestFactory
+    public Iterable<DynamicTest> each() throws Exception {  // <.>
+        return super.each();
+    }
+}
+----
+<.> specifies the domain module(s) to test
+<.> subclass from the superclass
+<.> indicates which package to pick up the queries
+<.> dynamically generates tests for each query
+
+Then include the following tests in the same package, using the naming convention:
+
+__class_name__``.each.``__anything_you_want__``._.gql``
+
+The word "each" comes from the name of the overridden method.
+If you want to change the "_.gql" suffix, you can pass an additional argument in the constructor.
+
+For example:
+
+* to exhaustively test the `Calculator#and()` action:
++
+[source,graphql]
+.Calculator_IntegTest.each.and_1._.gql
+----
+{
+  rich {
+    university_calc_Calculator {
+      and {
+        invoke(x: true, y: true) {
+          results
+        }
+      }
+    }
+  }
+}
+----
++
+[source,graphql]
+.Calculator_IntegTest.each.and_2._.gql
+----
+{
+  rich {
+    university_calc_Calculator {
+      and {
+        invoke(x: true, y: false) {
+          results
+        }
+      }
+    }
+  }
+}
+----
++
+[source,graphql]
+.Calculator_IntegTest.each.and_3._.gql
+----
+{
+  rich {
+    university_calc_Calculator {
+      and {
+        invoke(x: false, y: true) {
+          results
+        }
+      }
+    }
+  }
+}
+----
++
+[source,graphql]
+.Calculator_IntegTest.each.and_4._.gql
+----
+{
+  rich {
+    university_calc_Calculator {
+      and {
+        invoke(x: false, y: false) {
+          results
+        }
+      }
+    }
+  }
+}
+----
+
+* or, to test the `concat` action:
++
+[source,graphql]
+.Calculator_IntegTest.each.and_1._.gql
+----
+{
+  rich {
+    university_calc_Calculator {
+      concat {
+        invoke(prefix: "Fizz", suffix: "Buzz") {
+          results
+        }
+      }
+    }
+  }
+}
+----
+
+
+For further examples, take a look at the link:https://github.com/apache/causeway/tree/master/viewers/graphql/test/src/test/java/org/apache/causeway/viewer/graphql/viewer/test/e2e[tests for the GraphQL viewer itself], which use this class extensively.
+
+
+
+
+
+[#scenario-tests]
+== Scenario Tests
+
+The GraphQL viewer also supports what we call scenario tests.
+This is an extension to the rich schema, to include a new field "`Scenario`" which in turn can have three further fields, "`Given`", "`When`" and "`Then`".
+The scenario can also be named.
+
+Moreover, scenario test enables introduces a "saveAs" capability (within the xref:about.adoc#the-meta-fieldtype[meta] field) to tag objects and then use them at a later stage.
+
+This is all probably most easily explained with an example:
+
+[source,graphql]
+----
+{
+  rich {
+    Scenario(name: "Find department and change its name"){    #<.>
+      Name                                                    #<1>
+
+      Given {                                                 #<.>
+        university_dept_Departments {
+          findDepartmentByName {
+            invoke(name: "Classics") {
+              args {
+                name
+              }
+              results {
+                _meta {
+                  saveAs(ref: "dept#1")                       #<.>
+                }
+              }
+            }
+          }
+        }
+      }
+
+      When {                                                  #<.>
+        university_dept_Department(
+            object: {ref: "dept#1"}                           #<.>
+        ) {
+          name {
+            get
+          }
+          changeName {
+            invokeIdempotent(newName: "Ancient History") {
+              args {
+                newName                                       #<.>
+              }
+              results {                                       #<.>
+                name {
+                  get
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Then {
+        university_dept_Department(object: {ref: "dept#1"}) {
+          name {
+            get                                               #<.>
+          }
+        }
+      }
+    }
+  }
+}
+----
+<.> We name the scenario.
+The `Name` field means that the scenario's name will be printed out in the response.
+<.> Under the `Given` field, we set up or locate the objects that are to be interacted with within the scenario.
+<.> Having found an object, we save it with some meaningful name.
+<.> Under the `When` field, we interact with the object.
+<.> We use the tag from before to locate the object
+<.> We request to print out the arguments
+<.> The object is changed
+<.> We assert on the results
+
+This will result in a response such as:
+
+[source,json]
+----
+{
+  "data" : {
+    "rich" : {
+      "Scenario" : {
+        "Name" : "Find department and change its name",
+        "Given" : {
+          "university_dept_Departments" : {
+            "findDepartmentByName" : {
+              "invoke" : {
+                "args" : {
+                  "name" : "Classics"
+                },
+                "results" : {
+                  "_meta" : {
+                    "saveAs" : "dept#1  "
+                  }
+                }
+              }
+            }
+          }
+        },
+        "When" : {
+          "university_dept_Department" : {
+            "name": {
+              "get": "Classics"
+            },
+            "changeName" : {
+              "invokeIdempotent" : {
+                "args" : {
+                  "newName" : "Ancient History"
+                },
+                "results" : {
+                  "name" : {
+                    "get" : "Ancient History"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Then" : {
+          "university_dept_Department" : {
+            "name" : {
+              "get" : "Ancient History"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+In this case you'll notice that the `Then` field doesn't actually show any additional assertions to those already in the `When` clause, so it could have been omitted.
+
+
+Testing support is enabled with the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema.rich.enable-scenario-testing[causeway.viewer.graphql.schema.rich.enable-scenario-testing] configuration property.

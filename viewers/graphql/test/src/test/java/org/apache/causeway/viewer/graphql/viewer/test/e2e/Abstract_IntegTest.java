@@ -50,6 +50,8 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestA
     @DynamicPropertySource
     static void apiVariant(final DynamicPropertyRegistry registry) {
         registry.add("causeway.viewer.graphql.api-variant", CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
+        registry.add("causeway.viewer.graphql.schema.rich.enable-scenario-testing", () -> Boolean.TRUE);
+        registry.add("causeway.viewer.graphql.resources.response-type", CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT::name);
     }
 
     @Inject protected DepartmentRepository departmentRepository;
@@ -57,6 +59,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestA
     @Inject protected StaffMemberRepository staffMemberRepository;
     @Inject protected BookmarkService bookmarkService;
 
+    @Override
     @BeforeEach
     protected void beforeEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
@@ -86,6 +89,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestA
         });
     }
 
+    @Override
     @AfterEach
     protected void afterEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {

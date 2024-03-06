@@ -17,7 +17,7 @@ causeway.persistence.commons. +
 entity-change-tracker. +
 suppress-auto-flush
 
-|  true
+| 
 | Normally any query submitted to ``RepositoryService#allMatches(Query)`` will trigger a flush first, unless auto-flush has been disabled.
 
 However, this auto-flush behaviour can be troublesome if the query occurs as a side-effect of the evaluation of a derived property, whose value in turn is enlisted by an implementation of a subscriber (in particular ``EntityPropertyChangeSubscriber``) which captures the value of all properties (both persisted and derived). However, this behaviour can (at least under JDO), result in a ``ConcurrentModificationException``.

@@ -2363,7 +2363,7 @@ public class CausewayConfiguration {
                  *
                  * <p>
                  *     Optionally, fields for Scenario (given/when/then) testing may also be added if the
-                 *     {@link #isIncludeTestingFieldInRich()} config property is set.
+                 *     {@link #isEnableScenarioTestingForRich()} config property is set.
                  * </p>
                  * <p>
                  *     Suitable for clients where the application logic and state remains in the backend, within the
@@ -2406,34 +2406,52 @@ public class CausewayConfiguration {
              */
             private SchemaStyle schemaStyle = SchemaStyle.RICH_AND_SIMPLE;
 
-            /**
-             * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
-             * top-level field under which the &quot;simple&quot; schema resides.
-             *
-             * <p>
-             *     Ignored for any other {@link #getSchemaStyle()}.
-             * </p>
-             */
-            private String topLevelFieldNameForSimple = "simple";
-            /**
-             * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
-             * top-level field under which the &quot;rich&quot; schema resides.
-             *
-             * <p>
-             *     Ignored for any other {@link #getSchemaStyle()}.
-             * </p>
-             */
-            private String topLevelFieldNameForRich = "rich";
-            /**
-             * If the {@link #getSchemaStyle()} is set to either {@link SchemaStyle#RICH_ONLY} or
-             * {@link SchemaStyle#SIMPLE_AND_RICH}, then determines whether the &quot;Scenario&quot; field is included
-             * in order to allow given/when/then tests to be expressed.
-             *
-             * <p>
-             *     Ignored if the {@link #getSchemaStyle()} is {@link SchemaStyle#SIMPLE_ONLY}.
-             * </p>
-             */
-            private boolean includeTestingFieldInRich = true;
+            private final Schema schema = new Schema();
+            @Data
+            public static class Schema {
+
+                private final Simple simple = new Simple();
+                @Data
+                public static class Simple {
+
+                    /**
+                     * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
+                     * top-level field under which the &quot;simple&quot; schema resides.
+                     *
+                     * <p>
+                     *     Ignored for any other {@link #getSchemaStyle()}.
+                     * </p>
+                     */
+                    private String topLevelFieldName = "simple";
+                }
+
+                private final Rich rich = new Rich();
+                @Data
+                public static class Rich {
+
+                    /**
+                     * If the {@link #getSchemaStyle()} is set to {@link SchemaStyle#SIMPLE_AND_RICH}, defines the name of the
+                     * top-level field under which the &quot;rich&quot; schema resides.
+                     *
+                     * <p>
+                     *     Ignored for any other {@link #getSchemaStyle()}.
+                     * </p>
+                     */
+                    private String topLevelFieldName = "rich";
+
+                    /**
+                     * If the {@link #getSchemaStyle()} is set to either {@link SchemaStyle#RICH_ONLY} or
+                     * {@link SchemaStyle#SIMPLE_AND_RICH}, then determines whether the &quot;Scenario&quot; field is included
+                     * in order to allow given/when/then tests to be expressed.
+                     *
+                     * <p>
+                     *     Ignored if the {@link #getSchemaStyle()} is {@link SchemaStyle#SIMPLE_ONLY}.
+                     * </p>
+                     */
+                    private boolean enableScenarioTesting = false;
+                }
+            }
+
 
             public enum ApiVariant {
                 /**
