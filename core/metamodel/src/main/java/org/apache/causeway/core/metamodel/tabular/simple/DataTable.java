@@ -27,11 +27,13 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Predicates;
@@ -43,6 +45,8 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -293,6 +297,25 @@ public class DataTable implements Serializable {
         return exporter.exportToBlob(this, tableFriendlyName);
     }
 
+    // -- COLUMN FILTER FACTORIES
+
+    public final static Predicate<ObjectAssociation> columnFilterIncluding(final @NonNull Where whereToInclude) {
+        return (final ObjectAssociation assoc) ->
+            !Facets.hiddenWhere(assoc)
+                .map(where->where.includes(whereToInclude))
+                .orElse(false);
+    }
+
+    public final static Predicate<ObjectAssociation> columnFilterExcludingMixins() {
+        return _Predicates.not(ObjectAssociation::isMixedIn);
+    }
+
+    public final static Predicate<ObjectAssociation> columnFilterIncludingEnabledForSnapshot() {
+        return (final ObjectAssociation assoc) -> _Casts.castTo(OneToOneAssociation.class, assoc)
+                .map(prop->prop.isIncludedWithSnapshots())
+                .orElse(false);
+    }
+
     // -- SERIALIZATION PROXY
 
     private Object writeReplace() {
@@ -309,6 +332,7 @@ public class DataTable implements Serializable {
         private final @NonNull Class<?> elementTypeClass;
         private final @NonNull Can<Bookmark> rowElementBookmarks;
         private final @Nullable String tableFriendlyName;
+        private final @NonNull Can<String> columnIds;
 
         private SerializationProxy(final DataTable dataTable) {
             this.elementTypeClass = dataTable.getElementType().getCorrespondingClass();
@@ -316,11 +340,14 @@ public class DataTable implements Serializable {
                     .map(ManagedObject::getBookmarkElseFail)
                     .collect(Can.toCan());
             this.tableFriendlyName = dataTable.getTableFriendlyName();
+            this.columnIds = dataTable.getDataColumns().map(DataColumn::getColumnId);
         }
 
         private Object readResolve() {
             var objectManager = MetaModelContext.instanceElseFail().getObjectManager();
-            var dataTable = DataTable.forDomainType(elementTypeClass);
+            var elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(elementTypeClass);
+            var dataTable = new DataTable(elementType, columnIds
+                    .map(columnId->elementType.getAssociationElseFail(columnId, MixedIn.INCLUDED)));
             var rowElements = rowElementBookmarks.map(objectManager::loadObjectElseFail);
             dataTable.setDataElements(rowElements);
             dataTable.tableFriendlyName = tableFriendlyName;

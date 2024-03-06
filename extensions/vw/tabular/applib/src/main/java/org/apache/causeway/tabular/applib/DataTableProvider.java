@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -37,11 +36,16 @@ public abstract class DataTableProvider {
     @Inject CausewayBeanTypeRegistry beanTypeRegistry;
 
     /**
-     * Returns an empty {@link DataTable} for given domain object type.
-     * It can be populated later on using {@link DataTable#setDataElements(Can)}.
+     * Returns an empty {@link DataTable} for given domain object type
+     * with columns mapped to non-mixed-in properties that are enabled for snapshots.
+     * <p>
+     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
+     * {@link DataTable#setDataElementPojos(Iterable)}.
      */
     public DataTable getDataTable(final Class<?> domainType) {
-        return DataTable.forDomainType(domainType);
+        return DataTable.forDomainType(domainType,
+                DataTable.columnFilterExcludingMixins()
+                .and(DataTable.columnFilterIncludingEnabledForSnapshot()));
     }
 
     public Stream<DataTable> streamDataTables() {
