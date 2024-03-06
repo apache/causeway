@@ -207,9 +207,9 @@ public class SimpleAction
             final Environment environment,
             final Context context
     ) {
-        val argumentValue = (Map<String, String>) argumentValueObj;
+        val argumentValue = (Map<String, ?>) argumentValueObj;
 
-        val refValue = argumentValue.get("ref");
+        val refValue = (String)argumentValue.get("ref");
         if (refValue != null) {
             String key = CommonActionUtils.keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
@@ -232,24 +232,18 @@ public class SimpleAction
             return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
         }
 
-        val idValue = argumentValue.get("id");
+        val idValue = (String)argumentValue.get("id");
         if (idValue != null) {
             Class<?> paramClass = elementType.getCorrespondingClass();
             Optional<Bookmark> bookmarkIfAny;
             if(elementType.isAbstract()) {
-                val logicalTypeName = argumentValue.get("logicalTypeName");
-                if (logicalTypeName == null) {
+                val objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
+                if (objectSpecArg == null) {
                     throw new IllegalArgumentException(String.format(
                             "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
                             elementType.getLogicalTypeName()));
                 }
-                if(context.specificationLoader.specForLogicalTypeName(logicalTypeName).isEmpty()) {
-                    throw new IllegalArgumentException(String.format(
-                            "The 'logicalTypeName' of '%s' is unknown in the metamodel",
-                            logicalTypeName));
-                }
-
-                 bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, idValue));
+                 bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
             } else {
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
             }
