@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.univ.staff;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
@@ -29,9 +31,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
-@Order(40)
+@Order(60)
 @ActiveProfiles("test")
-public class Department_IntegTest extends Abstract_IntegTest {
+public class Staff_IntegTest extends Abstract_IntegTest {
 
     @Override
     @TestFactory

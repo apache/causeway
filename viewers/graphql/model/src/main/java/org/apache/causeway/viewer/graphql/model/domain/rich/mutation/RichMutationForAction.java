@@ -139,13 +139,13 @@ public class RichMutationForAction extends Element {
         } else {
             Object target = dataFetchingEnvironment.getArgument(argumentName);
             Optional<Object> result;
-            val argumentValue = (Map<String, String>) target;
-            String idValue = argumentValue.get("id");
+            val argumentValue = (Map<String, ?>) target;
+            String idValue = (String)argumentValue.get("id");
             if (idValue != null) {
-                String logicalTypeName = argumentValue.get("logicalTypeName");
+                val objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
                 Optional<Bookmark> bookmarkIfAny;
-                if (logicalTypeName != null) {
-                    bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, idValue));
+                if (objectSpecArg != null) {
+                    bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
                 } else {
                     Class<?> paramClass = objectSpec.getCorrespondingClass();
                     bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
@@ -155,7 +155,7 @@ public class RichMutationForAction extends Element {
                         .filter(Optional::isPresent)
                         .map(Optional::get);
             } else {
-                String refValue = argumentValue.get("ref");
+                val refValue = (String)argumentValue.get("ref");
                 if (refValue != null) {
                     String key = CommonActionUtils.keyFor(refValue);
                     BookmarkedPojo value = ((Environment) environment).getGraphQlContext().get(key);

@@ -37,8 +37,9 @@ import lombok.extern.log4j.Log4j2;
 public class RichActionInvoke
         extends ElementCustom {
 
-    private final RichActionInvokeResult result;
+    private final RichActionInvokeTarget target;
     private final RichActionInvokeArgs args;
+    private final RichActionInvokeResult result;
 
     public RichActionInvoke(
             final ActionInteractor actionInteractor,
@@ -46,13 +47,15 @@ public class RichActionInvoke
         super(TypeNames.actionInvokeTypeNameFor(actionInteractor.getObjectSpecification(), actionInteractor.getObjectMember(), actionInteractor.getSchemaType()), context);
 
         if(isBuilt()) {
-            this.result = null;
+            this.target = null;
             this.args = null;
+            this.result = null;
             return;
         }
 
-        addChildFieldFor(this.result = new RichActionInvokeResult(actionInteractor, context));
+        addChildFieldFor(this.target = new RichActionInvokeTarget(actionInteractor, context));
         addChildFieldFor(this.args = new RichActionInvokeArgs(actionInteractor, context));
+        addChildFieldFor(this.result = new RichActionInvokeResult(actionInteractor, context));
 
         val gqlObjectType = buildObjectType();
         val objectAction = actionInteractor.getObjectMember();
@@ -91,8 +94,9 @@ public class RichActionInvoke
 
     @Override
     protected void addDataFetchersForChildren() {
-        result.addDataFetcher(this);
+        target.addDataFetcher(this);
         args.addDataFetcher(this);
+        result.addDataFetcher(this);
     }
 
 }

@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.e2e;
+package org.apache.causeway.viewer.graphql.viewer.test.e2e.univ.depthead;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;

@@ -62,23 +62,4 @@ public class Person_2_IntegTest extends Abstract_IntegTest {
         Approvals.verify(response, jsonOptions());
     }
 
-    @Test
-    @UseReporter(DiffReporter.class)
-    void name_of_person_using_id_but_invalid_logicalTypeName() throws Exception {
-
-        final Bookmark bookmark =
-                transactionService.callTransactional(
-                        Propagation.REQUIRED,
-                        () -> {
-                            StaffMember staffMember = staffMemberRepository.findByName("Letitia Leadbetter");
-                            Optional<Bookmark> bookmark1 = bookmarkService.bookmarkFor(staffMember);
-                            return bookmark1.orElseThrow();
-                        }
-                ).valueAsNonNullElseFail();
-
-        val response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.getIdentifier()));
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
-    }
 }
