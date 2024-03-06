@@ -20,24 +20,22 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlIntegTestAbstract;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DepartmentRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHeadRepository;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMemberRepository;
+import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlIntegTestAbstract;
 
 
 @Import({
@@ -50,7 +48,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestA
     }
 
     @DynamicPropertySource
-    static void apiVariant(DynamicPropertyRegistry registry) {
+    static void apiVariant(final DynamicPropertyRegistry registry) {
         registry.add("causeway.viewer.graphql.api-variant", CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
         registry.add("causeway.viewer.graphql.schema.rich.enable-scenario-testing", () -> Boolean.TRUE);
         registry.add("causeway.viewer.graphql.resources.response-type", CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT::name);
@@ -61,6 +59,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestA
     @Inject protected StaffMemberRepository staffMemberRepository;
     @Inject protected BookmarkService bookmarkService;
 
+    @Override
     @BeforeEach
     protected void beforeEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
@@ -90,6 +89,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestA
         });
     }
 
+    @Override
     @AfterEach
     protected void afterEach(){
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
