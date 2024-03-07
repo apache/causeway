@@ -47,22 +47,6 @@
 
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-
-            <dependency>
-                <groupId>com.github.gavlyukovskiy</groupId>
-                <artifactId>datasource-proxy-spring-boot-starter</artifactId>
-                <version>${datasource-proxy-spring-boot-starter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.vertical-blank</groupId>
-                <artifactId>sql-formatter</artifactId>
-                <version>${sql-formatter.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <build>
 		<testResources>
 			<testResource>
@@ -89,7 +73,6 @@
             <artifactId>causeway-viewer-graphql-testsupport</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 
