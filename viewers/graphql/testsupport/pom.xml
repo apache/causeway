@@ -35,14 +35,13 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.graphql.testsupport</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/testsupport</git-plugin.propertiesDir>
-        <maven.install.skip>true</maven.install.skip>
-        <maven.deploy.skip>true</maven.deploy.skip>
 
         <!-- as a minimum requirement of
 		    org.springframework.graphql:spring-graphql-test:1.2.4 -->
         <maven.compiler.release>17</maven.compiler.release>
 
         <datasource-proxy-spring-boot-starter.version>1.8.1</datasource-proxy-spring-boot-starter.version>
+        <spring-graphql-test.version>1.2.5</spring-graphql-test.version>
         <sql-formatter.version>2.0.4</sql-formatter.version>
 
     </properties>
@@ -138,7 +137,7 @@
         <dependency>
             <groupId>org.springframework.graphql</groupId>
             <artifactId>spring-graphql-test</artifactId>
-            <version>1.2.5</version>
+            <version>${spring-graphql-test.version}</version>
         </dependency>
 
         <dependency>
