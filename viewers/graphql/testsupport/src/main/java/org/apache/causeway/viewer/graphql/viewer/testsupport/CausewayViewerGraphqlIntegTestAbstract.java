@@ -27,7 +27,6 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -291,7 +290,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     private String readResource(final String resourceName) throws IOException {
-        return _Resources.loadAsString(getClass(), resourceName, StandardCharsets.UTF_8);
+        return _Resources.loadAsStringUtf8ElseFail(getClass(), resourceName);
     }
 
     public enum BookmarkOptions {

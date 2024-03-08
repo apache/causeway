@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.commons.internal.resources;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
@@ -33,6 +32,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -97,12 +97,12 @@ public final class _Resources {
      * @param resourceName
      * @param charset
      * @return The resource as a String, or null if the resource could not be found.
-     * @throws IOException
      */
+    @SneakyThrows
     public static @Nullable String loadAsString(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName,
-            final @NonNull Charset charset) throws IOException {
+            final @NonNull Charset charset) {
 
         val inputStream = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(inputStream), charset);
@@ -113,8 +113,29 @@ public final class _Resources {
      */
     public static @Nullable String loadAsStringUtf8(
             final @NonNull Class<?> contextClass,
-            final @NonNull String resourceName) throws IOException {
+            final @NonNull String resourceName) {
         return loadAsString(contextClass, resourceName, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Similar to {@link #loadAsStringUtf8(Class, String)},
+     * but throws an {@link IllegalStateException},
+     * if the resource was not found or could not be read.
+     */
+    public static String loadAsStringUtf8ElseFail(
+            final @NonNull Class<?> contextClass,
+            final @NonNull String resourceName) {
+        try {
+            var content = loadAsStringUtf8(contextClass, resourceName);
+            if(content==null) {
+                throw _Exceptions.illegalState("Failed to locate resource '%s' relative to class %s",
+                        resourceName, contextClass.getName());
+            }
+            return content;
+        } catch (Exception e) {
+            throw _Exceptions.illegalState(e, "Failed to read resource '%s' relative to class %s",
+                    resourceName, contextClass.getName());
+        }
     }
 
     /**
