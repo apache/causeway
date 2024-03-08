@@ -58,7 +58,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.graphql.test.tester.HttpGraphQlTester;
 import org.springframework.lang.Nullable;
 import org.springframework.test.context.ActiveProfiles;
@@ -71,7 +70,6 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.viewer.graphql.viewer.CausewayModuleViewerGraphqlViewer;
@@ -143,12 +141,10 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
      */
     @SpringBootConfiguration
     @EnableAutoConfiguration
-    @EnableJpaRepositories
     @Import({
 
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
-            CausewayModulePersistenceJpaEclipselink.class,
             CausewayModuleTestingFixturesApplib.class,
             CausewayModuleViewerGraphqlViewer.class,
 

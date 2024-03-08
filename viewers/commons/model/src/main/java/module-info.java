@@ -36,4 +36,6 @@ module org.apache.causeway.viewer.commons.model {
     requires transitive org.apache.causeway.core.config;
     requires transitive org.apache.causeway.core.metamodel;
     requires spring.core;
+    requires org.apache.causeway.viewer.commons.applib;
+    requires org.apache.causeway.core.runtime;
 }

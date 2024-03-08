@@ -40,40 +40,9 @@
 		    org.springframework.graphql:spring-graphql-test:1.2.4 -->
         <maven.compiler.release>17</maven.compiler.release>
 
-        <datasource-proxy-spring-boot-starter.version>1.8.1</datasource-proxy-spring-boot-starter.version>
         <spring-graphql-test.version>1.2.5</spring-graphql-test.version>
-        <sql-formatter.version>2.0.4</sql-formatter.version>
 
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-
-            <dependency>
-                <groupId>com.github.gavlyukovskiy</groupId>
-                <artifactId>datasource-proxy-spring-boot-starter</artifactId>
-                <version>${datasource-proxy-spring-boot-starter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.vertical-blank</groupId>
-                <artifactId>sql-formatter</artifactId>
-                <version>${sql-formatter.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <build>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
-			</testResource>
-			<testResource>
-				<directory>src/test/java</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-	</build>
 
 	<dependencies>
 
@@ -91,10 +60,6 @@
             <artifactId>causeway-security-bypass</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-runtimeservices</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.causeway.testing</groupId>
             <artifactId>causeway-testing-fixtures-applib</artifactId>
         </dependency>
@@ -108,46 +73,15 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
 
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.approvaltests</groupId>
             <artifactId>approvaltests</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.persistence</groupId>
-            <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.persistence</groupId>
-                    <artifactId>jakarta.persistence</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test-autoconfigure</artifactId>
-        </dependency>
-
-
 
         <dependency>
             <groupId>org.springframework.graphql</groupId>
             <artifactId>spring-graphql-test</artifactId>
             <version>${spring-graphql-test.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.gavlyukovskiy</groupId>
-            <artifactId>datasource-proxy-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.vertical-blank</groupId>
-            <artifactId>sql-formatter</artifactId>
         </dependency>
 
     </dependencies>

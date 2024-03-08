@@ -16,26 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib;
+package org.apache.causeway.viewer.commons.model;
 
-import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
+import org.apache.causeway.viewer.commons.applib.CausewayModuleViewerCommonsApplib;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.viewer.commons.applib.mixins.Object_impersonate;
-import org.apache.causeway.viewer.commons.applib.mixins.Object_impersonateWithRoles;
 
 @Configuration
 @Import({
-
-    // modules
-    CausewayModuleCoreMetamodel.class,
-
-    // Mixins (prototyping)
-    Object_impersonate.class,
-    Object_impersonateWithRoles.class,
-
+        CausewayModuleViewerCommonsApplib.class,
+        CausewayModuleCoreRuntime.class,
 })
-public class CausewayModuleViewerCommonsApplib {
+public class CausewayModuleViewerCommonsModel {
 }
