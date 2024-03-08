@@ -325,8 +325,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -470,8 +470,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -498,8 +498,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -533,8 +533,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -678,8 +678,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -1243,8 +1243,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -1388,8 +1388,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -1416,8 +1416,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -1451,8 +1451,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -1596,8 +1596,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -2048,8 +2048,8 @@
 <mml:attr name="facet" value="ActionParameterChoicesFacetFromElementType"/>
 <mml:attr name="precedence" value="INFERRED"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -2286,8 +2286,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -2431,8 +2431,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -2459,8 +2459,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -2494,8 +2494,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -2639,8 +2639,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -2765,8 +2765,8 @@
 <mml:attr name="methods" value="public int org.apache.causeway.testdomain.model.good.ProperActionWithNameStartingWithSetOrGet.default0GetFromValue()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -3218,8 +3218,8 @@
 <mml:attr name="methods" value="public int org.apache.causeway.testdomain.model.good.ProperActionWithNameStartingWithSetOrGet.default0SetToValue()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -3516,8 +3516,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -3661,8 +3661,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -3689,8 +3689,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -3724,8 +3724,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -3869,8 +3869,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -4316,8 +4316,8 @@
 <mml:attr name="methods" value="public java.util.Set org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference$ProperChoicesWhenActionHasParamSupportingMethod_remove.choices0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -4532,8 +4532,8 @@
 <mml:attr name="methods" value="public java.util.Set org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference$ProperChoicesWhenActionHasParamSupportingMethod_remove.choices0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -4823,8 +4823,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -4968,8 +4968,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -4996,8 +4996,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -5031,8 +5031,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -5176,8 +5176,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -5629,8 +5629,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString$ProperChoicesWhenActionHasParamSupportingMethod_remove.choices0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -5851,8 +5851,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString$ProperChoicesWhenActionHasParamSupportingMethod_remove.choices0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -6133,8 +6133,8 @@
 <mml:attr name="facet" value="ActionParameterDefaultsFacetFromAssociatedCollection"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -6271,8 +6271,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -6416,8 +6416,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -6444,8 +6444,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -6479,8 +6479,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -6624,8 +6624,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -7757,8 +7757,8 @@
 <mml:attr name="methods" value="protected org.apache.causeway.commons.collections.Can org.apache.causeway.testdomain.model.good.ProperElementTypeVmAbstract.choices0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -7895,8 +7895,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -8040,8 +8040,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -8068,8 +8068,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -8103,8 +8103,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -8248,8 +8248,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -9006,8 +9006,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -9151,8 +9151,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -9179,8 +9179,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -9214,8 +9214,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -9359,8 +9359,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -10105,8 +10105,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -10250,8 +10250,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -10278,8 +10278,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -10313,8 +10313,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -10458,8 +10458,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -10898,8 +10898,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetForParameterAnnotation">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetForParameterAnnotation"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetForParameterAnnotation">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetForParameterAnnotation"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -11226,8 +11226,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -11371,8 +11371,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -11399,8 +11399,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -11434,8 +11434,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -11579,8 +11579,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -12019,8 +12019,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetForParameterAnnotation">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetForParameterAnnotation"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetForParameterAnnotation">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetForParameterAnnotation"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -12372,8 +12372,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -12517,8 +12517,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -12545,8 +12545,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -12580,8 +12580,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -12725,8 +12725,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -13585,8 +13585,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -13730,8 +13730,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -13758,8 +13758,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -13793,8 +13793,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -13938,8 +13938,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -14956,8 +14956,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -15101,8 +15101,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -15129,8 +15129,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -15164,8 +15164,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -15309,8 +15309,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -15938,8 +15938,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -16255,8 +16255,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -16400,8 +16400,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -16428,8 +16428,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -16463,8 +16463,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -16608,8 +16608,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -17256,8 +17256,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -17401,8 +17401,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -17429,8 +17429,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -17464,8 +17464,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -17609,8 +17609,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -18257,8 +18257,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -18402,8 +18402,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -18430,8 +18430,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -18465,8 +18465,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -18610,8 +18610,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -20230,8 +20230,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -20286,8 +20286,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -20461,8 +20461,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -20517,8 +20517,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -20699,8 +20699,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -20762,8 +20762,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -20944,8 +20944,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4.defaultA(org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4$Parameter)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21007,8 +21007,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4.defaultB(org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4$Parameter)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21256,8 +21256,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action6.choices0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21288,8 +21288,8 @@
 <mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21323,8 +21323,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action6.choices2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21355,8 +21355,8 @@
 <mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21493,8 +21493,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21638,8 +21638,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21666,8 +21666,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21701,8 +21701,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -21846,8 +21846,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -22299,8 +22299,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport.default0MyAction()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -22369,8 +22369,8 @@
 <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport.hide1MyAction(java.lang.String)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -23051,8 +23051,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -23196,8 +23196,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -23224,8 +23224,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -23259,8 +23259,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -23404,8 +23404,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -23787,8 +23787,8 @@
 <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hide0PlaceOrder(java.lang.String)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -23850,8 +23850,8 @@
 <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hide1PlaceOrder(java.lang.String)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -24423,8 +24423,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -24568,8 +24568,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -24596,8 +24596,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -24631,8 +24631,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -24776,8 +24776,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -25163,8 +25163,8 @@
 <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hide0PlaceOrder(java.lang.String)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -25226,8 +25226,8 @@
 <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hide1PlaceOrder(java.lang.String)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -25799,8 +25799,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -25944,8 +25944,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -25972,8 +25972,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -26007,8 +26007,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -26152,8 +26152,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -26539,8 +26539,8 @@
 <mml:attr name="methods" value="protected boolean org.apache.causeway.testdomain.model.base.MemberDetection$ProtectedBase.hide0PlaceOrder(java.lang.String)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -26602,8 +26602,8 @@
 <mml:attr name="methods" value="protected boolean org.apache.causeway.testdomain.model.base.MemberDetection$ProtectedBase.hide1PlaceOrder(java.lang.String)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -26988,8 +26988,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -27044,8 +27044,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -27315,8 +27315,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -27371,8 +27371,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -27649,8 +27649,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -27712,8 +27712,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -27990,8 +27990,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4.defaultA(org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4$Parameter)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -28053,8 +28053,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4.defaultB(org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4$Parameter)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -28494,8 +28494,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action6.choices0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -28526,8 +28526,8 @@
 <mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -28561,8 +28561,8 @@
 <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_action6.choices2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -28593,8 +28593,8 @@
 <mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -30722,8 +30722,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -30867,8 +30867,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -30895,8 +30895,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -30930,8 +30930,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -31075,8 +31075,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -31291,8 +31291,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -31319,8 +31319,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -32925,8 +32925,8 @@
 <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -32994,8 +32994,8 @@
 <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -33063,8 +33063,8 @@
 <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -33201,8 +33201,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -33346,8 +33346,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -33374,8 +33374,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -33409,8 +33409,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -33554,8 +33554,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -34119,8 +34119,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -34264,8 +34264,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -34292,8 +34292,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -34327,8 +34327,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -34472,8 +34472,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -35290,8 +35290,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -35435,8 +35435,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -35463,8 +35463,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -35498,8 +35498,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -35643,8 +35643,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -36603,8 +36603,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -36748,8 +36748,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -36776,8 +36776,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -36811,8 +36811,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -36956,8 +36956,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -37782,8 +37782,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -37927,8 +37927,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -37955,8 +37955,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.services.layout.LayoutExportStyle org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default1Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -37990,8 +37990,8 @@
 <mml:attr name="methods" value="public org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType org.apache.causeway.applib.mixins.layout.Object_downloadLayout.default2Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
@@ -38135,8 +38135,8 @@
 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.default0Act()"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+<mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="RESET"/>
                             </mml:facet>
