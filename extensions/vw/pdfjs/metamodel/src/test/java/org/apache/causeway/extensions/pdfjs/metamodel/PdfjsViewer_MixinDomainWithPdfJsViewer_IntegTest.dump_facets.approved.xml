@@ -379,7 +379,7 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
                 <mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="UPDATE_DEPENDENT"/>
+                <mml:attr name="value" value="RESET"/>
               </mml:facet>
             </mml:facets>
             <mml:type>java.lang.String</mml:type>
@@ -546,7 +546,7 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
                 <mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="UPDATE_DEPENDENT"/>
+                <mml:attr name="value" value="RESET"/>
               </mml:facet>
             </mml:facets>
             <mml:type>java.lang.String</mml:type>
@@ -591,7 +591,7 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
                 <mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="UPDATE_DEPENDENT"/>
+                <mml:attr name="value" value="RESET"/>
               </mml:facet>
             </mml:facets>
             <mml:type>org.apache.causeway.applib.services.layout.LayoutExportStyle</mml:type>
@@ -643,7 +643,7 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
                 <mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="UPDATE_DEPENDENT"/>
+                <mml:attr name="value" value="RESET"/>
               </mml:facet>
             </mml:facets>
             <mml:type>org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType</mml:type>
@@ -810,7 +810,7 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
                 <mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="UPDATE_DEPENDENT"/>
+                <mml:attr name="value" value="RESET"/>
               </mml:facet>
             </mml:facets>
             <mml:type>java.lang.String</mml:type>
