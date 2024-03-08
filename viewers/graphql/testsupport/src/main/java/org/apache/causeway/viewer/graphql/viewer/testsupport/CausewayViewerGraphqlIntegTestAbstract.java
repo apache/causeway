@@ -27,7 +27,6 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -212,17 +211,17 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     @SneakyThrows
-    protected String submit(Map<String,String> replacements) {
+    protected String submit(final Map<String,String> replacements) {
         val httpRequest = buildRequest(testInfo, "._.gql", replacements);
         return submitRequest(httpRequest);
     }
 
-    protected String submit(String variant) {
+    protected String submit(final String variant) {
         return submit(variant, Collections.emptyMap());
     }
 
     @SneakyThrows
-    protected String submit(String variant, Map<String,String> replacements) {
+    protected String submit(final String variant, final Map<String,String> replacements) {
         val httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
         return submitRequest(httpRequest);
     }
@@ -250,7 +249,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     @SneakyThrows
-    protected HttpRequest buildRequest(String resourceName, Map<String, String> replacements) {
+    protected HttpRequest buildRequest(final String resourceName, final Map<String, String> replacements) {
         String resourceContents = readResource(resourceName);
         String resourceContent = replace(resourceContents, replacements);
 
@@ -267,7 +266,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
                 build();
     }
 
-    private static String replace(String str, Map<String, String> replacements) {
+    private static String replace(final String str, final Map<String, String> replacements) {
         val builder = new StringBuilder(str);
         replacements.forEach((key, value) -> {
             int index;
@@ -291,7 +290,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     private String readResource(final String resourceName) throws IOException {
-        return _Resources.loadAsString(getClass(), resourceName, StandardCharsets.UTF_8);
+        return _Resources.loadAsStringUtf8ElseFail(getClass(), resourceName);
     }
 
     public enum BookmarkOptions {
@@ -304,15 +303,15 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         return jsonOptions(null, BookmarkOptions.SCRUB);
     }
 
-    protected Options jsonOptions(BookmarkOptions bookmarkOptions) {
+    protected Options jsonOptions(final BookmarkOptions bookmarkOptions) {
         return jsonOptions(null, bookmarkOptions);
     }
 
-    public Options jsonOptions(Options options) {
+    public Options jsonOptions(final Options options) {
         return jsonOptions(options, BookmarkOptions.SCRUB);
     }
 
-    public Options jsonOptions(@Nullable Options options, BookmarkOptions bookmarkOptions) {
+    public Options jsonOptions(@Nullable Options options, final BookmarkOptions bookmarkOptions) {
         if (options == null) {
             options = new Options();
         }
@@ -366,13 +365,13 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     protected void afterEach() {}
 
-    protected Blob asPdfBlob(String fileName) {
+    protected Blob asPdfBlob(final String fileName) {
         val bytes = toBytes(fileName);
         return new Blob(fileName, "application/pdf", bytes);
     }
 
     @SneakyThrows
-    protected byte[] toBytes(String fileName){
+    protected byte[] toBytes(final String fileName){
         InputStream inputStream = new ClassPathResource(fileName, resourceBaseClazz).getInputStream();
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
