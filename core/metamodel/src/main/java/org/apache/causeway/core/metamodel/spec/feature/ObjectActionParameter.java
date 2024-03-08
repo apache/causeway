@@ -173,13 +173,13 @@ extends ObjectFeature, CurrentHolder {
      * whenever a parameter this one depends on changes in the UI. Parameters
      * with higher index depend on those with lower index.
      * <p>
-     * Reassessment can be switch off by means of {@link org.apache.causeway.applib.annotation.Parameter#dependentDefaultsPolicy()}.
+     * Reassessment can be switch off by means of {@link org.apache.causeway.applib.annotation.Parameter#precedingParamsPolicy()}.
      */
     default boolean reassessDefault(final ParameterNegotiationModel pendingArgs) {
         val changed = _Refs.booleanRef(false);
         val paramIndex = getParameterIndex();
         val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
-        if(Facets.dependentDefaultsPolicy(this).isUpdateDependent()
+        if(Facets.precedingParametersPolicy(this).isReset()
                 // always allow when not dirtied by the user (UI)
                 || ! bindableParamDirtyFlag.getValue().booleanValue() ) {
             // reassess defaults honoring defaults semantics

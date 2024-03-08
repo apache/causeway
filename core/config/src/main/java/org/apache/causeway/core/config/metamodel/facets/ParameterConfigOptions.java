@@ -24,29 +24,35 @@ import lombok.NonNull;
 
 public final class ParameterConfigOptions {
 
-    public static enum DependentDefaultsPolicy {
+    public enum PrecedingParametersPolicy {
         /**
          * Allows user provided parameters in the UI to be overwritten via defaults semantics.
          */
-        UPDATE_DEPENDENT,
+        RESET,
         /**
          * Forbids user provided parameters in the UI to be overwritten via defaults semantics.
+         *
+         * <P>
+         *     <b>WARNING</b>: If the parameter is constrained by dependent choices, then these will <i>not</i> be
+         *     re-evaluated.  The validation for the action should make sure that the parameter argument is validated
+         *     correctly.
+         * </P>
          */
         PRESERVE_CHANGES;
-        public boolean isUpdateDependent() { return this == UPDATE_DEPENDENT; }
+        public boolean isReset() { return this == RESET; }
         public boolean isPreserveChanges() { return this == PRESERVE_CHANGES; }
 
-        public static DependentDefaultsPolicy defaultsIfNotSpecifiedOtherwise() {
-            return UPDATE_DEPENDENT; // backwards compatibility
+        public static PrecedingParametersPolicy defaultsIfNotSpecifiedOtherwise() {
+            return RESET; // backwards compatibility
         }
     }
 
 
     // -- FACTORIES
 
-    public static DependentDefaultsPolicy dependentDefaultsPolicy(
+    public static PrecedingParametersPolicy precedingParametersPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getParameter().getDependentDefaultsPolicy();
+        return configuration.getApplib().getAnnotation().getParameter().getPrecedingParametersPolicy();
     }
 
 

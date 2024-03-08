@@ -42,6 +42,22 @@
         <sql-formatter.version>2.0.4</sql-formatter.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.github.gavlyukovskiy</groupId>
+                <artifactId>datasource-proxy-spring-boot-starter</artifactId>
+                <version>${datasource-proxy-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.vertical-blank</groupId>
+                <artifactId>sql-formatter</artifactId>
+                <version>${sql-formatter.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
 		<testResources>
 			<testResource>
@@ -56,12 +72,36 @@
 	</build>
 	<dependencies>
 
-		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-graphql-viewer</artifactId>
-		</dependency>
-
 		<!-- TESTING -->
+
+        <dependency>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test-autoconfigure</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.gavlyukovskiy</groupId>
+            <artifactId>datasource-proxy-spring-boot-starter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.vertical-blank</groupId>
+            <artifactId>sql-formatter</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.causeway.viewer</groupId>

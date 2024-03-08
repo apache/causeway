@@ -135,16 +135,11 @@ public @interface Parameter {
             default "Doesn't match pattern";
 
     /**
-     * Whether dependent parameters should be reset to their default if an earlier parameter changes its
+     * Whether parameter values should be reset to their default if an earlier parameter changes its
      * value, or whether instead a parameter value, once changed by the end-user, should never be
      * overwritten even if the end-user changes an earlier parameter value.
      */
-    /**
-     * Whether this parameter should be reset to its default if an earlier parameter changes its
-     * value, or whether instead the parameter's value, once changed by the end-user, should never be
-     * overwritten even if the end-user changes an earlier parameter value.
-     */
-    DependentDefaultsPolicy dependentDefaultsPolicy()
-            default DependentDefaultsPolicy.AS_CONFIGURED;
+    PrecedingParamsPolicy precedingParamsPolicy()
+            default PrecedingParamsPolicy.AS_CONFIGURED;
 
 }

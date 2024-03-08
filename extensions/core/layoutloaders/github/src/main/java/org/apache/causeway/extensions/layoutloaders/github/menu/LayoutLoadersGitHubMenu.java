@@ -79,7 +79,7 @@ public class LayoutLoadersGitHubMenu {
             LayoutLoadersGitHubMenu.this.enabled = true;
         }
         @MemberSupport public boolean hideAct() {
-            return !isConfigured();
+            return isNotConfigured();
         }
         @MemberSupport public String disableAct() {
             return LayoutLoadersGitHubMenu.this.enabled ? "Already enabled" : null;
@@ -90,7 +90,7 @@ public class LayoutLoadersGitHubMenu {
 
     @Action(
             commandPublishing = Publishing.DISABLED,
-            domainEvent = enableDynamicLayoutLoading.ActionDomainEvent.class,
+            domainEvent = disableDynamicLayoutLoading.ActionDomainEvent.class,
             executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.IDEMPOTENT
     )
@@ -106,17 +106,17 @@ public class LayoutLoadersGitHubMenu {
             LayoutLoadersGitHubMenu.this.enabled = false;
         }
         @MemberSupport public boolean hideAct() {
-            return !isConfigured();
+            return isNotConfigured();
         }
         @MemberSupport public String disableAct() {
             return LayoutLoadersGitHubMenu.this.enabled ? null : "Already disabled";
         }
     }
 
-    boolean isConfigured() {
+    boolean isNotConfigured() {
         val layoutLoadersGitHub = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub();
-        return layoutLoadersGitHub.getRepository() != null &&
-               layoutLoadersGitHub.getApiKey() != null;
+        return layoutLoadersGitHub.getRepository() == null ||
+                layoutLoadersGitHub.getApiKey() == null;
     }
 
 }

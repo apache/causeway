@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DepartmentRepository;
@@ -39,7 +40,8 @@ import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraph
 
 
 @Import({
-        UniversityModule.class
+        UniversityModule.class,
+        CausewayModulePersistenceJpaEclipselink.class,
 })
 public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestAbstract {
 

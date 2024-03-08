@@ -33,6 +33,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * WebModule to log log-on exceptions.
@@ -62,10 +63,13 @@ public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 
         registerFilter(ctx, LOGONLOGGER_FILTER_NAME, CausewayLogOnExceptionFilter.class)
             .ifPresent(filterReg -> {
-                filterReg.addMappingForUrlPatterns(
-                        null,
-                        true, // filterReg is forced last
-                        webModuleContext.getProtectedPaths().toArray(String.class));
+                val protectedPaths = webModuleContext.getProtectedPaths();
+                if(protectedPaths.isNotEmpty()) {
+                    filterReg.addMappingForUrlPatterns(
+                            null,
+                            true, // filterReg is forced last
+                            protectedPaths.toArray(String.class));
+                }
             });
 
         return Can.empty(); // registers no listeners

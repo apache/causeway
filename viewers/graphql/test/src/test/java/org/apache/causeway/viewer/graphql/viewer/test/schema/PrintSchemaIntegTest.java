@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.schema;
 
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
@@ -27,8 +30,10 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.UniversityModule;
 import org.apache.causeway.viewer.graphql.viewer.testsupport.schema.PrintSchemaIntegTestAbstract;
 
 @Import({
-        UniversityModule.class
+        UniversityModule.class,
+        CausewayModulePersistenceJpaEclipselink.class,
 })
+@EnableJpaRepositories
 public class PrintSchemaIntegTest extends PrintSchemaIntegTestAbstract {
 
     @DynamicPropertySource

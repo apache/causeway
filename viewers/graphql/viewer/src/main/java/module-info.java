@@ -27,4 +27,5 @@ module org.apache.causeway.incubator.viewer.graphql.viewer {
     requires spring.tx;
     requires org.apache.causeway.incubator.viewer.graphql.applib;
     requires spring.web;
+    requires org.apache.causeway.core.webapp;
 }
