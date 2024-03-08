@@ -20,25 +20,16 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import graphql.schema.DataFetchingEnvironment;
 
-import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import org.springframework.lang.Nullable;
-
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 @Log4j2
 public class RichActionInvokeTarget
@@ -67,7 +58,7 @@ public class RichActionInvokeTarget
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context).getTargetPojo();
     }
 

@@ -26,8 +26,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLEnumType;
 
-import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
 import org.springframework.stereotype.Component;
 
@@ -42,19 +44,14 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.GraphQLEnumType;
-
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
 @Component
 @RequiredArgsConstructor

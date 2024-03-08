@@ -22,12 +22,7 @@ import javax.annotation.PostConstruct;
 
 import graphql.GraphQL;
 import graphql.execution.SimpleDataFetcherExceptionHandler;
-import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLSchema;
-
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
@@ -46,14 +41,6 @@ import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.toplevel.BothTopLevelQuery;
 
 import lombok.val;
-
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
 @Service()
 //@RequiredArgsConstructor(onConstructor_ = {@Inject})
