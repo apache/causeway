@@ -19,32 +19,35 @@
 package org.apache.causeway.applib.annotation;
 
 /**
- * The policies for calculating the defaults of dependent parameters.
+ * The policies for calculating the defaults of parameters if it has preceding parameters (isn't the first parameter,
+ * in other words).
  *
- * @since 1.x {@index}
+ * @since 2.x {@index}
  */
-public enum DependentDefaultsPolicy {
+public enum PrecedingParamsPolicy {
 
     /**
-     * The policy to use should be as per the default defaults policy configured in <tt>application.properties</tt>.
-     *
+     * The policy to use should be as per the preceding defaults policy configured in <tt>application.properties</tt>.
      * <p>
-     *     If no defaults policy is configured, then default to the {@link DependentDefaultsPolicy#UPDATE_DEPENDENT UPDATE_DEPENDENT} policy.
-     * </p>
+     * If no defaults policy is configured, then default to the {@link PrecedingParamsPolicy#RESET RESET} policy.
      */
     AS_CONFIGURED,
 
     /**
-     * If an end-user has changed this parameter's value, then do not overwrite the value when an earlier parameter changes.
+     * If an end-user has changed this parameter's value, then do not overwrite the value when an earlier parameter
+     * changes.
+     * <p>
+     * <b>WARNING</b>: If the parameter is constrained by dependent choices, then these will <i>not</i> be
+     * re-evaluated.  The validation for the action should make sure that the parameter argument is validated
+     * correctly.
      */
     PRESERVE_CHANGES,
 
     /**
-     * If this parameter declares a default that is dependent on the value of a previous parameter, and that previous
-     * parameter has been changed by the end-user, then update this dependent parameter with its computed default,
+     * If a previous parameter is changed, then reset this parameter to its default,
      * <i>even if</i> the end-user has changed the value of this parameter previously.
      */
-    UPDATE_DEPENDENT,
+    RESET,
 
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta

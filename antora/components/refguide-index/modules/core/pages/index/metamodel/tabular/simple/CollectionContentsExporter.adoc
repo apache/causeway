@@ -10,6 +10,7 @@ SPI to provide file export to table views.
 ----
 interface CollectionContentsExporter {
   void createExport(DataTable dataTable, File tempFile)     // <.>
+  Blob exportToBlob(DataTable dataTable, String name)     // <.>
   CommonMimeType getMimeType()
   String getTitleLabel()     // <.>
   String getCssClass()     // <.>
@@ -22,6 +23,11 @@ interface CollectionContentsExporter {
 +
 --
 Implementing exporters need to write given tabular data from xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] into the _File tempFile_ , which is provided by the framework for the duration of a single request cycle.
+--
+<.> xref:#exportToBlob_DataTable_String[exportToBlob(DataTable, String)]
++
+--
+Writes given tabular data into a xref:refguide:applib:index/value/Blob.adoc[Blob] of given name.
 --
 <.> xref:#getTitleLabel_[getTitleLabel()]
 <.> xref:#getCssClass_[getCssClass()]
@@ -42,6 +48,11 @@ Whether this exporter applies to given _objectType_ . If `false` , this exporter
 === createExport(DataTable, File)
 
 Implementing exporters need to write given tabular data from xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] into the _File tempFile_ , which is provided by the framework for the duration of a single request cycle.
+
+[#exportToBlob_DataTable_String]
+=== exportToBlob(DataTable, String)
+
+Writes given tabular data into a xref:refguide:applib:index/value/Blob.adoc[Blob] of given name.
 
 [#getTitleLabel_]
 === getTitleLabel()

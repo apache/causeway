@@ -72,7 +72,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFace
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet;
+import org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -175,11 +175,11 @@ public final class Facets {
         .map(DefaultViewFacet::value);
     }
 
-    public static ParameterConfigOptions.DependentDefaultsPolicy dependentDefaultsPolicy(
+    public static ParameterConfigOptions.PrecedingParametersPolicy precedingParametersPolicy(
             final ObjectActionParameter parameter) {
-        return parameter.lookupFacet(ParameterDependentDefaultsFacet.class)
-                .map(ParameterDependentDefaultsFacet::value)
-                .orElseGet(ParameterConfigOptions.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
+        return parameter.lookupFacet(PrecedingParametersPolicyFacet.class)
+                .map(PrecedingParametersPolicyFacet::value)
+                .orElseGet(ParameterConfigOptions.PrecedingParametersPolicy::defaultsIfNotSpecifiedOtherwise);
     }
 
     public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {

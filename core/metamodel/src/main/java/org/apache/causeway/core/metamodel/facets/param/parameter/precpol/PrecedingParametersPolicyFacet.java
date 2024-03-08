@@ -17,7 +17,7 @@
  *  under the License.
  *
  */
-package org.apache.causeway.core.metamodel.facets.param.parameter.depdef;
+package org.apache.causeway.core.metamodel.facets.param.parameter.precpol;
 
 import java.util.Optional;
 
@@ -32,41 +32,41 @@ import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
  * Determines how dependent parameter values should be updated,
  * if one of the earlier parameter values is changed.
  * <p>
- * Corresponds to annotating the action method {@link Parameter#dependentDefaultsPolicy()}.
+ * Corresponds to annotating the action method {@link Parameter#precedingParamsPolicy()}.
  *
  * @since 2.0
  */
-public interface ParameterDependentDefaultsFacet
-extends SingleValueFacet<ParameterConfigOptions.DependentDefaultsPolicy> {
+public interface PrecedingParametersPolicyFacet
+extends SingleValueFacet<ParameterConfigOptions.PrecedingParametersPolicy> {
 
-    static Optional<ParameterDependentDefaultsFacet> create(
+    static Optional<PrecedingParametersPolicyFacet> create(
             final Optional<Parameter> parameterIfAny,
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
-        final ParameterConfigOptions.DependentDefaultsPolicy defaultPolicyFromConfig =
-                ParameterConfigOptions.dependentDefaultsPolicy(configuration);
+        final ParameterConfigOptions.PrecedingParametersPolicy defaultPolicyFromConfig =
+                ParameterConfigOptions.precedingParametersPolicy(configuration);
 
         return _Optionals.orNullable(
 
         parameterIfAny
-        .map(Parameter::dependentDefaultsPolicy)
-        .<ParameterDependentDefaultsFacet>map(policy -> {
+        .map(Parameter::precedingParamsPolicy)
+        .<PrecedingParametersPolicyFacet>map(policy -> {
             switch (policy) {
             case PRESERVE_CHANGES:
-                return new ParameterDependentDefaultsFacetForParameterAnnotation(
-                        ParameterConfigOptions.DependentDefaultsPolicy.PRESERVE_CHANGES, holder);
-            case UPDATE_DEPENDENT:
-                return new ParameterDependentDefaultsFacetForParameterAnnotation(
-                        ParameterConfigOptions.DependentDefaultsPolicy.UPDATE_DEPENDENT, holder);
+                return new PrecedingParametersPolicyFacetForParameterAnnotation(
+                        ParameterConfigOptions.PrecedingParametersPolicy.PRESERVE_CHANGES, holder);
+            case RESET:
+                return new PrecedingParametersPolicyFacetForParameterAnnotation(
+                        ParameterConfigOptions.PrecedingParametersPolicy.RESET, holder);
             case NOT_SPECIFIED:
             case AS_CONFIGURED:
-                return new ParameterDependentDefaultsFacetForParameterAnnotation(defaultPolicyFromConfig, holder);
+                return new PrecedingParametersPolicyFacetForParameterAnnotation(defaultPolicyFromConfig, holder);
             default:
             }
-            throw new IllegalStateException("dependentDefaultsPolicy '" + policy + "' not recognised");
+            throw new IllegalStateException("precedingParametersPolicy '" + policy + "' not recognised");
         })
         ,
-        () -> new ParameterDependentDefaultsFacetFromConfiguration(defaultPolicyFromConfig, holder));
+        () -> new PrecedingParametersPolicyFacetFromConfiguration(defaultPolicyFromConfig, holder));
     }
 }

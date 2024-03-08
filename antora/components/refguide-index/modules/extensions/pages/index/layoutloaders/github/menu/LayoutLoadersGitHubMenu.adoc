@@ -9,7 +9,7 @@ Provides actions to managed the dynamic loading of layouts from a github source 
 .LayoutLoadersGitHubMenu.java
 ----
 class LayoutLoadersGitHubMenu {
-  boolean isConfigured()
+  boolean isNotConfigured()
 }
 ----
 

@@ -10,9 +10,11 @@ Represents a collection of domain objects (typically entity instances).
 ----
 class DataTable {
   DataTable(ObjectSpecification elementType)     // <.>
+  DataTable(ObjectSpecification elementType, Predicate<ObjectAssociation> columnFilter)     // <.>
   DataTable(ObjectSpecification elementType, Can<? extends ObjectAssociation> dataColumns)     // <.>
   DataTable(ObjectSpecification elementType, String tableFriendlyName, Can<? extends ObjectAssociation> dataColumns, Can<ManagedObject> dataElements)
   DataTable forDomainType(Class<?> domainType)     // <.>
+  DataTable forDomainType(Class<?> domainType, Predicate<ObjectAssociation> columnFilter)     // <.>
   String getLogicalName()     // <.>
   int getElementCount()     // <.>
   Stream<ManagedObject> streamDataElements()
@@ -23,23 +25,37 @@ class DataTable {
   DataTable populateEntities(Query<?> query)     // <.>
   DataTable visit(CellVisitor visitor)
   DataTable visit(CellVisitor visitor, Predicate<DataColumn> columnFilter)
+  Blob exportToBlob(CollectionContentsExporter exporter)     // <.>
+  Predicate<ObjectAssociation> columnFilterIncluding(Where whereToInclude)
+  Predicate<ObjectAssociation> columnFilterExcludingMixins()
+  Predicate<ObjectAssociation> columnFilterIncludingEnabledForSnapshot()
 }
 ----
 
 <.> xref:#DataTable_ObjectSpecification[DataTable(ObjectSpecification)]
 +
 --
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all properties as columns, excluding mixed-in ones. (For more control on which columns to include, consider a different constructor.)
+--
+<.> xref:#DataTable_ObjectSpecification_Predicate[DataTable(ObjectSpecification, Predicate)]
++
+--
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all (including mixed-in) associations as columns, that pass given _columnFilter_ . If the filter is _null_ it acts as a pass-through.
 --
 <.> xref:#DataTable_ObjectSpecification_Can[DataTable(ObjectSpecification, Can)]
 +
 --
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type.
 --
 <.> xref:#forDomainType_Class[forDomainType(Class)]
 +
 --
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all properties as columns, excluding mixed-in ones. (For more control on which columns to include, consider _#forDomainType(Class, Predicate)_ or a constructor that fits.)
+--
+<.> xref:#forDomainType_Class_Predicate[forDomainType(Class, Predicate)]
++
+--
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all (including mixed-in) associations as columns, that pass given _columnFilter_ . If the filter is _null_ it acts as a pass-through.
 --
 <.> xref:#getLogicalName_[getLogicalName()]
 +
@@ -76,23 +92,48 @@ Populates this table from the underlying (default) persistence layer.
 --
 Populates this table from the underlying (default) persistence layer, using given xref:refguide:applib:index/query/Query.adoc[Query] to refine the result.
 --
+<.> xref:#exportToBlob_CollectionContentsExporter[exportToBlob(CollectionContentsExporter)]
++
+--
+Typical use-case:
+--
 
 == Members
 
 [#DataTable_ObjectSpecification]
 === DataTable(ObjectSpecification)
 
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all properties as columns, excluding mixed-in ones. (For more control on which columns to include, consider a different constructor.)
+
+The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
+
+[#DataTable_ObjectSpecification_Predicate]
+=== DataTable(ObjectSpecification, Predicate)
+
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all (including mixed-in) associations as columns, that pass given _columnFilter_ . If the filter is _null_ it acts as a pass-through.
+
+The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
 
 [#DataTable_ObjectSpecification_Can]
 === DataTable(ObjectSpecification, Can)
 
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type.
+
+The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
 
 [#forDomainType_Class]
 === forDomainType(Class)
 
-Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type. It can be populated later on using _DataTable#setDataElements(Iterable)_ .
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all properties as columns, excluding mixed-in ones. (For more control on which columns to include, consider _#forDomainType(Class, Predicate)_ or a constructor that fits.)
+
+The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
+
+[#forDomainType_Class_Predicate]
+=== forDomainType(Class, Predicate)
+
+Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all (including mixed-in) associations as columns, that pass given _columnFilter_ . If the filter is _null_ it acts as a pass-through.
+
+The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
 
 [#getLogicalName_]
 === getLogicalName()
@@ -128,3 +169,12 @@ Populates this table from the underlying (default) persistence layer.
 === populateEntities(Query)
 
 Populates this table from the underlying (default) persistence layer, using given xref:refguide:applib:index/query/Query.adoc[Query] to refine the result.
+
+[#exportToBlob_CollectionContentsExporter]
+=== exportToBlob(CollectionContentsExporter)
+
+Typical use-case:
+
+----
+{@code
+----

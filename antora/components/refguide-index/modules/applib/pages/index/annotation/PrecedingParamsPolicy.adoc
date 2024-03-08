@@ -1,17 +1,17 @@
-= DependentDefaultsPolicy _(enum)_
+= PrecedingParamsPolicy _(enum)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The policies for calculating the defaults of dependent parameters.
+The policies for calculating the defaults of parameters if it has preceding parameters (isn't the first parameter, in other words).
 
 == API
 
 [source,java]
-.DependentDefaultsPolicy.java
+.PrecedingParamsPolicy.java
 ----
-enum DependentDefaultsPolicy {
+enum PrecedingParamsPolicy {
   AS_CONFIGURED     // <.>
   PRESERVE_CHANGES     // <.>
-  UPDATE_DEPENDENT     // <.>
+  RESET     // <.>
   NOT_SPECIFIED     // <.>
 }
 ----
@@ -19,17 +19,17 @@ enum DependentDefaultsPolicy {
 <.> xref:#AS_CONFIGURED[AS_CONFIGURED]
 +
 --
-The policy to use should be as per the default defaults policy configured in `application.properties` .
+The policy to use should be as per the preceding defaults policy configured in `application.properties` .
 --
 <.> xref:#PRESERVE_CHANGES[PRESERVE_CHANGES]
 +
 --
 If an end-user has changed this parameter's value, then do not overwrite the value when an earlier parameter changes.
 --
-<.> xref:#UPDATE_DEPENDENT[UPDATE_DEPENDENT]
+<.> xref:#RESET[RESET]
 +
 --
-If this parameter declares a default that is dependent on the value of a previous parameter, and that previous parameter has been changed by the end-user, then update this dependent parameter with its computed default, _even if_ the end-user has changed the value of this parameter previously.
+If a previous parameter is changed, then reset this parameter to its default, _even if_ the end-user has changed the value of this parameter previously.
 --
 <.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
@@ -42,19 +42,21 @@ Ignore the value provided by this annotation (meaning that the framework will ke
 [#AS_CONFIGURED]
 === AS_CONFIGURED
 
-The policy to use should be as per the default defaults policy configured in `application.properties` .
+The policy to use should be as per the preceding defaults policy configured in `application.properties` .
 
-If no defaults policy is configured, then default to the _DependentDefaultsPolicy#UPDATE_DEPENDENT UPDATE_DEPENDENT_ policy.
+If no defaults policy is configured, then default to the _PrecedingParamsPolicy#RESET RESET_ policy.
 
 [#PRESERVE_CHANGES]
 === PRESERVE_CHANGES
 
 If an end-user has changed this parameter's value, then do not overwrite the value when an earlier parameter changes.
 
-[#UPDATE_DEPENDENT]
-=== UPDATE_DEPENDENT
+ *WARNING* : If the parameter is constrained by dependent choices, then these will _not_ be re-evaluated. The validation for the action should make sure that the parameter argument is validated correctly.
 
-If this parameter declares a default that is dependent on the value of a previous parameter, and that previous parameter has been changed by the end-user, then update this dependent parameter with its computed default, _even if_ the end-user has changed the value of this parameter previously.
+[#RESET]
+=== RESET
+
+If a previous parameter is changed, then reset this parameter to its default, _even if_ the end-user has changed the value of this parameter previously.
 
 [#NOT_SPECIFIED]
 === NOT_SPECIFIED

@@ -1,0 +1,32 @@
+= CausewayViewerGraphqlIntegTestAbstract
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Intended as a base class for integration testing.
+
+Subclass and _Import_ the Spring _org.springframework.context.annotation.Configuration_ s (modules) that hold the domain model.
+
+Write tests as queries with a `._.gql` suffix (or specify a different suffix through the constructor). Then override the _#each()_ method trivially:
+
+----
+
+    _@_ TestFactory
+    public Iterable each() throws IOException, URISyntaxException {
+        return super.each();
+    }
+    
+----
+
+The class will use _Approvals approval_ tests to assert the returned response is correct.
+
+== API
+
+[source,java]
+.CausewayViewerGraphqlIntegTestAbstract.java
+----
+class CausewayViewerGraphqlIntegTestAbstract {
+  void init(TestInfo testInfo)
+  Options jsonOptions(Options options)
+  Options jsonOptions(Options options, BookmarkOptions bookmarkOptions)
+}
+----
+
