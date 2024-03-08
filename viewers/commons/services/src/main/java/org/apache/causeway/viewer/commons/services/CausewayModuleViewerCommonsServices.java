@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.commons.services;
 
+import org.apache.causeway.viewer.commons.model.CausewayModuleViewerCommonsModel;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -31,8 +33,9 @@ import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiService
 @Configuration
 @Import({
 
-    // adds object impersonation mixins
-    CausewayModuleViewerCommonsApplib.class,
+    // modules
+    CausewayModuleViewerCommonsApplib.class, // adds object impersonation mixins
+    CausewayModuleViewerCommonsModel.class,
 
     // @Service's
     BrandingUiServiceDefault.class,

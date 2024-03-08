@@ -35,4 +35,5 @@ module org.apache.causeway.viewer.commons.services {
     requires spring.beans;
     requires spring.context;
     requires javax.servlet.api;
+    requires org.apache.causeway.viewer.commons.model;
 }

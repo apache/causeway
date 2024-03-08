@@ -16,20 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.graphql.viewer.test.domain;
+package org.apache.causeway.viewer.commons.model;
 
-import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
+import org.apache.causeway.viewer.commons.applib.CausewayModuleViewerCommonsApplib;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 
 @Configuration
-@ComponentScan
-@EnableJpaRepositories
-@EntityScan(basePackageClasses = {UniversityModule.class})
-public class UniversityModule  {
-
+@Import({
+        CausewayModuleViewerCommonsApplib.class,
+        CausewayModuleCoreRuntime.class,
+})
+public class CausewayModuleViewerCommonsModel {
 }

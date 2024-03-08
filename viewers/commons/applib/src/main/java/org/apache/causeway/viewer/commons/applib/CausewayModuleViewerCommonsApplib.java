@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.commons.applib;
 
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -26,6 +28,9 @@ import org.apache.causeway.viewer.commons.applib.mixins.Object_impersonateWithRo
 
 @Configuration
 @Import({
+
+    // modules
+    CausewayModuleCoreMetamodel.class,
 
     // Mixins (prototyping)
     Object_impersonate.class,
