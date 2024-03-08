@@ -26,7 +26,7 @@ public class ParameterDependentDefaultsActionFacetForActionAnnotationAsConfigure
 extends ParameterDependentDefaultsFacetForParameterAnnotation {
 
     ParameterDependentDefaultsActionFacetForActionAnnotationAsConfigured(
-            final ParameterConfigOptions.DependentDefaultsPolicy value, final FacetHolder holder) {
+            final ParameterConfigOptions.PrecedingParametersPolicy value, final FacetHolder holder) {
         super(value, holder);
     }
 

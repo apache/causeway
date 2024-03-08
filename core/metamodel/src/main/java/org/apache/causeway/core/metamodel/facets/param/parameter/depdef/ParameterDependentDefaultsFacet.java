@@ -32,39 +32,39 @@ import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
  * Determines how dependent parameter values should be updated,
  * if one of the earlier parameter values is changed.
  * <p>
- * Corresponds to annotating the action method {@link Parameter#dependentDefaultsPolicy()}.
+ * Corresponds to annotating the action method {@link Parameter#precedingParamsPolicy()}.
  *
  * @since 2.0
  */
 public interface ParameterDependentDefaultsFacet
-extends SingleValueFacet<ParameterConfigOptions.DependentDefaultsPolicy> {
+extends SingleValueFacet<ParameterConfigOptions.PrecedingParametersPolicy> {
 
     static Optional<ParameterDependentDefaultsFacet> create(
             final Optional<Parameter> parameterIfAny,
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
-        final ParameterConfigOptions.DependentDefaultsPolicy defaultPolicyFromConfig =
-                ParameterConfigOptions.dependentDefaultsPolicy(configuration);
+        final ParameterConfigOptions.PrecedingParametersPolicy defaultPolicyFromConfig =
+                ParameterConfigOptions.precedingParametersPolicy(configuration);
 
         return _Optionals.orNullable(
 
         parameterIfAny
-        .map(Parameter::dependentDefaultsPolicy)
+        .map(Parameter::precedingParamsPolicy)
         .<ParameterDependentDefaultsFacet>map(policy -> {
             switch (policy) {
             case PRESERVE_CHANGES:
                 return new ParameterDependentDefaultsFacetForParameterAnnotation(
-                        ParameterConfigOptions.DependentDefaultsPolicy.PRESERVE_CHANGES, holder);
-            case UPDATE_DEPENDENT:
+                        ParameterConfigOptions.PrecedingParametersPolicy.PRESERVE_CHANGES, holder);
+            case RESET:
                 return new ParameterDependentDefaultsFacetForParameterAnnotation(
-                        ParameterConfigOptions.DependentDefaultsPolicy.UPDATE_DEPENDENT, holder);
+                        ParameterConfigOptions.PrecedingParametersPolicy.RESET, holder);
             case NOT_SPECIFIED:
             case AS_CONFIGURED:
                 return new ParameterDependentDefaultsFacetForParameterAnnotation(defaultPolicyFromConfig, holder);
             default:
             }
-            throw new IllegalStateException("dependentDefaultsPolicy '" + policy + "' not recognised");
+            throw new IllegalStateException("precedingParametersPolicy '" + policy + "' not recognised");
         })
         ,
         () -> new ParameterDependentDefaultsFacetFromConfiguration(defaultPolicyFromConfig, holder));

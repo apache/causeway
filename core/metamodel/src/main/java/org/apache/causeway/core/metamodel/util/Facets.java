@@ -175,11 +175,11 @@ public final class Facets {
         .map(DefaultViewFacet::value);
     }
 
-    public static ParameterConfigOptions.DependentDefaultsPolicy dependentDefaultsPolicy(
+    public static ParameterConfigOptions.PrecedingParametersPolicy dependentDefaultsPolicy(
             final ObjectActionParameter parameter) {
         return parameter.lookupFacet(ParameterDependentDefaultsFacet.class)
                 .map(ParameterDependentDefaultsFacet::value)
-                .orElseGet(ParameterConfigOptions.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
+                .orElseGet(ParameterConfigOptions.PrecedingParametersPolicy::defaultsIfNotSpecifiedOtherwise);
     }
 
     public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {

@@ -54,7 +54,7 @@ extends FacetFactoryAbstract {
         processParamsFileAccept(processParameterContext);
     }
 
-    // check for @Parameter(dependentDefaultsPolicy=...)
+    // check for @Parameter(precedingParametersPolicy=...)
     void processParamsDependentDefaultsPolicy(final ProcessParameterContext processParameterContext) {
 
         val holder = processParameterContext.getFacetHolder();

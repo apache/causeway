@@ -1513,16 +1513,16 @@ public class CausewayConfiguration {
             public static class Parameter {
 
                 /**
-                 * Whether dependent parameters should be reset to their default if an earlier parameter changes its
+                 * Whether parameters should be reset to their default if an earlier parameter changes its
                  * value, or whether instead a parameter value, once changed by the end-user, should never be
                  * overwritten even if the end-user changes an earlier parameter value.
                  *
                  * <p>
                  *     This setting can be overridden on a case-by-case basis using
-                 *     {@link org.apache.causeway.applib.annotation.Parameter#dependentDefaultsPolicy() Parameter#dependentDefaultsPolicy()}.
+                 *     {@link org.apache.causeway.applib.annotation.Parameter#precedingParamsPolicy() Parameter#precedingParametersPolicy()}.
                  * </p>
                  */
-                private ParameterConfigOptions.DependentDefaultsPolicy dependentDefaultsPolicy = ParameterConfigOptions.DependentDefaultsPolicy.UPDATE_DEPENDENT;
+                private ParameterConfigOptions.PrecedingParametersPolicy precedingParametersPolicy = ParameterConfigOptions.PrecedingParametersPolicy.RESET;
 
             }
 

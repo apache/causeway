@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DependentDefaultsPolicy;
+import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
@@ -253,16 +253,16 @@ implements
                 final LocalDateTime dateTime,
 
                 @Parameter(
-                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
+                        precedingParamsPolicy = PrecedingParamsPolicy.PRESERVE_CHANGES)
                 final String calendarName,
 
                 @Parameter(
-                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
+                        precedingParamsPolicy = PrecedingParamsPolicy.PRESERVE_CHANGES)
                 final String title,
 
                 @Parameter(
                         optionality = Optionality.OPTIONAL,
-                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
+                        precedingParamsPolicy = PrecedingParamsPolicy.PRESERVE_CHANGES)
                 @ParameterLayout(multiLine = 4)
                 final String notes) {
 

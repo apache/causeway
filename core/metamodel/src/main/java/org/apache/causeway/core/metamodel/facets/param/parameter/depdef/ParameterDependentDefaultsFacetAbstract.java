@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
 abstract class ParameterDependentDefaultsFacetAbstract
-extends SingleValueFacetAbstract<ParameterConfigOptions.DependentDefaultsPolicy>
+extends SingleValueFacetAbstract<ParameterConfigOptions.PrecedingParametersPolicy>
 implements ParameterDependentDefaultsFacet {
 
     private static final Class<? extends Facet> type() {
@@ -33,7 +33,7 @@ implements ParameterDependentDefaultsFacet {
     }
 
     protected ParameterDependentDefaultsFacetAbstract(
-            final ParameterConfigOptions.DependentDefaultsPolicy value, final FacetHolder holder) {
+            final ParameterConfigOptions.PrecedingParametersPolicy value, final FacetHolder holder) {
         super(type(), value, holder);
     }
 }
