@@ -47,7 +47,7 @@ extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        processParamsDependentDefaultsPolicy(processParameterContext);
+        processPrecedingParamsPolicy(processParameterContext);
         processParamsMaxLength(processParameterContext);
         processParamsMustSatisfy(processParameterContext);
         processParamsRegEx(processParameterContext);
@@ -55,8 +55,8 @@ extends FacetFactoryAbstract {
         processParamsFileAccept(processParameterContext);
     }
 
-    // check for @Parameter(precedingParametersPolicy=...)
-    void processParamsDependentDefaultsPolicy(final ProcessParameterContext processParameterContext) {
+    // check for @Parameter(precedingParamsPolicy=...)
+    void processPrecedingParamsPolicy(final ProcessParameterContext processParameterContext) {
 
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
