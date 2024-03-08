@@ -28,22 +28,18 @@ public enum PrecedingParamsPolicy {
 
     /**
      * The policy to use should be as per the preceding defaults policy configured in <tt>application.properties</tt>.
-     *
      * <p>
-     *     If no defaults policy is configured, then default to the {@link PrecedingParamsPolicy#RESET RESET} policy.
-     * </p>
+     * If no defaults policy is configured, then default to the {@link PrecedingParamsPolicy#RESET RESET} policy.
      */
     AS_CONFIGURED,
 
     /**
      * If an end-user has changed this parameter's value, then do not overwrite the value when an earlier parameter
      * changes.
-     *
-     * <P>
-     *     <b>WARNING</b>: If the parameter is constrained by dependent choices, then these will <i>not</i> be
-     *     re-evaluated.  The validation for the action should make sure that the parameter argument is validated
-     *     correctly.
-     * </P>
+     * <p>
+     * <b>WARNING</b>: If the parameter is constrained by dependent choices, then these will <i>not</i> be
+     * re-evaluated.  The validation for the action should make sure that the parameter argument is validated
+     * correctly.
      */
     PRESERVE_CHANGES,
 
