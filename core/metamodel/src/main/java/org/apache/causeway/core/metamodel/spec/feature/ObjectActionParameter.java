@@ -179,7 +179,7 @@ extends ObjectFeature, CurrentHolder {
         val changed = _Refs.booleanRef(false);
         val paramIndex = getParameterIndex();
         val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
-        if(Facets.dependentDefaultsPolicy(this).isReset()
+        if(Facets.precedingParametersPolicy(this).isReset()
                 // always allow when not dirtied by the user (UI)
                 || ! bindableParamDirtyFlag.getValue().booleanValue() ) {
             // reassess defaults honoring defaults semantics

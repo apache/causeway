@@ -17,15 +17,15 @@
  *  under the License.
  *
  */
-package org.apache.causeway.core.metamodel.facets.param.parameter.depdef;
+package org.apache.causeway.core.metamodel.facets.param.parameter.precpol;
 
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class ParameterDependentDefaultsFacetForParameterAnnotation
-extends ParameterDependentDefaultsFacetAbstract {
+public class PrecedingParametersPolicyFacetForParameterAnnotation
+extends PrecedingParametersPolicyFacetAbstract {
 
-    ParameterDependentDefaultsFacetForParameterAnnotation(
+    PrecedingParametersPolicyFacetForParameterAnnotation(
             final ParameterConfigOptions.PrecedingParametersPolicy value, final FacetHolder holder) {
         super(value, holder);
     }

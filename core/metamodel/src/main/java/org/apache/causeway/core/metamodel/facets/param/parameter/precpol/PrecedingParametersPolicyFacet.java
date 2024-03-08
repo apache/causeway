@@ -17,7 +17,7 @@
  *  under the License.
  *
  */
-package org.apache.causeway.core.metamodel.facets.param.parameter.depdef;
+package org.apache.causeway.core.metamodel.facets.param.parameter.precpol;
 
 import java.util.Optional;
 
@@ -36,10 +36,10 @@ import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
  *
  * @since 2.0
  */
-public interface ParameterDependentDefaultsFacet
+public interface PrecedingParametersPolicyFacet
 extends SingleValueFacet<ParameterConfigOptions.PrecedingParametersPolicy> {
 
-    static Optional<ParameterDependentDefaultsFacet> create(
+    static Optional<PrecedingParametersPolicyFacet> create(
             final Optional<Parameter> parameterIfAny,
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
@@ -51,22 +51,22 @@ extends SingleValueFacet<ParameterConfigOptions.PrecedingParametersPolicy> {
 
         parameterIfAny
         .map(Parameter::precedingParamsPolicy)
-        .<ParameterDependentDefaultsFacet>map(policy -> {
+        .<PrecedingParametersPolicyFacet>map(policy -> {
             switch (policy) {
             case PRESERVE_CHANGES:
-                return new ParameterDependentDefaultsFacetForParameterAnnotation(
+                return new PrecedingParametersPolicyFacetForParameterAnnotation(
                         ParameterConfigOptions.PrecedingParametersPolicy.PRESERVE_CHANGES, holder);
             case RESET:
-                return new ParameterDependentDefaultsFacetForParameterAnnotation(
+                return new PrecedingParametersPolicyFacetForParameterAnnotation(
                         ParameterConfigOptions.PrecedingParametersPolicy.RESET, holder);
             case NOT_SPECIFIED:
             case AS_CONFIGURED:
-                return new ParameterDependentDefaultsFacetForParameterAnnotation(defaultPolicyFromConfig, holder);
+                return new PrecedingParametersPolicyFacetForParameterAnnotation(defaultPolicyFromConfig, holder);
             default:
             }
             throw new IllegalStateException("precedingParametersPolicy '" + policy + "' not recognised");
         })
         ,
-        () -> new ParameterDependentDefaultsFacetFromConfiguration(defaultPolicyFromConfig, holder));
+        () -> new PrecedingParametersPolicyFacetFromConfiguration(defaultPolicyFromConfig, holder));
     }
 }

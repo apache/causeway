@@ -17,22 +17,22 @@
  *  under the License.
  *
  */
-package org.apache.causeway.core.metamodel.facets.param.parameter.depdef;
+package org.apache.causeway.core.metamodel.facets.param.parameter.precpol;
 
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
-abstract class ParameterDependentDefaultsFacetAbstract
+abstract class PrecedingParametersPolicyFacetAbstract
 extends SingleValueFacetAbstract<ParameterConfigOptions.PrecedingParametersPolicy>
-implements ParameterDependentDefaultsFacet {
+implements PrecedingParametersPolicyFacet {
 
     private static final Class<? extends Facet> type() {
-        return ParameterDependentDefaultsFacet.class;
+        return PrecedingParametersPolicyFacet.class;
     }
 
-    protected ParameterDependentDefaultsFacetAbstract(
+    protected PrecedingParametersPolicyFacetAbstract(
             final ParameterConfigOptions.PrecedingParametersPolicy value, final FacetHolder holder) {
         super(type(), value, holder);
     }

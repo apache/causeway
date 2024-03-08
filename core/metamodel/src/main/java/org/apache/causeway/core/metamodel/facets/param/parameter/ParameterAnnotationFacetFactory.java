@@ -25,12 +25,12 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 import org.apache.causeway.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
+import org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
@@ -61,7 +61,7 @@ extends FacetFactoryAbstract {
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(
-                ParameterDependentDefaultsFacet
+                PrecedingParametersPolicyFacet
                         .create(parameterIfAny, getConfiguration(), holder));
     }
 
