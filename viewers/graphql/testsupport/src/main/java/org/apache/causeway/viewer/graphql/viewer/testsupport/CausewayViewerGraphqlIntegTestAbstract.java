@@ -156,7 +156,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
             @PropertySource(CausewayPresets.SilenceProgrammingModel),
     })
     public static class TestApp {
-
     }
 
     @Inject protected CausewaySystemEnvironment causewaySystemEnvironment;
