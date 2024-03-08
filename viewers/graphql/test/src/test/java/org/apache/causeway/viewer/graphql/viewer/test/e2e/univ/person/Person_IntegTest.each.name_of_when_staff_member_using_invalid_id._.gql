@@ -5,7 +5,7 @@
       When {
         university_dept_People {
           nameOf {
-            invoke(person: {id: "123456", logicalTypeName: "university.dept.StaffMember"}) {
+            invoke(person: {id: "123456", logicalTypeName: university_dept_StaffMember}) {
               results
             }
           }

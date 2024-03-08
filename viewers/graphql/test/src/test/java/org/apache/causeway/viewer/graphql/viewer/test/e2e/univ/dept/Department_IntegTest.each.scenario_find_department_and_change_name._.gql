@@ -26,6 +26,11 @@
           }
           changeName {
             invokeIdempotent(newName: "Ancient History") {
+              target {
+                name {
+                  get
+                }
+              }
               args {
                 newName
               }

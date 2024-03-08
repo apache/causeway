@@ -50,9 +50,9 @@
 	<modules>
 		<module>applib</module>
 		<module>model</module>
-		<module>viewer</module>
-		<module>test</module>
 		<module>testsupport</module>
+		<module>test</module>
+		<module>viewer</module>
 	</modules>
 
 </project>

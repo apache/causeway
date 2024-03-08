@@ -92,13 +92,13 @@ public class RichMutationForProperty extends Element {
         Object target = dataFetchingEnvironment.getArgument(argumentName);
         Optional<Object> result;
         final Environment environment = new Environment.For(dataFetchingEnvironment);
-        val argumentValue1 = (Map<String, String>) target;
-        String idValue = argumentValue1.get("id");
+        val argumentValue1 = (Map<String, ?>) target;
+        val idValue = (String)argumentValue1.get("id");
         if (idValue != null) {
-            String logicalTypeName = argumentValue1.get("logicalTypeName");
+            val objectSpecArg = (ObjectSpecification) argumentValue1.get("logicalTypeName");
             Optional<Bookmark> bookmarkIfAny;
-            if (logicalTypeName != null) {
-                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, idValue));
+            if (objectSpecArg != null) {
+                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
             } else {
                 Class<?> paramClass = objectSpec.getCorrespondingClass();
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
@@ -108,9 +108,9 @@ public class RichMutationForProperty extends Element {
                     .filter(Optional::isPresent)
                     .map(Optional::get);
         } else {
-            String refValue = argumentValue1.get("ref");
+            val refValue = (String)argumentValue1.get("ref");
             if (refValue != null) {
-                String key = CommonActionUtils.keyFor(refValue);
+                val key = CommonActionUtils.keyFor(refValue);
                 BookmarkedPojo value = environment.getGraphQlContext().get(key);
                 result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
             } else {

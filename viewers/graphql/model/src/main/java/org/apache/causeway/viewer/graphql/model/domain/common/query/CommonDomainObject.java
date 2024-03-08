@@ -99,7 +99,7 @@ public class CommonDomainObject
                 .field(newInputObjectField()
                         .name("logicalTypeName")
                         .description("If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class")
-                        .type(Scalars.GraphQLString)
+                        .type(context.getLogicalTypeNames())
                         .build()
                 )
                 .field(newInputObjectField()

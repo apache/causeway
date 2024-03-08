@@ -26,6 +26,11 @@
             },
             "changeName" : {
               "invokeIdempotent" : {
+                "target" : {
+                  "name" : {
+                    "get" : "Classics"
+                  }
+                },
                 "args" : {
                   "newName" : "Ancient History"
                 },

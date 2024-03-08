@@ -22,6 +22,14 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLEnumType;
+
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
 import org.springframework.stereotype.Component;
 
@@ -36,13 +44,14 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import graphql.schema.GraphQLCodeRegistry;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Component
 @RequiredArgsConstructor
@@ -58,9 +67,17 @@ public class Context {
     public final ObjectManager objectManager;
     public final GraphQLTypeRegistry graphQLTypeRegistry;
 
-
     public final Map<String, CommonDomainService> domainServiceByTypeName = new LinkedHashMap<>();
     public final Map<String, CommonDomainObject> domainObjectByTypeName = new LinkedHashMap<>();
+
+    private GraphQLEnumType logicalTypeNames;
+
+    public GraphQLEnumType getLogicalTypeNames() {
+        if (logicalTypeNames == null) {
+            computeLogicalTypeNames();
+        }
+        return logicalTypeNames;
+    }
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
         return causewaySystemEnvironment.getDeploymentType().isProduction()
@@ -69,11 +86,40 @@ public class Context {
     }
 
     public List<ObjectSpecification> objectSpecifications() {
+        return objectSpecifications(spec -> true);
+    }
+
+    public List<ObjectSpecification> objectSpecifications(final Predicate<ObjectSpecification> predicate) {
         return specificationLoader.snapshotSpecifications()
                 .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
                 .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
                 .filter(x -> x.isEntityOrViewModelOrAbstract() || x.getBeanSort().isManagedBeanContributing())
+                .filter(predicate)
                 .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
                 .toList();
     }
+
+
+    private void computeLogicalTypeNames() {
+        if (logicalTypeNames != null) {
+            return;
+        }
+        logicalTypeNames = doComputeLogicalTypeNames();
+        graphQLTypeRegistry.addTypeIfNotAlreadyPresent(logicalTypeNames);
+    }
+
+    private GraphQLEnumType doComputeLogicalTypeNames() {
+        val entitiesOrViewModels = objectSpecifications(ObjectSpecification::isEntityOrViewModel);
+        return newEnum()
+                .name("logicalTypeNames__gqlv_enum")  // TODO: look this up from causeway configuration?
+                .values(entitiesOrViewModels.stream()
+                        .map(objectSpec -> newEnumValueDefinition()
+                                .name(TypeNames.objectTypeFieldNameFor(objectSpec))
+                                .description(objectSpec.getLogicalTypeName())
+                                .value(objectSpec)
+                                .build()).collect(Collectors.toList())
+                )
+                .build();
+    }
+
 }

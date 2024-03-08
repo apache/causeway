@@ -115,9 +115,11 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .query(topLevelQuery.getGqlObjectType())
                 .mutation(topLevelMutation.getGqlObjectType())
                 .additionalTypes(graphQLTypeRegistry.getGraphQLTypes())
+                .additionalType(context.getLogicalTypeNames())
                 .codeRegistry(codeRegistry)
                 .build();
     }
+
 
     private ElementCustom determineTopLevelQueryFrom(
             final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
