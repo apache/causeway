@@ -15,6 +15,9 @@ directive @include(
     if: Boolean!
   ) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
 
+"Indicates an Input Object is a OneOf Input Object."
+directive @oneOf on INPUT_OBJECT
+
 "Directs the executor to skip this field or fragment when the `if` argument is true."
 directive @skip(
     "Skipped when true."
@@ -103,7 +106,6 @@ type RICHSchema {
   java_util_Map(object: rich__java_util_Map__gqlv_input): rich__java_util_Map
   java_util_SortedMap(object: rich__java_util_SortedMap__gqlv_input): rich__java_util_SortedMap
   java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
-  java_util_function_BiFunction(object: rich__java_util_function_BiFunction__gqlv_input): rich__java_util_function_BiFunction
   java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
   java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
   java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
@@ -153,7 +155,6 @@ type SIMPLESchema {
   java_util_Map(object: simple__java_util_Map__gqlv_input): simple__java_util_Map
   java_util_SortedMap(object: simple__java_util_SortedMap__gqlv_input): simple__java_util_SortedMap
   java_util_concurrent_Callable(object: simple__java_util_concurrent_Callable__gqlv_input): simple__java_util_concurrent_Callable
-  java_util_function_BiFunction(object: simple__java_util_function_BiFunction__gqlv_input): simple__java_util_function_BiFunction
   java_util_function_Consumer(object: simple__java_util_function_Consumer__gqlv_input): simple__java_util_function_Consumer
   java_util_function_Function(object: simple__java_util_function_Function__gqlv_input): simple__java_util_function_Function
   java_util_stream_Stream(object: simple__java_util_stream_Stream__gqlv_input): simple__java_util_stream_Stream
@@ -213,7 +214,6 @@ type ScenarioStep {
   java_util_Map(object: rich__java_util_Map__gqlv_input): rich__java_util_Map
   java_util_SortedMap(object: rich__java_util_SortedMap__gqlv_input): rich__java_util_SortedMap
   java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
-  java_util_function_BiFunction(object: rich__java_util_function_BiFunction__gqlv_input): rich__java_util_function_BiFunction
   java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
   java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
   java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
@@ -1813,22 +1813,6 @@ type rich__java_util_concurrent_Callable {
 }
 
 type rich__java_util_concurrent_Callable__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__java_util_function_BiFunction {
-  "Object metadata"
-  _meta: rich__java_util_function_BiFunction__gqlv_meta
-}
-
-type rich__java_util_function_BiFunction__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -4655,22 +4639,6 @@ type simple__java_util_concurrent_Callable__gqlv_meta {
   title: String!
 }
 
-type simple__java_util_function_BiFunction {
-  "Object metadata"
-  _meta: simple__java_util_function_BiFunction__gqlv_meta
-}
-
-type simple__java_util_function_BiFunction__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
 type simple__java_util_function_Consumer {
   "Object metadata"
   _meta: simple__java_util_function_Consumer__gqlv_meta
@@ -5326,15 +5294,6 @@ input rich__java_util_concurrent_Callable__gqlv_input {
   ref: String
 }
 
-input rich__java_util_function_BiFunction__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__java_util_function_Consumer__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -5660,15 +5619,6 @@ input simple__java_util_SortedMap__gqlv_input {
 }
 
 input simple__java_util_concurrent_Callable__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__java_util_function_BiFunction__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
