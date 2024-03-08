@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.sse.wicket.markup;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.causeway.applib.value.LocalResourcePath;
@@ -43,10 +42,8 @@ final class ListeningMarkupComponent_observing  {
         }
         final String jScriptTemplate;
         try {
-            jScriptTemplate = _Resources.loadAsStringUtf8(
-                    ListeningMarkupComponent_observing.class, jScriptTemplateResource);
-
-        } catch (IOException e) {
+            jScriptTemplate = _Resources.loadAsStringUtf8ElseFail(ListeningMarkupComponent_observing.class, jScriptTemplateResource);
+        } catch (Exception e) {
             log.warn("resource not found class:{} path:{}",
                     ListeningMarkupComponent_observing.class, jScriptTemplateResource, e);
             return resourceNotFound();
