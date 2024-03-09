@@ -1,0 +1,5 @@
+{
+  "httpStatusCode" : 404,
+  "message" : "Could not determine adapter for bookmark: 'university.dept.Department:9999999'",
+  "detail" : null
+}
