@@ -37,26 +37,7 @@
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/test</git-plugin.propertiesDir>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-        
-        <datasource-proxy-spring-boot-starter.version>1.9.1</datasource-proxy-spring-boot-starter.version>
-        <sql-formatter.version>2.0.4</sql-formatter.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-
-            <dependency>
-                <groupId>com.github.gavlyukovskiy</groupId>
-                <artifactId>datasource-proxy-spring-boot-starter</artifactId>
-                <version>${datasource-proxy-spring-boot-starter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.vertical-blank</groupId>
-                <artifactId>sql-formatter</artifactId>
-                <version>${sql-formatter.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
 		<testResources>
@@ -74,6 +55,11 @@
 
 		<!-- TESTING -->
 
+        <dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-graphql-testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.causeway.persistence</groupId>
             <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
@@ -103,11 +89,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.causeway.viewer</groupId>
-            <artifactId>causeway-viewer-graphql-testsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 

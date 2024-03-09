@@ -108,6 +108,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
         <datanucleus-rdbms.version>6.0.7</datanucleus-rdbms.version>
 
+        <datasource-proxy-spring-boot-starter.version>1.9.1</datasource-proxy-spring-boot-starter.version>
+
         <datatables.version>1.13.5</datatables.version> <!-- keep in sync with DatatablesDotNet -->
 
         <docx4j.version>11.3.2</docx4j.version>
@@ -171,8 +173,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <shiro.version>2.0.0</shiro.version>
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.12</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
+
+        <sql-formatter.version>2.0.4</sql-formatter.version>
         <snakeyaml.version>2.0</snakeyaml.version>
         <spring-boot.version>3.2.3</spring-boot.version>
+
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.20</swagger-core.version>
@@ -539,6 +544,20 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-restfulobjects-client</artifactId>
+				<version>3.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+				<version>3.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
@@ -546,7 +565,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
+				<artifactId>causeway-viewer-restfulobjects-test</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
@@ -560,7 +579,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+				<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
@@ -1614,11 +1633,23 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${commons-io.version}</version>
 			</dependency>
 
-			<dependency>
+            <dependency>
+                <groupId>com.github.gavlyukovskiy</groupId>
+                <artifactId>datasource-proxy-spring-boot-starter</artifactId>
+                <version>${datasource-proxy-spring-boot-starter.version}</version>
+            </dependency>
+
+            <dependency>
 				<groupId>com.github.javafaker</groupId>
 				<artifactId>javafaker</artifactId>
 				<version>${javafaker.version}</version>
 			</dependency>
+
+            <dependency>
+                <groupId>com.github.vertical-blank</groupId>
+                <artifactId>sql-formatter</artifactId>
+                <version>${sql-formatter.version}</version>
+            </dependency>
 
 			<dependency>
 				<groupId>com.tngtech.archunit</groupId>

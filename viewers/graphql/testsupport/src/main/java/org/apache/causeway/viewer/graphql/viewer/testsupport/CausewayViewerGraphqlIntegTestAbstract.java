@@ -207,7 +207,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     @SneakyThrows
     protected String submit(final Map<String,String> replacements) {
-        val httpRequest = buildRequest(testInfo, "._.gql", replacements);
+        val httpRequest = buildRequest(testInfo, suffix, replacements);
         return submitRequest(httpRequest);
     }
 

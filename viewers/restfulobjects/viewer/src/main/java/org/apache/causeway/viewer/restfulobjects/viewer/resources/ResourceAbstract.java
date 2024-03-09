@@ -31,6 +31,9 @@ import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Providers;
 
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -149,12 +152,14 @@ implements HasMetaModelContext {
 
         val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
         return metaModelContext.getObjectManager().loadObject(bookmark)
+                .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))    // might return ManagedObject.EMPTY
                 .orElseThrow(()->onRoException.apply(
                         RestfulObjectsApplicationException
-                        .createWithMessage(HttpStatusCode.NOT_FOUND,
-                                "Could not determine adapter for bookmark: '%s'",
-                                bookmark)));
+                                .createWithMessage(HttpStatusCode.NOT_FOUND,
+                                        "Could not determine adapter for bookmark: '%s'",
+                                        bookmark)));
     }
+
 
     // -- HELPER
 
