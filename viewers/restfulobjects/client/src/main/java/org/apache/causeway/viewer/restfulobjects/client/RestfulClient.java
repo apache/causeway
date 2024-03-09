@@ -54,8 +54,8 @@ import lombok.extern.log4j.Log4j2;
 val clientConfig = RestfulClientConfig.builder();
     .restfulBaseUrl("http://localhost:8080/helloworld/restful/")
         .authenticationMode(AuthenticationMode.BASIC)
-        .restfulAuthUser("sven")
-        .restfulAuthPassword("pass")
+        .basicAuthUser("sven")
+        .basicAuthPassword("pass")
 // setup request/response debug logging
 .useRequestDebugLogging(true) // default = false
 .build();
