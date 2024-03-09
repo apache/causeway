@@ -31,6 +31,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,24 +151,15 @@ implements HasMetaModelContext {
         final String instanceIdDecoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
 
         val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
-        val managedObjectIfAny = metaModelContext.getObjectManager().loadObject(bookmark);
-        if (managedObjectIfAny.isEmpty()) {
-            throwNotFound(bookmark, onRoException);
-        }
-        val managedObject = managedObjectIfAny.get();
-        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) {
-            throwNotFound(bookmark, onRoException);
-        }
-        return managedObject;
+        return metaModelContext.getObjectManager().loadObject(bookmark)
+                .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))    // might return ManagedObject.EMPTY
+                .orElseThrow(()->onRoException.apply(
+                        RestfulObjectsApplicationException
+                                .createWithMessage(HttpStatusCode.NOT_FOUND,
+                                        "Could not determine adapter for bookmark: '%s'",
+                                        bookmark)));
     }
 
-    private static void throwNotFound(Bookmark bookmark, UnaryOperator<RestfulObjectsApplicationException> onRoException) {
-        throw onRoException.apply(
-                RestfulObjectsApplicationException
-                        .createWithMessage(HttpStatusCode.NOT_FOUND,
-                                "Could not determine adapter for bookmark: '%s'",
-                                bookmark));
-    }
 
     // -- HELPER
 
