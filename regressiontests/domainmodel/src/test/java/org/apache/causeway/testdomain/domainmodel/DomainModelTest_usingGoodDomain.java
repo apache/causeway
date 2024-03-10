@@ -101,6 +101,8 @@ import org.apache.causeway.testdomain.model.good.ProperMemberSupport;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1a;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1b;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action2;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action3;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4;
@@ -984,6 +986,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @ParameterizedTest
     @ValueSource(classes = {
             ProperMixinContribution_action1.class,
+            ProperMixinContribution_action1a.class, // relaxed inclusion policy for mixin main
+            ProperMixinContribution_action1b.class, // relaxed inclusion policy for mixin main
             ProperMixinContribution_action2.class,
             ProperMixinContribution_action3.class,
             ProperMixinContribution_action4.class,

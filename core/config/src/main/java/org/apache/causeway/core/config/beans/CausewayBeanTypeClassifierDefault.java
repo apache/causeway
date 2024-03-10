@@ -50,6 +50,8 @@ implements CausewayBeanTypeClassifier {
     private final Can<String> activeProfiles;
     private final Can<CausewayBeanTypeClassifier> classifierPlugins = CausewayBeanTypeClassifier.get();
 
+    private final _ClassCache classCache = _ClassCache.getInstance();
+    
     // handle arbitrary types ...
     @Override
     public CausewayBeanMetaData classify(
@@ -136,6 +138,8 @@ implements CausewayBeanTypeClassifier {
                 return CausewayBeanMetaData
                         .indifferent(BeanSort.MANAGED_BEAN_CONTRIBUTING, type);
             case MIXIN:
+                // memoize mixin main name
+                classCache.setAttribute(type, "mixin-main-method-name", aDomainObject.mixinMethod());
                 return CausewayBeanMetaData.causewayManaged(BeanSort.MIXIN, type);
             case ENTITY:
                 return CausewayBeanMetaData.entity(PersistenceStack.UNSPECIFIED, LogicalType.infer(type));

@@ -34,7 +34,7 @@ public class DocumentHolder_addDocument {           // <.>
 
     private final DocumentHolder holder;            // <.>
 
-    public <Document> act(Document doc) {           // <.>
+    public Document act(Document doc) {             // <.>
         /// ...
     }
     public boolean hideAct() { /* ... */ }          // <.>

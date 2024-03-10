@@ -21,7 +21,6 @@ package org.apache.causeway.testdomain.model.good;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Blob;
@@ -37,14 +36,14 @@ import lombok.RequiredArgsConstructor;
  * Verify: make sure this one does not get picked up as association (property)!
  */
 @Action(semantics = SemanticsOf.SAFE)
-@DomainObject(introspection = Introspection.ANNOTATION_OPTIONAL, nature = Nature.MIXIN, mixinMethod = "act")
+@DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED, nature = Nature.MIXIN, mixinMethod = "act")
 @RequiredArgsConstructor
-public class ProperMixinContribution_action1 {
+public class ProperMixinContribution_action1a {
 
     @SuppressWarnings("unused")
     private final ProperMixinContribution holder;
 
-    @MemberSupport
+    // no annotation here should work for Introspection.ENCAPSULATION_ENABLED
     public Blob act() {
         return Blob.of("sample", CommonMimeType.BIN, null);
     }
