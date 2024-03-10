@@ -49,6 +49,14 @@ extends FacetFactoryAbstract {
             case ENCAPSULATION_ENABLED:
                 getClassCache()
                         .streamResolvedMethods(processClassContext.getCls())
+                        /* honor exclude markers (always) */
+                        .filter(method->{
+                            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
+                                processClassContext.removeMethod(method);
+                                return false; // stop processing
+                            }
+                            return true; // continue processing
+                        })
                         /* don't throw away mixin main methods,
                          * those we keep irrespective of IntrospectionPolicy */
                         .filter(_Predicates.not(isMixinMainMethod(processClassContext)))
