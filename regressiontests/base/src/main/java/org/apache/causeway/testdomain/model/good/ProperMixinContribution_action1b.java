@@ -36,13 +36,14 @@ import lombok.RequiredArgsConstructor;
  * Verify: make sure this one does not get picked up as association (property)!
  */
 @Action(semantics = SemanticsOf.SAFE)
-@DomainObject(introspection = Introspection.ANNOTATION_OPTIONAL, nature = Nature.MIXIN, mixinMethod = "act")
+@DomainObject(introspection = Introspection.ANNOTATION_REQUIRED, nature = Nature.MIXIN, mixinMethod = "act")
 @RequiredArgsConstructor
-public class ProperMixinContribution_action1 {
+public class ProperMixinContribution_action1b {
 
     @SuppressWarnings("unused")
     private final ProperMixinContribution holder;
 
+    // no annotation here should work for Introspection.ANNOTATION_REQUIRED
     public Blob act() {
         return Blob.of("sample", CommonMimeType.BIN, null);
     }

@@ -24,15 +24,11 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -40,6 +36,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.MemberAnnotationPolicy;
@@ -97,6 +96,8 @@ import org.apache.causeway.testdomain.model.good.ProperMemberSupport;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1a;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1b;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action2;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action3;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4;
@@ -109,6 +110,7 @@ import org.apache.causeway.testdomain.model.good.ProperViewModelInferredFromNotB
 import org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
 import org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
@@ -976,6 +978,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @ParameterizedTest
     @ValueSource(classes = {
             ProperMixinContribution_action1.class,
+            ProperMixinContribution_action1a.class, // relaxed inclusion policy for mixin main
+            ProperMixinContribution_action1b.class, // relaxed inclusion policy for mixin main
             ProperMixinContribution_action2.class,
             ProperMixinContribution_action3.class,
             ProperMixinContribution_action4.class,

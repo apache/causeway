@@ -18,13 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ignore.annotation;
 
+import java.util.function.Predicate;
+
 import javax.inject.Inject;
 
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class RemoveAnnotatedMethodsFacetFactory
@@ -43,6 +49,9 @@ extends FacetFactoryAbstract {
             case ENCAPSULATION_ENABLED:
                 getClassCache()
                         .streamResolvedMethods(processClassContext.getCls())
+                        /* don't throw away mixin main methods, 
+                         * those we keep irrespective of IntrospectionPolicy */
+                        .filter(_Predicates.not(isMixinMainMethod(processClassContext)))
                         .forEach(method -> {
                             if (!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
                                 processClassContext.removeMethod(method);
@@ -65,8 +74,28 @@ extends FacetFactoryAbstract {
 
                 break;
         }
-
-
     }
 
+    // -- HELPER
+    
+    /**
+     * We have no MixinFacet yet, so we need to revert to low level introspection tactics.
+     */
+    private Predicate<ResolvedMethod> isMixinMainMethod(final @NonNull ProcessClassContext processClassContext) {
+        
+        // shortcut, when we already know the class is not a mixin
+        if(processClassContext.getFacetHolder() instanceof ObjectSpecification) {
+            val spec = (ObjectSpecification) processClassContext.getFacetHolder();
+            if(!spec.getBeanSort().isMixin()) {
+                return method->false; 
+            }
+        }
+        // lookup attribute from class-cache as it should have been already processed by the BeanTypeClassifier 
+        val cls = processClassContext.getCls();        
+        val mixinMainMethodName = getClassCache()
+            .lookupAttribute(cls, "mixin-main-method-name")
+            .orElse(null);
+        return method->method.name().equals(mixinMainMethodName);
+    }
+    
 }

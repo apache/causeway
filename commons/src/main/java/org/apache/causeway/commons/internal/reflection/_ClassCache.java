@@ -25,6 +25,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -216,7 +217,24 @@ public final class _ClassCache implements AutoCloseable {
             .stream();
         }
     }
-
+    
+    // -- ATTRIBUTES
+    
+    public _ClassCache setAttribute(
+            final Class<?> type,
+            final String attributeName,
+            final String value) {
+        val classModel = classModel(type);
+        classModel.attributeMap.put(attributeName, value);
+        return this;
+    }
+    
+    public Optional<String> lookupAttribute(
+            final Class<?> type,
+            final String attributeName) {
+        val classModel = classModel(type);
+        return Optional.ofNullable(classModel.attributeMap.get(attributeName));
+    }
 
     // -- IMPLEMENATION DETAILS
 
@@ -232,6 +250,7 @@ public final class _ClassCache implements AutoCloseable {
         private final Map<MethodKey, ResolvedMethod> postConstructMethodsByKey = new HashMap<>();
 
         private final Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute = new HashMap<>();
+        private final Map<String, String> attributeMap = new ConcurrentHashMap<>();
         private final boolean hasJaxbRootElementSemantics;
     }
 
