@@ -230,7 +230,6 @@ footer > .navbar {
 .collectionContentsAsAjaxTablePanel table.contents tr th,
 .collectionContentsAsAjaxTablePanel table.contents tr th a span {
     text-align: left;
-    white-space: nowrap;
     font-weight: bold;
 }
 
