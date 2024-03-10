@@ -21,6 +21,7 @@ package org.apache.causeway.testdomain.model.good;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Blob;
@@ -43,6 +44,7 @@ public class ProperMixinContribution_action1 {
     @SuppressWarnings("unused")
     private final ProperMixinContribution holder;
 
+    @MemberSupport
     public Blob act() {
         return Blob.of("sample", CommonMimeType.BIN, null);
     }
