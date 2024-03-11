@@ -24,6 +24,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 
 import lombok.experimental.UtilityClass;
 
@@ -61,65 +62,65 @@ public final class TypeNames {
 
     public static String actionTypeNameFor(
             final ObjectSpecification owningType,
-            final ObjectAction objectAction,
+            final ObjectAction oa,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + objectAction.getId() + "__gqlv_action";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(oa) + "__gqlv_action";
     }
 
     public static String actionInvokeTypeNameFor(
             final ObjectSpecification owningType,
-            final ObjectAction objectAction,
+            final ObjectAction oa,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + objectAction.getId() + "__gqlv_action_invoke";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(oa) + "__gqlv_action_invoke";
     }
 
     public static String actionParamsTypeNameFor(
             final ObjectSpecification owningType,
-            final ObjectAction objectAction,
+            final ObjectAction oa,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + objectAction.getId() + "__gqlv_action_params";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(oa) + "__gqlv_action_params";
     }
 
     public static String actionArgsTypeNameFor(
             final ObjectSpecification owningType,
-            final ObjectAction objectAction,
+            final ObjectAction oa,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + objectAction.getId() + "__gqlv_action_args";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(oa) + "__gqlv_action_args";
     }
 
     public static String actionParamTypeNameFor(
             final ObjectSpecification owningType,
-            final ObjectActionParameter objectActionParameter,
+            final ObjectActionParameter oap,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + objectActionParameter.getAction().getId() + "__" + objectActionParameter.getId() + "__gqlv_action_parameter";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(oap.getAction()) + "__" + ObjectFeatureUtils.asciiIdFor(oap) + "__gqlv_action_parameter";
     }
 
     public static String propertyTypeNameFor(
             final ObjectSpecification owningType,
-            final OneToOneAssociation oneToOneAssociation,
+            final OneToOneAssociation otoa,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + oneToOneAssociation.getId() + "__gqlv_property";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(otoa) + "__gqlv_property";
     }
 
     public static String propertyLobTypeNameFor(
             final ObjectSpecification owningType,
-            final OneToOneAssociation oneToOneAssociation,
+            final OneToOneAssociation otoa,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + oneToOneAssociation.getId() + "__gqlv_property_lob";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(otoa) + "__gqlv_property_lob";
     }
 
     public static String collectionTypeNameFor(
             final ObjectSpecification owningType,
-            final OneToManyAssociation objectMember,
+            final OneToManyAssociation otma,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + objectMember.getId() + "__gqlv_collection";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(otma) + "__gqlv_collection";
     }
 
     public static String memberTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectMember objectMember,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + objectMember.getId() + "__gqlv_member";
+        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(objectMember) + "__gqlv_member";
     }
 
     private static String sanitized(final String name) {

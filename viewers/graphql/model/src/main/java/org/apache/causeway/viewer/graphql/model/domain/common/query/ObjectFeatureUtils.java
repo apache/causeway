@@ -25,10 +25,12 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.facets.all.ascii.AsciiFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
@@ -37,7 +39,7 @@ import lombok.experimental.UtilityClass;
 import lombok.val;
 
 @UtilityClass
-public class CommonActionUtils {
+public class ObjectFeatureUtils {
 
     public static Optional<Object> asPojo(
             final ObjectSpecification elementType,
@@ -108,7 +110,7 @@ public class CommonActionUtils {
         return parameters
                 .map(oap -> {
                     final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(oap.getId());
+                    Object argumentValue = argumentPojos.get(asciiIdFor(oap));
                     Object pojoOrPojoList;
 
                     switch (elementType.getBeanSort()) {
@@ -151,6 +153,11 @@ public class CommonActionUtils {
                 });
     }
 
+    public static String asciiIdFor(final ObjectFeature objectFeature) {
+        val asciiFacet = objectFeature.getFacet(AsciiFacet.class);
+        return asciiFacet != null ? asciiFacet.asciiId() : objectFeature.getId();
+    }
+
     private static ManagedObject adaptValue(
             final ObjectActionParameter oap,
             final Object argumentValue,
@@ -166,6 +173,7 @@ public class CommonActionUtils {
     }
 
     public static String keyFor(String ref) {
-        return CommonActionUtils.class.getName() + "#" + ref;
+        return ObjectFeatureUtils.class.getName() + "#" + ref;
     }
+
 }

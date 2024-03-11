@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.PropertyInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -61,14 +62,14 @@ public class RichPropertyValidate extends Element {
             return null;
         }
 
-        val association = holder.getObjectMember();
+        val otoa = holder.getObjectMember();
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         val arguments = dataFetchingEnvironment.getArguments();
-        val argumentValue = arguments.get(association.getId());
-        val argumentManagedObject = ManagedObject.adaptProperty(association, argumentValue);
+        val argumentValue = arguments.get(ObjectFeatureUtils.asciiIdFor(otoa));
+        val argumentManagedObject = ManagedObject.adaptProperty(otoa, argumentValue);
 
-        val valid = association.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        val valid = otoa.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
         return valid.isVetoed() ? valid.getReasonAsString().orElse("invalid") : null;
     }
 

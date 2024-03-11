@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonActionUtils;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -91,7 +91,7 @@ public class RichAction
                     : null);
         addChildFieldFor(this.params = new RichActionParams(this, context));
 
-        buildObjectTypeAndField(objectAction.getId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
+        buildObjectTypeAndField(ObjectFeatureUtils.asciiIdFor(objectAction), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
     }
 
     private boolean isInvokeAllowed(ObjectAction objectAction) {
@@ -132,7 +132,7 @@ public class RichAction
         return parameters
                 .map(oap -> {
                     final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(oap.getId());
+                    Object argumentValue = argumentPojos.get(ObjectFeatureUtils.asciiIdFor(oap));
                     Object pojoOrPojoList;
 
                     switch (elementType.getBeanSort()) {
@@ -200,7 +200,7 @@ public class RichAction
 
         val refValue = (String)argumentValue.get("ref");
         if (refValue != null) {
-            String key = CommonActionUtils.keyFor(refValue);
+            String key = ObjectFeatureUtils.keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
             if (bookmarkedPojo == null) {
                 throw new IllegalArgumentException(String.format(
@@ -270,18 +270,18 @@ public class RichAction
     }
 
     GraphQLArgument gqlArgumentFor(
-            final OneToOneActionParameter oneToOneActionParameter,
+            final OneToOneActionParameter oap,
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
-                .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext, getSchemaType()))
+                .name(ObjectFeatureUtils.asciiIdFor(oap))
+                .type(context.typeMapper.inputTypeFor(oap, inputContext, getSchemaType()))
                 .build();
     }
 
-    GraphQLArgument gqlArgumentFor(final OneToManyActionParameter oneToManyActionParameter) {
+    GraphQLArgument gqlArgumentFor(final OneToManyActionParameter otmp) {
         return GraphQLArgument.newArgument()
-                .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, getSchemaType()))
+                .name(ObjectFeatureUtils.asciiIdFor(otmp))
+                .type(context.typeMapper.inputTypeFor(otmp, getSchemaType()))
                 .build();
     }
 

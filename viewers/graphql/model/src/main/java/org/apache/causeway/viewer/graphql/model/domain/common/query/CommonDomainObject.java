@@ -190,7 +190,7 @@ public class CommonDomainObject
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         Object target = dataFetchingEnvironment.getArgument("object");
-        return CommonActionUtils.asPojo(getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
+        return ObjectFeatureUtils.asPojo(getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
                 .orElse(null);
     }
 

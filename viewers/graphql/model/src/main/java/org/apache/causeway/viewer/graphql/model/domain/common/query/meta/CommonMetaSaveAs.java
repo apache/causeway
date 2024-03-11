@@ -27,7 +27,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonActionUtils;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 public class CommonMetaSaveAs extends Element {
@@ -49,7 +49,7 @@ public class CommonMetaSaveAs extends Element {
     protected Object fetchData(DataFetchingEnvironment environment) {
         String ref = environment.getArgument("ref");
         CommonMetaFetcher source = environment.getSource();
-        String originalKey = CommonActionUtils.keyFor(ref);
+        String originalKey = ObjectFeatureUtils.keyFor(ref);
         GraphQLContext graphQlContext = environment.getGraphQlContext();
 
         // we ensure the key hasn't been used already

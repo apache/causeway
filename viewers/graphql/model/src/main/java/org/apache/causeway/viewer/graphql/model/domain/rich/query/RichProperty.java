@@ -32,6 +32,7 @@ import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.PropertyInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectMemberProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationProvider;
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
@@ -99,7 +100,7 @@ public class RichProperty
         addChildFieldFor(this.set = isSetterAllowed() ? new RichPropertySet(this, context) : null);
         addChildFieldFor(this.datatype = new RichPropertyDatatype(this, context));
 
-        buildObjectTypeAndField(otoa.getId(), otoa.getCanonicalDescription().orElse(otoa.getCanonicalFriendlyName()));
+        buildObjectTypeAndField(ObjectFeatureUtils.asciiIdFor(otoa), otoa.getCanonicalDescription().orElse(otoa.getCanonicalFriendlyName()));
     }
 
     private boolean isSetterAllowed() {
@@ -134,11 +135,11 @@ public class RichProperty
     }
 
     private GraphQLArgument gqlArgumentFor(
-            final OneToOneAssociation oneToOneAssociation,
+            final OneToOneAssociation otoa,
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
-                .name(oneToOneAssociation.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneAssociation, inputContext, SchemaType.RICH))
+                .name(ObjectFeatureUtils.asciiIdFor(otoa))
+                .type(context.typeMapper.inputTypeFor(otoa, inputContext, SchemaType.RICH))
                 .build();
     }
 

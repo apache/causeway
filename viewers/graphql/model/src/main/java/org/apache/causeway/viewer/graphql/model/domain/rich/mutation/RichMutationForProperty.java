@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonActionUtils;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
@@ -81,8 +81,8 @@ public class RichMutationForProperty extends Element {
 
     private static String fieldName(
             final ObjectSpecification objectSpecification,
-            final OneToOneAssociation oneToOneAssociation) {
-        return TypeNames.objectTypeFieldNameFor(objectSpecification) + "__" + oneToOneAssociation.getId();
+            final OneToOneAssociation otoa) {
+        return TypeNames.objectTypeFieldNameFor(objectSpecification) + "__" + ObjectFeatureUtils.asciiIdFor(otoa);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class RichMutationForProperty extends Element {
         } else {
             val refValue = (String)argumentValue1.get("ref");
             if (refValue != null) {
-                val key = CommonActionUtils.keyFor(refValue);
+                val key = ObjectFeatureUtils.keyFor(refValue);
                 BookmarkedPojo value = environment.getGraphQlContext().get(key);
                 result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
             } else {
@@ -123,7 +123,7 @@ public class RichMutationForProperty extends Element {
         val managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-        Object argumentValue = arguments.get(oneToOneAssociation.getId());
+        Object argumentValue = arguments.get(ObjectFeatureUtils.asciiIdFor(oneToOneAssociation));
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
 
         val visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
@@ -160,7 +160,7 @@ public class RichMutationForProperty extends Element {
 
         fieldBuilder.argument(
                 GraphQLArgument.newArgument()
-                        .name(oneToOneAssociation.getId())
+                        .name(ObjectFeatureUtils.asciiIdFor(oneToOneAssociation))
                         .type(context.typeMapper.inputTypeFor(oneToOneAssociation, TypeMapper.InputContext.INVOKE, SchemaType.RICH))
                         .build());
     }
