@@ -1,0 +1,31 @@
+= i18n Concerns
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+The GraphQL Specification (link:https://spec.graphql.org/June2018/#sec-Names[]) requires that names of fields and types use only a subset of ASCII characters.
+On the other hand the GraphQL viewer will infer these fields from the Java domain objects, which permits a wider range of characters.
+
+To ensure that only permitted characters are used in the GraphQL model, use the xref:refguide:applib:index/annotation/Property.adoc#asciiId[@Property#asciiId], xref:refguide:applib:index/annotation/Collection.adoc#asciiId[@Collection#asciiId], xref:refguide:applib:index/annotation/Action.adoc#asciiId[@Action#asciiId] and xref:refguide:applib:index/annotation/Parameter.adoc#asciiId[@Parameter#asciiId].
+
+For example:
+
+[source,java]
+.I18nCalculator
+----
+@Named("university.calc.I18nCalculator")
+@DomainService(nature= NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class I18nCalculator {
+
+    @Action(semantics = SemanticsOf.SAFE, asciiId = "concat")
+    public String concät(
+            @Parameter(asciiId = "a1")
+            String ä1,
+            @Parameter(asciiId = "a2")
+            String ä2) {
+        return ä1 + ä2;
+    }
+}
+----
