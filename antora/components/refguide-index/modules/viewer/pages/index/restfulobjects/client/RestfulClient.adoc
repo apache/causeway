@@ -10,8 +10,8 @@ For example:
 val clientConfig = RestfulClientConfig.builder();
     .restfulBaseUrl("http://localhost:8080/helloworld/restful/")
         .authenticationMode(AuthenticationMode.BASIC)
-        .restfulAuthUser("sven")
-        .restfulAuthPassword("pass")
+        .basicAuthUser("sven")
+        .basicAuthPassword("pass")
 .useRequestDebugLogging(true) // default = false
 .build();
 

@@ -28,6 +28,7 @@ Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   String regexPattern() default "";     // <.>
   int regexPatternFlags() default 0;     // <.>
   String regexPatternReplacement() default "Doesn't match pattern";     // <.>
+  String asciiId() default "";     // <.>
 }
 ----
 
@@ -110,6 +111,11 @@ Pattern flags, as per _java.util.regex.Pattern#compile(String, int)_ .
 +
 --
 Replacement text for the pattern in generated error message.
+--
+<.> xref:#asciiId[asciiId]
++
+--
+Returns an alternative id for the property, using only ASCII characters.
 --
 
 == Members
@@ -235,6 +241,13 @@ The default value, `0` , means that no flags have been specified.
 === regexPatternReplacement
 
 Replacement text for the pattern in generated error message.
+
+[#asciiId]
+=== asciiId
+
+Returns an alternative id for the property, using only ASCII characters.
+
+Although Java itself allows the full UTF character set for identifiers, some integrations (such as GraphQL) have restrictions to only allow a more limited set of characters, in essence ASCII. This attribute allows a version of the property's Id using only the ASCII character set to be provided.
 
 include::hooks/Property_010-examples-and-usage.adoc[]
 
