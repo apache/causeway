@@ -28,21 +28,21 @@ public abstract class AsciiFacetAbstract
 extends FacetAbstract
 implements AsciiFacet {
 
-    private final String asciiName;
+    private final String asciiId;
 
     public static final Class<AsciiFacet> type() {
         return AsciiFacet.class;
     }
 
     protected AsciiFacetAbstract(
-            final String asciiName,
+            final String asciiId,
             final FacetHolder holder) {
         super(type(), holder, Precedence.DEFAULT);
-        this.asciiName = asciiName;
+        this.asciiId = asciiId;
     }
 
     @Override
     public String asciiId() {
-        return asciiName;
+        return asciiId;
     }
 }

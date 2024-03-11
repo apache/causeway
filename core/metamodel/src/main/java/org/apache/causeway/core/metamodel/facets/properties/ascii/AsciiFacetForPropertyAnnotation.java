@@ -37,7 +37,7 @@ extends AsciiFacetAbstract {
         return collectionIfAny
                 .map(Property::asciiId)
                 .filter(_Strings::isNotEmpty)
-                .map(asciiName -> new AsciiFacetForPropertyAnnotation(asciiName, facetHolder));
+                .map(asciiId -> new AsciiFacetForPropertyAnnotation(asciiId, facetHolder));
     }
 
     private AsciiFacetForPropertyAnnotation(
