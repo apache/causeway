@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
@@ -32,6 +33,7 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.collections.collection.ascii.AsciiFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -60,6 +62,7 @@ extends FacetFactoryAbstract {
 
         processDomainEvent(processMethodContext, collectionIfAny);
         processTypeOf(processMethodContext, collectionIfAny);
+        processAsciiName(processMethodContext, collectionIfAny);
     }
 
     Optional<Collection> collectionIfAny(final ProcessMethodContext processMethodContext) {
@@ -120,6 +123,16 @@ extends FacetFactoryAbstract {
                 );
 
         });
+    }
+
+    void processAsciiName(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
+
+        val holder = processMethodContext.getFacetHolder();
+
+        // check for @Collection(asciiId=...)
+        addFacetIfPresent(
+                AsciiFacetForCollectionAnnotation
+                        .create(collectionIfAny, holder));
     }
 
 }

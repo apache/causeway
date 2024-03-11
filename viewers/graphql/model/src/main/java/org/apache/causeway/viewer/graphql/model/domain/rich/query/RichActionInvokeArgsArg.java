@@ -29,6 +29,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 
 import lombok.Getter;
 import lombok.val;
@@ -44,25 +45,25 @@ public class RichActionInvokeArgsArg
 
     public RichActionInvokeArgsArg(
             final ActionInteractor actionInteractor,
-            final ObjectActionParameter objectActionParameter,
+            final ObjectActionParameter oap,
             final Context context,
             final int paramNum) {
         super(context);
 
         this.actionInteractor = actionInteractor;
-        this.objectActionParameter = objectActionParameter;
+        this.objectActionParameter = oap;
         this.paramNum = paramNum;
 
-        val elementType = objectActionParameter.getElementType();;
+        val elementType = oap.getElementType();;
 
         val gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType, actionInteractor.getSchemaType());
         if (gqlObjectTypeForElementType != null) {
-            val gqlOutputType = objectActionParameter.isPlural()
+            val gqlOutputType = oap.isPlural()
                     ? GraphQLList.list(gqlObjectTypeForElementType)
                     : gqlObjectTypeForElementType;
 
             val fieldBuilder = newFieldDefinition()
-                    .name(objectActionParameter.getId())
+                    .name(ObjectFeatureUtils.asciiIdFor(oap))
                     .type(gqlOutputType);
             setField(fieldBuilder.build());
         } else {

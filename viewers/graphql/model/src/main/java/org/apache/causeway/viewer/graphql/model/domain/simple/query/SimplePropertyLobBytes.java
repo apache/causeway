@@ -23,6 +23,7 @@ import graphql.schema.DataFetchingEnvironment;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
@@ -45,7 +46,7 @@ public class SimplePropertyLobBytes extends SimplePropertyLobAbstract {
 
         val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> String.format(
-                "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), memberInteractor.getObjectMember().getId())).orElse(null);
+                "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), ObjectFeatureUtils.asciiIdFor(memberInteractor.getObjectMember()))).orElse(null);
 
     }
 

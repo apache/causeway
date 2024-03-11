@@ -29,6 +29,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.causeway.core.metamodel.facets.actions.action.ascii.AsciiFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
@@ -73,6 +74,7 @@ extends FacetFactoryAbstract {
         processChoicesFrom(processMethodContext, actionIfAny);
 
         processFileAccept(processMethodContext, actionIfAny);
+        processAsciiName(processMethodContext, actionIfAny);
     }
 
     Optional<Action> actionIfAny(final ProcessMethodContext processMethodContext) {
@@ -248,6 +250,16 @@ extends FacetFactoryAbstract {
         // check for @Action(fileAccept=...)
         addFacetIfPresent(
                 FileAcceptFacetForActionAnnotation
+                .create(actionIfAny, holder));
+    }
+
+    void processAsciiName(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
+
+        val holder = processMethodContext.getFacetHolder();
+
+        // check for @Action(ascii=...)
+        addFacetIfPresent(
+                AsciiFacetForActionAnnotation
                 .create(actionIfAny, holder));
     }
 

@@ -1,0 +1,11 @@
+{
+  rich {
+    university_calc_I18nCalculator {
+      concat {
+        invoke(a1: "Fizz", a2: "Buzz") {
+          results
+        }
+      }
+    }
+  }
+}

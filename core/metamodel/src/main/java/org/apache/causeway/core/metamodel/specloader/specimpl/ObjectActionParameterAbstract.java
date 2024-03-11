@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.all.ascii.AsciiFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;

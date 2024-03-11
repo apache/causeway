@@ -23,6 +23,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
@@ -32,11 +33,13 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.collections.collection.ascii.AsciiFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.causeway.core.metamodel.facets.properties.ascii.AsciiFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation;
@@ -88,6 +91,7 @@ extends FacetFactoryAbstract {
         processOptional(processMethodContext, propertyIfAny);
         processRegEx(processMethodContext, propertyIfAny);
         processFileAccept(processMethodContext, propertyIfAny);
+        processAsciiName(processMethodContext, propertyIfAny);
     }
 
     Optional<Property> propertyIfAny(final ProcessMethodContext processMethodContext) {
@@ -321,6 +325,17 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(
                 FileAcceptFacetForPropertyAnnotation
                 .create(propertyIfAny, holder));
+    }
+
+
+    void processAsciiName(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
+
+        val holder = processMethodContext.getFacetHolder();
+
+        // check for @Property(asciiId=...)
+        addFacetIfPresent(
+                AsciiFacetForPropertyAnnotation
+                        .create(propertyIfAny, holder));
     }
 
 }
