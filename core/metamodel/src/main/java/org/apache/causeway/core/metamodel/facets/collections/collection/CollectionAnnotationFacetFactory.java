@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.causeway.core.metamodel.facets.actions.ascii.AsciiFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.collection.ascii.AsciiFacetForCollectionAnnotation;

@@ -16,30 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.ascii;
+package org.apache.causeway.core.metamodel.facets.actions.action.ascii;
 
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.all.ascii.AsciiFacet;
+import org.apache.causeway.core.metamodel.facets.all.ascii.AsciiFacetAbstract;
 
 public class AsciiFacetForActionAnnotation
-extends FileAcceptFacetAbstract {
+extends AsciiFacetAbstract {
 
-    public static Optional<FileAcceptFacet> create(
-            final Optional<Action> actionIfAny,
-            final FacetHolder holder) {
+    public static Optional<AsciiFacet> create(
+            final Optional<Action> collectionIfAny,
+            final FacetedMethod facetHolder) {
 
-        return actionIfAny
+        return collectionIfAny
                 .map(Action::asciiId)
                 .filter(_Strings::isNotEmpty)
-                .map(asciiName -> new AsciiFacetForActionAnnotation(asciiName, holder));
+                .map(asciiName -> new AsciiFacetForActionAnnotation(asciiName, facetHolder));
     }
 
-    private AsciiFacetForActionAnnotation(final String value, final FacetHolder holder) {
+    private AsciiFacetForActionAnnotation(
+            final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

@@ -29,6 +29,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.causeway.core.metamodel.facets.actions.action.ascii.AsciiFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
@@ -37,7 +38,6 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.actions.ascii.AsciiFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;

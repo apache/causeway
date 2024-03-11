@@ -112,6 +112,7 @@ type RICHSchema {
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
+  university_calc_I18nCalculator: rich__university_calc_I18nCalculator
   university_dept_Department(object: rich__university_dept_Department__gqlv_input): rich__university_dept_Department
   university_dept_Departments: rich__university_dept_Departments
   university_dept_DeptHead(object: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_DeptHead
@@ -162,6 +163,7 @@ type SIMPLESchema {
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: simple__university_admin_AdminMenu
   university_calc_Calculator: simple__university_calc_Calculator
+  university_calc_I18nCalculator: simple__university_calc_I18nCalculator
   university_dept_Department(object: simple__university_dept_Department__gqlv_input): simple__university_dept_Department
   university_dept_Departments: simple__university_dept_Departments
   university_dept_DeptHead(object: simple__university_dept_DeptHead__gqlv_input): simple__university_dept_DeptHead
@@ -222,6 +224,7 @@ type ScenarioStep {
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
+  university_calc_I18nCalculator: rich__university_calc_I18nCalculator
   university_dept_Department(object: rich__university_dept_Department__gqlv_input): rich__university_dept_Department
   university_dept_Departments: rich__university_dept_Departments
   university_dept_DeptHead(object: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_DeptHead
@@ -3350,6 +3353,53 @@ type rich__university_calc_Calculator__someUuid__gqlv_action_invoke {
   target: String
 }
 
+type rich__university_calc_I18nCalculator {
+  "Concät"
+  concat: rich__university_calc_I18nCalculator__concat__gqlv_action
+}
+
+type rich__university_calc_I18nCalculator__concat__a1__gqlv_action_parameter {
+  datatype: String
+  disabled(a1: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_I18nCalculator__concat__a2__gqlv_action_parameter {
+  datatype: String
+  disabled(a1: String, a2: String): String
+  hidden(a1: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_I18nCalculator__concat__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(a1: String!, a2: String!): rich__university_calc_I18nCalculator__concat__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_I18nCalculator__concat__gqlv_action_params
+  validate(a1: String, a2: String): String
+}
+
+type rich__university_calc_I18nCalculator__concat__gqlv_action_args {
+  a1: String
+  a2: String
+}
+
+type rich__university_calc_I18nCalculator__concat__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_I18nCalculator__concat__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_I18nCalculator__concat__gqlv_action_params {
+  "Ä1"
+  a1: rich__university_calc_I18nCalculator__concat__a1__gqlv_action_parameter
+  "Ä2"
+  a2: rich__university_calc_I18nCalculator__concat__a2__gqlv_action_parameter
+}
+
 "University department specializing in a field of study"
 type rich__university_dept_Department {
   "Object metadata"
@@ -4839,6 +4889,11 @@ type simple__university_calc_Calculator {
   someUrl: String
   "Some Uuid"
   someUuid: UUID
+}
+
+type simple__university_calc_I18nCalculator {
+  "Concät"
+  concat(a1: String!, a2: String!): String
 }
 
 "University department specializing in a field of study"

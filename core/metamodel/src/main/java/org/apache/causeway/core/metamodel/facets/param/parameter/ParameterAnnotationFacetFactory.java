@@ -53,7 +53,7 @@ extends FacetFactoryAbstract {
         processParamsRegEx(processParameterContext);
         processParamsOptional(processParameterContext);
         processParamsFileAccept(processParameterContext);
-        processParamsAsciiName(processParameterContext);
+        processParamsAsciiId(processParameterContext);
     }
 
     // check for @Parameter(precedingParamsPolicy=...)
@@ -134,7 +134,7 @@ extends FacetFactoryAbstract {
                 .create(parameterIfAny, holder));
     }
 
-    void processParamsAsciiName(final ProcessParameterContext processParameterContext) {
+    void processParamsAsciiId(final ProcessParameterContext processParameterContext) {
 
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
