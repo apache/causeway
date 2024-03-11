@@ -2356,7 +2356,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
-                    <version>3.1.0</version>    <!--bumped-->
+                    <version>3.2.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
