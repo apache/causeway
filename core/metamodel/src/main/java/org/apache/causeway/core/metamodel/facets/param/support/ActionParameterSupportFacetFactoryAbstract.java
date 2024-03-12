@@ -24,7 +24,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest;

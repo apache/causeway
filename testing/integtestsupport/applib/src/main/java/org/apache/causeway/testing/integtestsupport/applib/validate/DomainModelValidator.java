@@ -31,11 +31,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.opentest4j.AssertionFailedError;
 
-import static org.assertj.core.api.Assertions.filter;
-
 import org.springframework.lang.Nullable;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;

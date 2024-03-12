@@ -55,7 +55,6 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -372,7 +371,7 @@ implements EntityFacet {
     }
 
     @Override
-    public Object versionOf(Object pojo) {
+    public Object versionOf(final Object pojo) {
         if (getEntityState(pojo).isAttached()) {
             return JDOHelper.getVersion(pojo);
         }

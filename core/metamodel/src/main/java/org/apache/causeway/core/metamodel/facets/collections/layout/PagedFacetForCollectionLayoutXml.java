@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.collections.layout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacetAbstract;

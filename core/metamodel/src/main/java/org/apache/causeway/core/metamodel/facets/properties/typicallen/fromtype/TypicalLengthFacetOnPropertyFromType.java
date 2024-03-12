@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype
 
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;

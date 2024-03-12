@@ -18,19 +18,20 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain.admin;
 
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.applib.annotation.*;
-
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import org.springframework.lang.Nullable;
+import lombok.RequiredArgsConstructor;
 
 @Named("university.admin.AdminMenu")
 @DomainService(nature=NatureOfService.VIEW)
@@ -54,19 +55,19 @@ public class AdminMenu {
 
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public void actionWithDisabledParam(String firstParam, String secondParam, String thirdParameter) {
+    public void actionWithDisabledParam(final String firstParam, final String secondParam, final String thirdParameter) {
     }
     public String disable0ActionWithDisabledParam() {
         return "yup, disabled!";
     }
-    public String disable2ActionWithDisabledParam(String firstParam, String secondParam) {
+    public String disable2ActionWithDisabledParam(final String firstParam, final String secondParam) {
         return _Strings.isNullOrEmpty(secondParam) ? null : "Disabled because secondParam is not empty";
     }
 
 
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public void actionWithHiddenParam(String firstParam, String secondParam) {
+    public void actionWithHiddenParam(final String firstParam, final String secondParam) {
     }
     public boolean hide0ActionWithHiddenParam() {
         return true;

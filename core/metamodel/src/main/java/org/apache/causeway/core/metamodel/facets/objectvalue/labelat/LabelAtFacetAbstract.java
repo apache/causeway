@@ -22,7 +22,6 @@ import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 

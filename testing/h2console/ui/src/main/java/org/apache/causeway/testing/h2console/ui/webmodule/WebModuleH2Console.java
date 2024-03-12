@@ -43,7 +43,6 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
-import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console.H2WebServlet;
 
 import lombok.Getter;
 import lombok.val;

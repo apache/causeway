@@ -60,7 +60,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstallingEvent;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript.ExecutionContext;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 

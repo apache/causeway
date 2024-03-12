@@ -18,32 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import jakarta.inject.Inject;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import static org.apache.causeway.applib.annotation.Editing.ENABLED;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 public enum Grade  {
 
     PROFESSOR,

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.actions.position;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class ActionPositionFacetFallback extends ActionPositionFacetAbstract {

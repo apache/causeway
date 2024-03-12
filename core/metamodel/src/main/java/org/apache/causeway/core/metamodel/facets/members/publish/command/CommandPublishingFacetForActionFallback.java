@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.members.publish.command;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class CommandPublishingFacetForActionFallback extends CommandPublishingFacetAbstract {

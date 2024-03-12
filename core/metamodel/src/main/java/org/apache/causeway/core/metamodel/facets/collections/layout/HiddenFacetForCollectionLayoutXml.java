@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;

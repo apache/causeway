@@ -18,16 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.dept;
 
-import lombok.val;
-
-import java.util.Optional;
-
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.core.Response;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-
-import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
@@ -36,9 +28,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.springframework.transaction.annotation.Propagation;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
-import org.springframework.transaction.annotation.Propagation;
+import lombok.val;
 
 
 public class Department_IntegTest extends Abstract_IntegTest {
