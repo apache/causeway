@@ -25,12 +25,10 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.facets.all.ascii.AsciiFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
@@ -110,7 +108,7 @@ public class ObjectFeatureUtils {
         return parameters
                 .map(oap -> {
                     final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(asciiIdFor(oap));
+                    Object argumentValue = argumentPojos.get(oap.asciiId());
                     Object pojoOrPojoList;
 
                     switch (elementType.getBeanSort()) {
@@ -151,11 +149,6 @@ public class ObjectFeatureUtils {
                                     "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.getBeanSort()));
                     }
                 });
-    }
-
-    public static String asciiIdFor(final ObjectFeature objectFeature) {
-        val asciiFacet = objectFeature.getFacet(AsciiFacet.class);
-        return asciiFacet != null ? asciiFacet.asciiId() : objectFeature.getId();
     }
 
     private static ManagedObject adaptValue(

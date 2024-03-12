@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import graphql.schema.DataFetchingEnvironment;
 
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
@@ -45,8 +45,11 @@ public class RichPropertyGetClobChars extends RichPropertyGetClobAbstract {
         val sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
         val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
-        return bookmarkIfAny.map(x -> String.format(
-                "//%s/object/%s:%s/%s/clobChars", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), ObjectFeatureUtils.asciiIdFor(holder.getObjectMember()))).orElse(null);
+        return bookmarkIfAny.map(x -> {
+            final ObjectFeature objectFeature = holder.getObjectMember();
+            return String.format(
+                    "//%s/object/%s:%s/%s/clobChars", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), objectFeature.asciiId());
+        }).orElse(null);
 
     }
 
