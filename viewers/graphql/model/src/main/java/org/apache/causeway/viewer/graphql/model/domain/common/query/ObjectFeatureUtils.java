@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.facets.all.ascii.AsciiFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -154,8 +153,7 @@ public class ObjectFeatureUtils {
     }
 
     public static String asciiIdFor(final ObjectFeature objectFeature) {
-        val asciiFacet = objectFeature.getFacet(AsciiFacet.class);
-        return asciiFacet != null ? asciiFacet.asciiId() : objectFeature.getId();
+        return objectFeature.getId();
     }
 
     private static ManagedObject adaptValue(

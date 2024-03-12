@@ -284,7 +284,7 @@ public class SimpleAction
             final OneToOneActionParameter otoap,
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
-                .name(ObjectFeatureUtils.asciiIdFor(otoap))
+                .name(otoap.asciiId())
                 .type(context.typeMapper.inputTypeFor(otoap, inputContext, objectInteractor.getSchemaType()))
                 .build();
     }

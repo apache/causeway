@@ -19,11 +19,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class I18nCalculator {
 
-    @Action(semantics = SemanticsOf.SAFE, asciiId = "concat")
+    @Action(semantics = SemanticsOf.SAFE)
     public String concät(
-            @Parameter(asciiId = "a1")
             String ä1,
-            @Parameter(asciiId = "a2")
             String ä2) {
         return ä1 + ä2;
     }

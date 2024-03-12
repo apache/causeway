@@ -64,7 +64,7 @@ public final class TypeNames {
             final ObjectSpecification owningType,
             final ObjectAction oa,
             final SchemaType schemaType) {
-        return objectTypeNameFor(owningType, schemaType) + "__" + ObjectFeatureUtils.asciiIdFor(oa) + "__gqlv_action";
+        return objectTypeNameFor(owningType, schemaType) + "__" + oa.asciiId() + "__gqlv_action";
     }
 
     public static String actionInvokeTypeNameFor(

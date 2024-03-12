@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.locale.UserLocale;
@@ -194,6 +196,10 @@ public interface HasMetaModelContext {
     public default Optional<MessageBroker> getMessageBroker() {
         // session scoped!
         return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);
+    }
+
+    public default AsciiIdentifierService getAsciiIdentifierService() {
+        return getMetaModelContext().getServiceRegistry().lookupService(AsciiIdentifierService.class).orElse(featureId -> featureId);
     }
 
     default ManagedObject lookupServiceAdapterById(final String serviceId) {

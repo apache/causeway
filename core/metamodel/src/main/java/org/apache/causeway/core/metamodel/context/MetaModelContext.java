@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.context;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
