@@ -23,7 +23,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 
-import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
@@ -33,7 +32,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.collections.collection.ascii.AsciiFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;

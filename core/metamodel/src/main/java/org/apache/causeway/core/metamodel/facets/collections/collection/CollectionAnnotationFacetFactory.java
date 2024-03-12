@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
