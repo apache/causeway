@@ -1,7 +1,7 @@
 {
   "links" : [ {
     "rel" : "self",
-    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17",
+    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN",
     "method" : "GET",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
     "title" : "Untitled Department"
@@ -12,42 +12,42 @@
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {
     "rel" : "urn:org.apache.causeway.restfulobjects:rels/object-layout",
-    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/object-layout",
+    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/object-layout",
     "method" : "GET",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-layout-bs\""
   }, {
     "rel" : "urn:org.apache.causeway.restfulobjects:rels/object-icon",
-    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/object-icon",
+    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/object-icon",
     "method" : "GET",
     "type" : "image/*"
   }, {
     "rel" : "urn:org.restfulobjects:rels/update",
-    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department:17",
+    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department:NNN",
     "method" : "PUT",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
     "arguments" : { }
   } ],
   "extensions" : {
-    "oid" : "university.dept.Department:17",
+    "oid" : "university.dept.Department:NNN",
     "isService" : false,
     "isPersistent" : true
   },
   "title" : "Untitled Department",
   "domainType" : "university.dept.Department",
-  "instanceId" : "17",
+  "instanceId" : "NNN",
   "members" : {
     "deptHead" : {
       "id" : "deptHead",
       "memberType" : "property",
       "links" : [ {
         "rel" : "urn:org.restfulobjects:rels/details;property=\"deptHead\"",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/properties/deptHead",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/properties/deptHead",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
       } ],
       "value" : {
         "rel" : "urn:org.restfulobjects:rels/value",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.DeptHead/23",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.DeptHead/NNN",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
         "title" : "Untitled Dept Head"
@@ -58,7 +58,7 @@
       "memberType" : "property",
       "links" : [ {
         "rel" : "urn:org.restfulobjects:rels/details;property=\"name\"",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/properties/name",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/properties/name",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
       } ],
@@ -73,7 +73,7 @@
       "memberType" : "collection",
       "links" : [ {
         "rel" : "urn:org.restfulobjects:rels/details;collection=\"staffMembers\"",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/collections/staffMembers",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/collections/staffMembers",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-collection\""
       } ]
@@ -83,7 +83,7 @@
       "memberType" : "action",
       "links" : [ {
         "rel" : "urn:org.restfulobjects:rels/details;action=\"changeName\"",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/actions/changeName",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/actions/changeName",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
       } ]
@@ -93,7 +93,7 @@
       "memberType" : "action",
       "links" : [ {
         "rel" : "urn:org.restfulobjects:rels/details;action=\"changeDeptHead\"",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/actions/changeDeptHead",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/actions/changeDeptHead",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
       } ]
@@ -103,7 +103,7 @@
       "memberType" : "action",
       "links" : [ {
         "rel" : "urn:org.restfulobjects:rels/details;action=\"addStaffMember\"",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/actions/addStaffMember",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/actions/addStaffMember",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
       } ]
@@ -113,7 +113,7 @@
       "memberType" : "action",
       "links" : [ {
         "rel" : "urn:org.restfulobjects:rels/details;action=\"addStaffMembers\"",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/actions/addStaffMembers",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/actions/addStaffMembers",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
       } ]
@@ -123,7 +123,7 @@
       "memberType" : "action",
       "links" : [ {
         "rel" : "urn:org.restfulobjects:rels/details;action=\"removeStaffMember\"",
-        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/17/actions/removeStaffMember",
+        "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/actions/removeStaffMember",
         "method" : "GET",
         "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
       } ]
