@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -85,7 +84,7 @@ public class RichActionValidity extends Element {
         Can<ObjectActionParameter> parameters = objectAction.getParameters();
         Can<ManagedObject> argumentManagedObjects = parameters
                 .map(oap -> {
-                    Object argumentValue = argumentPojos.get(ObjectFeatureUtils.asciiIdFor(oap));
+                    Object argumentValue = argumentPojos.get(oap.asciiId());
                     return ManagedObject.adaptParameter(oap, argumentValue);
                 });
 

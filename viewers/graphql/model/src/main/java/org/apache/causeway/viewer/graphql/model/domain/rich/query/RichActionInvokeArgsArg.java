@@ -29,7 +29,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 
 import lombok.Getter;
 import lombok.val;
@@ -63,7 +62,7 @@ public class RichActionInvokeArgsArg
                     : gqlObjectTypeForElementType;
 
             val fieldBuilder = newFieldDefinition()
-                    .name(ObjectFeatureUtils.asciiIdFor(oap))
+                    .name(oap.asciiId())
                     .type(gqlOutputType);
             setField(fieldBuilder.build());
         } else {

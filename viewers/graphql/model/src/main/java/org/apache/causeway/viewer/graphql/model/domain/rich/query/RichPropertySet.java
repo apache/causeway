@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.PropertyInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
@@ -75,7 +74,7 @@ public class RichPropertySet extends Element {
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-        Object argumentValue = arguments.get(ObjectFeatureUtils.asciiIdFor(otoa));
+        Object argumentValue = arguments.get(otoa.asciiId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(otoa, argumentValue);
 
         val visibleConsent = otoa.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);

@@ -32,11 +32,11 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.graphql.model.context.Context;
+ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
- import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
  import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -79,7 +79,8 @@ import lombok.extern.log4j.Log4j2;
          val objectAction = actionParamInteractor.getObjectMember();
          val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-         val objectActionParameter = objectAction.getParameterById(ObjectFeatureUtils.asciiIdFor(actionParamInteractor.getObjectActionParameter()));
+         final ObjectFeature objectFeature = actionParamInteractor.getObjectActionParameter();
+         val objectActionParameter = objectAction.getParameterById(objectFeature.asciiId());
          val argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
          val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);

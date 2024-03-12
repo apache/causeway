@@ -25,11 +25,11 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.graphql.model.context.Context;
+ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
- import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
  import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -70,7 +70,8 @@ public class RichActionParamsParamHidden extends Element {
         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         val actionInteractionHead = objectAction.interactionHead(managedObject);
 
-        val objectActionParameter = objectAction.getParameterById(ObjectFeatureUtils.asciiIdFor(actionParamInteractor.getObjectActionParameter()));
+        final ObjectFeature objectFeature = actionParamInteractor.getObjectActionParameter();
+        val objectActionParameter = objectAction.getParameterById(objectFeature.asciiId());
 
         val argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 

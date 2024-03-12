@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.val;
@@ -61,7 +60,7 @@ public class SimpleCollection
     }
 
     public String getId() {
-        return ObjectFeatureUtils.asciiIdFor(objectMember);
+        return objectMember.asciiId();
     }
 
     @Override

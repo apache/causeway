@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
@@ -101,7 +100,7 @@ public class RichActionParamsParam
         addChildFieldFor(this.validate = new RichActionParamsParamValidate(this, context));
         addChildFieldFor(this.datatype = new RichActionParamsParamDatatype(this, context));
 
-        buildObjectTypeAndField(ObjectFeatureUtils.asciiIdFor(oap), oap.getCanonicalDescription().orElse(oap.getCanonicalFriendlyName()));
+        buildObjectTypeAndField(oap.asciiId(), oap.getCanonicalDescription().orElse(oap.getCanonicalFriendlyName()));
     }
 
     @Override

@@ -40,10 +40,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.*;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
@@ -86,7 +83,7 @@ public class SimpleAction
     }
 
     public String getId() {
-        return ObjectFeatureUtils.asciiIdFor(objectMember);
+        return objectMember.asciiId();
     }
 
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
@@ -143,7 +140,7 @@ public class SimpleAction
         return parameters
                 .map(oap -> {
                     final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(ObjectFeatureUtils.asciiIdFor(oap));
+                    Object argumentValue = argumentPojos.get(oap.asciiId());
                     Object pojoOrPojoList;
 
                     switch (elementType.getBeanSort()) {
@@ -291,7 +288,7 @@ public class SimpleAction
 
     GraphQLArgument gqlArgumentFor(final OneToManyActionParameter otmap) {
         return GraphQLArgument.newArgument()
-                .name(ObjectFeatureUtils.asciiIdFor(otmap))
+                .name(otmap.asciiId())
                 .type(context.typeMapper.inputTypeFor(otmap, objectInteractor.getSchemaType()))
                 .build();
     }

@@ -31,6 +31,7 @@ import graphql.schema.GraphQLType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
+import org.apache.causeway.core.metamodel.spec.feature.*;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -40,10 +41,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
@@ -93,7 +90,7 @@ public class RichMutationForAction extends Element {
     private static String fieldName(
             final ObjectSpecification objectSpecification,
             final ObjectAction oa) {
-        return TypeNames.objectTypeFieldNameFor(objectSpecification) + "__" + ObjectFeatureUtils.asciiIdFor(oa);
+        return TypeNames.objectTypeFieldNameFor(objectSpecification) + "__" + oa.asciiId();
     }
 
     @Nullable
@@ -229,7 +226,7 @@ public class RichMutationForAction extends Element {
     // adapted from SimpleAction
     GraphQLArgument gqlArgumentFor(final OneToOneActionParameter otoap) {
         return GraphQLArgument.newArgument()
-                .name(ObjectFeatureUtils.asciiIdFor(otoap))
+                .name(otoap.asciiId())
                 .type(context.typeMapper.inputTypeFor(otoap, TypeMapper.InputContext.INVOKE, SchemaType.RICH))
                 .build();
     }
@@ -237,7 +234,7 @@ public class RichMutationForAction extends Element {
     // adapted from SimpleAction
     GraphQLArgument gqlArgumentFor(final OneToManyActionParameter otmap) {
         return GraphQLArgument.newArgument()
-                .name(ObjectFeatureUtils.asciiIdFor(otmap))
+                .name(otmap.asciiId())
                 .type(context.typeMapper.inputTypeFor(otmap, SchemaType.RICH))
                 .build();
     }
