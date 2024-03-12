@@ -37,6 +37,7 @@ import org.apache.causeway.core.metamodel.facets.members.publish.command.Command
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.causeway.core.metamodel.facets.properties.ascii.AsciiFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation;
@@ -88,6 +89,7 @@ extends FacetFactoryAbstract {
         processOptional(processMethodContext, propertyIfAny);
         processRegEx(processMethodContext, propertyIfAny);
         processFileAccept(processMethodContext, propertyIfAny);
+        processAsciiName(processMethodContext, propertyIfAny);
     }
 
     Optional<Property> propertyIfAny(final ProcessMethodContext processMethodContext) {
@@ -321,6 +323,17 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(
                 FileAcceptFacetForPropertyAnnotation
                 .create(propertyIfAny, holder));
+    }
+
+
+    void processAsciiName(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
+
+        val holder = processMethodContext.getFacetHolder();
+
+        // check for @Property(asciiId=...)
+        addFacetIfPresent(
+                AsciiFacetForPropertyAnnotation
+                        .create(propertyIfAny, holder));
     }
 
 }

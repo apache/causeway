@@ -33,6 +33,7 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -102,7 +103,7 @@ public class SimpleProperty
 
         if (gqlOutputType != null) {
             val fieldBuilder = newFieldDefinition()
-                    .name(otoa.getId())
+                    .name(ObjectFeatureUtils.asciiIdFor(otoa))
                     .type(gqlOutputType);
             setField(fieldBuilder.build());
         } else {

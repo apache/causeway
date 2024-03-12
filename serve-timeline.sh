@@ -20,7 +20,19 @@
 #
 #
 
-# requires JDK 18
-#jwebserver -d $(pwd)/target/timeline -b ::
+#
+# npm i -g serve
+# npm i -g local-ssl-proxy
+#
 
-serve -d target/timeline
+# to use with Chromium, now need to:
+#
+# - re-enable WebSQLAccess (https://surajjadhav.me/blog/enabling-websql-access-in-chrome-119-and-beyond/)
+# - re-enable WebSQLNonSecureContextEnabled policy and acccess via https (https://stackoverflow.com/a/73153658)
+#
+
+
+# npm i -g local-web-server
+
+ws --https -d target/timeline/
+

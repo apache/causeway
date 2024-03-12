@@ -290,4 +290,16 @@ public @interface Property {
     String regexPatternReplacement()
             default "Doesn't match pattern";
 
+    /**
+     * Returns an alternative id for the property, using only ASCII characters.
+     *
+     * <p>
+     *     Although Java itself allows the full UTF character set for identifiers, some integrations (such as GraphQL)
+     *     have restrictions to only allow a more limited set of characters, in essence ASCII.
+     *     This attribute allows a version of the property's Id using only the ASCII character set to be provided.
+     * </p>
+     *
+     * @return an alternative id for the property, using only ASCII characters.
+     */
+    String asciiId() default "";
 }

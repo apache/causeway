@@ -17,6 +17,7 @@ Collects together all domain semantics of an action parameter within a single an
   int regexPatternFlags() default 0;     // <.>
   String regexPatternReplacement() default "Doesn't match pattern";     // <.>
   PrecedingParamsPolicy precedingParamsPolicy() default PrecedingParamsPolicy.AS_CONFIGURED;     // <.>
+  String asciiId() default "";     // <.>
 }
 ----
 
@@ -59,6 +60,11 @@ Replacement text for the pattern in generated error message.
 +
 --
 Whether parameter values should be reset to their default if an earlier parameter changes its value, or whether instead a parameter value, once changed by the end-user, should never be overwritten even if the end-user changes an earlier parameter value.
+--
+<.> xref:#asciiId[asciiId]
++
+--
+Returns an alternative id for the parameter, using only ASCII characters.
 --
 
 == Members
@@ -114,6 +120,13 @@ Replacement text for the pattern in generated error message.
 === precedingParamsPolicy
 
 Whether parameter values should be reset to their default if an earlier parameter changes its value, or whether instead a parameter value, once changed by the end-user, should never be overwritten even if the end-user changes an earlier parameter value.
+
+[#asciiId]
+=== asciiId
+
+Returns an alternative id for the parameter, using only ASCII characters.
+
+Although Java itself allows the full UTF character set for identifiers, some integrations (such as GraphQL) have restrictions to only allow a more limited set of characters, in essence ASCII. This attribute allows a version of the parameter's Id using only the ASCII character set to be provided.
 
 include::hooks/Parameter_010-examples-and-usage.adoc[]
 

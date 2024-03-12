@@ -2771,6 +2771,12 @@ skinparam rectangle<<RestfulObjects.ApacheCausewayViewerRORendering>> {
   BorderColor #2e6295
   shadowing false
 }
+skinparam rectangle<<RestfulObjects.ApacheCausewayViewerROTest>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
 skinparam rectangle<<RestfulObjects.ApacheCausewayViewerROTesting>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -2795,16 +2801,18 @@ rectangle "Restful Objects\n<size:10>[Software System]</size>" <<RestfulObjects>
   rectangle "==Apache Causeway Viewer - RO (Client)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROClient>> as RestfulObjects.ApacheCausewayViewerROClient
   rectangle "==Apache Causeway Viewer - RO (JAX-RS Resteasy)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROJAXRSResteasy>> as RestfulObjects.ApacheCausewayViewerROJAXRSResteasy
   rectangle "==Apache Causeway Viewer - RO (Rendering)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerRORendering>> as RestfulObjects.ApacheCausewayViewerRORendering
+  rectangle "==Apache Causeway Viewer - RO (Test)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROTest>> as RestfulObjects.ApacheCausewayViewerROTest
   rectangle "==Apache Causeway Viewer - RO (Testing)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROTesting>> as RestfulObjects.ApacheCausewayViewerROTesting
   rectangle "==Apache Causeway Viewer - RO (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROViewer>> as RestfulObjects.ApacheCausewayViewerROViewer
 }
 
+RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROAppLib : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROClient : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROJAXRSResteasy : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerRORendering : "<color:#707070>"
+RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROTest : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROTesting : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROViewer : "<color:#707070>"
-RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROAppLib : "<color:#707070>"
 @enduml
 ----
 
@@ -2931,6 +2939,38 @@ org.apache.causeway.viewer:causeway-viewer-restfulobjects-applib:jar:<managed> +
 .Document Index Entries
 ****
 xref:refguide:viewer:index/restfulobjects/rendering/CausewayModuleRestfulObjectsRendering.adoc[CausewayModuleRestfulObjectsRendering], xref:refguide:viewer:index/restfulobjects/rendering/IResourceContext.adoc[IResourceContext], xref:refguide:viewer:index/restfulobjects/rendering/service/RepresentationService.adoc[RepresentationService], xref:refguide:viewer:index/restfulobjects/rendering/service/acceptheader/AcceptHeaderServiceForRest.adoc[AcceptHeaderServiceForRest], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceAbstract.adoc[ContentNegotiationServiceAbstract], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheCausewayV2.adoc[ContentNegotiationServiceOrgApacheCausewayV2], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV1.adoc[ContentNegotiationServiceOrgApacheIsisV1], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceXRoDomainType.adoc[ContentNegotiationServiceXRoDomainType], xref:refguide:viewer:index/restfulobjects/rendering/service/swagger/SwaggerServiceMenu.adoc[SwaggerServiceMenu], xref:refguide:viewer:index/restfulobjects/rendering/service/valuerender/JsonValueEncoderService.adoc[JsonValueEncoderService]
+****
+
+|Apache Causeway Viewer - RO (Test)
+[source,yaml]
+----
+Group: org.apache.causeway.viewer
+Artifact: causeway-viewer-restfulobjects-test
+Type: jar
+Directory: /viewers/restfulobjects/test
+----
+|.Dependencies
+****
+com.approvaltests:approvaltests:jar:<managed> +
+com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
+com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:jar:<managed> +
+com.github.vertical-blank:sql-formatter:jar:<managed> +
+com.h2database:h2:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
+org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
+org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-commons-services:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-rendering:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-viewer:jar:<managed> +
+org.glassfish.jersey.core:jersey-client:jar:<managed> +
+org.glassfish.jersey.inject:jersey-hk2:jar:<managed> +
+org.springframework.boot:spring-boot-starter-web:jar:<managed> +
+org.springframework.boot:spring-boot-test-autoconfigure:jar:<managed> +
 ****
 
 |Apache Causeway Viewer - RO (Testing)
@@ -6010,7 +6050,7 @@ org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-j
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
 org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:2.0.0-SNAPSHOT +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 ****
 
@@ -7283,12 +7323,6 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
-.Components
-****
-o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
-o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
-****
-
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7313,16 +7347,6 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
-
-.Components
-****
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
-o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
-o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
-o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
-o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
-****
 
 .Dependencies
 ****

@@ -49,7 +49,7 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonActionUtils;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichAction;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
@@ -92,8 +92,8 @@ public class RichMutationForAction extends Element {
 
     private static String fieldName(
             final ObjectSpecification objectSpecification,
-            final ObjectAction objectAction) {
-        return TypeNames.objectTypeFieldNameFor(objectSpecification) + "__" + objectAction.getId();
+            final ObjectAction oa) {
+        return TypeNames.objectTypeFieldNameFor(objectSpecification) + "__" + ObjectFeatureUtils.asciiIdFor(oa);
     }
 
     @Nullable
@@ -157,7 +157,7 @@ public class RichMutationForAction extends Element {
             } else {
                 val refValue = (String)argumentValue.get("ref");
                 if (refValue != null) {
-                    String key = CommonActionUtils.keyFor(refValue);
+                    String key = ObjectFeatureUtils.keyFor(refValue);
                     BookmarkedPojo value = ((Environment) environment).getGraphQlContext().get(key);
                     result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
                 } else {
@@ -227,18 +227,18 @@ public class RichMutationForAction extends Element {
     }
 
     // adapted from SimpleAction
-    GraphQLArgument gqlArgumentFor(final OneToOneActionParameter oneToOneActionParameter) {
+    GraphQLArgument gqlArgumentFor(final OneToOneActionParameter otoap) {
         return GraphQLArgument.newArgument()
-                .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, TypeMapper.InputContext.INVOKE, SchemaType.RICH))
+                .name(ObjectFeatureUtils.asciiIdFor(otoap))
+                .type(context.typeMapper.inputTypeFor(otoap, TypeMapper.InputContext.INVOKE, SchemaType.RICH))
                 .build();
     }
 
     // adapted from SimpleAction
-    GraphQLArgument gqlArgumentFor(final OneToManyActionParameter oneToManyActionParameter) {
+    GraphQLArgument gqlArgumentFor(final OneToManyActionParameter otmap) {
         return GraphQLArgument.newArgument()
-                .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, SchemaType.RICH))
+                .name(ObjectFeatureUtils.asciiIdFor(otmap))
+                .type(context.typeMapper.inputTypeFor(otmap, SchemaType.RICH))
                 .build();
     }
 

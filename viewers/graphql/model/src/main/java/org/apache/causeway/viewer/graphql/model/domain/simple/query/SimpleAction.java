@@ -41,7 +41,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonActionUtils;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
@@ -85,7 +85,7 @@ public class SimpleAction
     }
 
     public String getId() {
-        return objectMember.getId();
+        return ObjectFeatureUtils.asciiIdFor(objectMember);
     }
 
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
@@ -142,7 +142,7 @@ public class SimpleAction
         return parameters
                 .map(oap -> {
                     final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(oap.getId());
+                    Object argumentValue = argumentPojos.get(ObjectFeatureUtils.asciiIdFor(oap));
                     Object pojoOrPojoList;
 
                     switch (elementType.getBeanSort()) {
@@ -210,7 +210,7 @@ public class SimpleAction
 
         val refValue = (String)argumentValue.get("ref");
         if (refValue != null) {
-            String key = CommonActionUtils.keyFor(refValue);
+            String key = ObjectFeatureUtils.keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
             if (bookmarkedPojo == null) {
                 throw new IllegalArgumentException(String.format(
@@ -275,25 +275,23 @@ public class SimpleAction
             final ObjectActionParameter objectActionParameter,
             final TypeMapper.InputContext inputContext) {
         return objectActionParameter.isPlural()
-                ? gqlArgumentFor((OneToManyActionParameter) objectActionParameter, inputContext)
+                ? gqlArgumentFor((OneToManyActionParameter) objectActionParameter)
                 : gqlArgumentFor((OneToOneActionParameter) objectActionParameter, inputContext);
     }
 
     GraphQLArgument gqlArgumentFor(
-            final OneToOneActionParameter oneToOneActionParameter,
+            final OneToOneActionParameter otoap,
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
-                .name(oneToOneActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToOneActionParameter, inputContext, objectInteractor.getSchemaType()))
+                .name(ObjectFeatureUtils.asciiIdFor(otoap))
+                .type(context.typeMapper.inputTypeFor(otoap, inputContext, objectInteractor.getSchemaType()))
                 .build();
     }
 
-    GraphQLArgument gqlArgumentFor(
-            final OneToManyActionParameter oneToManyActionParameter,
-            final TypeMapper.InputContext inputContext) {
+    GraphQLArgument gqlArgumentFor(final OneToManyActionParameter otmap) {
         return GraphQLArgument.newArgument()
-                .name(oneToManyActionParameter.getId())
-                .type(context.typeMapper.inputTypeFor(oneToManyActionParameter, objectInteractor.getSchemaType()))
+                .name(ObjectFeatureUtils.asciiIdFor(otmap))
+                .type(context.typeMapper.inputTypeFor(otmap, objectInteractor.getSchemaType()))
                 .build();
     }
 
