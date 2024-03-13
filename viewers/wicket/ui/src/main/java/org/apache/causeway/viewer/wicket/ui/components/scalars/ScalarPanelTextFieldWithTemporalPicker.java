@@ -31,7 +31,6 @@ import org.apache.wicket.model.PropertyModel;
 
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -138,11 +137,6 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
         return _Casts.uncheckedCast(Facets.valueTemporalSemantics(scalarModel().getElementType())
                 .orElseThrow(()->_Exceptions.illegalState("no (temporal) value semantics found for %s",
                         scalarModel().getElementType())));
-    }
-
-    //TODO[CAUSEWAY-3489] unused
-    private TemporalCharacteristic temporalCharacteristic() {
-        return temporalValueSemantics().getTemporalCharacteristic();
     }
 
     private OffsetCharacteristic offsetCharacteristic() {

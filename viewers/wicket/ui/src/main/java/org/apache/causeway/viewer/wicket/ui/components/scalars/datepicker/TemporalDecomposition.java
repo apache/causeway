@@ -31,7 +31,7 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
@@ -43,6 +43,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * Introduced to handle temporal values with zone or offset information
@@ -57,16 +58,21 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
             final TemporalValueSemantics<T> temporalValueSemantics,
             final ConverterBasedOnValueSemantics<T> fullConverter) {
 
+        var needsDecomposition = !temporalValueSemantics.getOffsetCharacteristic().isLocal()
+                && scalarModel.getViewOrEditMode().isEditing();
+
         var baseEditingPattern = fullConverter.getEditingPattern();
-        //TODO[CAUSEWAY-3489] switch on offsetCharacteristic and temporalCharacteristic to do this properly
-        var editingPattern = scalarModel.isEditingMode()
-            ? "yyyy-MM-dd HH:mm:ss" // strip 'XXX' or 'VV';
+        var editingPattern = needsDecomposition
+            ? stripZoneSuffixFrom(baseEditingPattern)
             : baseEditingPattern;
 
         var tempDecomp = new TemporalDecomposition<>(type, temporalValueSemantics, fullConverter,
                 scalarModel.getViewOrEditMode(),
                 editingPattern);
-        tempDecomp.initFrom(scalarModel.proposedValue());
+
+        if(needsDecomposition) {
+            tempDecomp.initFrom(scalarModel.proposedValue());
+        }
         return tempDecomp;
     }
 
@@ -90,6 +96,7 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
             var offsetTime = (OffsetTime) temporalValue;
             this.zoneOffset = offsetTime.getOffset();
         }
+        //TODO[CAUSEWAY-3489] zone/offset info on new temporal value should be set to current user's info from session
     }
 
     @Override
@@ -103,10 +110,6 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
     }
 
     // -- SPECIALIZATION
-
-    private TemporalCharacteristic temporalCharacteristic() {
-        return temporalValueSemantics.getTemporalCharacteristic();
-    }
 
     private OffsetCharacteristic offsetCharacteristic() {
         return temporalValueSemantics.getOffsetCharacteristic();
@@ -130,28 +133,22 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
 
     // -- PROPERTIES
 
-    private ZoneId zoneId;
-    public ZoneId getZoneId() {
-        //TODO[CAUSEWAY-3489] remove debug line
-        System.err.printf("getZoneId %s%n", zoneId);
-        return zoneId;
-    }
-    public void setZoneId(final ZoneId zoneId) {
-        this.zoneId = zoneId;
-        //TODO[CAUSEWAY-3489] remove debug line
-        System.err.printf("setZoneId %s%n", zoneId);
-    }
+    @Getter @Setter private ZoneId zoneId;
+    @Getter @Setter private ZoneOffset zoneOffset;
 
-    private ZoneOffset zoneOffset;
-    public ZoneOffset getZoneOffset() {
-        //TODO[CAUSEWAY-3489] remove debug line
-        System.err.printf("getZoneOffset %s%n", zoneOffset);
-        return zoneOffset;
-    }
-    public void setZoneOffset(final ZoneOffset zoneOffset) {
-        this.zoneOffset = zoneOffset;
-       //TODO[CAUSEWAY-3489] remove debug line
-        System.err.printf("setZoneOffset %s%n", zoneOffset);
+    // -- HELPER
+
+    /**
+     * Strips 'XXX' and 'VV' from end of pattern. Does not understand other zone/offset formats.
+     */
+    private static String stripZoneSuffixFrom(final String pattern) {
+        if(pattern.endsWith("XXX")) {
+            return _Strings.substring(pattern, 0, -3).stripTrailing();
+        }
+        if(pattern.endsWith("VV")) {
+            return _Strings.substring(pattern, 0, -2).stripTrailing();
+        }
+        return pattern;
     }
 
 }
