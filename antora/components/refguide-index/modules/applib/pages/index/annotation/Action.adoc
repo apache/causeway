@@ -19,7 +19,6 @@ Groups together all domain-specific metadata for an invokable action on a domain
   Class<?> typeOf() default // represents unspecified
 void.class;     // <.>
   String fileAccept() default "";     // <.>
-  String asciiId() default "";     // <.>
 }
 ----
 
@@ -67,11 +66,6 @@ If the action returns a collection, then this hints as to the run-time type of t
 +
 --
 For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
---
-<.> xref:#asciiId[asciiId]
-+
---
-Returns an alternative id for the action, using only ASCII characters.
 --
 
 == Members
@@ -153,13 +147,6 @@ This is only provided as a fallback; usually the framework can infer the element
 For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
-
-[#asciiId]
-=== asciiId
-
-Returns an alternative id for the action, using only ASCII characters.
-
-Although Java itself allows the full UTF character set for identifiers, some integrations (such as GraphQL) have restrictions to only allow a more limited set of characters, in essence ASCII. This attribute allows a version of the action's Id using only the ASCII character set to be provided.
 
 include::hooks/Action_010-examples-and-usage.adoc[]
 

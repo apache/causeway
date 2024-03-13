@@ -44,7 +44,7 @@ The same configuration property is also used for rendering the value.
 causeway.value-types.big-decimal. +
 use-scale-for-min-fractional-facet
 
-| 
+|  true
 | Indicates how to derive the min fractional facet (the minimum number of digits after the decimal point).
 
 If this flag is set, then the ``Digits#fraction()`` annotation or ORM equivalent (the JDO ``@Column#scale`` or the JPA ``Column#scale()``) should be used for the ``MinFractionalFacet`` as well as the ``MaxFractionalFacet``.
@@ -72,7 +72,7 @@ Eg. via docker instance like \{@literal yuzutech/kroki}.
 causeway.value-types.kroki. +
 request-timeout
 
-| 
+|  5000ms
 | Max time for requests to the ``#getBackendUrl()``, when waiting for a response. (default: 5 seconds)
 
 

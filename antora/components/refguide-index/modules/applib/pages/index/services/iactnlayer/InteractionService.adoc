@@ -61,12 +61,12 @@ Variant of _#call(InteractionContext, Callable)_ that takes a runnable.
 <.> xref:#callAnonymous_Callable[callAnonymous(Callable)]
 +
 --
-As per _#call(InteractionContext, Callable)_ , but using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+As per _#call(InteractionContext, Callable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
 --
 <.> xref:#runAnonymous_ThrowingRunnable[runAnonymous(ThrowingRunnable)]
 +
 --
-As per _#callAnonymous(Callable)_ , but for a runnable.
+As per _#run(InteractionContext, ThrowingRunnable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
 --
 <.> xref:#callAndCatch_InteractionContext_Callable[callAndCatch(InteractionContext, Callable)]
 +
@@ -140,12 +140,16 @@ Variant of _#call(InteractionContext, Callable)_ that takes a runnable.
 [#callAnonymous_Callable]
 === callAnonymous(Callable)
 
-As per _#call(InteractionContext, Callable)_ , but using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+As per _#call(InteractionContext, Callable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+
+However, if an _#isInInteraction() interaction (session)_ already exists (with possibly some other non-anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] ), then this is used instead.
 
 [#runAnonymous_ThrowingRunnable]
 === runAnonymous(ThrowingRunnable)
 
-As per _#callAnonymous(Callable)_ , but for a runnable.
+As per _#run(InteractionContext, ThrowingRunnable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+
+However, if an _#isInInteraction() interaction (session)_ already exists (with possibly some other non-anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] ), then this is used instead.
 
 [#callAndCatch_InteractionContext_Callable]
 === callAndCatch(InteractionContext, Callable)
