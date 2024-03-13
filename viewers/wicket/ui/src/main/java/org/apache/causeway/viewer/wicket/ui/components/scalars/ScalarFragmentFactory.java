@@ -214,7 +214,9 @@ public class ScalarFragmentFactory {
     public static enum InputFragment {
         TEXT("fragment-input-text"),
         TEXTAREA("fragment-input-textarea"),
-        DATE("fragment-input-date"),
+        TEMPORAL("fragment-input-temporal"),
+        TEMPORAL_WITH_OFFSET("fragment-input-temporal-with-offset"),
+        TEMPORAL_WITH_ZONE("fragment-input-temporal-with-zone"),
         CHECKBOX("fragment-input-checkbox"),
         FILE("fragment-input-file"),
         SELECT_VALUE("fragment-input-select_value"),

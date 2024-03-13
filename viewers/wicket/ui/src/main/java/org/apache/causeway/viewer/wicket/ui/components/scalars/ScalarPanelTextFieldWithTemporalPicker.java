@@ -24,6 +24,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
@@ -82,7 +84,20 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     @Override
     protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(InputFragment.DATE);
+        final OffsetCharacteristic offsetCharacteristic =
+            Facets.valueTemporalSemantics(scalarModel().getElementType())
+                .map(TemporalValueSemantics::getOffsetCharacteristic)
+                .orElse(OffsetCharacteristic.LOCAL);
+
+        switch (offsetCharacteristic) {
+        case OFFSET:
+            return Optional.of(InputFragment.TEMPORAL_WITH_OFFSET);
+        case ZONED:
+            return Optional.of(InputFragment.TEMPORAL_WITH_ZONE);
+        case LOCAL:
+        default:
+            return Optional.of(InputFragment.TEMPORAL);
+        }
     }
 
     @Override

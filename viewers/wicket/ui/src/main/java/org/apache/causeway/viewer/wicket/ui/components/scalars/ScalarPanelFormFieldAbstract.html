@@ -147,10 +147,40 @@
          	</span>
 		</wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-input-date">
+		<wicket:fragment wicket:id="fragment-input-temporal">
 			<input wicket:id="scalarValue"
 				type="text" name="scalarValue"
 				class="form-control form-control-sm scalarValue fragment-input-date"/>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-input-temporal-with-offset">
+			<input wicket:id="scalarValue"
+				type="text" name="scalarValue"
+				class="form-control form-control-sm scalarValue fragment-input-date"/>
+			<div class="input-group">
+			    <span class="input-group-text" id="datetimepickerZoneZ">Offset:</span>
+			    <select class="form-control" name="timezone" data-noreset="true" id="offset-select" style="width: auto;">
+					<option selected="selected" value="">Select offset ..</option>
+					<option value="169">0</option>
+					<option value="482">+1</option>
+					<option value="489">-1</option>
+			    </select>
+			</div>	
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-input-temporal-with-zone">
+			<input wicket:id="scalarValue"
+				type="text" name="scalarValue"
+				class="form-control form-control-sm scalarValue fragment-input-date"/>
+			<div class="input-group">
+			    <span class="input-group-text" id="datetimepickerZoneZ">Zone:</span>
+			    <select class="form-control" name="timezone" data-noreset="true" id="timezone-select" style="width: auto;">
+					<option selected="selected" value="">Select timezone ..</option>
+					<option value="169">America/New_York</option>
+					<option value="482">Europe/Vienna</option>
+					<option value="489">GB</option>
+			    </select>
+			</div>	
 		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragment-input-select_value">

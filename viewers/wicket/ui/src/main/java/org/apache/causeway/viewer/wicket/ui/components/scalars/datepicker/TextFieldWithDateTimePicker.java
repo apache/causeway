@@ -132,12 +132,12 @@ extends TextFieldWithConverter<T> {
     // -- HELPER
 
     private DateTimeConfig createDatePickerConfig(
-            final MetaModelContext commonContext,
+            final MetaModelContext mmc,
             final String temporalPattern,
             final boolean isInputNullable) {
         val config = new DateTimeConfig();
 
-        config.useLocale(commonContext.currentUserLocale()
+        config.useLocale(mmc.currentUserLocale()
                 .map(UserLocale::getLanguageLocale)
                 .orElse(Locale.US));
 
@@ -176,7 +176,7 @@ extends TextFieldWithConverter<T> {
                 .useCloseIcon(FontAwesome6IconType.check_s)
                 );
 
-        val causewayDatePickerConfig = commonContext.getConfiguration().getViewer().getWicket().getDatePicker();
+        val causewayDatePickerConfig = mmc.getConfiguration().getViewer().getWicket().getDatePicker();
 
         //XXX future extensions might allow to set bounds on a per member basis (via ValueSemantics annotation)
         config.minDate(causewayDatePickerConfig.getMinDate());

@@ -34,6 +34,7 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -95,8 +96,8 @@ public final class Facets {
     public Can<ManagedObject> autoCompleteExecute(
             final ObjectSpecification objectSpec, final String term) {
         return objectSpec.lookupFacet(AutoCompleteFacet.class)
-        .map(autoCompleteFacet->autoCompleteFacet.execute(term, InteractionInitiatedBy.USER))
-        .orElseGet(Can::empty);
+            .map(autoCompleteFacet->autoCompleteFacet.execute(term, InteractionInitiatedBy.USER))
+            .orElseGet(Can::empty);
     }
 
     public boolean autoCompleteIsPresent(final ObjectSpecification objectSpec) {
@@ -105,15 +106,15 @@ public final class Facets {
 
     public OptionalInt autoCompleteMinLength(final ObjectSpecification objectSpec) {
         return objectSpec.lookupFacet(AutoCompleteFacet.class)
-        .map(AutoCompleteFacet::getMinLength)
-        .map(OptionalInt::of)
-        .orElseGet(OptionalInt::empty);
+            .map(AutoCompleteFacet::getMinLength)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
     }
 
     public Optional<BookmarkPolicy> bookmarkPolicy(final @Nullable FacetHolder facetHolder) {
         return Optional.ofNullable(facetHolder)
-        .flatMap(spec->spec.lookupFacet(BookmarkPolicyFacet.class))
-        .map(BookmarkPolicyFacet::value);
+            .flatMap(spec->spec.lookupFacet(BookmarkPolicyFacet.class))
+            .map(BookmarkPolicyFacet::value);
     }
 
     public BookmarkPolicy bookmarkPolicyOrElseNotSpecified(final @Nullable FacetHolder facetHolder) {
@@ -123,8 +124,8 @@ public final class Facets {
     public Optional<BSGrid> bootstrapGrid(
             final ObjectSpecification objectSpec, final @Nullable ManagedObject objectAdapter) {
         return objectSpec.lookupFacet(GridFacet.class)
-        .map(gridFacet->gridFacet.getGrid(objectAdapter))
-        .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
+            .map(gridFacet->gridFacet.getGrid(objectAdapter))
+            .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
     }
 
     public Optional<BSGrid> bootstrapGrid(final ObjectSpecification objectSpec) {
@@ -144,20 +145,20 @@ public final class Facets {
     public Stream<ManagedObject> collectionStream(
             final ObjectSpecification objectSpec, final @Nullable ManagedObject collection) {
         return objectSpec.lookupFacet(CollectionFacet.class)
-        .map(collectionFacet->collectionFacet.stream(collection))
-        .orElseGet(Stream::empty);
+            .map(collectionFacet->collectionFacet.stream(collection))
+            .orElseGet(Stream::empty);
     }
 
     public Optional<String> cssClass(
             final FacetHolder facetHolder, final ManagedObject objectAdapter) {
         return facetHolder.lookupFacet(CssClassFacet.class)
-        .map(cssClassFacet->cssClassFacet.cssClass(objectAdapter));
+            .map(cssClassFacet->cssClassFacet.cssClass(objectAdapter));
     }
 
     public int dateRenderAdjustDays(final ObjectFeature feature) {
         return feature.lookupFacet(DateRenderAdjustFacet.class)
-        .map(DateRenderAdjustFacet::getDateRenderAdjustDays)
-        .orElse(0);
+            .map(DateRenderAdjustFacet::getDateRenderAdjustDays)
+            .orElse(0);
     }
 
     public boolean defaultViewIsPresent(final ObjectFeature feature) {
@@ -166,20 +167,20 @@ public final class Facets {
 
     public boolean defaultViewIsTable(final ObjectFeature feature) {
         return defaultViewName(feature)
-        .map(viewName->"table".equals(viewName))
-        .orElse(false);
+            .map(viewName->"table".equals(viewName))
+            .orElse(false);
     }
 
     public Optional<String> defaultViewName(final ObjectFeature feature) {
         return feature.lookupFacet(DefaultViewFacet.class)
-        .map(DefaultViewFacet::value);
+            .map(DefaultViewFacet::value);
     }
 
     public static ParameterConfigOptions.PrecedingParametersPolicy precedingParametersPolicy(
             final ObjectActionParameter parameter) {
         return parameter.lookupFacet(PrecedingParametersPolicyFacet.class)
-                .map(PrecedingParametersPolicyFacet::value)
-                .orElseGet(ParameterConfigOptions.PrecedingParametersPolicy::defaultsIfNotSpecifiedOtherwise);
+            .map(PrecedingParametersPolicyFacet::value)
+            .orElseGet(ParameterConfigOptions.PrecedingParametersPolicy::defaultsIfNotSpecifiedOtherwise);
     }
 
     public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {
@@ -188,33 +189,33 @@ public final class Facets {
 
     public Optional<MenuBar> domainServiceLayoutMenuBar(final ObjectSpecification objectSpec) {
         return objectSpec.lookupFacet(DomainServiceLayoutFacet.class)
-        .map(DomainServiceLayoutFacet::getMenuBar);
+            .map(DomainServiceLayoutFacet::getMenuBar);
     }
 
     public Optional<String> fileAccept(final ObjectFeature feature) {
         return feature.lookupFacet(FileAcceptFacet.class)
-        .map(FileAcceptFacet::value);
+            .map(FileAcceptFacet::value);
     }
 
     public void gridPreload(
             final ObjectSpecification objectSpec, final ManagedObject objectAdapter) {
         objectSpec.lookupFacet(GridFacet.class)
-        .ifPresent(gridFacet->
-            // the facet should always exist, in fact
-            // just enough to ask for the metadata.
-            // This will cause the current ObjectSpec to be updated as a side effect.
-            gridFacet.getGrid(objectAdapter));
+            .ifPresent(gridFacet->
+                // the facet should always exist, in fact
+                // just enough to ask for the metadata.
+                // This will cause the current ObjectSpec to be updated as a side effect.
+                gridFacet.getGrid(objectAdapter));
     }
 
     public Optional<Where> hiddenWhere(final ObjectFeature feature) {
         return feature.lookupFacet(HiddenFacet.class)
-        .map(HiddenFacet::where);
+            .map(HiddenFacet::where);
     }
 
     public Predicate<ObjectFeature> hiddenWhereMatches(final Predicate<Where> matcher) {
         return feature->Facets.hiddenWhere(feature)
-        .map(matcher::test)
-        .orElse(false);
+            .map(matcher::test)
+            .orElse(false);
     }
 
     public boolean iconIsPresent(final ObjectSpecification objectSpec) {
@@ -226,21 +227,21 @@ public final class Facets {
      */
     public LabelPosition labelAt(final ObjectFeature feature) {
         return feature.lookupFacet(LabelAtFacet.class)
-                .map(LabelAtFacet::label)
-                .map(labelPos->{
-                    switch (labelPos) {
-                    case LEFT:
-                    case RIGHT:
-                    case NONE:
-                    case TOP:
-                        return labelPos;
-                    case DEFAULT:
-                    case NOT_SPECIFIED:
-                    default:
-                        return LabelPosition.LEFT;
-                    }
-                })
-                .orElse(LabelPosition.LEFT);
+            .map(LabelAtFacet::label)
+            .map(labelPos->{
+                switch (labelPos) {
+                case LEFT:
+                case RIGHT:
+                case NONE:
+                case TOP:
+                    return labelPos;
+                case DEFAULT:
+                case NOT_SPECIFIED:
+                default:
+                    return LabelPosition.LEFT;
+                }
+            })
+            .orElse(LabelPosition.LEFT);
     }
 
     public String labelAtCss(final ObjectFeature feature) {
@@ -249,47 +250,47 @@ public final class Facets {
 
     public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MinFractionalDigitsFacet.class)
-        .map(MinFractionalDigitsFacet::getMinFractionalDigits)
-        .filter(digits->digits>-1)
-        .map(OptionalInt::of)
-        .orElseGet(OptionalInt::empty);
+            .map(MinFractionalDigitsFacet::getMinFractionalDigits)
+            .filter(digits->digits>-1)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
     }
 
     public OptionalInt maxFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MaxFractionalDigitsFacet.class)
-        .map(MaxFractionalDigitsFacet::getMaxFractionalDigits)
-        .filter(digits->digits>-1)
-        .map(OptionalInt::of)
-        .orElseGet(OptionalInt::empty);
+            .map(MaxFractionalDigitsFacet::getMaxFractionalDigits)
+            .filter(digits->digits>-1)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
     }
 
     public OptionalInt maxFractionalDigits(final @Nullable Iterable<FacetHolder> facetHolders) {
         return _NullSafe.stream(facetHolders)
-                .map(Facets::maxFractionalDigits)
-                .findFirst()
-                .orElseGet(OptionalInt::empty);
+            .map(Facets::maxFractionalDigits)
+            .findFirst()
+            .orElseGet(OptionalInt::empty);
     }
 
     public OptionalInt maxLength(final FacetHolder facetHolder) {
         return facetHolder
-                .lookupFacet(MaxLengthFacet.class)
-                .map(MaxLengthFacet::value)
-                .map(OptionalInt::of)
-                .orElseGet(OptionalInt::empty);
+            .lookupFacet(MaxLengthFacet.class)
+            .map(MaxLengthFacet::value)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
     }
 
     public OptionalInt maxTotalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MaxTotalDigitsFacet.class)
-        .map(MaxTotalDigitsFacet::getMaxTotalDigits)
-        .map(OptionalInt::of)
-        .orElseGet(OptionalInt::empty);
+            .map(MaxTotalDigitsFacet::getMaxTotalDigits)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
     }
 
     public OptionalInt maxTotalDigits(final @Nullable Iterable<FacetHolder> facetHolders) {
         return _NullSafe.stream(facetHolders)
-                .map(Facets::maxTotalDigits)
-                .findFirst()
-                .orElseGet(OptionalInt::empty);
+            .map(Facets::maxTotalDigits)
+            .findFirst()
+            .orElseGet(OptionalInt::empty);
     }
 
     public boolean mixinIsPresent(final ObjectSpecification objectSpec) {
@@ -298,46 +299,46 @@ public final class Facets {
 
     public boolean multilineIsPresent(final ObjectFeature feature) {
         return feature.lookupNonFallbackFacet(MultiLineFacet.class)
-                .isPresent();
+            .isPresent();
     }
 
     public OptionalInt multilineNumberOfLines(final ObjectFeature feature) {
         return feature
-                .lookupFacet(MultiLineFacet.class)
-                .map(MultiLineFacet::numberOfLines)
-                .map(OptionalInt::of)
-                .orElseGet(OptionalInt::empty);
+            .lookupFacet(MultiLineFacet.class)
+            .map(MultiLineFacet::numberOfLines)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
     }
 
     //XXX could be moved to ManagedObject directly
     public ManagedObject projected(final ManagedObject objectAdapter) {
         return objectAdapter.getSpecification().lookupFacet(ProjectionFacet.class)
-        .map(projectionFacet->projectionFacet.projected(objectAdapter))
-        .orElse(objectAdapter);
+            .map(projectionFacet->projectionFacet.projected(objectAdapter))
+            .orElse(objectAdapter);
     }
 
     public Optional<PromptStyle> promptStyle(final ObjectFeature feature) {
         return feature.lookupFacet(PromptStyleFacet.class)
-        .map(PromptStyleFacet::value);
+            .map(PromptStyleFacet::value);
     }
 
     public PromptStyle promptStyleOrElse(final ObjectFeature feature, final PromptStyle fallback) {
         return Facets.promptStyle(feature)
-        .map(promptStyle->
-            promptStyle == PromptStyle.AS_CONFIGURED
-            ? fallback
-            : promptStyle)
-        .orElse(fallback);
+            .map(promptStyle->
+                promptStyle == PromptStyle.AS_CONFIGURED
+                ? fallback
+                : promptStyle)
+            .orElse(fallback);
     }
 
     public Optional<ObjectSpecification> elementSpec(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(TypeOfFacet.class)
-        .map(TypeOfFacet::elementSpec);
+            .map(TypeOfFacet::elementSpec);
     }
 
     public Optional<ResolvedType> typeOfAnyCardinality(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(TypeOfFacet.class)
-        .map(TypeOfFacet::value);
+            .map(TypeOfFacet::value);
     }
 
     public OptionalInt typicalLength(
@@ -388,9 +389,9 @@ public final class Facets {
             final int paramIndex) {
         val objectSpec = param.getElementType();
         return objectSpec.valueFacet()
-        .<ObjectAction>flatMap(valueFacet->
-            valueFacet.selectCompositeValueMixinForParameter(
-                    parameterNegotiationModel,paramIndex));
+            .<ObjectAction>flatMap(valueFacet->
+                valueFacet.selectCompositeValueMixinForParameter(
+                        parameterNegotiationModel,paramIndex));
     }
 
     @SuppressWarnings("unchecked")
@@ -399,26 +400,26 @@ public final class Facets {
             final ManagedProperty managedProperty) {
         val objectSpec = prop.getElementType();
         return objectSpec.valueFacet()
-        .<ObjectAction>flatMap(valueFacet->
-            valueFacet.selectCompositeValueMixinForProperty(managedProperty));
+            .<ObjectAction>flatMap(valueFacet->
+                valueFacet.selectCompositeValueMixinForProperty(managedProperty));
     }
 
     @SuppressWarnings("unchecked")
     public <X> Stream<X> valueStreamSemantics(
             final ObjectSpecification objectSpec, final Class<X> requiredType) {
         return objectSpec.valueFacet()
-        .map(valueFacet->valueFacet.streamValueSemantics(requiredType))
-        .orElseGet(Stream::empty);
+            .map(valueFacet->valueFacet.streamValueSemantics(requiredType))
+            .orElseGet(Stream::empty);
     }
 
     @SuppressWarnings("unchecked")
     public <X> boolean valueHasSemantics(
             final ObjectSpecification objectSpec, final Class<X> requiredType) {
         return objectSpec.valueFacet()
-        .map(valueFacet->valueFacet.streamValueSemantics(requiredType)
-                .findFirst()
-                .isPresent())
-        .orElse(false);
+            .map(valueFacet->valueFacet.streamValueSemantics(requiredType)
+                    .findFirst()
+                    .isPresent())
+            .orElse(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -426,9 +427,9 @@ public final class Facets {
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return objectSpec.valueFacet()
-        .filter(typeGuard(requiredType))
-        .flatMap(ValueFacet::selectDefaultSemantics)
-        .map(_Casts::uncheckedCast);
+            .filter(typeGuard(requiredType))
+            .flatMap(ValueFacet::selectDefaultSemantics)
+            .map(_Casts::uncheckedCast);
     }
 
     @SuppressWarnings("unchecked")
@@ -436,17 +437,25 @@ public final class Facets {
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return objectSpec.valueFacet()
-        .filter(typeGuard(requiredType))
-        .map(valueFacet->(ValueSerializer<X>)valueFacet);
+            .filter(typeGuard(requiredType))
+            .map(valueFacet->(ValueSerializer<X>)valueFacet);
     }
 
     public <X> ValueSerializer<X> valueSerializerElseFail(
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return valueSerializer(objectSpec, requiredType)
-        .orElseThrow(()->_Exceptions.illegalArgument(
-                "ObjectSpec is expected to have a ValueFacet<%s>",
-                objectSpec.getCorrespondingClass().getName()));
+            .orElseThrow(()->_Exceptions.illegalArgument(
+                    "ObjectSpec is expected to have a ValueFacet<%s>",
+                    objectSpec.getCorrespondingClass().getName()));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<TemporalValueSemantics<?>> valueTemporalSemantics(final ObjectSpecification objectSpec) {
+        return objectSpec.valueFacet()
+            .flatMap(valueFacet->valueFacet.getAllValueSemantics().stream()
+                    .findFirst())
+            .flatMap(valueSemantics->_Casts.castTo(TemporalValueSemantics.class, valueSemantics));
     }
 
     // -- HELPER
