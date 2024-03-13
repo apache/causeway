@@ -158,7 +158,7 @@
 				type="text" name="scalarValue"
 				class="form-control form-control-sm scalarValue fragment-input-date"/>
 			<div class="input-group">
-			    <span class="input-group-text" id="datetimepickerZoneZ">Offset:</span>
+			    <span class="input-group-text">Offset:</span>
 			    <select class="form-control" name="timezone" data-noreset="true" id="offset-select" style="width: auto;">
 					<option selected="selected" value="">Select offset ..</option>
 					<option value="169">0</option>
@@ -173,7 +173,9 @@
 				type="text" name="scalarValue"
 				class="form-control form-control-sm scalarValue fragment-input-date"/>
 			<div class="input-group">
-			    <span class="input-group-text" id="datetimepickerZoneZ">Zone:</span>
+			    <span class="input-group-text">Zone:</span>
+				<select class="form-control" wicket:id="timezone" name="timezone" data-noreset="true" style="width: auto;" />
+				
 			    <select class="form-control" name="timezone" data-noreset="true" id="timezone-select" style="width: auto;">
 					<option selected="selected" value="">Select timezone ..</option>
 					<option value="169">America/New_York</option>

@@ -19,13 +19,18 @@
 package org.apache.causeway.applib.value.semantics;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.Temporal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} value types.
@@ -347,6 +352,29 @@ extends
             throw _Exceptions.unmatchedCase(timePrecision);
         }
 
+    }
+
+    /**
+     * For temporal value editing, provides the list of available time zones to choose from.
+     */
+    default List<ZoneId> getAvailableZoneIds() {
+        return ZoneId.getAvailableZoneIds().stream()
+                .sorted()
+                .map(ZoneId::of)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * For temporal value editing, provides the list of available offsets to choose from.
+     */
+    default List<ZoneId> getAvailableOffsets() {
+        val now = LocalDateTime.now();
+        return ZoneId.getAvailableZoneIds().stream()
+                .map(ZoneId::of)
+                .map(ZoneId::getRules)
+                .flatMap(zoneIdRules->zoneIdRules.getValidOffsets(now).stream())
+                .sorted()
+                .collect(Collectors.toList());
     }
 
 }
