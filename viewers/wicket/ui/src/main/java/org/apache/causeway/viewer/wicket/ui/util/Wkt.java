@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.util;
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -52,8 +53,10 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.FormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -607,6 +610,31 @@ public class Wkt {
 
     public ResourceLinkVolatile downloadLinkNoCache(final String id, final IResource resourceModel) {
         return new ResourceLinkVolatile(id, resourceModel);
+    }
+
+    // -- DROPDOWN CHOICE
+
+    public <T extends Serializable> DropDownChoice<T> dropDownChoice(final String id,
+            final IModel<T> model,
+            final List<? extends T> choices) {
+        return new DropDownChoice<T>(id, model, choices);
+    }
+
+    public <T extends Serializable> DropDownChoice<T> dropDownChoiceWithAjaxUpdate(final String id,
+            final IModel<T> model,
+            final List<? extends T> choices) {
+        var component = dropDownChoice(id, model, choices);
+        component.setOutputMarkupId(true);
+        component.add(new FormComponentUpdatingBehavior());
+        return component;
+    }
+
+    public <T extends Serializable> DropDownChoice<T> dropDownChoiceWithAjaxUpdateAdd(
+            final MarkupContainer container,
+            final String id,
+            final IModel<T> model,
+            final List<? extends T> choices) {
+        return add(container, dropDownChoiceWithAjaxUpdate(id, model, choices));
     }
 
     // -- FILE DOWNLOAD
@@ -1176,6 +1204,5 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
-
 
 }

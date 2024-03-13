@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.viewer.registries.components;
 
 import java.io.Serializable;
+import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.tabular.simple.CollectionContentsExporter;
@@ -279,6 +281,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     // -- UTILTIY
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static <T extends Serializable> ComponentFactoryScalarTypeConstrainedAbstract
     createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
 
@@ -287,7 +290,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         }
 
         if(valueSemantics.isTemporalType()) {
-            return new ScalarPanelFactoryForTemporalPicker<T>(valueSemantics.getCorrespondingClass());
+            return _Casts.uncheckedCast(new ScalarPanelFactoryForTemporalPicker(valueSemantics.getCorrespondingClass()));
         }
 
         if(valueSemantics.isCompositeType()) {
@@ -330,7 +333,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         }
     }
 
-    public static class ScalarPanelFactoryForTemporalPicker<T extends Serializable>
+    public static class ScalarPanelFactoryForTemporalPicker<T extends Serializable & Temporal>
     extends ComponentFactoryScalarTypeConstrainedAbstract {
 
         private final Class<T> valueTypeClass;

@@ -26,6 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -66,6 +67,11 @@ extends ScalarPanelFormFieldAbstract<T> {
      */
     protected abstract Optional<IConverter<T>> converter();
 
+    protected final IConverter<T> converterElseFail() {
+        return converter().orElseThrow(()->
+            _Exceptions.illegalState("framework bug: %s requires a converter", this.getClass().getSimpleName()));
+    }
+
     // --
 
     /**
@@ -87,7 +93,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected final FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
-        formField = createTextField(id);
+        this.formField = createTextField(id);
         formField.setOutputMarkupId(true);
         return applyFormComponentAttributes(formField);
     }

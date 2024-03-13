@@ -27,12 +27,11 @@ import java.util.Optional;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 
 import lombok.NonNull;
@@ -63,16 +62,17 @@ extends TextFieldWithConverter<T> {
 
     public TextFieldWithDateTimePicker(
             final @NonNull String id,
-            final @NonNull ScalarModel scalarModel,
+            final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
-            final @NonNull IConverter<T> converter) {
-        super(id, scalarModel.unwrapped(type), type, Optional.of(converter));
+            final boolean isRequired,
+            final @NonNull IConverter<T> converter,
+            final @NonNull String editingPattern) {
+        super(id, model, type, Optional.of(converter));
         setOutputMarkupId(true);
 
         this.config = createDatePickerConfig(
-                scalarModel.getMetaModelContext(),
-                ((ConverterBasedOnValueSemantics<T>) converter).getEditingPattern(),
-                !scalarModel.isRequired());
+                editingPattern,
+                !isRequired);
 
         /* debug
                 new IConverter<T>() {
@@ -132,12 +132,12 @@ extends TextFieldWithConverter<T> {
     // -- HELPER
 
     private DateTimeConfig createDatePickerConfig(
-            final MetaModelContext commonContext,
             final String temporalPattern,
             final boolean isInputNullable) {
         val config = new DateTimeConfig();
+        val mmc = MetaModelContext.instanceElseFail();
 
-        config.useLocale(commonContext.currentUserLocale()
+        config.useLocale(mmc.currentUserLocale()
                 .map(UserLocale::getLanguageLocale)
                 .orElse(Locale.US));
 
@@ -176,7 +176,7 @@ extends TextFieldWithConverter<T> {
                 .useCloseIcon(FontAwesome6IconType.check_s)
                 );
 
-        val causewayDatePickerConfig = commonContext.getConfiguration().getViewer().getWicket().getDatePicker();
+        val causewayDatePickerConfig = mmc.getConfiguration().getViewer().getWicket().getDatePicker();
 
         //XXX future extensions might allow to set bounds on a per member basis (via ValueSemantics annotation)
         config.minDate(causewayDatePickerConfig.getMinDate());

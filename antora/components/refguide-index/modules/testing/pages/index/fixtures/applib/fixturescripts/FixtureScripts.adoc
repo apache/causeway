@@ -11,7 +11,6 @@ Provides the mechanism to execute xref:refguide:testing:index/fixtures/applib/fi
 class FixtureScripts {
   // secman seeding
 public static final String LOGICAL_TYPE_NAME;
-  public static final String PACKAGE_PREFIX;     // <.>
   FixtureScripts(FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider, ServiceRegistry serviceRegistry)
   List<FixtureResult> runFixtureScript(String fixtureScriptName, String parameters)     // <.>
   List<FixtureResult> runFixtureScript(FixtureScript fixtureScript, String parameters)
@@ -22,25 +21,16 @@ public static final String LOGICAL_TYPE_NAME;
   String validateRunFixtureScript(String fixtureScriptName, String parameters)
   Object recreateObjectsAndReturnFirst()     // <.>
   boolean hideRecreateObjectsAndReturnFirst()
-  void run(FixtureScript... fixtureScriptList)
-  void runPersonas(PersonaWithBuilderScript<?, ? extends BuilderScriptAbstract<?>>... personas)
-  T runPersona(PersonaWithBuilderScript<T, ? extends BuilderScriptAbstract<? extends T>> persona)
+  void run(FixtureScript... fixtureScriptList)     // <.>
+  void runPersonas(PersonaWithBuilderScript<?, ? extends BuilderScriptAbstract<?>>... personas)     // <.>
+  T runPersona(PersonaWithBuilderScript<T, ? extends BuilderScriptAbstract<? extends T>> persona)     // <.>
   T runBuilder(BuilderScriptAbstract<T> builderScript)     // <.>
   T runBuilderScriptNonTransactional(BuilderScriptAbstract<T> builderScript)     // <.>
-  String findFixtureScriptNameFor(Class<? extends FixtureScript> fixtureScriptClass)
-  FixtureScript.ExecutionContext newExecutionContext(String parameters)
-  String mementoFor(FixtureScript fs)
-  void initOf(String xml, FixtureScript fs)
   FixtureResult newFixtureResult(FixtureScript script, String subkey, Object object, boolean firstTime)
   String titleOf(FixtureResult fixtureResult)
 }
 ----
 
-<.> xref:#PACKAGE_PREFIX[PACKAGE_PREFIX]
-+
---
-The package prefix to search for fixture scripts. This default value will result in no fixture scripts being found. However, normally it will be overridden.
---
 <.> xref:#runFixtureScript_String_String[runFixtureScript(String, String)]
 +
 --
@@ -51,23 +41,33 @@ Main action - as exposed in the UI - to execute the specified fixture script.
 --
 Convenience action - exposed through the UI - to execute the specified "recreate" xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] and return/show the first object returned by that fixture script.
 --
+<.> xref:#run_FixtureScript[run(FixtureScript)]
++
+--
+Runs the provided xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] s, using _InteractionService#runAnonymous(ThrowingRunnable)_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)_ .
+--
+<.> xref:#runPersonas_PersonaWithBuilderScript[runPersonas(PersonaWithBuilderScript)]
++
+--
+Runs the provided xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScript.adoc[PersonaWithBuilderScript] s, using _InteractionService#runAnonymous(ThrowingRunnable)_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)_ .
+--
+<.> xref:#runPersona_PersonaWithBuilderScript[runPersona(PersonaWithBuilderScript)]
++
+--
+Runs the provided xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScript.adoc[PersonaWithBuilderScript] , using _InteractionService#runAnonymous(ThrowingRunnable)_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)_ .
+--
 <.> xref:#runBuilder_BuilderScriptAbstract[runBuilder(BuilderScriptAbstract)]
 +
 --
-Runs the builderScript within its own transactional boundary.
+Runs the provided xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract] , using _InteractionService#runAnonymous(ThrowingRunnable)_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)_ .
 --
 <.> xref:#runBuilderScriptNonTransactional_BuilderScriptAbstract[runBuilderScriptNonTransactional(BuilderScriptAbstract)]
 +
 --
-Runs the builderScript without its own transactional boundary.The caller is responsible to provide a transactional context/boundary.
+Runs the xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract] without its own transactional boundary.
 --
 
 == Members
-
-[#PACKAGE_PREFIX]
-=== PACKAGE_PREFIX
-
-The package prefix to search for fixture scripts. This default value will result in no fixture scripts being found. However, normally it will be overridden.
 
 [#runFixtureScript_String_String]
 === runFixtureScript(String, String)
@@ -83,14 +83,47 @@ NOTE: this method can only be used for xref:refguide:testing:index/fixtures/appl
 
 Convenience action - exposed through the UI - to execute the specified "recreate" xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] and return/show the first object returned by that fixture script.
 
+[#run_FixtureScript]
+=== run(FixtureScript)
+
+Runs the provided xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] s, using _InteractionService#runAnonymous(ThrowingRunnable)_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)_ .
+
+This means that if there is an existing _org.apache.causeway.applib.services.iactn.Interaction interaction (session)_ and transaction, then they will be re-used, but otherwise (all of) the provided fixtures will be installed in a single transaction.
+
+ *Be aware* that (unlike _#runPersonas(PersonaWithBuilderScript[])_ ), the scripts are _not_ called in a hierarchy; all provided fixture scripts will be executed in their own _org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript.ExecutionContext_ and therefore run irrespective of configured _#getMultipleExecutionStrategy()_ .
+
+Also note that _unlike_ _#runFixtureScript(FixtureScript, String)_ , then xref:refguide:testing:index/fixtures/applib/events/FixturesInstallingEvent.adoc[FixturesInstallingEvent] and xref:refguide:testing:index/fixtures/applib/events/FixturesInstalledEvent.adoc[FixturesInstalledEvent] s are _not_ fired.
+
+[#runPersonas_PersonaWithBuilderScript]
+=== runPersonas(PersonaWithBuilderScript)
+
+Runs the provided xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScript.adoc[PersonaWithBuilderScript] s, using _InteractionService#runAnonymous(ThrowingRunnable)_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)_ .
+
+This means that if there is an existing _org.apache.causeway.applib.services.iactn.Interaction interaction (session)_ and transaction, then they will be re-used, but otherwise (all of) the provided persona fixtures will be installed in a single transaction.
+
+Also, the persona scripts _are_ called within a single hierarchy, in other words through a single _org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript.ExecutionContext_ ; they therefore honour the configured _#getMultipleExecutionStrategy()_ .
+
+But note that _unlike_ _#runFixtureScript(String, String)_ , then xref:refguide:testing:index/fixtures/applib/events/FixturesInstallingEvent.adoc[FixturesInstallingEvent] and xref:refguide:testing:index/fixtures/applib/events/FixturesInstalledEvent.adoc[FixturesInstalledEvent] s are _not_ fired.
+
+[#runPersona_PersonaWithBuilderScript]
+=== runPersona(PersonaWithBuilderScript)
+
+Runs the provided xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScript.adoc[PersonaWithBuilderScript] , using _InteractionService#runAnonymous(ThrowingRunnable)_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)_ .
+
+This means that if there is an existing _org.apache.causeway.applib.services.iactn.Interaction interaction (session)_ and transaction, then they will be re-used, but otherwise the provided persona fixture will be installed in a single transaction.
+
+Also note that _unlike_ _#runFixtureScript(String, String)_ , then xref:refguide:testing:index/fixtures/applib/events/FixturesInstallingEvent.adoc[FixturesInstallingEvent] and xref:refguide:testing:index/fixtures/applib/events/FixturesInstalledEvent.adoc[FixturesInstalledEvent] s are _not_ fired.
+
 [#runBuilder_BuilderScriptAbstract]
 === runBuilder(BuilderScriptAbstract)
 
-Runs the builderScript within its own transactional boundary.
+Runs the provided xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract] , using _InteractionService#runAnonymous(ThrowingRunnable)_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)_ .
 
 [#runBuilderScriptNonTransactional_BuilderScriptAbstract]
 === runBuilderScriptNonTransactional(BuilderScriptAbstract)
 
-Runs the builderScript without its own transactional boundary.The caller is responsible to provide a transactional context/boundary.
+Runs the xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract] without its own transactional boundary.
+
+This means that the caller is responsible for ensuring that an _org.apache.causeway.applib.services.iactn.Interaction interaction_ and _TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable) transaction_ are in place.
 
 include::hooks/FixtureScripts_020-configuration-properties.adoc[]

@@ -12,7 +12,6 @@ Domain semantics for domain object collection.
   Class<? extends CollectionDomainEvent<?, ?>> domainEvent() default CollectionDomainEvent.Default.class;     // <.>
   Class<?> typeOf() default // represents unspecified
 void.class;     // <.>
-  String asciiId() default "";     // <.>
 }
 ----
 
@@ -25,11 +24,6 @@ Indicates that changes to the collection that should be posted to the _org.apach
 +
 --
 The type-of the elements held within the collection.
---
-<.> xref:#asciiId[asciiId]
-+
---
-Returns an alternative id for the collection, using only ASCII characters.
 --
 
 == Members
@@ -61,13 +55,6 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 The type-of the elements held within the collection.
 
 This is only provided as a fallback; usually the framework can infer the element type of the collection from the collection method's generic type.
-
-[#asciiId]
-=== asciiId
-
-Returns an alternative id for the collection, using only ASCII characters.
-
-Although Java itself allows the full UTF character set for identifiers, some integrations (such as GraphQL) have restrictions to only allow a more limited set of characters, in essence ASCII. This attribute allows a version of the collection's Id using only the ASCII character set to be provided.
 
 include::hooks/Collection_010-examples-and-usage.adoc[]
 
