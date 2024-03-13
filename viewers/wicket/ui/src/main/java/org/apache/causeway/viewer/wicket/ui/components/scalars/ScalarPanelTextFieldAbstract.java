@@ -87,7 +87,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected final FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
-        formField = createTextField(id);
+        this.formField = createTextField(id);
         formField.setOutputMarkupId(true);
         return applyFormComponentAttributes(formField);
     }

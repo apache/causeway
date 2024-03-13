@@ -18,11 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.PropertyModel;
 
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
@@ -31,7 +35,12 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -78,18 +87,46 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
         return textField;
     }
 
+    @Getter @Setter
+    private ZoneId zoneId;
+
+    @Getter @Setter
+    private ZoneOffset zoneOffset;
+
+    @Override
+    protected void onFormGroupCreated(final FormGroup formGroup) {
+
+        // find the scalarValue container, which we want to add the additional fields to
+        var container = WktComponents.findById(formGroup, "container-scalarValue", MarkupContainer.class)
+            .orElse(null);
+        if(container==null) return;
+
+        // create additional form fields that in combination with the main field make up the value
+        switch (offsetCharacteristic()) {
+        case OFFSET:
+            Wkt.dropDownChoiceAdd(container, "timeoffset",
+                    new PropertyModel<ZoneOffset>(ScalarPanelTextFieldWithTemporalPicker.this, "zoneOffset"),
+                    temporalValueSemantics().getAvailableOffsets())
+                .setRequired(true);
+            break;
+        case ZONED:
+            Wkt.dropDownChoiceAdd(container, "timezone",
+                    new PropertyModel<ZoneId>(ScalarPanelTextFieldWithTemporalPicker.this, "zoneId"),
+                    temporalValueSemantics().getAvailableZoneIds())
+                .setRequired(true);
+            break;
+        case LOCAL:
+        default:
+        }
+    }
+
     protected final TextField<T> getTextField() {
         return (TextField<T>)getFormComponent();
     }
 
     @Override
     protected Optional<InputFragment> getInputFragmentType() {
-        final OffsetCharacteristic offsetCharacteristic =
-            Facets.valueTemporalSemantics(scalarModel().getElementType())
-                .map(TemporalValueSemantics::getOffsetCharacteristic)
-                .orElse(OffsetCharacteristic.LOCAL);
-
-        switch (offsetCharacteristic) {
+        switch (offsetCharacteristic()) {
         case OFFSET:
             return Optional.of(InputFragment.TEMPORAL_WITH_OFFSET);
         case ZONED:
@@ -103,6 +140,20 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected void installScalarModelChangeBehavior() {
         // don't install the default change listener, instead OnChangeAjaxBehavior is installed above
+    }
+
+    // -- HELPER
+
+    private TemporalValueSemantics<?> temporalValueSemantics() {
+        return Facets.valueTemporalSemantics(scalarModel().getElementType())
+                .orElseThrow(()->_Exceptions.illegalState("no (temporal) value semantics found for %s",
+                        scalarModel().getElementType()));
+    }
+
+    private OffsetCharacteristic offsetCharacteristic() {
+        return Facets.valueTemporalSemantics(scalarModel().getElementType())
+                .map(TemporalValueSemantics::getOffsetCharacteristic)
+                .orElse(OffsetCharacteristic.LOCAL);
     }
 
 }

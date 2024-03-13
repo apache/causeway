@@ -619,6 +619,14 @@ public class Wkt {
         return new DropDownChoice<T>(id, model, choices);
     }
 
+    public <T extends Serializable> DropDownChoice<T> dropDownChoiceAdd(
+            final MarkupContainer container,
+            final String id,
+            final IModel<T> model,
+            final List<? extends T> choices) {
+        return add(container, dropDownChoice(id, model, choices));
+    }
+
     // -- FILE DOWNLOAD
 
     /**

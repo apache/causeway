@@ -21,6 +21,7 @@ package org.apache.causeway.applib.value.semantics;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -367,7 +368,7 @@ extends
     /**
      * For temporal value editing, provides the list of available offsets to choose from.
      */
-    default List<ZoneId> getAvailableOffsets() {
+    default List<ZoneOffset> getAvailableOffsets() {
         val now = LocalDateTime.now();
         return ZoneId.getAvailableZoneIds().stream()
                 .map(ZoneId::of)
