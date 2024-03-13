@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.util;
 
+import java.util.Optional;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -26,18 +28,57 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.lang.Args;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
+
 import de.agilecoders.wicket.jquery.util.Strings2;
 
-public final class WktComponents {
+@UtilityClass
+public class WktComponents {
+
+    // -- FINDING
+
+    /**
+     * Searches given container for children of given id.
+     */
+    public Optional<Component> findById(
+            final @Nullable MarkupContainer container,
+            final @Nullable String id) {
+        if(container==null
+                || _Strings.isNullOrEmpty(id)) {
+            return Optional.empty();
+        }
+        return container.streamChildren()
+                .filter(child->id.equals(child.getId()))
+                .findFirst();
+    }
+
+    /**
+     * Searches given container for children of given id
+     * and satisfying requiredType.
+     */
+    public <T extends Component> Optional<T> findById(
+            final @Nullable MarkupContainer container,
+            final @Nullable String id,
+            final @NonNull Class<T> requiredType) {
+        return findById(container, id)
+                .filter(requiredType::isInstance)
+                .map(requiredType::cast);
+    }
+
+    // -- HIDING
 
     /**
      * Permanently hides by replacing with a {@link Label} that has an empty
      * string for its caption.
      */
-    public static void permanentlyHide(final MarkupContainer container, final String... ids) {
+    public void permanentlyHide(final MarkupContainer container, final String... ids) {
         for (final String id : ids) {
             permanentlyHideSingle(container, id);
         }
@@ -46,7 +87,7 @@ public final class WktComponents {
     /**
      * @see #permanentlyHide(MarkupContainer, String...)
      */
-    public static void permanentlyHide(final MarkupContainer container, final UiComponentType... componentIds) {
+    public void permanentlyHide(final MarkupContainer container, final UiComponentType... componentIds) {
         for (final UiComponentType uiComponentType : componentIds) {
             permanentlyHideSingle(container, uiComponentType.getId());
         }
@@ -56,7 +97,7 @@ public final class WktComponents {
      * Not overloaded because - although compiles ok on JDK6u20 (Mac), fails to
      * on JDK6u18 (Ubuntu)
      */
-    private static void permanentlyHideSingle(final MarkupContainer container, final String id) {
+    private void permanentlyHideSingle(final MarkupContainer container, final String id) {
         final WebMarkupContainer invisible = new WebMarkupContainer(id);
         invisible.setVisible(false);
         container.addOrReplace(invisible);
@@ -66,7 +107,7 @@ public final class WktComponents {
      * Sets the visibility of the child component(s) within the supplied
      * container.
      */
-    public static void setVisible(final MarkupContainer container, final boolean visibility, final String... ids) {
+    public void setVisible(final MarkupContainer container, final boolean visibility, final String... ids) {
         for (final String id : ids) {
             setVisible(container, visibility, id);
         }
@@ -75,26 +116,26 @@ public final class WktComponents {
     /**
      * @see #setVisible(MarkupContainer, boolean, String...)
      */
-    public static void setVisible(final MarkupContainer container, final boolean visibility, final UiComponentType... componentTypes) {
+    public void setVisible(final MarkupContainer container, final boolean visibility, final UiComponentType... componentTypes) {
         for (final UiComponentType uiComponentType : componentTypes) {
             setVisible(container, visibility, uiComponentType.getId());
         }
     }
 
-    private static void setVisible(final MarkupContainer container, final boolean visibility, final String wicketId) {
+    private void setVisible(final MarkupContainer container, final boolean visibility, final String wicketId) {
         final Component childComponent = container.get(wicketId);
         childComponent.setVisible(visibility);
     }
 
-    public static boolean isRenderedComponent(final Component component) {
+    public boolean isRenderedComponent(final Component component) {
         return (component.getOutputMarkupId() && !(component instanceof Page));
     }
 
-    public static boolean hasPage(final Component component) {
+    public boolean hasPage(final Component component) {
         return component.findParent(Page.class)!=null;
     }
 
-    public static void addToAjaxRequest(final AjaxRequestTarget target, final Component component) {
+    public void addToAjaxRequest(final AjaxRequestTarget target, final Component component) {
 
         if (target == null || component == null) {
             return;
@@ -112,7 +153,7 @@ public final class WktComponents {
 
     }
 
-    public static CharSequence getMarkupId(final Component component) {
+    public CharSequence getMarkupId(final Component component) {
         return Strings2.getMarkupId(Args.notNull(component, "component"));
     }
 

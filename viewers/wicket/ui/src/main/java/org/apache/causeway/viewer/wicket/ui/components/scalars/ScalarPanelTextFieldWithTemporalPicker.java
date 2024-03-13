@@ -18,27 +18,42 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.temporal.Temporal;
 import java.util.Optional;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.PropertyModel;
 
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.TemporalDecomposition;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
-public class ScalarPanelTextFieldWithTemporalPicker<T>
+public class ScalarPanelTextFieldWithTemporalPicker<T extends Temporal>
 extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     private static final long serialVersionUID = 1L;
+
+    private TemporalDecomposition<T> temporalDecomposition;
 
     public ScalarPanelTextFieldWithTemporalPicker(
             final String id, final ScalarModel scalarModel, final Class<T> type) {
@@ -52,12 +67,83 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected final TextField<T> createTextField(final String id) {
         val scalarModel = scalarModel();
-        val converter = converter().orElseThrow(()->
-            _Exceptions.illegalArgument("framework bug: ScalarPanelTextFieldWithTemporalPicker requires a converter"));
+
+        this.temporalDecomposition = TemporalDecomposition.create(type,
+                scalarModel,
+                temporalValueSemantics(),
+                (ConverterBasedOnValueSemantics<T>)converterElseFail());
 
         val textField = new TextFieldWithDateTimePicker<T>(
-                id, scalarModel, type, converter);
+                        id, scalarModel.unwrapped(type), type, scalarModel.isRequired(),
+                        temporalDecomposition,
+                        temporalDecomposition.getEditingPattern());
 
+        return installUpdateNotifier(textField);
+    }
+
+    @Override
+    protected void onFormGroupCreated(final FormGroup formGroup) {
+        if(!scalarModel().isEditingMode()) return;
+
+        // find the scalarValue container, which we want to add the additional fields to
+        var container = WktComponents.findById(formGroup, "container-scalarValue", MarkupContainer.class)
+            .orElse(null);
+        if(container==null) return;
+
+        // create additional form fields that in combination with the main field make up the value
+        switch (offsetCharacteristic()) {
+        case OFFSET:
+            Wkt.dropDownChoiceWithAjaxUpdateAdd(container, "timeoffset",
+                    new PropertyModel<ZoneOffset>(temporalDecomposition, "zoneOffset"),
+                    temporalValueSemantics().getAvailableOffsets())
+                .setRequired(true);
+            break;
+        case ZONED:
+            Wkt.dropDownChoiceWithAjaxUpdateAdd(container, "timezone",
+                    new PropertyModel<ZoneId>(temporalDecomposition, "zoneId"),
+                    temporalValueSemantics().getAvailableZoneIds())
+                .setRequired(true);
+            break;
+        case LOCAL:
+        default:
+        }
+    }
+
+    protected final TextField<T> getTextField() {
+        return (TextField<T>)getFormComponent();
+    }
+
+    @Override
+    protected Optional<InputFragment> getInputFragmentType() {
+        switch (offsetCharacteristic()) {
+        case OFFSET:
+            return Optional.of(InputFragment.TEMPORAL_WITH_OFFSET);
+        case ZONED:
+            return Optional.of(InputFragment.TEMPORAL_WITH_ZONE);
+        case LOCAL:
+        default:
+            return Optional.of(InputFragment.TEMPORAL);
+        }
+    }
+
+    @Override
+    protected void installScalarModelChangeBehavior() {
+        // don't install the default change listener, instead OnChangeAjaxBehavior is installed above
+    }
+
+    // -- HELPER
+
+    private TemporalValueSemantics<T> temporalValueSemantics() {
+        return _Casts.uncheckedCast(Facets.valueTemporalSemantics(scalarModel().getElementType())
+                .orElseThrow(()->_Exceptions.illegalState("no (temporal) value semantics found for %s",
+                        scalarModel().getElementType())));
+    }
+
+    private OffsetCharacteristic offsetCharacteristic() {
+        return temporalValueSemantics().getOffsetCharacteristic();
+    }
+
+    private <X> TextField<X> installUpdateNotifier(final TextField<X> textField) {
         /* [CAUSEWAY-3201]
          * Adding OnChangeAjaxBehavior registers a JavaScript event listener on change events.
          * Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request
@@ -67,27 +153,12 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
-                // triggers update of dependent args (action prompt)
+                // triggers update of following args (action prompt)
                 ScalarPanelTextFieldWithTemporalPicker.this
                     .getScalarModelChangeDispatcher().notifyUpdate(target);
             }
         });
-
         return textField;
-    }
-
-    protected final TextField<T> getTextField() {
-        return (TextField<T>)getFormComponent();
-    }
-
-    @Override
-    protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(InputFragment.DATE);
-    }
-
-    @Override
-    protected void installScalarModelChangeBehavior() {
-        // don't install the default change listener, instead OnChangeAjaxBehavior is installed above
     }
 
 }

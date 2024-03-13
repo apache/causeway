@@ -19,23 +19,19 @@
 package org.apache.causeway.viewer.wicket.ui.pages.login;
 
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -43,6 +39,8 @@ import org.apache.wicket.util.cookies.CookieUtils;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.valuesemantics.temporal.ZonedDateTimeValueSemantics;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -266,20 +264,11 @@ implements HasMetaModelContext {
             add(new TextField<>("username").setRequired(true));
             add(new PasswordTextField("password"));
 
-            add(new DropDownChoice<ZoneId>("timezone",
+            add(Wkt.dropDownChoice("timezone",
                     new PropertyModel<ZoneId>(SignInPanelAbstract.this, "timezone"),
-                    new LoadableDetachableModel<List<ZoneId>>() {
-                        private static final long serialVersionUID = 1L;
-                        @Override
-                        protected List<ZoneId> load() {
-                            return ZoneId.getAvailableZoneIds().stream()
-                                    .sorted()
-                                    .map(ZoneId::of)
-                                    .collect(Collectors.toList());
-                        }
-                    })
-                    .setRequired(true)
-                    .setMarkupId(TIME_ZONE_SELECT));
+                    new ZonedDateTimeValueSemantics().getAvailableZoneIds())
+                .setRequired(true)
+                .setMarkupId(TIME_ZONE_SELECT));
 
             // container for remember me checkbox
             WebMarkupContainer rememberMeContainer = new WebMarkupContainer("rememberMeContainer");
